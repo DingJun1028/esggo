@@ -153,7 +153,7 @@ export function ZKPRangeProofVisualizer({ proof, title = 'ZKP 隱私區間驗證
               {/* Range Result */}
               {result.valid && (
                 <div className="mt-3 p-2 bg-verified/5 rounded border border-verified/10 flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-verified animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-verified" />
                   <span className="text-[11px] font-bold text-verified uppercase">
                     區間誠信確認: {proof.inRange ? 'TRUE' : 'FALSE'}
                   </span>

@@ -48,7 +48,7 @@ export default function BrandModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0" onClick={onClose} />
       <div
-        className={`relative w-full ${sizeStyles[size]} bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col`}
+        className={`relative w-full ${sizeStyles[size]} bg-white rounded-xl shadow-sm border border-slate-200 max-h-[90vh] flex flex-col`}
       >
         <div className="flex items-start justify-between p-5 border-b border-slate-100">
           <div className="flex items-start gap-3">

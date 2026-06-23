@@ -1,23 +1,63 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
-import { getOmniTableServerClient } from '@/lib/omni-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 
 /**
  * OmniTable Setup Status API
- * GET /api/omni-table/status
+ * GET /api/oa-table/status
  *
  * 回傳所有已設定的 OmniBlueTable 模組狀態
  * 供 Admin Dashboard 使用
  */
 
 const MODULE_CONFIGS = [
-  { key: 'notes_tasks',        label: '萬能筆記 - 任務管理',      envKey: 'OMNITABLE_TASKS_DATASHEET_ID',                icon: '📝' },
-  { key: 'daily_intelligence', label: '商情中心 - 每日情資庫',    envKey: 'OMNITABLE_DAILY_INTELLIGENCE_DATASHEET_ID',   icon: '📡' },
-  { key: 'esg_risk',           label: 'ESG 風險稽核庫',            envKey: 'OMNITABLE_ESG_RISK_DATASHEET_ID',             icon: '⚠️' },
-  { key: 'compliance',         label: '合規引擎 - 掃描結果',       envKey: 'OMNITABLE_COMPLIANCE_DATASHEET_ID',           icon: '✅' },
-  { key: 'governance',         label: '治理稽核 - 事件日誌',       envKey: 'OMNITABLE_GOVERNANCE_AUDIT_DATASHEET_ID',     icon: '🏛️' },
-  { key: 'supplier',           label: '供應鏈誠信評估庫',          envKey: 'OMNITABLE_SUPPLIER_INTEGRITY_DATASHEET_ID',   icon: '🔗' },
-  { key: 'vault',              label: 'Vault Omni 封存索引',       envKey: 'OMNITABLE_VAULT_OMNI_DATASHEET_ID',           icon: '🔐' },
-  { key: 'swarm',              label: 'OmniSwarm 蜂群共識',        envKey: 'OMNITABLE_SWARM_CONSENSUS_DATASHEET_ID',      icon: '🐝' },
+  {
+    key: 'notes_tasks',
+    label: '萬能筆記 - 任務管理',
+    envKey: 'OMNITABLE_TASKS_DATASHEET_ID',
+    icon: '📝',
+  },
+  {
+    key: 'daily_intelligence',
+    label: '商情中心 - 每日情資庫',
+    envKey: 'OMNITABLE_DAILY_INTELLIGENCE_DATASHEET_ID',
+    icon: '📡',
+  },
+  {
+    key: 'esg_risk',
+    label: 'ESG 風險稽核庫',
+    envKey: 'OMNITABLE_ESG_RISK_DATASHEET_ID',
+    icon: '⚠️',
+  },
+  {
+    key: 'compliance',
+    label: '合規引擎 - 掃描結果',
+    envKey: 'OMNITABLE_COMPLIANCE_DATASHEET_ID',
+    icon: '✅',
+  },
+  {
+    key: 'governance',
+    label: '治理稽核 - 事件日誌',
+    envKey: 'OMNITABLE_GOVERNANCE_AUDIT_DATASHEET_ID',
+    icon: '🏛️',
+  },
+  {
+    key: 'supplier',
+    label: '供應鏈誠信評估庫',
+    envKey: 'OMNITABLE_SUPPLIER_INTEGRITY_DATASHEET_ID',
+    icon: '🔗',
+  },
+  {
+    key: 'vault',
+    label: 'Vault Omni 封存索引',
+    envKey: 'OMNITABLE_VAULT_OMNI_DATASHEET_ID',
+    icon: '🔐',
+  },
+  {
+    key: 'swarm',
+    label: 'OmniSwarm 蜂群共識',
+    envKey: 'OMNITABLE_SWARM_CONSENSUS_DATASHEET_ID',
+    icon: '🐝',
+  },
 ] as const;
 
 export async function GET(_req: NextRequest) {
@@ -41,7 +81,7 @@ export async function GET(_req: NextRequest) {
       }
 
       try {
-        const client = getOmniTableServerClient();
+        const client = getOATableServerClient();
         const result = await client.getRecords(datasheetId, { pageSize: 1 });
         return {
           ...base,
@@ -61,9 +101,9 @@ export async function GET(_req: NextRequest) {
 
   const summary = {
     total: modules.length,
-    active: modules.filter(m => m.status === 'active').length,
-    unconfigured: modules.filter(m => m.status === 'unconfigured').length,
-    error: modules.filter(m => m.status === 'error').length,
+    active: modules.filter((m) => m.status === 'active').length,
+    unconfigured: modules.filter((m) => m.status === 'unconfigured').length,
+    error: modules.filter((m) => m.status === 'error').length,
     apiConfigured: Boolean(apiKey),
     spaceConfigured: Boolean(spaceId),
     timestamp: new Date().toISOString(),

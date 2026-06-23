@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniModalProps {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -15,7 +16,15 @@ export interface OmniModalProps {
   className?: string;
 }
 
-export function OmniModal({ isOpen, onClose, title, children, className }: OmniModalProps) {
+export function OmniModal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  className,
+  omniHeart: initialHeart,
+}: OmniModalProps) {
+  const omniHeart = useOmniResonance(initialHeart);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +47,7 @@ export function OmniModal({ isOpen, onClose, title, children, className }: OmniM
 
       <div
         className={cn(
-          'relative w-full max-w-lg bg-[var(--theme-surface)] border border-[var(--theme-border)] rounded-2xl shadow-2xl p-6',
+          'relative w-full max-w-lg bg-[var(--theme-surface)] border border-[var(--theme-border)] rounded-xl shadow-sm p-6',
           'animate-in fade-in zoom-in-95 duration-200',
           className
         )}
@@ -56,7 +65,7 @@ export function OmniModal({ isOpen, onClose, title, children, className }: OmniM
         <div className="relative z-10">{children}</div>
 
         {/* Glow effect behind modal */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur-xl -z-10 opacity-50" />
+        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl blur-xl -z-10 opacity-50" />
       </div>
     </div>,
     document.body

@@ -1,0 +1,25 @@
+{
+  "uuid": "tmpl-ch-05",
+  "version": "2.0.0",
+  "timestamp": 1782070654958,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.5 廢棄物與循環經濟",
+  "tags": [
+    "廢棄物與",
+    "#零算力",
+    "GRI-306"
+  ],
+  "content": "<h2>Ch.5 廢棄物與循環經濟</h2>\n<h3>5.1 概述</h3>\n<p>{{year}} 年廢棄物產出 {{waste_generated}} 公噸，回收率 {{recycling_rate}}%。推動循環經濟，產品回收率 75%，包裝減量 15%。</p>\n<h3>5.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 500 280\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"250\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">廢棄物產出(公噸)</text><line x1=\"60\" y1=\"220\" x2=\"440\" y2=\"220\" stroke=\"#E2E8F0\"/><rect x=\"80\" y=\"50\" width=\"45\" height=\"170\" fill=\"#003262\" rx=\"4\"/><text x=\"102\" y=\"45\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">10000</text><text x=\"102\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">2021</text><rect x=\"155\" y=\"58\" width=\"45\" height=\"162\" fill=\"#FDB515\" rx=\"4\"/><text x=\"177\" y=\"53\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">9500</text><text x=\"177\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">2022</text><rect x=\"230\" y=\"67\" width=\"45\" height=\"153\" fill=\"#10B981\" rx=\"4\"/><text x=\"252\" y=\"62\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">9000</text><text x=\"252\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">2023</text><rect x=\"305\" y=\"72\" width=\"45\" height=\"148\" fill=\"#3B82F6\" rx=\"4\"/><text x=\"327\" y=\"67\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">8700</text><text x=\"327\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">2024</text><rect x=\"380\" y=\"75\" width=\"45\" height=\"145\" fill=\"#6366F1\" rx=\"4\"/><text x=\"402\" y=\"70\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">8500</text><text x=\"402\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">2025</text></svg>\n<h3>5.3 數據表格</h3>\n<table><thead><tr><th>指標</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>廢棄物總量</td><td>8,500</td><td>8,700</td><td>持續減少</td></tr><tr><td>回收率</td><td>82%</td><td>78%</td><td>≥85%</td></tr><tr><td>有害廢棄物</td><td>120</td><td>130</td><td>持續減少</td></tr></tbody></table>\n<h3>5.4 管理方針</h3>\n<p>本公司針對 廢棄物與循環經濟 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>5.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 352,
+  "griAlignment": [
+    "GRI-306"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "bd3637cba0e7a02a",
+    "chartType": "bar"
+  }
+}

@@ -60,7 +60,7 @@ export default function ReportBuilderUI() {
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-neutral-100 /20 /20 flex items-center justify-center border border-teal-500/30 shadow-[0_0_30px_rgba(20,184,166,0.15)] relative">
+            <div className="w-14 h-14 rounded-xl bg-neutral-100 /20 /20 flex items-center justify-center border border-teal-500/30 shadow-[0_0_30px_rgba(20,184,166,0.15)] relative">
               <FileText className="text-teal-400 relative z-10" size={28} />
             </div>
             <div>

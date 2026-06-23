@@ -114,7 +114,7 @@ export default function OmniEvidenceUploader({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-sans select-none animate-in fade-in duration-300">
-      <div className="bg-white border border-slate-200 w-full max-w-md rounded-2xl shadow-lg overflow-hidden flex flex-col relative animate-in zoom-in-95 duration-300">
+      <div className="bg-white border border-slate-200 w-full max-w-md rounded-xl shadow-sm overflow-hidden flex flex-col relative animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className="bg-slate-50 p-4 border-b border-slate-200/80 flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -159,7 +159,7 @@ export default function OmniEvidenceUploader({
                 className="cursor-pointer flex flex-col items-center gap-3"
               >
                 <div className="w-12 h-12 bg-cyan-50 rounded-full flex items-center justify-center border border-cyan-100 mb-2">
-                  <UploadCloud className="text-cyan-600 w-6 h-6 animate-pulse" />
+                  <UploadCloud className="text-cyan-600 w-6 h-6" />
                 </div>
                 <div className="text-slate-800 font-bold text-sm">點擊上傳或拖曳檔案至此</div>
                 <div className="text-xs text-slate-400">支援 PDF, PNG, JPG, CSV (上限 10MB)</div>

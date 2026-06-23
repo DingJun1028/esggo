@@ -1,83 +1,22 @@
 'use client';
 
-import React, { createContext, useEffect, useContext } from 'react';
-import { useThemeStore, AppMode, AppFlavor } from '../lib/theme-store';
+import { useThemeStore } from '../lib/theme-store';
 
-interface ThemeContextType {
-  mode: AppMode;
-  flavor: AppFlavor;
-  setMode: (mode: AppMode) => void;
-  setFlavor: (flavor: AppFlavor) => void;
-  omniTheme: 'v2' | 'omnicore';
-  setOmniTheme: (theme: 'v2' | 'omnicore') => void;
-  resolvedTheme: 'light' | 'dark'; // The actual computed theme (if system, it resolves to light or dark)
+export type ThemeMode = 'light' | 'dark' | 'system';
+
+export interface ThemeContextValue {
+  mode: ThemeMode;
+  resolvedTheme: ThemeMode;
+  setMode: (mode: ThemeMode) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { mode, flavor, omniTheme, setMode, setFlavor, setOmniTheme } = useThemeStore();
-  const [resolvedTheme, setResolvedTheme] = React.useState<'light' | 'dark'>('light');
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    
-    // Determine the actual light/dark theme
-    const getSystemTheme = () => 
-      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    
-    const actualTheme = mode === 'system' ? getSystemTheme() : mode;
-    setResolvedTheme(actualTheme);
-
-    // Apply dark mode class
-    if (actualTheme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-
-    // Remove any existing flavor classes
-    root.classList.remove(
-      'theme-berkeley', 
-      'theme-sustainable', 
-      'theme-minimalist', 
-      'theme-best-practice'
-    );
-    // Add the selected flavor class
-    root.classList.add(`theme-${flavor}`);
-
-    // Set the OmniTheme dual engine state
-    root.setAttribute('data-omni-theme', omniTheme);
-
-    // Listen for system theme changes if in system mode
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      if (mode === 'system') {
-        const newTheme = mediaQuery.matches ? 'dark' : 'light';
-        setResolvedTheme(newTheme);
-        if (newTheme === 'dark') {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [mode, flavor, omniTheme]);
-
-  return (
-    <ThemeContext.Provider value={{ mode, flavor, omniTheme, setMode, setFlavor, setOmniTheme, resolvedTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+function getSystemTheme(): 'light' | 'dark' {
+  if (typeof window === 'undefined') return 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
+export function useTheme(): ThemeContextValue {
+  const { mode, setMode } = useThemeStore();
+  const resolvedTheme = mode === 'system' ? getSystemTheme() : mode;
+  return { mode, resolvedTheme, setMode };
 }

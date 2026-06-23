@@ -1,0 +1,29 @@
+{
+  "node": {
+    "70d78365de9af96503d40b42e57a12e44231a1027d": {
+      "workers": {
+        "app/omni-notes/page": {
+          "moduleId": 240197,
+          "async": false,
+          "exportedName": "syncTaskAction",
+          "filename": "app/actions/omni-notes.ts"
+        }
+      },
+      "exportedName": "syncTaskAction",
+      "filename": "app/actions/omni-notes.ts"
+    },
+    "0001b5833be98fbaf675d8245fc215765dc93a6f9c": {
+      "workers": {
+        "app/omni-notes/page": {
+          "moduleId": 240197,
+          "async": false,
+          "exportedName": "fetchTasksFromNCBAction",
+          "filename": "app/actions/omni-notes.ts"
+        }
+      },
+      "exportedName": "fetchTasksFromNCBAction",
+      "filename": "app/actions/omni-notes.ts"
+    }
+  },
+  "edge": {}
+}

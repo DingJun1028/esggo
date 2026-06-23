@@ -1,0 +1,3 @@
+{
+  "/api/agent/artifacts/[artifactId]/review/route": "app/api/agent/artifacts/[artifactId]/review/route.js"
+}

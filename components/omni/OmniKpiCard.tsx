@@ -33,7 +33,7 @@ export default function OmniKpiCard({
 
   return (
     <div
-      className={`relative p-6 rounded-2xl bg-white border border-slate-100 overflow-hidden group shadow-sm hover:shadow-md transition-shadow ${className}`}
+      className={`relative p-6 rounded-xl bg-white border border-slate-100 overflow-hidden group shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {/* Background Glow */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-50 rounded-full blur-[60px] group-hover:bg-cyan-100 transition-all duration-700 pointer-events-none" />
@@ -52,7 +52,7 @@ export default function OmniKpiCard({
         <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
             {fiveTStatus.every(Boolean) && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             )}
             <span
               className={`relative inline-flex rounded-full h-2.5 w-2.5 ${

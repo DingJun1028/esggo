@@ -1,0 +1,31 @@
+{
+  "uuid": "tmpl-ch-24",
+  "version": "2.0.0",
+  "timestamp": 1782070654977,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.24 附錄：GRI/TCFD/IFRS 準則索引",
+  "tags": [
+    "附錄：G",
+    "#零算力",
+    "GRI",
+    "IFRS-S1",
+    "TCFD",
+    "SASB"
+  ],
+  "content": "<h2>Ch.24 附錄：GRI/TCFD/IFRS 準則索引</h2>\n<h3>24.1 概述</h3>\n<p>聯絡：sustainability@{{company_name}}.com | ir@{{company_name}}.com</p>\n<h3>24.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 500 280\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"250\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">準則覆蓋率(%)</text><line x1=\"60\" y1=\"220\" x2=\"440\" y2=\"220\" stroke=\"#E2E8F0\"/><rect x=\"80\" y=\"50\" width=\"45\" height=\"170\" fill=\"#003262\" rx=\"4\"/><text x=\"102\" y=\"45\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">100</text><text x=\"102\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">GRI</text><rect x=\"155\" y=\"67\" width=\"45\" height=\"153\" fill=\"#FDB515\" rx=\"4\"/><text x=\"177\" y=\"62\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">90</text><text x=\"177\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">TCFD</text><rect x=\"230\" y=\"58\" width=\"45\" height=\"162\" fill=\"#10B981\" rx=\"4\"/><text x=\"252\" y=\"53\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">95</text><text x=\"252\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">IFRS</text><rect x=\"305\" y=\"75\" width=\"45\" height=\"145\" fill=\"#3B82F6\" rx=\"4\"/><text x=\"327\" y=\"70\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">85</text><text x=\"327\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">SASB</text><rect x=\"380\" y=\"118\" width=\"45\" height=\"102\" fill=\"#6366F1\" rx=\"4\"/><text x=\"402\" y=\"113\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">60</text><text x=\"402\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">TNFD</text></svg>\n<h3>24.3 數據表格</h3>\n<table><thead><tr><th>準則</th><th>揭露位置</th></tr></thead><tbody><tr><td>GRI-2</td><td>Ch.1,4</td></tr><tr><td>GRI-305</td><td>Ch.2</td></tr><tr><td>IFRS S1</td><td>Ch.1,2,4</td></tr><tr><td>TCFD</td><td>Ch.2,10</td></tr><tr><td>SASB</td><td>Ch.7,18</td></tr></tbody></table>\n<h3>24.4 管理方針</h3>\n<p>本公司針對 附錄：GRI/TCFD/IFRS 準則索引 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>24.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 352,
+  "griAlignment": [
+    "GRI",
+    "IFRS-S1",
+    "TCFD",
+    "SASB"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "7d317214f6e5160f",
+    "chartType": "bar"
+  }
+}

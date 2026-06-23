@@ -40,7 +40,7 @@ const shadowStyles = {
   none: '',
   sm: 'shadow-sm',
   md: 'shadow-md',
-  lg: 'shadow-lg',
+  lg: 'shadow-sm',
 };
 
 export function BrandCardHeader({ title, subtitle, icon, action, badge, className = '' }: BrandCardHeaderProps) {
@@ -88,13 +88,13 @@ export default function BrandCard({
   const getVariantClasses = () => {
     switch (variant) {
       case 'glass':
-        return 'glass-panel shadow-glass';
+        return ' shadow-glass';
       case 'hologram':
         return 'glass-cyber-hologram z-layer-2';
       case 'liquid':
-        return 'glass-panel-refined shadow-xl';
+        return '-refined shadow-sm';
       default:
-        return 'bg-white/90 backdrop-blur-md shadow-sm border border-slate-100';
+        return 'bg-white  shadow-sm border border-slate-100';
     }
   };
 

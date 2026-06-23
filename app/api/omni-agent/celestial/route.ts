@@ -3,7 +3,7 @@ import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 /**
  * POST /api/omni-agent/celestial
- * Execute a Celestial Command via OmniAgentBus.
+ * Execute a Celestial Command via OAAgentBus.
  */
 export async function POST(req: NextRequest) {
   try {

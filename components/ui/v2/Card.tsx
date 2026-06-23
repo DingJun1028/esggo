@@ -2,34 +2,29 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { HTMLAttributes, forwardRef } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface CardProps extends HTMLMotionProps<'div'> {
-  variant?: 'default' | 'elevated' | 'outlined';
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'elevated' | 'outlined' | 'glass';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   hover?: boolean;
   title?: string;
   subtitle?: string;
+  omniHeart?: any;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', hover = true, children, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      whileHover={
-        hover ? { scale: 1.01, boxShadow: '0px 10px 30px rgba(99, 166, 176, 0.15)' } : undefined
-      }
       className={cn(
         'rounded-xl transition-all duration-200',
         {
           'bg-white border border-neutral-200': variant === 'default',
           'bg-white shadow-sm border border-neutral-100': variant === 'elevated',
           'bg-transparent border border-neutral-200': variant === 'outlined',
+          'bg-slate-900/80 border-slate-800': variant === 'glass',
         },
-        hover && 'hover:shadow-md hover:border-neutral-300',
+        hover && 'hover:shadow-md hover:border-neutral-300 hover:scale-[1.005]',
         {
           'p-0': padding === 'none',
           'p-4': padding === 'sm',
@@ -41,7 +36,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   )
 );
 Card.displayName = 'Card';
@@ -89,3 +84,24 @@ export const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEleme
   )
 );
 CardFooter.displayName = 'CardFooter';
+
+export function CardHeaderWithTitle({
+  title,
+  subtitle,
+  omniHeart,
+  className,
+}: {
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
+  omniHeart?: any;
+  className?: string;
+}) {
+  return (
+    <div className={cn('flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4', className)}>
+      <div>
+        <h3 className="text-lg font-bold text-[var(--theme-text)]">{title}</h3>
+        {subtitle && <p className="text-sm text-[var(--theme-text-muted)] mt-1">{subtitle}</p>}
+      </div>
+    </div>
+  );
+}

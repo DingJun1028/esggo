@@ -6,7 +6,7 @@ import { Shield, Activity, FileText } from 'lucide-react';
 export default function OmniCardsDemo() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-2xl relative overflow-hidden">
+      <div className="bg-slate-950 p-6 rounded-xl border border-slate-800 shadow-sm relative overflow-hidden">
         {/* Background ambient light */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-2xl bg-cyan-500/5 blur-[120px] pointer-events-none"></div>
 

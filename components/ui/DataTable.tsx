@@ -129,7 +129,7 @@ function DataTableInner<T extends object>({
                 <tr key={i} className="border-b border-[#f3f4f6]">
                   {columns.map((col) => (
                     <td key={String(col.key)} className="px-4 py-3">
-                      <div className="h-4 bg-[#f3f4f6] rounded animate-pulse" />
+                      <div className="h-4 bg-[#f3f4f6] rounded" />
                     </td>
                   ))}
                 </tr>

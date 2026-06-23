@@ -28,7 +28,8 @@ export async function GET(request: NextRequest) {
     case 'memories': {
       const agentId = searchParams.get('agentId') || undefined;
       const type = searchParams.get('type') || undefined;
-      return NextResponse.json(OmniHub.getSharedMemories({ agentId, type }));
+      const memories = await OmniHub.getSharedMemories({ agentId, type });
+      return NextResponse.json(memories || []);
     }
 
     case 'tasks': {

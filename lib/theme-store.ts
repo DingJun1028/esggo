@@ -25,7 +25,7 @@ export const useThemeStore = create<ThemeStore>()(
       mode: 'system',
       flavor: 'berkeley',
       sidebarTheme: 'dark',
-      omniTheme: 'omnicore', // 預設使用沉浸式的 OmniCore 5T 協議介面
+      omniTheme: 'omnicore',
       setMode: (mode) => set({ mode }),
       setFlavor: (flavor) => set({ flavor }),
       setSidebarTheme: (sidebarTheme) => set({ sidebarTheme }),

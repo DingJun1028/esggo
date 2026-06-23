@@ -42,8 +42,9 @@ export const Badge = forwardRef<
     size?: 'sm' | 'md' | 'xs';
     className?: string;
     children?: React.ReactNode;
+    icon?: React.ReactNode;
   }
->(({ variant = 'neutral', size = 'sm', className, children, ...props }, ref) => (
+>(({ variant = 'neutral', size = 'sm', className, children, icon, ...props }, ref) => (
   <span
     ref={ref}
     className={cn(
@@ -65,6 +66,7 @@ export const Badge = forwardRef<
     )}
     {...props}
   >
+    {icon && <span className="mr-1 flex items-center">{icon}</span>}
     {children}
   </span>
 ));

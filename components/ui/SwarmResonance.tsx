@@ -60,7 +60,7 @@ export function SwarmResonance() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-slate-900/80 border border-white/10 rounded-xl overflow-hidden shadow-sm">
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
         <div className="flex items-center gap-2">
           <Terminal size={16} className="text-cyan-400" />
@@ -79,42 +79,40 @@ export function SwarmResonance() {
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-3 custom-scrollbar"
       >
-        
-          {logs.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-white/20 italic">
-              <Info size={24} className="mb-2 opacity-20" />
-              <p>Waiting for intent resonance...</p>
-            </div>
-          ) : (
-            logs.map((log) => (
-              <div
-                key={log.id}
-                className="group border-l-2 border-white/5 pl-3 py-1 hover:border-cyan-500/50 transition-colors"
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-white/30">[{log.timestamp}]</span>
-                  <span className="px-1.5 py-0.5 rounded text-cyan-400 font-bold border border-white/5">
-                    {log.event}
-                  </span>
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800 text-white/60 text-[9px]">
-                    {getAgentIcon(log.agent)}
-                    {log.agent}
-                  </div>
-                </div>
-                <div className="text-white/50 break-all leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
-                  {typeof log.payload === 'string' ? log.payload : JSON.stringify(log.payload)}
+        {logs.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-white/20 italic">
+            <Info size={24} className="mb-2 opacity-20" />
+            <p>Waiting for intent resonance...</p>
+          </div>
+        ) : (
+          logs.map((log) => (
+            <div
+              key={log.id}
+              className="group border-l-2 border-white/5 pl-3 py-1 hover:border-cyan-500/50 transition-colors"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-white/30">[{log.timestamp}]</span>
+                <span className="px-1.5 py-0.5 rounded text-cyan-400 font-bold border border-white/5">
+                  {log.event}
+                </span>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800 text-white/60 text-[9px]">
+                  {getAgentIcon(log.agent)}
+                  {log.agent}
                 </div>
               </div>
-            ))
-          )}
-        
+              <div className="text-white/50 break-all leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
+                {typeof log.payload === 'string' ? log.payload : JSON.stringify(log.payload)}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="px-4 py-2 border-t border-white/5 flex items-center justify-between">
         <span className="text-[9px] text-white/30 font-bold uppercase tracking-tighter">
           Connection: Active (5T Secure)
         </span>
-        <span className="text-[9px] text-cyan-500/50 font-mono animate-pulse">● LIVE</span>
+        <span className="text-[9px] text-cyan-500/50 font-mono">● LIVE</span>
       </div>
     </div>
   );

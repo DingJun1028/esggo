@@ -11,7 +11,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
-import { OmniAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
+import { OAAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
 
 export interface PulseTask {
   id: string;
@@ -31,10 +31,10 @@ export function OmniAgentPulse() {
     },
   ]);
 
-  // Subscribe to OmniAgentBus
+  // Subscribe to OAAgentBus
   useEffect(() => {
     // 廣通：訂閱全域事件
-    const unsubscribe = OmniAgentBus.subscribe('*', (event: IOmniEvent) => {
+    const unsubscribe = OAAgentBus.subscribe('*', (event: IOmniEvent) => {
       setTasks((prev) => {
         const newTasks = [...prev];
 
@@ -91,14 +91,12 @@ export function OmniAgentPulse() {
     >
       {/* 展開面板 */}
       {isExpanded && (
-        <div
-          className="w-72 bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative"
-        >
+        <div className="w-72 bg-slate-950/90 border border-cyan-500/30 rounded-xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
           <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
             <div className="flex items-center gap-2 text-cyan-400">
-              <Activity size={16} className="animate-pulse" />
+              <Activity size={16} className="" />
               <span className="text-xs font-bold tracking-widest uppercase">
                 Agent Pulse Ledger
               </span>
@@ -118,7 +116,7 @@ export function OmniAgentPulse() {
                   className={cn(
                     'mt-0.5 shrink-0 rounded-full p-1',
                     task.status === 'active'
-                      ? 'bg-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.5)] animate-pulse'
+                      ? 'bg-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.5)] '
                       : 'bg-white/5'
                   )}
                 >
@@ -157,7 +155,7 @@ export function OmniAgentPulse() {
         <Brain className="text-cyan-400 relative z-10" size={24} />
 
         {/* Status Indicator Dot */}
-        <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
+        <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
       </div>
     </div>
   );

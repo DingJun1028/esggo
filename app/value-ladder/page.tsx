@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 
 import {
-  LucideIcon,
+
   TrendingUp,
   ArrowRight,
   CheckCircle2,
@@ -38,7 +38,7 @@ interface ValueTier {
   name: string;
   subtitle: string;
   description: string;
-  icon: LucideIcon;
+  icon: any;
   color: string;
   bgColor: string;
   borderColor: string;
@@ -210,7 +210,7 @@ function TierCard({ tier, index }: { tier: ValueTier; index: number }) {
   return (
     <div
       className={cn(
-        'relative bg-white rounded-2xl border-2 p-6 transition-all hover:shadow-lg',
+        'relative bg-white rounded-xl border-2 p-6 transition-all hover:shadow-sm',
         tier.borderColor,
         isPopular && 'ring-2 ring-blue-500 ring-offset-2'
       )}
@@ -300,11 +300,11 @@ export default function ValueLadderPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1200px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
+        <header className="bg-white rounded-xl border border-slate-100 p-6 relative overflow-hidden">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-50 rounded-full blur-3xl breathing-glow-amber" />
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg breathing-glow-amber">
+              <div className="w-14 h-14 rounded-xl bg-neutral-100 flex items-center justify-center shadow-sm breathing-glow-amber">
                 <TrendingUp size={28} className="text-white" />
               </div>
               <div>

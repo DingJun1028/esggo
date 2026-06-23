@@ -24,7 +24,7 @@ export default function BrandPageHeader({
 }: BrandPageHeaderProps) {
   return (
     <div className={`
-      rounded-2xl px-6 py-5 border border-slate-200 mb-6
+      rounded-xl px-6 py-5 border border-slate-200 mb-6
       ${gradient
         ? 'bg-gradient-to-r from-[#003262] to-[#005DAA] text-white border-[#003262]'
         : 'bg-white text-[#0F172A]'

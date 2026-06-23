@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { scanEvidenceWithVision } from '@/lib/omni-gateway';
+import { scanEvidenceWithVision } from '@/lib/oa-gateway';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 
 export async function POST(req: Request) {
@@ -15,9 +15,7 @@ export async function POST(req: Request) {
 
     const result = await scanEvidenceWithVision(fileId, fileType || 'image/jpeg');
 
-    return NextResponse.json<ApiResponse>(
-      createSuccessResponse(result)
-    );
+    return NextResponse.json<ApiResponse>(createSuccessResponse(result));
   } catch (error: any) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('VISION_FAILED', error.message || 'OmniAgent Vision scanning failed'),

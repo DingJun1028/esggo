@@ -104,7 +104,7 @@ export function KpiCard({
           onClick={() => setShowFormula(false)}
         >
           <div
-            className="bg-white rounded-[20px] p-7 max-w-md w-full shadow-2xl"
+            className="bg-white rounded-[20px] p-7 max-w-md w-full shadow-sm"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-5">

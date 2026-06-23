@@ -203,7 +203,7 @@ export default function DashboardPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
               <span className="text-xs font-semibold text-emerald-600 tracking-wider uppercase">
@@ -230,143 +230,145 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* ─── KPI Cards ─── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* ─── High-Density Bento Grid ─── */}
+        <div className="bento-tight">
+          {/* ─── KPI Cards (4 x 3 cols = 12) ─── */}
           {KPI_CARDS.map((kpi) => (
-            <Card key={kpi.id} variant="default" padding="md" hover>
-              <div className="flex justify-between items-start mb-3">
-                <div className={cn('p-2 rounded-lg', kpi.iconBg)}>
-                  <kpi.icon size={18} className={kpi.iconColor} />
+            <div key={kpi.id} className="col-span-12 sm:col-span-6 lg:col-span-3">
+              <Card variant="default" padding="md" hover>
+                <div className="flex justify-between items-start mb-3">
+                  <div className={cn('p-2 rounded-lg', kpi.iconBg)}>
+                    <kpi.icon size={18} className={kpi.iconColor} />
+                  </div>
+                  {kpi.trend !== undefined && (
+                    <Badge variant={kpi.trend >= 0 ? 'success' : 'error'} size="sm">
+                      {kpi.trend >= 0 ? '↑' : '↓'} {Math.abs(kpi.trend)}%
+                    </Badge>
+                  )}
                 </div>
-                {kpi.trend !== undefined && (
-                  <Badge variant={kpi.trend >= 0 ? 'success' : 'error'} size="sm">
-                    {kpi.trend >= 0 ? '↑' : '↓'} {Math.abs(kpi.trend)}%
-                  </Badge>
-                )}
-              </div>
-              <p className="text-xs text-neutral-500 font-medium uppercase tracking-wider mb-1">
-                {kpi.title}
-              </p>
-              <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-2xl font-black text-neutral-900">{kpi.value}</span>
-                <span className="text-sm text-neutral-400">{kpi.unit}</span>
-              </div>
-              <FiveTStrip status={kpi.fiveTStatus} showLabels={false} size="sm" />
-            </Card>
+                <p className="text-xs text-neutral-500 font-medium uppercase tracking-wider mb-1">
+                  {kpi.title}
+                </p>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-2xl font-black text-neutral-900">{kpi.value}</span>
+                  <span className="text-sm text-neutral-400">{kpi.unit}</span>
+                </div>
+                <FiveTStrip status={kpi.fiveTStatus} showLabels={false} size="sm" />
+              </Card>
+            </div>
           ))}
-        </div>
 
-        {/* ─── Quick Actions ─── */}
-        <div>
-          <SectionHeader title="快速操作" />
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-            {QUICK_ACTIONS.map((action) => (
+          {/* ─── Quick Actions (6 x 2 cols = 12) ─── */}
+          <div className="col-span-12 mt-4">
+            <SectionHeader title="快速操作" />
+          </div>
+          {QUICK_ACTIONS.map((action) => (
+            <div key={action.label} className="col-span-4 sm:col-span-2">
               <Card
-                key={action.label}
                 variant="outlined"
                 padding="sm"
                 hover
-                className="text-center cursor-pointer"
+                className="text-center cursor-pointer h-full flex flex-col justify-center"
               >
-                <action.icon size={18} className="text-neutral-400 mx-auto mb-1.5" />
+                <action.icon size={18} className="text-[#63a6b0] mx-auto mb-1.5" />
                 <span className="text-[10px] font-semibold text-neutral-600">{action.label}</span>
               </Card>
-            ))}
-          </div>
-        </div>
+            </div>
+          ))}
 
-        {/* ─── Agent Status ─── */}
-        <div>
-          <SectionHeader title="代理狀態" />
-          <div className="grid grid-cols-3 gap-3">
-            {['Sentinel', 'Analyst', 'Writer'].map((agent) => (
-              <Card key={agent} variant="outlined" padding="sm" className="text-center">
+          {/* ─── Agent Status (3 x 4 cols = 12) ─── */}
+          <div className="col-span-12 mt-4">
+            <SectionHeader title="代理狀態" />
+          </div>
+          {['Sentinel', 'Analyst', 'Writer'].map((agent) => (
+            <div key={agent} className="col-span-12 sm:col-span-4">
+              <Card variant="outlined" padding="sm" className="text-center">
                 <StatusDot status="active" pulse />
                 <p className="text-xs font-medium text-neutral-600 mt-1">{agent}</p>
               </Card>
-            ))}
-          </div>
-        </div>
+            </div>
+          ))}
 
-        {/* ─── Data Ledger Table ─── */}
-        <div>
-          <SectionHeader
-            title="資料溯源帳本"
-            subtitle={`${data.length} records`}
-            action={
-              <div className="flex items-center gap-1.5 text-xs text-emerald-600">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-                </span>
-                Live Sync
-              </div>
-            }
-          />
+          {/* ─── Data Ledger Table (1 x 12 cols = 12) ─── */}
+          <div className="col-span-12 mt-4">
+            <SectionHeader
+              title="資料溯源帳本"
+              subtitle={`${data.length} records`}
+              action={
+                <div className="flex items-center gap-1.5 text-xs text-[#63a6b0]">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#63a6b0] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#63a6b0]" />
+                  </span>
+                  Live Sync
+                </div>
+              }
+            />
 
-          <Card variant="default" padding="none">
-            {loading ? (
-              <div className="h-48 flex flex-col items-center justify-center gap-3">
-                <Loader2 size={24} className="text-cyan-500 animate-spin" />
-                <span className="text-sm text-neutral-400">Synchronizing OmniMemorySync...</span>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="bg-neutral-50 border-b border-neutral-100">
-                      {['Content', 'Value', 'Source', 'Status', '5T Seal', 'Action'].map((h) => (
-                        <th
-                          key={h}
-                          className="px-4 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider"
-                        >
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-50">
-                    {data.map((row) => (
-                      <tr key={row.id} className="hover:bg-neutral-50/50 transition-colors">
-                        <td className="px-4 py-3 text-sm font-medium text-neutral-900">
-                          {row.content}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-neutral-600 font-mono">
-                          {row.value}
-                        </td>
-                        <td className="px-4 py-3 text-xs text-neutral-400">{row.source_origin}</td>
-                        <td className="px-4 py-3">
-                          <Badge variant={STATUS_VARIANT[row.status]} size="sm">
-                            {row.status}
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-3">
-                          {row.zkp_sealed ? (
-                            <div className="flex items-center gap-1.5 text-xs text-emerald-600">
-                              <LockIcon size={12} />
-                              <span className="font-mono">{row.hash.substring(0, 10)}...</span>
-                            </div>
-                          ) : (
-                            <span className="text-[10px] text-neutral-400">—</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3">
-                          {!row.zkp_sealed && (
-                            <button
-                              onClick={() => handleSeal(row.id)}
-                              className="text-xs font-bold text-cyan-600 hover:text-cyan-800 transition-colors"
-                            >
-                              Seal
-                            </button>
-                          )}
-                        </td>
+            <Card variant="default" padding="none">
+              {loading ? (
+                <div className="h-48 flex flex-col items-center justify-center gap-3">
+                  <Loader2 size={24} className="text-[#63a6b0] animate-spin" />
+                  <span className="text-sm text-neutral-400">Synchronizing OmniMemorySync...</span>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-neutral-50 border-b border-neutral-100">
+                        {['Content', 'Value', 'Source', 'Status', '5T Seal', 'Action'].map((h) => (
+                          <th
+                            key={h}
+                            className="px-4 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider"
+                          >
+                            {h}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </Card>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-50">
+                      {data.map((row) => (
+                        <tr key={row.id} className="hover:bg-neutral-50/50 transition-colors">
+                          <td className="px-4 py-3 text-sm font-medium text-neutral-900">
+                            {row.content}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-neutral-600 font-mono">
+                            {row.value}
+                          </td>
+                          <td className="px-4 py-3 text-xs text-neutral-400">{row.source_origin}</td>
+                          <td className="px-4 py-3">
+                            <Badge variant={STATUS_VARIANT[row.status]} size="sm">
+                              {row.status}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3">
+                            {row.zkp_sealed ? (
+                              <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+                                <LockIcon size={12} />
+                                <span className="font-mono">{row.hash.substring(0, 10)}...</span>
+                              </div>
+                            ) : (
+                              <span className="text-[10px] text-neutral-400">—</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            {!row.zkp_sealed && (
+                              <button
+                                onClick={() => handleSeal(row.id)}
+                                className="text-xs font-bold text-[#63a6b0] hover:text-[#003262] transition-colors"
+                              >
+                                Seal
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
+          </div>
         </div>
       </div>
     </div>

@@ -53,7 +53,7 @@ import {
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
 import { useAuth } from '../hooks/useAuth';
-import { useOmniAgentBus } from '../lib/omni-agent-bus';
+import { useOAAgentBus } from '../lib/oa-agent-bus';
 import { BrandBadge } from './brand';
 
 import { cn } from '../lib/utils';
@@ -73,82 +73,64 @@ interface NavGroup {
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    title: 'CORE',
+    title: 'CORE SYSTEMS',
     items: [
       { href: '/', label: '控制台', sub: 'Dashboard', icon: LayoutDashboard },
       { href: '/editor', label: '永續撰寫', sub: 'SustainWrite', icon: FileText, badge: 'AI' },
       { href: '/digital-twin', label: '數位分身', sub: 'Digital Twin', icon: Fingerprint },
       { href: '/health-check', label: '企業健檢', sub: 'Health Check', icon: CheckSquare },
-      { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: Users },
-      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: BarChart3 },
-    ],
-  },
-  {
-    title: 'E · S · G 模組',
-    items: [
       { href: '/environmental', label: '環境指揮', sub: 'Environmental', icon: Leaf },
-      { href: '/social', label: '社會影響', sub: 'Social', icon: HeartHandshake },
-      { href: '/governance', label: '公司治理', sub: 'Governance', icon: Shield },
-    ],
-  },
-  {
-    title: 'GOVERNANCE',
-    items: [
-      { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: AlertTriangle },
-      { href: '/templates', label: '專家模板', sub: 'Templates', icon: Layout },
-      { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: ClipboardList },
+      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: BarChart3 },
       { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: Database },
+      { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: ClipboardList },
       { href: '/integrity', label: '數位誠信', sub: 'ZKP Center', icon: ShieldCheck, badge: '5T' },
     ],
   },
   {
-    title: 'INSIGHTS',
+    title: 'AI & OMNI AGENTS',
     items: [
-      { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: TrendingDown },
-      {
-        href: '/dashboard/report-builder',
-        label: '報告生成器',
-        sub: 'Report Builder',
-        icon: FileText,
-        badge: 'ZKP',
-      },
-      { href: '/publish', label: '報告發布', sub: 'Publish', icon: Globe },
-      { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: BookOpen },
-      { href: '/library', label: '永續智庫', sub: 'Library', icon: Layers },
-      { href: '/finance', label: '永續財務', sub: 'Finance', icon: DollarSign },
-      { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: Link2 },
-      { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: Network },
-      { href: '/verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: Award },
-    ],
-  },
-  {
-    title: 'ACADEMY',
-    items: [
-      { href: '/academy', label: '永續學院', sub: 'Academy', icon: GraduationCap },
-      { href: '/advisors', label: '顧問專區', sub: 'Advisors', icon: UserCheck },
-      { href: '/agents', label: '代理專區', sub: 'Agents', icon: Briefcase },
-      { href: '/consulting', label: '顧問服務', sub: 'Consulting', icon: HeartHandshake },
+      { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
+      { href: '/omni-notes', label: '萬能筆記', sub: 'OmniNotes', icon: FileText, badge: 'NEW' },
+      { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'AI' },
+      { href: '/omni-agent', label: 'OmniAgent', sub: 'OmniAgent Evolved', icon: FlaskConical },
+      { href: '/oa-gateway', label: 'OmniAgent 網關', sub: 'Gateway v3.0', icon: Server, badge: 'NEW' },
       { href: '/ai-platform', label: 'AI 整合平台', sub: 'AI Platform', icon: Cpu },
     ],
   },
   {
-    title: 'OMNI SYSTEM',
+    title: 'KNOWLEDGE & RESOURCES',
     items: [
-      { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
-      { href: '/omni-notes', label: '萬能筆記', sub: 'OmniNotes', icon: FileText, badge: 'NEW' },
-      { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen },
+      { href: '/dashboard/report-builder', label: '報告生成器', sub: 'Report Builder', icon: FileText, badge: 'ZKP' },
+      { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: BookOpen },
+      { href: '/library', label: '永續智庫', sub: 'Library', icon: Layers },
+      { href: '/academy', label: '永續學院', sub: 'Academy', icon: GraduationCap },
       { href: '/guide', label: '平台導覽', sub: 'Guide', icon: Award, badge: 'v8.5.1' },
+    ],
+  },
+  {
+    title: 'WAVE 1 UPDATES (建置中)',
+    items: [
+      { href: '/social', label: '社會影響', sub: 'Social', icon: HeartHandshake },
+      { href: '/governance', label: '公司治理', sub: 'Governance', icon: Shield },
+      { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: AlertTriangle },
+      { href: '/templates', label: '專家模板', sub: 'Templates', icon: Layout },
+      { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: TrendingDown },
+      { href: '/publish', label: '報告發布', sub: 'Publish', icon: Globe },
+    ],
+  },
+  {
+    title: 'WAVE 2 UPDATES (尚未開放)',
+    items: [
+      { href: '/finance', label: '永續財務', sub: 'Finance', icon: DollarSign },
+      { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: Link2 },
+      { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: Network },
+      { href: '/verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: Award },
+      { href: '/advisors', label: '顧問專區', sub: 'Advisors', icon: UserCheck },
+      { href: '/agents', label: '代理專區', sub: 'Agents', icon: Briefcase },
+      { href: '/consulting', label: '顧問服務', sub: 'Consulting', icon: HeartHandshake },
+      { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
-      { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'AI' },
-      { href: '/omni-agent', label: 'OmniAgent', sub: 'OmniAgent Evolved', icon: FlaskConical },
-      {
-        href: '/omni-gateway',
-        label: 'OmniAgent 網關',
-        sub: 'Gateway v3.0',
-        icon: Server,
-        badge: 'NEW',
-      },
     ],
   },
 ];
@@ -182,13 +164,13 @@ function getThemeStyles(theme: SidebarTheme) {
   if (theme === 'glass') {
     return {
       sidebar:
-        'bg-white/40 backdrop-blur-xl border-r border-white/50 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]',
+        'bg-white/40  border-r border-white/50 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]',
       logo: 'border-b border-white/40',
       logoText: 'text-[#003262]',
       logoSub: 'text-[#003262]/60',
       groupTitle: 'text-[#003262]/40',
       navItem: 'text-[#003262]/70 hover:bg-white/60 hover:text-[#003262]',
-      navItemActive: 'bg-white/80 text-[#003262] shadow-sm',
+      navItemActive: 'bg-white text-[#003262] shadow-sm',
       navItemSub: 'text-[#003262]/50',
       navItemSubActive: 'text-[#003262]/80',
       iconActive: 'text-[#003262]',
@@ -242,7 +224,7 @@ function SaaSStatusWidget() {
   const pct = Math.round((usage.aiWords / usage.aiLimit) * 100);
 
   return (
-    <div className="mx-4 mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 shadow-sm">
+    <div className="mx-4 mb-4 p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3 shadow-sm">
       <div className="flex items-center justify-between">
         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">SaaS Plan</p>
         <BrandBadge variant="gold" size="xs" className="scale-75 origin-right uppercase">
@@ -257,10 +239,7 @@ function SaaSStatusWidget() {
           <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
         </div>
         <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-          <div
-            animate={{ width: `${pct}%` }}
-            className="h-full bg-blue-600"
-          />
+          <div animate={{ width: `${pct}%` }} className="h-full bg-blue-600" />
         </div>
       </div>
       <button
@@ -282,25 +261,44 @@ export default function Sidebar({
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
   const { user } = useAuth();
-  const { isPulseDismissed, setPulseDismissed } = useOmniAgentBus();
+  const { isPulseDismissed, setPulseDismissed } = useOAAgentBus();
   const visibleGroups = NAV_GROUPS.filter((group) => {
     if (group.title === '超級管理員區') return user?.role === 'superadmin';
     return true;
   });
   const t = getThemeStyles(sidebarTheme);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
-    CORE: true,
-    'E · S · G 模組': true,
-    GOVERNANCE: true,
-    INSIGHTS: false,
-    ACADEMY: false,
-    SYSTEM: false,
+    'CORE SYSTEMS': true,
+    'AI & OMNI AGENTS': true,
+    'KNOWLEDGE & RESOURCES': false,
+    'WAVE 1 UPDATES (建置中)': false,
+    'WAVE 2 UPDATES (尚未開放)': false,
   });
   const [mounted, setMounted] = useState(false);
+  const [kpiData, setKpiData] = useState<any[]>([]);
+  const [sysHealth, setSysHealth] = useState<any>({ status: 'connecting', dbLatency: 0 });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => {
     setMounted(true);
+
+    // Fetch dynamic KPIs for badges
+    fetch('/api/metrics/kpi')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.ok && d.data) {
+          setKpiData(d.data);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch system health ONCE per refresh
+    fetch('/api/system/health')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d) setSysHealth(d);
+      })
+      .catch(() => setSysHealth({ status: 'degraded', dbLatency: 0 }));
   }, []);
 
   const isActive = (href: string) => {
@@ -317,14 +315,13 @@ export default function Sidebar({
 
   return (
     <>
-      
-        {mobileOpen && (
-          <div
-            onClick={() => setMobileOpen?.(false)}
-            className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
-          />
-        )}
-      
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen?.(false)}
+          className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
+        />
+      )}
+
       <aside
         className={cn(
           `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,
@@ -394,6 +391,24 @@ export default function Sidebar({
                     {group.items.map((item) => {
                       const Icon = item.icon;
                       const active = isActive(item.href);
+                      
+                      // Dynamic badges logic
+                      let dynamicBadge = item.badge;
+                      let badgeClasses = t.badge;
+                      if (item.href === '/vault' && kpiData.length > 0) {
+                        const count = kpiData.find((k) => k.title === '數位封印總數')?.value;
+                        if (count && count !== '...') {
+                           dynamicBadge = `${count} ZKP`;
+                           badgeClasses = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+                        }
+                      } else if (item.href === '/audit-log' && kpiData.length > 0) {
+                        const count = kpiData.find((k) => k.title === '審計日誌紀錄')?.value;
+                        if (count && count !== '...') {
+                           dynamicBadge = `${count} 筆`;
+                           badgeClasses = 'bg-cyan-500/10 text-cyan-600 border border-cyan-500/20';
+                        }
+                      }
+
                       return (
                         <Link
                           key={item.href}
@@ -411,11 +426,11 @@ export default function Sidebar({
                           {!isCollapsed && (
                             <>
                               <span className="flex-1 truncate">{item.label}</span>
-                              {item.badge && (
+                              {dynamicBadge && (
                                 <span
-                                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${t.badge}`}
+                                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${badgeClasses}`}
                                 >
-                                  {item.badge}
+                                  {dynamicBadge}
                                 </span>
                               )}
                               <span
@@ -445,7 +460,7 @@ export default function Sidebar({
           {isPulseDismissed && !isCollapsed && (
             <button
               onClick={() => setPulseDismissed(false)}
-              className="flex items-center justify-center gap-2 w-full py-1.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 text-[10px] font-bold uppercase tracking-wider transition-colors border border-cyan-500/20"
+              className="flex items-center justify-center gap-2 w-full py-1.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 text-[10px] font-bold uppercase tracking-wider transition-colors border border-cyan-500/20"
             >
               <Bot size={12} />
               喚醒萬能精靈
@@ -453,8 +468,12 @@ export default function Sidebar({
           )}
           {!isCollapsed ? (
             <div className={`flex items-center gap-2 text-xs ${t.footerText}`}>
-              <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
-              <span className={t.syncText}>Sovereign Sync</span>
+              <div 
+                className={`w-1.5 h-1.5 rounded-full ${sysHealth.status === 'operational' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} 
+              />
+              <span className={t.syncText}>
+                {sysHealth.status === 'operational' ? `5T Sync (${sysHealth.dbLatency}ms)` : 'Sync Degraded'}
+              </span>
               <span className="ml-auto opacity-40">v8.5</span>
             </div>
           ) : (
@@ -468,7 +487,10 @@ export default function Sidebar({
                   <Bot size={16} />
                 </button>
               )}
-              <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
+              <div 
+                className={`w-1.5 h-1.5 rounded-full ${sysHealth.status === 'operational' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} 
+                title={sysHealth.status === 'operational' ? `5T Sync (${sysHealth.dbLatency}ms)` : 'Sync Degraded'}
+              />
             </div>
           )}
         </div>

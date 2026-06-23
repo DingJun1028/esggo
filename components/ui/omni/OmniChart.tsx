@@ -13,6 +13,7 @@ import {
   Legend,
 } from 'recharts';
 import { ShieldCheck } from 'lucide-react';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniChartProps {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -30,15 +31,27 @@ export interface OmniChartProps {
   height?: number;
 }
 
-export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300, omniHeart }: OmniChartProps) {
+export function OmniChart({
+  data,
+  type = 'area',
+  xAxisKey,
+  series,
+  height = 300,
+  omniHeart: initialHeart,
+}: OmniChartProps) {
+  const omniHeart = useOmniResonance(initialHeart);
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const isGolden = omniHeart?.resonanceState === 1.0;
       const borderColor = isGolden ? 'border-[#ffd700]/30' : 'border-[#63a6b0]/30';
-      const shadowColor = isGolden ? 'shadow-[0_0_15px_rgba(255,215,0,0.15)]' : 'shadow-[0_0_15px_rgba(99,166,176,0.15)]';
-      
+      const shadowColor = isGolden
+        ? 'shadow-[0_0_15px_rgba(255,215,0,0.15)]'
+        : 'shadow-[0_0_15px_rgba(99,166,176,0.15)]';
+
       return (
-        <div className={`bg-void-stark/90 border ${borderColor} p-3 rounded-lg ${shadowColor} backdrop-blur-sm`}>
+        <div
+          className={`bg-void-stark/90 border ${borderColor} p-3 rounded-lg ${shadowColor}`}
+        >
           <p className="text-sm font-bold text-slate-200 mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center gap-2 text-xs">
@@ -50,8 +63,12 @@ export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300,
           {omniHeart && (
             <div className="mt-3 pt-2 border-t border-slate-700/50 flex flex-col gap-1">
               <div className="flex items-center gap-1.5">
-                <ShieldCheck size={12} className={isGolden ? "text-[#ffd700]" : "text-[#63a6b0]"} />
-                <span className={`text-[10px] font-bold ${isGolden ? "text-[#ffd700]" : "text-[#63a6b0]"}`}>
+                <ShieldCheck size={12} className={isGolden ? 'text-[#ffd700]' : 'text-[#63a6b0]'} />
+                <span
+                  className={`text-[10px] font-bold ${
+                    isGolden ? 'text-[#ffd700]' : 'text-[#63a6b0]'
+                  }`}
+                >
                   ZKP Verified
                 </span>
               </div>
@@ -67,14 +84,25 @@ export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300,
   };
 
   const isGolden = omniHeart?.resonanceState === 1.0;
-  const containerBorder = omniHeart ? (isGolden ? 'border-[#ffd700]/20 shadow-[0_0_20px_rgba(255,215,0,0.05)]' : 'border-[#63a6b0]/20 shadow-[0_0_20px_rgba(99,166,176,0.05)]') : 'border-transparent';
+  const containerBorder = omniHeart
+    ? isGolden
+      ? 'border-[#ffd700]/20 shadow-[0_0_20px_rgba(255,215,0,0.05)]'
+      : 'border-[#63a6b0]/20 shadow-[0_0_20px_rgba(99,166,176,0.05)]'
+    : 'border-transparent';
 
   return (
-    <div style={{ width: '100%', height }} className={`relative rounded-xl border ${containerBorder} p-2 transition-all duration-500`}>
+    <div
+      style={{ width: '100%', height }}
+      className={`relative rounded-xl border ${containerBorder} p-2 transition-all duration-500`}
+    >
       {omniHeart && (
         <div className="absolute top-2 right-4 z-10 flex items-center gap-1.5 opacity-80 pointer-events-none">
-          <ShieldCheck size={14} className={isGolden ? "text-[#ffd700]" : "text-[#63a6b0]"} />
-          <span className={`text-[10px] font-bold tracking-widest ${isGolden ? "text-[#ffd700]" : "text-[#63a6b0]"}`}>
+          <ShieldCheck size={14} className={isGolden ? 'text-[#ffd700]' : 'text-[#63a6b0]'} />
+          <span
+            className={`text-[10px] font-bold tracking-widest ${
+              isGolden ? 'text-[#ffd700]' : 'text-[#63a6b0]'
+            }`}
+          >
             OMNI-CORE 5T SECURED
           </span>
         </div>
@@ -109,7 +137,15 @@ export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300,
             />
             <Tooltip
               content={<CustomTooltip />}
-              cursor={{ stroke: omniHeart ? (omniHeart.resonanceState === 1.0 ? 'rgba(255,215,0,0.2)' : 'rgba(99,166,176,0.2)') : 'rgba(255,255,255,0.1)', strokeWidth: 2, strokeDasharray: '4 4' }}
+              cursor={{
+                stroke: omniHeart
+                  ? omniHeart.resonanceState === 1.0
+                    ? 'rgba(255,215,0,0.2)'
+                    : 'rgba(99,166,176,0.2)'
+                  : 'rgba(255,255,255,0.1)',
+                strokeWidth: 2,
+                strokeDasharray: '4 4',
+              }}
             />
             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
             {series.map((s, idx) => (
@@ -122,7 +158,7 @@ export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300,
                 strokeWidth={2}
                 fillOpacity={1}
                 fill={s.gradient ? `url(#color${s.key})` : s.color}
-                activeDot={{ r: 6, strokeWidth: 0, fill: s.color, className: 'animate-pulse' }}
+                activeDot={{ r: 6, strokeWidth: 0, fill: s.color, className: '' }}
               />
             ))}
           </AreaChart>
@@ -142,7 +178,16 @@ export function OmniChart({ data, type = 'area', xAxisKey, series, height = 300,
               tickLine={false}
               axisLine={false}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: omniHeart ? (omniHeart.resonanceState === 1.0 ? 'rgba(255,215,0,0.05)' : 'rgba(99,166,176,0.05)') : 'rgba(255,255,255,0.05)' }} />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{
+                fill: omniHeart
+                  ? omniHeart.resonanceState === 1.0
+                    ? 'rgba(255,215,0,0.05)'
+                    : 'rgba(99,166,176,0.05)'
+                  : 'rgba(255,255,255,0.05)',
+              }}
+            />
             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
             {series.map((s, idx) => (
               <Bar key={idx} dataKey={s.key} name={s.name} fill={s.color} radius={[4, 4, 0, 0]} />

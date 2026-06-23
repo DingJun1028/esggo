@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 async function createClient() {
   const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   return createSupabaseClient(supabaseUrl, serviceRoleKey);
 }
@@ -40,7 +40,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ data, message: 'Best practice saved successfully' }, { status: 201 });
+    return NextResponse.json(
+      { data, message: 'Best practice saved successfully' },
+      { status: 201 }
+    );
   } catch (error: any) {
     if (error.errors) {
       return NextResponse.json({ errors: error.errors }, { status: 400 });
@@ -56,7 +59,7 @@ export async function GET(request: NextRequest) {
     const industry = searchParams.get('industry');
 
     const { data, error } = await omniBlueTableService.getBestPracticesFromSupabase();
-    
+
     if (error) {
       return NextResponse.json({ error }, { status: 500 });
     }
@@ -66,8 +69,8 @@ export async function GET(request: NextRequest) {
       filtered = filtered.filter((bp: BestPractice) => bp.category === category);
     }
     if (industry) {
-      filtered = filtered.filter((bp: BestPractice) => 
-        bp.industry.includes(industry) || bp.industry === 'General Corporate'
+      filtered = filtered.filter(
+        (bp: BestPractice) => bp.industry.includes(industry) || bp.industry === 'General Corporate'
       );
     }
 

@@ -14,7 +14,7 @@
  *   P7 保持純淨    — 單一 StatCard / 精簡 state
  *   P8 意圖宣告    — 本段 metadata
  *   P9 雙向型別    — DocumentRow interface 對齊 DB schema
- *   P10 Liquid Glass — bg-white/60 backdrop-blur border-white/20
+ *   P10 Liquid Glass — bg-white/60  border-white/20
  */
 
 'use client';
@@ -299,7 +299,7 @@ export default function ReadingRoomPage() {
     <tr className="border-b border-slate-100">
       {Array.from({ length: 8 }).map((_, i) => (
         <td key={i} className="px-4 py-3">
-          <div className="h-4 bg-slate-100 rounded animate-pulse w-full" />
+          <div className="h-4 bg-slate-100 rounded w-full" />
         </td>
       ))}
     </tr>
@@ -459,7 +459,7 @@ export default function ReadingRoomPage() {
               {loading ? (
                 <div className="py-6 space-y-2">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="h-10 bg-slate-100 rounded animate-pulse" />
+                    <div key={i} className="h-10 bg-slate-100 rounded" />
                   ))}
                 </div>
               ) : documents.length === 0 ? (

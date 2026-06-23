@@ -1,4 +1,4 @@
-import { getOmniTableServerClient } from '../lib/omni-table/client';
+import { getOATableServerClient } from '../lib/omni-table/client';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 
@@ -9,9 +9,9 @@ const GEMMA_SERVER = 'http://localhost:9379';
 
 async function extractTasksWithGemma4(note: string) {
   console.log('🤖 Gemma 4 正在分析筆記內容...');
-  
+
   const url = `${GEMMA_SERVER}/v1beta/models/google/gemma-4-E4B-it:generateContent`;
-  
+
   const prompt = `你是一位高效的專案經理助手。
 請從以下「ESG 會議筆記」中提取具體的「待辦任務」。
 筆記內容：
@@ -28,7 +28,7 @@ ${note}
 
   try {
     const response = await axios.post(url, {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }]
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
     });
 
     const content = response.data.candidates[0].content.parts[0].text;
@@ -39,7 +39,7 @@ ${note}
     console.error('❌ Gemma 4 提取任務失敗，切換至模擬數據...');
     return [
       { title: '啟動 Gemma 4 核心進行 ESG 數據分析', status: 'Todo' },
-      { title: '完成 OmniTable 任務表單對接', status: 'In Progress' }
+      { title: '完成 OmniTable 任務表單對接', status: 'In Progress' },
     ];
   }
 }
@@ -55,16 +55,16 @@ async function main() {
   const tasks = await extractTasksWithGemma4(sampleNote);
   console.log(`✅ 成功提取 ${tasks.length} 個任務。`);
 
-  const client = getOmniTableServerClient();
+  const client = getOATableServerClient();
 
   try {
     console.log(`🚀 正在將任務同步至 OmniTable [${DATASHEET_ID}]...`);
-    
+
     const records = tasks.map((t: any) => ({
       fields: {
         'Task Title': t.title,
-        'Status': t.status
-      }
+        Status: t.status,
+      },
     }));
 
     await client.createRecords(DATASHEET_ID, records);

@@ -1,6 +1,6 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 async function getAdminClient() {
@@ -9,7 +9,7 @@ async function getAdminClient() {
     throw new Error('Supabase credentials not configured');
   }
   return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { persistSession: false }
+    auth: { persistSession: false },
   });
 }
 
@@ -33,25 +33,23 @@ export async function GET(request: NextRequest) {
       .from('evidence_vault')
       .select('category, status, is_sealed');
 
-    const { data: auditData } = await supabase
-      .from('audit_logs')
-      .select('module, action, status');
+    const { data: auditData } = await supabase.from('audit_logs').select('module, action, status');
 
-    const envVerified = envData?.filter(d => d.verified)?.length || 0;
-    const socialVerified = socialData?.filter(d => d.verified)?.length || 0;
-    const govVerified = govData?.filter(d => d.verified)?.length || 0;
+    const envVerified = envData?.filter((d) => d.verified)?.length || 0;
+    const socialVerified = socialData?.filter((d) => d.verified)?.length || 0;
+    const govVerified = govData?.filter((d) => d.verified)?.length || 0;
 
     const vaultByCategory: Record<string, number> = {};
     const vaultByStatus: Record<string, number> = {};
     let sealedCount = 0;
-    vaultData?.forEach(v => {
+    vaultData?.forEach((v) => {
       vaultByCategory[v.category] = (vaultByCategory[v.category] || 0) + 1;
       vaultByStatus[v.status] = (vaultByStatus[v.status] || 0) + 1;
       if (v.is_sealed) sealedCount++;
     });
 
     const auditByModule: Record<string, number> = {};
-    auditData?.forEach(a => {
+    auditData?.forEach((a) => {
       auditByModule[a.module] = (auditByModule[a.module] || 0) + 1;
     });
 
@@ -90,7 +88,7 @@ export async function GET(request: NextRequest) {
           const verified = envVerified + socialVerified + govVerified;
           return total > 0 ? Math.round((verified / total) * 100) : 0;
         })(),
-      }
+      },
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';

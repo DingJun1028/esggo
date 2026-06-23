@@ -178,7 +178,7 @@ export default function EnvironmentalPage() {
   ];
 
   // --- P10: Liquid Glass helpers ---
-  const glassCard = 'bg-white border border-slate-200 shadow-sm rounded-2xl';
+  const glassCard = 'bg-white border border-slate-200 shadow-sm rounded-xl';
   const glassInput =
     'w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all';
 

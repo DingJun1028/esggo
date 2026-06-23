@@ -18,7 +18,7 @@ export default function SkillBookUI() {
     try {
       const mockLog = `
 User: "我需要將 OmniTable 加上 ZKP 封印，並且與 Supabase 直接連線"
-Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetch 直接進行 REST 操作，並整合了 generateZkpSeal 單向鏈式加密，同時具備 5T 協議的 Transparent (Zod Schema) 與 Trustworthy (迴圈防禦閘門)。"
+Agent: "好的，我為您覆寫了 app/api/oa-table/route.ts，使用了 fetch 直接進行 REST 操作，並整合了 generateZkpSeal 單向鏈式加密，同時具備 5T 協議的 Transparent (Zod Schema) 與 Trustworthy (迴圈防禦閘門)。"
       `;
 
       const res = await fetch('/api/agent/memory-shards', {
@@ -59,7 +59,7 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-[#020617] rounded-2xl border border-cyan-900/50 shadow-2xl relative overflow-hidden font-sans">
+    <div className="w-full max-w-4xl mx-auto p-6 bg-[#020617] rounded-xl border border-cyan-900/50 shadow-sm relative overflow-hidden font-sans">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-cyan-600/20 blur-[100px] pointer-events-none"></div>
 
@@ -104,51 +104,49 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
               </tr>
             </thead>
             <tbody>
-              
-                {shards.map((shard, idx) => (
-                  <tr
-                    key={shard.id}
-                    className="border-b border-cyan-800/20 hover:bg-cyan-900/20 transition-colors group"
-                  >
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <span className="relative flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              {shards.map((shard, idx) => (
+                <tr
+                  key={shard.id}
+                  className="border-b border-cyan-800/20 hover:bg-cyan-900/20 transition-colors group"
+                >
+                  <td className="p-3">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-3 w-3">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-[10px] text-emerald-400 font-bold tracking-widest">
+                        VERIFIED
+                      </span>
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <h3 className="text-sm font-semibold text-cyan-100 group-hover:text-cyan-300 transition-colors">
+                      {shard.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 max-w-[250px] truncate">
+                      {shard.description}
+                    </p>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex flex-wrap gap-1">
+                      {shard.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-800/50"
+                        >
+                          {tag}
                         </span>
-                        <span className="text-[10px] text-emerald-400 font-bold tracking-widest">
-                          VERIFIED
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <h3 className="text-sm font-semibold text-cyan-100 group-hover:text-cyan-300 transition-colors">
-                        {shard.title}
-                      </h3>
-                      <p className="text-xs text-slate-500 max-w-[250px] truncate">
-                        {shard.description}
-                      </p>
-                    </td>
-                    <td className="p-3">
-                      <div className="flex flex-wrap gap-1">
-                        {shard.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-800/50"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="p-3 text-right">
-                      <div className="text-[10px] font-mono text-slate-500 group-hover:text-emerald-400 transition-colors px-2 py-1 rounded inline-block border border-white/5">
-                        0x{shard.id.replace(/-/g, '').substring(0, 16)}...
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              
+                      ))}
+                    </div>
+                  </td>
+                  <td className="p-3 text-right">
+                    <div className="text-[10px] font-mono text-slate-500 group-hover:text-emerald-400 transition-colors px-2 py-1 rounded inline-block border border-white/5">
+                      0x{shard.id.replace(/-/g, '').substring(0, 16)}...
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           {shards.length === 0 && (
@@ -169,7 +167,7 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
             whileTap={{ scale: 0.95 }}
             onClick={handleSynthesize}
             disabled={shards.length < 2 || isSynthesizing || !!ultimate}
-            className={`px-8 py-3 rounded-full flex items-center gap-2 font-semibold shadow-lg transition-all ${
+            className={`px-8 py-3 rounded-full flex items-center gap-2 font-semibold shadow-sm transition-all ${
               shards.length >= 2 && !ultimate
                 ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                 : 'bg-slate-800 text-slate-500 cursor-not-allowed'
@@ -185,43 +183,40 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
         </div>
 
         {/* Ultimate Skill Display */}
-        
-          {ultimate && (
-            <div
-              className="mt-6 p-6 rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 to-slate-900/60 shadow-[0_0_30px_rgba(16,185,129,0.2)] overflow-hidden relative"
-            >
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Zap className="w-32 h-32 text-emerald-400" />
+
+        {ultimate && (
+          <div className="mt-6 p-6 rounded-xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 to-slate-900/60 shadow-[0_0_30px_rgba(16,185,129,0.2)] overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <Zap className="w-32 h-32 text-emerald-400" />
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-widest">
+                  Level: {ultimate.masteryLevel}
+                </span>
+                <h3 className="text-2xl font-bold text-emerald-100">{ultimate.skillName}</h3>
               </div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-widest">
-                    Level: {ultimate.masteryLevel}
-                  </span>
-                  <h3 className="text-2xl font-bold text-emerald-100">{ultimate.skillName}</h3>
-                </div>
 
-                <p className="text-sm text-slate-300 italic mb-6 pl-4 border-l-2 border-emerald-500/50">
-                  {ultimate.synthesis}
-                </p>
+              <p className="text-sm text-slate-300 italic mb-6 pl-4 border-l-2 border-emerald-500/50">
+                {ultimate.synthesis}
+              </p>
 
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-widest">
-                    核心心法 (Core Principles)
-                  </h4>
-                  <ul className="space-y-2">
-                    {ultimate.corePrinciples.map((principle, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-300">
-                        <Sparkles className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                        <span>{principle}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-widest">
+                  核心心法 (Core Principles)
+                </h4>
+                <ul className="space-y-2">
+                  {ultimate.corePrinciples.map((principle, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-300">
+                      <Sparkles className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>{principle}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-          )}
-        
+          </div>
+        )}
       </div>
     </div>
   );

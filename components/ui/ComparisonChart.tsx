@@ -31,7 +31,7 @@ export function ComparisonChart({ resultA, resultB }: { resultA: any; resultB: a
   return (
     <BrandCard
       padding="lg"
-      className="w-full h-[400px] border-slate-200 dark:border-white/10 dark:bg-[#020617]/40 shadow-xl mt-8"
+      className="w-full h-[400px] border-slate-200 /10 #020617]/40 shadow-sm mt-8"
     >
       <div className="flex items-center gap-2 mb-6">
         <Activity size={20} className="text-cyan-400" />

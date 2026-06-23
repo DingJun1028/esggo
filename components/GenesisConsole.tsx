@@ -122,7 +122,7 @@ export default function GenesisConsole() {
       <div className="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
         {/* Swarm Status */}
         <aside className="col-span-3 space-y-6 overflow-y-auto pr-2">
-          <Card className="border-white/5 rounded-2xl overflow-hidden">
+          <Card className="border-white/5 rounded-xl overflow-hidden">
             <div className="p-4 border-b border-white/5 flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                 <Cpu size={14} className="text-cyan-400" /> Agent Swarm
@@ -139,7 +139,7 @@ export default function GenesisConsole() {
                     <div
                       className={cn(
                         'w-2 h-2 rounded-full',
-                        i === 0 ? 'bg-cyan-400 animate-pulse' : 'bg-emerald-400'
+                        i === 0 ? 'bg-cyan-400 ' : 'bg-emerald-400'
                       )}
                     />
                     <span className="text-[11px] font-bold text-slate-200">{name}</span>
@@ -155,7 +155,7 @@ export default function GenesisConsole() {
             </CardContent>
           </Card>
 
-          <Card className="border-white/5 rounded-2xl overflow-hidden">
+          <Card className="border-white/5 rounded-xl overflow-hidden">
             <div className="p-4 border-b border-white/5">
               <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-emerald-400">
                 <Shield size={14} /> 5T Integrity Gate
@@ -194,7 +194,7 @@ export default function GenesisConsole() {
         </aside>
 
         {/* Real-time Terminal */}
-        <main className="col-span-6 flex flex-col border border-white/5 rounded-3xl overflow-hidden shadow-2xl relative">
+        <main className="col-span-6 flex flex-col border border-white/5 rounded-xl overflow-hidden shadow-sm relative">
           <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent pointer-events-none" />
 
           <div className="p-5 border-b border-white/5 flex items-center justify-between z-10">
@@ -205,7 +205,7 @@ export default function GenesisConsole() {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
               <span className="text-[9px] font-black text-red-500 uppercase tracking-tighter">
                 Recording Truth
               </span>
@@ -235,7 +235,7 @@ export default function GenesisConsole() {
                       {log.agent}
                     </span>
                     {log.type === 'command' && (
-                      <Zap size={10} className="text-amber-400 animate-pulse" />
+                      <Zap size={10} className="text-amber-400" />
                     )}
                   </div>
                   <p
@@ -252,7 +252,7 @@ export default function GenesisConsole() {
           </div>
 
           <div className="p-4 border-t border-white/5 flex items-center gap-4 z-10">
-            <ChevronRight size={16} className="text-cyan-400 animate-pulse" />
+            <ChevronRight size={16} className="text-cyan-400" />
             <input
               type="text"
               placeholder="Direct command to Supreme Commander..."
@@ -263,7 +263,7 @@ export default function GenesisConsole() {
 
         {/* Global Insight Layer */}
         <aside className="col-span-3 space-y-6 overflow-y-auto pl-2">
-          <Card className="border-white/5 rounded-2xl overflow-hidden">
+          <Card className="border-white/5 rounded-xl overflow-hidden">
             <div className="p-4 border-b border-white/5">
               <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-amber-400">
                 <Database size={14} /> Data Connect Sync
@@ -301,7 +301,7 @@ export default function GenesisConsole() {
             </CardContent>
           </Card>
 
-          <Card className="border-white/5 rounded-2xl overflow-hidden border-cyan-500/20">
+          <Card className="border-white/5 rounded-xl overflow-hidden border-cyan-500/20">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center gap-3">
                 <Globe size={16} className="text-cyan-400" />

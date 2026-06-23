@@ -202,7 +202,7 @@ export default function OmniKeyPage() {
         ) : keys.length === 0 ? (
           <Card variant="default" padding="lg">
             <div className="text-center space-y-4 py-8">
-              <div className="w-16 h-16 rounded-2xl bg-neutral-100 flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-xl bg-neutral-100 flex items-center justify-center mx-auto">
                 <Key size={28} className="text-neutral-300" />
               </div>
               <div>

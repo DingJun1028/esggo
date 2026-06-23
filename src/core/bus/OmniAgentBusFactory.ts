@@ -1,4 +1,4 @@
-// src/core/bus/OmniAgentBusFactory.ts
+// src/core/bus/OAAgentBusFactory.ts
 
 import { IOmniNotification } from './IOmniNotification';
 import { IT5Protocol } from '../types/IComponentCore';
@@ -6,7 +6,7 @@ import { IT5Protocol } from '../types/IComponentCore';
 export type { IOmniNotification };
 
 // 4. 萬能通知核心鑄造工廠
-export class OmniAgentBusFactory {
+export class OAAgentBusFactory {
   public static createNotification(
     uuid: string,
     type: IOmniNotification['type'],
@@ -15,7 +15,6 @@ export class OmniAgentBusFactory {
     origin: string,
     formula: string
   ): Readonly<IOmniNotification> {
-    
     // 建立基礎通知物件
     const notification: IOmniNotification = {
       uuid,
@@ -29,12 +28,12 @@ export class OmniAgentBusFactory {
       t5Data: {
         traceable: { source_origin: origin },
         trackable: { lifecycle_hook: 'Initialized' },
-        transparent: { 
-          algorithm_formula: formula, 
-          verification: '[ISO-14064-1] Verified' 
+        transparent: {
+          algorithm_formula: formula,
+          verification: '[ISO-14064-1] Verified',
         },
-        trustworthy: { isLocked: true }
-      }
+        trustworthy: { isLocked: true },
+      },
     };
 
     // 【信 (Trust) 核⼼禁區】數據寫入後即刻執⾏ Hash Lock 與 Object.freeze()

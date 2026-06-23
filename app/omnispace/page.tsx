@@ -99,12 +99,12 @@ export default function OmniSpacePage() {
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Neon Orb top left */}
         <div
-          className="absolute top-[-25%] left-[-15%] w-[60%] h-[60%] bg-cyan-500 opacity-20 blur-[130px] rounded-full animate-pulse"
+          className="absolute top-[-25%] left-[-15%] w-[60%] h-[60%] bg-cyan-500 opacity-20 blur-[130px] rounded-full"
           style={{ animationDuration: '8s' }}
         />
         {/* Neon Orb bottom right */}
         <div
-          className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500 opacity-15 blur-[110px] rounded-full animate-pulse"
+          className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500 opacity-15 blur-[110px] rounded-full"
           style={{ animationDuration: '10s' }}
         />
         {/* High-tech grid scan line */}
@@ -113,7 +113,7 @@ export default function OmniSpacePage() {
 
       <div className="relative z-10 flex-1 flex flex-col p-4 md:p-8 max-w-7xl mx-auto w-full gap-6">
         {/* Sovereign Cyber Header */}
-        <header className="p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+        <header className="p-6 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
           <div className="flex items-center gap-4">
             {/* Animated Logo Hexagon */}
             <div className="relative w-12 h-12 flex items-center justify-center bg-cyan-950/40 border border-cyan-500/30 rounded-xl shadow-[0_0_10px_rgba(6,182,212,0.2)]">
@@ -131,7 +131,7 @@ export default function OmniSpacePage() {
                 />
               </svg>
               {isStreaming && (
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full animate-ping text-cyan-400" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full text-cyan-400" />
               )}
             </div>
             <div>
@@ -142,7 +142,7 @@ export default function OmniSpacePage() {
                 <span className="text-xs text-slate-500">v2.1-Berkeley (Collaborative)</span>
               </div>
               <h1
-                className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-neutral-100  via-emerald-400  mt-1"
+                className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-neutral-100 via-emerald-400 mt-1"
                 style={{ textShadow: '0 0 20px rgba(6,182,212,0.3)' }}
               >
                 OMNICORE RESONATOR
@@ -210,14 +210,14 @@ export default function OmniSpacePage() {
         {/* Sovereign Bento Grid Layout */}
         <div className="grid grid-cols-12 gap-6 flex-1 min-h-[600px]">
           {/* Main Bento Panel: Live Cyber Terminal (8 cols) */}
-          <div className="col-span-12 lg:col-span-8 -md rounded-2xl p-6 flex flex-col relative overflow-hidden border border-slate-200">
+          <div className="col-span-12 lg:col-span-8 -md rounded-xl p-6 flex flex-col relative overflow-hidden border border-slate-200">
             {/* Subtle light scan line */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-neutral-100 from-transparent via-cyan-500 to-transparent opacity-30 animate-pulse" />
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-neutral-100 from-transparent via-cyan-500 to-transparent opacity-30" />
 
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
               <h2 className="text-sm font-bold text-slate-700 flex items-center gap-2.5 tracking-wider">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                 </span>
                 LIVE CORE TELEMETRY STREAM
@@ -231,7 +231,7 @@ export default function OmniSpacePage() {
                   [ Trigger Pulse ]
                 </button>
                 <div className="text-[10px] text-slate-500 flex items-center gap-1.5 px-3 py-1 rounded-md border border-slate-200">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   REALTIME CHANNEL
                 </div>
               </div>
@@ -314,7 +314,7 @@ export default function OmniSpacePage() {
           {/* Right Column Panels (4 cols) */}
           <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
             {/* Panel 1: Online Commanders (Presence) */}
-            <div className="-md rounded-2xl p-6 flex flex-col border border-slate-200">
+            <div className="-md rounded-xl p-6 flex flex-col border border-slate-200">
               <h3 className="text-sm font-bold text-slate-700 tracking-wider mb-4 flex items-center gap-2">
                 <svg
                   className="w-4 h-4 text-cyan-400"
@@ -360,7 +360,7 @@ export default function OmniSpacePage() {
             </div>
 
             {/* Panel 2: System Metric Gauges */}
-            <div className="-md rounded-2xl p-6 flex flex-col border border-slate-200 flex-1">
+            <div className="-md rounded-xl p-6 flex flex-col border border-slate-200 flex-1">
               <h3 className="text-sm font-bold text-slate-700 tracking-wider mb-6 flex items-center gap-2">
                 <svg
                   className="w-4 h-4 text-cyan-400"
@@ -392,7 +392,7 @@ export default function OmniSpacePage() {
                   </div>
                   <div className="h-2.5 rounded-full overflow-hidden border border-slate-200">
                     <div
-                      className="h-full bg-neutral-100  via-emerald-400  rounded-full transition-all duration-500"
+                      className="h-full bg-neutral-100 via-emerald-400 rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(streamStatus.ren, 100)}%` }}
                     />
                   </div>
@@ -411,7 +411,7 @@ export default function OmniSpacePage() {
                   </div>
                   <div className="h-2.5 rounded-full overflow-hidden border border-slate-200">
                     <div
-                      className="h-full bg-neutral-100  via-cyan-400  rounded-full transition-all duration-500"
+                      className="h-full bg-neutral-100 via-cyan-400 rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(streamStatus.du, 100)}%` }}
                     />
                   </div>
@@ -420,7 +420,7 @@ export default function OmniSpacePage() {
             </div>
 
             {/* Omni Core Modules: The Five Pillars of Ascension */}
-            <div className="-md rounded-2xl p-6 flex flex-col border border-slate-200 border-t-cyan-500/30">
+            <div className="-md rounded-xl p-6 flex flex-col border border-slate-200 border-t-cyan-500/30">
               <h3 className="text-sm font-bold text-slate-700 tracking-wider mb-4 flex items-center gap-2">
                 <svg
                   className="w-4 h-4 text-cyan-400"

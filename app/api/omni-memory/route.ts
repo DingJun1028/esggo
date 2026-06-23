@@ -226,7 +226,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, shards: shards.length, results: crawlResults });
     }
 
-    // 13. 自動萃取（由 OmniAgentBus 觸發）
+    // 13. 自動萃取（由 OAAgentBus 觸發）
     if (action === 'auto_extract') {
       const shards = await autoExtractFromBusEvents();
       return NextResponse.json({ success: true, shardsExtracted: shards.length, shards });

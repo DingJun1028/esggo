@@ -176,7 +176,7 @@ const MenuBar = ({ editor, documentId }: { editor: Editor | null; documentId: st
  <div className="flex-grow" />
 
  <ToolbarButton onClick={handleExportPDF} disabled={isExporting} title="Export to PDF">
- <span className="flex items-center gap-1 text-emerald-600 ">
+ <span className="flex items-center gap-1 text-emerald-600">
  {isExporting ? <RefreshCcw size={16} className="animate-spin" /> : <FileDown size={16} />}
  <span className="text-[10px] hidden sm:inline-block font-bold">匯出 PDF</span>
  </span>
@@ -186,7 +186,7 @@ const MenuBar = ({ editor, documentId }: { editor: Editor | null; documentId: st
  onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
  title="Clear Formatting"
  >
- <span className="flex items-center gap-1 text-amber-600 ">
+ <span className="flex items-center gap-1 text-amber-600">
  <RemoveFormatting size={16} />
  <span className="text-[10px] hidden sm:inline-block font-bold">清除格式</span>
  </span>
@@ -250,7 +250,7 @@ const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
  return (
  <BubbleMenu
  editor={editor}
- className="flex bg-white border border-slate-200 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 "
+ className="flex bg-white border border-slate-200 shadow-sm rounded-lg overflow-hidden divide-x divide-slate-100"
  >
  <button
  onClick={() => handleAiRewrite('refine')}

@@ -27,7 +27,7 @@ export default function StandardPage({ config, children }: StandardPageProps) {
       >
         <div className="flex items-center gap-6 min-w-0">
           {/* 5T Protocol Micro Indicator */}
-          <div className="flex gap-2 px-4 py-2.5 bg-[#003262]/5 rounded-2xl border border-[#003262]/10 shadow-inner">
+          <div className="flex gap-2 px-4 py-2.5 bg-[#003262]/5 rounded-xl border border-[#003262]/10 shadow-inner">
             {['T1', 'T2', 'T3', 'T4', 'T5'].map((code) => (
               <div
                 key={code}
@@ -45,7 +45,7 @@ export default function StandardPage({ config, children }: StandardPageProps) {
           {/* Icon + Title Pair */}
           <div className="flex items-center gap-4 min-w-0">
             {config.icon && (
-              <div className="w-12 h-12 rounded-2xl bg-[#003262] text-white flex items-center justify-center shadow-xl shadow-[#003262]/20 z-layer-2">
+              <div className="w-12 h-12 rounded-xl bg-[#003262] text-white flex items-center justify-center shadow-sm shadow-[#003262]/20 z-layer-2">
                 {React.cloneElement(config.icon as React.ReactElement, { size: 24 })}
               </div>
             )}
@@ -75,7 +75,7 @@ export default function StandardPage({ config, children }: StandardPageProps) {
 
         {/* Global Action Terminal */}
         <div className="flex items-center gap-4 flex-shrink-0">
-          <div className="flex items-center gap-3 px-4 py-2 bg-emerald-50/40 rounded-2xl border border-emerald-100/60 -md">
+          <div className="flex items-center gap-3 px-4 py-2 bg-emerald-50/40 rounded-xl border border-emerald-100/60 -md">
             <BrandStatusDot status="active" pulse size="sm" />
             <span className="text-[10px] font-black text-emerald-800 uppercase tracking-widest hidden sm:block">
               Protocol_Verified
@@ -89,7 +89,7 @@ export default function StandardPage({ config, children }: StandardPageProps) {
               loading={action.loading}
               disabled={action.disabled}
               size="md"
-              className="rounded-2xl shadow-lg"
+              className="rounded-xl shadow-sm"
               icon={action.icon}
             >
               {action.label}

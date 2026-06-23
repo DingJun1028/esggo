@@ -63,7 +63,7 @@ return (
           <aside
             ref={drawerRef}
             className={cn(
-              'fixed top-0 bottom-0 z-50 h-full   border-r border-white/20 shadow-2xl',
+              'fixed top-0 bottom-0 z-50 h-full   border-r border-white/20 shadow-sm',
               side === 'left' ? 'left-0' : 'right-0',
               sizeClasses[size]
             )}

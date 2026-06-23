@@ -158,9 +158,9 @@ export const CausalTopologyGraph: React.FC<CausalTopologyGraphProps> = ({
   const getStatusColor = (status: NodeStatus) => {
     switch (status) {
       case 'processing':
-        return 'border-blue-400 bg-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.6)] animate-pulse scale-[1.02] ring-1 ring-blue-400/50';
+        return 'border-blue-400 bg-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.6)]  scale-[1.02] ring-1 ring-blue-400/50';
       case 'healing':
-        return 'border-indigo-400 bg-indigo-500/20 shadow-[0_0_20px_rgba(99,102,241,0.6)] animate-pulse scale-[1.02] ring-1 ring-indigo-400/50';
+        return 'border-indigo-400 bg-indigo-500/20 shadow-[0_0_20px_rgba(99,102,241,0.6)]  scale-[1.02] ring-1 ring-indigo-400/50';
       case 'success':
         return 'border-emerald-400 bg-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.5)] scale-[1.05] ring-2 ring-emerald-400/50';
       case 'failed':
@@ -171,7 +171,7 @@ export const CausalTopologyGraph: React.FC<CausalTopologyGraphProps> = ({
   };
 
   return (
-    <div className="relative w-full p-8 rounded-2xl bg-slate-900/80 border border-white/10 overflow-hidden">
+    <div className="relative w-full p-8 rounded-xl bg-slate-900/80 border border-white/10 overflow-hidden">
       {/* 神經形態背景光暈 */}
       <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.1),transparent_50%)] animate-spin-slow pointer-events-none" />
 
@@ -187,7 +187,7 @@ export const CausalTopologyGraph: React.FC<CausalTopologyGraphProps> = ({
           <React.Fragment key={node.id}>
             {/* 節點卡片 (液態玻璃擬態) */}
             <div
-              className={`flex flex-col items-center justify-center p-6 w-64 rounded-xl border backdrop-blur-md transition-all duration-700 ease-out ${getStatusColor(
+              className={`flex flex-col items-center justify-center p-6 w-64 rounded-xl border  transition-all duration-700 ease-out ${getStatusColor(
                 node.status
               )}`}
             >
@@ -218,7 +218,7 @@ export const CausalTopologyGraph: React.FC<CausalTopologyGraphProps> = ({
                   <div
                     className={`absolute inset-0 transition-opacity duration-1000 ${
                       nodes[index].status === 'processing'
-                        ? 'opacity-100 bg-gradient-to-r from-blue-500/20 to-blue-400/80 animate-pulse'
+                        ? 'opacity-100 bg-gradient-to-r from-blue-500/20 to-blue-400/80 '
                         : 'opacity-0'
                     }`}
                   />

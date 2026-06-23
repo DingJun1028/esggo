@@ -3,7 +3,7 @@
 /**
  * useOmniTable — React Hook for OmniTable Integration
  * ═══════════════════════════════════════════════
- * Client-side hook that communicates with /api/omni-table proxy
+ * Client-side hook that communicates with /api/oa-table proxy
  */
 
 import { useState, useCallback } from 'react';
@@ -24,19 +24,32 @@ interface UseOmniTableReturn {
   // Read operations
   fetchSpaces: () => Promise<OmniTableSpace[]>;
   fetchNodes: (spaceId: string) => Promise<OmniTableNode[]>;
-  fetchRecords: (datasheetId: string, opts?: { pageSize?: number; pageNum?: number; viewId?: string }) => Promise<OmniTableRecordsResponse>;
+  fetchRecords: (
+    datasheetId: string,
+    opts?: { pageSize?: number; pageNum?: number; viewId?: string }
+  ) => Promise<OmniTableRecordsResponse>;
   fetchFields: (datasheetId: string) => Promise<OmniTableField[]>;
   fetchViews: (datasheetId: string) => Promise<OmniTableView[]>;
 
   // Write operations
-  createRecords: (datasheetId: string, records: Array<{ fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
-  updateRecords: (datasheetId: string, records: Array<{ recordId: string; fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
+  createRecords: (
+    datasheetId: string,
+    records: Array<{ fields: Record<string, unknown> }>
+  ) => Promise<OmniTableRecord[]>;
+  updateRecords: (
+    datasheetId: string,
+    records: Array<{ recordId: string; fields: Record<string, unknown> }>
+  ) => Promise<OmniTableRecord[]>;
   deleteRecords: (datasheetId: string, recordIds: string[]) => Promise<void>;
-  createDatasheet: (spaceId: string, name: string, fields: Array<{ name: string; type: string }>) => Promise<{ id: string }>;
+  createDatasheet: (
+    spaceId: string,
+    name: string,
+    fields: Array<{ name: string; type: string }>
+  ) => Promise<{ id: string }>;
 }
 
 async function apiGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL('/api/omni-table', window.location.origin);
+  const url = new URL('/api/oa-table', window.location.origin);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
 
@@ -47,7 +60,7 @@ async function apiGet<T>(action: string, params: Record<string, string> = {}): P
 }
 
 async function apiPost<T>(action: string, payload: Record<string, unknown>): Promise<T> {
-  const res = await fetch('/api/omni-table', {
+  const res = await fetch('/api/oa-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),
@@ -79,10 +92,7 @@ export function useOmniTable(): UseOmniTableReturn {
     }
   }, []);
 
-  const fetchSpaces = useCallback(
-    () => wrap(() => apiGet<OmniTableSpace[]>('spaces')),
-    [wrap]
-  );
+  const fetchSpaces = useCallback(() => wrap(() => apiGet<OmniTableSpace[]>('spaces')), [wrap]);
 
   const fetchNodes = useCallback(
     (spaceId: string) => wrap(() => apiGet<OmniTableNode[]>('nodes', { spaceId })),

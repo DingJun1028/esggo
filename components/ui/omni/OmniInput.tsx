@@ -2,6 +2,7 @@ import { OmniComponentHeart } from '@esggo/types';
 import React, { useId } from 'react';
 import { cn } from '../../../lib/utils';
 import { AlertCircle, Lock } from 'lucide-react';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -14,17 +15,35 @@ export interface OmniInputProps extends React.InputHTMLAttributes<HTMLInputEleme
 }
 
 export const OmniInput = React.forwardRef<HTMLInputElement, OmniInputProps>(
-  ({ className, label, error, icon, fullWidth = true, id, omniHeart, ...props }, ref) => {
+  (
+    { className, label, error, icon, fullWidth = true, id, omniHeart: initialHeart, ...props },
+    ref
+  ) => {
+    const omniHeart = useOmniResonance(initialHeart);
     const generatedId = useId();
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
+      <div
+        className={cn(
+          'flex flex-col gap-1.5',
+          fullWidth ? 'w-full' : '',
+          omniHeart ? 'relative group' : '',
+          omniHeart?.resonanceState === 1.0 &&
+            'ring-2 ring-[var(--theme-accent)] ring-offset-1 rounded-lg'
+        )}
+        data-omni-resonance={omniHeart?.resonanceState}
+      >
         {label && (
-          <label htmlFor={inputId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label
+            htmlFor={inputId}
+            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]"
+          >
             {label}
-            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
+            {omniHeart && (
+              <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />
+            )}
           </label>
         )}
         <div className="relative">
@@ -79,17 +98,35 @@ export interface OmniSelectProps extends React.SelectHTMLAttributes<HTMLSelectEl
 }
 
 export const OmniSelect = React.forwardRef<HTMLSelectElement, OmniSelectProps>(
-  ({ className, label, error, fullWidth = true, id, children, omniHeart, ...props }, ref) => {
+  (
+    { className, label, error, fullWidth = true, id, children, omniHeart: initialHeart, ...props },
+    ref
+  ) => {
+    const omniHeart = useOmniResonance(initialHeart);
     const generatedId = useId();
     const selectId = id || generatedId;
     const errorId = `${selectId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
+      <div
+        className={cn(
+          'flex flex-col gap-1.5',
+          fullWidth ? 'w-full' : '',
+          omniHeart ? 'relative group' : '',
+          omniHeart?.resonanceState === 1.0 &&
+            'ring-2 ring-[var(--theme-accent)] ring-offset-1 rounded-lg'
+        )}
+        data-omni-resonance={omniHeart?.resonanceState}
+      >
         {label && (
-          <label htmlFor={selectId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label
+            htmlFor={selectId}
+            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]"
+          >
             {label}
-            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
+            {omniHeart && (
+              <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />
+            )}
           </label>
         )}
         <select
@@ -136,17 +173,32 @@ export interface OmniTextareaProps extends React.TextareaHTMLAttributes<HTMLText
 }
 
 export const OmniTextarea = React.forwardRef<HTMLTextAreaElement, OmniTextareaProps>(
-  ({ className, label, error, fullWidth = true, id, omniHeart, ...props }, ref) => {
+  ({ className, label, error, fullWidth = true, id, omniHeart: initialHeart, ...props }, ref) => {
+    const omniHeart = useOmniResonance(initialHeart);
     const generatedId = useId();
     const textareaId = id || generatedId;
     const errorId = `${textareaId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
+      <div
+        className={cn(
+          'flex flex-col gap-1.5',
+          fullWidth ? 'w-full' : '',
+          omniHeart ? 'relative group' : '',
+          omniHeart?.resonanceState === 1.0 &&
+            'ring-2 ring-[var(--theme-accent)] ring-offset-1 rounded-lg'
+        )}
+        data-omni-resonance={omniHeart?.resonanceState}
+      >
         {label && (
-          <label htmlFor={textareaId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label
+            htmlFor={textareaId}
+            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]"
+          >
             {label}
-            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
+            {omniHeart && (
+              <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />
+            )}
           </label>
         )}
         <textarea

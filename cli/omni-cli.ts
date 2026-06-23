@@ -4,7 +4,7 @@
  * ESGGO 全域治理指令集
  *
  * Changelog v3.0.0:
- * - Added bus-health command (OmniAgentBus health check)
+ * - Added bus-health command (OAAgentBus health check)
  * - Added bus-events command (SSE event stream)
  * - Added bus-skills command (list registered skills)
  * - Added bus-metrics command (skill execution metrics)
@@ -27,13 +27,18 @@ const OMNICORE_VPS_PROTOCOL = process.env.OMNICORE_VPS_PROTOCOL || 'https';
 const OMNICORE_GATEWAY_URL = `${OMNICORE_VPS_PROTOCOL}://${OMNICORE_VPS_HOST}:${OMNICORE_VPS_PORT}`;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-async function callApi(endpoint: string, method = 'GET', body?: object, baseUrl?: string): Promise<any> {
+async function callApi(
+  endpoint: string,
+  method = 'GET',
+  body?: object,
+  baseUrl?: string
+): Promise<any> {
   const url = `${baseUrl || OMNIAGENT_API_URL}${endpoint}`;
   const options: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OMNI_MCP_ACCESS_TOKEN || ''}`,
+      Authorization: `Bearer ${process.env.OMNI_MCP_ACCESS_TOKEN || ''}`,
     },
   };
   if (body) options.body = JSON.stringify(body);
@@ -43,8 +48,10 @@ async function callApi(endpoint: string, method = 'GET', body?: object, baseUrl?
 }
 
 function printTable(headers: string[], rows: string[][]) {
-  const colWidths = headers.map((h, i) => Math.max(h.length, ...rows.map(r => (r[i] || '').length)));
-  const separator = colWidths.map(w => '─'.repeat(w + 2)).join('┼');
+  const colWidths = headers.map((h, i) =>
+    Math.max(h.length, ...rows.map((r) => (r[i] || '').length))
+  );
+  const separator = colWidths.map((w) => '─'.repeat(w + 2)).join('┼');
   console.log(`┌${separator}┐`);
   console.log(`│ ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' │ ')} │`);
   console.log(`├${separator}┤`);
@@ -86,7 +93,12 @@ program
         spinner.text = '初始化 Agent Session...';
         spinner.start();
         try {
-          const session = await callApi('/api/agent/session', 'POST', { persona: options.persona, mode: options.mode }, baseUrl);
+          const session = await callApi(
+            '/api/agent/session',
+            'POST',
+            { persona: options.persona, mode: options.mode },
+            baseUrl
+          );
           spinner.succeed(chalk.green(`Session 已建立: ${session.sessionId || 'N/A'}`));
         } catch {
           spinner.warn('Session API 不可用，跳過');
@@ -128,7 +140,7 @@ program
 // ─── bus-health ──────────────────────────────────────────────────────────────
 program
   .command('bus-health')
-  .description('查看 OmniAgentBus 健康狀態與技能指標')
+  .description('查看 OAAgentBus 健康狀態與技能指標')
   .option('--vps', '直接呼叫 VPS 閘道', false)
   .action(async (options) => {
     const baseUrl = options.vps ? OMNICORE_GATEWAY_URL : OMNIAGENT_API_URL;
@@ -137,11 +149,12 @@ program
       const data = await callApi('/api/system/bus-health', 'GET', undefined, baseUrl);
       spinner.succeed();
 
-      console.log(chalk.hex('#003262').bold('\n🚌 OmniAgentBus 健康狀態'));
+      console.log(chalk.hex('#003262').bold('\n🚌 OAAgentBus 健康狀態'));
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
       const h = data.health;
-      const statusColor = h.status === 'healthy' ? chalk.green : h.status === 'degraded' ? chalk.yellow : chalk.red;
+      const statusColor =
+        h.status === 'healthy' ? chalk.green : h.status === 'degraded' ? chalk.yellow : chalk.red;
       console.log(`  ${chalk.cyan('Status:')}      ${statusColor(h.status)}`);
       console.log(`  ${chalk.cyan('Uptime:')}      ${Math.round(h.uptime / 1000)}s`);
       console.log(`  ${chalk.cyan('Total Events:')} ${h.totalEvents}`);
@@ -155,9 +168,12 @@ program
         for (const skill of data.skills) {
           const m = skill.metrics;
           if (m) {
-            const successRate = m.executions > 0 ? ((m.successes / m.executions) * 100).toFixed(1) : 'N/A';
+            const successRate =
+              m.executions > 0 ? ((m.successes / m.executions) * 100).toFixed(1) : 'N/A';
             console.log(`  ${chalk.cyan(skill.name)} (${skill.id})`);
-            console.log(`    執行: ${m.executions} | 成功: ${m.successes} | 失敗: ${m.failures} | 成功率: ${successRate}%`);
+            console.log(
+              `    執行: ${m.executions} | 成功: ${m.successes} | 失敗: ${m.failures} | 成功率: ${successRate}%`
+            );
             if (m.avgExecutionTime) console.log(`    平均耗時: ${m.avgExecutionTime.toFixed(0)}ms`);
             if (m.lastError) console.log(`    ${chalk.red('最後錯誤:')} ${m.lastError}`);
           } else {
@@ -173,7 +189,7 @@ program
 // ─── bus-skills ───────────────────────────────────────────────────────────────
 program
   .command('bus-skills')
-  .description('列出所有已註冊的 OmniAgentBus 技能')
+  .description('列出所有已註冊的 OAAgentBus 技能')
   .option('--vps', '直接呼叫 VPS 閘道', false)
   .action(async (options) => {
     const baseUrl = options.vps ? OMNICORE_GATEWAY_URL : OMNIAGENT_API_URL;
@@ -182,7 +198,7 @@ program
       const data = await callApi('/api/system/bus-health', 'GET', undefined, baseUrl);
       spinner.succeed();
 
-      console.log(chalk.hex('#003262').bold('\n⚔️ OmniAgentBus 已註冊技能'));
+      console.log(chalk.hex('#003262').bold('\n⚔️ OAAgentBus 已註冊技能'));
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
       const headers = ['ID', '名稱', '觸發事件', '自治'];
@@ -201,16 +217,21 @@ program
 // ─── bus-events ───────────────────────────────────────────────────────────────
 program
   .command('bus-events')
-  .description('查看 OmniAgentBus 事件統計')
+  .description('查看 OAAgentBus 事件統計')
   .option('--vps', '直接呼叫 VPS 閘道', false)
   .action(async (options) => {
     const baseUrl = options.vps ? OMNICORE_GATEWAY_URL : OMNIAGENT_API_URL;
     const spinner = ora('取得事件統計...').start();
     try {
-      const data = await callApi('/api/omni-agent-api/stream/events/stats', 'GET', undefined, baseUrl);
+      const data = await callApi(
+        '/api/omni-agent-api/stream/events/stats',
+        'GET',
+        undefined,
+        baseUrl
+      );
       spinner.succeed();
 
-      console.log(chalk.hex('#003262').bold('\n📡 OmniAgentBus 事件統計'));
+      console.log(chalk.hex('#003262').bold('\n📡 OAAgentBus 事件統計'));
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
       const headers = ['事件類型', '次數'];
@@ -222,7 +243,9 @@ program
       }
 
       if (data.buffer) {
-        console.log(`\n  緩衝區: ${data.buffer.current}/${data.buffer.max} (${data.buffer.percent}%)`);
+        console.log(
+          `\n  緩衝區: ${data.buffer.current}/${data.buffer.max} (${data.buffer.percent}%)`
+        );
       }
       if (data.subscribers !== undefined) {
         console.log(`  SSE 訂閱者: ${data.subscribers}`);
@@ -275,7 +298,12 @@ program
 
     const spinner = ora('封印中...').start();
     try {
-      const result = await callApi('/api/vault/seal', 'POST', { evidenceUuid, sealType: options.type }, baseUrl);
+      const result = await callApi(
+        '/api/vault/seal',
+        'POST',
+        { evidenceUuid, sealType: options.type },
+        baseUrl
+      );
       spinner.succeed(chalk.green('封印完成'));
 
       console.log(chalk.hex('#003262').bold('\n🔐 封印結果'));
@@ -308,7 +336,7 @@ program
 
     for (const step of steps) {
       const spinner = ora(step.label).start();
-      await new Promise(resolve => setTimeout(resolve, step.delay));
+      await new Promise((resolve) => setTimeout(resolve, step.delay));
       spinner.succeed();
     }
 
@@ -336,7 +364,8 @@ program
   .command('memory')
   .description('記憶碎片管理')
   .addCommand(
-    program.createCommand('list')
+    program
+      .createCommand('list')
       .description('列出記憶碎片')
       .option('--limit <n>', '限制數量', '20')
       .option('--tags <tags>', '標籤過濾（逗號分隔）')
@@ -368,8 +397,12 @@ program
           } else {
             for (const shard of data.shards) {
               const entropy = shard.entropyLevel !== undefined ? `熵${shard.entropyLevel}` : '';
-              const importance = shard.importanceScore ? `⭐${shard.importanceScore.toFixed(2)}` : '';
-              console.log(`  ${chalk.cyan(shard.title)} ${chalk.gray(entropy)} ${chalk.yellow(importance)}`);
+              const importance = shard.importanceScore
+                ? `⭐${shard.importanceScore.toFixed(2)}`
+                : '';
+              console.log(
+                `  ${chalk.cyan(shard.title)} ${chalk.gray(entropy)} ${chalk.yellow(importance)}`
+              );
               console.log(`    ${chalk.gray(shard.description.substring(0, 80))}...`);
               console.log(`    ${chalk.gray('標籤:')} ${shard.tags?.join(', ') || '無'}`);
               console.log('');
@@ -382,7 +415,8 @@ program
       })
   )
   .addCommand(
-    program.createCommand('ultimates')
+    program
+      .createCommand('ultimates')
       .description('列出技能奧義')
       .option('--json', 'JSON 格式輸出')
       .action(async (options) => {
@@ -403,10 +437,17 @@ program
             console.log(chalk.gray('  尚無技能奧義'));
           } else {
             for (const ultimate of data.ultimates) {
-              const masteryColor = ultimate.masteryLevel === 'Master' ? chalk.yellow :
-                ultimate.masteryLevel === 'Expert' ? chalk.green :
-                ultimate.masteryLevel === 'Adept' ? chalk.blue : chalk.gray;
-              console.log(`  ${chalk.cyan(ultimate.skillName)} ${masteryColor(`[${ultimate.masteryLevel}]`)}`);
+              const masteryColor =
+                ultimate.masteryLevel === 'Master'
+                  ? chalk.yellow
+                  : ultimate.masteryLevel === 'Expert'
+                  ? chalk.green
+                  : ultimate.masteryLevel === 'Adept'
+                  ? chalk.blue
+                  : chalk.gray;
+              console.log(
+                `  ${chalk.cyan(ultimate.skillName)} ${masteryColor(`[${ultimate.masteryLevel}]`)}`
+              );
               console.log(`    ${chalk.gray(ultimate.synthesis.substring(0, 100))}...`);
               console.log(`    ${chalk.gray('來源碎片:')} ${ultimate.sourceShards?.length || 0}`);
               console.log('');
@@ -418,7 +459,8 @@ program
       })
   )
   .addCommand(
-    program.createCommand('stats')
+    program
+      .createCommand('stats')
       .description('記憶碎片統計')
       .action(async () => {
         const spinner = ora('取得統計...').start();
@@ -437,14 +479,22 @@ program
           if (data.shardStats) {
             console.log(chalk.cyan('\n  碎片統計:'));
             for (const stat of data.shardStats) {
-              console.log(`    ${stat.source_type}: ${stat.total_shards} 碎片, 平均熵 ${stat.avg_entropy?.toFixed(1) || 'N/A'}`);
+              console.log(
+                `    ${stat.source_type}: ${stat.total_shards} 碎片, 平均熵 ${
+                  stat.avg_entropy?.toFixed(1) || 'N/A'
+                }`
+              );
             }
           }
 
           if (data.ultimateStats) {
             console.log(chalk.cyan('\n  奧義統計:'));
             for (const stat of data.ultimateStats) {
-              console.log(`    ${stat.mastery_level}: ${stat.total_ultimates} 奧義, 成功率 ${stat.avg_success_rate?.toFixed(2) || 'N/A'}`);
+              console.log(
+                `    ${stat.mastery_level}: ${stat.total_ultimates} 奧義, 成功率 ${
+                  stat.avg_success_rate?.toFixed(2) || 'N/A'
+                }`
+              );
             }
           }
         } catch (error: any) {
@@ -453,7 +503,8 @@ program
       })
   )
   .addCommand(
-    program.createCommand('extract')
+    program
+      .createCommand('extract')
       .description('從文字萃取記憶碎片')
       .argument('<text>', '要萃取的文字內容')
       .option('--source <type>', '來源類型', 'manual')
@@ -486,7 +537,8 @@ program
       })
   )
   .addCommand(
-    program.createCommand('synthesize')
+    program
+      .createCommand('synthesize')
       .description('合成技能奧義（從現有碎片）')
       .option('--tags <tags>', '指定標籤碎片（逗號分隔）')
       .action(async (options) => {
@@ -519,7 +571,9 @@ program
 
           if (synthData.success) {
             console.log(chalk.green('✔ 合成成功'));
-            console.log(`  ${chalk.cyan(synthData.ultimate.skillName)} [${synthData.ultimate.masteryLevel}]`);
+            console.log(
+              `  ${chalk.cyan(synthData.ultimate.skillName)} [${synthData.ultimate.masteryLevel}]`
+            );
             console.log(`  ${chalk.gray(synthData.ultimate.synthesis.substring(0, 150))}`);
           } else {
             console.log(chalk.red(`✗ 合成失敗: ${synthData.error}`));
@@ -530,7 +584,8 @@ program
       })
   )
   .addCommand(
-    program.createCommand('crawl')
+    program
+      .createCommand('crawl')
       .description('爬取 ESG 情報並萃取記憶碎片')
       .option('--sources <sources>', '指定來源（逗號分隔）')
       .option('--topics <topics>', '搜尋主題（逗號分隔）')

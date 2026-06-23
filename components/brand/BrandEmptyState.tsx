@@ -13,7 +13,7 @@ export default function BrandEmptyState({ icon, title, description, action, clas
   return (
     <div className={`flex flex-col items-center justify-center py-14 px-6 text-center ${className}`}>
       {icon && (
-        <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-400">
+        <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-4 text-slate-400">
           {icon}
         </div>
       )}

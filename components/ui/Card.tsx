@@ -24,7 +24,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 
           // Hover 效果
           isHoverable &&
-            'transition-all duration-500 hover:shadow-xl hover:scale-[1.01] hover: hover:border-white/80',
+            'transition-all duration-500 hover:shadow-sm hover:scale-[1.01] hover: hover:border-white/80',
 
           // 發光效果（用於重要卡片）
           glow &&

@@ -1,9 +1,8 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 import {
   Shield,
   Activity,
@@ -60,7 +59,7 @@ const matrixData = [
           'Framer Motion Presets',
         ],
         businessLogic:
-          '整合背景毛玻璃 backdrop-blur、邊框漸層與動態發光，作為全系統 UI 的基礎容器。',
+          '整合背景毛玻璃 、邊框漸層與動態發光，作為全系統 UI 的基礎容器。',
         uiux: '支援微滑鼠懸停傾斜動態，具有 12 像素圓角與微發光背景。',
         customerJourney: '使用者與系統交互的視覺起點，貫穿整個瀏覽與操作過程。',
         painPointsSolved: '解決傳統硬邊扁平卡片缺乏深度與科技感的痛點。',
@@ -369,12 +368,12 @@ const matrixData = [
     nodes: [
       {
         id: 'dat-001',
-        name: 'OmniAgentIntegrations',
+        name: 'OAAgentIntegrations',
         description: '各類第三方平台與 ERP 系統的串接管理。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Integration', 'API'],
         registered: true,
-        deliverables: ['components/omni/OmniAgentIntegrations.tsx', 'Webhook Connector API'],
+        deliverables: ['components/omni/OAAgentIntegrations.tsx', 'Webhook Connector API'],
         businessLogic:
           '管理與 ERP、SCM 等外部系統的 Webhook 和 API 連接，具備數據清洗與格式對齊邏輯。',
         uiux: '插頭連接插座動效、數據包流動粒子動畫、連接狀態徽章。',
@@ -415,12 +414,12 @@ const matrixData = [
       },
       {
         id: 'dat-004',
-        name: 'OmniAgentEvolutionPanel',
+        name: 'OAAgentEvolutionPanel',
         description: 'OmniAgent 資料管線的演化與效能面板。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Data', 'Pipeline'],
         registered: true,
-        deliverables: ['components/omni/OmniAgentEvolutionPanel.tsx'],
+        deliverables: ['components/omni/OAAgentEvolutionPanel.tsx'],
         businessLogic:
           'OmniAgent 智能數據管線的流量自適應與吞吐量優化面板，當檢測到高流量時自動擴容。',
         uiux: '動態齒輪轉動、波形負載圖、擴容進度環。',
@@ -752,7 +751,7 @@ export function OmniUltimateMatrix() {
         {/* Left Side: The Category Grid (8 Cols) */}
         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           {matrixData.map((category, idx) => (
-            <OmniBaseCard
+            <Card
               key={idx}
               variant="glass"
               className="p-6 border-cyan-500/10 bg-gradient-to-br from-black/60 to-cyan-950/10 relative overflow-hidden h-full flex flex-col"
@@ -793,7 +792,7 @@ export function OmniUltimateMatrix() {
                         >
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${
-                              isCurrentSelected ? 'bg-white animate-ping' : 'bg-cyan-500'
+                              isCurrentSelected ? 'bg-white ' : 'bg-cyan-500'
                             }`}
                           ></span>
                           {node.name}
@@ -841,13 +840,13 @@ export function OmniUltimateMatrix() {
                   );
                 })}
               </div>
-            </OmniBaseCard>
+            </Card>
           ))}
         </div>
 
         {/* Right Side: The Status & Design Matrix Detail Panel (4 Cols) */}
         <div className="lg:col-span-4 sticky top-8">
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 border-cyan-400/30 bg-gradient-to-b from-slate-950 to-cyan-950/30 relative overflow-hidden shadow-[0_0_25px_rgba(34,211,238,0.08)]"
           >
@@ -858,7 +857,7 @@ export function OmniUltimateMatrix() {
             <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                 </span>
                 <span className="text-xs font-mono font-bold text-cyan-400/80">
@@ -890,7 +889,7 @@ export function OmniUltimateMatrix() {
                     <CheckCircle2 size={12} /> 已註冊 (Registered)
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full animate-pulse">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full">
                     <XCircle size={12} /> 未註冊 (Pending)
                   </span>
                 )}
@@ -969,7 +968,7 @@ export function OmniUltimateMatrix() {
               <span>SYSTEM: ESGGO_CORE</span>
               <span className="text-cyan-500/80">VERIFIED_合規</span>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
       </div>
     </div>

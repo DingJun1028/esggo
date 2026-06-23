@@ -45,8 +45,8 @@ import {
   Network,
   Shield,
 } from 'lucide-react';
-import ThemeSelector from './ThemeSelector';
-import OmniAgentFloatingAgent from './brand/OmniAgentFloating';
+// ThemeSelector removed
+import OmniAgentBar from './brand/OmniAgentBar';
 import OmniCommandPalette from './omni/OmniCommandPalette';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
 import OmniSearchBar from './omni/OmniSearchBar';
@@ -389,11 +389,7 @@ function SidebarNav({
             gap: 8,
           }}
         >
-          <ThemeSelector
-            currentTheme={currentTheme}
-            onSelect={onThemeChange}
-            collapsed={collapsed && !mobileOpen}
-          />
+          {/* ThemeSelector removed to enforce light theme */}
           <OmniMatrixInput collapsed={collapsed && !mobileOpen} />
           <div
             style={{
@@ -673,8 +669,8 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
       {/* 萬能指揮面板 (全域快捷鍵 Ctrl+K) */}
       <OmniCommandPalette />
 
-      {/* 懸浮 Agent */}
-      <OmniAgentFloatingAgent />
+      {/* 懸浮 Agent Bar */}
+      <OmniAgentBar />
 
       {/* OmniJules 被動亂碼守衛 (全知之眼) */}
       <OmniJulesPassiveGuard />

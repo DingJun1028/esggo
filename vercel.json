@@ -1,6 +1,14 @@
 {
   "$schema": "https://vercel.com/docs/build-output-api/v3/primitives",
   "version": 2,
+  "installCommand": "corepack enable && corepack prepare pnpm@10.0.0 --activate && pnpm install --no-frozen-lockfile",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "autoJobCancelation": true
+  },
   "routes": [
     {
       "src": "/api/(.*)",

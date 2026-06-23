@@ -1,11 +1,11 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect } from 'react';
 
 import { Sparkles, Terminal, Cpu } from 'lucide-react';
 import { OmniBaseCard } from './OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 
 interface OmniLHubWidgetProps {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -42,7 +42,7 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
   }, [currentIndex, insights, isProcessing]);
 
   return (
-    <OmniBaseCard
+    <Card
       variant="glass"
       className="relative overflow-hidden border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-black/40 p-6"
     >
@@ -52,7 +52,7 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
       <div className="flex items-center justify-between mb-6 relative z-10 border-b border-cyan-500/20 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-cyan-500/20 rounded-lg border border-cyan-500/30">
-            <Cpu className="text-cyan-400 animate-pulse" size={18} />
+            <Cpu className="text-cyan-400" size={18} />
           </div>
           <div>
             <h3 className="font-bold text-white tracking-wide flex items-center gap-2">{title}</h3>
@@ -64,7 +64,7 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
 
         {isProcessing && (
           <div className="flex items-center gap-2 text-cyan-400">
-            <span className="text-xs font-mono animate-pulse">Processing</span>
+            <span className="text-xs font-mono">Processing</span>
             <div className="flex gap-1">
               <span
                 className="w-1 h-1 bg-cyan-400 rounded-full animate-bounce"
@@ -105,6 +105,6 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
           </div>
         )}
       </div>
-    </OmniBaseCard>
+    </Card>
   );
 };

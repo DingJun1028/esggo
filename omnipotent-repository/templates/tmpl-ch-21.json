@@ -1,0 +1,27 @@
+{
+  "uuid": "tmpl-ch-21",
+  "version": "2.0.0",
+  "timestamp": 1782070654976,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.21 社會影響評估",
+  "tags": [
+    "社會影響",
+    "#零算力",
+    "GRI-203",
+    "GRI-413"
+  ],
+  "content": "<h2>Ch.21 社會影響評估</h2>\n<h3>21.1 概述</h3>\n<p>{{year}} 年 SROI {{sroi}}:1，社區滿意度 {{community_satisfaction}}%。採用 SROI 方法評估四大面向。</p>\n<h3>21.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 400 320\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"200\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">社會影響評估</text><polygon points=\"200,125 238,153 224,197 176,197 162,153\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,85 276,140 247,230 153,230 124,140\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,45 314,128 271,262 129,262 86,128\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,15 343,119 288,286 112,286 57,119\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><line x1=\"200\" y1=\"165\" x2=\"200\" y2=\"15\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"200\" y=\"-2\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">教育</text><line x1=\"200\" y1=\"165\" x2=\"343\" y2=\"119\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"362\" y=\"115\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">健康</text><line x1=\"200\" y1=\"165\" x2=\"288\" y2=\"286\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"300\" y=\"306\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">環保</text><line x1=\"200\" y1=\"165\" x2=\"112\" y2=\"286\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"100\" y=\"306\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">社區</text><line x1=\"200\" y1=\"165\" x2=\"57\" y2=\"119\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"38\" y=\"115\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">經濟</text><polygon points=\"200,55 299,133 260,247 137,251 107,135\" fill=\"#00326215\" stroke=\"#003262\" stroke-width=\"2\"/></svg>\n<h3>21.3 數據表格</h3>\n<table><thead><tr><th>指標</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>SROI</td><td>3.5:1</td><td>3.2:1</td><td>≥3.5</td></tr><tr><td>社區滿意度</td><td>88%</td><td>85%</td><td>≥90%</td></tr><tr><td>受益人數</td><td>50,000</td><td>45,000</td><td>持續增加</td></tr></tbody></table>\n<h3>21.4 管理方針</h3>\n<p>本公司針對 社會影響評估 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>21.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 315,
+  "griAlignment": [
+    "GRI-203",
+    "GRI-413"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "122c58d2ae32a519",
+    "chartType": "radar"
+  }
+}

@@ -1,0 +1,100 @@
+[
+  {
+    "agent": "OWL",
+    "type": "knowledge",
+    "content": {
+      "topic": "NCBDB雙向同步共享記憶層",
+      "status": "初始化完成"
+    },
+    "tags": [
+      "shared-memory",
+      "ncbdb",
+      "v1"
+    ],
+    "priority": "high",
+    "id": "mem_1781930834328_36xhqt",
+    "timestamp": 1781930834328,
+    "hash": "70defa810e2bb5da0be2be2247ca3adf5395eb9bc85c62b95fc598f28be9765b"
+  },
+  {
+    "agent": "OmniAgent",
+    "type": "event",
+    "content": {
+      "action": "sync_test",
+      "timestamp": "2026-06-20T13:04:23+08:00"
+    },
+    "tags": [
+      "test",
+      "sync"
+    ],
+    "priority": "normal",
+    "id": "mem_1781931865680_iot469",
+    "timestamp": 1781931865680,
+    "hash": "bbe0b9a4474bfa9fb73582c5cc62cc94509f333b174ef3ecad3e9b55b5a8bcd7"
+  },
+  {
+    "agent": "OmniAgent",
+    "type": "event",
+    "content": {
+      "action": "startup_test"
+    },
+    "tags": [
+      "test"
+    ],
+    "priority": "normal",
+    "id": "mem_1781932431961_fu6zxu",
+    "timestamp": 1781932431961,
+    "hash": "9cb06cb9b10f224736fe5dc5da20861521308d640ee2d42f44d3ad98836b3b3c"
+  },
+  {
+    "agent": "CORS_Test",
+    "type": "event",
+    "content": {
+      "test": "cors"
+    },
+    "tags": [
+      "cors"
+    ],
+    "priority": "normal",
+    "id": "mem_1781935003383_eyekxy",
+    "timestamp": 1781935003383,
+    "hash": "9e93a45a59bd4b739ad9b0dd96d0f91e57fcfdef4b87bdd8a2784e3eead78154"
+  },
+  {
+    "agent": "Redis_Test",
+    "type": "event",
+    "content": {
+      "action": "redis_connectivity_test",
+      "ts": "2026-06-20T14:03:18+08:00"
+    },
+    "tags": [
+      "redis",
+      "test"
+    ],
+    "priority": "normal",
+    "id": "mem_1781935404121_tx9nyp",
+    "timestamp": 1781935404121,
+    "hash": "b784be168be1b7288acde23541238289818c5075a4adf9d00a37f6282801cb86",
+    "source": "local",
+    "ncbSynced": false,
+    "version": 1
+  },
+  {
+    "agent": "Redis_V2",
+    "type": "event",
+    "content": {
+      "action": "redis_v2_test"
+    },
+    "tags": [
+      "redis",
+      "v2"
+    ],
+    "priority": "normal",
+    "id": "mem_1781935460891_krb6oh",
+    "timestamp": 1781935460891,
+    "hash": "893e93fa5b4fc763dac3bf0133143eca12ab1286ae9969f5214082c4a71e13fb",
+    "source": "local",
+    "ncbSynced": false,
+    "version": 1
+  }
+]

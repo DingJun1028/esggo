@@ -200,8 +200,8 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
  */
 async function syncTaskToOmniNotes(task: AgentTask) {
   try {
-    const { getOmniTableServerClient } = await import('../omni-table/client');
-    const client = getOmniTableServerClient();
+    const { getOATableServerClient } = await import('../omni-table/client');
+    const client = getOATableServerClient();
     const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
     if (!datasheetId) {
@@ -344,36 +344,36 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
         (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二')
           ? '305-2'
           : '305-1';
-const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
+      const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = `## 🌌 全域彙整永續報告 (GRI Standard)\n\n${draftContent}\n\n> 🕊️ **OmniCore 確信**：本章節由 5T 誠信組件自動生成，所有數據具備不可篡改性。`;
     } else if (task.taskType === 'email_processing') {
       console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-      const { getHermesCredentials } = await import('./hermes-store');
-      const creds = await getHermesCredentials(task.actorId);
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let emailResult = '';
 
       console.log(`[OmniAgent] Simulated execution. Fetching recent emails...`);
       await new Promise((r) => setTimeout(r, 1200));
-      console.log(`[Hermes Agent] Found 3 unread emails. Analyzing for ESG relevance...`);
+      console.log(`[OmniAgent Agent] Found 3 unread emails. Analyzing for ESG relevance...`);
       emailResult = `### OmniAgent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合視\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = emailResult;
     } else if (task.taskType === 'calendar_scheduling') {
-      console.log(`[Hermes Agent] Connecting to Google Calendar for Task ${taskId}...`);
+      console.log(`[OmniAgent Agent] Connecting to Google Calendar for Task ${taskId}...`);
 
-      const { getHermesCredentials } = await import('./hermes-store');
-      const creds = await getHermesCredentials(task.actorId);
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1200));
       let calendarResult = '';
 
-      console.log(`[Hermes Agent] Fetching upcoming calendar events...`);
+      console.log(`[OmniAgent Agent] Fetching upcoming calendar events...`);
       await new Promise((r) => setTimeout(r, 1000));
 
       calendarResult = `### OmniAgent 行事曆同步報告\n\n已掃描近期 Google Calendar 事件：\n\n1. **[永續報告] ESG 數據校閘會議** \n   - 日期：2024-06-25 14:00-16:00\n   - 狀態：📅 已建立待辦事項，自動生成會議記錄模板\n\n2. **[稽核] 內部 ESG 合規稽核** \n   - 日期：2024-06-28 09:00-12:00\n   - 狀態：⏰ 已設定前置提醒，關聯稽核題庳\n\n3. **[訓練] ESG 雙證課程教師進度追蹤** \n   - 日期：2024-07-02 10:00-12:00\n   - 狀態：🔄 已推播至課程管理系統\n\n> ✅ 行事曆自動化同步已完成，所有 ESG 相關會議已同步至 OmniAgent 任務列表。`;
@@ -381,15 +381,15 @@ const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = calendarResult;
     } else if (task.taskType === 'file_processing') {
-      console.log(`[Hermes Agent] Connecting to Google Drive for Task ${taskId}...`);
+      console.log(`[OmniAgent Agent] Connecting to Google Drive for Task ${taskId}...`);
 
-      const { getHermesCredentials } = await import('./hermes-store');
-      const creds = await getHermesCredentials(task.actorId);
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let driveResult = '';
 
-      console.log(`[Hermes Agent] Scanning Drive files for ESG-related documents...`);
+      console.log(`[OmniAgent Agent] Scanning Drive files for ESG-related documents...`);
       await new Promise((r) => setTimeout(r, 1000));
 
       driveResult = `### OmniAgent 雲端硬碟掃描報告\n\n已掃描 Google Drive 文件：\n\n1. **2024_永續報告書草稿_v3.pdf** \n   - 路徑：/ESG報告/2024/草稿\n   - 狀態：📎 已識別為 ESG報告書\n   - 動作：已將文件複製至 Evidence Vault，建立5T溯源証據\n\n2. **供應商碳排盤查清冊.xlsx** \n   - 路徑：/資料庫/供應鏈/盤查\n   - 狀態：📊 已識別為 ESG/供應鏈\n   - 動作：已提取表格數據並建立索引\n\n3. **勞健法教育訓練記錄_2024Q1.mp4** \n   - 路徑：/人資/訓練記錄\n   - 狀態：🎥 已識別為 ESG/社會\n   - 動作：已建立轉錄文字與摘要\n\n> ✅ 雲端硬碟自動化掃描已完成，共歸檔 3 個 ESG 相關文件。`;

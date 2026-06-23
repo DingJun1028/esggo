@@ -39,7 +39,7 @@ export default function BrandT5Strip({
             initial={animate ? { opacity: 0, scale: 0.8 } : false}
             animate={animate ? { opacity: 1, scale: 1 } : false}
             className={`
-              inline-flex items-center gap-1.5 rounded-2xl font-black transition-all border-2
+              inline-flex items-center gap-1.5 rounded-xl font-black transition-all border-2
               ${compact ? 'text-[9px] px-2.5 py-0.5' : 'text-[10px] px-3.5 py-1.5'}
             `}
             style={{

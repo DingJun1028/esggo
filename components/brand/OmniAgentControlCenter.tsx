@@ -117,7 +117,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
         {/* Header Alignment */}
         <header className="px-10 py-8 border-b border-slate-100/50 flex items-center justify-between relative overflow-hidden">
           <div className="flex items-center gap-6 relative z-10">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg group">
+            <div className="w-16 h-16 rounded-[1.5rem] bg-berkeley-blue flex items-center justify-center text-california-gold shadow-sm group">
               <Settings2
                 size={32}
                 className="animate-spin-slow group-hover:rotate-180 transition-transform duration-1000"
@@ -144,7 +144,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
           <Button
             variant="glass"
             onClick={onClose}
-            className="w-14 h-14 rounded-2xl p-0 hover:rotate-90 transition-all border-slate-200"
+            className="w-14 h-14 rounded-xl p-0 hover:rotate-90 transition-all border-slate-200"
           >
             <X size={28} />
           </Button>
@@ -165,9 +165,9 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                   key={t.id}
                   onClick={() => setActiveTab(t.id)}
                   className={cn(
-                    'w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 group',
+                    'w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-black transition-all duration-300 group',
                     activeTab === t.id
-                      ? 'bg-berkeley-blue text-white shadow-lg scale-[1.02]'
+                      ? 'bg-berkeley-blue text-white shadow-sm scale-[1.02]'
                       : 'text-slate-400 hover:text-berkeley-blue hover:'
                   )}
                 >
@@ -185,7 +185,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
             </div>
 
             <div className="mt-auto space-y-6">
-              <Card className="p-6 bg-berkeley-blue text-white border-none shadow-xl relative overflow-hidden">
+              <Card className="p-6 bg-berkeley-blue text-white border-none shadow-sm relative overflow-hidden">
                 <div className="relative z-10 space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black uppercase text-blue-200 tracking-widest">
@@ -209,7 +209,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
 
               <Button
                 variant="primary"
-                className="w-full h-14 rounded-2xl text-[10px] tracking-widest"
+                className="w-full h-14 rounded-xl text-[10px] tracking-widest"
                 onClick={triggerCrystallization}
                 isLoading={isCrystallizing}
               >
@@ -295,7 +295,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                       ].map((item, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between p-6 rounded-3xl border border-slate-100/50 hover:border-berkeley-blue/30 transition-all shadow-sm group"
+                          className="flex items-center justify-between p-6 rounded-xl border border-slate-100/50 hover:border-berkeley-blue/30 transition-all shadow-sm group"
                         >
                           <div className="max-w-[70%]">
                             <p className="text-sm font-black text-berkeley-blue">{item.label}</p>
@@ -340,7 +340,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                     <Button
                       variant="primary"
                       onClick={handleTestSeal}
-                      className="rounded-2xl h-14 px-8"
+                      className="rounded-xl h-14 px-8"
                     >
                       發起測試封裝 (Seal Test)
                     </Button>
@@ -351,7 +351,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                       <Card className="p-10 bg-berkeley-blue/5 border-berkeley-blue/10 relative overflow-hidden">
                         <div className="flex items-center justify-between mb-8">
                           <div className="flex items-center gap-5">
-                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-berkeley-blue shadow-sm">
+                            <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-berkeley-blue shadow-sm">
                               <Fingerprint size={28} />
                             </div>
                             <div>
@@ -403,7 +403,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                         <div className="flex gap-4 relative z-10">
                           <Button
                             variant="primary"
-                            className="flex-1 h-14 rounded-2xl text-[11px]"
+                            className="flex-1 h-14 rounded-xl text-[11px]"
                             onClick={handleVerify}
                             isLoading={isVerifying}
                           >
@@ -411,7 +411,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                           </Button>
                           <Button
                             variant="secondary"
-                            className="flex-1 h-14 rounded-2xl text-[11px] border-slate-200 text-slate-500"
+                            className="flex-1 h-14 rounded-xl text-[11px] border-slate-200 text-slate-500"
                             onClick={() => {
                               if (lastSeal) {
                                 setLastSeal({
@@ -484,14 +484,14 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
         <footer className="px-10 py-8 border-t border-slate-100/50 bg-slate-50/50 flex items-center justify-between sticky bottom-0 z-10">
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-verified animate-pulse shadow-[0_0_12px_#10b981]" />
+              <div className="w-2 h-2 rounded-full bg-verified shadow-[0_0_12px_#10b981]" />
               <span className="text-[10px] font-black text-verified uppercase tracking-[0.3em]">
                 Compute Node: Berkeley_Main
               </span>
             </div>
             <div className="h-4 w-px bg-slate-200" />
             <div className="flex items-center gap-3">
-              <Radio size={14} className="text-berkeley-blue animate-pulse" />
+              <Radio size={14} className="text-berkeley-blue" />
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Sovereign Link: Encrypted
               </span>

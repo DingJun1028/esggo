@@ -2,7 +2,7 @@
  * OmniTable Fusion API v1 — TypeScript SDK Client
  * ═══════════════════════════════════════════════
  * ESG GO 平台 × OmniTable 集成層
- * 
+ *
  * 5T Protocol Compliance:
  *   T1-Traceable:   每次 API 呼叫記錄 source_origin
  *   T2-Transparent: 所有回應保留原始結構
@@ -107,7 +107,7 @@ export interface UpdateRecordPayload {
 interface OmniTableClientConfig {
   /** API Token (Bearer) */
   token: string;
-  /** Base URL — defaults to https://omni-table.ai */
+  /** Base URL — defaults to https://oa-table.ai */
   baseUrl?: string;
 }
 
@@ -119,7 +119,11 @@ export class OmniTableClient {
 
   constructor(config: OmniTableClientConfig) {
     this.token = config.token;
-    this.baseUrl = (config.baseUrl || process.env.OMNITABLE_BASE_URL || 'https://api.apitable.com/fusion/v1').replace(/\/$/, '');
+    this.baseUrl = (
+      config.baseUrl ||
+      process.env.OMNITABLE_BASE_URL ||
+      'https://api.apitable.com/fusion/v1'
+    ).replace(/\/$/, '');
   }
 
   private get headers(): HeadersInit {
@@ -277,10 +281,7 @@ export class OmniTableClient {
 
   async deleteRecords(datasheetId: string, recordIds: string[]): Promise<void> {
     const idsParam = recordIds.map((id) => `recordIds=${id}`).join('&');
-    await this.request<void>(
-      'DELETE',
-      `/datasheets/${datasheetId}/records?${idsParam}`
-    );
+    await this.request<void>('DELETE', `/datasheets/${datasheetId}/records?${idsParam}`);
   }
 
   // ── Datasheets ──────────────────────────────────────────────────
@@ -344,7 +345,7 @@ export class OmniTableError extends Error {
 
 let _serverClient: OmniTableClient | null = null;
 
-export function getOmniTableServerClient(): OmniTableClient {
+export function getOATableServerClient(): OmniTableClient {
   if (!_serverClient) {
     const token = process.env.OMNITABLE_API_KEY;
     if (!token) {

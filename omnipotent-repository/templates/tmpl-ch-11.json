@@ -1,0 +1,27 @@
+{
+  "uuid": "tmpl-ch-11",
+  "version": "2.0.0",
+  "timestamp": 1782070654965,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.11 社區發展與社會貢獻",
+  "tags": [
+    "社區發展",
+    "#零算力",
+    "GRI-413",
+    "GRI-203"
+  ],
+  "content": "<h2>Ch.11 社區發展與社會貢獻</h2>\n<h3>11.1 概述</h3>\n<p>{{year}} 年社區投資 {{community_investment}} 萬元，受益 {{beneficiaries}} 人。志工參與率 35%，SROI 達 3.5:1。</p>\n<h3>11.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 500 280\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"250\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">社區投資(萬元)</text><line x1=\"60\" y1=\"220\" x2=\"440\" y2=\"220\" stroke=\"#E2E8F0\"/><rect x=\"80\" y=\"50\" width=\"45\" height=\"170\" fill=\"#003262\" rx=\"4\"/><text x=\"102\" y=\"45\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">800</text><text x=\"102\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">教育</text><rect x=\"155\" y=\"92\" width=\"45\" height=\"128\" fill=\"#FDB515\" rx=\"4\"/><text x=\"177\" y=\"87\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">600</text><text x=\"177\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">醫療</text><rect x=\"230\" y=\"114\" width=\"45\" height=\"106\" fill=\"#10B981\" rx=\"4\"/><text x=\"252\" y=\"109\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">500</text><text x=\"252\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">環保</text><rect x=\"305\" y=\"156\" width=\"45\" height=\"64\" fill=\"#3B82F6\" rx=\"4\"/><text x=\"327\" y=\"151\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">300</text><text x=\"327\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">文化</text><rect x=\"380\" y=\"156\" width=\"45\" height=\"64\" fill=\"#6366F1\" rx=\"4\"/><text x=\"402\" y=\"151\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">300</text><text x=\"402\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">急難</text></svg>\n<h3>11.3 數據表格</h3>\n<table><thead><tr><th>指標</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>投資金額</td><td>2,500</td><td>2,200</td><td>持續增加</td></tr><tr><td>志工時數</td><td>12,000</td><td>10,000</td><td>≥12,000</td></tr><tr><td>受益人數</td><td>50,000</td><td>45,000</td><td>持續增加</td></tr><tr><td>SROI</td><td>3.5:1</td><td>3.2:1</td><td>≥3.5</td></tr></tbody></table>\n<h3>11.4 管理方針</h3>\n<p>本公司針對 社區發展與社會貢獻 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>11.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 373,
+  "griAlignment": [
+    "GRI-413",
+    "GRI-203"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "d7835358c2d10d7f",
+    "chartType": "bar"
+  }
+}

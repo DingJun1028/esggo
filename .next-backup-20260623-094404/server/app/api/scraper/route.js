@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/scraper/route.js")
+R.c("server/chunks/[root-of-the-server]__0kjd84p._.js")
+R.c("server/chunks/node_modules_next_08s853w._.js")
+R.c("server/chunks/node_modules_next_dist_esm_build_templates_app-route_1byho6f.js")
+R.c("server/chunks/lib_firebase_ts_17mhq4o._.js")
+R.c("server/chunks/[root-of-the-server]__15rkmrr._.js")
+R.c("server/chunks/[root-of-the-server]__0y6567a._.js")
+R.c("server/chunks/_next-internal_server_app_api_scraper_route_actions_0d98z8s.js")
+R.m(484789)
+module.exports=R.m(484789).exports

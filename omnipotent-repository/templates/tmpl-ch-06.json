@@ -1,0 +1,25 @@
+{
+  "uuid": "tmpl-ch-06",
+  "version": "2.0.0",
+  "timestamp": 1782070654959,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.6 生物多樣性與生態保護",
+  "tags": [
+    "生物多樣",
+    "#零算力",
+    "GRI-304"
+  ],
+  "content": "<h2>Ch.6 生物多樣性與生態保護</h2>\n<h3>6.1 概述</h3>\n<p>{{company_name}} 承諾營運活動不會對生物多樣性造成重大負面影響。{{year}} 年造林 {{tree_planting}} 棵，復育面積 10 公頃。已開始依 TNFD 框架進行自然相關財務揭露。</p>\n<h3>6.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 400 320\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"200\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">生物多樣性影響評估</text><polygon points=\"200,125 238,153 224,197 176,197 162,153\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,85 276,140 247,230 153,230 124,140\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,45 314,128 271,262 129,262 86,128\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><polygon points=\"200,15 343,119 288,286 112,286 57,119\" fill=\"none\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><line x1=\"200\" y1=\"165\" x2=\"200\" y2=\"15\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"200\" y=\"-2\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">棲地保護</text><line x1=\"200\" y1=\"165\" x2=\"343\" y2=\"119\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"362\" y=\"115\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">物種復育</text><line x1=\"200\" y1=\"165\" x2=\"288\" y2=\"286\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"300\" y=\"306\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">造林</text><line x1=\"200\" y1=\"165\" x2=\"112\" y2=\"286\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"100\" y=\"306\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">水域生態</text><line x1=\"200\" y1=\"165\" x2=\"57\" y2=\"119\" stroke=\"#E2E8F0\" stroke-width=\"0.5\"/><text x=\"38\" y=\"115\" font-size=\"9\" fill=\"#0F172A\" text-anchor=\"middle\">教育</text><polygon points=\"200,55 296,134 270,262 143,244 101,133\" fill=\"#00326215\" stroke=\"#003262\" stroke-width=\"2\"/></svg>\n<h3>6.3 數據表格</h3>\n<table><thead><tr><th>指標</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>造林棵數</td><td>50,000</td><td>40,000</td><td>持續增加</td></tr><tr><td>復育面積</td><td>10公頃</td><td>8公頃</td><td>持續增加</td></tr><tr><td>生態教育</td><td>24場</td><td>20場</td><td>≥24場</td></tr></tbody></table>\n<h3>6.4 管理方針</h3>\n<p>本公司針對 生物多樣性與生態保護 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>6.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 349,
+  "griAlignment": [
+    "GRI-304"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "c55e6838c2cd587b",
+    "chartType": "radar"
+  }
+}

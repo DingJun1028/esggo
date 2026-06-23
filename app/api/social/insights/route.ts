@@ -1,14 +1,14 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { getSocialMetrics } from '@/lib/db';
 
 export const runtime = 'edge';
 
-const OAK = process.env['OPENROUTER_API_KEY'] || '';
-const OPENROUTER_MODEL = process.env['OPENROUTER_MODEL'] || 'mistralai/mistral-small-3.1-24b:free';
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-
 export async function GET(request: any) {
+  const OAK = process.env['OPENROUTER_API_KEY'] || '';
+  const OPENROUTER_MODEL =
+    process.env['OPENROUTER_MODEL'] || 'mistralai/mistral-small-3.1-24b:free';
+  const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || undefined;

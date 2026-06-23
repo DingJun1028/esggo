@@ -1,0 +1,3 @@
+{
+  "/api/system/memory-health/route": "app/api/system/memory-health/route.js"
+}

@@ -26,42 +26,42 @@ import { Badge } from '@/components/ui/v2/Input';
 import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
 
 /* ─── Data ─── */
-const KPI_DATA = [
+const INITIAL_KPI_DATA = [
   {
     title: '碳排放量',
-    value: '1,284',
+    value: '...',
     unit: 'tCO₂e',
-    trend: -5.2,
-    trendLabel: 'vs last quarter',
-    fiveTStatus: [true, true, true, true, true],
-    dataSource: 'EPA Database',
+    trend: 0,
+    trendLabel: 'loading...',
+    fiveTStatus: [false, false, false, false, false],
+    dataSource: '-',
   },
   {
-    title: '治理評分',
-    value: '92',
-    unit: '/100',
-    trend: 3.1,
-    trendLabel: 'vs last audit',
-    fiveTStatus: [true, true, true, true, false],
-    dataSource: 'Internal Audit',
+    title: '數位封印總數',
+    value: '...',
+    unit: '件',
+    trend: 0,
+    trendLabel: 'loading...',
+    fiveTStatus: [false, false, false, false, false],
+    dataSource: '-',
   },
   {
-    title: '供應鏈合規',
-    value: '87',
-    unit: '%',
-    trend: -1.8,
-    trendLabel: 'vs last month',
-    fiveTStatus: [true, true, true, false, false],
-    dataSource: 'SCM System',
+    title: '審計日誌紀錄',
+    value: '...',
+    unit: '筆',
+    trend: 0,
+    trendLabel: 'loading...',
+    fiveTStatus: [false, false, false, false, false],
+    dataSource: '-',
   },
   {
     title: '水資源效率',
-    value: '98.5',
+    value: '...',
     unit: '%',
-    trend: 2.4,
-    trendLabel: 'vs last year',
-    fiveTStatus: [true, true, true, true, true],
-    dataSource: 'Water Management',
+    trend: 0,
+    trendLabel: 'loading...',
+    fiveTStatus: [false, false, false, false, false],
+    dataSource: '-',
   },
 ];
 
@@ -154,6 +154,7 @@ const TESTIMONIALS = [
 export default function LandingPage() {
   const [liveStats, setLiveStats] = useState({ agents: 0, memories: 0, verified: 0 });
   const [showDemo, setShowDemo] = useState(false);
+  const [kpiData, setKpiData] = useState<any[]>(INITIAL_KPI_DATA);
 
   useEffect(() => {
     // Fetch live stats
@@ -168,6 +169,16 @@ export default function LandingPage() {
           });
       })
       .catch(() => {});
+
+    // Fetch dynamic KPIs
+    fetch('/api/metrics/kpi')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.ok && d.data) {
+          setKpiData(d.data);
+        }
+      })
+      .catch(() => {});
   }, []);
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -177,7 +188,7 @@ export default function LandingPage() {
           {/* Status badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full mb-8">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span className="text-xs font-semibold text-emerald-700 tracking-wider uppercase">
@@ -257,7 +268,7 @@ export default function LandingPage() {
           永續數據概覽
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {KPI_DATA.map((kpi) => (
+          {kpiData.map((kpi) => (
             <Card key={kpi.title} variant="default" padding="md" hover>
               <CardHeader>
                 <CardTitle>{kpi.title}</CardTitle>

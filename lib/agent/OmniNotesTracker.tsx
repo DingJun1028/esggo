@@ -1,5 +1,5 @@
 import React from 'react';
-import { getOmniTableServerClient } from '@/lib/omni-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 import { revalidatePath } from 'next/cache';
 import { CheckCircle2, RefreshCw } from 'lucide-react';
 
@@ -17,7 +17,7 @@ export default async function OmniNotesTracker() {
   let error: string | null = null;
 
   try {
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
     const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
     if (!datasheetId) {

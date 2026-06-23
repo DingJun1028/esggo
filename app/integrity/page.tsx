@@ -92,7 +92,7 @@ export default function IntegrityPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl">
         {/* Left Column: ZKP Generator */}
         <div className="space-y-6">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 shadow-2xl relative overflow-hidden group">
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 shadow-sm relative overflow-hidden group">
             <div className="absolute inset-0 bg-neutral-100 from-[#003262]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
@@ -147,7 +147,7 @@ export default function IntegrityPage() {
           {/* Visualization / Animation Area */}
 
           {proofData && (
-            <div className="bg-neutral-100 from-[#002014] to-[#111111] border border-[#52C41A]/30 rounded-xl p-6 shadow-2xl relative overflow-hidden">
+            <div className="bg-neutral-100 from-[#002014] to-[#111111] border border-[#52C41A]/30 rounded-xl p-6 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4">
                 <CheckCircle className="w-16 h-16 text-[#52C41A]/20" />
               </div>
@@ -178,7 +178,7 @@ export default function IntegrityPage() {
         </div>
 
         {/* Right Column: Audit Trail */}
-        <div className="bg-[#1E1E1E] border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-2xl h-[600px]">
+        <div className="bg-[#1E1E1E] border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-sm h-[600px]">
           <div className="bg-[#2D2D2D] px-4 py-3 border-b border-gray-800 flex items-center gap-2">
             <Terminal className="w-4 h-4 text-gray-400" />
             <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">

@@ -123,10 +123,10 @@ export default function MemoryShardsPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* Header */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6">
+        <header className="bg-white rounded-xl border border-slate-100 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg">
+              <div className="w-14 h-14 rounded-xl bg-neutral-100 flex items-center justify-center shadow-sm">
                 <Brain size={28} className="text-white" />
               </div>
               <div>
@@ -238,7 +238,7 @@ export default function MemoryShardsPage() {
 
         {/* Content */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
+          <div className="bg-white rounded-xl border border-slate-100 p-12 text-center">
             <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-500 rounded-full animate-spin mx-auto mb-4" />
             <p className="text-sm text-slate-400">載入中...</p>
           </div>
@@ -248,7 +248,7 @@ export default function MemoryShardsPage() {
               <div
                 key={shard.id}
                 onClick={() => setSelectedShard(shard)}
-                className="bg-white rounded-xl border border-slate-100 p-5 hover:shadow-lg hover:border-violet-200 transition-all cursor-pointer group"
+                className="bg-white rounded-xl border border-slate-100 p-5 hover:shadow-sm hover:border-violet-200 transition-all cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -302,7 +302,7 @@ export default function MemoryShardsPage() {
               </div>
             ))}
             {filteredShards.length === 0 && (
-              <div className="col-span-full bg-white rounded-2xl border border-slate-100 p-12 text-center">
+              <div className="col-span-full bg-white rounded-xl border border-slate-100 p-12 text-center">
                 <Brain size={48} className="mx-auto mb-4 text-slate-700" />
                 <p className="text-sm text-slate-400">尚無記憶碎片</p>
                 <p className="text-xs text-slate-300 mt-1">
@@ -316,11 +316,11 @@ export default function MemoryShardsPage() {
             {ultimates.map((ultimate) => (
               <div
                 key={ultimate.id}
-                className="bg-white rounded-xl border border-slate-100 p-6 hover:shadow-lg hover:border-amber-200 transition-all"
+                className="bg-white rounded-xl border border-slate-100 p-6 hover:shadow-sm hover:border-amber-200 transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-neutral-100   flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center">
                       <Sparkles size={24} className="text-white" />
                     </div>
                     <div>
@@ -363,7 +363,7 @@ export default function MemoryShardsPage() {
               </div>
             ))}
             {ultimates.length === 0 && (
-              <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
+              <div className="bg-white rounded-xl border border-slate-100 p-12 text-center">
                 <Sparkles size={48} className="mx-auto mb-4 text-slate-700" />
                 <p className="text-sm text-slate-400">尚無技能奧義</p>
                 <p className="text-xs text-slate-300 mt-1">
@@ -420,7 +420,7 @@ export default function MemoryShardsPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
+          <div className="bg-white rounded-xl border border-slate-100 p-12 text-center">
             <Layers size={48} className="mx-auto mb-4 text-slate-700" />
             <p className="text-sm text-slate-400">碎片關聯圖</p>
             <p className="text-xs text-slate-300 mt-1">開發中...</p>
@@ -431,7 +431,7 @@ export default function MemoryShardsPage() {
       {/* Shard Detail Modal */}
       {selectedShard && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="text-xl font-black text-[#003262]">{selectedShard.title}</h2>

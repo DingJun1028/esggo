@@ -56,12 +56,12 @@ const DashboardContent = () => {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[var(--at-border)]">
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--at-accent)]/10 text-[var(--at-accent)] text-[10px] font-black uppercase tracking-[0.2em] border border-[var(--at-accent)]/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--at-accent)] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--at-accent)]" />
             Live Governance Node
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[var(--at-text-main)]">
             善向永續{' '}
-            <span className="text-neutral-900 bg-neutral-100 from-[var(--at-accent)] ">
+            <span className="text-neutral-900 bg-neutral-100 from-[var(--at-accent)]">
               ESG GO
             </span>
           </h1>
@@ -95,11 +95,11 @@ const DashboardContent = () => {
           >
             <div>
               <div className="flex items-center justify-between mb-8">
-                <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
                   <Leaf size={32} />
                 </div>
                 <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                  <Activity size={12} className="animate-pulse" /> ISO 14064-1
+                  <Activity size={12} className="" /> ISO 14064-1
                 </div>
               </div>
               <h2 className="text-3xl font-black text-[var(--at-text-main)] mb-3 tracking-tight">
@@ -109,7 +109,7 @@ const DashboardContent = () => {
                 即時監測全集團溫室氣體排放。透過 IoT 感測與 API 串接，當前信任得分穩定於聖殿級別。
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-5 rounded-2xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] group-hover:border-[var(--at-accent)]/30 transition-colors">
+                <div className="p-5 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] group-hover:border-[var(--at-accent)]/30 transition-colors">
                   <p className="text-[10px] font-black text-[var(--at-text-sub)] uppercase mb-2 tracking-widest">
                     範疇一排放
                   </p>
@@ -117,7 +117,7 @@ const DashboardContent = () => {
                     1,245 <span className="text-xs font-bold text-[var(--at-text-sub)]">tCO2e</span>
                   </p>
                 </div>
-                <div className="p-5 rounded-2xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] group-hover:border-emerald-500/30 transition-colors">
+                <div className="p-5 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] group-hover:border-emerald-500/30 transition-colors">
                   <p className="text-[10px] font-black text-[var(--at-text-sub)] uppercase mb-2 tracking-widest">
                     再生能源占比
                   </p>
@@ -172,7 +172,7 @@ const DashboardContent = () => {
                 <span className="text-blue-500">75%</span>
               </div>
               <div className="h-2 w-full bg-[var(--at-border)] rounded-full overflow-hidden">
-                <div className="h-full bg-neutral-100   rounded-full" />
+                <div className="h-full bg-neutral-100 rounded-full" />
               </div>
             </div>
           </AtomicCard>
@@ -215,8 +215,8 @@ const DashboardContent = () => {
             className="h-full flex flex-col items-center justify-center text-center space-y-4"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-[var(--at-accent)] blur-xl opacity-30 animate-pulse rounded-full" />
-              <div className="p-4 bg-[var(--at-bg-card)] rounded-2xl relative z-10 border border-[var(--at-border)] group-hover:border-[var(--at-accent)] transition-colors">
+              <div className="absolute inset-0 bg-[var(--at-accent)] blur-xl opacity-30 rounded-full" />
+              <div className="p-4 bg-[var(--at-bg-card)] rounded-xl relative z-10 border border-[var(--at-border)] group-hover:border-[var(--at-accent)] transition-colors">
                 <Cpu size={28} className="text-[var(--at-accent)]" />
               </div>
             </div>
@@ -236,7 +236,7 @@ const DashboardContent = () => {
       <section aria-label="main content" className="space-y-4 pt-8">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
-            <Activity size={18} className="text-[var(--at-accent)] animate-pulse" />
+            <Activity size={18} className="text-[var(--at-accent)]" />
             <h2 className="text-lg font-bold tracking-tight text-[var(--at-text-main)]">
               誠信溯源視圖 (Causality Visualizer)
             </h2>

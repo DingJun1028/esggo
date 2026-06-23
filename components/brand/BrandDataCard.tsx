@@ -30,7 +30,7 @@ export default function BrandDataCard({
   className = '' 
 }: BrandDataCardProps) {
   return (
-    <div className={`glass-panel rounded-2xl p-5 group ${className}`}>
+    <div className={` rounded-xl p-5 group ${className}`}>
       <div className="flex items-start justify-between mb-4">
         {icon && (
           <div 

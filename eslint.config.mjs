@@ -8,7 +8,7 @@ export default [
   {
     ignores: [
       ".kilo/worktrees/**",
-      ".next/**",
+      ".next/**",".next-old/**",
       "node_modules/**",
       "dist/**",
       "src/dataconnect-generated/**",
@@ -19,6 +19,9 @@ export default [
       "lib/page.js",
       "User.js",
       "vscode-acp/**",
+      "**/.tmp*.js",
+      "**/*.tmp*.js",
+      ".tmp-gen.js"
     ],
   },
   {

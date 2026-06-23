@@ -48,7 +48,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          'bg-white rounded-[20px] w-full shadow-2xl flex flex-col max-h-[90vh]',
+          'bg-white rounded-[20px] w-full shadow-sm flex flex-col max-h-[90vh]',
           modalSizes[size],
           className
         )}

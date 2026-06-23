@@ -51,7 +51,7 @@ export default function ThinkTankPage() {
           <Brain size={16} />
           <span className="text-xs font-bold tracking-widest uppercase">OmniMemory Sanctuary</span>
         </div>
-        <h1 className="text-4xl font-black text-neutral-900 bg-neutral-100  via-indigo-300  mb-4 tracking-tight">
+        <h1 className="text-4xl font-black text-neutral-900 bg-neutral-100 via-indigo-300 mb-4 tracking-tight">
           萬能智庫檢索中心
         </h1>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
@@ -62,10 +62,10 @@ export default function ThinkTankPage() {
 
       {/* 搜尋列 */}
       <div className="relative max-w-3xl mx-auto mb-12">
-        <div className="absolute -inset-1 bg-neutral-100 /20 via-indigo-500/20 /20 rounded-2xl blur-xl opacity-70"></div>
+        <div className="absolute -inset-1 bg-neutral-100 /20 via-indigo-500/20 /20 rounded-xl blur-xl opacity-70"></div>
         <form
           onSubmit={handleSearch}
-          className="relative bg-[#020617]/70 border border-slate-200 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+          className="relative bg-[#020617]/70 border border-slate-200 rounded-xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
         >
           <div className="pl-4 pr-2 text-cyan-400/50">
             <Search size={24} />
@@ -84,7 +84,7 @@ export default function ThinkTankPage() {
           >
             {loading ? (
               <>
-                <Zap size={18} className="animate-pulse" />
+                <Zap size={18} className="" />
                 <span>檢索中...</span>
               </>
             ) : (
@@ -104,9 +104,9 @@ export default function ThinkTankPage() {
           <div className="relative w-24 h-24 flex items-center justify-center">
             <div className="absolute inset-0 border-t-2 border-cyan-500 rounded-full animate-spin"></div>
             <div className="absolute inset-2 border-r-2 border-indigo-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
-            <Network size={32} className="text-cyan-400 animate-pulse" />
+            <Network size={32} className="text-cyan-400" />
           </div>
-          <div className="text-cyan-400 font-medium tracking-widest text-sm animate-pulse">
+          <div className="text-cyan-400 font-medium tracking-widest text-sm">
             OMNINEXUS 正在遍歷知識節點...
           </div>
         </div>
@@ -136,9 +136,9 @@ export default function ThinkTankPage() {
             {results.map((item, idx) => (
               <div
                 key={idx}
-                className="group relative bg-[#020617]/40 -md border border-slate-200 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
+                className="group relative bg-[#020617]/40 -md border border-slate-200 rounded-xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
               >
-                <div className="absolute top-0 left-0 w-1 h-full bg-neutral-100   opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
+                <div className="absolute top-0 left-0 w-1 h-full bg-neutral-100 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">

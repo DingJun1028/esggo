@@ -3,9 +3,9 @@
 
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/v2/Card';
-import { Button } from '@/components/ui/v2/Button';
-import { Badge, SectionHeader } from '@/components/ui/v2/Input';
+import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/v2/Progress';
+import { OmniComponentHeart } from '@esggo/types';
 import {
   GraduationCap,
   BookOpen,
@@ -156,12 +156,29 @@ export default function AcademyPage() {
   });
   const myCourses = COURSES.filter((c) => c.progress !== undefined);
 
+  // 產生示範用 OmniHeart
+  const getMockHeart = (rating: number): OmniComponentHeart | undefined => {
+    if (rating >= 4.9) {
+      return {
+        uuid: 'mock-uuid',
+        timestamp: Date.now(),
+        formula: 'rating-based',
+        impactMetric: 'education',
+        status: 'Trustworthy',
+        evidence: {} as any,
+        lock: () => {},
+        resonanceState: 1.0,
+      };
+    }
+    return undefined;
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        <header className="rounded-2xl border border-neutral-200 bg-white p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <header className="rounded-xl border border-neutral-200 bg-white p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-700 flex items-center justify-center shadow-lg">
+            <div className="w-14 h-14 rounded-xl bg-blue-700 flex items-center justify-center shadow-sm">
               <GraduationCap size={28} className="text-white" />
             </div>
             <div>
@@ -206,7 +223,7 @@ export default function AcademyPage() {
             >
               <tab.icon size={16} /> {tab.label}
               <span
-                className={`w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center ${
+                className={`w-5 h-5 rounded-md text-[10px] font-bold flex items-center justify-center ${
                   activeTab === tab.id
                     ? 'bg-white/20 text-white'
                     : 'bg-neutral-100 text-neutral-500'
@@ -265,8 +282,9 @@ export default function AcademyPage() {
                     key={course.id}
                     variant="default"
                     padding="none"
-                    hover
-                    className={`overflow-hidden ${course.locked ? 'opacity-70' : ''}`}
+                    className={`overflow-hidden hover:shadow-sm transition-shadow ${
+                      course.locked ? 'opacity-70' : ''
+                    }`}
                   >
                     <div
                       className={`h-28 flex items-center justify-center text-4xl relative ${
@@ -286,9 +304,8 @@ export default function AcademyPage() {
                               ? 'info'
                               : course.category === 'certification'
                               ? 'warning'
-                              : 'neutral'
+                              : 'default'
                           }
-                          size="sm"
                         >
                           {cat.label}
                         </Badge>
@@ -307,7 +324,7 @@ export default function AcademyPage() {
                               {course.progress}%
                             </span>
                           </div>
-                          <Progress value={course.progress} size="xs" color="auto" />
+                          <Progress value={course.progress} className="h-1.5" />
                         </div>
                       )}
                       <div className="flex items-center justify-between text-[10px] text-neutral-400">
@@ -337,7 +354,12 @@ export default function AcademyPage() {
         {activeTab === 'paths' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {PATHS.map((path) => (
-              <Card key={path.id} variant="default" padding="md" hover>
+              <Card
+                key={path.id}
+                variant="default"
+                padding="md"
+                className="hover:shadow-sm transition-shadow"
+              >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center text-2xl">
                     {path.badge}
@@ -363,7 +385,12 @@ export default function AcademyPage() {
         {activeTab === 'my-learning' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {myCourses.map((course) => (
-              <Card key={course.id} variant="default" padding="md" hover>
+              <Card
+                key={course.id}
+                variant="default"
+                padding="md"
+                className="hover:shadow-sm transition-shadow"
+              >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center text-xl">
                     {course.thumbnail}
@@ -373,7 +400,7 @@ export default function AcademyPage() {
                     <p className="text-[10px] text-neutral-400">{course.instructor}</p>
                   </div>
                 </div>
-                <Progress value={course.progress || 0} size="sm" color="auto" />
+                <Progress value={course.progress || 0} size="md" />
                 <p className="text-[10px] text-neutral-400 mt-2 text-right">
                   {course.progress}% 完成
                 </p>

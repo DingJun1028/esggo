@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
-import { OmniAgentPulse } from '@/components/omni/OmniAgentPulse';
 import OmniBlueDashboard from '@/components/omni/OmniBlueDashboard';
 import { ReportBuilder } from '@/components/ReportBuilder';
 import ApolloStudioConsole from '@/components/omni/ApolloStudioConsole';
@@ -193,9 +192,9 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020617] text-white flex flex-col items-center justify-center p-6 lg:p-12 selection:bg-cyan-500/30">
       {/* ─── Layer 0: Void & Luminous Effects ────────────────────────── */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none animate-pulse" />
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
       <div
-        className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none animate-pulse"
+        className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none"
         style={{ animationDelay: '2s' }}
       />
       <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none" />
@@ -228,7 +227,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
             </div>
           </div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1] uppercase relative z-10 drop-shadow-2xl">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1] uppercase relative z-10 drop-shadow-sm">
             ESGGO <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
               善向永續
@@ -248,7 +247,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
             <BrandButton
               variant="primary"
               size="lg"
-              className="rounded-2xl px-12 py-6 text-lg group shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)]"
+              className="rounded-xl px-12 py-6 text-lg group shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)]"
               onClick={() => (window.location.href = '/dashboard')}
             >
               啟動治理終端{' '}
@@ -260,7 +259,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
             <BrandButton
               variant="glass"
               size="lg"
-              className="rounded-2xl px-12 py-6 text-lg border-white/20 hover:"
+              className="rounded-xl px-12 py-6 text-lg border-white/20 hover:"
               onClick={() => (window.location.href = '/wiki')}
             >
               探索架構聖碑
@@ -273,7 +272,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
               onClick={handleManualTrigger}
               className="flex items-center gap-2 px-6 py-3 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 text-xs font-bold tracking-widest hover:bg-cyan-500/20 hover:scale-105 transition-all shadow-[0_0_20px_rgba(6,182,212,0.2)]"
             >
-              <Activity size={16} className="animate-pulse" />
+              <Activity size={16} className="" />
               [TEST] 手動觸發 (動態角色多層次輸出)
             </button>
           </div>
@@ -296,10 +295,10 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
           <div
             className="w-full relative z-10 max-w-5xl mx-auto -mt-8"
           >
-            <div className="bg-[#0f172a]/90 border border-indigo-500/30 rounded-2xl p-5 shadow-[0_0_30px_rgba(99,102,241,0.15)] font-mono text-sm text-left relative overflow-hidden">
+            <div className="bg-[#0f172a]/90 border border-indigo-500/30 rounded-xl p-5 shadow-[0_0_30px_rgba(99,102,241,0.15)] font-mono text-sm text-left relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
               <div className="flex items-center gap-2 mb-3 text-indigo-400 border-b border-indigo-500/20 pb-3">
-                <Activity size={16} className="animate-pulse" />
+                <Activity size={16} className="" />
                 <span className="font-bold tracking-widest uppercase">
                   Healing_Guardian_Terminal
                 </span>
@@ -349,7 +348,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
                 </div>
               </div>
               <div className="mt-12 flex items-center text-cyan-400 text-xs font-black tracking-widest uppercase">
-                進入主權終端 <Zap size={14} className="ml-2 animate-pulse" />
+                進入主權終端 <Zap size={14} className="ml-2" />
               </div>
             </BrandCard>
           </Link>
@@ -421,7 +420,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
                 </div>
               </div>
               <div className="mt-12 flex items-center text-purple-400 text-xs font-black tracking-widest uppercase">
-                提取記憶碎片 <Activity size={14} className="ml-2 animate-pulse" />
+                提取記憶碎片 <Activity size={14} className="ml-2" />
               </div>
             </BrandCard>
           </Link>
@@ -450,7 +449,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
         )}
 
         <div className="pt-12 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-2 rounded-2xl border border-white/5">
+          <div className="inline-flex items-center gap-3 px-6 py-2 rounded-xl border border-white/5">
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-black">
               OmniCore P0 Genesis Infrastructure // v8.5.5-Stable
             </span>
@@ -458,8 +457,8 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
         </div>
       </div>
 
-      {/* ─── Layer 3: OmniAgent Floating Pulse ──────────────────────── */}
-      <OmniAgentPulse />
+      {/* ─── Layer 3: OmniAgent Floating Pulse ─── */}
+      {/* Removed: OmniAgentPulse - using OmniAgentBar instead */}
     </div>
   );
 }

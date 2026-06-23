@@ -11,8 +11,8 @@ export interface IMiaoDeNotification {
   readonly isUnimpeded: boolean; // 圓通無礙狀態
 }
 
-export class OmniAgentBus {
-  private static instance: OmniAgentBus;
+export class OAAgentBus {
+  private static instance: OAAgentBus;
 
   // 圓通無礙：無邊際量子通訊道
   private supremeWillOcean$ = new Subject<string>();
@@ -22,11 +22,11 @@ export class OmniAgentBus {
   /**
    * 深貫廣通 · 獲取無礙單一實例
    */
-  public static getUnimpededInstance(): OmniAgentBus {
-    if (!OmniAgentBus.instance) {
-      OmniAgentBus.instance = new OmniAgentBus();
+  public static getUnimpededInstance(): OAAgentBus {
+    if (!OAAgentBus.instance) {
+      OAAgentBus.instance = new OAAgentBus();
     }
-    return OmniAgentBus.instance;
+    return OAAgentBus.instance;
   }
 
   /**
@@ -154,4 +154,4 @@ export class OmniAgentBus {
   }
 }
 
-export const omniAgentBus = OmniAgentBus.getUnimpededInstance();
+export const omniAgentBus = OAAgentBus.getUnimpededInstance();

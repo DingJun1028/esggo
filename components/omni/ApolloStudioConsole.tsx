@@ -25,7 +25,7 @@ export default function ApolloStudioConsole() {
   };
 
   return (
-    <div className="p-8 bg-[#020617] text-white rounded-3xl border border-indigo-500/30 shadow-[0_0_60px_rgba(99,102,241,0.15)] relative overflow-hidden w-full max-w-4xl mx-auto">
+    <div className="p-8 bg-[#020617] text-white rounded-xl border border-indigo-500/30 shadow-[0_0_60px_rgba(99,102,241,0.15)] relative overflow-hidden w-full max-w-4xl mx-auto">
       {/* Background aesthetics */}
       <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none transform translate-x-1/4 -translate-y-1/4">
         <Network size={300} />
@@ -35,7 +35,7 @@ export default function ApolloStudioConsole() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8 relative z-10">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-indigo-500/20 text-indigo-400 rounded-2xl border border-indigo-500/30 shadow-inner">
+          <div className="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/30 shadow-inner">
             <Cpu size={28} />
           </div>
           <div>
@@ -51,7 +51,7 @@ export default function ApolloStudioConsole() {
           <div
             className={`w-2.5 h-2.5 rounded-full ${
               isOrchestrating
-                ? 'bg-amber-400 animate-pulse shadow-[0_0_12px_#fbbf24]'
+                ? 'bg-amber-400  shadow-[0_0_12px_#fbbf24]'
                 : 'bg-emerald-400 shadow-[0_0_12px_#34d399]'
             }`}
           />
@@ -63,7 +63,7 @@ export default function ApolloStudioConsole() {
 
       {/* KPI Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative z-10">
-        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
+        <div className="border border-white/10 rounded-xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <Zap
             size={24}
             className="text-cyan-400 mb-3 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
@@ -73,7 +73,7 @@ export default function ApolloStudioConsole() {
             Swarm Latency
           </span>
         </div>
-        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
+        <div className="border border-white/10 rounded-xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <Network
             size={24}
             className="text-indigo-400 mb-3 drop-shadow-[0_0_10px_rgba(99,102,241,0.8)]"
@@ -83,7 +83,7 @@ export default function ApolloStudioConsole() {
             Active Nodes
           </span>
         </div>
-        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
+        <div className="border border-white/10 rounded-xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <ShieldCheck
             size={24}
             className="text-emerald-400 mb-3 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]"
@@ -96,7 +96,7 @@ export default function ApolloStudioConsole() {
       </div>
 
       {/* Terminal Display */}
-      <div className="bg-[#0f172a]/80 border border-indigo-500/30 rounded-2xl p-5 h-56 overflow-y-auto font-mono text-sm mb-8 relative z-10 shadow-inner">
+      <div className="bg-[#0f172a]/80 border border-indigo-500/30 rounded-xl p-5 h-56 overflow-y-auto font-mono text-sm mb-8 relative z-10 shadow-inner">
         {logs.length === 0 ? (
           <div className="h-full flex items-center justify-center text-slate-600/50 uppercase tracking-widest text-xs font-bold">
             [ 等待全域調度指令... ]
@@ -124,7 +124,7 @@ export default function ApolloStudioConsole() {
       <button
         onClick={triggerSwarm}
         disabled={isOrchestrating}
-        className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.2em] transition-all relative z-10 text-sm overflow-hidden group ${
+        className={`w-full py-5 rounded-xl font-black uppercase tracking-[0.2em] transition-all relative z-10 text-sm overflow-hidden group ${
           isOrchestrating
             ? 'bg-indigo-900/40 text-indigo-500/50 border border-indigo-900/50 cursor-not-allowed'
             : 'bg-indigo-600 text-white shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:bg-indigo-500 hover:shadow-[0_0_40px_rgba(79,70,229,0.6)] active:scale-[0.98]'
@@ -134,7 +134,7 @@ export default function ApolloStudioConsole() {
         <span className="relative z-10 flex items-center justify-center gap-3">
           {isOrchestrating ? (
             <>
-              <Activity size={18} className="animate-pulse" /> 調度執行中 (Running...)
+              <Activity size={18} className="" /> 調度執行中 (Running...)
             </>
           ) : (
             <>

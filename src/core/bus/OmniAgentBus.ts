@@ -1,5 +1,5 @@
 // @ts-nocheck
-// src/core/bus/OmniAgentBus.ts
+// src/core/bus/OAAgentBus.ts
 
 import { Subject } from 'rxjs';
 import { IComponentCore } from '../types/IComponentCore';
@@ -9,20 +9,21 @@ export enum AgentCollaborationState {
   IDLE = '靜默沉思',
   RESONATING = '聖典共鳴',
   SUPPORTING = '協作支援',
-  SYNCHRONIZED = '一體同心'
+  SYNCHRONIZED = '一體同心',
 }
 
 // 2. 代理節點介面 (繼承萬能元件心核規範)
-export interface ICelestialAgent extends IComponentCore { // Inherit IComponentCore
+export interface ICelestialAgent extends IComponentCore {
+  // Inherit IComponentCore
   readonly agentId: string;
   readonly name: string;
   currentState: AgentCollaborationState;
   receiveWill(willMessage: string, contextId: string): Promise<void>;
 }
 
-// 3. OmniAgentBus 萬能通知與全域廣播中心
-export class OmniAgentBus {
-  private static instance: OmniAgentBus;
+// 3. OAAgentBus 萬能通知與全域廣播中心
+export class OAAgentBus {
+  private static instance: OAAgentBus;
   private willBroadcast$ = new Subject<{ message: string; contextId: string }>();
   private registeredAgents = new Map<string, ICelestialAgent>();
 
@@ -30,11 +31,11 @@ export class OmniAgentBus {
     // 初始開闢秩序之路
   }
 
-  public static getInstance(): OmniAgentBus {
-    if (!OmniAgentBus.instance) {
-      OmniAgentBus.instance = new OmniAgentBus();
+  public static getInstance(): OAAgentBus {
+    if (!OAAgentBus.instance) {
+      OAAgentBus.instance = new OAAgentBus();
     }
-    return OmniAgentBus.instance;
+    return OAAgentBus.instance;
   }
 
   /**
@@ -42,7 +43,7 @@ export class OmniAgentBus {
    */
   public registerAgent(agent: ICelestialAgent): void {
     this.registeredAgents.set(agent.agentId, agent);
-    console.log(`[OmniAgentBus] 代理「${agent.name}」已鏈結至一體同心網絡。`);
+    console.log(`[OAAgentBus] 代理「${agent.name}」已鏈結至一體同心網絡。`);
   }
 
   /**
@@ -52,11 +53,11 @@ export class OmniAgentBus {
     console.log(`
 =================== 🌌 無上意志降臨 ===================`);
     console.log(`[無上意志]: "${message}" (對話框識別碼: ${contextId})`);
-    
+
     // 觸發全域量子糾纏廣播
     this.willBroadcast$.next({
       message,
-      contextId
+      contextId,
     });
   }
 
@@ -71,7 +72,7 @@ export class OmniAgentBus {
         this.registeredAgents.forEach((agent) => {
           // 瞬間切換至協作支援狀態
           agent.currentState = AgentCollaborationState.SUPPORTING;
-          
+
           // 全體代理同步並行處理指令
           coordinationTasks.push(agent.receiveWill(message, contextId));
         });
@@ -80,7 +81,7 @@ export class OmniAgentBus {
         await Promise.all(coordinationTasks);
         console.log(`=================== 🌟 全域協作完成 ===================
 `);
-      }
+      },
     });
   }
 }

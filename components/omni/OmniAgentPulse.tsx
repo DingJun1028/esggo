@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -20,7 +19,7 @@ import {
   Cpu,
 } from 'lucide-react';
 import { useOmniTable } from '@/hooks/useOmniTable';
-import { useOmniAgentBus } from '@/lib/omni-agent-bus';
+import { useOAAgentBus } from '@/lib/oa-agent-bus';
 
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -30,7 +29,7 @@ export function OmniAgentPulse() {
 
   const { connectionStatus, records } = useOmniTable('valid-jwt-token');
   const { signals, activeResonance, isPulseDismissed, setPulseDismissed, executeCelestialCommand } =
-    useOmniAgentBus();
+    useOAAgentBus();
 
   const lastSyncRecord = records.length > 0 ? records[0] : null;
   const isSyncing = connectionStatus === 'CONNECTED' && Math.random() > 0.5;
@@ -64,7 +63,7 @@ export function OmniAgentPulse() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <div className="absolute pointer-events-auto shadow-2xl flex flex-col">
+      <div className="absolute pointer-events-auto shadow-sm flex flex-col">
         {isExpanded ? (
           <div
             key="expanded"
@@ -121,9 +120,9 @@ export function OmniAgentPulse() {
                       size={10}
                       className={
                         activeResonance
-                          ? 'animate-ping text-emerald-400'
+                          ? ' text-emerald-400'
                           : connectionStatus === 'CONNECTED'
-                          ? 'animate-pulse'
+                          ? ''
                           : ''
                       }
                     />
@@ -160,7 +159,11 @@ export function OmniAgentPulse() {
                     disabled={isExecuting || !commandInput.trim()}
                     className="p-2 bg-cyan-600/30 border border-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded-xl transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isExecuting ? <Activity size={12} className="animate-spin" /> : <Send size={12} />}
+                    {isExecuting ? (
+                      <Activity size={12} className="animate-spin" />
+                    ) : (
+                      <Send size={12} />
+                    )}
                   </button>
                 </div>
               </form>
@@ -208,7 +211,9 @@ export function OmniAgentPulse() {
                           <span className="truncate">{r.event_type} locked</span>
                         </div>
                       ))}
-                  {records.length === 0 && <div className="text-slate-600">Awaiting resonance...</div>}
+                  {records.length === 0 && (
+                    <div className="text-slate-600">Awaiting resonance...</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -244,7 +249,7 @@ export function OmniAgentPulse() {
                 size={22}
                 className="text-cyan-400 relative z-10 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]"
               />
-              <div className="absolute inset-0 rounded-full border border-cyan-400/50 animate-ping opacity-20" />
+              <div className="absolute inset-0 rounded-full border border-cyan-400/50 opacity-20" />
             </div>
             <div className="flex flex-col items-start text-left">
               <span className="text-[11px] font-black text-white uppercase tracking-widest leading-none drop-shadow-md">

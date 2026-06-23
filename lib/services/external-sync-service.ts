@@ -66,31 +66,34 @@ export class ExternalSyncService {
         return false;
       }
 
-      const response = await fetch(`https://api.omni-table.ai/fusion/v1/datasheets/${datasheetId}/records`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          records: [
-            {
-              fields: {
-                Payload: JSON.stringify(payload),
-                Type: payload.type || 'unknown',
-                Timestamp: new Date().toISOString()
-              }
-            }
-          ]
-        })
-      });
+      const response = await fetch(
+        `https://api.oa-table.ai/fusion/v1/datasheets/${datasheetId}/records`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            records: [
+              {
+                fields: {
+                  Payload: JSON.stringify(payload),
+                  Type: payload.type || 'unknown',
+                  Timestamp: new Date().toISOString(),
+                },
+              },
+            ],
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errData = await response.json();
         console.error(`[Nexus] ❌ OmniTable API 錯誤:`, errData);
         return false;
       }
-      
+
       console.log(`[Nexus] ✅ 成功同步至 OmniTable.ai`);
       return true;
     } catch (error) {
@@ -115,17 +118,17 @@ export class ExternalSyncService {
       const response = await fetch(`${baseUrl}${endpoint}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-         console.error(`[Nexus] ❌ OmniBlue API 錯誤: HTTP ${response.status}`);
-         return false;
+        console.error(`[Nexus] ❌ OmniBlue API 錯誤: HTTP ${response.status}`);
+        return false;
       }
-      
+
       console.log(`[Nexus] ✅ 成功同步至 OmniBlue`);
       return true;
     } catch (error) {
@@ -140,14 +143,16 @@ export class ExternalSyncService {
    */
   public async triggerEvolutionSync(event: EvolutionEvent) {
     console.log(`[Evolution Loop] 🧬 啟動萬能進化環聯合同步機制... 事件類型: ${event.type}`);
-    
+
     // 並行發送至多個外部系統
     const results = await Promise.allSettled([
       this.syncToOmniTable('dst_evolution_logs', event),
-      this.syncToOmniBlue('/v1/events/omni-core', event)
+      this.syncToOmniBlue('/v1/events/omni-core', event),
     ]);
 
-    const successCount = results.filter(r => r.status === 'fulfilled' && (r as PromiseFulfilledResult<boolean>).value === true).length;
+    const successCount = results.filter(
+      (r) => r.status === 'fulfilled' && (r as PromiseFulfilledResult<boolean>).value === true
+    ).length;
     console.log(`[Evolution Loop] 🧬 同步完成，成功推送至 ${successCount} 個外部節點。`);
   }
 }

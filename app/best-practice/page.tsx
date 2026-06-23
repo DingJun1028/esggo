@@ -224,9 +224,9 @@ export default function BestPracticeHubPage() {
   );
 
   // --- P10: Liquid Glass helpers ---
-  const glassCard = 'bg-white border border-slate-200 shadow-sm rounded-2xl';
+  const glassCard = 'bg-white border border-slate-200 shadow-sm rounded-xl';
   const glassInput =
-    'bg-white border border-slate-200 rounded-2xl pl-12 pr-6 h-14 text-sm font-bold shadow-sm focus:ring-4 focus:ring-cyan-500/5 outline-none';
+    'bg-white border border-slate-200 rounded-xl pl-12 pr-6 h-14 text-sm font-bold shadow-sm focus:ring-4 focus:ring-cyan-500/5 outline-none';
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 p-4 md:p-8">
@@ -299,7 +299,7 @@ export default function BestPracticeHubPage() {
 
         {/* ---- AI Recommendations ---- */}
         {aiRecs.length > 0 && activeTab === 'benchmarks' && (
-          <div className="bg-cyan-50/40 border border-cyan-100 rounded-2xl p-6 space-y-4">
+          <div className="bg-cyan-50/40 border border-cyan-100 rounded-xl p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-cyan-600 rounded-xl text-white">
@@ -442,7 +442,7 @@ export default function BestPracticeHubPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredTemplates.map((t) => (
               <div key={t.id} className={`${glassCard} p-5 flex items-center gap-5`}>
-                <div className="w-14 h-14 rounded-2xl bg-slate-50 text-slate-500 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-xl bg-slate-50 text-slate-500 flex items-center justify-center">
                   <FileText size={28} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -487,7 +487,7 @@ export default function BestPracticeHubPage() {
           size="lg"
         >
           <div className="space-y-6">
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
                 案例精華
               </p>
@@ -496,13 +496,13 @@ export default function BestPracticeHubPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+              <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                   <Target size={12} /> 實踐影響力
                 </p>
                 <p className="text-xs font-bold text-slate-700">{selectedPractice.impact}</p>
               </div>
-              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+              <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                   <CheckCircle2 size={12} /> 對齊指標
                 </p>
@@ -520,7 +520,7 @@ export default function BestPracticeHubPage() {
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 專家行動建議
               </p>
-              <div className="bg-slate-900 rounded-2xl p-5 text-white space-y-4 relative overflow-hidden">
+              <div className="bg-slate-900 rounded-xl p-5 text-white space-y-4 relative overflow-hidden">
                 <div className="flex items-center gap-3">
                   <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                     <Zap size={16} />
@@ -558,7 +558,7 @@ export default function BestPracticeHubPage() {
       {/* ---- Toast ---- */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-[100] p-3 rounded-xl shadow-lg flex items-center gap-2.5 min-w-[280px] border ${
+          className={`fixed bottom-6 right-6 z-[100] p-3 rounded-xl shadow-sm flex items-center gap-2.5 min-w-[280px] border ${
             toast.type === 'success'
               ? 'bg-emerald-500 text-white border-emerald-400'
               : toast.type === 'error'
@@ -571,7 +571,7 @@ export default function BestPracticeHubPage() {
           ) : toast.type === 'error' ? (
             <Zap size={16} />
           ) : (
-            <Bot size={16} className="animate-pulse" />
+            <Bot size={16} className="" />
           )}
           <p className="text-xs font-bold">{toast.msg}</p>
         </div>

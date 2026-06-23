@@ -266,7 +266,7 @@ export default function LoginPage() {
         <div className="text-center mb-6">
           <div
             onClick={handleLogoClick}
-            className="mx-auto w-16 h-16 bg-[#003262] rounded-2xl flex items-center justify-center mb-4 shadow-lg cursor-pointer active:scale-95 transition-transform"
+            className="mx-auto w-16 h-16 bg-[#003262] rounded-xl flex items-center justify-center mb-4 shadow-sm cursor-pointer active:scale-95 transition-transform"
           >
             <Fingerprint size={32} className="text-[#FDB515]" />
           </div>
@@ -281,13 +281,13 @@ export default function LoginPage() {
         </div>
 
         {/* 登入卡片 */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-xl p-6 space-y-4">
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
           {/* Demo 模式：快速進入按鈕 */}
           {mode === 'demo' && (
             <>
               <button
                 onClick={enterDemo}
-                className="w-full py-3.5 bg-[#003262] text-white font-bold rounded-xl hover:bg-[#002850] transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 text-base"
+                className="w-full py-3.5 bg-[#003262] text-white font-bold rounded-xl hover:bg-[#002850] transition-all flex items-center justify-center gap-2 shadow-sm shadow-blue-900/20 text-base"
               >
                 <ShieldCheck size={20} />
                 進入 ESGGO 展示平台

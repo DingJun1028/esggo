@@ -3,7 +3,7 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useOmniTheme } from '../../theme/OmniThemeProvider';
-import { TrendingUp, TrendingDown, LucideIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import type { TDimension } from '@/types/omni-component';
 
 export interface OmniKPICardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -12,7 +12,7 @@ export interface OmniKPICardProps extends React.HTMLAttributes<HTMLDivElement> {
   unit?: string;
   change?: number;
   trend?: 'up' | 'down' | 'neutral';
-  icon?: LucideIcon;
+  icon?: any;
   griRef?: string;
   source?: string;
   loading?: boolean;

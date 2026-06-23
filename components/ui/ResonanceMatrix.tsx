@@ -112,7 +112,7 @@ export function ResonanceMatrix({ results }: Props) {
           </div>
 
           {/* Simple Scatter Simulation */}
-          <div className="aspect-video rounded-3xl border border-white/10 relative p-8">
+          <div className="aspect-video rounded-xl border border-white/10 relative p-8">
             {/* Axis */}
             <div className="absolute left-8 bottom-8 right-8 h-px" />
             <div className="absolute left-8 bottom-8 top-8 w-px" />
@@ -134,7 +134,7 @@ export function ResonanceMatrix({ results }: Props) {
               >
                 <div
                   className={cn(
-                    'w-full h-full rounded-full border-2 border-white/50 shadow-lg cursor-help group/dot relative',
+                    'w-full h-full rounded-full border-2 border-white/50 shadow-sm cursor-help group/dot relative',
                     r.resonance > 80
                       ? 'bg-emerald-500'
                       : r.resonance > 60

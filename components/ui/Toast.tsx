@@ -35,7 +35,7 @@ export function ToastContainer() {
             <div
               key={t.id}
               className={cn(
-                'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg min-w-[300px] max-w-[420px]',
+                'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-sm min-w-[300px] max-w-[420px]',
                 config.containerClass
               )}
             >

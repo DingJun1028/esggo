@@ -35,12 +35,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
           // 顏色變體
           {
-            'bg-berkeley-blue text-white hover:bg-berkeley-dark shadow-lg shadow-berkeley-blue/10':
+            'bg-berkeley-blue text-white hover:bg-berkeley-dark shadow-sm shadow-berkeley-blue/10':
               variant === 'primary',
             'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200':
               variant === 'secondary',
             'bg-transparent text-slate-500 hover:bg-slate-50': variant === 'ghost',
-            'bg-error text-white hover:bg-red-600 focus:ring-error shadow-lg shadow-error/10':
+            'bg-error text-white hover:bg-red-600 focus:ring-error shadow-sm shadow-error/10':
               variant === 'danger',
             '  border border-white/60 text-berkeley-blue hover: ': variant === 'glass',
           },

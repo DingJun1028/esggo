@@ -10,6 +10,7 @@ import { Badge, SectionHeader } from '@/components/ui/v2/Input';
 import { StatusDot } from '@/components/ui/v2/StatusDot';
 import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
 import { OmniHeader } from '@/components/ui/v2/OmniHeader';
+import { Modal } from '@/components/ui/v2/Modal';
 import { useRealtime } from '@/lib/omni-hub/useRealtime';
 import {
   Layers,
@@ -143,6 +144,12 @@ export default function OmniHubPage() {
   const [selectedTask, setSelectedTask] = useState<TaskEntry | null>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Modals state
+  const [isMemoryModalOpen, setIsMemoryModalOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [newMemory, setNewMemory] = useState({ title: '', content: '' });
+  const [newTaskForm, setNewTaskForm] = useState({ title: '', assignedTo: 'omni-agent' });
+
   // 即時同步狀態
   const realtimeStatus = useRealtime((event) => {
     // 收到即時事件時自動刷新相關資料
@@ -262,10 +269,7 @@ export default function OmniHubPage() {
   };
 
   const handleCreateMemory = async () => {
-    const title = prompt('記憶標題');
-    if (!title) return;
-    const content = prompt('記憶內容');
-    if (!content) return;
+    if (!newMemory.title || !newMemory.content) return;
     try {
       await fetch('/api/hub', {
         method: 'POST',
@@ -276,9 +280,9 @@ export default function OmniHubPage() {
             agentId: 'omni-agent',
             agentName: 'OmniAgent',
             type: 'insight',
-            title,
-            content,
-            summary: content.substring(0, 80),
+            title: newMemory.title,
+            content: newMemory.content,
+            summary: newMemory.content.substring(0, 80),
             tags: ['user-created'],
             visibility: 'public',
             referencedBy: [],
@@ -286,6 +290,8 @@ export default function OmniHubPage() {
           },
         }),
       });
+      setIsMemoryModalOpen(false);
+      setNewMemory({ title: '', content: '' });
       fetchMemories();
       fetchStats();
     } catch (e) {
@@ -294,10 +300,7 @@ export default function OmniHubPage() {
   };
 
   const handleCreateTask = async () => {
-    const title = prompt('任務標題');
-    if (!title) return;
-    const assignedTo = prompt('指派給（設施 ID）', 'omni-agent');
-    if (!assignedTo) return;
+    if (!newTaskForm.title || !newTaskForm.assignedTo) return;
     try {
       await fetch('/api/hub', {
         method: 'POST',
@@ -305,10 +308,10 @@ export default function OmniHubPage() {
         body: JSON.stringify({
           action: 'task',
           task: {
-            title,
+            title: newTaskForm.title,
             description: '',
             assignedBy: 'omni-agent',
-            assignedTo,
+            assignedTo: newTaskForm.assignedTo,
             priority: 'normal',
             input: {},
             memoryRefs: [],
@@ -318,6 +321,8 @@ export default function OmniHubPage() {
           },
         }),
       });
+      setIsTaskModalOpen(false);
+      setNewTaskForm({ title: '', assignedTo: 'omni-agent' });
       fetchTasks();
       fetchStats();
     } catch (e) {
@@ -363,7 +368,7 @@ export default function OmniHubPage() {
                 variant="primary"
                 size="sm"
                 icon={<Plus size={14} />}
-                onClick={handleCreateMemory}
+                onClick={() => setIsMemoryModalOpen(true)}
               >
                 新增記憶
               </Button>
@@ -718,7 +723,7 @@ export default function OmniHubPage() {
                     variant="primary"
                     size="sm"
                     icon={<Plus size={12} />}
-                    onClick={handleCreateMemory}
+                    onClick={() => setIsMemoryModalOpen(true)}
                   >
                     新增
                   </Button>
@@ -761,7 +766,7 @@ export default function OmniHubPage() {
                   variant="primary"
                   size="sm"
                   icon={<Plus size={12} />}
-                  onClick={handleCreateTask}
+                  onClick={() => setIsTaskModalOpen(true)}
                 >
                   新增任務
                 </Button>
@@ -968,6 +973,83 @@ export default function OmniHubPage() {
           </div>
         )}
       </div>
+
+      {/* Modals */}
+      <Modal
+        open={isMemoryModalOpen}
+        onClose={() => setIsMemoryModalOpen(false)}
+        title="新增共享記憶"
+        subtitle="建立跨設施可存取的記憶與知識"
+        icon={<Database size={18} className="text-[#63a6b0]" />}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setIsMemoryModalOpen(false)}>取消</Button>
+            <Button variant="primary" onClick={handleCreateMemory}>儲存記憶</Button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">記憶標題</label>
+            <input
+              type="text"
+              value={newMemory.title}
+              onChange={(e) => setNewMemory(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="輸入記憶標題..."
+              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#63a6b0]/20"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">記憶內容</label>
+            <textarea
+              value={newMemory.content}
+              onChange={(e) => setNewMemory(prev => ({ ...prev, content: e.target.value }))}
+              placeholder="輸入記憶內容..."
+              rows={4}
+              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#63a6b0]/20 resize-none"
+            />
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={isTaskModalOpen}
+        onClose={() => setIsTaskModalOpen(false)}
+        title="分派新任務"
+        subtitle="將任務分派給特定的萬能設施"
+        icon={<GitBranch size={18} className="text-[#ffd700]" />}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setIsTaskModalOpen(false)}>取消</Button>
+            <Button variant="primary" onClick={handleCreateTask}>建立任務</Button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">任務標題</label>
+            <input
+              type="text"
+              value={newTaskForm.title}
+              onChange={(e) => setNewTaskForm(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="輸入任務標題..."
+              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#ffd700]/20"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">指派設施</label>
+            <select
+              value={newTaskForm.assignedTo}
+              onChange={(e) => setNewTaskForm(prev => ({ ...prev, assignedTo: e.target.value }))}
+              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#ffd700]/20 bg-white"
+            >
+              {facilities.map(f => (
+                <option key={f.id} value={f.id}>{f.displayName} ({f.id})</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

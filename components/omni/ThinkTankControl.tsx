@@ -111,7 +111,7 @@ function MissionCard({
 
   return (
     <div className="relative">
-      <Card className="border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-all">
+      <Card className="border-white/5 rounded-xl overflow-hidden group hover:border-white/10 transition-all">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
@@ -447,7 +447,7 @@ export default function ThinkTankControl() {
 
         {/* Event Stream — 5 cols */}
         <div className="lg:col-span-5">
-          <Card className="border-white/5 rounded-2xl overflow-hidden h-full">
+          <Card className="border-white/5 rounded-xl overflow-hidden h-full">
             <div className="p-4 border-b border-white/5 flex items-center justify-between">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
                 <Radio size={10} className="text-cyan-400" /> OmniAgent Event Stream
@@ -462,7 +462,7 @@ export default function ThinkTankControl() {
 
         {/* HITL + Stats — 3 cols */}
         <div className="lg:col-span-3 space-y-4">
-          <Card className="border-white/5 rounded-2xl overflow-hidden">
+          <Card className="border-white/5 rounded-xl overflow-hidden">
             <div className="p-4 border-b border-white/5">
               <p className="text-[9px] font-black text-amber-400 uppercase tracking-[0.2em] flex items-center gap-2">
                 <Shield size={10} /> 審查聖殿 HITL Review
@@ -474,7 +474,7 @@ export default function ThinkTankControl() {
           </Card>
 
           {/* System Stats */}
-          <Card className="border-white/5 rounded-2xl overflow-hidden">
+          <Card className="border-white/5 rounded-xl overflow-hidden">
             <CardContent className="p-5 space-y-3">
               <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
                 <Activity size={10} className="text-emerald-400" /> System Vitals

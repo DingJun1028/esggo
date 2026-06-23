@@ -4,6 +4,7 @@ import { cn } from '../../../lib/utils';
 import { useThemeStore } from '../../../lib/theme-store';
 import { OmniHeartSeal } from './OmniHeartSeal';
 import { useOmniResonance } from './useOmniResonance';
+import { CardHeaderWithTitle } from '@/components/ui/v2/Card';
 
 export interface OmniBaseCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -36,7 +37,7 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
         ? 'bg-[var(--theme-base)] border border-[var(--theme-border)] shadow-card'
         : 'bg-white border border-slate-200 shadow-sm text-slate-800',
       glass: omniTheme === 'omnicore'
-        ? 'bg-slate-950/45 dark:bg-slate-950/45 light:bg-white/70 backdrop-blur-xl border border-white/15 dark:border-white/15 light:border-slate-900/15 shadow-glass saturate-150 text-slate-100'
+        ? 'bg-slate-950/45 /45 light:bg-white  border border-white/15 /15 light:border-slate-900/15 shadow-glass saturate-150 text-slate-100'
         : 'bg-white border border-slate-200 shadow-sm text-slate-800',
       outline: omniTheme === 'omnicore'
         ? 'bg-transparent border-2 border-[var(--theme-border)]'
@@ -53,7 +54,7 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-2xl transition-all duration-normal relative',
+          'rounded-xl transition-all duration-normal relative',
           omniTheme === 'omnicore' ? 'text-[var(--theme-text)]' : '',
           variants[variant],
           paddings[padding],
@@ -69,7 +70,7 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
             <OmniHeartSeal omniHeart={omniHeart} />
           </div>
         )}
-        {(title || subtitle) && <OmniBaseCardHeader title={title} subtitle={subtitle} omniHeart={omniHeart} />}
+        {(title || subtitle) && <CardHeaderWithTitle title={title} subtitle={subtitle} omniHeart={omniHeart} />}
         {children}
       </div>
     );
@@ -99,7 +100,7 @@ export function OmniBaseCardHeader({
       )}
     >
       <div>
-        <h3 className="text-lg font-bold text-[var(--theme-text)] tracking-tight">{title}</h3>
+        <h3 className="text-lg font-bold text-[var(--theme-text)]">{title}</h3>
         {subtitle && <p className="text-sm text-[var(--theme-text-muted)] mt-1">{subtitle}</p>}
       </div>
       {action && <div>{action}</div>}

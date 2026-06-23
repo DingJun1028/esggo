@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@100..900&family=Noto+Sans+TC:wght@100..900&display=swap');
 @import 'tailwindcss';
-@config "../tailwind.config.mjs";
+@config "../tailwind.config.js";
 
 /* =============================================================
    OmniAgent X ESGGO Design System v14.0 - LIGHT FIRST
@@ -164,18 +164,7 @@
     gap: 0.25rem;
   }
 
-  /* ─── Card Panel ─────────────────────────────────────────────── */
-  /* Clean white card with subtle depth */
-  .glass-panel {
-    background: #ffffff;
-    border: 1px solid rgba(0, 50, 98, 0.08);
-    box-shadow: 0 1px 4px rgba(0, 50, 98, 0.04), 0 4px 12px rgba(0, 50, 98, 0.04);
-    border-radius: 1rem;
-    transition: box-shadow 0.25s ease;
-  }
-  .glass-panel:hover {
-    box-shadow: 0 4px 16px rgba(0, 50, 98, 0.07);
-  }
+  /* Removed glass-panel legacy styling */
   /* ─── Section Card — Pure Light ──────────────────────────────────── */
   /* ─── Section Card — Pure Light ──────────────────────────────────── */
   .section-card {
@@ -386,70 +375,19 @@
     animation: gradientX 10s ease infinite;
   }
 
-  /* ─── Breathing Glow (呼吸光暈) ───────────────────────────────────── */
-  @keyframes breathingGlow {
-    0%,
-    100% {
-      box-shadow: 0 0 8px rgba(6, 182, 212, 0.3), 0 0 16px rgba(6, 182, 212, 0.1);
-      opacity: 1;
-    }
-    50% {
-      box-shadow: 0 0 16px rgba(6, 182, 212, 0.5), 0 0 32px rgba(6, 182, 212, 0.2);
-      opacity: 0.9;
-    }
-  }
-  @keyframes breathingGlowEmerald {
-    0%,
-    100% {
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.3), 0 0 16px rgba(16, 185, 129, 0.1);
-    }
-    50% {
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), 0 0 32px rgba(16, 185, 129, 0.2);
-    }
-  }
-  @keyframes breathingGlowAmber {
-    0%,
-    100% {
-      box-shadow: 0 0 8px rgba(255, 183, 3, 0.3), 0 0 16px rgba(255, 183, 3, 0.1);
-    }
-    50% {
-      box-shadow: 0 0 16px rgba(255, 183, 3, 0.5), 0 0 32px rgba(255, 183, 3, 0.2);
-    }
-  }
-  @keyframes pulseRing {
-    0% {
-      transform: scale(1);
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(1.8);
-      opacity: 0;
-    }
-  }
+  /* --- Minimalist Float --- */
   @keyframes float {
     0%,
     100% {
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
     }
   }
 
-  .breathing-glow {
-    animation: breathingGlow 3s ease-in-out infinite;
-  }
-  .breathing-glow-emerald {
-    animation: breathingGlowEmerald 3s ease-in-out infinite;
-  }
-  .breathing-glow-amber {
-    animation: breathingGlowAmber 3s ease-in-out infinite;
-  }
-  .pulse-ring {
-    animation: pulseRing 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
   .float {
-    animation: float 3s ease-in-out infinite;
+    animation: float 4s ease-in-out infinite;
   }
 }
 
@@ -569,16 +507,6 @@
   --theme-text-muted: #64748b;
   --theme-border: rgba(0, 50, 98, 0.1);
 }
-.dark.theme-berkeley {
-  --theme-primary: #3b7ea1;
-  --theme-primary-hover: #4b8eb1;
-  --theme-accent: #fdb515;
-  --theme-base: #020617;
-  --theme-surface: #0f172a;
-  --theme-text: #f8fafc;
-  --theme-text-muted: #94a3b8;
-  --theme-border: rgba(255, 255, 255, 0.1);
-}
 
 /* Flavor: Sustainable Classic */
 .theme-sustainable {
@@ -590,16 +518,6 @@
   --theme-text: #064e3b;
   --theme-text-muted: #166534;
   --theme-border: rgba(16, 185, 129, 0.2);
-}
-.dark.theme-sustainable {
-  --theme-primary: #34d399;
-  --theme-primary-hover: #10b981;
-  --theme-accent: #059669;
-  --theme-base: #022c22;
-  --theme-surface: #064e3b;
-  --theme-text: #ecfdf5;
-  --theme-text-muted: #a7f3d0;
-  --theme-border: rgba(52, 211, 153, 0.2);
 }
 
 /* Flavor: Minimalist */
@@ -613,16 +531,6 @@
   --theme-text-muted: #475569;
   --theme-border: #e2e8f0;
 }
-.dark.theme-minimalist {
-  --theme-primary: #f8fafc;
-  --theme-primary-hover: #f1f5f9;
-  --theme-accent: #cbd5e1;
-  --theme-base: #020617;
-  --theme-surface: #0f172a;
-  --theme-text: #f8fafc;
-  --theme-text-muted: #94a3b8;
-  --theme-border: #334155;
-}
 
 /* Flavor: Best Practice */
 .theme-best-practice {
@@ -634,16 +542,6 @@
   --theme-text: #1e3a8a;
   --theme-text-muted: #3b82f6;
   --theme-border: #dbeafe;
-}
-.dark.theme-best-practice {
-  --theme-primary: #3b82f6;
-  --theme-primary-hover: #60a5fa;
-  --theme-accent: #fbbf24;
-  --theme-base: #172554;
-  --theme-surface: #1e3a8a;
-  --theme-text: #eff6ff;
-  --theme-text-muted: #93c5fd;
-  --theme-border: rgba(59, 130, 246, 0.2);
 }
 
 /* =============================================================

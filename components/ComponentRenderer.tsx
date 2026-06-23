@@ -113,7 +113,7 @@ export function ComponentRenderer({ zone, className }: ComponentRendererProps) {
               {/* Tool Header */}
               <div className="flex items-start justify-between mb-6 relative z-10">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:scale-110 transition-transform">
+                  <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:scale-110 transition-transform">
                     <LucideIcons.Cpu size={24} />
                   </div>
                   <div>

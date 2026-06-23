@@ -13,9 +13,9 @@ import {
   Lock,
 } from 'lucide-react';
 
-import { useOmniAgentBus } from '@/lib/omni-agent-bus';
+import { useOAAgentBus } from '@/lib/oa-agent-bus';
 import { OmniThinkingChain } from '@/components/omni/OmniThinkingChain';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Badge } from '@/components/ui/v2/Input';
 
 export interface RagSource {
   title: string;
@@ -34,7 +34,7 @@ export const ESGSmartQA = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [feedbackStatus, setFeedbackStatus] = useState<Record<string, 'good' | 'bad'>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dispatchBus = useOmniAgentBus((state) => state.dispatch);
+  const dispatchBus = useOAAgentBus((state) => state.dispatch);
 
   const handleSend = async () => {
     if (!query.trim() || isLoading || isStreaming || isUploading) return;
@@ -282,10 +282,10 @@ export const ESGSmartQA = () => {
               }`}
             >
               <div
-                className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                className={`px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
                   msg.role === 'user'
                     ? 'bg-cyan-500/10 text-cyan-50 border border-cyan-500/20 rounded-tr-sm'
-                    : 'bg-slate-800/50 text-slate-200 border border-white/10 rounded-tl-sm backdrop-blur-sm'
+                    : 'bg-slate-800/50 text-slate-200 border border-white/10 rounded-tl-sm '
                 }`}
               >
                 {msg.text}
@@ -310,9 +310,9 @@ export const ESGSmartQA = () => {
                       </div>
                       {src.hashLock && (
                         <div className="flex items-center gap-1.5 mt-1 border-t border-slate-700/50 pt-1">
-                          <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={10} />}>
+                          <Badge variant="success" size="sm" icon={<ShieldCheck size={10} />}>
                             5T Validated
-                          </OmniBadge>
+                          </Badge>
                           <span className="font-mono text-[9px] text-slate-500 flex items-center gap-1">
                             <Lock size={8} /> {src.hashLock.substring(0, 8)}...
                           </span>
@@ -370,9 +370,7 @@ export const ESGSmartQA = () => {
         ))}
 
         {isLoading && (
-          <div
-            className="flex gap-3 max-w-[90%]"
-          >
+          <div className="flex gap-3 max-w-[90%]">
             <div className="p-2 rounded-full h-fit bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <Bot size={16} />
             </div>

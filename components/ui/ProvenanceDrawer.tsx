@@ -68,7 +68,7 @@ export default function ProvenanceDrawer({
       <div className="absolute inset-0 bg-slate-900/60" onClick={onClose} />
 
       <aside
-        className={`absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-500 ease-in-out ${
+        className={`absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-sm transition-transform duration-500 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -98,7 +98,7 @@ export default function ProvenanceDrawer({
           <div className="flex-1 overflow-y-auto p-6 space-y-8">
             {/* Current Value Card */}
             {currentValue && (
-              <div className="bg-[#EBF2FA] rounded-3xl p-6 border border-blue-100/50">
+              <div className="bg-[#EBF2FA] rounded-xl p-6 border border-blue-100/50">
                 <p className="text-[10px] font-bold text-blue-700 uppercase tracking-widest mb-2">
                   當前採用數值
                 </p>

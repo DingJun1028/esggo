@@ -34,7 +34,7 @@ export function OmniHeartSeal({ omniHeart, compact = false, className, ...props 
       {...props}
     >
       {isMaxResonance ? (
-        <Sparkles size={compact ? 12 : 14} className="animate-pulse" />
+        <Sparkles size={compact ? 12 : 14} className="" />
       ) : (
         <ShieldCheck size={compact ? 12 : 14} />
       )}

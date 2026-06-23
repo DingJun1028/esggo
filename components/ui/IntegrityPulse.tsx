@@ -50,7 +50,7 @@ export function IntegrityPulse() {
   return (
     <BrandCard
       padding="none"
-      className="glass-panel border-none shadow-lg overflow-hidden bg-slate-900 text-white h-full flex flex-col"
+      className="border-none shadow-sm overflow-hidden bg-slate-900 text-white h-full flex flex-col"
     >
       <div className="p-5 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3">

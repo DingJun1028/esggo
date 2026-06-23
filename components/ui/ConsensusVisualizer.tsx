@@ -84,7 +84,7 @@ export function ConsensusVisualizer({ result }: Props) {
       </div>
 
       {/* Final Action */}
-      <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+      <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
          <div className="flex items-center gap-3 text-emerald-800">
             <Shield size={20} />
             <p className="text-xs font-bold uppercase tracking-tight">戰略執行權限已授權：5T 封印寫入中...</p>

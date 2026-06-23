@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useEffect, useState } from 'react';
 import VaultOmniTable, { VaultOmniTableRecord } from './VaultOmniTable';
@@ -8,6 +7,7 @@ import { Database, Server } from 'lucide-react';
 import { OmniButton } from '../ui/omni/OmniButton';
 import { OmniBaseCard } from '../ui/omni/OmniBaseCard';
 import { OmniBadge } from '../ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
 
 export default function OmniBlueDashboard() {
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ export default function OmniBlueDashboard() {
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-12 space-y-6 relative z-10">
-      <OmniBaseCard variant="glass" className="p-6">
+      <Card variant="glass" className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
@@ -112,7 +112,7 @@ export default function OmniBlueDashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <OmniBaseCard variant="outline" className="flex items-center gap-4 p-4">
+          <Card variant="outlined" className="flex items-center gap-4 p-4">
             <div className="p-3 bg-emerald-500/10 rounded-full border border-emerald-500/20">
               <Database className="w-5 h-5 text-emerald-400" />
             </div>
@@ -120,9 +120,9 @@ export default function OmniBlueDashboard() {
               <div className="text-xs font-bold text-slate-500 tracking-wider uppercase">Primary Vault</div>
               <div className="text-lg font-bold text-slate-200">Supabase Connected</div>
             </div>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="outline" className="flex items-center gap-4 p-4">
+          <Card variant="outlined" className="flex items-center gap-4 p-4">
             <div className="p-3 bg-purple-500/10 rounded-full border border-purple-500/20">
               <Server className="w-5 h-5 text-purple-400" />
             </div>
@@ -130,9 +130,9 @@ export default function OmniBlueDashboard() {
               <div className="text-xs font-bold text-slate-500 tracking-wider uppercase">Sovereign DB</div>
               <div className="text-lg font-bold text-slate-200">NCBDB Synchronized</div>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
-      </OmniBaseCard>
+      </Card>
 
       <VaultOmniTable
         columns={[

@@ -40,7 +40,7 @@ export function subscribeToEvents(
 ): () => void {
   if (!subClient) return () => {};
 
-  subClient.subscribe(CHANNEL, (message) => {
+  subClient.subscribe(CHANNEL, (message: string) => {
     try {
       const event = JSON.parse(message) as RealtimeEvent;
       handler(event);

@@ -1,0 +1,25 @@
+{
+  "uuid": "tmpl-ch-03",
+  "version": "2.0.0",
+  "timestamp": 1782070654891,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.3 能源管理",
+  "tags": [
+    "能源管理",
+    "#零算力",
+    "GRI-302"
+  ],
+  "content": "<h2>Ch.3 能源管理</h2>\n<h3>3.1 概述</h3>\n<p>{{year}} 年總能耗 {{energy_consumption}} GJ，再生能源佔比 {{renewable_ratio}}%。能源密集度 85 GJ/百萬營收，較前年改善 10%。已承諾 RE100，2030年達成100%再生能源使用。</p>\n<h3>3.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 400 260\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"140\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">能源結構</text><path d=\"M140,130 L140,50 A80,80 0 0,1 165,206 Z\" fill=\"#003262\" stroke=\"white\" stroke-width=\"2\"/><path d=\"M140,130 L165,206 A80,80 0 1,1 60,130 Z\" fill=\"#FDB515\" stroke=\"white\" stroke-width=\"2\"/><path d=\"M140,130 L60,130 A80,80 0 1,1 93,65 Z\" fill=\"#10B981\" stroke=\"white\" stroke-width=\"2\"/><path d=\"M140,130 L93,65 A80,80 0 1,1 140,50 Z\" fill=\"#3B82F6\" stroke=\"white\" stroke-width=\"2\"/><rect x=\"260\" y=\"50\" width=\"12\" height=\"12\" fill=\"#003262\"/><text x=\"277\" y=\"60\" font-size=\"10\" fill=\"#0F172A\">再生能源 45%</text><rect x=\"260\" y=\"72\" width=\"12\" height=\"12\" fill=\"#FDB515\"/><text x=\"277\" y=\"82\" font-size=\"10\" fill=\"#0F172A\">外購電力 30%</text><rect x=\"260\" y=\"94\" width=\"12\" height=\"12\" fill=\"#10B981\"/><text x=\"277\" y=\"104\" font-size=\"10\" fill=\"#0F172A\">天然氣 15%</text><rect x=\"260\" y=\"116\" width=\"12\" height=\"12\" fill=\"#3B82F6\"/><text x=\"277\" y=\"126\" font-size=\"10\" fill=\"#0F172A\">化石燃料 10%</text></svg>\n<h3>3.3 數據表格</h3>\n<table><thead><tr><th>能源類型</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>再生能源</td><td>45%</td><td>35%</td><td>100%</td></tr><tr><td>外購電力</td><td>30%</td><td>35%</td><td>-</td></tr><tr><td>化石燃料</td><td>10%</td><td>10%</td><td>0%</td></tr></tbody></table>\n<h3>3.4 管理方針</h3>\n<p>本公司針對 能源管理 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>3.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 349,
+  "griAlignment": [
+    "GRI-302"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "e306f3a48a6c7d39",
+    "chartType": "pie"
+  }
+}

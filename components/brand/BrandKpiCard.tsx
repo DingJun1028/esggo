@@ -53,7 +53,7 @@ export default function BrandKpiCard({
   return (
     <>
       <div
-        className={`glass-panel rounded-[24px] p-7 transition-all duration-700 cursor-pointer group relative overflow-hidden ${
+        className={` rounded-[24px] p-7 transition-all duration-700 cursor-pointer group relative overflow-hidden ${
           sealed ? 'border-emerald-100/50' : ''
         } ${className}`}
         style={{
@@ -72,7 +72,7 @@ export default function BrandKpiCard({
 
         <div className="flex items-start justify-between mb-6 relative z-10">
           <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-110 duration-500"
+            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-110 duration-500"
             style={{
               backgroundColor: sealed ? 'rgba(16, 185, 129, 0.08)' : `${color}08`,
               color: sealed ? '#10B981' : color,
@@ -158,7 +158,7 @@ export default function BrandKpiCard({
             <header className="flex items-start justify-between mb-12 relative z-10">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#003262]/5 flex items-center justify-center text-[#003262]">
+                  <div className="w-10 h-10 rounded-xl bg-[#003262]/5 flex items-center justify-center text-[#003262]">
                     {icon}
                   </div>
                   <h3 className="text-3xl font-black text-[#003262] tracking-tight uppercase leading-none">
@@ -171,7 +171,7 @@ export default function BrandKpiCard({
               </div>
               <button
                 onClick={() => setShowDetail(false)}
-                className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all hover:rotate-90 hover:text-slate-600"
+                className="w-12 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all hover:rotate-90 hover:text-slate-600"
               >
                 <X size={24} />
               </button>
@@ -216,7 +216,7 @@ export default function BrandKpiCard({
                       {sources.map((src, i) => (
                         <div
                           key={i}
-                          className="text-sm text-slate-600 flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm transition-all hover:border-blue-200"
+                          className="text-sm text-slate-600 flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-100 shadow-sm transition-all hover:border-blue-200"
                         >
                           <div className="w-2 h-2 rounded-full bg-[#003262]" />
                           <span className="font-black text-[#003262]/80">{src}</span>
@@ -239,7 +239,7 @@ export default function BrandKpiCard({
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <div
-                        className={`w-3 h-3 rounded-full animate-pulse ${
+                        className={`w-3 h-3 rounded-full  ${
                           sealed ? 'bg-emerald-500' : 'bg-amber-500'
                         }`}
                       />
@@ -272,7 +272,7 @@ export default function BrandKpiCard({
               <BrandButton
                 variant="primary"
                 size="lg"
-                className="rounded-2xl h-14 px-8 shadow-xl"
+                className="rounded-xl h-14 px-8 shadow-sm"
                 onClick={() => setShowDetail(false)}
               >
                 Close Inspector

@@ -151,10 +151,10 @@ export default function DashboardContent() {
               OmniCore Governance Center • V1.0
             </p>
           </div>
-          <div className="flex items-center gap-4 px-6 py-2 rounded-2xl border border-slate-200 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+          <div className="flex items-center gap-4 px-6 py-2 rounded-xl border border-slate-200 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
             <div className="flex items-center gap-2">
               <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
               <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">
@@ -168,7 +168,7 @@ export default function DashboardContent() {
         <div initial="initial" animate="animate" className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Global Compliance Beacon */}
           <div className="md:col-span-1">
-            <Card className="h-full border border-slate-200 rounded-3xl overflow-hidden shadow-xl relative group">
+            <Card className="h-full border border-slate-200 rounded-xl overflow-hidden shadow-sm relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardContent className="p-8 flex flex-col h-full relative z-10">
                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-8 flex items-center gap-2">
@@ -176,8 +176,8 @@ export default function DashboardContent() {
                 </p>
                 <div className="flex-1 flex flex-col items-center justify-center">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-emerald-400/20 rounded-full blur-[30px] animate-pulse" />
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg relative z-10 border-4 border-white">
+                    <div className="absolute inset-0 bg-emerald-400/20 rounded-full blur-[30px]" />
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-sm relative z-10 border-4 border-white">
                       <span className="text-5xl font-black text-white tracking-tighter">A</span>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export default function DashboardContent() {
 
           {/* Governance Loop Monitor (Radar/Stats) */}
           <div className="md:col-span-2">
-            <Card className="h-full border border-slate-200 rounded-3xl shadow-xl">
+            <Card className="h-full border border-slate-200 rounded-xl shadow-sm">
               <CardContent className="p-8 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-6">
                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2">
@@ -242,7 +242,7 @@ export default function DashboardContent() {
                     <div
                       key={dim.id}
                       className={cn(
-                        'rounded-2xl p-6 border flex flex-col justify-between transition-all hover:scale-[1.02]',
+                        'rounded-xl p-6 border flex flex-col justify-between transition-all hover:scale-[1.02]',
                         dim.bg,
                         dim.border
                       )}
@@ -265,7 +265,7 @@ export default function DashboardContent() {
           </div>
 
           {/* Active Agents */}
-          <div className="md:col-span-3 mt-4 -md rounded-3xl p-6 border border-slate-200/60 shadow-sm">
+          <div className="md:col-span-3 mt-4 -md rounded-xl p-6 border border-slate-200/60 shadow-sm">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
               <div>
                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2 mb-1">
@@ -309,7 +309,7 @@ export default function DashboardContent() {
 
             <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar min-h-[350px]">
               {isLoadingAgents ? (
-                <div className="w-full flex items-center justify-center text-slate-400 font-mono text-sm animate-pulse">
+                <div className="w-full flex items-center justify-center text-slate-400 font-mono text-sm">
                   Synchronizing with OmniCore...
                 </div>
               ) : (
@@ -329,7 +329,7 @@ export default function DashboardContent() {
 
           {/* OmniAgent Activity Stream */}
           <div className="md:col-span-2">
-            <Card className="h-full bg-slate-900/95 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
+            <Card className="h-full bg-slate-900/95 border border-slate-800 rounded-xl shadow-sm overflow-hidden">
               <CardContent className="p-8">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                   <Activity size={12} className="text-cyan-400" /> OmniAgent Stream
@@ -362,7 +362,7 @@ export default function DashboardContent() {
 
           {/* Quick Action Hub */}
           <div className="md:col-span-1">
-            <Card className="h-full border border-slate-200 rounded-3xl shadow-xl">
+            <Card className="h-full border border-slate-200 rounded-xl shadow-sm">
               <CardContent className="p-8 flex flex-col h-full">
                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                   <Compass size={12} className="text-purple-600" /> Quick Actions

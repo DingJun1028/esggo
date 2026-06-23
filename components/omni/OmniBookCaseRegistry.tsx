@@ -191,7 +191,7 @@ export default function OmniBookCaseRegistry() {
             disabled={isVerifying}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium shadow-sm disabled:opacity-50"
           >
-            <CheckCircle size={16} className={isVerifying ? 'animate-pulse text-emerald-500' : 'text-emerald-500'} />
+            <CheckCircle size={16} className={isVerifying ? ' text-emerald-500' : 'text-emerald-500'} />
             <span>{isVerifying ? '驗證中...' : '5T 協議驗證'}</span>
           </button>
           <button 

@@ -36,17 +36,19 @@ export async function POST(req: Request) {
     };
 
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
     );
 
     // Write to esg_atoms for 5T traceability (Trustworthy & Traceable)
-    const { error } = await supabase.from('esg_atoms').insert([{
-      uuid: vaultEntry.uuid,
-      hash_lock: vaultEntry.checksum,
-      status: 'Trustworthy',
-      evidence: vaultEntry,
-    }]);
+    const { error } = await supabase.from('esg_atoms').insert([
+      {
+        uuid: vaultEntry.uuid,
+        hash_lock: vaultEntry.checksum,
+        status: 'Trustworthy',
+        evidence: vaultEntry,
+      },
+    ]);
 
     if (error) {
       console.error('[OmniSync] Supabase Insert Error:', error);

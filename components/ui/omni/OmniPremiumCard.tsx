@@ -25,7 +25,7 @@ export function OmniPremiumCard({
   return (
     <div
       className={cn(
-        'relative bg-white rounded-2xl p-6 transition-all duration-300',
+        'relative bg-white rounded-xl p-6 transition-all duration-300',
         'border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]',
         interactive && 'cursor-pointer hover:shadow-[0_12px_30px_-6px_rgba(0,0,0,0.08)] hover:border-slate-200',
         active && 'ring-2 ring-[#003262] ring-offset-2 border-transparent',

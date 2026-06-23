@@ -47,7 +47,7 @@ export function MemoryGraphVisualizer({ graph, title = '永續記憶因果圖譜
               >
                 <div className="flex flex-col items-center gap-3 w-32 sm:w-40 text-center">
                   <div 
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center shadow-lg border-2 border-white transition-all group-hover:scale-110 group-hover:rotate-6"
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center shadow-sm border-2 border-white transition-all group-hover:scale-110 group-hover:rotate-6"
                     style={{ backgroundColor: Config.bg, color: Config.color }}
                   >
                     <Config.icon size={24} className="sm:w-7 sm:h-7" />
@@ -65,7 +65,7 @@ export function MemoryGraphVisualizer({ graph, title = '永續記憶因果圖譜
 
                 {/* Pulse Effect for current focused node (usually evidence) */}
                 {node.type === 'EVIDENCE' && (
-                  <div className="absolute inset-0 bg-blue-400/20 rounded-full animate-ping -z-10 scale-125 sm:scale-150 blur-xl opacity-30" />
+                  <div className="absolute inset-0 bg-blue-400/20 rounded-full -z-10 scale-125 sm:scale-150 blur-xl opacity-30" />
                 )}
               </div>
 
@@ -74,7 +74,7 @@ export function MemoryGraphVisualizer({ graph, title = '永續記憶因果圖譜
                 <div
                   className="flex items-center text-slate-200 shrink-0"
                 >
-                  <ArrowRight size={16} className="animate-pulse sm:w-5 sm:h-5" />
+                  <ArrowRight size={16} className="sm:w-5 sm:h-5" />
                   <div className="h-px w-6 sm:w-8 bg-gradient-to-r from-slate-200 to-transparent" />
                 </div>
               )}

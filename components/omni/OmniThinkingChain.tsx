@@ -221,7 +221,7 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
         flex items-start gap-3 px-3 py-2.5 rounded-xl border transition-all duration-500
         ${
           isActive || isFailed || isFallback
-            ? `${bgColor} ${borderColor} shadow-lg ${glowClass}`
+            ? `${bgColor} ${borderColor} shadow-sm ${glowClass}`
             : ''
         }
         ${isDone ? 'bg-white/3 border-white/5' : ''}
@@ -465,7 +465,7 @@ export function OmniThinkingChain({
 
   return (
     <div
-      className={`rounded-3xl overflow-hidden border border-white/8 bg-slate-950/70 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.07)] ${
+      className={`rounded-xl overflow-hidden border border-white/8 bg-slate-950/70  shadow-[0_24px_64px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.07)] ${
         compact ? 'max-w-sm' : 'w-full'
       }`}
     >

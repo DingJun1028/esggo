@@ -136,7 +136,7 @@ export default function OmniCommandPalette() {
               {/* 背景環境光 */}
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-[2rem] blur-xl opacity-70"></div>
 
-              <div className="relative bg-[#020617]/70 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 ring-1 ring-white/5 rounded-3xl overflow-hidden flex flex-col">
+              <div className="relative bg-[#020617]/70 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 ring-1 ring-white/5 rounded-xl overflow-hidden flex flex-col">
                 {/* 頂部漸層裝飾 */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-cyan-500 opacity-80" />
 
@@ -175,7 +175,7 @@ export default function OmniCommandPalette() {
                             setIsOpen(false);
                             setSearch('');
                           }}
-                          className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-cyan-500/10 hover:shadow-sm text-left transition-all duration-200 group relative overflow-hidden"
+                          className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-cyan-500/10 hover:shadow-sm text-left transition-all duration-200 group relative overflow-hidden"
                         >
                           {/* Hover 光源 */}
                           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -221,7 +221,7 @@ export default function OmniCommandPalette() {
                             alert('⚠️ 連線異常: ' + e.message);
                           }
                         }}
-                        className="mt-2 px-6 py-2.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-xl text-sm font-bold shadow-md hover:bg-cyan-500/30 hover:shadow-lg transition-all"
+                        className="mt-2 px-6 py-2.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-xl text-sm font-bold shadow-md hover:bg-cyan-500/30 hover:shadow-sm transition-all"
                       >
                         呼叫 OmniAgent 運算
                       </button>
@@ -239,7 +239,7 @@ export default function OmniCommandPalette() {
                     to close
                   </span>
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                    <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
                     <span className="text-[10px] font-black text-cyan-500/80 tracking-widest uppercase">
                       ESGGO Omnicore V8.5
                     </span>

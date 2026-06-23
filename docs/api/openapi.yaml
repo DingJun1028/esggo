@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: ESGGO External API
+  description: Public API for third-party integrations with the ESGGO platform.
+  version: 1.0.0
+servers:
+  - url: https://esggo.vercel.app/api/v1
+    description: Production Server
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+security:
+  - ApiKeyAuth: []
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns the health status of the API.
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  status:
+                    type: string
+                  service:
+                    type: string
+                  version:
+                    type: string
+                  timestamp:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /metrics:
+    get:
+      summary: Get ESG Metrics
+      description: Retrieve environmental, social, or governance metrics from the platform.
+      parameters:
+        - name: category
+          in: query
+          description: Optional category filter (e.g. GHG, Water)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  timestamp:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /data/ingest:
+    post:
+      summary: Ingest ESG Data
+      description: Push new ESG data (e.g., energy consumption) into the platform. Automatically sealed with 5T Integrity Protocol.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - category
+                - value
+              properties:
+                category:
+                  type: string
+                  description: The category of the data (e.g. GHG, Water, Electricity)
+                value:
+                  type: number
+                  description: The numeric value
+                unit:
+                  type: string
+                  description: The unit of measurement (e.g. kWh, tons)
+                source:
+                  type: string
+                  description: The origin system (e.g. Factory-A-Sensor)
+      responses:
+        '200':
+          description: Data successfully ingested and sealed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  integrity:
+                    type: object
+                    properties:
+                      hashLock:
+                        type: string
+                      status:
+                        type: string
+                      sealedAt:
+                        type: string
+        '400':
+          description: Bad Request (missing fields)
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden

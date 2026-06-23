@@ -57,7 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
             </div>
 
-            <div className="p-4 bg-slate-900/5 rounded-2xl text-[10px] font-mono text-slate-400 break-all text-left">
+            <div className="p-4 bg-slate-900/5 rounded-xl text-[10px] font-mono text-slate-400 break-all text-left">
               Error: {this.state.error?.message || 'Unknown Runtime Exception'}
             </div>
 
@@ -65,7 +65,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <BrandButton
                 variant="primary"
                 fullWidth
-                className="h-14 rounded-2xl font-black shadow-xl"
+                className="h-14 rounded-xl font-black shadow-sm"
                 onClick={() => window.location.reload()}
               >
                 <RefreshCw size={18} className="mr-2" /> 嘗試重新啟動

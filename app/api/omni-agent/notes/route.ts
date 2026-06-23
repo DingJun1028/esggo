@@ -8,8 +8,8 @@ const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 const DEFAULT_OPENROUTER_MODEL = 'mistralai/mistral-small-3.1-24b:free';
 
 function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key';
   if (!url || !key) return null;
   return createClient(url, key);
 }

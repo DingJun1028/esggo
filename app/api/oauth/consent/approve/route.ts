@@ -5,8 +5,8 @@ import { cookies } from 'next/headers';
 export async function POST(request: Request) {
   const { consent_id, user_id } = await request.json();
   const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy-key'
   );
 
   // 1. Verify user session

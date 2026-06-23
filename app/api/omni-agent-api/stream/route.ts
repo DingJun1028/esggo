@@ -5,7 +5,7 @@ import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 /**
  * OmniAgent Bus SSE Stream
  * ────────────────────────
- * Server-Sent Events endpoint that bridges the backend OmniAgentBus
+ * Server-Sent Events endpoint that bridges the backend OAAgentBus
  * to the frontend in real-time. The client subscribes once and receives
  * a continuous stream of mission events, agent tasks, and 5T seal confirmations.
  *
@@ -26,7 +26,11 @@ export async function GET(req: NextRequest) {
       // Send initial handshake
       const handshake = `data: ${JSON.stringify({
         event: 'STREAM_CONNECTED',
-        payload: { message: 'OmniAgent Bus SSE connected', bufferedEvents: eventBuffer.length, busHooks: omniAgentBus.hookCount },
+        payload: {
+          message: 'OmniAgent Bus SSE connected',
+          bufferedEvents: eventBuffer.length,
+          busHooks: omniAgentBus.hookCount,
+        },
         timestamp: new Date().toISOString(),
       })}\n\n`;
       controller.enqueue(encoder.encode(handshake));
@@ -64,7 +68,11 @@ export async function GET(req: NextRequest) {
       req.signal.addEventListener('abort', () => {
         clearInterval(heartbeat);
         subscribers.delete(onEvent);
-        try { controller.close(); } catch { /* already closed */ }
+        try {
+          controller.close();
+        } catch {
+          /* already closed */
+        }
       });
     },
   });
@@ -73,7 +81,7 @@ export async function GET(req: NextRequest) {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'X-Accel-Buffering': 'no',
     },
   });

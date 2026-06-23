@@ -36,7 +36,7 @@ export const OmniCard: React.FC<Props> = ({
 
   if (isVersionMismatch) {
     return (
-      <div className="p-6 rounded-2xl border-2 border-rose-500/50 bg-rose-950/20 text-rose-500 font-mono text-xs animate-pulse">
+      <div className="p-6 rounded-xl border-2 border-rose-500/50 bg-rose-950/20 text-rose-500 font-mono text-xs">
         [⚠️ VERSION MISMATCH ERROR]: v{componentVersion} mismatched with core v
         {CURRENT_SYSTEM_DESIGN_VERSION}.
       </div>
@@ -53,18 +53,18 @@ export const OmniCard: React.FC<Props> = ({
   return (
     <div
       className={`
-        relative overflow-hidden p-6 rounded-2xl transition-all duration-300 ease-out border
+        relative overflow-hidden p-6 rounded-xl transition-all duration-300 ease-out border
         
         ${/* 美：日夜雙工液態玻璃材料學（Figma Token 同步） */ ''}
-        dark:bg-slate-900/60 dark:border-white/10 dark:text-white
+        /60 /10 
         light:bg-white/60 light:border-slate-900/10 light:text-slate-900
-        backdrop-blur-md saturate-180
-        hover:translate-y-[-2px] hover:shadow-lg
+         saturate-180
+        hover:translate-y-[-2px] hover:shadow-sm
         
         ${/* 信：核心禁區 - 日夜雙模冷晶防護態 */ ''}
         ${
           isHardLocked
-            ? 'dark:border-[#63a6b0]/50 dark:shadow-[inset_0_0_15px_rgba(99,166,176,0.25)] dark:bg-[#63a6b0]/20 light:border-[#63a6b0]/60 light:shadow-[inset_0_0_15px_rgba(99,166,176,0.15)] light:bg-[#63a6b0]/10'
+            ? '#63a6b0]/50 _0_0_15px_rgba(99,166,176,0.25)] #63a6b0]/20 light:border-[#63a6b0]/60 light:shadow-[inset_0_0_15px_rgba(99,166,176,0.15)] light:bg-[#63a6b0]/10'
             : attention === AttentionStatus.Critical
             ? 'border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.1)]'
             : isResonant
@@ -76,13 +76,13 @@ export const OmniCard: React.FC<Props> = ({
     >
       {/* Header 區塊 */}
       <div className="flex justify-between items-center mb-4 select-none">
-        <h2 className="text-sm font-semibold uppercase tracking-widest flex items-center gap-2 dark:text-slate-200 light:text-slate-800">
+        <h2 className="text-sm font-semibold uppercase tracking-widest flex items-center gap-2 light:text-slate-800">
           <span
             className={`w-2 h-2 rounded-full ${
               isHardLocked
-                ? 'bg-[#63a6b0] animate-pulse'
+                ? 'bg-[#63a6b0] '
                 : attention === AttentionStatus.Critical
-                ? 'bg-rose-500 animate-ping'
+                ? 'bg-rose-500 '
                 : 'bg-[#ffd700]'
             }`}
           />
@@ -113,11 +113,11 @@ export const OmniCard: React.FC<Props> = ({
           >
             Trace
           </button>
-          <span className="px-1 dark:text-slate-400 light:text-slate-500 rounded">
+          <span className="px-1 light:text-slate-500 rounded">
             v{componentVersion}
           </span>
           {omniHeart?.omniSignature && (
-            <span className="ml-1.5 px-1.5 py-0.5 rounded border border-[#ffd700]/40 text-[#ffd700] bg-[#ffd700]/10 animate-pulse shadow-[0_0_5px_rgba(255,215,0,0.5)]">
+            <span className="ml-1.5 px-1.5 py-0.5 rounded border border-[#ffd700]/40 text-[#ffd700] bg-[#ffd700]/10 shadow-[0_0_5px_rgba(255,215,0,0.5)]">
               ZKP:{omniHeart.omniSignature.substring(0, 6)}
             </span>
           )}
@@ -135,9 +135,9 @@ export const OmniCard: React.FC<Props> = ({
 
       {/* 善：公式零幻覺驗算面板（日夜對照） */}
       {showFormula && (
-        <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in dark:bg-slate-950/95 dark:text-slate-300 light:bg-slate-50/95 light:text-slate-800">
+        <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in /95 light:bg-slate-50/95 light:text-slate-800">
           <div>
-            <div className="flex justify-between border-b pb-1 mb-3 text-[#ffd700] dark:border-white/10 light:border-slate-900/10">
+            <div className="flex justify-between border-b pb-1 mb-3 text-[#ffd700] /10 light:border-slate-900/10">
               <span>[📊 VERIFIABLE COMPLIANCE FORMULA]</span>
               <button onClick={() => setShowFormula(false)} className="hover:text-rose-500">
                 ✕
@@ -145,7 +145,7 @@ export const OmniCard: React.FC<Props> = ({
             </div>
             <div className="space-y-2">
               <span className="opacity-60 block">CORE METRIC FORMULA:</span>
-              <code className="text-xs p-2 rounded block border dark:bg-slate-900 dark:text-white dark:border-white/5 light:bg-white light:text-slate-900 light:border-slate-900/10">
+              <code className="text-xs p-2 rounded block border /5 light:bg-white light:text-slate-900 light:border-slate-900/10">
                 E_total = E_scope1 + E_scope2 + \sum (Activity_i \times EF_i)
               </code>
               <p>
@@ -160,9 +160,9 @@ export const OmniCard: React.FC<Props> = ({
 
       {/* 真：鏈式溯源日誌面板（日夜對照） */}
       {showLog && (
-        <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in dark:bg-slate-950/95 dark:text-slate-300 light:bg-slate-50/95 light:text-slate-800">
+        <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in /95 light:bg-slate-50/95 light:text-slate-800">
           <div>
-            <div className="flex justify-between border-b pb-1 mb-2 text-[#63a6b0] dark:border-white/10 light:border-slate-900/10">
+            <div className="flex justify-between border-b pb-1 mb-2 text-[#63a6b0] /10 light:border-slate-900/10">
               <span>[⛓️ OMNISTITCH DATA TRACE]</span>
               <button onClick={() => setShowLog(false)} className="hover:text-rose-500">
                 ✕
@@ -208,7 +208,7 @@ export const OmniCard: React.FC<Props> = ({
               <div className="mt-3 p-2 rounded border border-[#ffd700]/20 bg-[#ffd700]/10">
                 <div className="opacity-80 mb-1 text-[#ffd700] flex items-center gap-2">
                   <span>[⚡ OMNI-CORE 5T STATE]</span>
-                  {omniHeart.resonanceState === 1.0 && <span className="animate-pulse">✨</span>}
+                  {omniHeart.resonanceState === 1.0 && <span className="">✨</span>}
                 </div>
                 <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] opacity-80">
                   <div className="col-span-2 text-[#63a6b0] truncate">SIG: {omniHeart.omniSignature}</div>

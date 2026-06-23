@@ -101,7 +101,7 @@ function ConsentContent() {
 
             {status === 'pending' && (
               <>
-                <div className="w-full border border-slate-200 rounded-2xl p-4 text-left space-y-3">
+                <div className="w-full border border-slate-200 rounded-xl p-4 text-left space-y-3">
                   <h3 className="text-[10px] font-black uppercase text-white/40 tracking-widest">
                     要求權限範圍 (Scopes)
                   </h3>

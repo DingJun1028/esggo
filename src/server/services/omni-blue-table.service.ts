@@ -5,12 +5,16 @@
 
 import { supabase } from '../lib/supabase';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { type ThinkTankRegistration, THINK_TANK_REGISTRY, getThinkTankRegistrations, getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
+import {
+  type ThinkTankRegistration,
+  THINK_TANK_REGISTRY,
+  getThinkTankRegistrations,
+  getOmniBlueTablePractices,
+} from '@/lib/agent/best-practice-registry';
 import { type BestPractice } from '@/lib/agent/best-practice-registry';
 import { aiTableBlueBridge } from '@/lib/services/omni-table-blue-bridge';
 
 export class OmniBlueTableService {
-
   /**
    * 列出已登入萬能智庫的元件清單
    */
@@ -22,7 +26,7 @@ export class OmniBlueTableService {
    * 查詢特定元件的智庫註冊資訊
    */
   getRegistration(component: string): ThinkTankRegistration | undefined {
-    return THINK_TANK_REGISTRY.find(tr => tr.component === component);
+    return THINK_TANK_REGISTRY.find((tr) => tr.component === component);
   }
 
   /**
@@ -45,7 +49,7 @@ export class OmniBlueTableService {
       console.error('Supabase URL or Service Role Key missing for admin client');
       return { success: false, error: 'Supabase URL or Service Role Key missing.' };
     }
-    
+
     let serviceRoleSupabase: SupabaseClient | null = null;
     try {
       serviceRoleSupabase = createClient(supabaseUrl, serviceRoleKey);
@@ -97,7 +101,7 @@ export class OmniBlueTableService {
 
     return {
       success: !error,
-      data: error ? [] : (data ?? []),
+      data: error ? [] : data ?? [],
       error: error?.message || null,
     };
   }
@@ -111,10 +115,8 @@ export class OmniBlueTableService {
   /**
    * 查詢 OmniBlueTable 最佳實踐清單 (從 Supabase 獲取)
    */
-  async getBestPracticesFromSupabase(): Promise<{ data: BestPractice[], error: string | null }> {
-    const { data, error } = await supabase
-      .from('best_practices')
-      .select('*');
+  async getBestPracticesFromSupabase(): Promise<{ data: BestPractice[]; error: string | null }> {
+    const { data, error } = await supabase.from('best_practices').select('*');
 
     if (error) {
       console.error('Error fetching best practices from Supabase:', error.message);

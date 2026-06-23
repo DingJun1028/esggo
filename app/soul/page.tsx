@@ -200,7 +200,7 @@ export default function SoulPage() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-slate-200 bg-white"
+                className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-200 bg-white"
               >
                 <div className="text-slate-500">{item.icon}</div>
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">

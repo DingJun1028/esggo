@@ -1,25 +1,30 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
-import { SwapDeFiClient } from '../../../../lib/services/swap-defi-adapter';
-import type { SwapDefiTransaction } from '../../../../src/shared/types/swap-defi.types';
-import { createTask, executeSwarmTask } from '../../../../lib/agent/orchestrator';
-import { GLOBAL_TASKS, addTask, addExecution, addArtifact } from '../../../../lib/agent/store';
-import { omniSwarm } from '../../../../lib/agents/adk-swarm';
-import type { AgentTaskType } from '../../../../lib/agent/types';
+﻿export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { task, context } = body;
 
+    // Dynamic imports — only loaded at runtime, never at build time
+    const [{ createTask, executeSwarmTask }, { GLOBAL_TASKS, addTask, addExecution, addArtifact }] =
+      await Promise.all([
+        import('../../../../lib/agent/orchestrator'),
+        import('../../../../lib/agent/store'),
+      ]);
+
     // Swarm collaborative task
     if (task && !body.taskType) {
+      const { omniSwarm } = await import('../../../../lib/agents/adk-swarm');
       const result = await omniSwarm.collaborate(task, context);
       return NextResponse.json({ success: true, result });
     }
 
-    const { task: agentTask, policy } = createTask({
+    const { task: agentTask } = createTask({
       actorId: body.actorId ?? 'system',
-      taskType: (body.taskType as AgentTaskType) || 'analysis',
+      taskType: (body.taskType as any) || 'analysis',
       title: body.title || 'New Task',
       description: body.description || '',
       inputRefIds: body.inputRefIds ?? [],
@@ -30,7 +35,8 @@ export async function POST(req: NextRequest) {
 
     // Standard task creation
     if (body.taskType === 'swap_defi') {
-      const transaction = body.transaction as SwapDefiTransaction;
+      const { SwapDeFiClient } = await import('../../../../lib/services/swap-defi-adapter');
+      const transaction = body.transaction;
       const swapClient = new SwapDeFiClient();
       const swapResult = await swapClient.executeSwap(transaction);
       return NextResponse.json({ task: agentTask, result: swapResult, ok: true });
@@ -44,7 +50,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'oa_gold_2026',
         },
         body: JSON.stringify({ task: agentTask }),
       });
@@ -58,24 +64,34 @@ export async function POST(req: NextRequest) {
         throw new Error(`VPS response not OK: ${vpsRes.status}`);
       }
     } catch (vpsErr) {
-      console.warn('[VPS] OmniAgent Server unreachable, falling back to local orchestrator:', vpsErr);
+      console.warn(
+        '[VPS] OmniAgent Server unreachable, falling back to local orchestrator:',
+        vpsErr
+      );
       executionSource = 'local';
       const localResult = await executeSwarmTask(agentTask.id);
       execution = localResult.execution;
       artifact = localResult.artifact;
     }
 
-    return NextResponse.json({ task: agentTask, execution, artifact, source: executionSource, ok: true });
+    return NextResponse.json({
+      task: agentTask,
+      execution,
+      artifact,
+      source: executionSource,
+      ok: true,
+    });
   } catch (err: any) {
-    const message = err.message || '未知錯誤';
+    const message = err.message || 'unknown error';
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ 
-    tasks: GLOBAL_TASKS, 
-    total: GLOBAL_TASKS.length, 
-    ok: true 
+  const { GLOBAL_TASKS } = await import('../../../../lib/agent/store');
+  return NextResponse.json({
+    tasks: GLOBAL_TASKS,
+    total: GLOBAL_TASKS.length,
+    ok: true,
   });
 }

@@ -66,7 +66,7 @@ export function ListTemplate<T>({
             <tbody className="divide-y divide-border-primary">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i} className="animate-pulse">
+                  <tr key={i} className="">
                     <td
                       colSpan={columns.length}
                       className="px-6 py-4 h-16 bg-surface-secondary/20"

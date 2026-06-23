@@ -2,7 +2,7 @@
 import { createHash } from 'crypto';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 async function getAdminClient() {
@@ -11,7 +11,7 @@ async function getAdminClient() {
     throw new Error('Supabase service role credentials not configured');
   }
   return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { persistSession: false }
+    auth: { persistSession: false },
   });
 }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const { error: vaultError } = await supabase.from('vault_omni_core').insert({
       uuid: evidenceUuid,
       dimension: sealType,
-      hash_lock: finalPayload
+      hash_lock: finalPayload,
     });
 
     if (vaultError) {
@@ -54,7 +54,11 @@ export async function POST(request: NextRequest) {
     }
 
     let targetTable = 'evidence_vault';
-    let updatePayload: Record<string, unknown> = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
+    let updatePayload: Record<string, unknown> = {
+      hash_lock: hashLock,
+      zkp_proof: true,
+      status: 'verified',
+    };
 
     if (sourceOrigin === 'environmental-module') {
       targetTable = 'environmental_data';
@@ -85,13 +89,13 @@ export async function POST(request: NextRequest) {
       details: `5T seal created for evidence ${evidenceUuid}, type: ${sealType}`,
     });
 
-    // Fire T5 Lifecycle Event via OmniAgentBus
+    // Fire T5 Lifecycle Event via OAAgentBus
     omniAgentBus.publish('vault:seal:5t', {
       evidenceUuid,
       sealType,
       hashLock,
       sourceOrigin,
-      timestamp: rawSealData.timestamp
+      timestamp: rawSealData.timestamp,
     });
 
     return NextResponse.json({
@@ -121,13 +125,13 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = await getAdminClient();
     const { data, error } = await supabase
-       .from('vault_omni_core')
-       .select('hash_lock')
-       .eq('uuid', evidenceUuid)
-       .eq('dimension', sealType)
-       .order('created_at', { ascending: false })
-       .limit(1)
-       .single();
+      .from('vault_omni_core')
+      .select('hash_lock')
+      .eq('uuid', evidenceUuid)
+      .eq('dimension', sealType)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
 
     if (error) {
       return NextResponse.json({ success: false, error: error.message }, { status: 404 });

@@ -34,7 +34,7 @@ export { ThemeToggle } from '../theme/ThemeToggle';
 
 // Hooks
 export { useTouchGesture } from '../hooks/useTouchGesture';
-export { useOmniAgentBus } from '../hooks/useOmniAgentBus';
+export { useOAAgentBus } from '../hooks/useOmniAgentBus';
 export { omniAgentBus } from '../../services/OmniAgentBus.client';
 export type { IMiaoDeNotification } from '../../services/OmniAgentBus.client';
 

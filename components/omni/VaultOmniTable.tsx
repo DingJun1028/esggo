@@ -73,7 +73,7 @@ export default function VaultOmniTable({
 
   return (
     <div
-      className={`w-full bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden ${className}`}
+      className={`w-full bg-slate-950 rounded-xl border border-slate-800 shadow-sm overflow-hidden ${className}`}
     >
       {/* Header */}
       <div className="p-4 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
@@ -103,12 +103,12 @@ export default function VaultOmniTable({
         <div className="text-xs font-mono text-slate-500 flex items-center gap-2">
           {isLoading ? (
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
               SYNCING...
             </span>
           ) : (
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               REALTIME VERIFIED
             </span>
           )}

@@ -45,7 +45,7 @@ export function IntegrityCertificateView({ certificate, onClose }: Props) {
             <FileCheck size={14} className="text-berkeley-blue" />
             數據摘要 (Data Payload)
           </h4>
-          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 space-y-4">
+          <div className="bg-slate-50 rounded-xl p-5 border border-slate-100 space-y-4">
             <div className="flex justify-between items-end">
               <div>
                 <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Metric Value</p>
@@ -80,7 +80,7 @@ export function IntegrityCertificateView({ certificate, onClose }: Props) {
         </div>
 
         {/* Master Seal */}
-        <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-2">
+        <div className="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100 space-y-2">
           <div className="flex justify-between items-center">
             <p className="text-[10px] font-black text-emerald-800 uppercase tracking-widest flex items-center gap-2">
               <Shield size={14} /> MasterSeal v1.1.0 Hash
@@ -94,10 +94,10 @@ export function IntegrityCertificateView({ certificate, onClose }: Props) {
 
         {/* Footer Actions */}
         <div className="flex gap-4 pt-4">
-          <BrandButton variant="ghost" fullWidth onClick={onClose} className="rounded-2xl text-xs font-black uppercase">
+          <BrandButton variant="ghost" fullWidth onClick={onClose} className="rounded-xl text-xs font-black uppercase">
             關閉
           </BrandButton>
-          <BrandButton variant="primary" fullWidth className="rounded-2xl text-xs font-black uppercase shadow-lg shadow-blue-900/10">
+          <BrandButton variant="primary" fullWidth className="rounded-xl text-xs font-black uppercase shadow-sm shadow-blue-900/10">
             <Download size={14} className="mr-2" /> 下載憑證
           </BrandButton>
         </div>

@@ -209,7 +209,7 @@ async function loadData() {
           { label: '涵蓋標準來源', value: '18', trend: '0%', color: 'text-[#FDB515]' },
           { label: 'Omni 成功率', value: '99.8%', trend: '+0.2%', color: 'text-emerald-500' },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+          <div key={i} className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{kpi.label}</p>
             <div className="flex items-end justify-between">
               <span className={`text-3xl font-black ${kpi.color} leading-none`}>{kpi.value}</span>

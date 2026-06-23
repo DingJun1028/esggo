@@ -18,13 +18,13 @@ export default function SustainWriteError({
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center p-6 bg-slate-50/50">
       {/* 液態玻璃 (Liquid Glass) 容器 */}
-      <div className="relative overflow-hidden border border-white/80 shadow-[0_8px_32px_rgba(99,166,176,0.1)] rounded-3xl p-8 max-w-md w-full text-center">
+      <div className="relative overflow-hidden border border-white/80 shadow-[0_8px_32px_rgba(99,166,176,0.1)] rounded-xl p-8 max-w-md w-full text-center">
         {/* 背景裝飾光暈 */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-[var(--danger)]/10 rounded-full blur-2xl"></div>
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[var(--primary)]/10 rounded-full blur-2xl"></div>
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-100 to-orange-50 flex items-center justify-center text-rose-500 mb-6 shadow-inner">
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-tr from-rose-100 to-orange-50 flex items-center justify-center text-rose-500 mb-6 shadow-inner">
             <AlertCircle size={32} strokeWidth={2.5} />
           </div>
 

@@ -250,7 +250,7 @@ export default function HealthCheckPage() {
                 disabled={isHealing}
                 className="flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
               >
-                <Activity size={14} className={isHealing ? 'animate-pulse' : ''} />
+                <Activity size={14} className={isHealing ? '' : ''} />
                 自癒修復
               </button>
             </>
@@ -274,7 +274,7 @@ export default function HealthCheckPage() {
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-neutral-100 /20 /20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
+            <div className="w-14 h-14 rounded-xl bg-neutral-100 /20 /20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
               <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <Stethoscope className="text-cyan-400 relative z-10" size={28} />
             </div>
@@ -389,7 +389,7 @@ export default function HealthCheckPage() {
                     }
                   }}
                   disabled={isHealing || loading}
-                  className="w-full py-2 bg-neutral-100   hover: hover: text-white rounded-lg text-xs font-black tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-2 bg-neutral-100 hover: hover: text-white rounded-lg text-xs font-black tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   <ShieldCheck size={14} className={isHealing ? 'animate-spin' : ''} />
                   🚀 全域自癒掃描 (Overdrive Sweep)
@@ -399,7 +399,7 @@ export default function HealthCheckPage() {
                 <div className="space-y-1.5 border border-slate-200 p-3 rounded-lg font-mono text-[10px] text-emerald-400/90 shadow-inner">
                   <div className="flex justify-between border-b border-slate-200 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[9px]">
                     <span>自癒終端日誌流</span>
-                    <span className="animate-pulse text-emerald-500">● LIVE</span>
+                    <span className="text-emerald-500">● LIVE</span>
                   </div>
                   <div className="space-y-1 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
                     {healingLogs.map((log, idx) => (

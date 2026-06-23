@@ -5,7 +5,7 @@
 
 type AgentEventCallback = (data: any) => void;
 
-export class OmniAgentBus {
+export class OAAgentBus {
   private subscribers: Map<string, AgentEventCallback[]> = new Map();
   private _startTime: number = Date.now();
   private _errorCount: number = 0;
@@ -16,12 +16,12 @@ export class OmniAgentBus {
     this._totalEvents++;
     const callbacks = this.subscribers.get(event);
     if (callbacks) {
-      callbacks.forEach(cb => {
+      callbacks.forEach((cb) => {
         try {
           cb(data);
         } catch (e) {
           this._errorCount++;
-          console.error(`[OmniAgentBus] Subscriber error for ${event}:`, e);
+          console.error(`[OAAgentBus] Subscriber error for ${event}:`, e);
         }
       });
     }
@@ -71,4 +71,4 @@ export class OmniAgentBus {
   }
 }
 
-export const omniAgentBus = new OmniAgentBus();
+export const omniAgentBus = new OAAgentBus();

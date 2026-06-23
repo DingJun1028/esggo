@@ -33,7 +33,7 @@ export function Tooltip({ content, children, position = 'top', className, eviden
     >
       {children}
       {visible && (
-        <div className={cn('absolute z-50 px-2.5 py-1.5 rounded-[7px] text-[12px] text-white whitespace-nowrap shadow-lg pointer-events-none', positionClasses[position], bgStyle)}>
+        <div className={cn('absolute z-50 px-2.5 py-1.5 rounded-[7px] text-[12px] text-white whitespace-nowrap shadow-sm pointer-events-none', positionClasses[position], bgStyle)}>
           {displayContent}
         </div>
       )}

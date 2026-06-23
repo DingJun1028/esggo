@@ -127,7 +127,7 @@ export function ChapterEditor({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+    <div className="flex flex-col h-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       {/* Toolbar */}
       <div className="h-12 px-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -228,7 +228,7 @@ export function ChapterEditor({
             isGeneratingAI[chapterId] ? 'opacity-100' : 'opacity-0'
           )}
         >
-          <div className="p-4 rounded-2xl border border-indigo-100 shadow-2xl flex flex-col items-center gap-3">
+          <div className="p-4 rounded-xl border border-indigo-100 shadow-sm flex flex-col items-center gap-3">
             <RefreshCw size={24} className="text-indigo-600 animate-spin" />
             <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">
               Generating Content...

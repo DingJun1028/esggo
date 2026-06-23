@@ -1,0 +1,3 @@
+{
+  "/api/agent/memory-shards/extract-logs/route": "app/api/agent/memory-shards/extract-logs/route.js"
+}

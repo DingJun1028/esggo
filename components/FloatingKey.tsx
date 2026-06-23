@@ -33,7 +33,7 @@ const FloatingKey: React.FC = () => {
       {/* 浮動功能鍵 - 液態玻璃質感 */}
       <button
         style={{ transition: 'all 0.4s ease' }}
-        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-blue-500/30 -md border border-white/20 shadow-lg flex items-center justify-center text-white z-50"
+        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-blue-500/30 -md border border-white/20 shadow-sm flex items-center justify-center text-white z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         ⚛️
@@ -43,7 +43,7 @@ const FloatingKey: React.FC = () => {
       {isOpen && (
         <div
           style={{ transition: 'all 0.4s ease' }}
-          className="fixed bottom-28 right-8 w-80 p-6 rounded-2xl bg-slate-900/80 border border-blue-500/30 shadow-2xl z-50 text-xs text-blue-100 font-mono"
+          className="fixed bottom-28 right-8 w-80 p-6 rounded-xl bg-slate-900/80 border border-blue-500/30 shadow-sm z-50 text-xs text-blue-100 font-mono"
         >
           <h3 className="text-sm font-bold mb-2">OmniAgent 心核狀態</h3>
           <div className="space-y-1">

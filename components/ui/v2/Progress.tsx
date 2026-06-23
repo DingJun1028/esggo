@@ -55,7 +55,7 @@ export function Progress({
       )}
       <div className={cn('w-full bg-slate-100 rounded-full overflow-hidden', sizeStyles[size])}>
         <div
-          className={cn('h-full rounded-full transition-all duration-500', colorStyles[resolvedColor], animated ? 'animate-pulse' : '')}
+          className={cn('h-full rounded-full transition-all duration-500', colorStyles[resolvedColor], animated ? '' : '')}
           style={{ width: `${pct}%` }}
         />
       </div>

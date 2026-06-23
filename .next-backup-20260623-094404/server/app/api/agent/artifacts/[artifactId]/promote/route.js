@@ -1,0 +1,13 @@
+var R=require("../../../../../../chunks/[turbopack]_runtime.js")("server/app/api/agent/artifacts/[artifactId]/promote/route.js")
+R.c("server/chunks/[root-of-the-server]__1pvhdt4._.js")
+R.c("server/chunks/lib_agent_0cyrz23._.js")
+R.c("server/chunks/lib_agent_rag-engine_ts_1vcir8q._.js")
+R.c("server/chunks/node_modules_@noble_secp256k1_index_1n_z1ce.js")
+R.c("server/chunks/[root-of-the-server]__0y6567a._.js")
+R.c("server/chunks/node_modules_15ff9zg._.js")
+R.c("server/chunks/node_modules_@supabase_supabase-js_dist_index_mjs_0u-n9p7._.js")
+R.c("server/chunks/lib_firebase_ts_17mhq4o._.js")
+R.c("server/chunks/node_modules_next_08s853w._.js")
+R.c("server/chunks/1oeh_server_app_api_agent_artifacts_[artifactId]_promote_route_actions_1zt3o3g.js")
+R.m(522437)
+module.exports=R.m(522437).exports

@@ -386,12 +386,12 @@ export default function NotificationsPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1200px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
+        <header className="bg-white rounded-xl border border-slate-100 p-6 relative overflow-hidden">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-50 rounded-full blur-3xl breathing-glow" />
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg breathing-glow">
+                <div className="w-14 h-14 rounded-xl bg-neutral-100 flex items-center justify-center shadow-sm breathing-glow">
                   <Bell size={24} className="text-white" />
                 </div>
                 {unreadCount > 0 && (

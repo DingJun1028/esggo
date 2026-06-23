@@ -140,7 +140,7 @@ function MetricCard({
 }) {
   return (
     <div
-      className={`p-5 rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-md flex items-center gap-4 transition-all hover:bg-slate-800/50 ${glow}`}
+      className={`p-5 rounded-xl border border-slate-800 bg-slate-900/50 flex items-center gap-4 transition-all hover:bg-slate-800/50 ${glow}`}
     >
       <div className="p-3 rounded-lg border border-slate-700/50">{icon}</div>
       <div>

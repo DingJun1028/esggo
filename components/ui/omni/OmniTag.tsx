@@ -4,6 +4,7 @@ import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/cn';
 import { X } from 'lucide-react';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniTagProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -17,7 +18,8 @@ export interface OmniTagProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantStyles = {
-  primary: 'bg-[var(--theme-primary)]/15 text-[var(--theme-primary)] border-[var(--theme-primary)]/30',
+  primary:
+    'bg-[var(--theme-primary)]/15 text-[var(--theme-primary)] border-[var(--theme-primary)]/30',
   secondary: 'bg-[var(--theme-surface)] text-[var(--theme-text)] border-[var(--theme-border)]',
   accent: 'bg-[var(--theme-accent)]/15 text-[var(--theme-accent)] border-[var(--theme-accent)]/30',
   success: 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30',
@@ -33,14 +35,29 @@ const sizeStyles = {
 };
 
 export const OmniTag = React.forwardRef<HTMLSpanElement, OmniTagProps>(
-  ({ className, label, variant = 'primary', size = 'sm', removable, onRemove, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      variant = 'primary',
+      size = 'sm',
+      removable,
+      onRemove,
+      omniHeart: initialHeart,
+      ...props
+    },
+    ref
+  ) => {
+    const omniHeart = useOmniResonance(initialHeart);
     return (
       <span
         ref={ref}
+        data-omni-resonance={omniHeart?.resonanceState}
         className={cn(
           'inline-flex items-center gap-1 font-semibold rounded-full border transition-all duration-normal',
           variantStyles[variant],
           sizeStyles[size],
+          omniHeart?.resonanceState === 1.0 && 'ring-2 ring-[var(--theme-accent)] ring-offset-1',
           className
         )}
         {...props}

@@ -97,11 +97,11 @@ export function ShieldOfAbsoluteTruth({
             ) : status === 'drift-detected' ? (
               <ShieldAlert size={20} />
             ) : (
-              <Shield size={20} className={status === 'healing' ? 'animate-pulse' : ''} />
+              <Shield size={20} className={status === 'healing' ? '' : ''} />
             )}
 
             {status === 'healing' && (
-              <div className="absolute inset-0 bg-aqua-cyan/20 animate-ping rounded-lg" />
+              <div className="absolute inset-0 bg-aqua-cyan/20 rounded-lg" />
             )}
           </div>
           <div>

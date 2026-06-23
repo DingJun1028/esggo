@@ -149,11 +149,11 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
       <div
         style={{ transition: 'all 0.4s ease' }}
         className={cn(
-          'rounded-[2.5rem] border shadow-2xl flex items-center transition-all duration-500',
+          'rounded-[2.5rem] border shadow-sm flex items-center transition-all duration-500',
           sizeClasses[currentSize],
           isDark
             ? 'bg-[#003262]/60 border-[#FDB515]/30 shadow-[#FDB515]/5'
-            : ' border-[#003262]/20 shadow-xl',
+            : ' border-[#003262]/20 shadow-sm',
           isMinimized && 'p-0 rounded-full w-10 h-10 flex items-center justify-center'
         )}
       >
@@ -164,8 +164,8 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
             <div className="relative">
               <div
                 className={cn(
-                  'p-3 rounded-2xl transition-colors',
-                  isDark ? 'bg-[#FDB515]/10 text-[#FDB515]' : 'bg-[#003262] text-white shadow-lg'
+                  'p-3 rounded-xl transition-colors',
+                  isDark ? 'bg-[#FDB515]/10 text-[#FDB515]' : 'bg-[#003262] text-white shadow-sm'
                 )}
               >
                 <Bot

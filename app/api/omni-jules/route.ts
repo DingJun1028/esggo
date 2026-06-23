@@ -7,7 +7,7 @@ import { generateText } from 'ai';
 
 /**
  * OmniJules 果因修復端點 (Karma Protocol Receiver)
- * 接收從 OmniAgentBus 傳來的 HEAL (Spontaneous Virtue) 訊號。
+ * 接收從 OAAgentBus 傳來的 HEAL (Spontaneous Virtue) 訊號。
  * 在生產環境中，它負責：
  * 1. 記錄前端發生異常的根本原因 (Root Cause)
  * 2. 觸發 5T 協議的 Audit Log

@@ -149,7 +149,7 @@ export function NoteSearch() {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4 bg-slate-900 rounded-lg shadow-xl border border-slate-800">
+        <div className="w-full max-w-4xl mx-auto p-4 bg-slate-900 rounded-lg shadow-sm border border-slate-800">
             <div className="flex gap-2 mb-6">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />

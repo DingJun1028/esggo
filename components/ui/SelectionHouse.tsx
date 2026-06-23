@@ -115,7 +115,7 @@ export default function SelectionHouse({
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input
             type="text"
-            className="w-full h-14 bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 text-sm font-medium focus:bg-white focus:border-blue-600 transition-all outline-none"
+            className="w-full h-14 bg-slate-50 border border-slate-100 rounded-xl pl-12 pr-4 text-sm font-medium focus:bg-white focus:border-blue-600 transition-all outline-none"
             placeholder={placeholder}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -173,7 +173,7 @@ export default function SelectionHouse({
                     onSelect(item);
                     onClose();
                   }}
-                  className="group w-full p-5 rounded-2xl bg-white border border-slate-100 text-left hover:border-blue-600 hover:shadow-lg hover:shadow-blue-900/5 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
+                  className="group w-full p-5 rounded-xl bg-white border border-slate-100 text-left hover:border-blue-600 hover:shadow-sm hover:shadow-blue-900/5 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <span className="text-sm font-bold text-slate-700 group-hover:text-blue-700 transition-colors">

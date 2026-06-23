@@ -17,13 +17,13 @@ interface BrandButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-[#003262] text-white hover:bg-[#002244] shadow-xl hover:shadow-cyan-500/20 glow-on-hover',
-  secondary: 'bg-white/60 text-[#003262] hover:bg-white/80 border border-[#003262]/10 backdrop-blur-md',
+  primary: 'bg-[#003262] text-white hover:bg-[#002244] shadow-sm hover:shadow-cyan-500/20 glow-on-hover',
+  secondary: 'bg-white/60 text-[#003262] hover:bg-white border border-[#003262]/10 ',
   ghost: 'bg-transparent text-[#003262]', // Removed default hoverBg, will be applied via prop or fallback
-  danger: 'bg-red-600 text-white hover:bg-red-700 shadow-lg',
-  gold: 'bg-[#FDB515] text-[#003262] hover:bg-[#E6A612] shadow-xl font-black',
+  danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+  gold: 'bg-[#FDB515] text-[#003262] hover:bg-[#E6A612] shadow-sm font-black',
   outline: 'bg-transparent text-[#003262] border-2 border-[#003262] hover:bg-[#003262] hover:text-white',
-  glass: 'bg-white/20 backdrop-blur-xl border border-white/40 text-white hover:bg-white/30',
+  glass: 'bg-white/20  border border-white/40 text-white hover:bg-white/30',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -52,7 +52,7 @@ export default function BrandButton({
   return (
     <button
       className={cn(
-        'relative inline-flex items-center justify-center gap-3 rounded-2xl font-black uppercase overflow-hidden',
+        'relative inline-flex items-center justify-center gap-3 rounded-xl font-black uppercase overflow-hidden',
         'transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/20',
         'disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer active:scale-95',
         variantStyles[variant],

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 
 import {
-  LucideIcon,
+
   TrendingUp,
   FileText,
   ShieldCheck,
@@ -39,14 +39,14 @@ interface LevelData {
   subtitle: string;
   period: string;
   description: string;
-  icon: LucideIcon;
+  icon: any;
   color: string;
   bgColor: string;
   borderColor: string;
   features: {
     title: string;
     description: string;
-    icon: LucideIcon;
+    icon: any;
     color: string;
   }[];
   metrics: { label: string; value: string; trend?: string }[];
@@ -181,7 +181,7 @@ function LevelCard({ level, index }: { level: LevelData; index: number }) {
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border-2 p-6 hover:shadow-lg transition-all',
+        'bg-white rounded-xl border-2 p-6 hover:shadow-sm transition-all',
         level.borderColor
       )}
     >
@@ -365,11 +365,11 @@ export default function ValueLevelsPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1200px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
+        <header className="bg-white rounded-xl border border-slate-100 p-6 relative overflow-hidden">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-50 rounded-full blur-3xl breathing-glow" />
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg breathing-glow">
+              <div className="w-14 h-14 rounded-xl bg-neutral-100 flex items-center justify-center shadow-sm breathing-glow">
                 <Rocket size={28} className="text-white" />
               </div>
               <div>

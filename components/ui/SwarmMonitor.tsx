@@ -62,7 +62,7 @@ export function SwarmMonitor() {
   return (
     <BrandCard
       padding="none"
-      className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg bg-gradient-to-br from-white/90 to-slate-50/50"
+      className="border-none h-full overflow-hidden flex flex-col shadow-sm bg-gradient-to-br from-white/90 to-slate-50/50"
     >
       <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-800/5">
         <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ export function SwarmMonitor() {
           >
             {loading ? 'Syncing...' : 'Live'}
           </BrandBadge>
-          <div className={cn('w-2 h-2 rounded-full bg-emerald-500', !loading && 'animate-ping')} />
+          <div className={cn('w-2 h-2 rounded-full bg-emerald-500', !loading && '')} />
         </div>
       </div>
 
@@ -158,7 +158,7 @@ export function SwarmMonitor() {
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                     <Activity
                       size={16}
-                      className={task.status === 'approved_for_execution' ? 'animate-pulse' : ''}
+                      className={task.status === 'approved_for_execution' ? '' : ''}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -194,7 +194,7 @@ export function SwarmMonitor() {
         </div>
 
         {/* Compute Load Indicator */}
-        <div className="p-4 bg-berkeley-blue rounded-2xl text-white relative overflow-hidden">
+        <div className="p-4 bg-berkeley-blue rounded-xl text-white relative overflow-hidden">
           <div className="relative z-10 space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase tracking-widest opacity-60">

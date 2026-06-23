@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { OmniBaseCard } from '../ui/omni/OmniBaseCard';
 import { OmniBadge } from '../ui/omni/OmniBadge';
+import { Badge } from '@/components/ui/v2/Input';
 
 export interface OmniTableDataRow {
   id: string;
@@ -84,7 +85,7 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
       )}
 
       {/* Table Toolbar */}
-      <div className="flex justify-between items-center bg-[#0f172a] p-4 rounded-2xl border border-slate-800">
+      <div className="flex justify-between items-center bg-[#0f172a] p-4 rounded-xl border border-slate-800">
         <div className="relative w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
           <input
@@ -107,7 +108,7 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
         {filteredData.map((row) => (
           <div
             key={row.id}
-            className={`group rounded-2xl border transition-all duration-300 ${
+            className={`group rounded-xl border transition-all duration-300 ${
               row.status === 'Void' 
                 ? 'bg-slate-900/50 border-slate-800' 
                 : row.zkp_sealed
@@ -148,14 +149,14 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
                     <ShieldCheck size={12} /> ZKP Sealed
                   </div>
                 ) : (
-                  <OmniBadge variant="warning" size="sm" icon={<AlertTriangle size={12} />}>
+                  <Badge variant="warning" size="sm" icon={<AlertTriangle size={12} />}>
                     Unsealed
-                  </OmniBadge>
+                  </Badge>
                 )}
                 {row.status === 'Void' && (
-                  <OmniBadge variant="error" size="sm">
+                  <Badge variant="error" size="sm">
                     Void
-                  </OmniBadge>
+                  </Badge>
                 )}
               </div>
 
@@ -232,7 +233,7 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
           </div>
         ))}
         {filteredData.length === 0 && (
-          <div className="py-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">
+          <div className="py-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">
             No 5T registered data found.
           </div>
         )}

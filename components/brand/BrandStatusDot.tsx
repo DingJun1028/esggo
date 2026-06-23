@@ -46,7 +46,7 @@ export default function BrandStatusDot({
     <div className="relative flex-shrink-0">
       <div className={cn(finalDotSize, 'rounded-full', finalDotColor, borderClassName, shadowClassName)} />
       {pulse && (
-        <div className={cn('absolute inset-0', finalDotSize, 'rounded-full', finalDotColor, 'animate-ping opacity-50')} />
+        <div className={cn('absolute inset-0', finalDotSize, 'rounded-full', finalDotColor, ' opacity-50')} />
       )}
     </div>
   );

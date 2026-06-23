@@ -103,7 +103,7 @@ export default function OmniAllianceHub() {
   const activeNodeData = nodes.find((n) => n.id === activeNode);
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 md:p-10 bg-[#020617] rounded-3xl border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.1)] relative overflow-hidden">
+    <div className="w-full max-w-6xl mx-auto p-6 md:p-10 bg-[#020617] rounded-xl border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.1)] relative overflow-hidden">
       {/* Background Ornaments */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -148,7 +148,7 @@ export default function OmniAllianceHub() {
               <div
                 key={node.id}
                 onClick={() => setActiveNode(node.id)}
-                className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                className={`p-4 rounded-xl border cursor-pointer transition-all ${
                   activeNode === node.id
                     ? 'bg-blue-500/10 border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
                     : 'bg-white/5 border-white/5 hover:border-white/20'
@@ -158,7 +158,7 @@ export default function OmniAllianceHub() {
                   <span className="font-bold text-slate-200">{node.name}</span>
                   <div
                     className={`w-2 h-2 rounded-full mt-1.5 ${
-                      node.status === 'active' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+                      node.status === 'active' ? 'bg-emerald-400' : 'bg-amber-400 '
                     }`}
                   />
                 </div>
@@ -175,8 +175,8 @@ export default function OmniAllianceHub() {
 
         {/* Right Col: Network Visualization & Data */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-          <div className="flex-1 rounded-3xl border border-white/10 p-6 flex flex-col items-center justify-center relative min-h-[300px]">
-            <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none rounded-3xl" />
+          <div className="flex-1 rounded-xl border border-white/10 p-6 flex flex-col items-center justify-center relative min-h-[300px]">
+            <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none rounded-xl" />
 
             
               {!activeNode ? (
@@ -184,7 +184,7 @@ export default function OmniAllianceHub() {
                   key="empty"
                   className="flex flex-col items-center"
                 >
-                  <Activity size={48} className="text-blue-500/30 mb-4 animate-pulse" />
+                  <Activity size={48} className="text-blue-500/30 mb-4" />
                   <p className="text-slate-400 font-mono text-sm tracking-widest">
                     [ OMNI_TOPOLOGY_RENDERER_ACTIVE ]
                   </p>
@@ -205,7 +205,7 @@ export default function OmniAllianceHub() {
                   {isLinking ? (
                     <div className="flex flex-col items-center justify-center flex-1">
                       <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin mb-4" />
-                      <p className="text-cyan-400 font-mono text-sm animate-pulse">
+                      <p className="text-cyan-400 font-mono text-sm">
                         Routing via L-Hub AI Network...
                       </p>
                     </div>
@@ -233,7 +233,7 @@ export default function OmniAllianceHub() {
             
           </div>
 
-          <div className="h-24 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-2xl border border-blue-500/20 flex flex-col md:flex-row items-center justify-between px-8 gap-4 py-4 md:py-0">
+          <div className="h-24 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl border border-blue-500/20 flex flex-col md:flex-row items-center justify-between px-8 gap-4 py-4 md:py-0">
             <div className="flex items-center gap-4 w-full md:w-auto">
               <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center border border-blue-500/40 shrink-0">
                 <LinkIcon size={20} className="text-blue-400" />

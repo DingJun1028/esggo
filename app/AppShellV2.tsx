@@ -88,15 +88,13 @@ import {
 import { cn } from '../lib/utils';
 import BrandButton from '../components/brand/BrandButton';
 import BrandStatusDot from '../components/brand/BrandStatusDot';
-import OmniAgentPulseFloating from '../components/core/OmniAgentPulseFloating';
+import OmniAgentBar from '../components/brand/OmniAgentBar';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../hooks/useAuth';
 import { NAV_STAGES, ALL_NAV_ITEMS } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
-import ThemeSwitcher from '../components/ThemeSwitcher';
 import OmniOverviewMenu from '../components/OmniOverviewMenu';
-import OmniThemeSwitcher from '../components/omni/OmniThemeSwitcher';
 
 // Adapt NAV_STAGES to the internal navigation format
 const SaaS_NAVIGATION = NAV_STAGES.map((stage) => ({
@@ -339,7 +337,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       <aside
         style={{ width: sidebarCollapsed ? 80 : 288 }}
         className={cn(
-          'hidden md:flex flex-col h-full relative z-50 border-r shadow-2xl',
+          'hidden md:flex flex-col h-full relative z-50 border-r shadow-sm',
           'transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           isDark ? 'bg-[#003262]/80 border-slate-200' : ' border-slate-200/50'
         )}
@@ -390,10 +388,10 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               className={cn(
                 'space-y-3 transition-all duration-500',
                 group.groupId === 'super-admin' && !sidebarCollapsed
-                  ? 'p-4 bg-gradient-to-br from-purple-500/5 to-pink-500/5 border border-purple-500/10 dark:border-purple-500/20 rounded-3xl relative overflow-hidden shadow-inner'
+                  ? 'p-4 bg-gradient-to-br from-purple-500/5 to-pink-500/5 border border-purple-500/10 dark:border-purple-500/20 rounded-xl relative overflow-hidden shadow-inner'
                   : '',
                 group.groupId === 'favorites' && !sidebarCollapsed
-                  ? 'p-4 bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border border-amber-500/10 dark:border-amber-500/20 rounded-3xl relative overflow-hidden shadow-inner'
+                  ? 'p-4 bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border border-amber-500/10 dark:border-amber-500/20 rounded-xl relative overflow-hidden shadow-inner'
                   : ''
               )}
             >
@@ -426,11 +424,11 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                       key={item.id}
                       href={item.path}
                       className={cn(
-                        'flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative',
+                        'flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group relative',
                         isActive
                           ? isDark
                             ? ' text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]'
-                            : 'bg-[#003262] text-white shadow-lg'
+                            : 'bg-[#003262] text-white shadow-sm'
                           : isDark
                           ? 'text-slate-400 hover:bg-white/5 hover:text-white'
                           : 'text-slate-500 hover:bg-slate-100/80 hover:text-[#003262]'
@@ -552,12 +550,6 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               {/* Search Trigger (Global Search CMD+K) */}
               <GlobalSearch />
 
-              {/* Theme Switcher */}
-              <ThemeSwitcher />
-
-              {/* OmniTheme Dual Engine Switcher */}
-              <OmniThemeSwitcher />
-
               {/* Favorite Toggle Button */}
               <BrandButton
                 onClick={toggleFavorite}
@@ -601,7 +593,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                   isDark ? 'border-slate-200' : 'border-slate-200'
                 )}
               >
-                <div className="w-10 h-10 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] font-black shadow-lg border-2 border-white/20">
+                <div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-[#FDB515] font-black shadow-sm border-2 border-white/20">
                   A
                 </div>
                 <div className="flex flex-col">
@@ -619,7 +611,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         <button
           onClick={handleTopbarToggle}
           className={cn(
-            'hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 z-[100] px-8 py-1 rounded-b-2xl border transition-all duration-500 group overflow-hidden shadow-lg',
+            'hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 z-[100] px-8 py-1 rounded-b-2xl border transition-all duration-500 group overflow-hidden shadow-sm',
             isDark ? 'bg-slate-900 border-slate-200' : 'bg-white border-slate-200',
             topbarCollapsed ? 'translate-y-0' : 'translate-y-[80px]'
           )}
@@ -645,14 +637,6 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           )}
         >
           <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full pr-4">
-            {/* Theme Toggle Mobile */}
-            <div className="flex-shrink-0">
-              <ThemeSwitcher />
-            </div>
-
-            <div className="flex-shrink-0">
-              <OmniThemeSwitcher />
-            </div>
 
             {/* Quick Actions Pills */}
             <BrandButton
@@ -704,7 +688,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         <div
           className={cn(
             'md:hidden h-24 fixed bottom-0 left-0 right-0 z-[100] border-t flex justify-center px-4 -[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transition-colors',
-            isDark ? 'bg-slate-950/90 border-slate-200' : 'bg-white/90 border-slate-300'
+            isDark ? 'bg-slate-950/90 border-slate-200' : 'bg-white border-slate-300'
           )}
         >
           {/* FAB Pop-up Menu — 將 AnimatePresence + motion.div 替換為條件渲染 + 原生 div */}
@@ -718,23 +702,23 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               <div
                 style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
                 className={cn(
-                  'absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-3xl shadow-2xl border w-64',
+                  'absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-xl shadow-sm border w-64',
                   isDark ? 'bg-slate-900 border-slate-200' : 'bg-white border-slate-200'
                 )}
               >
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FDB515]/10 text-left transition-colors">
+                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#FDB515]/10 text-left transition-colors">
                   <div className="bg-[#FDB515]/20 p-2 rounded-xl text-[#FDB515]">
                     <Plus size={20} />
                   </div>
                   <span className="font-bold text-sm">新增紀錄</span>
                 </button>
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-cyan-500/10 text-left transition-colors">
+                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-cyan-500/10 text-left transition-colors">
                   <div className="bg-cyan-500/20 p-2 rounded-xl text-cyan-500">
                     <MessageSquare size={20} />
                   </div>
                   <span className="font-bold text-sm">快速留言</span>
                 </button>
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-blue-500/10 text-left transition-colors">
+                <button className="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-500/10 text-left transition-colors">
                   <div className="bg-blue-500/20 p-2 rounded-xl text-blue-500">
                     <Save size={20} />
                   </div>
@@ -756,7 +740,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                       <button
                         onClick={() => setShowFabMenu(!showFabMenu)}
                         className={cn(
-                          'w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl transform transition-transform duration-300',
+                          'w-14 h-14 rounded-full flex items-center justify-center text-white shadow-sm transform transition-transform duration-300',
                           showFabMenu ? 'rotate-45 bg-rose-500' : 'bg-[#FDB515] hover:scale-110'
                         )}
                       >
@@ -767,7 +751,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                   <Link
                     href={item.href}
                     className={cn(
-                      'flex flex-col items-center justify-center min-w-[64px] h-16 rounded-3xl transition-all duration-500 relative',
+                      'flex flex-col items-center justify-center min-w-[64px] h-16 rounded-xl transition-all duration-500 relative',
                       isActive ? 'scale-105' : 'opacity-40'
                     )}
                   >
@@ -775,12 +759,12 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                     {isActive && (
                       <div
                         style={{ transition: 'all 0.4s ease' }}
-                        className="absolute inset-0 bg-[#FDB515]/10 rounded-3xl border border-[#FDB515]/20"
+                        className="absolute inset-0 bg-[#FDB515]/10 rounded-xl border border-[#FDB515]/20"
                       />
                     )}
                     <div
                       className={cn(
-                        'p-2 rounded-2xl transition-colors relative z-10',
+                        'p-2 rounded-xl transition-colors relative z-10',
                         isActive ? 'text-[#FDB515]' : isDark ? 'text-white' : 'text-[#003262]'
                       )}
                     >
@@ -801,8 +785,8 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           </div>
         </div>
 
-        {/* ─── FLOATING RESONANCE INDICATOR (Desktop Only) ─── */}
-        <OmniAgentPulseFloating logoPosition={logoPosition} />
+        {/* ─── OmniAgent Bar (Desktop Only) ─── */}
+        <OmniAgentBar />
       </div>
 
       {/* Global Style Adjustments */}

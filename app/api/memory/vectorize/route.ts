@@ -1,23 +1,31 @@
-// @ts-nocheck
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'] || '';
-const supabaseKey =
-  process.env['SUPABASE_SERVICE_ROLE_KEY'] || process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const OAK = process.env['OPENROUTER_API_KEY'] || '';
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createClient } = require('@supabase/supabase-js');
+  return createClient(url, key);
+}
 
 export async function POST(req: Request) {
   try {
+    const OAK = process.env.OPENROUTER_API_KEY || '';
+    if (!OAK) {
+      return NextResponse.json({ error: 'OPENROUTER_API_KEY is not configured' }, { status: 500 });
+    }
+
     const { shard_id } = await req.json();
     if (!shard_id) {
       return NextResponse.json({ error: 'shard_id is required' }, { status: 400 });
     }
 
-    if (!OAK) {
-      return NextResponse.json({ error: 'OPENROUTER_API_KEY is not configured' }, { status: 500 });
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase not configured' }, { status: 503 });
     }
 
     const { data: shard, error: fetchError } = await supabase

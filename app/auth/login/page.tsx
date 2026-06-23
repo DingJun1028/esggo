@@ -205,7 +205,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-10 text-center">
           <div
             onClick={handleLeafClick}
-            className="w-20 h-20 rounded-[32px] bg-[#003262] flex items-center justify-center shadow-2xl shadow-blue-900/20 mb-6 relative group overflow-hidden cursor-pointer active:scale-95 transition-all"
+            className="w-20 h-20 rounded-[32px] bg-[#003262] flex items-center justify-center shadow-sm shadow-blue-900/20 mb-6 relative group overflow-hidden cursor-pointer active:scale-95 transition-all"
           >
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <Leaf size={40} color="#FDB515" className="relative z-10" />
@@ -224,7 +224,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Card padding="lg" className="bg-white border border-neutral-200 shadow-sm rounded-2xl p-8">
+        <Card padding="lg" className="bg-white border border-neutral-200 shadow-sm rounded-xl p-8">
           <div className="mb-10 text-center">
             <h2 className="text-2xl font-black text-[#003262] tracking-tight">身分驗證中心</h2>
             <p className="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">
@@ -233,7 +233,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3 text-rose-600 text-xs font-bold">
+            <div className="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-3 text-rose-600 text-xs font-bold">
               <AlertCircle size={16} className="mt-0.5 shrink-0" />
               <p>{error}</p>
             </div>
@@ -257,7 +257,7 @@ export default function LoginPage() {
                 fullWidth
                 size="sm"
                 onClick={handleDemoLogin}
-                className="bg-blue-600 hover:bg-blue-700 text-white h-12 text-xs font-black rounded-2xl shadow-lg shadow-blue-500/20"
+                className="bg-blue-600 hover:bg-blue-700 text-white h-12 text-xs font-black rounded-xl shadow-sm shadow-blue-500/20"
                 loading={loading}
               >
                 <Zap size={14} className="mr-2" /> 快速進入開發者控制台
@@ -282,7 +282,7 @@ export default function LoginPage() {
                       placeholder="name@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
+                      className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-xl transition-all font-bold"
                       required
                     />
                   </div>
@@ -304,7 +304,7 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
+                      className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-xl transition-all font-bold"
                       required
                     />
                   </div>
@@ -314,7 +314,7 @@ export default function LoginPage() {
                       variant="primary"
                       fullWidth
                       size="lg"
-                      className="bg-[#003262] h-14 text-sm font-black shadow-xl shadow-blue-900/20 rounded-2xl group"
+                      className="bg-[#003262] h-14 text-sm font-black shadow-sm shadow-blue-900/20 rounded-xl group"
                       loading={loading}
                     >
                       啟動主權連線{' '}
@@ -354,7 +354,7 @@ export default function LoginPage() {
                     <Button
                       variant="outline"
                       onClick={handleGoogleLogin}
-                      className="border-slate-100 text-slate-600 hover:bg-slate-50 h-14 text-xs font-black bg-white rounded-2xl shadow-sm flex items-center justify-center gap-3 group"
+                      className="border-slate-100 text-slate-600 hover:bg-slate-50 h-14 text-xs font-black bg-white rounded-xl shadow-sm flex items-center justify-center gap-3 group"
                     >
                       <Globe
                         size={18}

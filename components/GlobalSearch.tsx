@@ -80,7 +80,7 @@ export function GlobalSearch() {
 
             {/* 搜尋視窗 */}
             <div
-              className="relative w-full max-w-2xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-2xl rounded-xl border border-white/20 shadow-sm overflow-hidden flex flex-col"
               ref={searchRef}
             >
               {/* Input 區塊 */}
@@ -115,7 +115,7 @@ export function GlobalSearch() {
                     {results.map((res: any, i) => (
                       <div
                         key={i}
-                        className="group p-5 rounded-2xl border border-slate-50 hover:border-cyan-100 hover:bg-white hover:shadow-md transition-all cursor-default"
+                        className="group p-5 rounded-xl border border-slate-50 hover:border-cyan-100 hover:bg-white hover:shadow-md transition-all cursor-default"
                       >
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2 px-2 py-0.5 bg-cyan-50 text-cyan-600 rounded-md border border-cyan-100">

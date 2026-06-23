@@ -25,7 +25,7 @@ export default function BrandTooltip({ content, children, position = 'top' }: Br
     >
       {children}
       {visible && (
-        <div className={`absolute z-50 ${posStyles[position]} px-2.5 py-1.5 bg-[#0F172A] text-white text-xs rounded-lg whitespace-nowrap shadow-lg`}>
+        <div className={`absolute z-50 ${posStyles[position]} px-2.5 py-1.5 bg-[#0F172A] text-white text-xs rounded-lg whitespace-nowrap shadow-sm`}>
           {content}
         </div>
       )}

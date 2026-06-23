@@ -61,7 +61,7 @@ const mapNodesData: MapNode[] = [
       'Tailwind Card Tokens',
       'Framer Motion Presets',
     ],
-    businessLogic: '整合背景毛玻璃 backdrop-blur、邊框漸層與動態發光，作為全系統 UI 的基礎容器。',
+    businessLogic: '整合背景毛玻璃 、邊框漸層與動態發光，作為全系統 UI 的基礎容器。',
     uiux: '支援微滑鼠懸停傾斜動態，具有 12 像素圓角與微發光背景。',
     customerJourney: '使用者與系統交互的視覺起點，貫穿整個瀏覽與操作過程。',
     painPointsSolved: '解決傳統硬邊扁平卡片缺乏深度與科技感的痛點。',
@@ -124,13 +124,13 @@ const mapNodesData: MapNode[] = [
   // 2. Data Ring (r = 170)
   {
     id: 'dat-001',
-    name: 'OmniAgentIntegrations',
+    name: 'OAAgentIntegrations',
     category: 'Data',
     description: '各類第三方平台與 ERP 系統的串接管理。',
     r: 170,
     angle: Math.PI / 4,
     registered: true,
-    deliverables: ['components/omni/OmniAgentIntegrations.tsx', 'Webhook Connector API'],
+    deliverables: ['components/omni/OAAgentIntegrations.tsx', 'Webhook Connector API'],
     businessLogic: '管理與 ERP、SCM 等外部系統的 Webhook 和 API 連接，具備數據清洗與格式對齊邏輯。',
     uiux: '插頭連接插座動效、數據包流動粒子動畫、連接狀態徽章。',
     customerJourney: '數據導入與多平台整合旅程，打通企業資訊孤島。',
@@ -491,7 +491,7 @@ export default function OmniMapPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: SVG Star Orbit Map (8 Cols) */}
-          <div className="lg:col-span-8 bg-slate-950/40 -md border border-slate-200 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
+          <div className="lg:col-span-8 bg-slate-950/40 -md border border-slate-200 rounded-xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
             {/* Hologram Circle Frame */}
             <div className="absolute inset-0 bg-neutral-50 pointer-events-none z-10" />
 
@@ -615,7 +615,7 @@ export default function OmniMapPage() {
                         r="14"
                         fill="none"
                         className={cn(
-                          'stroke-2 animate-ping',
+                          'stroke-2 ',
                           node.registered ? 'stroke-cyan-400' : 'stroke-amber-400'
                         )}
                         style={{ animationDuration: '3s' }}
@@ -631,7 +631,7 @@ export default function OmniMapPage() {
                         'transition-all duration-300 border',
                         isSelected
                           ? node.registered
-                            ? 'fill-cyan-400 stroke-cyan-300 shadow-lg shadow-cyan-500/50'
+                            ? 'fill-cyan-400 stroke-cyan-300 shadow-sm shadow-cyan-500/50'
                             : 'fill-amber-400 stroke-amber-300'
                           : node.registered
                           ? 'fill-cyan-950/80 stroke-cyan-500/40 hover:stroke-cyan-400 hover:fill-cyan-900'
@@ -672,7 +672,7 @@ export default function OmniMapPage() {
                 cy={cy}
                 r="18"
                 fill="url(#core-grad)"
-                className="stroke-2 stroke-cyan-400/30 animate-pulse"
+                className="stroke-2 stroke-cyan-400/30"
                 style={{ animationDuration: '4s' }}
               />
               <circle cx={cx} cy={cy} r="6" fill="#22d3ee" filter="url(#glow-cyan)" />
@@ -690,7 +690,7 @@ export default function OmniMapPage() {
                 <span className="w-2 h-2 rounded-full bg-cyan-400"></span> 已註冊 (Registered)
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> 未註冊
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span> 未註冊
                 (Pending)
               </span>
             </div>
@@ -701,13 +701,13 @@ export default function OmniMapPage() {
             {/* 1. Node Info Card */}
             <Card
               variant="default"
-              className="p-6 border-cyan-400/25 bg-neutral-100  /20 relative overflow-hidden shadow-2xl flex-1 flex flex-col justify-between"
+              className="p-6 border-cyan-400/25 bg-neutral-100 /20 relative overflow-hidden shadow-sm flex-1 flex flex-col justify-between"
             >
               {/* Top Bumper */}
               <div className="flex justify-between items-center border-b border-slate-200 pb-4 mb-4">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                   </span>
                   <span className="text-xs font-mono font-bold text-cyan-400/80">
@@ -754,7 +754,7 @@ export default function OmniMapPage() {
                       <CheckCircle2 size={10} /> 已註冊 (Registered)
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                       <XCircle size={10} /> 未註冊 (Pending)
                     </span>
                   )}
@@ -790,7 +790,7 @@ export default function OmniMapPage() {
                 <div className="space-y-1 border border-slate-200 p-3 rounded-lg font-mono text-[9px] text-emerald-400/90 shadow-inner">
                   <div className="flex justify-between border-b border-slate-200 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[8px]">
                     <span>誠信與自癒日誌</span>
-                    <span className="animate-pulse text-emerald-500">● ONLINE</span>
+                    <span className="text-emerald-500">● ONLINE</span>
                   </div>
                   <div className="space-y-1 max-h-[100px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800 leading-relaxed">
                     {healingLogs.map((log, idx) => (

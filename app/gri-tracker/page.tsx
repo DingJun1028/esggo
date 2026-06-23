@@ -182,7 +182,7 @@ export default function GRITrackerPage() {
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-neutral-200 pb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
               <span className="text-xs font-mono font-bold tracking-[0.2em] text-neutral-500 uppercase">
                 GRI 2021 / ISSB
               </span>
@@ -408,7 +408,7 @@ export default function GRITrackerPage() {
         {selected && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/40" onClick={() => setSelected(null)} />
-            <div className="relative bg-white rounded-2xl shadow-2xl border border-neutral-200 max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div className="relative bg-white rounded-xl shadow-sm border border-neutral-200 max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">

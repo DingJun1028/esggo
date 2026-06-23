@@ -111,7 +111,7 @@ export default function ScraperControl() {
           <BrandCardHeader title="爬蟲任務控制" subtitle="選擇目標來源並啟動採集" />
           <div className="mt-6 space-y-4">
             {targets.map(t => (
-              <div key={t.id} className="p-4 border border-slate-200 rounded-2xl hover:border-blue-300 hover:bg-blue-50/30 transition-all">
+              <div key={t.id} className="p-4 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <Globe size={16} className="text-[#003262]" />

@@ -20,7 +20,7 @@ export default function ComposerFooter() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 px-6 pb-6 pointer-events-none lg:left-[var(--sidebar-width)] transition-all duration-500">
       <div
-        className={`max-w-4xl mx-auto glass-panel border border-white/20 shadow-extreme rounded-[32px] p-2 pointer-events-auto transition-all duration-500 ${isFocused ? 'ring-4 ring-blue-500/5 -translate-y-2' : ''}`}
+        className={`max-w-4xl mx-auto  border border-white/20 shadow-extreme rounded-[32px] p-2 pointer-events-auto transition-all duration-500 ${isFocused ? 'ring-4 ring-blue-500/5 -translate-y-2' : ''}`}
       >
         <div className="flex flex-col">
           {/* Header Actions */}
@@ -50,14 +50,14 @@ export default function ComposerFooter() {
                       <circle cx="20" cy="20" r="16" fill="transparent" stroke="#f1f5f9" strokeWidth="4" />
                       <circle cx="20" cy="20" r="16" fill="transparent" stroke={activeProfile?.color} strokeWidth="4" strokeDasharray="100" strokeDashoffset="75" strokeLinecap="round" className="transition-all duration-1000" />
                    </svg>
-                   <Sparkles size={10} className="absolute text-amber-400 animate-pulse" />
+                   <Sparkles size={10} className="absolute text-amber-400" />
                 </div>
              </div>
           </div>
 
           {/* Input Area */}
           <div className="flex items-end gap-3 p-2">
-             <button className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all">
+             <button className="w-12 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all">
                 <Paperclip size={20} />
              </button>
              <div className="flex-1 relative">
@@ -72,12 +72,12 @@ export default function ComposerFooter() {
                 />
              </div>
              <div className="flex items-center gap-2">
-                <button className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all">
+                <button className="w-12 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all">
                    <Mic size={20} />
                 </button>
                 <button 
                   disabled={!prompt}
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all shadow-lg ${prompt ? 'bg-[#003262] shadow-blue-500/20 scale-100' : 'bg-slate-200 scale-95'}`}
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all shadow-sm ${prompt ? 'bg-[#003262] shadow-blue-500/20 scale-100' : 'bg-slate-200 scale-95'}`}
                 >
                    <Send size={20} />
                 </button>

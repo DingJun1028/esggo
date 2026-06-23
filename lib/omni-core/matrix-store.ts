@@ -64,7 +64,7 @@ export const getMatrixComponents = async (): Promise<MatrixComponent[]> => {
         id: 'ui-002',
         name: 'OmniTable',
         category: 'Perception',
-        route: '/admin/omni-table',
+        route: '/admin/oa-table',
         registered: true,
         fiveT: {
           traceable: true,
@@ -184,7 +184,7 @@ export const MATRIX_ROUTES = [
   '/health-check',
   '/system-status',
   '/super-admin',
-  '/admin/omni-table',
+  '/admin/oa-table',
   '/design-library',
   '/omnispace/sanctuary',
   '/omni-factory',

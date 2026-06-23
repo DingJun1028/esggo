@@ -33,10 +33,10 @@ export const BrandLogo = ({ className, size = 'md', hideText = false }: BrandLog
       </div>
       {!hideText && (
         <div className="flex flex-col">
-          <span className={cn("font-black tracking-tight text-slate-900 dark:text-white drop-shadow-md", currentSize.text)}>
+          <span className={cn("font-black tracking-tight text-slate-900  drop-shadow-md", currentSize.text)}>
             ESGGO
           </span>
-          <span className="text-sm font-black text-cyan-700 dark:text-cyan-300 tracking-widest uppercase drop-shadow-sm">
+          <span className="text-sm font-black text-cyan-700 tracking-widest uppercase drop-shadow-sm">
             善向永續
           </span>
         </div>

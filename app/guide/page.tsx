@@ -68,7 +68,7 @@ export default function PlatformGuidePage() {
       capabilities:
         '外部環境監測、政策與法規動態抓取、今日永續觀察者日報 (Daily Observer Report) AI 生成、5T Hash Lock 鏈上雜湊校驗',
       testFiles:
-        'app/api/social/insights/route.test.ts, app/api/omni-agent-api/schedule/route.test.ts',
+        'app/api/social/insights/route.test.ts, app/api/oa-agent-api/schedule/route.test.ts',
       dimension: 'Trackable',
       testsCount: 16,
       desc: '外部風險感知與情資監控中樞，自動產出日報提供決策輔助。',
@@ -174,7 +174,7 @@ export default function PlatformGuidePage() {
 
         {/* Dashboard Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
+          <div className="bg-white border border-slate-200/60 shadow-sm rounded-xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
             <div className="flex items-center justify-between text-slate-500">
               <span className="text-xs font-bold uppercase tracking-widest">系統總測試數</span>
               <CheckCircle2 size={18} className="text-emerald-500" />
@@ -185,7 +185,7 @@ export default function PlatformGuidePage() {
             <p className="text-[10px] text-emerald-600 font-mono font-bold">100% Success Rate</p>
           </div>
 
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
+          <div className="bg-white border border-slate-200/60 shadow-sm rounded-xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
             <div className="flex items-center justify-between text-slate-500">
               <span className="text-xs font-bold uppercase tracking-widest">自動自檢檔案</span>
               <Database size={18} className="text-cyan-600" />
@@ -196,7 +196,7 @@ export default function PlatformGuidePage() {
             <p className="text-[10px] text-cyan-600 font-mono font-bold">Vitest & Webpack Unit</p>
           </div>
 
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
+          <div className="bg-white border border-slate-200/60 shadow-sm rounded-xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
             <div className="flex items-center justify-between text-slate-500">
               <span className="text-xs font-bold uppercase tracking-widest">系統代碼架構</span>
               <Cpu size={18} className="text-[#63a6b0]" />
@@ -205,10 +205,10 @@ export default function PlatformGuidePage() {
             <p className="text-[10px] text-slate-500 font-mono font-bold">End-to-End Type Safety</p>
           </div>
 
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
+          <div className="bg-white border border-slate-200/60 shadow-sm rounded-xl p-6 space-y-4 hover:shadow-md transition-all duration-300">
             <div className="flex items-center justify-between text-slate-500">
               <span className="text-xs font-bold uppercase tracking-widest">5T 協議守護</span>
-              <ShieldCheck size={18} className="text-cyan-600 animate-pulse" />
+              <ShieldCheck size={18} className="text-cyan-600" />
             </div>
             <div className="text-3xl font-black text-slate-900">Active</div>
             <p className="text-[10px] text-cyan-600 font-mono font-bold">ZKP & Vault Ensured</p>
@@ -216,7 +216,7 @@ export default function PlatformGuidePage() {
         </div>
 
         {/* Search & Tabs Filter Panel */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white border border-slate-200/60 p-4 rounded-2xl shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white border border-slate-200/60 p-4 rounded-xl shadow-sm">
           <div className="relative w-full md:w-80">
             <input
               type="text"
@@ -256,7 +256,7 @@ export default function PlatformGuidePage() {
         </div>
 
         {/* Matrix Main Display */}
-        <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden animate-in fade-in duration-500">
+        <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden animate-in fade-in duration-500">
           <div className="p-5 border-b border-slate-100 flex justify-between items-center flex-wrap gap-2">
             <div>
               <h3 className="text-base font-bold text-slate-900">5T 全自動誠信校驗功能矩陣</h3>

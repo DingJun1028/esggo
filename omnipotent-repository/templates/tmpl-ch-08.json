@@ -1,0 +1,27 @@
+{
+  "uuid": "tmpl-ch-08",
+  "version": "2.0.0",
+  "timestamp": 1782070654959,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.8 多元平等與包容",
+  "tags": [
+    "多元平等",
+    "#零算力",
+    "GRI-405",
+    "GRI-406"
+  ],
+  "content": "<h2>Ch.8 多元平等與包容</h2>\n<h3>8.1 概述</h3>\n<p>{{year}} 年女性主管比例 {{female_manager_ratio}}%，身心障礙就業 2.5%。推動無意識偏見訓練、女性領導力培育、原住民就業促進、LGBTQ+ 友善政策。</p>\n<h3>8.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 500 280\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"250\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">DEI 指標(%)</text><line x1=\"60\" y1=\"220\" x2=\"440\" y2=\"220\" stroke=\"#E2E8F0\"/><rect x=\"80\" y=\"154\" width=\"45\" height=\"66\" fill=\"#003262\" rx=\"4\"/><text x=\"102\" y=\"149\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">35</text><text x=\"102\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">女性主管</text><rect x=\"155\" y=\"158\" width=\"45\" height=\"62\" fill=\"#FDB515\" rx=\"4\"/><text x=\"177\" y=\"153\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">33</text><text x=\"177\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">女性董事</text><rect x=\"230\" y=\"215\" width=\"45\" height=\"5\" fill=\"#10B981\" rx=\"4\"/><text x=\"252\" y=\"210\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">2.5</text><text x=\"252\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">身心障礙</text><rect x=\"305\" y=\"217\" width=\"45\" height=\"3\" fill=\"#3B82F6\" rx=\"4\"/><text x=\"327\" y=\"212\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">1.5</text><text x=\"327\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">原住民</text><rect x=\"380\" y=\"50\" width=\"45\" height=\"170\" fill=\"#6366F1\" rx=\"4\"/><text x=\"402\" y=\"45\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">90</text><text x=\"402\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">LGBTQ+</text></svg>\n<h3>8.3 數據表格</h3>\n<table><thead><tr><th>指標</th><th>{{year}}</th><th>前年</th><th>目標</th></tr></thead><tbody><tr><td>女性主管</td><td>35%</td><td>33%</td><td>≥40%</td></tr><tr><td>女性董事</td><td>33%</td><td>33%</td><td>≥33%</td></tr><tr><td>身心障礙</td><td>2.5%</td><td>2.0%</td><td>≥2.5%</td></tr><tr><td>性平政策</td><td>✅</td><td>✅</td><td>✅</td></tr></tbody></table>\n<h3>8.4 管理方針</h3>\n<p>本公司針對 多元平等與包容 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>8.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 352,
+  "griAlignment": [
+    "GRI-405",
+    "GRI-406"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "8f798724284efdf3",
+    "chartType": "bar"
+  }
+}

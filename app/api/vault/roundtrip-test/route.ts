@@ -1,7 +1,7 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 interface RoundTripStep {
@@ -31,16 +31,19 @@ export async function GET(request: NextRequest) {
   };
 
   if (!supabaseUrl || !serviceRoleKey) {
-    return NextResponse.json({
-      success: false,
-      error: 'Missing SUPABASE_SERVICE_ROLE_KEY in environment',
-      hint: 'Add SUPABASE_SERVICE_ROLE_KEY to your .env file',
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Missing SUPABASE_SERVICE_ROLE_KEY in environment',
+        hint: 'Add SUPABASE_SERVICE_ROLE_KEY to your .env file',
+      },
+      { status: 500 }
+    );
   }
 
   const { createClient } = await import('@supabase/supabase-js');
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
-    auth: { persistSession: false }
+    auth: { persistSession: false },
   });
 
   const testName = `test_evidence_seal_${Date.now()}`;

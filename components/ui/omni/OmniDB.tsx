@@ -2,11 +2,13 @@
 
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useCallback } from 'react';
-import { cn } from '../../../lib/cn';
+import { cn } from '../../../lib/utils';
 import { Database, RefreshCw, Plus, Trash2, Edit2 } from 'lucide-react';
 import { OmniButton } from './OmniButton';
 import { OmniInput } from './OmniInput';
 import { OmniBadge } from './OmniBadge';
+import { useOmniResonance } from './useOmniResonance';
+import { Badge } from '@/components/ui/v2/Input';
 
 export interface OmniDBRecord {
   id: string;
@@ -38,7 +40,21 @@ export interface OmniDBProps {
 }
 
 export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
-  ({ source = 'supabase', records = [], onRefresh, onAdd, onUpdate, onDelete, loading, className }, ref) => {
+  (
+    {
+      source = 'supabase',
+      records = [],
+      onRefresh,
+      onAdd,
+      onUpdate,
+      onDelete,
+      loading,
+      className,
+      omniHeart: initialHeart,
+    },
+    ref
+  ) => {
+    const omniHeart = useOmniResonance(initialHeart);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [newRecord, setNewRecord] = useState<Record<string, any>>({});
     const [activeTab, setActiveTab] = useState<'records' | 'schema'>('records');
@@ -60,7 +76,13 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
     const config = sourceConfig[source];
 
     return (
-      <div ref={ref} className={cn('w-full bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-border)] shadow-2xl overflow-hidden', className)}>
+      <div
+        ref={ref}
+        className={cn(
+          'w-full bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-border)] shadow-sm overflow-hidden',
+          className
+        )}
+      >
         {/* Header */}
         <div className="p-4 border-b border-[var(--theme-border)] bg-[var(--theme-surface)]/80 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -68,11 +90,16 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
               <Database className="w-5 h-5 text-[var(--theme-primary)]" />
             </div>
             <h3 className="text-lg font-bold text-[var(--theme-text)]">
-              OmniDB <span className="text-xs font-mono text-[var(--theme-text-muted)] ml-2">({config.label})</span>
+              OmniDB{' '}
+              <span className="text-xs font-mono text-[var(--theme-text-muted)] ml-2">
+                ({config.label})
+              </span>
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <OmniBadge variant="outline" size="sm">{config.label} Connected</OmniBadge>
+            <Badge variant="outline" size="sm">
+              {config.label} Connected
+            </Badge>
             {onRefresh && (
               <OmniButton variant="ghost" size="icon" onClick={onRefresh} disabled={loading}>
                 <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
@@ -85,15 +112,23 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
         <div className="flex border-b border-[var(--theme-border)]">
           <button
             onClick={() => setActiveTab('records')}
-            className={cn('px-4 py-2 text-xs font-medium border-b-2 transition-colors', 
-              activeTab === 'records' ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]' : 'border-transparent text-[var(--theme-text-muted)]')}
+            className={cn(
+              'px-4 py-2 text-xs font-medium border-b-2 transition-colors',
+              activeTab === 'records'
+                ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]'
+                : 'border-transparent text-[var(--theme-text-muted)]'
+            )}
           >
             Records
           </button>
           <button
             onClick={() => setActiveTab('schema')}
-            className={cn('px-4 py-2 text-xs font-medium border-b-2 transition-colors', 
-              activeTab === 'schema' ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]' : 'border-transparent text-[var(--theme-text-muted)]')}
+            className={cn(
+              'px-4 py-2 text-xs font-medium border-b-2 transition-colors',
+              activeTab === 'schema'
+                ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]'
+                : 'border-transparent text-[var(--theme-text-muted)]'
+            )}
           >
             Schema
           </button>
@@ -106,7 +141,9 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
             {onAdd && (
               <div className="mb-4 p-3 border border-[var(--theme-border)] rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-[var(--theme-text-muted)] uppercase tracking-widest">New Record</span>
+                  <span className="text-xs font-bold text-[var(--theme-text-muted)] uppercase tracking-widest">
+                    New Record
+                  </span>
                   <OmniButton variant="primary" size="sm" onClick={handleAdd}>
                     <Plus className="w-3 h-3 mr-1" /> Add
                   </OmniButton>
@@ -142,9 +179,16 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
                   </thead>
                   <tbody>
                     {records.map((record) => (
-                      <tr key={record.id} className="border-b border-[var(--theme-border)]/50 hover:bg-[var(--theme-surface)]/50">
-                        <td className="p-2 font-mono text-xs text-[var(--theme-text-muted)]">{record.id.slice(0, 8)}...</td>
-                        <td className="p-2 font-mono text-xs text-[var(--theme-text)]">{JSON.stringify(record.data).slice(0, 50)}...</td>
+                      <tr
+                        key={record.id}
+                        className="border-b border-[var(--theme-border)]/50 hover:bg-[var(--theme-surface)]/50"
+                      >
+                        <td className="p-2 font-mono text-xs text-[var(--theme-text-muted)]">
+                          {record.id.slice(0, 8)}...
+                        </td>
+                        <td className="p-2 font-mono text-xs text-[var(--theme-text)]">
+                          {JSON.stringify(record.data).slice(0, 50)}...
+                        </td>
                         <td className="p-2 text-right">
                           <div className="flex justify-end gap-1">
                             {onUpdate && (

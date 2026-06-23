@@ -105,12 +105,12 @@ export function OmniAgentCard({
 
   return (
     <div
-      className="w-full rounded-2xl md:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row gap-4 md:gap-6 border"
+      className="w-full rounded-xl md:rounded-xl shadow-sm p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row gap-4 md:gap-6 border"
       style={{ backgroundColor: colors.bg.secondary, borderColor: `${colors.border}80` }}
     >
       {/* Left Panel - Character Visual */}
       <div
-        className="w-full lg:w-[520px] rounded-2xl p-6 relative overflow-hidden min-h-[400px] lg:h-auto"
+        className="w-full lg:w-[520px] rounded-xl p-6 relative overflow-hidden min-h-[400px] lg:h-auto"
         style={{ background: 'linear-gradient(to bottom, #0E1E3580, #08111F80)' }}
       >
         {/* Background Effects */}
@@ -154,7 +154,7 @@ export function OmniAgentCard({
               }}
             >
               <Brain
-                className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
+                className="w-24 h-24 md:w-32 md:h-32 drop-shadow-sm"
                 style={{ color: colors.accent.cyan }}
               />
             </div>
@@ -207,7 +207,7 @@ export function OmniAgentCard({
             </div>
             <div className="flex gap-2 flex-shrink-0">
               <span
-                className="px-3 py-1 text-xs font-black rounded-full shadow-lg"
+                className="px-3 py-1 text-xs font-black rounded-full shadow-sm"
                 style={{
                   background: `linear-gradient(135deg, ${colors.accent.gold}, #E8B84A)`,
                   color: '#000',
@@ -217,7 +217,7 @@ export function OmniAgentCard({
               </span>
               {isAwakened && (
                 <span
-                  className="px-3 py-1 text-xs font-black rounded-full shadow-lg"
+                  className="px-3 py-1 text-xs font-black rounded-full shadow-sm"
                   style={{
                     background: `linear-gradient(135deg, ${colors.accent.purple}, #7B5FCF)`,
                     color: '#FFF',
@@ -249,7 +249,7 @@ export function OmniAgentCard({
         <div className="flex flex-col md:flex-row gap-4 mt-2">
           {/* Radar Chart Placeholder */}
           <div
-            className="w-full md:w-[260px] rounded-2xl p-4 border"
+            className="w-full md:w-[260px] rounded-xl p-4 border"
             style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}
           >
             <div
@@ -322,7 +322,7 @@ export function OmniAgentCard({
 
           {/* Stats List */}
           <div
-            className="flex-1 rounded-2xl p-4 border space-y-3"
+            className="flex-1 rounded-xl p-4 border space-y-3"
             style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}
           >
             {stats.map((stat) => (
@@ -407,7 +407,7 @@ export function OmniAgentCard({
             }}
           >
             <div
-              className="absolute inset-0 animate-pulse opacity-50"
+              className="absolute inset-0 opacity-50"
               style={{
                 background: `linear-gradient(to right, ${colors.accent.purple}00, ${colors.accent.cyan}10, ${colors.accent.purple}00)`,
               }}

@@ -66,12 +66,12 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
 return (
     <>
       {isOpen && (
-        <aside className="fixed right-0 top-0 bottom-0 w-full max-w-[90%] sm:max-w-[450px] lg:max-w-[560px] bg-white border-l border-slate-100 shadow-2xl z-50 flex flex-col">
+        <aside className="fixed right-0 top-0 bottom-0 w-full max-w-[90%] sm:max-w-[450px] lg:max-w-[560px] bg-white border-l border-slate-100 shadow-sm z-50 flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-50 -md sticky top-0 z-10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-[#FDB515] shadow-lg">
-                <Radar size={20} className="animate-pulse" />
+              <div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-[#FDB515] shadow-sm">
+                <Radar size={20} className="" />
               </div>
               <div>
                 <h3 className="text-sm font-black text-[#003262] uppercase tracking-widest">
@@ -103,7 +103,7 @@ return (
             {activeTab === 'swarm' && (
               <div className="space-y-8 fade-in">
                 {/* Swarm Status Card */}
-                <BrandCard className="bg-[#003262] text-white p-8 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden">
+                <BrandCard className="bg-[#003262] text-white p-8 rounded-[2.5rem] border-none shadow-sm relative overflow-hidden">
                   <div className="relative z-10 space-y-6">
                     <div className="flex justify-between items-start">
                       <div className="space-y-1">
@@ -114,7 +114,7 @@ return (
                           {Math.round(swarmResonance)}%
                         </h4>
                       </div>
-                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center">
                         <Bot size={24} className="text-[#FDB515]" />
                       </div>
                     </div>
@@ -166,7 +166,7 @@ return (
                   ].map((a, i) => (
                     <div
                       key={i}
-                      className="p-4 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group hover:border-blue-200 transition-all shadow-sm"
+                      className="p-4 bg-white border border-slate-100 rounded-xl flex items-center justify-between group hover:border-blue-200 transition-all shadow-sm"
                     >
                       <div className="flex items-center gap-4">
                         <div
@@ -199,7 +199,7 @@ return (
                   className="border-dashed border-2 border-slate-100 bg-slate-50/30 flex items-center justify-between group hover:border-blue-400 transition-all cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <Sparkles size={16} className="text-blue-600 animate-pulse" />
+                    <Sparkles size={16} className="text-blue-600" />
                     <span className="text-[10px] font-black text-[#003262] uppercase tracking-widest">
                       召喚全域共識 (Alt + G)
                     </span>
@@ -270,7 +270,7 @@ return (
                   variant="ghost"
                   fullWidth
                   size="sm"
-                  className="rounded-2xl border-slate-100 text-slate-400 h-14"
+                  className="rounded-xl border-slate-100 text-slate-400 h-14"
                 >
                   進入萬能聖碑管理 <ArrowUpRight size={14} className="ml-2" />
                 </BrandButton>
@@ -350,7 +350,7 @@ return (
             <BrandButton
               variant="primary"
               fullWidth
-              className="h-14 rounded-2xl font-black shadow-xl shadow-blue-500/10 text-xs tracking-widest"
+              className="h-14 rounded-xl font-black shadow-sm shadow-blue-500/10 text-xs tracking-widest"
             >
               <Cpu size={16} className="mr-2" /> 啟動全域協作模式
             </BrandButton>

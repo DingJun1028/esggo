@@ -24,15 +24,15 @@ export default function OmniAuthOmni() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 bg-[#020617] rounded-3xl border border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.15)] max-w-md w-full mx-auto relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center p-8 bg-[#020617] rounded-xl border border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.15)] max-w-md w-full mx-auto relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-indigo-500/10 pointer-events-none" />
 
-      <div className="w-16 h-16 border border-cyan-500/30 rounded-2xl flex items-center justify-center mb-6 relative">
-        <div className="absolute inset-0 rounded-2xl bg-cyan-400/20 blur-xl" />
+      <div className="w-16 h-16 border border-cyan-500/30 rounded-xl flex items-center justify-center mb-6 relative">
+        <div className="absolute inset-0 rounded-xl bg-cyan-400/20 blur-xl" />
         {status === 'success' ? (
           <ShieldCheck size={32} className="text-emerald-400" />
         ) : status === 'verifying_5T' ? (
-          <Activity size={32} className="text-cyan-400 animate-pulse" />
+          <Activity size={32} className="text-cyan-400" />
         ) : (
           <Lock size={32} className="text-slate-300" />
         )}
@@ -73,7 +73,7 @@ export default function OmniAuthOmni() {
             <span>Protocol Check</span>
             <span
               className={
-                status === 'success' ? 'text-emerald-400 font-bold' : 'text-cyan-400 animate-pulse'
+                status === 'success' ? 'text-emerald-400 font-bold' : 'text-cyan-400 '
               }
             >
               {status === 'success' ? 'Verified' : 'Processing'}

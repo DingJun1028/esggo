@@ -258,7 +258,7 @@ export const MATRIX_ROUTE_COMPONENTS: MatrixRouteComponent[] = [
 
   // Admin & UI
   {
-    route: '/admin/omni-table',
+    route: '/admin/oa-table',
     componentName: 'OmniTable',
     category: 'Atoms',
     priority: 'medium',

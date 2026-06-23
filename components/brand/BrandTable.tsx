@@ -30,8 +30,8 @@ export default function BrandTable<T extends Record<string, any>>({
 }: BrandTableProps<T>) {
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-100 overflow-hidden">
-        <div className="animate-pulse">
+      <div className="rounded-xl border border-slate-100 overflow-hidden">
+        <div className="">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="h-14 bg-slate-50 border-b border-slate-100" />
           ))}
@@ -41,7 +41,7 @@ export default function BrandTable<T extends Record<string, any>>({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-100/50 overflow-hidden -md shadow-sm">
+    <div className="rounded-xl border border-slate-100/50 overflow-hidden -md shadow-sm">
       <div className="overflow-x-auto no-scrollbar">
         <table className="w-full text-[13px] lg:text-sm">
           <thead>

@@ -7,7 +7,7 @@
  * 1. 從 ESG 前30大情報點爬取最新資訊
  * 2. 清洗、排列、重組爬取內容
  * 3. 萃取記憶碎片
- * 4. 與 OmniAgentBus 深度整合
+ * 4. 與 OAAgentBus 深度整合
  */
 
 import { extractShardFromWebCrawl, type MemoryShard } from '../agent/memory-shards';
@@ -16,16 +16,40 @@ import { extractShardFromWebCrawl, type MemoryShard } from '../agent/memory-shar
 const ESG_SOURCES = [
   { name: 'GRI Standards', url: 'https://www.globalreporting.org/standards/', type: 'standard' },
   { name: 'SASB Standards', url: 'https://www.sasb.org/standards/', type: 'standard' },
-  { name: 'TCFD Recommendations', url: 'https://www.fsb-tcfd.org/recommendations/', type: 'framework' },
+  {
+    name: 'TCFD Recommendations',
+    url: 'https://www.fsb-tcfd.org/recommendations/',
+    type: 'framework',
+  },
   { name: 'CDP Climate Change', url: 'https://www.cdp.net/en/climate', type: 'disclosure' },
   { name: 'UN Global Compact', url: 'https://www.unglobalcompact.org/', type: 'initiative' },
-  { name: 'ISSB Standards', url: 'https://www.ifrs.org/issued-standards/issb-standards/', type: 'standard' },
-  { name: 'EU Taxonomy', url: 'https://ec.europa.eu/sustainable-finance-taxonomy/', type: 'regulation' },
-  { name: 'SEC Climate Disclosure', url: 'https://www.sec.gov/spotlight/climate-disclosure', type: 'regulation' },
+  {
+    name: 'ISSB Standards',
+    url: 'https://www.ifrs.org/issued-standards/issb-standards/',
+    type: 'standard',
+  },
+  {
+    name: 'EU Taxonomy',
+    url: 'https://ec.europa.eu/sustainable-finance-taxonomy/',
+    type: 'regulation',
+  },
+  {
+    name: 'SEC Climate Disclosure',
+    url: 'https://www.sec.gov/spotlight/climate-disclosure',
+    type: 'regulation',
+  },
   { name: 'MSCI ESG Research', url: 'https://www.msci.com/esg-investing', type: 'research' },
   { name: 'Sustainalytics', url: 'https://www.sustainalytics.com/esg-ratings', type: 'rating' },
-  { name: 'Bloomberg ESG', url: 'https://www.bloomberg.com/professional/solution/esg/', type: 'data' },
-  { name: 'Refinitiv ESG', url: 'https://www.refinitiv.com/en/financial-data/company-data/esg-data', type: 'data' },
+  {
+    name: 'Bloomberg ESG',
+    url: 'https://www.bloomberg.com/professional/solution/esg/',
+    type: 'data',
+  },
+  {
+    name: 'Refinitiv ESG',
+    url: 'https://www.refinitiv.com/en/financial-data/company-data/esg-data',
+    type: 'data',
+  },
   { name: 'Carbon Disclosure Project', url: 'https://www.cdp.net/', type: 'disclosure' },
   { name: 'Climate Action 100+', url: 'https://www.climateaction100.org/', type: 'initiative' },
   { name: 'Science Based Targets', url: 'https://sciencebasedtargets.org/', type: 'initiative' },
@@ -38,11 +62,23 @@ const ESG_SOURCES = [
   { name: 'FT Moral Money', url: 'https://www.ft.com/moral-money', type: 'news' },
   { name: 'WSJ ESG', url: 'https://www.wsj.com/news/types/esg', type: 'news' },
   { name: 'PRI ESG', url: 'https://www.unpri.org/', type: 'initiative' },
-  { name: 'World Economic Forum ESG', url: 'https://www.weforum.org/agenda/archive/esg/', type: 'research' },
+  {
+    name: 'World Economic Forum ESG',
+    url: 'https://www.weforum.org/agenda/archive/esg/',
+    type: 'research',
+  },
   { name: 'OECD ESG', url: 'https://www.oecd.org/finance/esg-investing/', type: 'research' },
   { name: 'EPA GHG Reporting', url: 'https://www.epa.gov/ghgreporting', type: 'regulation' },
-  { name: 'Taiwan EPA ESG', url: 'https://www.epa.gov.tw/Page/4B98A075A80D6A9C', type: 'regulation' },
-  { name: 'Taiwan FSC ESG', url: 'https://www.fsc.gov.tw/ch/home.jsp?id=130&parentpath=0,2', type: 'regulation' },
+  {
+    name: 'Taiwan EPA ESG',
+    url: 'https://www.epa.gov.tw/Page/4B98A075A80D6A9C',
+    type: 'regulation',
+  },
+  {
+    name: 'Taiwan FSC ESG',
+    url: 'https://www.fsc.gov.tw/ch/home.jsp?id=130&parentpath=0,2',
+    type: 'regulation',
+  },
   { name: 'CSRone', url: 'https://csrone.com/', type: 'taiwan' },
 ];
 
@@ -56,11 +92,14 @@ class FirecrawlClient {
     this.baseUrl = 'https://api.firecrawl.dev/v2';
   }
 
-  async scrape(url: string, options?: {
-    formats?: string[];
-    onlyMainContent?: boolean;
-    waitFor?: number;
-  }): Promise<{ success: boolean; data?: any; error?: string }> {
+  async scrape(
+    url: string,
+    options?: {
+      formats?: string[];
+      onlyMainContent?: boolean;
+      waitFor?: number;
+    }
+  ): Promise<{ success: boolean; data?: any; error?: string }> {
     if (!this.apiKey) {
       console.warn('[Firecrawl] API key not configured');
       return { success: false, error: 'API key not configured' };
@@ -70,7 +109,7 @@ class FirecrawlClient {
       const response = await fetch(`${this.baseUrl}/scrape`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -93,12 +132,15 @@ class FirecrawlClient {
     }
   }
 
-  async crawl(url: string, options?: {
-    limit?: number;
-    maxDepth?: number;
-    includePaths?: string[];
-    excludePaths?: string[];
-  }): Promise<{ success: boolean; jobId?: string; error?: string }> {
+  async crawl(
+    url: string,
+    options?: {
+      limit?: number;
+      maxDepth?: number;
+      includePaths?: string[];
+      excludePaths?: string[];
+    }
+  ): Promise<{ success: boolean; jobId?: string; error?: string }> {
     if (!this.apiKey) {
       return { success: false, error: 'API key not configured' };
     }
@@ -107,7 +149,7 @@ class FirecrawlClient {
       const response = await fetch(`${this.baseUrl}/crawl`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -132,10 +174,13 @@ class FirecrawlClient {
     }
   }
 
-  async search(query: string, options?: {
-    limit?: number;
-    scrapeFormats?: string[];
-  }): Promise<{ success: boolean; data?: any; error?: string }> {
+  async search(
+    query: string,
+    options?: {
+      limit?: number;
+      scrapeFormats?: string[];
+    }
+  ): Promise<{ success: boolean; data?: any; error?: string }> {
     if (!this.apiKey) {
       return { success: false, error: 'API key not configured' };
     }
@@ -144,7 +189,7 @@ class FirecrawlClient {
       const response = await fetch(`${this.baseUrl}/search`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -179,12 +224,24 @@ export class ESGIntelligenceCrawler {
    * 從 ESG 資訊來源爬取最新情報
    */
   async crawlESGSources(sources?: typeof ESG_SOURCES): Promise<{
-    results: Array<{ source: string; url: string; success: boolean; content?: string; error?: string }>;
+    results: Array<{
+      source: string;
+      url: string;
+      success: boolean;
+      content?: string;
+      error?: string;
+    }>;
     totalFetched: number;
     totalFailed: number;
   }> {
     const targetSources = sources || ESG_SOURCES;
-    const results: Array<{ source: string; url: string; success: boolean; content?: string; error?: string }> = [];
+    const results: Array<{
+      source: string;
+      url: string;
+      success: boolean;
+      content?: string;
+      error?: string;
+    }> = [];
     let totalFetched = 0;
     let totalFailed = 0;
 
@@ -206,7 +263,7 @@ export class ESGIntelligenceCrawler {
       }
 
       // Rate limiting: 1 second between requests
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     return { results, totalFetched, totalFailed };
@@ -231,7 +288,7 @@ export class ESGIntelligenceCrawler {
       }
 
       // Rate limiting
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     return { results };
@@ -262,7 +319,9 @@ export class ESGIntelligenceCrawler {
 
         try {
           const shard = await extractShardFromWebCrawl(source.url, content, summary);
-          shard.tags = [...new Set([...shard.tags, 'esg-intelligence', source.type, 'daily-crawl'])];
+          shard.tags = [
+            ...new Set([...shard.tags, 'esg-intelligence', source.type, 'daily-crawl']),
+          ];
           shards.push(shard);
         } catch (e: any) {
           console.warn(`[ESG Crawler] 萃取碎片失敗: ${source.name}`, e.message);
@@ -273,7 +332,7 @@ export class ESGIntelligenceCrawler {
         crawlResults.push({ source: source.name, success: false });
       }
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     return { shards, crawlResults };

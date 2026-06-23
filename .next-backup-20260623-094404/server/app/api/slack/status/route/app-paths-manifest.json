@@ -1,0 +1,3 @@
+{
+  "/api/slack/status/route": "app/api/slack/status/route.js"
+}

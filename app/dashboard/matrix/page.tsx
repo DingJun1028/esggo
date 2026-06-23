@@ -46,7 +46,7 @@ export default function UltimateMatrixPage() {
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-neutral-200 pb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
               <span className="text-xs font-mono font-bold tracking-[0.2em] text-neutral-500 uppercase">
                 Omni Component Center
               </span>

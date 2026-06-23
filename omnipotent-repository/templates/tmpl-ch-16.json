@@ -1,0 +1,25 @@
+{
+  "uuid": "tmpl-ch-16",
+  "version": "2.0.0",
+  "timestamp": 1782070654970,
+  "source_origin": "mass-ingest-heavy-duty",
+  "title": "Ch.16 稅務透明與貢獻",
+  "tags": [
+    "稅務透明",
+    "#零算力",
+    "GRI-207"
+  ],
+  "content": "<h2>Ch.16 稅務透明與貢獻</h2>\n<h3>16.1 概述</h3>\n<p>{{year}} 年繳納稅款 {{tax_paid}} 億元，有效稅率 {{effective_tax_rate}}%。移轉定價遵循 OECD BEPS，無爭議。</p>\n<h3>16.2 趨勢圖表</h3>\n<svg width=\"100%\" viewBox=\"0 0 500 280\" style=\"margin:20px 0;background:#F8FAFC;border-radius:8px;padding:10px;\"><text x=\"250\" y=\"22\" font-size=\"13\" fill=\"#003262\" text-anchor=\"middle\" font-weight=\"bold\">稅務貢獻(億元)</text><line x1=\"60\" y1=\"220\" x2=\"440\" y2=\"220\" stroke=\"#E2E8F0\"/><rect x=\"80\" y=\"50\" width=\"45\" height=\"170\" fill=\"#003262\" rx=\"4\"/><text x=\"102\" y=\"45\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">12</text><text x=\"102\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">台灣</text><rect x=\"155\" y=\"149\" width=\"45\" height=\"71\" fill=\"#FDB515\" rx=\"4\"/><text x=\"177\" y=\"144\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">5</text><text x=\"177\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">美國</text><rect x=\"230\" y=\"177\" width=\"45\" height=\"43\" fill=\"#10B981\" rx=\"4\"/><text x=\"252\" y=\"172\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">3</text><text x=\"252\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">中國</text><rect x=\"305\" y=\"192\" width=\"45\" height=\"28\" fill=\"#3B82F6\" rx=\"4\"/><text x=\"327\" y=\"187\" font-size=\"10\" fill=\"#0F172A\" text-anchor=\"middle\">2</text><text x=\"327\" y=\"240\" font-size=\"9\" fill=\"#64748B\" text-anchor=\"middle\">歐洲</text></svg>\n<h3>16.3 數據表格</h3>\n<table><thead><tr><th>國家</th><th>營收</th><th>稅款</th><th>稅率</th></tr></thead><tbody><tr><td>台灣</td><td>85億</td><td>12億</td><td>21%</td></tr><tr><td>美國</td><td>25億</td><td>5億</td><td>20%</td></tr><tr><td>中國</td><td>15億</td><td>3億</td><td>20%</td></tr></tbody></table>\n<h3>16.4 管理方針</h3>\n<p>本公司針對 稅務透明與貢獻 制定完整管理方針，包括政策制定、資源投入、績效評估、持續改善。具體作為包括定期檢視目標達成、投入必要資源、建立跨部門溝通、對外透明揭露。</p>\n<h3>16.5 未來目標</h3>\n<ul><li>持續改善現有績效</li><li>深化永續報告品質</li><li>強化供應鏈管理</li><li>提升利害關係人溝通</li></ul>",
+  "wordCount": 297,
+  "griAlignment": [
+    "GRI-207"
+  ],
+  "placeholders": [
+    "{{company_name}}",
+    "{{year}}"
+  ],
+  "evidence": {
+    "checksum": "8c424359f5f1469b",
+    "chartType": "bar"
+  }
+}

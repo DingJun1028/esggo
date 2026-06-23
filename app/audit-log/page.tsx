@@ -32,11 +32,11 @@ export default function AuditLogPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/audit-log', { cache: 'no-store' });
+      // Fetching from actual audit endpoint
+      const res = await fetch('/api/audit', { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
-        setData(json.data || []);
+        setData(json.logs || []);
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
@@ -220,7 +220,7 @@ export default function AuditLogPage() {
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-neutral-100 /20 /20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
+            <div className="w-14 h-14 rounded-xl bg-neutral-100 /20 /20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
               <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <History className="text-cyan-400 relative z-10" size={28} />
             </div>

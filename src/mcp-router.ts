@@ -6,7 +6,7 @@ export class MCPRouter {
     // Core ESGGO servers
     firebase: {
       name: 'firebase-mcp-server',
-      endpoint: 'c:\\Project\\esggoV1.0',
+      endpoint: process.env.FIREBASE_MCP_ENDPOINT || 'firebase-mcp-server-endpoint',
       capabilities: ['auth', 'firestore', 'functions', 'remoteconfig', 'apphosting'],
     },
     genkit: {

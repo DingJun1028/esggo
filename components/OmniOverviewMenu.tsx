@@ -50,7 +50,7 @@ return (
         >
           <div
             className={cn(
-              'relative w-full max-w-lg max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl',
+              'relative w-full max-w-lg max-h-[90vh] rounded-xl overflow-hidden shadow-sm',
               isDark ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200'
             )}
             onClick={(e) => e.stopPropagation()} // Prevent click from closing modal

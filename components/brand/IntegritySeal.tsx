@@ -26,9 +26,9 @@ export default function IntegritySeal({
             className="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-[2rem] shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden"
           >
             {/* Luminous Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 via-white/5 to-emerald-500/5 animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 via-white/5 to-emerald-500/5" />
 
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 z-10">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-sm shadow-emerald-500/20 z-10">
               <ShieldCheck size={24} />
             </div>
 
@@ -37,7 +37,7 @@ export default function IntegritySeal({
                 <span className="text-[10px] font-black tracking-[0.3em] text-emerald-600 uppercase">
                   T5_INTEGRITY_SEALED
                 </span>
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <Hash size={12} className="text-emerald-400" />
@@ -59,7 +59,7 @@ export default function IntegritySeal({
             key="open"
             className="flex items-center gap-4 bg-slate-100/50 border border-dashed border-slate-300 p-4 rounded-[2rem] grayscale opacity-60"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-200 text-slate-400 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-slate-200 text-slate-400 flex items-center justify-center">
               <Lock size={20} />
             </div>
             <div>

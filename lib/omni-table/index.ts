@@ -4,7 +4,7 @@
  * Re-exports all OmniTable types, client, and hooks
  */
 
-export { OmniTableClient, OmniTableError, getOmniTableServerClient } from './client';
+export { OmniTableClient, OmniTableError, getOATableServerClient } from './client';
 export { useOmniTable } from './useOmniTable';
 
 // ── Domain-specific ESG hooks ──────────────────────────────────────────────────

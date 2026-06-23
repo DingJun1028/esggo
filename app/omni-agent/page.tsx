@@ -939,7 +939,7 @@ export default function OmniAgentPage() {
                       className={cn(
                         'p-2.5 rounded-lg transition-all',
                         isRecording
-                          ? 'bg-red-500 text-white animate-pulse'
+                          ? 'bg-red-500 text-white '
                           : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
                       )}
                     >
@@ -956,7 +956,7 @@ export default function OmniAgentPage() {
                     />
 
                     {isLoading ? (
-                      <Button variant="danger" size="md" onClick={handleStop}>
+                      <Button variant="error" size="md" onClick={handleStop}>
                         <Loader2 size={16} className="animate-spin" />
                       </Button>
                     ) : (

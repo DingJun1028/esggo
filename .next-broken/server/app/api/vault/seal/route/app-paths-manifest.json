@@ -1,0 +1,3 @@
+{
+  "/api/vault/seal/route": "app/api/vault/seal/route.js"
+}

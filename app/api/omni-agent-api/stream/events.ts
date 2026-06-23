@@ -1,6 +1,6 @@
 // 5T End-to-End Type Safety Enforced
 /**
- * OmniAgentBus SSE Event Buffer
+ * OAAgentBus SSE Event Buffer
  * v2.0.0 | Production-Ready
  *
  * Changelog v2.0.0:
@@ -32,7 +32,9 @@ const recentEventKeys: Record<string, number> = {};
 
 function getEventKey(event: string, payload: Record<string, unknown>): string {
   // Create a dedup key from event type + relevant payload fields
-  const keyFields = [event, payload.evidenceUuid, payload.skillId, payload.colorDropId].filter(Boolean);
+  const keyFields = [event, payload.evidenceUuid, payload.skillId, payload.colorDropId].filter(
+    Boolean
+  );
   return keyFields.join(':');
 }
 
@@ -96,5 +98,5 @@ export function getBufferUtilization(): { current: number; max: number; percent:
   };
 }
 
-// Auto-register with OmniAgentBus
+// Auto-register with OAAgentBus
 omniAgentBus.registerBroadcastHook(pushBusEvent);

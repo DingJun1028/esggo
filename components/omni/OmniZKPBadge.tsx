@@ -15,13 +15,13 @@ export function OmniZKPBadge() {
 
   return (
     <div 
-      className={`relative overflow-hidden rounded-full px-4 py-2 flex items-center gap-3 backdrop-blur-md border ${visualState.borderColor}`}
+      className={`relative overflow-hidden rounded-full px-4 py-2 flex items-center gap-3 border ${visualState.borderColor}`}
       style={{ backgroundColor: visualState.bgColor, boxShadow: visualState.glowColor }}
     >
       {/* Live Indicator */}
       <div className="relative flex h-3 w-3">
         {isLive && (
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+          <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
         )}
         <span className={`relative inline-flex rounded-full h-3 w-3 ${isLive ? 'bg-cyan-500' : 'bg-gray-500'}`}></span>
       </div>

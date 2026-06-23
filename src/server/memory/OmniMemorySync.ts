@@ -11,21 +11,23 @@ import { OmniTableClient } from '@/lib/omni-table/client';
 export class OmniMemorySync {
   constructor() {
     OmniEventStore.eventBus.on('event_saved', this.handleEventSaved.bind(this));
-    console.log('[OmniMemorySync] Attached to Omni-Space event bus. Ready to encode episodic memories.');
+    console.log(
+      '[OmniMemorySync] Attached to Omni-Space event bus. Ready to encode episodic memories.'
+    );
   }
 
   private async handleEventSaved(event: OmniEvent): Promise<void> {
     console.log(`[OmniMemorySync] Intercepted new event: ${event.id} (Type: ${event.event_type})`);
-    
+
     const destinations = [
       { name: 'VectorDB', syncFn: () => this.syncToVectorDB(event) },
       { name: 'AITable', syncFn: () => this.syncToAITable(event) },
-      { name: 'OmniTable', syncFn: () => this.syncToOmniTable(event) }
+      { name: 'OmniTable', syncFn: () => this.syncToOmniTable(event) },
     ];
 
-    await Promise.all(destinations.map(target => 
-      this.syncWithRetry(event, target.name, target.syncFn)
-    ));
+    await Promise.all(
+      destinations.map((target) => this.syncWithRetry(event, target.name, target.syncFn))
+    );
   }
 
   private async syncWithRetry(event: OmniEvent, targetName: string, syncFn: () => Promise<void>) {
@@ -36,18 +38,27 @@ export class OmniMemorySync {
     while (attempt < maxRetries && !success) {
       try {
         await syncFn();
-        console.log(`[OmniMemorySync] Successfully synchronized event ${event.id} to ${targetName} on attempt ${attempt + 1}.`);
+        console.log(
+          `[OmniMemorySync] Successfully synchronized event ${
+            event.id
+          } to ${targetName} on attempt ${attempt + 1}.`
+        );
         success = true;
       } catch (error) {
         attempt++;
-        console.error(`[OmniMemorySync] Attempt ${attempt} failed to sync event ${event.id} to ${targetName}.`, error);
-        
+        console.error(
+          `[OmniMemorySync] Attempt ${attempt} failed to sync event ${event.id} to ${targetName}.`,
+          error
+        );
+
         if (attempt < maxRetries) {
           const delay = Math.pow(2, attempt) * 1000;
           console.log(`[OmniMemorySync] Retrying ${targetName} in ${delay}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         } else {
-          console.error(`[OmniMemorySync] Max retries reached for event ${event.id} to ${targetName}. Moving to Dead Letter logic.`);
+          console.error(
+            `[OmniMemorySync] Max retries reached for event ${event.id} to ${targetName}. Moving to Dead Letter logic.`
+          );
           const errorMessage = error instanceof Error ? error.message : String(error);
           await this.saveToDeadLetterQueue(event, `[Target: ${targetName}] ${errorMessage}`);
         }
@@ -66,7 +77,7 @@ export class OmniMemorySync {
     const datasheetId = process.env.AITABLE_DATASHEET_ID;
 
     if (!token || !datasheetId) {
-      console.warn("[OmniMemorySync] AITABLE_API_KEY or AITABLE_DATASHEET_ID not configured");
+      console.warn('[OmniMemorySync] AITABLE_API_KEY or AITABLE_DATASHEET_ID not configured');
       return;
     }
 
@@ -74,11 +85,23 @@ export class OmniMemorySync {
 
     const record: { fields: Record<string, unknown> } = {
       fields: {
-        "Task Title": (event.payload && typeof event.payload === 'object' && 'name' in event.payload && typeof event.payload.name === 'string') ? event.payload.name : "Unknown Task",
-        Status: "Todo",
-        Type: (event.payload && typeof event.payload === 'object' && 'attributes' in event.payload && Array.isArray(event.payload.attributes)) ? (event.payload.attributes as string[]).join(',') : "OmniEvent",
-        Source: event.source_platform || "OmniNotes",
-      }
+        'Task Title':
+          event.payload &&
+          typeof event.payload === 'object' &&
+          'name' in event.payload &&
+          typeof event.payload.name === 'string'
+            ? event.payload.name
+            : 'Unknown Task',
+        Status: 'Todo',
+        Type:
+          event.payload &&
+          typeof event.payload === 'object' &&
+          'attributes' in event.payload &&
+          Array.isArray(event.payload.attributes)
+            ? (event.payload.attributes as string[]).join(',')
+            : 'OmniEvent',
+        Source: event.source_platform || 'OmniNotes',
+      },
     };
 
     try {
@@ -93,14 +116,14 @@ export class OmniMemorySync {
   private async syncToOmniTable(event: OmniEvent): Promise<void> {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
+
     if (!supabaseUrl || !serviceRoleKey) {
       console.warn('[OmniMemorySync] Skip OmniTable Sync: Supabase credentials not found.');
       return;
     }
 
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { persistSession: false }
+      auth: { persistSession: false },
     });
 
     const { error } = await supabase.from('omni_events_log').insert({
@@ -119,7 +142,7 @@ export class OmniMemorySync {
   private async saveToDeadLetterQueue(event: OmniEvent, errorLog: string): Promise<void> {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
+
     if (!supabaseUrl || !serviceRoleKey) {
       console.error('[OmniMemorySync] DLQ Error: Supabase credentials not found in env.');
       return;
@@ -127,7 +150,7 @@ export class OmniMemorySync {
 
     try {
       const supabase = createClient(supabaseUrl, serviceRoleKey, {
-        auth: { persistSession: false }
+        auth: { persistSession: false },
       });
 
       const { error } = await supabase.from('failed_sync_events').insert({
@@ -135,29 +158,34 @@ export class OmniMemorySync {
         event_type: event.event_type,
         payload: event.payload,
         error_log: errorLog,
-        retry_count: 3
+        retry_count: 3,
       });
 
       if (error) {
-        console.error(`[OmniMemorySync] Failed to insert dead letter for event ${event.id}:`, error);
+        console.error(
+          `[OmniMemorySync] Failed to insert dead letter for event ${event.id}:`,
+          error
+        );
       } else {
-        console.log(`[OmniMemorySync] Event ${event.id} successfully moved to Supabase DLQ (failed_sync_events).`);
+        console.log(
+          `[OmniMemorySync] Event ${event.id} successfully moved to Supabase DLQ (failed_sync_events).`
+        );
       }
     } catch (err) {
       console.error(`[OmniMemorySync] Fatal error while saving to DLQ:`, err);
     }
   }
 
-  public async replayDLQ(): Promise<{ processed: number, succeeded: number, failed: number }> {
+  public async replayDLQ(): Promise<{ processed: number; succeeded: number; failed: number }> {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
+
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error('Supabase credentials not found in env.');
     }
 
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { persistSession: false }
+      auth: { persistSession: false },
     });
 
     const { data: failedEvents, error } = await supabase
@@ -182,7 +210,7 @@ export class OmniMemorySync {
         payload: record.payload as any,
         created_at: new Date(record.created_at).getTime(),
         hash_lock: (record.payload as any)?.hash_lock || 'REPLAY_HASH',
-        source_platform: 'DLQ'
+        source_platform: 'DLQ',
       };
 
       try {

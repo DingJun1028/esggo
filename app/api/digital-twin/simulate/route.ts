@@ -4,14 +4,14 @@ import { ncbClient } from '@/lib/ncbdb';
 import { createClient } from '@supabase/supabase-js';
 import { generateHashLock } from '@/lib/hash-lock';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export async function POST(request: Request) {
   try {
     const { scenarioId, parameters } = await request.json();
     const authHeader = request.headers.get('Authorization');
-    
+
     let token = '';
     let companyId = 'default';
     let userId = 'anonymous';
@@ -29,40 +29,45 @@ export async function POST(request: Request) {
 
     // 建立帶有 User Token 的 Supabase Client，強制套用 RLS
     const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: { headers: { Authorization: `Bearer ${token}` } }
+      global: { headers: { Authorization: `Bearer ${token}` } },
     });
 
     // 1. 從 NCBDB 獲取真實基線數據 (若無 Token，NCBDBClient 會回傳 fallback)
     const ncbResponse = await ncbClient.listRecords<any>('BaselineEmissions');
-    
+
     // 設定基線數據
-    let baseline = { carbonEmissions: 12000, energyUsage: 350000, waterUsage: 5000, wasteGenerated: 1200 };
+    let baseline = {
+      carbonEmissions: 12000,
+      energyUsage: 350000,
+      waterUsage: 5000,
+      wasteGenerated: 1200,
+    };
     if (ncbResponse.success && ncbResponse.data && ncbResponse.data.length > 0) {
       const realData = ncbResponse.data[0];
       baseline = {
         carbonEmissions: realData.carbonEmissions || baseline.carbonEmissions,
         energyUsage: realData.energyUsage || baseline.energyUsage,
         waterUsage: realData.waterUsage || baseline.waterUsage,
-        wasteGenerated: realData.wasteGenerated || baseline.wasteGenerated
+        wasteGenerated: realData.wasteGenerated || baseline.wasteGenerated,
       };
     }
 
     // 2. 將前端送來的環境參數 (DNA Parameters) 轉換為引擎可讀的 modifiers
-    const reduction = (parameters.greenEnergy * 0.5) + (parameters.supplyChainLocal * 0.2);
-    
+    const reduction = parameters.greenEnergy * 0.5 + parameters.supplyChainLocal * 0.2;
+
     const scenarioPayload = {
       id: scenarioId,
       name: `Scenario ${scenarioId}`,
       modifiers: [
         {
           targetField: 'carbonEmissions' as const,
-          valueChange: -(reduction / 100)
+          valueChange: -(reduction / 100),
         },
         {
           targetField: 'energyUsage' as const,
-          valueChange: -((parameters.greenEnergy * 0.3) / 100)
-        }
-      ]
+          valueChange: -((parameters.greenEnergy * 0.3) / 100),
+        },
+      ],
     };
 
     // 3. 執行推演引擎
@@ -74,14 +79,14 @@ export async function POST(request: Request) {
       isValid: isGriValid,
       score: Math.min(99, 50 + parameters.greenEnergy * 2),
       violations: isGriValid ? [] : ['再生能源佔比未達 20% 綠電門檻安全線'],
-      recommendations: isGriValid ? [] : ['增加綠電採購比例至 20% 以上']
+      recommendations: isGriValid ? [] : ['增加綠電採購比例至 20% 以上'],
     };
-    
+
     result.complianceProjections['carbonEmissions'] = {
       ...result.complianceProjections['carbonEmissions'],
       score: Math.min(99, 82 + reduction),
       violations: [],
-      recommendations: []
+      recommendations: [],
     };
 
     // 5. ZKP Hash Lock 與 Audit Log 寫入 (T3 Trackable & T5 Trustworthy)
@@ -94,16 +99,18 @@ export async function POST(request: Request) {
         department: 'System',
         t5_tag: 'Trustworthy',
         details: JSON.stringify({ parameters }),
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
-      
+
       const { hash } = generateHashLock(auditPayload);
-      
-      const { error: auditError } = await supabase.from('audit_logs').insert([{
-        ...auditPayload,
-        hash_lock: hash
-      }]);
-      
+
+      const { error: auditError } = await supabase.from('audit_logs').insert([
+        {
+          ...auditPayload,
+          hash_lock: hash,
+        },
+      ]);
+
       if (auditError) {
         console.error('[Audit Log] Failed to insert:', auditError.message);
       }

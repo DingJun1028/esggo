@@ -29,7 +29,7 @@ export default function OmniMECEDashboard() {
   const totalScore = logs.reduce((acc, log) => acc + log.impactMetric, 0);
 
   return (
-    <div className="relative bg-[#020617]/60 border border-indigo-500/30 rounded-2xl p-6 mt-8 overflow-hidden group w-full">
+    <div className="relative bg-[#020617]/60 border border-indigo-500/30 rounded-xl p-6 mt-8 overflow-hidden group w-full">
       <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
 
       <div className="flex items-center justify-between mb-6 border-b border-indigo-500/20 pb-4">
@@ -44,7 +44,7 @@ export default function OmniMECEDashboard() {
               {totalScore} <span className="text-xs text-slate-500">T/E</span>
             </p>
           </div>
-          <Activity className="text-emerald-400 animate-pulse" />
+          <Activity className="text-emerald-400" />
         </div>
       </div>
 
@@ -112,7 +112,7 @@ export default function OmniMECEDashboard() {
                     <span className="text-[11px] px-2 py-1 rounded-full bg-slate-800/50 text-slate-400 border border-slate-700/50 cursor-help transition-colors hover:bg-slate-700/50">
                       {p?.name}
                     </span>
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black border border-slate-700 text-[10px] text-slate-300 rounded shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black border border-slate-700 text-[10px] text-slate-300 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
                       {p?.desc}
                     </div>
                   </div>

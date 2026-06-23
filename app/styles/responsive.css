@@ -6,7 +6,7 @@
 /* Panel/Modal responsive sizing */
 .responsive-panel {
   @apply w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl h-auto max-h-[80vh] overflow-auto;
-  @apply bg-white/90 backdrop-blur-md border border-white/20 rounded-xl shadow-lg;
+  @apply bg-white  border border-white/20 rounded-xl shadow-sm;
 }
 
 /* Card responsive grid system */
@@ -17,14 +17,14 @@
 
 /* Toast/Notification responsive sizing */
 .responsive-toast {
-  @apply w-full max-w-xs sm:max-w-sm md:max-w-md p-4 bg-white/90 backdrop-blur-md rounded-lg shadow-lg;
+  @apply w-full max-w-xs sm:max-w-sm md:max-w-md p-4 bg-white  rounded-lg shadow-sm;
   @apply border border-white/20;
 }
 
 /* Navigation drawer */
 .responsive-drawer {
   @apply fixed inset-y-0 left-0 z-[60] w-64 sm:w-80 md:w-96;
-  @apply bg-white/95 backdrop-blur-xl border-r border-white/20 shadow-2xl;
+  @apply bg-white/95  border-r border-white/20 shadow-sm;
   @apply transform transition-transform duration-300 ease-in-out;
 }
 

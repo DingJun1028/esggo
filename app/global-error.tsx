@@ -21,7 +21,7 @@ export default function GlobalError({
     <html>
       <body className="bg-slate-50 min-h-screen flex items-center justify-center font-sans p-4">
         <Card variant="default" className="max-w-lg w-full p-8 text-center space-y-6">
-          <div className="mx-auto w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center">
+          <div className="mx-auto w-16 h-16 bg-red-100 text-red-600 rounded-xl flex items-center justify-center">
             <AlertTriangle size={32} />
           </div>
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOmniTableServerClient } from '@/lib/omni-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 
 const TARGET_DATASHEET_ID = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: 'Mock synced', records: tasks });
     }
 
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
 
     // Convert client-side tasks to OmniTable format
     const recordsToCreate = tasks.map((task: any) => ({
