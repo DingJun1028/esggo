@@ -1,8 +1,0 @@
-{
-  "model": {
-    "name": "google/gemma-4-31b-it:free"
-  },
-  "billing": {
-    "overageStrategy": "never"
-  }
-}
