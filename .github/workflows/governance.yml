@@ -1,0 +1,78 @@
+name: Project Governance Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  adr-and-contract-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Git Safety Config
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: ADR Requirement Check
+        id: adr_check
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          ADR_CHANGED=false
+          if git diff --name-only "origin/${BASE_REF}" HEAD | grep -Eq '(^|/)adr/adr-.*\.md$'; then
+            ADR_CHANGED=true
+          fi
+          if echo "$PR_BODY" | grep -iqE "ADR-[0-9]+" || echo "$PR_TITLE" | grep -iqE "ADR-[0-9]+"; then
+            echo "PR_REFERENCES_ADR=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR_REFERENCES_ADR=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "ADR_CHANGED=$ADR_CHANGED" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Warn if no ADR changes
+        if: github.event_name == 'pull_request' && steps.adr_check.outputs.ADR_CHANGED == 'false' && steps.adr_check.outputs.PR_REFERENCES_ADR == 'false'
+        run: echo "::warning::Pull Request should modify an ADR file or reference an ADR in its title or description."
+
+      - name: Run Build
+        run: pnpm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          SKIP_ENV_VALIDATION: 1
+
+      - name: Run Lint
+        run: pnpm run lint
+        continue-on-error: true
+
+      - name: Run Typecheck
+        run: pnpm run typecheck
+        continue-on-error: true

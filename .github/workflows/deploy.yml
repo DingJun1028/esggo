@@ -1,0 +1,4 @@
+Warning: Identity file /root/.ssh/id_rsa not accessible: No such file or directory.
+# 已廢棄，改用 deploy-vps.yml
+# 自動部署請使用 GitHub Actions → Deploy to VPS (Manual)
+# 或 push 到 main branch 自動觸發

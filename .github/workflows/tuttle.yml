@@ -1,0 +1,11 @@
+name: Tuttle Workflow (Disabled)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Tuttle workflow is disabled. Enable manually when needed."

@@ -1,0 +1,46 @@
+name: Deploy to VPS (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Deploy to Oracle VPS via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            echo "==== 📥 Pulling latest code ===="
+            cd /var/www/esggo
+            git checkout main
+            git pull origin main
+
+            echo "==== 📦 Installing dependencies ===="
+            pnpm install --frozen-lockfile
+
+            echo "==== 🏗️ Building Next.js production ===="
+            NODE_OPTIONS=--max_old_space_size=4096 pnpm run build
+
+            echo "==== 🚀 Reloading PM2 services ===="
+            pm2 reload esggo omniagent-gateway --update-env
+            pm2 save
+
+            echo "==== 🩺 Health check ===="
+            curl -fsS http://127.0.0.1:3000/ -I || echo "⚠️ Web server not responding"
+            curl -fsS http://127.0.0.1:8642/status || echo "⚠️ Gateway not responding"
+            echo "==== ✅ Deployment complete ===="
