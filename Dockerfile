@@ -27,6 +27,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/packages/types ./packages/types
+COPY --from=builder /app/src/dataconnect-admin-generated ./src/dataconnect-admin-generated
+COPY --from=builder /app/src/dataconnect-generated ./src/dataconnect-generated
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
