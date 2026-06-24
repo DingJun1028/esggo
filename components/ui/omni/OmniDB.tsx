@@ -101,19 +101,37 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
               {config.label} Connected
             </Badge>
             {onRefresh && (
-              <OmniButton variant="ghost" size="icon" onClick={onRefresh} disabled={loading}>
-                <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
+              <OmniButton
+                variant="ghost"
+                size="icon"
+                onClick={onRefresh}
+                disabled={loading}
+                aria-label="Refresh database"
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]"
+              >
+                <RefreshCw
+                  className={cn('w-4 h-4', loading && 'animate-spin')}
+                  aria-hidden="true"
+                />
               </OmniButton>
             )}
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-[var(--theme-border)]">
+        <div
+          className="flex border-b border-[var(--theme-border)]"
+          role="tablist"
+          aria-label="OmniDB Views"
+        >
           <button
+            role="tab"
+            id="tab-records"
+            aria-selected={activeTab === 'records'}
+            aria-controls="panel-records"
             onClick={() => setActiveTab('records')}
             className={cn(
-              'px-4 py-2 text-xs font-medium border-b-2 transition-colors',
+              'px-4 py-2 text-xs font-medium border-b-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]',
               activeTab === 'records'
                 ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]'
                 : 'border-transparent text-[var(--theme-text-muted)]'
@@ -122,9 +140,13 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
             Records
           </button>
           <button
+            role="tab"
+            id="tab-schema"
+            aria-selected={activeTab === 'schema'}
+            aria-controls="panel-schema"
             onClick={() => setActiveTab('schema')}
             className={cn(
-              'px-4 py-2 text-xs font-medium border-b-2 transition-colors',
+              'px-4 py-2 text-xs font-medium border-b-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]',
               activeTab === 'schema'
                 ? 'border-[var(--theme-primary)] text-[var(--theme-primary)]'
                 : 'border-transparent text-[var(--theme-text-muted)]'
@@ -136,7 +158,13 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
 
         {/* Content */}
         {activeTab === 'records' && (
-          <div className="p-4">
+          <div
+            className="p-4"
+            role="tabpanel"
+            id="panel-records"
+            aria-labelledby="tab-records"
+            tabIndex={0}
+          >
             {/* Add Record Form */}
             {onAdd && (
               <div className="mb-4 p-3 border border-[var(--theme-border)] rounded-lg">
@@ -194,17 +222,19 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
                             {onUpdate && (
                               <button
                                 onClick={() => setEditingId(record.id)}
-                                className="p-1 text-[var(--theme-text-muted)] hover:text-[var(--theme-primary)]"
+                                aria-label={`Edit record ${record.id.slice(0, 8)}`}
+                                className="p-1 text-[var(--theme-text-muted)] hover:text-[var(--theme-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] rounded"
                               >
-                                <Edit2 className="w-3 h-3" />
+                                <Edit2 className="w-3 h-3" aria-hidden="true" />
                               </button>
                             )}
                             {onDelete && (
                               <button
                                 onClick={() => onDelete(record.id)}
-                                className="p-1 text-[var(--theme-text-muted)] hover:text-rose-500"
+                                aria-label={`Delete record ${record.id.slice(0, 8)}`}
+                                className="p-1 text-[var(--theme-text-muted)] hover:text-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] rounded"
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className="w-3 h-3" aria-hidden="true" />
                               </button>
                             )}
                           </div>
@@ -219,7 +249,13 @@ export const OmniDB = React.forwardRef<HTMLDivElement, OmniDBProps>(
         )}
 
         {activeTab === 'schema' && (
-          <div className="p-4">
+          <div
+            className="p-4"
+            role="tabpanel"
+            id="panel-schema"
+            aria-labelledby="tab-schema"
+            tabIndex={0}
+          >
             <div className="text-center py-8 text-[var(--theme-text-muted)]">
               <p>Schema view - connect to {config.label} to explore table structure</p>
             </div>
