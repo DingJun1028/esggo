@@ -1,8 +1,7 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { Search, Command, Bot, Database, ShieldCheck, Zap, Library } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -114,9 +113,10 @@ export default function OmniCommandPalette() {
     },
   ];
 
-  const filteredCommands = commands.filter((cmd) =>
-    cmd.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCommands = useMemo(() => {
+    const lowerSearch = search.toLowerCase();
+    return commands.filter((cmd) => cmd.title.toLowerCase().includes(lowerSearch));
+  }, [commands, search]);
 
   return (
     <>
@@ -129,9 +129,7 @@ export default function OmniCommandPalette() {
           />
 
           {/* 面板主體 - 強化 Liquid Glass 2.0 漸層與邊框反光 (深色版) */}
-          <div
-            className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-2xl z-[10000]"
-          >
+          <div className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-2xl z-[10000]">
             <div className="relative mx-4 sm:mx-0">
               {/* 背景環境光 */}
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-[2rem] blur-xl opacity-70"></div>

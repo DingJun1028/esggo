@@ -2,7 +2,7 @@
 import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import {
   ShieldCheck,
@@ -42,13 +42,15 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [processing, setProcessing] = useState<string | null>(null);
 
-  const lowerFilter = filter.toLowerCase();
-  const filteredData = data.filter(
-    (row) =>
-      row.content.toLowerCase().includes(lowerFilter) ||
-      row.source_origin.toLowerCase().includes(lowerFilter) ||
-      (row.hash && row.hash.toLowerCase().includes(lowerFilter))
-  );
+  const filteredData = useMemo(() => {
+    const lowerFilter = filter.toLowerCase();
+    return data.filter(
+      (row) =>
+        row.content.toLowerCase().includes(lowerFilter) ||
+        row.source_origin.toLowerCase().includes(lowerFilter) ||
+        (row.hash && row.hash.toLowerCase().includes(lowerFilter))
+    );
+  }, [data, filter]);
 
   const handleSeal = async (id: string) => {
     if (!onSealAction) return;
@@ -67,18 +69,41 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
       {omniHeart && (
         <div className="flex items-center justify-between px-4 py-2 bg-[#0f172a] border border-[#ffd700]/30 rounded-xl shadow-[0_0_15px_rgba(255,215,0,0.1)]">
           <div className="flex items-center gap-2">
-            <ShieldCheck size={16} className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"} />
-            <span className={`text-xs font-bold tracking-widest ${omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"}`}>
+            <ShieldCheck
+              size={16}
+              className={omniHeart.resonanceState === 1.0 ? 'text-[#ffd700]' : 'text-[#63a6b0]'}
+            />
+            <span
+              className={`text-xs font-bold tracking-widest ${omniHeart.resonanceState === 1.0 ? 'text-[#ffd700]' : 'text-[#63a6b0]'}`}
+            >
               OMNI-CORE 5T SECURED
             </span>
           </div>
           {omniHeart.fiveTState && (
             <div className="flex gap-2 text-[10px] font-mono opacity-80">
-              <span className={omniHeart.fiveTState.tangible ? 'text-[#63a6b0]' : 'text-slate-600'}>Tan</span>
-              <span className={omniHeart.fiveTState.traceable ? 'text-[#63a6b0]' : 'text-slate-600'}>Tra</span>
-              <span className={omniHeart.fiveTState.trackable ? 'text-[#63a6b0]' : 'text-slate-600'}>Trk</span>
-              <span className={omniHeart.fiveTState.transparent ? 'text-[#63a6b0]' : 'text-slate-600'}>Trp</span>
-              <span className={omniHeart.fiveTState.trustworthy ? 'text-[#ffd700]' : 'text-slate-600'}>Tru</span>
+              <span className={omniHeart.fiveTState.tangible ? 'text-[#63a6b0]' : 'text-slate-600'}>
+                Tan
+              </span>
+              <span
+                className={omniHeart.fiveTState.traceable ? 'text-[#63a6b0]' : 'text-slate-600'}
+              >
+                Tra
+              </span>
+              <span
+                className={omniHeart.fiveTState.trackable ? 'text-[#63a6b0]' : 'text-slate-600'}
+              >
+                Trk
+              </span>
+              <span
+                className={omniHeart.fiveTState.transparent ? 'text-[#63a6b0]' : 'text-slate-600'}
+              >
+                Trp
+              </span>
+              <span
+                className={omniHeart.fiveTState.trustworthy ? 'text-[#ffd700]' : 'text-slate-600'}
+              >
+                Tru
+              </span>
             </div>
           )}
         </div>
@@ -109,11 +134,11 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
           <div
             key={row.id}
             className={`group rounded-xl border transition-all duration-300 ${
-              row.status === 'Void' 
-                ? 'bg-slate-900/50 border-slate-800' 
+              row.status === 'Void'
+                ? 'bg-slate-900/50 border-slate-800'
                 : row.zkp_sealed
-                ? 'bg-[#ffd700]/5 border-[#ffd700]/20 hover:border-[#ffd700]/40 hover:bg-[#ffd700]/10 shadow-[0_0_15px_rgba(255,215,0,0.05)] hover:shadow-[0_0_20px_rgba(255,215,0,0.15)]'
-                : 'bg-black/40 border-[#63a6b0]/10 hover:border-[#63a6b0]/30 hover:bg-[#63a6b0]/5 shadow-[0_0_20px_rgba(99,166,176,0)] hover:shadow-[0_0_20px_rgba(99,166,176,0.1)]'
+                  ? 'bg-[#ffd700]/5 border-[#ffd700]/20 hover:border-[#ffd700]/40 hover:bg-[#ffd700]/10 shadow-[0_0_15px_rgba(255,215,0,0.05)] hover:shadow-[0_0_20px_rgba(255,215,0,0.15)]'
+                  : 'bg-black/40 border-[#63a6b0]/10 hover:border-[#63a6b0]/30 hover:bg-[#63a6b0]/5 shadow-[0_0_20px_rgba(99,166,176,0)] hover:shadow-[0_0_20px_rgba(99,166,176,0.1)]'
             }`}
           >
             {/* Main Row */}
@@ -124,11 +149,11 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
               <div className="flex items-center gap-4 w-1/3">
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    row.status === 'Void' 
-                      ? 'bg-slate-800 text-slate-500' 
-                      : row.zkp_sealed 
-                      ? 'bg-[#ffd700]/20 text-[#ffd700]' 
-                      : 'bg-[#63a6b0]/20 text-[#63a6b0]'
+                    row.status === 'Void'
+                      ? 'bg-slate-800 text-slate-500'
+                      : row.zkp_sealed
+                        ? 'bg-[#ffd700]/20 text-[#ffd700]'
+                        : 'bg-[#63a6b0]/20 text-[#63a6b0]'
                   }`}
                 >
                   <Database size={20} />
@@ -175,61 +200,60 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
             </div>
 
             {/* Expandable Trace Details */}
-            
-              {expandedId === row.id && (
-                <div
-                  className="overflow-hidden border-t border-slate-800/50"
-                >
-                  <div className="p-5 bg-[#0a0f1d]/80 flex flex-col gap-4 rounded-b-2xl border-t border-white/5">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
-                          公式透明度
-                        </h4>
-                        <div className={`text-sm flex items-center gap-2 font-mono p-2 rounded-lg border ${row.formula_visibility ? 'bg-[#63a6b0]/10 border-[#63a6b0]/20 text-[#63a6b0]' : 'bg-amber-500/10 border-amber-500/20 text-amber-400'}`}>
-                          {row.formula_visibility ? (
-                            <CheckCircle size={14} />
-                          ) : (
-                            <AlertTriangle size={14} />
-                          )}
-                          {row.formula_visibility ? 'ISO-14064 公開可驗證' : 'OPAQUE'}
-                        </div>
+
+            {expandedId === row.id && (
+              <div className="overflow-hidden border-t border-slate-800/50">
+                <div className="p-5 bg-[#0a0f1d]/80 flex flex-col gap-4 rounded-b-2xl border-t border-white/5">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                        公式透明度
+                      </h4>
+                      <div
+                        className={`text-sm flex items-center gap-2 font-mono p-2 rounded-lg border ${row.formula_visibility ? 'bg-[#63a6b0]/10 border-[#63a6b0]/20 text-[#63a6b0]' : 'bg-amber-500/10 border-amber-500/20 text-amber-400'}`}
+                      >
+                        {row.formula_visibility ? (
+                          <CheckCircle size={14} />
+                        ) : (
+                          <AlertTriangle size={14} />
+                        )}
+                        {row.formula_visibility ? 'ISO-14064 公開可驗證' : 'OPAQUE'}
                       </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
-                          Timestamp
-                        </h4>
-                        <div className="text-sm text-slate-300 font-mono">{row.timestamp}</div>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
-                          Hash Lock (哈希封印)
-                        </h4>
-                        <div className="flex flex-col gap-2">
-                          <div className="text-xs text-slate-300 font-mono break-all p-2.5 rounded-lg border border-white/10 shadow-inner">
-                            {row.hash || 'N/A (Awaiting Seal)'}
-                          </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              alert(
-                                `正向 OmniCore Gateway 發起溯源請求...\n目標 Hash: ${
-                                  row.hash || '無效'
-                                }\n此功能將展示原始單據與 5T 驗證路徑。`
-                              );
-                            }}
-                            className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-[#63a6b0]/10 hover:bg-[#63a6b0]/30 text-[#63a6b0] text-xs font-bold rounded-lg border border-[#63a6b0]/20 transition-all"
-                          >
-                            <Search size={12} />
-                            溯源反查 (Trace Origin)
-                          </button>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                        Timestamp
+                      </h4>
+                      <div className="text-sm text-slate-300 font-mono">{row.timestamp}</div>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                        Hash Lock (哈希封印)
+                      </h4>
+                      <div className="flex flex-col gap-2">
+                        <div className="text-xs text-slate-300 font-mono break-all p-2.5 rounded-lg border border-white/10 shadow-inner">
+                          {row.hash || 'N/A (Awaiting Seal)'}
                         </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert(
+                              `正向 OmniCore Gateway 發起溯源請求...\n目標 Hash: ${
+                                row.hash || '無效'
+                              }\n此功能將展示原始單據與 5T 驗證路徑。`
+                            );
+                          }}
+                          className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-[#63a6b0]/10 hover:bg-[#63a6b0]/30 text-[#63a6b0] text-xs font-bold rounded-lg border border-[#63a6b0]/20 transition-all"
+                        >
+                          <Search size={12} />
+                          溯源反查 (Trace Origin)
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
-            
+              </div>
+            )}
           </div>
         ))}
         {filteredData.length === 0 && (
