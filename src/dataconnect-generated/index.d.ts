@@ -11,35 +11,9 @@ export type DateString = string;
 
 
 
-export interface Action_Key {
-  id: UUIDString;
-  __typename?: 'Action_Key';
-}
-
 export interface AuditRecord_Key {
   id: UUIDString;
   __typename?: 'AuditRecord_Key';
-}
-
-export interface Category_Key {
-  id: UUIDString;
-  __typename?: 'Category_Key';
-}
-
-export interface ChallengeParticipation_Key {
-  userUid: string;
-  challengeId: UUIDString;
-  __typename?: 'ChallengeParticipation_Key';
-}
-
-export interface Challenge_Key {
-  id: UUIDString;
-  __typename?: 'Challenge_Key';
-}
-
-export interface Comment_Key {
-  id: UUIDString;
-  __typename?: 'Comment_Key';
 }
 
 export interface CompanyMetric_Key {
@@ -50,11 +24,6 @@ export interface CompanyMetric_Key {
 export interface CompanyProfile_Key {
   id: UUIDString;
   __typename?: 'CompanyProfile_Key';
-}
-
-export interface CreateDemoDataData {
-  user_insertMany: User_Key[];
-  comment_insertMany: Comment_Key[];
 }
 
 export interface EternalMemory_Key {
@@ -73,14 +42,40 @@ export interface GetCompanyProfileData {
     employeeCount?: number | null;
     revenueTwd?: number | null;
     capitalTwd?: number | null;
-    user?: {
-      uid: string;
+    user: {
+      id: string;
     } & User_Key;
   } & CompanyProfile_Key;
 }
 
 export interface GetCompanyProfileVariables {
   id: UUIDString;
+}
+
+export interface GetMyCompanyProfileData {
+  companyProfiles: ({
+    id: UUIDString;
+    name: string;
+    industry?: string | null;
+    headquarters?: string | null;
+    vision?: string | null;
+    mission?: string | null;
+    employeeCount?: number | null;
+    revenueTwd?: number | null;
+    capitalTwd?: number | null;
+  } & CompanyProfile_Key)[];
+}
+
+export interface GetReportByCompanyData {
+  reports: ({
+    id: UUIDString;
+    title: string;
+    status: string;
+  } & Report_Key)[];
+}
+
+export interface GetReportByCompanyVariables {
+  companyId: UUIDString;
 }
 
 export interface GetReportByIdData {
@@ -91,12 +86,12 @@ export interface GetReportByIdData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
-      user?: {
-        uid: string;
+      user: {
+        id: string;
       } & User_Key;
     } & CompanyProfile_Key;
   } & Report_Key;
@@ -110,7 +105,7 @@ export interface GetTaskByIdData {
   task?: {
     id: UUIDString;
     user: {
-      uid: string;
+      id: string;
     } & User_Key;
       title: string;
       description?: string | null;
@@ -128,14 +123,45 @@ export interface GetTaskByIdVariables {
   id: UUIDString;
 }
 
-export interface IntelligenceModule_Key {
-  id: string;
-  __typename?: 'IntelligenceModule_Key';
+export interface InsertAuditRecordData {
+  auditRecord_insert: AuditRecord_Key;
 }
 
-export interface IntelligenceSource_Key {
-  id: UUIDString;
-  __typename?: 'IntelligenceSource_Key';
+export interface InsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title?: string | null;
+  dataType?: string | null;
+  source?: string | null;
+  standard?: string | null;
+  description?: string | null;
+  contentHash?: string | null;
+  zkpStatus?: string | null;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+  eventType?: string | null;
+  payload?: string | null;
+  evidenceUuid?: string | null;
+  colorDropId?: string | null;
+  timestamp?: DateString | null;
+}
+
+export interface InsertEternalMemoryData {
+  eternalMemory_insert: EternalMemory_Key;
+}
+
+export interface InsertEternalMemoryVariables {
+  id?: UUIDString | null;
+  companyId?: UUIDString | null;
+  type: string;
+  content: string;
+  tags?: string | null;
+  hashLock: string;
+  consolidated: boolean;
+  sourceOrigin: string;
 }
 
 export interface ListAllTasksData {
@@ -150,25 +176,30 @@ export interface ListAllTasksData {
     department?: string | null;
     griReference?: string | null;
     dueDate?: DateString | null;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & Task_Key)[];
 }
 
 export interface ListAuditRecordsData {
   auditRecords: ({
     id: UUIDString;
-    title: string;
-    dataType: string;
-    source: string;
+    title?: string | null;
+    dataType?: string | null;
+    source?: string | null;
     standard?: string | null;
     description?: string | null;
-    contentHash: string;
-    zkpStatus: string;
-    createdAt: TimestampString;
+    contentHash?: string | null;
+    zkpStatus?: string | null;
+    createdAt: DateString;
+    eventType?: string | null;
+    payload?: string | null;
+    evidenceUuid?: string | null;
+    colorDropId?: string | null;
+    timestamp?: DateString | null;
   } & AuditRecord_Key)[];
 }
 
-export interface ListCompanyMetricsByCategoryData {
+export interface ListCompanyMetricsData {
   companyMetrics: ({
     id: UUIDString;
     metricName: string;
@@ -177,13 +208,30 @@ export interface ListCompanyMetricsByCategoryData {
     category: string;
     verified: boolean;
     griStandard?: string | null;
-    updatedAt: TimestampString;
+    sourceOrigin?: string | null;
+    hashLock?: string | null;
+    updatedAt: DateString;
   } & CompanyMetric_Key)[];
 }
 
-export interface ListCompanyMetricsByCategoryVariables {
+export interface ListCompanyMetricsVariables {
   companyId: UUIDString;
-  category: string;
+}
+
+export interface ListEternalMemoriesByCompanyData {
+  eternalMemories: ({
+    id: UUIDString;
+    type: string;
+    content: string;
+    tags?: string | null;
+    hashLock: string;
+    consolidated: boolean;
+    createdAt: DateString;
+  } & EternalMemory_Key)[];
+}
+
+export interface ListEternalMemoriesByCompanyVariables {
+  companyId: UUIDString;
 }
 
 export interface ListEternalMemoriesData {
@@ -194,19 +242,41 @@ export interface ListEternalMemoriesData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 
 export interface ListRegulatoryPoliciesData {
   regulatoryPolicies: ({
-    id: string;
-    standard: string;
-    code: string;
-    name: string;
+    id: UUIDString;
+    standard?: string | null;
+    code?: string | null;
+    name?: string | null;
     description?: string | null;
-    rulesJson: string;
+    rulesJson?: string | null;
   } & RegulatoryPolicy_Key)[];
+}
+
+export interface ListReportSectionsByReportData {
+  reportSections: ({
+    id: UUIDString;
+    sectionId: string;
+    title: string;
+    content?: string | null;
+    contentMd?: string | null;
+    fieldValuesJson?: string | null;
+    notes?: string | null;
+    documentsStateJson?: string | null;
+    isDone: boolean;
+    chapterOrder?: number | null;
+    griReferences?: string[] | null;
+    hashLock?: string | null;
+    updatedAt: DateString;
+  } & ReportSection_Key)[];
+}
+
+export interface ListReportSectionsByReportVariables {
+  reportId: UUIDString;
 }
 
 export interface ListReportsData {
@@ -217,7 +287,7 @@ export interface ListReportsData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
@@ -249,7 +319,7 @@ export interface ListScrapedArticlesData {
     category: string;
     tags?: string | null;
     impactLevel: string;
-    scrapedAt: TimestampString;
+    scrapedAt: DateString;
   } & ScrapedArticle_Key)[];
 }
 
@@ -262,13 +332,13 @@ export interface ListSwarmAgentTasksData {
     agentId?: string | null;
     progress: number;
     skillKey?: string | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
+    createdAt: DateString;
+    updatedAt: DateString;
   } & SwarmAgentTask_Key)[];
 }
 
 export interface RegulatoryPolicy_Key {
-  id: string;
+  id: UUIDString;
   __typename?: 'RegulatoryPolicy_Key';
 }
 
@@ -290,12 +360,6 @@ export interface RoadmapMilestone_Key {
 export interface ScrapedArticle_Key {
   id: UUIDString;
   __typename?: 'ScrapedArticle_Key';
-}
-
-export interface SocialConnection_Key {
-  followerUid: string;
-  followedUid: string;
-  __typename?: 'SocialConnection_Key';
 }
 
 export interface SwarmAgentTask_Key {
@@ -321,6 +385,8 @@ export interface UpsertCompanyMetricVariables {
   category: string;
   verified: boolean;
   griStandard?: string | null;
+  sourceOrigin?: string | null;
+  hashLock?: string | null;
 }
 
 export interface UpsertCompanyProfileData {
@@ -338,21 +404,29 @@ export interface UpsertCompanyProfileVariables {
   capitalTwd?: number | null;
 }
 
-export interface UpsertEternalMemoryData {
-  eternalMemory_upsert: EternalMemory_Key;
-}
-
-export interface UpsertEternalMemoryVariables {
-  id?: UUIDString | null;
-  type: string;
-  content: string;
-  tags?: string | null;
-  hashLock: string;
-  consolidated: boolean;
-}
-
 export interface UpsertReportData {
   report_upsert: Report_Key;
+}
+
+export interface UpsertReportSectionData {
+  reportSection_upsert: ReportSection_Key;
+}
+
+export interface UpsertReportSectionVariables {
+  id?: UUIDString | null;
+  reportId: UUIDString;
+  sectionId: string;
+  title: string;
+  content?: string | null;
+  contentMd?: string | null;
+  fieldValuesJson?: string | null;
+  notes?: string | null;
+  documentsStateJson?: string | null;
+  isDone: boolean;
+  chapterOrder?: number | null;
+  griReferences?: string[] | null;
+  hashLock?: string | null;
+  sourceOrigin: string;
 }
 
 export interface UpsertReportVariables {
@@ -428,7 +502,7 @@ export interface UpsertTaskVariables {
 }
 
 export interface User_Key {
-  uid: string;
+  id: string;
   __typename?: 'User_Key';
 }
 
@@ -479,6 +553,18 @@ export const listAuditRecordsRef: ListAuditRecordsRef;
 
 export function listAuditRecords(options?: ExecuteQueryOptions): QueryPromise<ListAuditRecordsData, undefined>;
 export function listAuditRecords(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListAuditRecordsData, undefined>;
+
+interface InsertAuditRecordRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars?: InsertAuditRecordVariables): MutationRef<InsertAuditRecordData, InsertAuditRecordVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars?: InsertAuditRecordVariables): MutationRef<InsertAuditRecordData, InsertAuditRecordVariables>;
+  operationName: string;
+}
+export const insertAuditRecordRef: InsertAuditRecordRef;
+
+export function insertAuditRecord(vars?: InsertAuditRecordVariables): MutationPromise<InsertAuditRecordData, InsertAuditRecordVariables>;
+export function insertAuditRecord(dc: DataConnect, vars?: InsertAuditRecordVariables): MutationPromise<InsertAuditRecordData, InsertAuditRecordVariables>;
 
 interface ListScrapedArticlesRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -564,29 +650,29 @@ export const upsertReportRef: UpsertReportRef;
 export function upsertReport(vars: UpsertReportVariables): MutationPromise<UpsertReportData, UpsertReportVariables>;
 export function upsertReport(dc: DataConnect, vars: UpsertReportVariables): MutationPromise<UpsertReportData, UpsertReportVariables>;
 
-interface ListReportsRef {
+interface UpsertReportSectionRef {
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<ListReportsData, undefined>;
+  (vars: UpsertReportSectionVariables): MutationRef<UpsertReportSectionData, UpsertReportSectionVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<ListReportsData, undefined>;
+  (dc: DataConnect, vars: UpsertReportSectionVariables): MutationRef<UpsertReportSectionData, UpsertReportSectionVariables>;
   operationName: string;
 }
-export const listReportsRef: ListReportsRef;
+export const upsertReportSectionRef: UpsertReportSectionRef;
 
-export function listReports(options?: ExecuteQueryOptions): QueryPromise<ListReportsData, undefined>;
-export function listReports(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListReportsData, undefined>;
+export function upsertReportSection(vars: UpsertReportSectionVariables): MutationPromise<UpsertReportSectionData, UpsertReportSectionVariables>;
+export function upsertReportSection(dc: DataConnect, vars: UpsertReportSectionVariables): MutationPromise<UpsertReportSectionData, UpsertReportSectionVariables>;
 
-interface ListCompanyMetricsByCategoryRef {
+interface ListReportSectionsByReportRef {
   /* Allow users to create refs without passing in DataConnect */
-  (vars: ListCompanyMetricsByCategoryVariables): QueryRef<ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables>;
+  (vars: ListReportSectionsByReportVariables): QueryRef<ListReportSectionsByReportData, ListReportSectionsByReportVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: ListCompanyMetricsByCategoryVariables): QueryRef<ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables>;
+  (dc: DataConnect, vars: ListReportSectionsByReportVariables): QueryRef<ListReportSectionsByReportData, ListReportSectionsByReportVariables>;
   operationName: string;
 }
-export const listCompanyMetricsByCategoryRef: ListCompanyMetricsByCategoryRef;
+export const listReportSectionsByReportRef: ListReportSectionsByReportRef;
 
-export function listCompanyMetricsByCategory(vars: ListCompanyMetricsByCategoryVariables, options?: ExecuteQueryOptions): QueryPromise<ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables>;
-export function listCompanyMetricsByCategory(dc: DataConnect, vars: ListCompanyMetricsByCategoryVariables, options?: ExecuteQueryOptions): QueryPromise<ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables>;
+export function listReportSectionsByReport(vars: ListReportSectionsByReportVariables, options?: ExecuteQueryOptions): QueryPromise<ListReportSectionsByReportData, ListReportSectionsByReportVariables>;
+export function listReportSectionsByReport(dc: DataConnect, vars: ListReportSectionsByReportVariables, options?: ExecuteQueryOptions): QueryPromise<ListReportSectionsByReportData, ListReportSectionsByReportVariables>;
 
 interface UpsertCompanyMetricRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -599,6 +685,66 @@ export const upsertCompanyMetricRef: UpsertCompanyMetricRef;
 
 export function upsertCompanyMetric(vars: UpsertCompanyMetricVariables): MutationPromise<UpsertCompanyMetricData, UpsertCompanyMetricVariables>;
 export function upsertCompanyMetric(dc: DataConnect, vars: UpsertCompanyMetricVariables): MutationPromise<UpsertCompanyMetricData, UpsertCompanyMetricVariables>;
+
+interface ListCompanyMetricsRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListCompanyMetricsVariables): QueryRef<ListCompanyMetricsData, ListCompanyMetricsVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListCompanyMetricsVariables): QueryRef<ListCompanyMetricsData, ListCompanyMetricsVariables>;
+  operationName: string;
+}
+export const listCompanyMetricsRef: ListCompanyMetricsRef;
+
+export function listCompanyMetrics(vars: ListCompanyMetricsVariables, options?: ExecuteQueryOptions): QueryPromise<ListCompanyMetricsData, ListCompanyMetricsVariables>;
+export function listCompanyMetrics(dc: DataConnect, vars: ListCompanyMetricsVariables, options?: ExecuteQueryOptions): QueryPromise<ListCompanyMetricsData, ListCompanyMetricsVariables>;
+
+interface InsertEternalMemoryRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: InsertEternalMemoryVariables): MutationRef<InsertEternalMemoryData, InsertEternalMemoryVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: InsertEternalMemoryVariables): MutationRef<InsertEternalMemoryData, InsertEternalMemoryVariables>;
+  operationName: string;
+}
+export const insertEternalMemoryRef: InsertEternalMemoryRef;
+
+export function insertEternalMemory(vars: InsertEternalMemoryVariables): MutationPromise<InsertEternalMemoryData, InsertEternalMemoryVariables>;
+export function insertEternalMemory(dc: DataConnect, vars: InsertEternalMemoryVariables): MutationPromise<InsertEternalMemoryData, InsertEternalMemoryVariables>;
+
+interface ListEternalMemoriesByCompanyRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListEternalMemoriesByCompanyVariables): QueryRef<ListEternalMemoriesByCompanyData, ListEternalMemoriesByCompanyVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListEternalMemoriesByCompanyVariables): QueryRef<ListEternalMemoriesByCompanyData, ListEternalMemoriesByCompanyVariables>;
+  operationName: string;
+}
+export const listEternalMemoriesByCompanyRef: ListEternalMemoriesByCompanyRef;
+
+export function listEternalMemoriesByCompany(vars: ListEternalMemoriesByCompanyVariables, options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesByCompanyData, ListEternalMemoriesByCompanyVariables>;
+export function listEternalMemoriesByCompany(dc: DataConnect, vars: ListEternalMemoriesByCompanyVariables, options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesByCompanyData, ListEternalMemoriesByCompanyVariables>;
+
+interface GetReportByCompanyRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetReportByCompanyVariables): QueryRef<GetReportByCompanyData, GetReportByCompanyVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetReportByCompanyVariables): QueryRef<GetReportByCompanyData, GetReportByCompanyVariables>;
+  operationName: string;
+}
+export const getReportByCompanyRef: GetReportByCompanyRef;
+
+export function getReportByCompany(vars: GetReportByCompanyVariables, options?: ExecuteQueryOptions): QueryPromise<GetReportByCompanyData, GetReportByCompanyVariables>;
+export function getReportByCompany(dc: DataConnect, vars: GetReportByCompanyVariables, options?: ExecuteQueryOptions): QueryPromise<GetReportByCompanyData, GetReportByCompanyVariables>;
+
+interface ListReportsRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListReportsData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<ListReportsData, undefined>;
+  operationName: string;
+}
+export const listReportsRef: ListReportsRef;
+
+export function listReports(options?: ExecuteQueryOptions): QueryPromise<ListReportsData, undefined>;
+export function listReports(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListReportsData, undefined>;
 
 interface UpsertScrapedArticleRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -623,18 +769,6 @@ export const listEternalMemoriesRef: ListEternalMemoriesRef;
 
 export function listEternalMemories(options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesData, undefined>;
 export function listEternalMemories(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesData, undefined>;
-
-interface UpsertEternalMemoryRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
-  operationName: string;
-}
-export const upsertEternalMemoryRef: UpsertEternalMemoryRef;
-
-export function upsertEternalMemory(vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
-export function upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
 
 interface ListSwarmAgentTasksRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -672,15 +806,15 @@ export const listRegulatoryPoliciesRef: ListRegulatoryPoliciesRef;
 export function listRegulatoryPolicies(options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
 export function listRegulatoryPolicies(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
 
-interface CreateDemoDataRef {
+interface GetMyCompanyProfileRef {
   /* Allow users to create refs without passing in DataConnect */
-  (): MutationRef<CreateDemoDataData, undefined>;
+  (): QueryRef<GetMyCompanyProfileData, undefined>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
+  (dc: DataConnect): QueryRef<GetMyCompanyProfileData, undefined>;
   operationName: string;
 }
-export const createDemoDataRef: CreateDemoDataRef;
+export const getMyCompanyProfileRef: GetMyCompanyProfileRef;
 
-export function createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
-export function createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
+export function getMyCompanyProfile(options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
+export function getMyCompanyProfile(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
 

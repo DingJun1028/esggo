@@ -37,7 +37,7 @@ importers:
         version: file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)
       '@esggo/types':
         specifier: file:packages/types
-        version: types@file:packages/types
+        version: file:packages/types
       '@genkit-ai/firebase':
         specifier: ^1.37.0
         version: 1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0)(genkit@1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0))
@@ -1495,6 +1495,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@esggo/types@file:packages/types':
+    resolution: {directory: packages/types, type: directory}
 
   '@eslint-community/eslint-utils@4.9.1':
     resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
@@ -9217,9 +9220,6 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  types@file:packages/types:
-    resolution: {directory: packages/types, type: directory}
-
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
@@ -10909,6 +10909,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.1':
     optional: true
+
+  '@esggo/types@file:packages/types':
+    dependencies:
+      zod: 3.25.76
 
   '@eslint-community/eslint-utils@4.9.1(eslint@9.39.4(jiti@2.7.0))':
     dependencies:
@@ -20618,8 +20622,6 @@ snapshots:
       reflect.getprototypeof: 1.0.10
 
   typedarray@0.0.6: {}
-
-  types@file:packages/types: {}
 
   typescript@5.9.3: {}
 
