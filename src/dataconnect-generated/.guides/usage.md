@@ -12,24 +12,28 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useUpsertUser, useCreateTask, useUpdateTask, useListTasks, useListUsers, useListUserTasks, useGetTaskById, useSearchTask } from '@dataconnect/generated/react';
+import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile, useGetReportById } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
 
-const { data, isPending, isSuccess, isError, error } = useUpsertUser(upsertUserVars);
-
-const { data, isPending, isSuccess, isError, error } = useCreateTask(createTaskVars);
-
-const { data, isPending, isSuccess, isError, error } = useUpdateTask(updateTaskVars);
-
-const { data, isPending, isSuccess, isError, error } = useListTasks();
-
-const { data, isPending, isSuccess, isError, error } = useListUsers();
-
-const { data, isPending, isSuccess, isError, error } = useListUserTasks();
+const { data, isPending, isSuccess, isError, error } = useListAllTasks();
 
 const { data, isPending, isSuccess, isError, error } = useGetTaskById(getTaskByIdVars);
 
-const { data, isPending, isSuccess, isError, error } = useSearchTask(searchTaskVars);
+const { data, isPending, isSuccess, isError, error } = useUpsertTask(upsertTaskVars);
+
+const { data, isPending, isSuccess, isError, error } = useListAuditRecords();
+
+const { data, isPending, isSuccess, isError, error } = useListScrapedArticles();
+
+const { data, isPending, isSuccess, isError, error } = useListRoadmapMilestones();
+
+const { data, isPending, isSuccess, isError, error } = useUpsertRoadmapMilestone(upsertRoadmapMilestoneVars);
+
+const { data, isPending, isSuccess, isError, error } = useGetCompanyProfile(getCompanyProfileVars);
+
+const { data, isPending, isSuccess, isError, error } = useUpsertCompanyProfile(upsertCompanyProfileVars);
+
+const { data, isPending, isSuccess, isError, error } = useGetReportById(getReportByIdVars);
 
 ```
 
@@ -68,32 +72,38 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { upsertUser, createTask, updateTask, listTasks, listUsers, listUserTasks, getTaskById, searchTask } from '@dataconnect/generated';
+import { listAllTasks, getTaskById, upsertTask, listAuditRecords, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile, getReportById } from '@dataconnect/generated';
 
 
-// Operation UpsertUser:  For variables, look at type UpsertUserVars in ../index.d.ts
-const { data } = await UpsertUser(dataConnect, upsertUserVars);
-
-// Operation CreateTask:  For variables, look at type CreateTaskVars in ../index.d.ts
-const { data } = await CreateTask(dataConnect, createTaskVars);
-
-// Operation UpdateTask:  For variables, look at type UpdateTaskVars in ../index.d.ts
-const { data } = await UpdateTask(dataConnect, updateTaskVars);
-
-// Operation ListTasks: 
-const { data } = await ListTasks(dataConnect);
-
-// Operation ListUsers: 
-const { data } = await ListUsers(dataConnect);
-
-// Operation ListUserTasks: 
-const { data } = await ListUserTasks(dataConnect);
+// Operation ListAllTasks: 
+const { data } = await ListAllTasks(dataConnect);
 
 // Operation GetTaskById:  For variables, look at type GetTaskByIdVars in ../index.d.ts
 const { data } = await GetTaskById(dataConnect, getTaskByIdVars);
 
-// Operation SearchTask:  For variables, look at type SearchTaskVars in ../index.d.ts
-const { data } = await SearchTask(dataConnect, searchTaskVars);
+// Operation UpsertTask:  For variables, look at type UpsertTaskVars in ../index.d.ts
+const { data } = await UpsertTask(dataConnect, upsertTaskVars);
+
+// Operation ListAuditRecords: 
+const { data } = await ListAuditRecords(dataConnect);
+
+// Operation ListScrapedArticles: 
+const { data } = await ListScrapedArticles(dataConnect);
+
+// Operation ListRoadmapMilestones: 
+const { data } = await ListRoadmapMilestones(dataConnect);
+
+// Operation UpsertRoadmapMilestone:  For variables, look at type UpsertRoadmapMilestoneVars in ../index.d.ts
+const { data } = await UpsertRoadmapMilestone(dataConnect, upsertRoadmapMilestoneVars);
+
+// Operation GetCompanyProfile:  For variables, look at type GetCompanyProfileVars in ../index.d.ts
+const { data } = await GetCompanyProfile(dataConnect, getCompanyProfileVars);
+
+// Operation UpsertCompanyProfile:  For variables, look at type UpsertCompanyProfileVars in ../index.d.ts
+const { data } = await UpsertCompanyProfile(dataConnect, upsertCompanyProfileVars);
+
+// Operation GetReportById:  For variables, look at type GetReportByIdVars in ../index.d.ts
+const { data } = await GetReportById(dataConnect, getReportByIdVars);
 
 
 ```
