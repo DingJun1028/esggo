@@ -1,0 +1,2136 @@
+﻿export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
+  public: {
+    Tables: {
+      advisory_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          messages: Json | null
+          persona: string
+          title: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          persona?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          persona?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_alerts: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          description: string | null
+          gri_tag: string | null
+          id: string
+          is_resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          suggested_fix: string | null
+          title: string
+        }
+        Insert: {
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          gri_tag?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          suggested_fix?: string | null
+          title: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          gri_tag?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          suggested_fix?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      ai_memory: {
+        Row: {
+          company_id: string
+          context_tags: string[] | null
+          created_at: string | null
+          id: string
+          key_insights: Json | null
+          messages: Json | null
+          persona: string
+          summary: string | null
+          token_count: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id?: string
+          context_tags?: string[] | null
+          created_at?: string | null
+          id?: string
+          key_insights?: Json | null
+          messages?: Json | null
+          persona?: string
+          summary?: string | null
+          token_count?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Update: {
+          company_id?: string
+          context_tags?: string[] | null
+          created_at?: string | null
+          id?: string
+          key_insights?: Json | null
+          messages?: Json | null
+          persona?: string
+          summary?: string | null
+          token_count?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      artifacts: {
+        Row: {
+          cost: number | null
+          effect: string | null
+          icon: string | null
+          id: string
+          name: string
+          type: string | null
+        }
+        Insert: {
+          cost?: number | null
+          effect?: string | null
+          icon?: string | null
+          id: string
+          name: string
+          type?: string | null
+        }
+        Update: {
+          cost?: number | null
+          effect?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          type?: string | null
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          actor: string
+          company_id: string | null
+          created_at: string
+          data_hash: string
+          details: Json | null
+          hash_lock: string | null
+          id: string
+          module: string
+          resource: string | null
+          status: string
+          t5_tag: string | null
+          txn_id: string
+        }
+        Insert: {
+          action: string
+          actor: string
+          company_id?: string | null
+          created_at?: string
+          data_hash: string
+          details?: Json | null
+          hash_lock?: string | null
+          id?: string
+          module: string
+          resource?: string | null
+          status: string
+          t5_tag?: string | null
+          txn_id: string
+        }
+        Update: {
+          action?: string
+          actor?: string
+          company_id?: string | null
+          created_at?: string
+          data_hash?: string
+          details?: Json | null
+          hash_lock?: string | null
+          id?: string
+          module?: string
+          resource?: string | null
+          status?: string
+          t5_tag?: string | null
+          txn_id?: string
+        }
+        Relationships: []
+      }
+      best_practices: {
+        Row: {
+          created_at: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      brand_components: {
+        Row: {
+          category: string
+          company_id: string
+          created_at: string | null
+          description: string | null
+          hash_lock: string | null
+          id: string
+          is_favorite: boolean | null
+          name: string
+          props: Json | null
+          tags: string[] | null
+          updated_at: string | null
+          usage_example: string | null
+          variant: string | null
+          version: string | null
+        }
+        Insert: {
+          category: string
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          hash_lock?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          name: string
+          props?: Json | null
+          tags?: string[] | null
+          updated_at?: string | null
+          usage_example?: string | null
+          variant?: string | null
+          version?: string | null
+        }
+        Update: {
+          category?: string
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          hash_lock?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          name?: string
+          props?: Json | null
+          tags?: string[] | null
+          updated_at?: string | null
+          usage_example?: string | null
+          variant?: string | null
+          version?: string | null
+        }
+        Relationships: []
+      }
+      brand_tokens: {
+        Row: {
+          category: string
+          company_id: string
+          created_at: string | null
+          description: string | null
+          id: string
+          token_key: string
+          token_value: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          token_key: string
+          token_value: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          token_key?: string
+          token_value?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      company_profiles: {
+        Row: {
+          capital_twd: number | null
+          company_id: string | null
+          company_name: string
+          created_at: string | null
+          employee_count: number | null
+          esg_goals: Json | null
+          governance_structure: Json | null
+          id: string
+          industry: string | null
+          locations: string[] | null
+          reporting_year: number | null
+          revenue_twd: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          capital_twd?: number | null
+          company_id?: string | null
+          company_name?: string
+          created_at?: string | null
+          employee_count?: number | null
+          esg_goals?: Json | null
+          governance_structure?: Json | null
+          id?: string
+          industry?: string | null
+          locations?: string[] | null
+          reporting_year?: number | null
+          revenue_twd?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          capital_twd?: number | null
+          company_id?: string | null
+          company_name?: string
+          created_at?: string | null
+          employee_count?: number | null
+          esg_goals?: Json | null
+          governance_structure?: Json | null
+          id?: string
+          industry?: string | null
+          locations?: string[] | null
+          reporting_year?: number | null
+          revenue_twd?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      component_usage_logs: {
+        Row: {
+          action: string | null
+          company_id: string | null
+          component_id: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          page_path: string | null
+        }
+        Insert: {
+          action?: string | null
+          company_id?: string | null
+          component_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+        }
+        Update: {
+          action?: string | null
+          company_id?: string | null
+          component_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "component_usage_logs_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "brand_components"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      digital_twins: {
+        Row: {
+          awakening_stage: string | null
+          created_at: string | null
+          description: string | null
+          hash_lock: string | null
+          id: string
+          knowledge_entries: Json | null
+          moral_dna: Json | null
+          name: string
+          updated_at: string | null
+          user_id: string
+          version: string | null
+        }
+        Insert: {
+          awakening_stage?: string | null
+          created_at?: string | null
+          description?: string | null
+          hash_lock?: string | null
+          id?: string
+          knowledge_entries?: Json | null
+          moral_dna?: Json | null
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+          version?: string | null
+        }
+        Update: {
+          awakening_stage?: string | null
+          created_at?: string | null
+          description?: string | null
+          hash_lock?: string | null
+          id?: string
+          knowledge_entries?: Json | null
+          moral_dna?: Json | null
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          content: string | null
+          embedding: string | null
+          id: number
+          metadata: Json | null
+        }
+        Insert: {
+          content?: string | null
+          embedding?: string | null
+          id?: number
+          metadata?: Json | null
+        }
+        Update: {
+          content?: string | null
+          embedding?: string | null
+          id?: number
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
+      energy_metrics: {
+        Row: {
+          carbon_emission: number
+          energy_consumption: number
+          id: string
+          metadata: Json | null
+          service: string
+          timestamp: string | null
+        }
+        Insert: {
+          carbon_emission: number
+          energy_consumption: number
+          id?: string
+          metadata?: Json | null
+          service: string
+          timestamp?: string | null
+        }
+        Update: {
+          carbon_emission?: number
+          energy_consumption?: number
+          id?: string
+          metadata?: Json | null
+          service?: string
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
+      environmental_data: {
+        Row: {
+          achievement_rate: number | null
+          category: string
+          company_id: string
+          created_at: string | null
+          gri_standard: string | null
+          hash_lock: string | null
+          id: string
+          metric_name: string
+          metric_value: number | null
+          source_origin: string | null
+          target_value: number | null
+          unit: string | null
+          updated_at: string | null
+          verified: boolean | null
+          year: number | null
+        }
+        Insert: {
+          achievement_rate?: number | null
+          category: string
+          company_id?: string
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name: string
+          metric_value?: number | null
+          source_origin?: string | null
+          target_value?: number | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Update: {
+          achievement_rate?: number | null
+          category?: string
+          company_id?: string
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name?: string
+          metric_value?: number | null
+          source_origin?: string | null
+          target_value?: number | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      esg_data: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          evidence_id: string | null
+          id: string
+          label: string
+          module: string
+          status: string
+          unit: string | null
+          updated_at: string
+          value: number | null
+          verified: boolean | null
+        }
+        Insert: {
+          category?: string
+          code: string
+          created_at?: string
+          evidence_id?: string | null
+          id?: string
+          label: string
+          module: string
+          status?: string
+          unit?: string | null
+          updated_at?: string
+          value?: number | null
+          verified?: boolean | null
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          evidence_id?: string | null
+          id?: string
+          label?: string
+          module?: string
+          status?: string
+          unit?: string | null
+          updated_at?: string
+          value?: number | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      esg_health_checks: {
+        Row: {
+          advice: string
+          created_at: string
+          evidence: Json
+          gaps: Json
+          hash_lock: string
+          score_e: number
+          score_g: number
+          score_s: number
+          status: string
+          user_id: string | null
+          uuid: string
+        }
+        Insert: {
+          advice: string
+          created_at?: string
+          evidence?: Json
+          gaps?: Json
+          hash_lock: string
+          score_e?: number
+          score_g?: number
+          score_s?: number
+          status?: string
+          user_id?: string | null
+          uuid?: string
+        }
+        Update: {
+          advice?: string
+          created_at?: string
+          evidence?: Json
+          gaps?: Json
+          hash_lock?: string
+          score_e?: number
+          score_g?: number
+          score_s?: number
+          status?: string
+          user_id?: string | null
+          uuid?: string
+        }
+        Relationships: []
+      }
+      esg_metrics: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          gri_code: string | null
+          id: string
+          is_verified: boolean
+          metric_name: string
+          month: number | null
+          org_id: string
+          unit: string | null
+          value: number | null
+          year: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by?: string | null
+          gri_code?: string | null
+          id?: string
+          is_verified?: boolean
+          metric_name: string
+          month?: number | null
+          org_id: string
+          unit?: string | null
+          value?: number | null
+          year?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          gri_code?: string | null
+          id?: string
+          is_verified?: boolean
+          metric_name?: string
+          month?: number | null
+          org_id?: string
+          unit?: string | null
+          value?: number | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_metrics_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_metrics_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evidence_vault: {
+        Row: {
+          category: string | null
+          company_id: string | null
+          created_at: string
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          gri_mapping: string[] | null
+          hash_lock: string | null
+          id: string
+          is_sealed: boolean
+          source_url: string | null
+          status: string | null
+          storage_path: string
+          t5_bundle: Json | null
+          zkp_proof: boolean | null
+        }
+        Insert: {
+          category?: string | null
+          company_id?: string | null
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          gri_mapping?: string[] | null
+          hash_lock?: string | null
+          id?: string
+          is_sealed?: boolean
+          source_url?: string | null
+          status?: string | null
+          storage_path: string
+          t5_bundle?: Json | null
+          zkp_proof?: boolean | null
+        }
+        Update: {
+          category?: string | null
+          company_id?: string | null
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          gri_mapping?: string[] | null
+          hash_lock?: string | null
+          id?: string
+          is_sealed?: boolean
+          source_url?: string | null
+          status?: string | null
+          storage_path?: string
+          t5_bundle?: Json | null
+          zkp_proof?: boolean | null
+        }
+        Relationships: []
+      }
+      firebase: {
+        Row: {
+          attrs: Json | null
+          created_at: string | null
+          email: string | null
+          uid: string | null
+        }
+        Insert: {
+          attrs?: Json | null
+          created_at?: string | null
+          email?: string | null
+          uid?: string | null
+        }
+        Update: {
+          attrs?: Json | null
+          created_at?: string | null
+          email?: string | null
+          uid?: string | null
+        }
+        Relationships: []
+      }
+      global_logs: {
+        Row: {
+          action_type: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          player_id: string | null
+        }
+        Insert: {
+          action_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          player_id?: string | null
+        }
+        Update: {
+          action_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          player_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "global_logs_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      governance_metrics: {
+        Row: {
+          category: string
+          company_id: string | null
+          created_at: string | null
+          gri_standard: string | null
+          hash_lock: string | null
+          id: string
+          metric_name: string
+          metric_value: number | null
+          source_origin: string | null
+          unit: string | null
+          updated_at: string | null
+          verified: boolean | null
+          year: number | null
+        }
+        Insert: {
+          category: string
+          company_id?: string | null
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name: string
+          metric_value?: number | null
+          source_origin?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Update: {
+          category?: string
+          company_id?: string | null
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name?: string
+          metric_value?: number | null
+          source_origin?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      healing_log: {
+        Row: {
+          action_taken: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          status: string | null
+          target_gri: string
+        }
+        Insert: {
+          action_taken: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          status?: string | null
+          target_gri: string
+        }
+        Update: {
+          action_taken?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          status?: string | null
+          target_gri?: string
+        }
+        Relationships: []
+      }
+      health_check_records: {
+        Row: {
+          answers: Json
+          category_scores: Json
+          company_id: string
+          created_at: string | null
+          gaps: string[] | null
+          id: string
+          total_score: number
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          category_scores: Json
+          company_id?: string
+          created_at?: string | null
+          gaps?: string[] | null
+          id?: string
+          total_score: number
+          user_id?: string
+        }
+        Update: {
+          answers?: Json
+          category_scores?: Json
+          company_id?: string
+          created_at?: string | null
+          gaps?: string[] | null
+          id?: string
+          total_score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      health_check_results: {
+        Row: {
+          answers: Json
+          category_scores: Json
+          company_id: string
+          created_at: string | null
+          gaps: Json
+          id: string
+          total_score: number
+          updated_at: string | null
+        }
+        Insert: {
+          answers?: Json
+          category_scores?: Json
+          company_id?: string
+          created_at?: string | null
+          gaps?: Json
+          id?: string
+          total_score: number
+          updated_at?: string | null
+        }
+        Update: {
+          answers?: Json
+          category_scores?: Json
+          company_id?: string
+          created_at?: string | null
+          gaps?: Json
+          id?: string
+          total_score?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      integrity_proofs: {
+        Row: {
+          circuit_hash: string
+          claim_type: string
+          created_at: string
+          document_ref: string | null
+          hash_lock: string | null
+          id: string
+          public_signal: Json
+          status: string
+          tenant_id: string
+          zkp_proof: Json
+        }
+        Insert: {
+          circuit_hash: string
+          claim_type: string
+          created_at?: string
+          document_ref?: string | null
+          hash_lock?: string | null
+          id?: string
+          public_signal: Json
+          status?: string
+          tenant_id?: string
+          zkp_proof: Json
+        }
+        Update: {
+          circuit_hash?: string
+          claim_type?: string
+          created_at?: string
+          document_ref?: string | null
+          hash_lock?: string | null
+          id?: string
+          public_signal?: Json
+          status?: string
+          tenant_id?: string
+          zkp_proof?: Json
+        }
+        Relationships: []
+      }
+      kb_document_embeddings: {
+        Row: {
+          chunk_index: number
+          company_id: string
+          content: string
+          created_at: string | null
+          document_id: string | null
+          embedding: string | null
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          chunk_index: number
+          company_id?: string
+          content: string
+          created_at?: string | null
+          document_id?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          chunk_index?: number
+          company_id?: string
+          content?: string
+          created_at?: string | null
+          document_id?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kb_document_embeddings_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "kb_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kb_documents: {
+        Row: {
+          company_id: string
+          content: string
+          created_at: string | null
+          document_type: string | null
+          id: string
+          metadata: Json | null
+          source_url: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_id?: string
+          content: string
+          created_at?: string | null
+          document_type?: string | null
+          id?: string
+          metadata?: Json | null
+          source_url?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          content?: string
+          created_at?: string | null
+          document_type?: string | null
+          id?: string
+          metadata?: Json | null
+          source_url?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      mission_logs: {
+        Row: {
+          completed_at: string | null
+          id: string
+          mission_id: string | null
+          player_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          id?: string
+          mission_id?: string | null
+          player_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          id?: string
+          mission_id?: string | null
+          player_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mission_logs_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notion_component_metadata: {
+        Row: {
+          archived: boolean | null
+          attrs: Json | null
+          created_time: string | null
+          id: string | null
+          last_edited_time: string | null
+          url: string | null
+        }
+        Insert: {
+          archived?: boolean | null
+          attrs?: Json | null
+          created_time?: string | null
+          id?: string | null
+          last_edited_time?: string | null
+          url?: string | null
+        }
+        Update: {
+          archived?: boolean | null
+          attrs?: Json | null
+          created_time?: string | null
+          id?: string | null
+          last_edited_time?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      omni_atomic_components: {
+        Row: {
+          atom_id: string
+          created_at: string
+          governance_node: string | null
+          intent: string | null
+          specification: string | null
+          status: string
+          type: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          atom_id: string
+          created_at?: string
+          governance_node?: string | null
+          intent?: string | null
+          specification?: string | null
+          status: string
+          type: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          atom_id?: string
+          created_at?: string
+          governance_node?: string | null
+          intent?: string | null
+          specification?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      omni_memory_shards: {
+        Row: {
+          created_at: string
+          description: string
+          extracted_code_snippets: Json | null
+          id: string
+          tags: Json
+          timestamp: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          extracted_code_snippets?: Json | null
+          id: string
+          tags?: Json
+          timestamp: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          extracted_code_snippets?: Json | null
+          id?: string
+          tags?: Json
+          timestamp?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      omni_skill_ultimates: {
+        Row: {
+          core_principles: Json
+          created_at: string
+          id: string
+          mastery_level: string
+          skill_name: string
+          source_shards: Json
+          synthesis: string
+          timestamp: number
+        }
+        Insert: {
+          core_principles?: Json
+          created_at?: string
+          id?: string
+          mastery_level: string
+          skill_name: string
+          source_shards?: Json
+          synthesis: string
+          timestamp: number
+        }
+        Update: {
+          core_principles?: Json
+          created_at?: string
+          id?: string
+          mastery_level?: string
+          skill_name?: string
+          source_shards?: Json
+          synthesis?: string
+          timestamp?: number
+        }
+        Relationships: []
+      }
+      omni_vector_store: {
+        Row: {
+          content: string | null
+          embedding: string | null
+          id: string
+          metadata: Json | null
+          source: string | null
+        }
+        Insert: {
+          content?: string | null
+          embedding?: string | null
+          id: string
+          metadata?: Json | null
+          source?: string | null
+        }
+        Update: {
+          content?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          source?: string | null
+        }
+        Relationships: []
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          industry: string | null
+          mission: string | null
+          name: string
+          vision: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          mission?: string | null
+          name: string
+          vision?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          mission?: string | null
+          name?: string
+          vision?: string | null
+        }
+        Relationships: []
+      }
+      players: {
+        Row: {
+          fragments: number
+          id: string
+          inventory: Json
+        }
+        Insert: {
+          fragments?: number
+          id: string
+          inventory?: Json
+        }
+        Update: {
+          fragments?: number
+          id?: string
+          inventory?: Json
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          fragments: number | null
+          full_name: string | null
+          id: string
+          inventory: Json | null
+          org_id: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          fragments?: number | null
+          full_name?: string | null
+          id: string
+          inventory?: Json | null
+          org_id?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          fragments?: number | null
+          full_name?: string | null
+          id?: string
+          inventory?: Json | null
+          org_id?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      published_reports: {
+        Row: {
+          analysis_json: Json | null
+          company_id: string | null
+          created_at: string | null
+          framework: string[] | null
+          gri_coverage: number | null
+          id: string
+          page_count: number | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          word_count: number | null
+          year: number
+          zkp_hash: string | null
+          zkp_verified: boolean | null
+        }
+        Insert: {
+          analysis_json?: Json | null
+          company_id?: string | null
+          created_at?: string | null
+          framework?: string[] | null
+          gri_coverage?: number | null
+          id?: string
+          page_count?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          word_count?: number | null
+          year: number
+          zkp_hash?: string | null
+          zkp_verified?: boolean | null
+        }
+        Update: {
+          analysis_json?: Json | null
+          company_id?: string | null
+          created_at?: string | null
+          framework?: string[] | null
+          gri_coverage?: number | null
+          id?: string
+          page_count?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          word_count?: number | null
+          year?: number
+          zkp_hash?: string | null
+          zkp_verified?: boolean | null
+        }
+        Relationships: []
+      }
+      reading_room: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          report_type: string
+          source: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          report_type: string
+          source?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          report_type?: string
+          source?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      roadmap_milestones: {
+        Row: {
+          category: string | null
+          company_id: string | null
+          created_at: string | null
+          current_value: number | null
+          description: string | null
+          gri_reference: string | null
+          id: string
+          sbti_aligned: boolean | null
+          status: string | null
+          target_value: number | null
+          target_year: number
+          title: string
+          unit: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          current_value?: number | null
+          description?: string | null
+          gri_reference?: string | null
+          id?: string
+          sbti_aligned?: boolean | null
+          status?: string | null
+          target_value?: number | null
+          target_year: number
+          title: string
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          current_value?: number | null
+          description?: string | null
+          gri_reference?: string | null
+          id?: string
+          sbti_aligned?: boolean | null
+          status?: string | null
+          target_value?: number | null
+          target_year?: number
+          title?: string
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      social_metrics: {
+        Row: {
+          category: string
+          company_id: string | null
+          created_at: string | null
+          gri_standard: string | null
+          hash_lock: string | null
+          id: string
+          metric_name: string
+          metric_value: number | null
+          source_origin: string | null
+          unit: string | null
+          updated_at: string | null
+          verified: boolean | null
+          year: number | null
+        }
+        Insert: {
+          category: string
+          company_id?: string | null
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name: string
+          metric_value?: number | null
+          source_origin?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Update: {
+          category?: string
+          company_id?: string | null
+          created_at?: string | null
+          gri_standard?: string | null
+          hash_lock?: string | null
+          id?: string
+          metric_name?: string
+          metric_value?: number | null
+          source_origin?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      stakeholders: {
+        Row: {
+          company_id: string | null
+          concern: number | null
+          created_at: string | null
+          email: string | null
+          engagements: number | null
+          id: string
+          influence: number | null
+          last_contact: string | null
+          name: string
+          organization: string | null
+          responses: Json | null
+          sentiment: string | null
+          survey_status: string | null
+          topics: string[] | null
+          type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          concern?: number | null
+          created_at?: string | null
+          email?: string | null
+          engagements?: number | null
+          id?: string
+          influence?: number | null
+          last_contact?: string | null
+          name: string
+          organization?: string | null
+          responses?: Json | null
+          sentiment?: string | null
+          survey_status?: string | null
+          topics?: string[] | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          concern?: number | null
+          created_at?: string | null
+          email?: string | null
+          engagements?: number | null
+          id?: string
+          influence?: number | null
+          last_contact?: string | null
+          name?: string
+          organization?: string | null
+          responses?: Json | null
+          sentiment?: string | null
+          survey_status?: string | null
+          topics?: string[] | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      sustainwrite_sections: {
+        Row: {
+          ai_persona: string | null
+          audit_log_id: string | null
+          author_id: string | null
+          chapter_id: string | null
+          company_id: string
+          content_md: string
+          created_at: string | null
+          data: Json
+          evidence: Json
+          evidence_bundle_id: string | null
+          hash_lock: string | null
+          hash_value: string
+          id: string
+          input_snapshot: Json
+          notes: string | null
+          project_id: string
+          section_code: string | null
+          section_id: string | null
+          section_key: string
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+          version: string | null
+          word_count: number | null
+        }
+        Insert: {
+          ai_persona?: string | null
+          audit_log_id?: string | null
+          author_id?: string | null
+          chapter_id?: string | null
+          company_id?: string
+          content_md?: string
+          created_at?: string | null
+          data?: Json
+          evidence?: Json
+          evidence_bundle_id?: string | null
+          hash_lock?: string | null
+          hash_value?: string
+          id?: string
+          input_snapshot?: Json
+          notes?: string | null
+          project_id?: string
+          section_code?: string | null
+          section_id?: string | null
+          section_key: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          version?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          ai_persona?: string | null
+          audit_log_id?: string | null
+          author_id?: string | null
+          chapter_id?: string | null
+          company_id?: string
+          content_md?: string
+          created_at?: string | null
+          data?: Json
+          evidence?: Json
+          evidence_bundle_id?: string | null
+          hash_lock?: string | null
+          hash_value?: string
+          id?: string
+          input_snapshot?: Json
+          notes?: string | null
+          project_id?: string
+          section_code?: string | null
+          section_id?: string | null
+          section_key?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          version?: string | null
+          word_count?: number | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          assignee: string | null
+          company_id: string | null
+          created_at: string | null
+          department: string | null
+          description: string | null
+          due_date: string | null
+          evidence_ids: string[] | null
+          gri_reference: string | null
+          hash_lock: string | null
+          id: string
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          assignee?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_ids?: string[] | null
+          gri_reference?: string | null
+          hash_lock?: string | null
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          assignee?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_ids?: string[] | null
+          gri_reference?: string | null
+          hash_lock?: string | null
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      twin_knowledge_base: {
+        Row: {
+          content: string
+          created_at: string | null
+          domain: string | null
+          embedding: string | null
+          id: string
+          source: string | null
+          title: string
+          twin_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          domain?: string | null
+          embedding?: string | null
+          id?: string
+          source?: string | null
+          title: string
+          twin_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          domain?: string | null
+          embedding?: string | null
+          id?: string
+          source?: string | null
+          title?: string
+          twin_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "twin_knowledge_base_twin_id_fkey"
+            columns: ["twin_id"]
+            isOneToOne: false
+            referencedRelation: "digital_twins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_company_map: {
+        Row: {
+          company_id: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_memory: {
+        Row: {
+          company_id: string
+          context: Json | null
+          created_at: string | null
+          hash_lock: string | null
+          id: string
+          last_accessed: string | null
+          memory_key: string
+          memory_type: string
+          memory_value: Json
+          updated_at: string | null
+          user_id: string
+          version: number | null
+        }
+        Insert: {
+          company_id?: string
+          context?: Json | null
+          created_at?: string | null
+          hash_lock?: string | null
+          id?: string
+          last_accessed?: string | null
+          memory_key: string
+          memory_type?: string
+          memory_value?: Json
+          updated_at?: string | null
+          user_id?: string
+          version?: number | null
+        }
+        Update: {
+          company_id?: string
+          context?: Json | null
+          created_at?: string | null
+          hash_lock?: string | null
+          id?: string
+          last_accessed?: string | null
+          memory_key?: string
+          memory_type?: string
+          memory_value?: Json
+          updated_at?: string | null
+          user_id?: string
+          version?: number | null
+        }
+        Relationships: []
+      }
+      user_sessions: {
+        Row: {
+          company_id: string
+          id: string
+          is_active: boolean | null
+          last_route: string | null
+          page_context: string | null
+          session_key: string
+          started_at: string | null
+          state: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id?: string
+          id?: string
+          is_active?: boolean | null
+          last_route?: string | null
+          page_context?: string | null
+          session_key: string
+          started_at?: string | null
+          state?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Update: {
+          company_id?: string
+          id?: string
+          is_active?: boolean | null
+          last_route?: string | null
+          page_context?: string | null
+          session_key?: string
+          started_at?: string | null
+          state?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_tenant_map: {
+        Row: {
+          created_at: string | null
+          role: string | null
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          role?: string | null
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          role?: string | null
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vault_omni_core: {
+        Row: {
+          created_at: string | null
+          dimension: string
+          hash_lock: string
+          metadata: Json
+          payload: Json
+          timestamp: number
+          uuid: string
+        }
+        Insert: {
+          created_at?: string | null
+          dimension?: string
+          hash_lock: string
+          metadata?: Json
+          payload?: Json
+          timestamp: number
+          uuid: string
+        }
+        Update: {
+          created_at?: string | null
+          dimension?: string
+          hash_lock?: string
+          metadata?: Json
+          payload?: Json
+          timestamp?: number
+          uuid?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      daily_energy_summary: {
+        Row: {
+          avg_consumption: number | null
+          day: string | null
+          readings_count: number | null
+          service: string | null
+          total_emission: number | null
+        }
+        Relationships: []
+      }
+      report_progress: {
+        Row: {
+          company_id: string | null
+          completed_chapters: number | null
+          seal_rate: number | null
+          total_chapters: number | null
+        }
+        Relationships: []
+      }
+      system_gaps_summary: {
+        Row: {
+          company_id: string | null
+          gri_tag: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Relationships: []
+      }
+    }
+    Functions: {
+      _append_audit_log: {
+        Args: {
+          p_action: string
+          p_actor: string
+          p_company_id: string
+          p_module: string
+          p_new: Json
+          p_old: Json
+        }
+        Returns: undefined
+      }
+      consolidate_eternal_memories: {
+        Args: { p_company_id: string; p_memory_type: string; p_user_id: string }
+        Returns: string
+      }
+      create_evidence_seal:
+        | {
+            Args: {
+              p_company_id: string
+              p_payload: Json
+              p_section_id: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: { p_description?: string; p_name: string; p_secret: string }
+            Returns: string
+          }
+      execute_autonomous_healing: {
+        Args: { p_company_id: string }
+        Returns: Json
+      }
+      get_decrypted_seal: { Args: { p_name: string }; Returns: string }
+      get_gri_nexus: {
+        Args: { p_gri_tag: string }
+        Returns: {
+          artifact_id: string
+          artifact_type: string
+          identity_hash: string
+        }[]
+      }
+      list_vault_omni: {
+        Args: { p_limit?: number }
+        Returns: {
+          created_at: string | null
+          dimension: string
+          hash_lock: string
+          metadata: Json
+          payload: Json
+          timestamp: number
+          uuid: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "vault_omni_core"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      match_documents: {
+        Args: { filter?: Json; match_count?: number; query_embedding: string }
+        Returns: {
+          content: string
+          id: number
+          metadata: Json
+          similarity: number
+        }[]
+      }
+      match_kb_documents: {
+        Args: {
+          match_count: number
+          match_threshold: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          metadata: Json
+          similarity: number
+        }[]
+      }
+      match_omni_documents: {
+        Args: {
+          match_count: number
+          match_threshold: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          id: string
+          metadata: Json
+          similarity: number
+          source: string
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

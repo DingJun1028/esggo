@@ -13,19 +13,10 @@ interface LoginCardProps {
   onDemoLogin?: () => void;
 }
 
-export function LoginCard({
-  onSubmit,
-  loading,
-  error,
-  success,
-  mode = 'demo',
-  onDemoLogin,
-}: LoginCardProps) {
+export function LoginCard({ onSubmit, loading, error, success, mode = 'demo', onDemoLogin }: LoginCardProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const emailId = React.useId();
-  const passwordId = React.useId();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,19 +48,11 @@ export function LoginCard({
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Email */}
         <div className="relative">
-          <label htmlFor={emailId} className="sr-only">
-            Email
-          </label>
-          <Mail
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-            aria-hidden="true"
-          />
+          <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
-            id={emailId}
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             placeholder="Email"
             autoComplete="email"
             className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue transition-all"
@@ -78,34 +61,22 @@ export function LoginCard({
 
         {/* Password */}
         <div className="relative">
-          <label htmlFor={passwordId} className="sr-only">
-            Password
-          </label>
-          <Lock
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-            aria-hidden="true"
-          />
+          <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
-            id={passwordId}
             type={showPassword ? 'text' : 'password'}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             placeholder="Password"
             autoComplete="current-password"
             className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue transition-all"
           />
           <button
             type="button"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-berkeley-blue rounded p-1"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+            tabIndex={-1}
           >
-            {showPassword ? (
-              <EyeOff size={16} aria-hidden="true" />
-            ) : (
-              <Eye size={16} aria-hidden="true" />
-            )}
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
 
@@ -130,14 +101,9 @@ export function LoginCard({
           className="w-full py-2.5 bg-berkeley-blue text-white font-semibold rounded-lg hover:bg-berkeley-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm flex items-center justify-center gap-2"
         >
           {loading ? (
-            <>
-              <Loader2 size={14} className="animate-spin" />
-              處理中...
-            </>
-          ) : mode === 'supabase' ? (
-            'Secure Login'
+            <><Loader2 size={14} className="animate-spin" />處理中...</>
           ) : (
-            '展示登入'
+            mode === 'supabase' ? 'Secure Login' : '展示登入'
           )}
         </button>
       </form>
