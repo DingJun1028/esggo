@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
@@ -257,6 +256,9 @@ function SidebarNav({
           />
           {mobileOpen && (
             <button
+              aria-label="關閉選單"
+              aria-expanded={mobileOpen}
+              className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-current rounded"
               onClick={() => setMobileOpen(false)}
               style={{
                 marginLeft: 'auto',
@@ -423,6 +425,9 @@ function SidebarNav({
               </div>
             )}
             <button
+              aria-label={collapsed ? '展開側邊欄' : '收起側邊欄'}
+              aria-expanded={!collapsed}
+              className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-current"
               onClick={() => setCollapsed(!collapsed)}
               style={{
                 width: 26,
@@ -524,12 +529,12 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
             currentTheme === 'water-zen'
               ? 'radial-gradient(ellipse at 10% 90%, rgba(46,168,176,0.06) 0%, transparent 60%), radial-gradient(ellipse at 90% 10%, rgba(82,183,136,0.05) 0%, transparent 60%)'
               : currentTheme === 'berkeley'
-              ? 'radial-gradient(ellipse at 0% 0%, rgba(0,50,98,0.05) 0%, transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(253,181,21,0.04) 0%, transparent 50%)'
-              : currentTheme === 'minimal-blue'
-              ? 'radial-gradient(ellipse at 30% 20%, rgba(14,165,233,0.04) 0%, transparent 60%)'
-              : currentTheme === 'esggo'
-              ? 'radial-gradient(ellipse at 20% 20%, rgba(22,163,74,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(22,163,74,0.04) 0%, transparent 50%)'
-              : 'radial-gradient(ellipse at 20% 20%, rgba(6,182,212,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.04) 0%, transparent 50%)',
+                ? 'radial-gradient(ellipse at 0% 0%, rgba(0,50,98,0.05) 0%, transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(253,181,21,0.04) 0%, transparent 50%)'
+                : currentTheme === 'minimal-blue'
+                  ? 'radial-gradient(ellipse at 30% 20%, rgba(14,165,233,0.04) 0%, transparent 60%)'
+                  : currentTheme === 'esggo'
+                    ? 'radial-gradient(ellipse at 20% 20%, rgba(22,163,74,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(22,163,74,0.04) 0%, transparent 50%)'
+                    : 'radial-gradient(ellipse at 20% 20%, rgba(6,182,212,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.04) 0%, transparent 50%)',
         }}
       />
 
@@ -575,8 +580,10 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
           }}
         >
           <button
+            aria-label="開啟選單"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
-            className="mobile-menu-btn"
+            className="mobile-menu-btn focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-current"
             style={{
               display: 'none',
               width: 30,
@@ -634,6 +641,8 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
             ))}
           </div>
           <button
+            aria-label="通知"
+            className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-current"
             style={{
               width: 30,
               height: 30,
