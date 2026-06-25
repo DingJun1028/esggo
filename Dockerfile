@@ -29,6 +29,9 @@ COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
 # Install production dependencies only
+COPY --from=builder /app/src /app/src
+COPY --from=builder /app/packages /app/packages
+COPY --from=builder /app/pnpm-workspace.yaml /app/pnpm-workspace.yaml
 RUN pnpm install --prod --frozen-lockfile
 
 EXPOSE 3000
