@@ -28,6 +28,11 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
+# Copy local dependencies required by package.json
+COPY --from=builder /app/src/dataconnect-admin-generated ./src/dataconnect-admin-generated
+COPY --from=builder /app/src/dataconnect-generated ./src/dataconnect-generated
+COPY --from=builder /app/packages/types ./packages/types
+
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
 
