@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
+import xss from 'xss';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
@@ -837,13 +838,13 @@ export default function SustainWritePage() {
     const stats = cats.map((cat) => {
       const docs = ALL_DOCS.filter((d) => d.category === cat);
       const required = docs.filter((d) => d.required);
-      
+
       // 計算已上傳的單據 (基礎值 + 實際點擊上傳的)
       const baseCompleted = Math.floor(docs.length * 0.3); // 模擬原本完成度
       const baseRequiredCompleted = Math.floor(required.length * 0.4);
-      
-      const userUploadedCat = docs.filter(d => uploadedDocs.has(d.id)).length;
-      const userUploadedReqCat = required.filter(d => uploadedDocs.has(d.id)).length;
+
+      const userUploadedCat = docs.filter((d) => uploadedDocs.has(d.id)).length;
+      const userUploadedReqCat = required.filter((d) => uploadedDocs.has(d.id)).length;
 
       return {
         category: cat,
@@ -1345,8 +1346,17 @@ ${appendices}
                                     <Button
                                       variant={uploadedDocs.has(doc.id) ? 'ghost' : 'secondary'}
                                       size="sm"
-                                      icon={uploadedDocs.has(doc.id) ? <CheckCircle2 size={14} className="text-emerald-500" /> : <Upload size={14} />}
-                                      onClick={() => !uploadedDocs.has(doc.id) && handleUploadClick(doc.id, doc.name)}
+                                      icon={
+                                        uploadedDocs.has(doc.id) ? (
+                                          <CheckCircle2 size={14} className="text-emerald-500" />
+                                        ) : (
+                                          <Upload size={14} />
+                                        )
+                                      }
+                                      onClick={() =>
+                                        !uploadedDocs.has(doc.id) &&
+                                        handleUploadClick(doc.id, doc.name)
+                                      }
                                       disabled={uploadedDocs.has(doc.id)}
                                       className="h-7 text-[10px]"
                                     >
@@ -1467,7 +1477,7 @@ ${appendices}
             <div className="border border-neutral-200 rounded-lg p-6 bg-white max-h-[600px] overflow-y-auto">
               <div
                 className="prose prose-sm max-w-none text-neutral-700"
-                dangerouslySetInnerHTML={{ __html: generatedHtml }}
+                dangerouslySetInnerHTML={{ __html: xss(generatedHtml) }}
               />
             </div>
           </Card>

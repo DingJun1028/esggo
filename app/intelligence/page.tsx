@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import xss from 'xss';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
@@ -397,7 +398,7 @@ export default function IntelligencePage() {
                 {report.content && (
                   <div
                     className="prose prose-sm max-w-none text-slate-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: report.content }}
+                    dangerouslySetInnerHTML={{ __html: xss(report.content) }}
                   />
                 )}
                 {report.loading && report.content && (
