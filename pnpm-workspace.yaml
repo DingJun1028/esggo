@@ -1,0 +1,4 @@
+packages:
+  - 'packages/*'
+  - 'src/dataconnect-admin-generated'
+  - 'src/dataconnect-generated'

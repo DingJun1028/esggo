@@ -31,13 +31,13 @@ importers:
         version: 1.5.0(@types/react@18.3.31)(date-fns@4.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dataconnect/admin-generated':
         specifier: file:src/dataconnect-admin-generated
-        version: file:src/dataconnect-admin-generated(firebase-admin@13.10.0)
+        version: link:src/dataconnect-admin-generated
       '@dataconnect/generated':
         specifier: file:src/dataconnect-generated
-        version: file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)
+        version: link:src/dataconnect-generated
       '@esggo/types':
         specifier: file:packages/types
-        version: file:packages/types
+        version: link:packages/types
       '@genkit-ai/firebase':
         specifier: ^1.37.0
         version: 1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0)(genkit@1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0))
@@ -379,42 +379,6 @@ importers:
         specifier: ^4.1.8
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.18.20)(jiti@2.7.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))
 
-  packages/client:
-    dependencies:
-      '@esggo/types':
-        specifier: file:../types
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.4.5
-        version: 5.9.3
-
-  packages/server:
-    dependencies:
-      '@esggo/types':
-        specifier: file:../types
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.4.5
-        version: 5.9.3
-
-  packages/shared-ui:
-    dependencies:
-      '@esggo/types':
-        specifier: file:../types
-        version: link:../types
-      react:
-        specifier: ^18.2.0
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      typescript:
-        specifier: ^5.4.5
-        version: 5.9.3
-
   packages/types:
     dependencies:
       zod:
@@ -424,6 +388,21 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.9.3
+
+  src/dataconnect-admin-generated:
+    dependencies:
+      firebase-admin:
+        specifier: ^13.4.0
+        version: 13.10.0
+
+  src/dataconnect-generated:
+    dependencies:
+      '@tanstack-query-firebase/react':
+        specifier: ^2.0.0
+        version: 2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0)
+      firebase:
+        specifier: ^12.11.0
+        version: 12.15.0
 
 packages:
 
@@ -1151,19 +1130,6 @@ packages:
   '@dabh/diagnostics@2.0.8':
     resolution: {integrity: sha512-R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q==}
 
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated':
-    resolution: {directory: src/dataconnect-admin-generated, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      firebase-admin: ^13.4.0
-
-  '@dataconnect/generated@file:src/dataconnect-generated':
-    resolution: {directory: src/dataconnect-generated, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      '@tanstack-query-firebase/react': ^2.0.0
-      firebase: ^12.11.0
-
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
@@ -1495,9 +1461,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@esggo/types@file:packages/types':
-    resolution: {directory: packages/types, type: directory}
 
   '@eslint-community/eslint-utils@4.9.1':
     resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
@@ -10686,15 +10649,6 @@ snapshots:
       enabled: 2.0.0
       kuler: 2.0.0
 
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated(firebase-admin@13.10.0)':
-    dependencies:
-      firebase-admin: 13.10.0
-
-  '@dataconnect/generated@file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)':
-    dependencies:
-      '@tanstack-query-firebase/react': 2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0)
-      firebase: 12.15.0
-
   '@discoveryjs/json-ext@0.5.7': {}
 
   '@dotenvx/dotenvx@1.73.1':
@@ -10909,10 +10863,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.1':
     optional: true
-
-  '@esggo/types@file:packages/types':
-    dependencies:
-      zod: 3.25.76
 
   '@eslint-community/eslint-utils@4.9.1(eslint@9.39.4(jiti@2.7.0))':
     dependencies:
