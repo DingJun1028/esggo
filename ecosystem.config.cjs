@@ -21,6 +21,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: '8642',
+        SITE_URL: 'http://127.0.0.1:3000',
       },
       max_memory_restart: '512M',
       restart_delay: 5000,
