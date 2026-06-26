@@ -1,0 +1,5 @@
+allowBuilds:
+  '@firebase/util': false
+  '@google/genai': false
+  protobufjs: false
+  unrs-resolver: false

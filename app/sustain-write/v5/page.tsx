@@ -1157,7 +1157,7 @@ export default function SustainWriteV5Page() {
         const res = await fetch('/api/sustain-write/v5', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ companyId, format: 'json' }),
+          body: JSON.stringify({ companyId, format: 'json', mode: 'full' }),
         });
         const data: V5Report = await res.json();
         if ('error' in data) {

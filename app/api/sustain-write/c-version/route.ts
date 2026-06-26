@@ -3,7 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '/var/www/esggo/lib/sustain-write';
+import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@/lib/sustain-write';
+
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
           companyName: report.companyName,
           totalWords: report.totalWords,
           fiveTStatus: report.fiveTStatus,
-          chapters: report.chapters.map(ch => ({
+          chapters: report.chapters.map((ch: any) => ({
             id: ch.id,
             title: ch.title,
             fiveTGate: ch.fiveTGate,
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
         companyName: report.companyName,
         totalWords: report.totalWords,
         fiveTStatus: report.fiveTStatus,
-        chapters: report.chapters.map(ch => ({
+        chapters: report.chapters.map((ch: any) => ({
           id: ch.id,
           title: ch.title,
           fiveTGate: ch.fiveTGate,

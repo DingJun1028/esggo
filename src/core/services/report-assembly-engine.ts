@@ -10,7 +10,7 @@ import type {
   CompanyProfile,
   QuestionBank,
   ChapterDefinition,
-} from './types';
+} from '../repositories/types';
 
 import {
   companyProfiles,
@@ -20,7 +20,7 @@ import {
   getQuestionsByChapter,
   getAnswersForCompany,
   getChapterDefinition,
-} from './data-sources';
+} from '../repositories/data-sources';
 
 // ─── Utility Functions ───────────────────────────────────────────────────────
 

@@ -24,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ::-webkit-scrollbar-thumb{background:#009EB0;border-radius:2px}
           a{text-decoration:none;color:inherit}
           button{font-family:inherit}
+          .nav-link{transition:all .2s}
+          .nav-link:hover{color:var(--hover-color) !important;background:var(--hover-bg) !important}
         `}</style>
       </head>
       <body>
@@ -55,14 +57,14 @@ function GlobalNav() {
       </div>
       <div style={{display:'flex',alignItems:'center',gap:4}}>
         {NAV.map(n => (
-          <a key={n.href} href={n.href} style={{
+          <a key={n.href} href={n.href} className="nav-link" style={{
             display:'flex', alignItems:'center', gap:6,
             padding:'5px 12px', borderRadius:8,
             fontSize:13, color:'#9CA3AF',
             transition:'all .2s',
-          }}
-          onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.color=n.color;(e.currentTarget as HTMLElement).style.background=n.color+'18';}}
-          onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.color='#9CA3AF';(e.currentTarget as HTMLElement).style.background='transparent';}}>
+            '--hover-color': n.color,
+            '--hover-bg': n.color + '18',
+          } as any}>
             <span>{n.icon}</span>
             <span>{n.label}</span>
           </a>
