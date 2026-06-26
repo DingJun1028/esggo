@@ -24,3 +24,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+
+# OmniAgent Gateway (local node_modules excluded from repo)
+omniagent-gateway/node_modules/
+omniagent-gateway/logs/
