@@ -13,6 +13,7 @@
  */
 
 import { createHash } from 'crypto';
+import { EntropyForge } from './entropy-forge';
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 1: 5T Protocol Types
@@ -52,11 +53,9 @@ export type ExtractionMethod = 'OCR' | 'IoT' | 'Manual' | 'AI' | 'API';
 export type LifecycleEvent = 'created' | 'updated' | 'verified' | 'locked' | 'archived' | 'restored';
 
 export interface ComponentEvidence {
-  readonly origin_id: string;        // 原始憑證 ID
-  readonly origin_hash: string;      // SHA-256 指紋 (真/信)
-  readonly extraction_method: ExtractionMethod;
-  readonly extracted_at: number;     // Unix timestamp
-  readonly extractor?: string;       // 採集者 ID
+  originCause: string;    // 因：原始觸發條件
+  processTrace: string[]; // 循：InfoOne 流轉路徑
+  finalEffect: string;    // 果：最終執行結果與狀態
 }
 
 export interface ComponentLifecycleEntry {
@@ -71,7 +70,11 @@ export interface IComponentCore<T = unknown> {
   readonly uuid: string;             // 萬能永憶主體分發的唯一 ID
   readonly version: string;          // 語義化版本 (semver)
   readonly timestamp: number;        // 刻印時間戳
-  readonly evidence: ComponentEvidence;
+  evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+  };
   readonly lifecycle_events: ReadonlyArray<ComponentLifecycleEntry>;
   readonly data: T;
   readonly isFrozen: boolean;        // Object.freeze 狀態
@@ -82,22 +85,21 @@ export interface IComponentCore<T = unknown> {
 /** 建立 IComponentCore 實例 */
 export function createComponent<T>(
   data: T,
-  evidence: Omit<ComponentEvidence, 'origin_hash'> & { raw_content?: string },
+  evidence: ComponentEvidence,
   fiveT?: Partial<FiveTScore>,
+  actor?: string,
 ): IComponentCore<T> {
   const uuid = `OC-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
   const version = '1.0.0';
   const timestamp = Date.now();
-  const origin_hash = createHash('sha256')
-    .update(evidence.raw_content || JSON.stringify(data))
-    .digest('hex');
-  const ev: ComponentEvidence = {
-    origin_id: evidence.origin_id,
-    origin_hash,
-    extraction_method: evidence.extraction_method,
-    extracted_at: evidence.extracted_at ?? timestamp,
-    extractor: evidence.extractor,
+
+  const purifiedDataStr = EntropyForge.purify(JSON.stringify(data));
+  const purifiedEvidence = {
+    originCause: EntropyForge.purify(evidence.originCause),
+    processTrace: evidence.processTrace.map(trace => EntropyForge.purify(trace)),
+    finalEffect: EntropyForge.purify(evidence.finalEffect),
   };
+
   const fiveTScore: FiveTScore = {
     traceable:   fiveT?.traceable   ?? 0.8,
     transparent: fiveT?.transparent ?? 0.8,
@@ -105,16 +107,17 @@ export function createComponent<T>(
     trustworthy: fiveT?.trustworthy ?? 0.9,
     trackable:   fiveT?.trackable   ?? 0.8,
   };
+
   const bodyHash = createHash('sha256')
-    .update(JSON.stringify({ uuid, version, timestamp, data, origin_hash }))
+    .update(EntropyForge.purify(JSON.stringify({ uuid, version, timestamp, data: purifiedDataStr, evidence: purifiedEvidence })))
     .digest('hex');
 
   const component: IComponentCore<T> = {
     uuid,
     version,
     timestamp,
-    evidence: ev,
-    lifecycle_events: [{ event: 'created', timestamp, actor: evidence.extractor }],
+    evidence: purifiedEvidence,
+    lifecycle_events: [{ event: 'created', timestamp, actor }],
     data,
     isFrozen: false,
     fiveT: fiveTScore,
