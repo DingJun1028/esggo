@@ -51,9 +51,21 @@ export function OmniOneChat() {
     setBusy(true);
     const ct = classify(input);
     const start = Date.now();
-    await new Promise(r=>setTimeout(r, 800 + Math.random()*800));
-    const pool = RESPONSES[ct];
-    const reply = pool[Math.floor(Math.random()*pool.length)];
+    
+    let reply = '';
+    try {
+      const res = await fetch('/api/omni-one', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: userMsg.text, caseType: ct })
+      });
+      if (!res.ok) throw new Error('API Error');
+      const data = await res.json();
+      reply = data.output;
+    } catch (err) {
+      reply = '[系統錯誤] 無法連接 OmniOne API，請稍後再試。';
+    }
+
     const ms = Date.now()-start;
     const aiMsg: Message = {id:Date.now()+'a', role:'assistant', text:reply, caseType:ct, time:now(), ms};
     setMsgs(m=>[...m,aiMsg]);

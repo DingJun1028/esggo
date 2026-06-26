@@ -3,9 +3,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { OmniNoteCRUD, type NoteData } from './omni-note-crud';
 import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
+import { PdfUploader } from './pdf-uploader';
 
 const C = { bg:'#0D0D0D', card:'rgba(20,20,24,0.85)', border:'rgba(0,158,176,0.2)', teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', text:'#E8E8E8', muted:'#9CA3AF', surface:'#1A1A1F' };
-type Tab = 'dashboard'|'notes'|'chat'|'fiveT';
+type Tab = 'dashboard'|'notes'|'chat'|'fiveT'|'rag';
 
 const FIVE_T = [
   { key:'traceable',   zh:'真', color:'#3B82F6' },
@@ -20,8 +21,8 @@ const OMNI_MODULES = [
   { name:'萬能任務', en:'OmniTask',     icon:'✅', color:C.gold,   href:'notes'   as Tab },
   { name:'OmniOne', en:'覺醒對話',      icon:'🤖', color:C.purple, href:'chat'    as Tab },
   { name:'5T 雷達', en:'FiveT Radar',   icon:'📡', color:C.cyan,   href:'fiveT'   as Tab },
-  { name:'萬能代理', en:'OmniAgent',    icon:'⚡', color:C.blue,   href:'dashboard' as Tab },
-  { name:'萬能基地', en:'OmniBase',     icon:'🏛️', color:C.green,  href:'dashboard' as Tab },
+  { name:'RAG 知識', en:'RAG DB',       icon:'📚', color:C.green,  href:'rag'     as Tab },
+  { name:'永續村',   en:'Village',      icon:'🏡', color:C.blue,   href:'/village' },
 ];
 
 const DEMO_NOTES: NoteData[] = [
@@ -54,6 +55,7 @@ export default function OmniCenterPage() {
     {id:'notes',    label:'萬能筆記',icon:'📝'},
     {id:'chat',     label:'OmniOne 對話',icon:'🤖'},
     {id:'fiveT',    label:'5T 雷達圖',icon:'📡'},
+    {id:'rag',      label:'知識治理',icon:'📚'},
   ];
 
   const tabStyle = (active:boolean) => ({
@@ -132,7 +134,10 @@ export default function OmniCenterPage() {
               <div style={{fontSize:11,color:C.muted,fontWeight:600,letterSpacing:1,marginBottom:10}}>萬能模組矩陣</div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6}}>
                 {OMNI_MODULES.map(m=>(
-                  <button key={m.name} onClick={()=>m.href&&setTab(m.href as Tab)}
+                  <button key={m.name} onClick={()=>{
+                    if (m.href.startsWith('/')) window.location.href = m.href;
+                    else setTab(m.href as Tab);
+                  }}
                     style={{background:C.surface,border:`1px solid ${m.color}30`,borderRadius:8,padding:'8px 6px',cursor:'pointer',textAlign:'center',transition:'all .2s'}}
                     onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=m.color;(e.currentTarget as HTMLElement).style.background=`${m.color}15`;}}
                     onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${m.color}30`;(e.currentTarget as HTMLElement).style.background=C.surface;}}>
@@ -164,6 +169,13 @@ export default function OmniCenterPage() {
       {tab==='fiveT' && (
         <div className="card">
           <FiveTRadar/>
+        </div>
+      )}
+
+      {/* RAG Knowledge Base Tab */}
+      {tab==='rag' && (
+        <div className="card" style={{ maxWidth: 800, margin: '0 auto' }}>
+          <PdfUploader/>
         </div>
       )}
     </div>

@@ -166,18 +166,46 @@ export function createNote(
 // SECTION 4: OmniNoteManager
 // ═══════════════════════════════════════════════════════════════
 
+import { db } from '../firebase';
+import { collection, doc, setDoc, getDocs, deleteDoc } from 'firebase/firestore';
+
 export class OmniNoteManager {
   private notes: OmniNote[] = [];
+  private dbLoaded = false;
+
+  async loadFromDb(): Promise<void> {
+    if (this.dbLoaded) return;
+    try {
+      const querySnapshot = await getDocs(collection(db, 'omni-notes'));
+      const dbNotes: OmniNote[] = [];
+      querySnapshot.forEach((doc) => {
+        dbNotes.push(doc.data() as OmniNote);
+      });
+      if (dbNotes.length > 0) {
+        this.notes = dbNotes;
+      }
+      this.dbLoaded = true;
+    } catch (e) {
+      console.error('Failed to load notes from DB', e);
+    }
+  }
 
   /** Add or replace a note */
   upsert(note: OmniNote): void {
     const idx = this.notes.findIndex(n => n.id === note.id);
+    const updatedNote = idx >= 0 ? { ...note, updatedAt: Date.now() } : note;
+    
     if (idx >= 0) {
-      this.notes[idx] = { ...note, updatedAt: Date.now() };
+      this.notes[idx] = updatedNote;
     } else {
-      this.notes.push(note);
+      this.notes.push(updatedNote);
     }
-    OmniEventBus.publish(OMNI_TOPICS.NOTE_CREATED, { id: note.id, title: note.title });
+    OmniEventBus.publish(OMNI_TOPICS.NOTE_CREATED, { id: updatedNote.id, title: updatedNote.title });
+
+    // Async DB write
+    setDoc(doc(db, 'omni-notes', updatedNote.id), updatedNote).catch(e => 
+      console.error('Failed to sync note to DB', e)
+    );
   }
 
   get(id: string): OmniNote | undefined {
@@ -238,6 +266,12 @@ export class OmniNoteManager {
     const idx = this.notes.findIndex(n => n.id === id);
     if (idx < 0) return false;
     this.notes.splice(idx, 1);
+    
+    // Async DB delete
+    deleteDoc(doc(db, 'omni-notes', id)).catch(e => 
+      console.error('Failed to delete note from DB', e)
+    );
+    
     return true;
   }
 
