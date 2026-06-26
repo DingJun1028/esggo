@@ -302,22 +302,23 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
 
   broadcastWS({ type: 'OBSERVE', source: 'Gateway', payload: { taskId: task.id, skill: resolved } });
 
-  // ── ESG Report Bridge: delegate to Next.js OmniAgent ──
+  // ── ESG Report Bridge: delegate to Next.js async API ──
   if (task.taskType === 'esg-report' || task.taskType === 'sustain-write') {
     try {
       const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP || '127.0.0.1'}:3000`;
-      const bridgeRes = await fetch(`${siteUrl}/api/omni-agent/execute`, {
+      const bridgeRes = await fetch(`${siteUrl}/api/sustain-write/v5/async`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'assemble', companyId: task.companyId || task.company }),
+        body: JSON.stringify({ companyId: task.companyId || task.company }),
       });
       const bridgeData = await bridgeRes.json();
-      if (bridgeData.success) {
-        broadcastWS({ type: 'MANIFEST', source: 'ESG-Bridge', payload: { taskId: task.id, report: bridgeData.report } });
+      if (bridgeData.taskId) {
+        broadcastWS({ type: 'MANIFEST', source: 'ESG-Bridge', payload: { taskId: task.id, taskId: bridgeData.taskId } });
         return res.json({
-          execution: { id: genId('exec'), taskId: task.id, runtime: 'esggo-bridge', status: 'completed', startedAt: new Date().toISOString(), finishedAt: new Date().toISOString() },
-          artifact: { id: genId('art'), content: `ESG Report: ${bridgeData.report.companyName} (${bridgeData.report.totalWords} words)`, hash_lock: hashLock(JSON.stringify(bridgeData.report)) },
-          bridge: { target: 'nextjs', endpoint: '/api/omni-agent/execute' },
+          success: true,
+          bridge: { target: 'nextjs', endpoint: '/api/sustain-write/v5/async' },
+          taskId: bridgeData.taskId,
+          progressUrl: `/api/sustain-write/v5/progress/${bridgeData.taskId}`,
         });
       }
       return res.status(502).json({ error: 'Bridge returned failure', detail: bridgeData });
