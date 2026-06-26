@@ -21,9 +21,8 @@
 import { createHash } from 'crypto';
 import {
   create5TTag,
-  seal5TTag,
   entangle,
-  trinityHash,
+  generateZKProof,
   type ZKProof,
 } from '../omni-tag/index';
 import type { FiveTDimension } from '../omni-core/types';
@@ -34,6 +33,9 @@ import type { FiveTDimension } from '../omni-core/types';
 
 /** Gate is the 5T dimension used as a chapter gate */
 type Gate = FiveTDimension;
+
+/** Agent operational mode */
+export type AgentMode = 'autonomous' | 'supervised' | 'debug';
 
 /** Agent operational status */
 export type AgentStatus =
@@ -53,6 +55,26 @@ export type AssemblyPhase =
   | 'verifying'
   | 'sealing'
   | 'done';
+
+/** Agent capability with confidence tracking (from v2.5 legacy) */
+export interface AgentCapability {
+  readonly id: string;
+  readonly name: string;
+  readonly gate: Gate;
+  readonly enabled: boolean;
+  readonly confidence: number;
+  readonly lastExecuted: number;
+  readonly executionCount: number;
+}
+
+/** Default 5T capabilities */
+const DEFAULT_CAPABILITIES: AgentCapability[] = [
+  { id: 'cap-traceable', name: '溯源驗證', gate: 'traceable', enabled: true, confidence: 0.95, lastExecuted: 0, executionCount: 0 },
+  { id: 'cap-transparent', name: '透明揭露', gate: 'transparent', enabled: true, confidence: 0.92, lastExecuted: 0, executionCount: 0 },
+  { id: 'cap-tangible', name: '量化驗證', gate: 'tangible', enabled: true, confidence: 0.97, lastExecuted: 0, executionCount: 0 },
+  { id: 'cap-trustworthy', name: '信任封印', gate: 'trustworthy', enabled: true, confidence: 0.98, lastExecuted: 0, executionCount: 0 },
+  { id: 'cap-trackable', name: '生命週期追蹤', gate: 'trackable', enabled: true, confidence: 0.93, lastExecuted: 0, executionCount: 0 },
+];
 
 /** V5ReportChapter from report-assembly-v5 */
 interface V5ReportChapter {
@@ -190,15 +212,13 @@ export function verify5TGate(
     score -= 0.3;
   }
 
-  // Check 4: Tag gate must match the expected gate
-  if (tag && tag.gate !== gate) {
-    issues.push(
-      'Tag gate mismatch: expected ' + gate + ', got ' + tag.gate
-    );
-    score -= 0.3;
+  // Check 4: Tag must be sealed or active
+  if (tag && tag.lifecycle !== 'sealed' && tag.lifecycle !== 'paired') {
+    issues.push('Tag not sealed: ' + tag.lifecycle);
+    score -= 0.2;
   }
 
-  // Check 5: Gate-specific quality criteria
+  // Check 5: Content quality criteria based on gate
   const gateIssues = verifyGateSpecificCriteria(gate, chapterContent);
   issues.push(...gateIssues);
   score -= gateIssues.length * 0.1;
@@ -223,4 +243,44 @@ function getGateMinLength(gate: Gate): number {
     case 'trackable':   return 80;
     default:            return 100;
   }
+}
+
+/** Verify gate-specific quality criteria for chapter content */
+function verifyGateSpecificCriteria(gate: Gate, content: string): string[] {
+  const issues: string[] = [];
+  const minLen = getGateMinLength(gate);
+
+  if (content.length < minLen) {
+    issues.push('Content too short for ' + gate + ' gate: ' + content.length + ' < ' + minLen);
+  }
+
+  switch (gate) {
+    case 'traceable':
+      if (!content.match(/GRI|ISO|TCFD|SDG/)) {
+        issues.push('Missing standard reference (GRI/ISO/TCFD/SDG)');
+      }
+      break;
+    case 'transparent':
+      if (!content.match(/%|百分比|比率|比例/)) {
+        issues.push('Missing quantifiable metrics (%)');
+      }
+      break;
+    case 'tangible':
+      if (!content.match(/完成|達成|實現|推動|建立|導入/)) {
+        issues.push('Missing concrete action evidence');
+      }
+      break;
+    case 'trustworthy':
+      if (!content.match(/ZKP|hash|封印|SHA/)) {
+        issues.push('Missing ZKP seal or hash lock evidence');
+      }
+      break;
+    case 'trackable':
+      if (!content.match(/2025|2026|年度|期間|日期/)) {
+        issues.push('Missing temporal tracking reference');
+      }
+      break;
+  }
+
+  return issues;
 }
