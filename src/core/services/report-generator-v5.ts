@@ -179,10 +179,12 @@ export function reportV5ToMarkdown(report: V5GeneratedReport): string {
   return md;
 }
 
-export { V5_CHAPTERS, COMPANIES, getAnswersByCompany };
+// Re-exports for backward compatibility — prefer importing from source modules
+export { V5_CHAPTERS } from './report-assembly-v5';
+export { getAnswersByCompany } from '../repositories/sustain-write-answer-database';
 
 export function getV5Companies() {
-  return COMPANIES.map((c: any) => ({
+  return COMPANIES.map((c) => ({
     id: c.instanceId,
     name: c.companyName,
     shortName: c.shortName,
