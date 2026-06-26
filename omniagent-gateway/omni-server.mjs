@@ -302,6 +302,30 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
 
   broadcastWS({ type: 'OBSERVE', source: 'Gateway', payload: { taskId: task.id, skill: resolved } });
 
+  // ── ESG Report Bridge: delegate to Next.js OmniAgent ──
+  if (task.taskType === 'esg-report' || task.taskType === 'sustain-write') {
+    try {
+      const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP || '127.0.0.1'}:3000`;
+      const bridgeRes = await fetch(`${siteUrl}/api/omni-agent/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'assemble', companyId: task.companyId || task.company }),
+      });
+      const bridgeData = await bridgeRes.json();
+      if (bridgeData.success) {
+        broadcastWS({ type: 'MANIFEST', source: 'ESG-Bridge', payload: { taskId: task.id, report: bridgeData.report } });
+        return res.json({
+          execution: { id: genId('exec'), taskId: task.id, runtime: 'esggo-bridge', status: 'completed', startedAt: new Date().toISOString(), finishedAt: new Date().toISOString() },
+          artifact: { id: genId('art'), content: `ESG Report: ${bridgeData.report.companyName} (${bridgeData.report.totalWords} words)`, hash_lock: hashLock(JSON.stringify(bridgeData.report)) },
+          bridge: { target: 'nextjs', endpoint: '/api/omni-agent/execute' },
+        });
+      }
+      return res.status(502).json({ error: 'Bridge returned failure', detail: bridgeData });
+    } catch (err) {
+      return res.status(502).json({ error: 'Bridge unreachable: ' + err.message });
+    }
+  }
+
   try {
     const aiResult = await dispatchAI(task, resolved);
     const ts = new Date().toISOString();
@@ -320,7 +344,7 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
         id: artId, executionId: execId, taskId: task.id,
         title: `${task.title || task.taskType} — OmniAgent v3`,
         content: aiResult.content,
-        hash_lock: hashLock(aiResult.content),
+        hashLock: hashLock(aiResult.content),
         reviewStatus: 'awaiting_review', version: 1,
         fiveT: { T1: true, T2: true, T4: true, T5: true },
         createdAt: ts,
