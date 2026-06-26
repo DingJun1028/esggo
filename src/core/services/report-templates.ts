@@ -4,7 +4,8 @@
  * 包含12章節定義、GRI對應、報告段落範本與組合函式
  */
 
-import { Answer, getFullCompanyAnswers } from './answer-database';
+import { Answer as V5Answer, getAnswersByCompany } from '../repositories/sustain-write-answer-database';
+import { COMPANIES } from '../repositories/company-profiles';
 
 export interface ChapterDefinition {
   code: string;
@@ -215,14 +216,21 @@ export const REPORT_SECTION_TEMPLATES: ReportSectionTemplate[] = [
  * @returns 組合後的報告物件
  */
 export function assembleReport(companyName: string): AssembledReport {
-  const { company, answers, answersByChapter } = getFullCompanyAnswers(companyName);
+  const company: any = COMPANIES.find(c => c.companyName === companyName);
+  if (!company) return { companyName, companyType: '', title: companyName, generatedAt: new Date().toISOString(), sections: [], dataMaturitySummary: {}, dataGaps: ['Company not found'] };
+  const answers = getAnswersByCompany(company.instanceId);
+  const answersByChapter: Record<string, V5Answer[]> = {};
+  for (const a of answers) {
+    if (!answersByChapter[a.chapter]) answersByChapter[a.chapter] = [];
+    answersByChapter[a.chapter].push(a);
+  }
 
   const sections: ReportSection[] = [];
   const dataGaps: string[] = [];
 
   for (const template of REPORT_SECTION_TEMPLATES) {
     const chapterAnswers = answersByChapter[template.chapterCode] || [];
-    const answerMap = new Map<string, Answer>();
+    const answerMap = new Map<string, V5Answer>();
     for (const a of chapterAnswers) {
       answerMap.set(a.questionId, a);
     }
@@ -279,7 +287,8 @@ export function assembleReport(companyName: string): AssembledReport {
   // Build data maturity summary
   const maturitySummary: Record<string, number> = {};
   for (const a of answers) {
-    maturitySummary[a.dataMaturity] = (maturitySummary[a.dataMaturity] || 0) + 1;
+    const maturity = a.dataMaturity || 'C版專業可查核';
+    maturitySummary[maturity] = (maturitySummary[maturity] || 0) + 1;
   }
 
   return {

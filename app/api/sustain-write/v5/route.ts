@@ -1,7 +1,7 @@
 // app/api/sustain-write/v5/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown, getV5Companies } from '@/lib/sustain-write/v5/report-generator-v5';
-import { generateFullV5Report, fullReportToHtml } from '@/lib/sustain-write/v5/report-generator-v5-full';
+import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown, getV5Companies } from '@/core/services/report-generator-v5';
+import { generateFullV5Report, fullReportToHtml } from '@/core/services/report-generator-v5-full';
 
 export async function GET() {
   const companies = getV5Companies();

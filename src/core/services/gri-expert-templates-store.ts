@@ -43,7 +43,7 @@ const C01_P01: ExpertParagraph = {
   fiveTGate: 'traceable',
   placeholders: ['company_name', 'report_year', 'founded_year', 'headquarters', 'legal_name', 'stock_code'],
   content: `<h3>組織概述與基本資訊</h3>
-<p>{{company_name}}（股票代碼：{{stock_code}}）創立於 {{founded_year}} 年，總部設於 {{headquarters}}，法定名稱為 {{legal_name}}。截至 {{report_year}} 年 12 月 31 日，本集團在全球 {{operation_count}} 個國家設有營運據點，員工人數達 {{total_employees}} 人，年合併營收為 NT${{revenue_millions}} 億元。</p>
+<p>{{company_name}}（股票代碼：{{stock_code}}）創立於 {{founded_year}} 年，總部設於 {{headquarters}}，法定名稱為 {{legal_name}}。截至 {{report_year}} 年 12 月 31 日，本集團在全球 {{operation_count}} 個國家設有營運據點，員工人數達 {{total_employees}} 人，年合併營收為 NT\${{revenue_millions}} 億元。</p>
 <p>本集團主要業務範圍涵蓋 {{business_segments}}，各營收佔比為：{{revenue_breakdown}}。依據 GRI 2-1 規範，本報告完整揭露集團組織架構、股權結構及價值鏈配置，確保所有利害關係人得以清楚理解集團的經濟規模與營運足跡。</p>
 <p>報告邊界涵蓋所有由 {{company_name}} 擁有或控制的實體，包括 {{subsidiary_count}} 家子公司。對於合資企業與投資事業，依據持股比例與實質控制權判斷是否納入合併報導範圍，並在本報告附錄七「集團組織與投資架構圖」中完整說明。</p>`,
   kpiIndicators: ['員工人數', '營收規模', '營運據點數', '子公司數', '成立年份'],
@@ -134,8 +134,8 @@ const C01_P06: ExpertParagraph = {
   placeholders: ['company_name', 'report_year', 'business_model', 'value_chain_position', 'key_products'],
   content: `<h3>商業模式與價值鏈定位</h3>
 <p>{{company_name}} 的商業模式以 {{business_model}} 為核心，透過 {{value_chain_position}} 的產業定位，為客戶提供 {{key_products}} 等產品與服務。集團的競爭優勢來源於 {{competitive_advantages}}。</p>
-<p>在價值創造過程中，集團投入 {{input_capital_types}} 六種資本，包括財務資本、製造資本、人力資本、社會與關係資本、自然資本及人力資本，透過經營活動產出 {{output_types}} 等產出。{{report_year}} 年集團總產值達 NT${{total_value_created}} 億元。</p>
-<p>集團持續推動商業模式創新，{{report_year}} 年在研發方面投入 NT${{rd_expense}} 億元，佔營收 {{rd_ratio}}%，並推出 {{new_product_count}} 項新產品，其中 {{green_product_count}} 項具備環境或社會效益，顯示集團將永續價值內化於核心業務的決心。</p>`,
+<p>在價值創造過程中，集團投入 {{input_capital_types}} 六種資本，包括財務資本、製造資本、人力資本、社會與關係資本、自然資本及人力資本，透過經營活動產出 {{output_types}} 等產出。{{report_year}} 年集團總產值達 NT\${{total_value_created}} 億元。</p>
+<p>集團持續推動商業模式創新，{{report_year}} 年在研發方面投入 NT\${{rd_expense}} 億元，佔營收 {{rd_ratio}}%，並推出 {{new_product_count}} 項新產品，其中 {{green_product_count}} 項具備環境或社會效益，顯示集團將永續價值內化於核心業務的決心。</p>`,
   kpiIndicators: ['研發投入金額', '研發佔比', '新產品數', '綠色產品數', '總產值'],
   chartTemplate: {
     type: 'radar',
@@ -244,7 +244,7 @@ const C02_P03: ExpertParagraph = {
   placeholders: ['company_name', 'report_year', 'conflict_policy', 'related_party_transactions', 'recusal_count'],
   content: `<h3>利益衝突管理與獨立性</h3>
 <p>{{company_name}} 訂定「董事利益衝突管理辦法」（{{conflict_policy}}），規範董事應避免涉及個人利益與公司利益衝突的情事。{{report_year}} 年度董事會進行 {{recusal_count}} 次利益迴避，主要涉及 {{recusal_topics}} 等議案。</p>
-<p>關係人交易均經審計委員會事前審核，{{report_year}} 年共 {{related_party_transactions}} 筆關係人交易，交易金額合計 NT${{rpt_amount}} 億元，佔集團合併營收 {{rpt_ratio}}%。所有關係人交易均依「關係人交易管理辦法」辦理，並充分揭露於財務報告附註。</p>
+<p>關係人交易均經審計委員會事前審核，{{report_year}} 年共 {{related_party_transactions}} 筆關係人交易，交易金額合計 NT\${{rpt_amount}} 億元，佔集團合併營收 {{rpt_ratio}}%。所有關係人交易均依「關係人交易管理辦法」辦理，並充分揭露於財務報告附註。</p>
 <p>董事每年須簽署獨立性聲明書，確認其符合公司及法規的獨立性要求。{{report_year}} 年全體董事均完成簽署，並通過董事會委任的外部專家獨立性評估。對於董事持有的競業禁止、保密及忠實義務，公司亦透過定期訓練與告知強化遵循。</p>`,
   kpiIndicators: ['利益迴避次數', '關係人交易筆數', '獨立性聲明簽署率'],
   chartTemplate: {
@@ -280,7 +280,7 @@ const C02_P05: ExpertParagraph = {
   placeholders: ['company_name', 'report_year', 'sustainability_responsibility', 'management_esg_kpi', 'esg_compensation_ratio'],
   content: `<h3>永續發展管理權責與績效連結</h3>
 <p>{{company_name}} 明確將永續發展納入管理階層的職責與績效考核。{{sustainability_responsibility}} 永續長（CSO）或指定高階主管負責永續策略之規劃與執行，並定期向董事會報告。{{report_year}} 年管理階層 KPI 中，ESG 相關指標佔比達 {{esg_compensation_ratio}}%。</p>
-<p>各事業群設有 {{esg_business_unit_count}} 位永續聯絡人，負責推動各單位的永續專案。{{report_year}} 年各單位執行 {{esg_project_count}} 項永續專案，投入經費 NT${{esg_project_budget}} 萬元。</p>
+<p>各事業群設有 {{esg_business_unit_count}} 位永續聯絡人，負責推動各單位的永續專案。{{report_year}} 年各單位執行 {{esg_project_count}} 項永續專案，投入經費 NT\${{esg_project_budget}} 萬元。</p>
 <p>高階主管的薪酬與永續績效連結，透過 {{esg_compensation_ratio}}% 的績效獎金與 ESG 指標掛鉤。{{report_year}} 年永續績效評核結果：{{esg_performance_rating}}。集團並設有「永續創新獎」，鼓勵各單位提出創新永續方案，{{report_year}} 年共收到 {{esg_innovation_submissions}} 件提案。</p>`,
   kpiIndicators: ['ESG 績效佔比', '永續專案數', '專案預算', '創新提案數'],
   chartTemplate: {

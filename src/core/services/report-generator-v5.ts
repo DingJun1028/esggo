@@ -3,8 +3,8 @@
  * Generates 28-chapter sustainability reports using Excel high-fidelity answers.
  */
 
-import { getAnswersByCompany } from '../answer-database';
-import { COMPANIES } from '../company-profiles';
+import { getAnswersByCompany } from '../repositories/sustain-write-answer-database';
+import { COMPANIES } from '../repositories/company-profiles';
 import { V5_CHAPTERS, type V5GeneratedReport, type V5ReportChapter } from './report-assembly-v5';
 
 export interface GenerationProgress {
@@ -180,3 +180,12 @@ export function reportV5ToMarkdown(report: V5GeneratedReport): string {
 }
 
 export { V5_CHAPTERS, COMPANIES, getAnswersByCompany };
+
+export function getV5Companies() {
+  return COMPANIES.map((c: any) => ({
+    id: c.instanceId,
+    name: c.companyName,
+    shortName: c.shortName,
+    industry: c.industryType,
+  }));
+}

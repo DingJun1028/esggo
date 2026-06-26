@@ -6,11 +6,11 @@
  * UI Design: v3.7 固態極簡光學
  */
 
-import { OmniTagFactory, FiveTReportEngine, GeneratedReport, ReportChapter } from './omni-tag';
-import { COMPANIES } from './company-profiles';
-import { QUESTIONS } from './question-bank';
-import { ANSWERS, getAnswersByCompany } from './answer-database';
-import { generateReportHTML } from './ui-design';
+import { OmniTagFactory, FiveTReportEngine, GeneratedReport, ReportChapter } from '../../lib/sustain-write/omni-tag';
+import { COMPANIES } from '../repositories/company-profiles';
+import { QUESTIONS } from '../repositories/question-bank';
+import { getAnswersByCompany } from '../repositories/answer-database';
+import { generateReportHTML } from '../../lib/sustain-write/ui-design';
 
 // 重新匯出
 export { OmniTagFactory, FiveTReportEngine, generateReportHTML };
