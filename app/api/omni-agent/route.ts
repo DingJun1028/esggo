@@ -9,6 +9,10 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   const { action, companyId } = await req.json();
 
+  // Force dynamic evaluation (prevent Next.js from optimizing this away)
+  const _ts = Date.now();
+  const _env = process.env.NODE_ENV;
+
   switch (action) {
     case 'status':
       return NextResponse.json({
