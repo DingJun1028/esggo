@@ -28,23 +28,26 @@ export interface Question {
   readonly chapter: string;
   readonly question: string;
   readonly whatToFill: string;
-  readonly whyToFill: string;
+  readonly whyToFill?: string;
   readonly griMapping: string;
   readonly evidence: string;
-  readonly aiHelp: string;
+  readonly aiHelp?: string;
 }
 
 export interface Answer {
   readonly companyId: string;
-  readonly companyType: string;
-  readonly companyName: string;
+  readonly companyType?: string;
+  readonly companyName?: string;
   readonly questionId: string;
   readonly chapter: string;
-  readonly question: string;
+  readonly question?: string;
   readonly answer: string;
   readonly dataAtoms: string;
   readonly gri: string;
-  readonly evidence: string;
+  readonly evidence?: string;
+  readonly griImpact?: string;
+  readonly dataGap?: string;
+  readonly dataMaturity?: string;
 }
 
 export interface ReportOutline {
@@ -56,7 +59,7 @@ export interface ReportOutline {
   readonly socialHighlight: string;
   readonly govHighlight: string;
   readonly impactHighlight: string;
-  readonly upgradeAdvice: string;
+  readonly upgradeAdvice?: string;
 }
 
 export interface EvidenceGuide {
@@ -65,7 +68,7 @@ export interface EvidenceGuide {
   readonly suggestedUpload: string;
   readonly necessity: string;
   readonly purpose: string;
-  readonly aVersionHint: string;
+  readonly aVersionHint?: string;
 }
 
 export interface DashboardMetric {
@@ -74,7 +77,7 @@ export interface DashboardMetric {
   readonly sourceQuestion: string;
   readonly availableData: string;
   readonly govPurpose: string;
-  readonly upgradeAdvice: string;
+  readonly upgradeAdvice?: string;
 }
 
 export interface GRIImpactMapping {
@@ -82,7 +85,7 @@ export interface GRIImpactMapping {
   readonly mainQuestions: string;
   readonly griMapping: string;
   readonly investorMapping: string;
-  readonly aiTranslationLogic: string;
+  readonly aiTranslationLogic?: string;
 }
 
 // ═══════════════════════════════════════════════

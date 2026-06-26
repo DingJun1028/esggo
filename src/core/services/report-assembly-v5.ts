@@ -1,5 +1,6 @@
-import { getAnswersByCompany } from '../answer-database';
-import { COMPANIES } from '../company-profiles';
+import { getAnswersByCompany } from '../repositories/sustain-write-answer-database';
+import { COMPANIES } from '../repositories/company-profiles';
+export { COMPANIES } from "../repositories/company-profiles";
 
 export const V5_CHAPTERS = [
   { id:'v5-ch01', num:1, title:'組織溯源與報告邊界', gri:['GRI 2-1','GRI 2-2','GRI 2-3','GRI 2-4','GRI 2-5','GRI 2-6','GRI 2-7','GRI 2-8','GRI 1'], fiveTGate:'traceable' },

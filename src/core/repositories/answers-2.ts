@@ -2,7 +2,7 @@
 // Auto-generated from '03_C版完整填答1400筆' sheet
 // Total: 1400 answers across 10 companies, 140 questions each
 
-export { Answer } from './answers-1';
+import { Answer } from './answers-1';
 
 export const ANSWERS_PART2: Answer[] = [
   {

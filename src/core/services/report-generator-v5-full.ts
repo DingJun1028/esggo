@@ -8,7 +8,8 @@ import {
   getQuestionsByChapter, getEvidenceGuide, getGRIImpact,
   TOTAL_COMPANIES, TOTAL_QUESTIONS, TOTAL_ANSWERS,
   type CompanyProfile, type Answer, type EvidenceGuide, type DashboardMetric, type GRIImpactMapping
-} from './answer-assembly-v5';
+} from '../repositories/sustain-write-answer-database';
+import { V5_CHAPTERS, COMPANIES } from './report-assembly-v5';
 import type { V5GeneratedReport, V5ReportChapter } from './report-assembly-v5';
 import type { GenerationProgress } from './report-generator-v5';
 
@@ -69,9 +70,6 @@ export function generateFullV5Report(companyId: string): ExtendedV5Report | null
   const allAnswers = getAnswersByCompany(companyId);
   if (!allAnswers.length) return null;
   const outline = getReportOutline(companyId) || null;
-
-  // Import V5_CHAPTERS from report-assembly-v5
-  const { V5_CHAPTERS, COMPANIES } = require('./report-assembly-v5');
 
   const chapters: ExtendedChapterData[] = [];
   let totalWords = 0;

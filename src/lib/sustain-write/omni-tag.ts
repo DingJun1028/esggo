@@ -166,13 +166,12 @@ export class OmniTagFactory {
   static getPairedTags(): [OmniTag, OmniTag][] {
     const pairs: [OmniTag, OmniTag][] = [];
     const seen: { [uuid: string]: boolean } = {};
-    for (const uuid in tagRegistry) {
-      const tag = tagRegistry[uuid];
-      if (tag.pairedWith && !seen[uuid] && !seen[tag.pairedWith]) {
+    for (const tag of Object.values(tagRegistry)) {
+      if (tag.pairedWith && !seen[tag.uuid] && !seen[tag.pairedWith]) {
         const paired = tagRegistry[tag.pairedWith];
         if (paired) {
           pairs.push([tag, paired]);
-          seen[uuid] = true;
+          seen[tag.uuid] = true;
           seen[tag.pairedWith] = true;
         }
       }
