@@ -118,3 +118,32 @@ export const ncbVillageService = {
     });
   }
 };
+
+// ── User Profile 專用封裝 ──────────────────────────────────────────────
+
+export const ncbUserService = {
+  async getProfile(userId: string): Promise<any> {
+    return ncbQuery({
+      table: 'user_profiles',
+      method: 'GET',
+      params: { user_id: userId }
+    });
+  },
+
+  async upsertProfile(profile: Record<string, any>): Promise<any> {
+    return ncbQuery({
+      table: 'user_profiles',
+      method: 'POST',
+      body: profile
+    });
+  },
+
+  async updatePoints(userId: string, delta: number): Promise<any> {
+    return ncbQuery({
+      table: 'user_profiles',
+      method: 'PUT',
+      params: { user_id: userId },
+      body: { total_points: delta }
+    });
+  },
+};

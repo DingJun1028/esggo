@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { ThemeToggle } from './components/theme-toggle';
+import { AuthProvider } from '@/components/AuthProvider';
 
 export const metadata: Metadata = {
   title: 'ESGGO — 萬能中心 | 5T 永續數據治理平台',
-  description: 'ESG GO 萬能中心：OmniCore 同心圓系統、5T 協議、OmniOne 覺醒 AI、永續報告產生器',
+  description: 'ESGGO 萬能中心：OmniCore 同心圓系統、5T 協議、OmniOne 覺醒 AI、永續報告產生器',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,34 +14,48 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&family=Fira+Code&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&family=Noto+Serif+TC:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Fira+Code&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <style>{`
           :root {
+            --bg-color: #F7F8FA;
+            --text-color: #1A1D23;
+            --nav-bg: rgba(247, 248, 250, 0.92);
+            --nav-border: rgba(0, 0, 0, 0.08);
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 8px -1px rgba(0, 0, 0, 0.02);
+            --surface-bg: #F0F2F5;
+            --muted-color: #6B7280;
+            --scroll-track: #F0F2F5;
+            --scroll-thumb: #009EB0;
+            --logo-text: #009EB0;
+            --accent-teal: #009EB0;
+            --accent-gold: #C9962A;
+            --accent-blue: #2563EB;
+            --accent-purple: #7C3AED;
+            --accent-red: #DC2626;
+            --font-serif: 'Noto Serif TC', 'Lora', serif;
+          }
+          [data-theme="dark"] {
             --bg-color: #0D0D0D;
             --text-color: #E8E8E8;
-            --nav-bg: rgba(13,13,13,0.92);
-            --nav-border: rgba(0,158,176,0.18);
-            --card-bg: rgba(20,20,24,0.85);
-            --card-border: rgba(0,158,176,0.2);
+            --nav-bg: rgba(13, 13, 13, 0.92);
+            --nav-border: rgba(0, 158, 176, 0.18);
+            --card-bg: rgba(20, 20, 24, 0.85);
+            --card-border: rgba(0, 158, 176, 0.2);
+            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
             --surface-bg: #1A1A1F;
             --muted-color: #9CA3AF;
             --scroll-track: #1A1A1F;
             --scroll-thumb: #009EB0;
             --logo-text: #009EB0;
-          }
-          [data-theme="light"] {
-            --bg-color: #F8FAFC;
-            --text-color: #0F172A;
-            --nav-bg: rgba(255,255,255,0.92);
-            --nav-border: rgba(0,158,176,0.25);
-            --card-bg: #FFFFFF;
-            --card-border: rgba(0,158,176,0.25);
-            --surface-bg: #E2E8F0;
-            --muted-color: #475569;
-            --scroll-track: #F1F5F9;
-            --scroll-thumb: #009EB0;
-            --logo-text: #008B9B;
+            --accent-teal: #009EB0;
+            --accent-gold: #D4AF37;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --accent-red: #FF4D6D;
+            --font-serif: 'Noto Serif TC', 'Lora', serif;
           }
           *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
           html{scroll-behavior:smooth}
@@ -56,8 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</style>
       </head>
       <body>
-        <GlobalNav />
-        <main>{children}</main>
+        <AuthProvider>
+          <GlobalNav />
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
@@ -86,9 +102,9 @@ function GlobalNav() {
         <div style={{display:'flex',alignItems:'center',gap:4}}>
           {NAV.map(n => (
             <a key={n.href} href={n.href} className="nav-link" style={{
-              display:'flex', alignItems:'center', gap:6,
-              padding:'5px 12px', borderRadius:8,
-              fontSize:13, color:'var(--muted-color)',
+              display:'flex', alignItems:'center',gap:6,
+              padding:'5px 12px',borderRadius:8,
+              fontSize:13,color:'var(--muted-color)',
               transition:'all .2s',
               '--hover-color': n.color,
               '--hover-bg': n.color + '18',
@@ -99,7 +115,6 @@ function GlobalNav() {
           ))}
         </div>
         <div style={{borderLeft:'1px solid var(--nav-border)',height:20}}/>
-        <ThemeToggle />
       </div>
     </nav>
   );
