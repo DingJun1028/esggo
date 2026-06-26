@@ -1,0 +1,3 @@
+## 2024-07-25 - Focus Visible Styles for Interactive Elements
+**Learning:** Found that custom buttons and inputs (like `LoginButton`) often rely entirely on placeholder text without explicit `aria-label` attributes or visible focus states, which hurts both screen reader users and keyboard navigators.
+**Action:** Consistently added `aria-label` to form inputs lacking explicit labels and utilized Tailwind's `focus-visible:ring-2 focus-visible:outline-none` across all interactive elements (buttons, inputs) to ensure they are visually distinct when navigated via keyboard. Additionally, added explicit disabled states while waiting for async tasks to prevent multiple submissions.
