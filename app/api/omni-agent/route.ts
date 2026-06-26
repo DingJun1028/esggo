@@ -1,8 +1,10 @@
 /**
- * POST /api/omni-agent/execute
- * OmniAgent 統一執行入口 — 輕量版本（不依賴重型 repository）
+ * GET /api/omni-agent/execute
+ * OmniAgent 統一執行入口
  */
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   const { action, companyId } = await req.json();
