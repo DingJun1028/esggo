@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ThemeToggle } from './components/theme-toggle';
 
 export const metadata: Metadata = {
   title: 'ESGGO — 萬能中心 | 5T 永續數據治理平台',
@@ -16,12 +17,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&family=Fira+Code&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <style>{`
+          :root {
+            --bg-color: #0D0D0D;
+            --text-color: #E8E8E8;
+            --nav-bg: rgba(13,13,13,0.92);
+            --nav-border: rgba(0,158,176,0.18);
+            --card-bg: rgba(20,20,24,0.85);
+            --card-border: rgba(0,158,176,0.2);
+            --surface-bg: #1A1A1F;
+            --muted-color: #9CA3AF;
+            --scroll-track: #1A1A1F;
+            --scroll-thumb: #009EB0;
+            --logo-text: #009EB0;
+          }
+          [data-theme="light"] {
+            --bg-color: #F8FAFC;
+            --text-color: #0F172A;
+            --nav-bg: rgba(255,255,255,0.92);
+            --nav-border: rgba(0,158,176,0.25);
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0,158,176,0.25);
+            --surface-bg: #E2E8F0;
+            --muted-color: #475569;
+            --scroll-track: #F1F5F9;
+            --scroll-thumb: #009EB0;
+            --logo-text: #008B9B;
+          }
           *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
           html{scroll-behavior:smooth}
-          body{background:#0D0D0D;color:#E8E8E8;font-family:'Noto Sans TC',sans-serif;min-height:100vh}
+          body{background:var(--bg-color);color:var(--text-color);font-family:'Noto Sans TC',sans-serif;min-height:100vh;transition:background 0.2s, color 0.2s}
           ::-webkit-scrollbar{width:4px;height:4px}
-          ::-webkit-scrollbar-track{background:#1A1A1F}
-          ::-webkit-scrollbar-thumb{background:#009EB0;border-radius:2px}
+          ::-webkit-scrollbar-track{background:var(--scroll-track)}
+          ::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px}
           a{text-decoration:none;color:inherit}
           button{font-family:inherit}
           .nav-link{transition:all .2s}
@@ -45,30 +72,34 @@ function GlobalNav() {
   return (
     <nav style={{
       position:'sticky', top:0, zIndex:200,
-      background:'rgba(13,13,13,0.92)', backdropFilter:'blur(16px)',
-      borderBottom:'1px solid rgba(0,158,176,0.18)',
+      background:'var(--nav-bg)', backdropFilter:'blur(16px)',
+      borderBottom:'1px solid var(--nav-border)',
       padding:'0 20px', height:52,
       display:'flex', alignItems:'center', justifyContent:'space-between', gap:16,
     }}>
       <div style={{display:'flex',alignItems:'center',gap:12}}>
         <div style={{width:32,height:32,borderRadius:8,background:'#009EB0',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Montserrat',sans-serif",fontWeight:700,fontSize:15,color:'#000'}}>E</div>
-        <span style={{fontFamily:"'Montserrat',sans-serif",fontWeight:700,fontSize:16,color:'#009EB0'}}>ESGGO</span>
+        <span style={{fontFamily:"'Montserrat',sans-serif",fontWeight:700,fontSize:16,color:'var(--logo-text)'}}>ESGGO</span>
         <span style={{background:'#D4AF37',color:'#000',padding:'1px 7px',borderRadius:6,fontSize:10,fontWeight:700}}>v5.0</span>
       </div>
-      <div style={{display:'flex',alignItems:'center',gap:4}}>
-        {NAV.map(n => (
-          <a key={n.href} href={n.href} className="nav-link" style={{
-            display:'flex', alignItems:'center', gap:6,
-            padding:'5px 12px', borderRadius:8,
-            fontSize:13, color:'#9CA3AF',
-            transition:'all .2s',
-            '--hover-color': n.color,
-            '--hover-bg': n.color + '18',
-          } as any}>
-            <span>{n.icon}</span>
-            <span>{n.label}</span>
-          </a>
-        ))}
+      <div style={{display:'flex',alignItems:'center',gap:12}}>
+        <div style={{display:'flex',alignItems:'center',gap:4}}>
+          {NAV.map(n => (
+            <a key={n.href} href={n.href} className="nav-link" style={{
+              display:'flex', alignItems:'center', gap:6,
+              padding:'5px 12px', borderRadius:8,
+              fontSize:13, color:'var(--muted-color)',
+              transition:'all .2s',
+              '--hover-color': n.color,
+              '--hover-bg': n.color + '18',
+            } as any}>
+              <span>{n.icon}</span>
+              <span>{n.label}</span>
+            </a>
+          ))}
+        </div>
+        <div style={{borderLeft:'1px solid var(--nav-border)',height:20}}/>
+        <ThemeToggle />
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const C = { teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', muted:'#9CA3AF', surface:'#1A1A1F', border:'rgba(0,158,176,0.2)' };
+const C = { teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', muted:'var(--muted-color)', surface:'var(--surface-bg)', border:'var(--card-border)' };
 
 const CARDS = [
   { icon:'◎', title:'萬能中心', desc:'OmniCore 同心圓系統 · OmniNote · OmniTask · OmniOne 覺醒 AI', color:C.gold, href:'/omni-center', badge:'NEW' },
@@ -24,7 +24,7 @@ export default function HomePage() {
     <div style={{minHeight:'calc(100vh - 52px)', padding:'40px 20px', maxWidth:900, margin:'0 auto'}}>
       {/* Hero */}
       <div style={{textAlign:'center', marginBottom:48}}>
-        <div style={{width:64,height:64,borderRadius:16,background:C.teal,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px',fontSize:28,boxShadow:`0 0 ${tick%2?24:12}px ${C.teal}60`,transition:'box-shadow .7s'}}>⊙</div>
+        <div style={{width:64,height:64,borderRadius:16,background:C.teal,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px',fontSize:28,boxShadow:`0 0 ${tick%2?24:12}px ${C.teal}60`,transition:'box-shadow .7s',color:'#000'}}>⊙</div>
         <h1 style={{fontFamily:"'Montserrat',sans-serif",fontSize:32,fontWeight:700,color:C.teal,marginBottom:8}}>ESGGO 萬能系統</h1>
         <p style={{color:C.muted,fontSize:15,maxWidth:520,margin:'0 auto',lineHeight:1.7}}>
           以「萬能中心同心圓 (Omni-Core)」為核心的永續數據治理平台<br/>
@@ -36,11 +36,11 @@ export default function HomePage() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:16,marginBottom:40}}>
         {CARDS.map(c=>(
           <a key={c.title} href={c.href} style={{
-            display:'block', background:'rgba(20,20,24,0.85)', border:`1px solid ${c.color}40`,
+            display:'block', background:'var(--card-bg)', border:`1px solid var(--card-border)`,
             borderRadius:16, padding:24, cursor:'pointer', transition:'all .2s', textDecoration:'none',
           }}
           onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=c.color;(e.currentTarget as HTMLElement).style.transform='translateY(-2px)';}}
-          onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${c.color}40`;(e.currentTarget as HTMLElement).style.transform='translateY(0)';}}>
+          onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor=`var(--card-border)`;(e.currentTarget as HTMLElement).style.transform='translateY(0)';}}>
             <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
               <span style={{fontSize:24}}>{c.icon}</span>
               <span style={{fontFamily:"'Montserrat',sans-serif",fontWeight:700,fontSize:18,color:c.color}}>{c.title}</span>
@@ -52,7 +52,7 @@ export default function HomePage() {
       </div>
 
       {/* 5T Strip */}
-      <div style={{background:'rgba(20,20,24,0.85)',border:`1px solid ${C.border}`,borderRadius:16,padding:'20px 24px'}}>
+      <div style={{background:'var(--card-bg)',border:`1px solid var(--card-border)`,borderRadius:16,padding:'20px 24px'}}>
         <div style={{fontSize:11,fontWeight:600,color:C.muted,letterSpacing:1,marginBottom:14}}>5T 永續數據治理協議</div>
         <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
           {FIVE_T.map(t=>(
