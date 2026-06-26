@@ -28,3 +28,34 @@ next-env.d.ts
 # OmniAgent Gateway (local node_modules excluded from repo)
 omniagent-gateway/node_modules/
 omniagent-gateway/logs/
+
+# Local AI tool configs
+.gemini/
+.jules/
+.kilo/
+.playwright-mjs/
+.storybook/
+.codeturtle.yml
+.editorconfig
+.dockerignore
+.gcloudignore
+.gitattributes
+.husky/
+.lintstagedrc.json
+.npmrc
+
+# Temp files
+.tmp-*
+tmp_*
+*.bak
+*.bak.*
+
+# VPS local deployment (synced separately)
+vps/.next-backup-*/
+vps/.next-broken/
+
+# Omnipotent repository (local cache, not source)
+omnipotent-repository/
+
+# Agents local state
+.agents/tmp_log.txt

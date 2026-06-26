@@ -1,0 +1,25 @@
+# vps/Dockerfile.gateway — OmniAgent Gateway 容器
+FROM node:22-alpine
+
+WORKDIR /app
+
+# 安裝依賴
+COPY package.json pnpm-lock.yaml* ./
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+
+# 複製源代碼
+COPY src/ ./src/
+COPY lib/ ./lib/
+COPY scripts/ ./scripts/
+COPY ecosystem.config.cjs ./
+
+# 暴露端口
+EXPOSE 3003
+
+# 健康檢查
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost:3003/status || exit 1
+
+# 啟動
+CMD ["node", "src/omnimcp-entry.js"]
