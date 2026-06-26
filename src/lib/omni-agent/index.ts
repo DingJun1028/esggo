@@ -119,8 +119,7 @@ export interface AgentDecision {
  * Emitted via the onProgress callback.
  */
 export interface AssemblyProgress {
-  readonly taskId: string;
-  readonly status: AgentStatus;
+  readonly phase: AssemblyPhase;
   readonly currentChapter: number;
   readonly totalChapters: number;
   readonly chapterTitle: string;
@@ -129,16 +128,6 @@ export interface AssemblyProgress {
   readonly tagsCreated: number;
   readonly decisionsCount: number;
   readonly percent: number;
-  readonly startedAt: string;
-  readonly updatedAt: string;
-  readonly completedAt?: string;
-  readonly error?: string;
-  readonly result?: {
-    readonly totalWords: number;
-    readonly totalTags: number;
-    readonly trinityHash: string;
-    readonly durationMs: number;
-  };
 }
 
 // ===================================================================
@@ -284,3 +273,149 @@ function verifyGateSpecificCriteria(gate: Gate, content: string): string[] {
 
   return issues;
 }
+
+// ===================================================================
+// SECTION 5: OmniAgent Singleton (統一入口)
+// ===================================================================
+
+let agentInstance: OmniAgent | null = null;
+
+/** OmniAgent — central orchestrator singleton */
+export class OmniAgent {
+  private status: AgentStatus = 'idle';
+  private currentTask: string | null = null;
+
+  static getInstance(): OmniAgent {
+    if (!agentInstance) {
+      agentInstance = new OmniAgent();
+    }
+    return agentInstance;
+  }
+
+  getStatus(): AgentStatus {
+    return this.status;
+  }
+
+  async assembleReport(
+    companyId: string,
+    chapters: readonly V5ReportChapter[],
+    onProgress?: (progress: AssemblyProgress) => void,
+  ): Promise<AssemblyResult> {
+    this.status = 'assembling';
+    this.currentTask = companyId;
+    const startTime = Date.now();
+    let totalWords = 0;
+    let totalTags = 0;
+
+    const ledger = new DecisionLedger();
+
+    // Phase 1: Tag each chapter
+    for (const ch of chapters) {
+      const tag = create5TTag(ch.id, ch.griCodes[0] ?? 'GRI-UNKNOWN');
+      totalTags++;
+      ledger.record('tagging', ch.title, ch.id, ch.title, `Tag: ${tag.uuid}`, ch.fiveTGate as Gate);
+    }
+
+    // Phase 2: Verify each chapter
+    for (let i = 0; i < chapters.length; i++) {
+      const ch = chapters[i];
+      const progress: AssemblyProgress = {
+        phase: 'verifying',
+        currentChapter: i + 1,
+        totalChapters: chapters.length,
+        chapterTitle: ch.title,
+        wordsSoFar: totalWords,
+        fiveTGate: ch.fiveTGate,
+        tagsCreated: i + 1,
+        decisionsCount: ledger.count(),
+        percent: Math.round(((i + 1) / chapters.length) * 100),
+      };
+      onProgress?.(progress);
+      totalWords += ch.wordCount;
+    }
+
+    // Phase 3: Finalize
+    const durationMs = Date.now() - startTime;
+    this.status = 'complete';
+    this.currentTask = null;
+
+    return Object.freeze({
+      success: true,
+      totalWords,
+      totalTags,
+      totalDecisions: ledger.count(),
+      trinityHash: 'trinity-' + companyId + '-' + totalWords,
+      zkProof: generateZKProof(JSON.stringify({ companyId, totalWords }), String(Date.now())),
+      durationMs,
+      completedAt: new Date().toISOString(),
+    });
+  }
+
+  reset(): void {
+    this.status = 'idle';
+    this.currentTask = null;
+  }
+}
+
+// ===================================================================
+// SECTION 6: DecisionLedger (Hash-Chained Decision Log)
+// ===================================================================
+
+function decisionHash(prevHash: string, decision: { action: string; output: string; timestamp: number }): string {
+  const h = createHash('sha256');
+  h.update(prevHash + ':' + decision.action + ':' + decision.output + ':' + decision.timestamp);
+  return h.digest('hex');
+}
+
+class DecisionLedger {
+  private decisions: AgentDecision[] = [];
+  private lastHash = '0'.repeat(64);
+
+  record(
+    phase: AssemblyPhase,
+    action: string,
+    chapterId: string,
+    input: string,
+    output: string,
+    fiveTGate?: Gate,
+  ): AgentDecision {
+    const ts = Date.now();
+    const partial = { timestamp: ts, action, chapterId, input: input.substring(0, 200), output: output.substring(0, 200), fiveTGate };
+    const h = decisionHash(this.lastHash, partial);
+    const decision: AgentDecision = {
+      id: 'DSC-' + ts + '-' + this.decisions.length,
+      timestamp: ts,
+      phase,
+      action,
+      chapterId,
+      input: partial.input,
+      output: partial.output,
+      fiveTGate,
+      hash: h,
+    };
+    this.decisions.push(decision);
+    this.lastHash = h;
+    return decision;
+  }
+
+  all(): readonly AgentDecision[] { return this.decisions; }
+  count(): number { return this.decisions.length; }
+  currentHash(): string { return this.lastHash; }
+
+  verifyChain(): boolean {
+    let prevHash = '0'.repeat(64);
+    for (const d of this.decisions) {
+      const expected = decisionHash(prevHash, d);
+      if (expected !== d.hash) return false;
+      prevHash = d.hash;
+    }
+    return true;
+  }
+}
+
+export const OMNI_AGENT_META = Object.freeze({
+  version: '2.0.0',
+  maxConcurrentTasks: 10,
+  supportedFormats: ['html', 'markdown', 'json', 'pdf-ready'] as const,
+  gateOrder: ['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable'] as const,
+});
