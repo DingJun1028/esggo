@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'esggo-core',
-      script: 'npm',
-      args: 'start',
+      script: 'node',
+      args: 'node_modules/next/dist/bin/next start -p 3000',
       cwd: '/var/www/esggo',
       env: {
         NODE_ENV: 'production',
