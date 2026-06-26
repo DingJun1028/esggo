@@ -3,10 +3,10 @@
  * 啟動非同步報告生成任務
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { createTask, startAsyncTask } from '../../../../../src/core/services/async-task-manager';
+import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
 
 export async function POST(req: NextRequest) {
-  const { companyId, format = 'json' } = await req.json();
+  const { companyId } = await req.json();
 
   if (!companyId) {
     return NextResponse.json({ error: 'companyId is required' }, { status: 400 });
@@ -27,9 +27,11 @@ export async function GET() {
   return NextResponse.json({
     version: '5.0-async',
     endpoints: {
-      start: 'POST /api/sustain-write/v5/async { companyId, format }',
+      start: 'POST /api/sustain-write/v5/async { companyId }',
       progress: 'GET /api/sustain-write/v5/progress/:taskId',
       cancel: 'DELETE /api/sustain-write/v5/progress/:taskId',
     },
+    companies: getCompanyList(),
+    activeTasks: getAllTasks().filter(t => t.status === 'running' || t.status === 'pending').length,
   });
 }
