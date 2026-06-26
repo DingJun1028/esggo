@@ -4,17 +4,18 @@
  * 外部（Gateway/Telegram）可透過此端點觸發 5T 報告組裝
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { OmniAgent } from '@/lib/omni-agent/index';
-import { generateV5Report } from '@/core/services/report-generator-v5';
 
 export async function POST(req: NextRequest) {
-  const { action, companyId, intent, context } = await req.json();
+  const { action, companyId } = await req.json();
+
+  // Lazy import to avoid loading 22MB repository at module init
+  const { OmniAgent } = await import('@/lib/omni-agent/index');
+  const { generateV5Report } = await import('@/core/services/report-generator-v5');
 
   const agent = OmniAgent.getInstance();
 
   switch (action) {
     case 'assemble': {
-      // 報告組裝（同步版，適合短任務）
       if (!companyId) {
         return NextResponse.json({ error: 'companyId required' }, { status: 400 });
       }
@@ -36,9 +37,7 @@ export async function POST(req: NextRequest) {
 
     case 'status': {
       return NextResponse.json({
-        agent: {
-          status: agent.getStatus(),
-        },
+        agent: { status: agent.getStatus() },
         timestamp: Date.now(),
       });
     }
@@ -62,12 +61,13 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  const { OmniAgent } = await import('@/lib/omni-agent/index');
   return NextResponse.json({
     name: 'ESGGO OmniAgent API',
     version: '2.0.0',
     status: OmniAgent.getInstance().getStatus(),
     endpoints: {
-      execute: 'POST /api/omni-agent/execute { action, companyId, intent, context }',
+      execute: 'POST /api/omni-agent/execute { action, companyId }',
       status: 'GET /api/omni-agent/execute',
     },
   });
