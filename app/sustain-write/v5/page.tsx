@@ -66,9 +66,18 @@ const GATE_BG: Record<FiveTGate, string> = {
 
 // ─── API Helpers ─────────────────────────────────────────────────────
 async function fetchCompanies(): Promise<Company[]> {
-  const res = await fetch('/api/sustain-write/v5');
-  const data = await res.json();
-  return data.companies || [];
+  try {
+    const res = await fetch('/api/sustain-write/v5');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data || !Array.isArray(data.companies)) {
+      throw new Error('回應格式不正確：缺少 companies 陣列');
+    }
+    return data.companies;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : '無法載入公司列表';
+    throw new Error(msg);
+  }
 }
 
 async function startAsyncReport(companyId: string): Promise<{ taskId: string }> {
@@ -77,12 +86,27 @@ async function startAsyncReport(companyId: string): Promise<{ taskId: string }> 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ companyId }),
   });
-  return res.json();
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`啟動失敗: HTTP ${res.status} ${body.slice(0, 100)}`);
+  }
+  const data = await res.json();
+  if (!data?.taskId) {
+    throw new Error('回應格式不正確：缺少 taskId');
+  }
+  return data;
 }
 
 async function fetchTaskProgress(taskId: string): Promise<TaskProgress> {
   const res = await fetch(`/api/sustain-write/v5/progress/${taskId}`);
-  return res.json();
+  if (!res.ok) {
+    throw new Error(`查詢進度失敗: HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  if (!data || typeof data.status !== 'string') {
+    throw new Error('進度回應格式不正確');
+  }
+  return data;
 }
 
 // ─── Components ──────────────────────────────────────────────────────
@@ -124,7 +148,7 @@ function ProgressBar({ progress }: { progress: TaskProgress }) {
         <div><span className="font-medium text-slate-700">{progress.tagsCreated}</span> 標籤</div>
         <div><span className="font-medium text-slate-700">{progress.decisionsCount}</span> 決策</div>
         <div>
-          <FiveTBadge gate={progress.fiveTGate as FiveTGate} />
+          <FiveTBadge gate={progress.fiveTGate as FiveTGate | undefined ?? 'traceable'} />
         </div>
       </div>
     </div>

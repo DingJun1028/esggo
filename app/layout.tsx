@@ -88,7 +88,7 @@ function GlobalNav() {
               transition:'all .2s',
               '--hover-color': n.color,
               '--hover-bg': n.color + '18',
-            } as any}>
+            } as React.CSSProperties}>
               <span>{n.icon}</span>
               <span>{n.label}</span>
             </a>

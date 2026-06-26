@@ -5,7 +5,7 @@ import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
 import { PdfUploader } from './pdf-uploader';
 
-const C = { bg:'#0D0D0D', card:'rgba(20,20,24,0.85)', border:'rgba(0,158,176,0.2)', teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', text:'#E8E8E8', muted:'#9CA3AF', surface:'#1A1A1F' };
+const C = { bg:'#F8FAFC', card:'#FFFFFF', border:'#E2E8F0', teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', text:'#0F172A', muted:'#64748B', surface:'#F1F5F9' };
 type Tab = 'dashboard'|'notes'|'chat'|'fiveT'|'rag';
 
 const FIVE_T = [
@@ -60,14 +60,14 @@ export default function OmniCenterPage() {
 
   const tabStyle = (active:boolean) => ({
     display:'flex' as const, alignItems:'center' as const, gap:6, padding:'7px 14px', borderRadius:8, border:'none', cursor:'pointer', fontSize:13, fontWeight:600,
-    background:active?C.teal:'transparent', color:active?'#000':C.muted, transition:'all .2s',
+    background:active?C.teal:'transparent', color:active?'#FFFFFF':C.muted, transition:'all .2s',
   });
 
   return (
     <div style={{minHeight:'calc(100vh - 52px)',background:C.bg,color:C.text,fontFamily:"'Noto Sans TC',sans-serif",padding:20}}>
       <style>{`
         @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
-        .card{background:${C.card};border:1px solid ${C.border};border-radius:16px;padding:16px;backdrop-filter:blur(12px)}
+        .card{background:${C.card};border:1px solid ${C.border};border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
       `}</style>
 
       {/* Header */}
@@ -100,8 +100,8 @@ export default function OmniCenterPage() {
                 <path d={radarPath} fill={`${C.teal}20`} stroke={C.teal} strokeWidth={2}/>
                 {FIVE_T.map((d,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,MR+14,CX,CY); return <text key={d.key} x={p.x} y={p.y+4} textAnchor="middle" fill={d.color} fontSize={12} fontWeight={700}>{d.zh}</text>; })}
                 <circle cx={CX} cy={CY} r={18} fill={C.teal}/>
-                <text x={CX} y={CY-4} textAnchor="middle" fill="#000" fontSize={8} fontWeight={700}>萬能</text>
-                <text x={CX} y={CY+6} textAnchor="middle" fill="#000" fontSize={8} fontWeight={700}>中心</text>
+                <text x={CX} y={CY-4} textAnchor="middle" fill="#FFFFFF" fontSize={8} fontWeight={700}>萬能</text>
+                <text x={CX} y={CY+6} textAnchor="middle" fill="#FFFFFF" fontSize={8} fontWeight={700}>中心</text>
               </svg>
               <div style={{flex:1}}>
                 <div style={{fontFamily:"'Fira Code',monospace",fontSize:28,fontWeight:700,color:C.green,marginBottom:4}}>{(overall*100).toFixed(1)}%</div>
@@ -139,8 +139,8 @@ export default function OmniCenterPage() {
                     else setTab(m.href as Tab);
                   }}
                     style={{background:C.surface,border:`1px solid ${m.color}30`,borderRadius:8,padding:'8px 6px',cursor:'pointer',textAlign:'center',transition:'all .2s'}}
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor=m.color;(e.currentTarget as HTMLElement).style.background=`${m.color}15`;}}
-                    onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor=`${m.color}30`;(e.currentTarget as HTMLElement).style.background=C.surface;}}>
+                    onMouseEnter={e=>{e.currentTarget.style.borderColor=m.color;e.currentTarget.style.background=`${m.color}15`;}}
+                    onMouseLeave={e=>{e.currentTarget.style.borderColor=`${m.color}30`;e.currentTarget.style.background=C.surface;}}>
                     <div style={{fontSize:18,marginBottom:2}}>{m.icon}</div>
                     <div style={{fontSize:10,color:m.color,fontWeight:600}}>{m.name}</div>
                   </button>

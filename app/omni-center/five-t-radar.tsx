@@ -35,12 +35,15 @@ const DEMO_COMPANIES = [
   { name:'鴻海',            scores:{ traceable:0.88, transparent:0.86, tangible:0.85, trustworthy:0.90, trackable:0.84 } },
 ];
 
+// Light theme color tokens
+const C = { muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A' };
+
 export function FiveTRadar({ }: Props) {
   const [selected, setSelected] = useState(0);
   const [displayed, setDisplayed] = useState<FiveTData>({ traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 });
   const [loading, setLoading] = useState(false);
 
-  const target = DEMO_COMPANIES[selected].scores;
+  const target = DEMO_COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 };
 
   // Animate scores on change
   useEffect(() => {
@@ -74,14 +77,14 @@ export function FiveTRadar({ }: Props) {
 
   return (
     <div>
-      <div style={{fontSize:12,fontWeight:600,color:'#9CA3AF',letterSpacing:1,marginBottom:10}}>5T 協議即時評分雷達圖</div>
+      <div style={{fontSize:12,fontWeight:600,color:C.muted,letterSpacing:1,marginBottom:10}}>5T 協議即時評分雷達圖</div>
 
       {/* Company selector */}
       <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:12}}>
         {DEMO_COMPANIES.map((c,i)=>(
           <button key={c.name} onClick={()=>setSelected(i)}
             style={{fontSize:11,padding:'4px 10px',borderRadius:6,cursor:'pointer',border:'none',
-              background:selected===i?'#009EB0':'#252530',color:selected===i?'#000':'#9CA3AF',transition:'all .2s'}}>
+              background:selected===i?'#009EB0':C.surface,color:selected===i?'#FFFFFF':C.muted,transition:'all .2s'}}>
             {c.name}
           </button>
         ))}
@@ -94,7 +97,7 @@ export function FiveTRadar({ }: Props) {
           {gridLevels.map(level=>(
             <polygon key={level}
               points={DIMS.map((_,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,level*MAX_R,CX,CY); return `${p.x},${p.y}`; }).join(' ')}
-              fill="none" stroke="rgba(0,158,176,0.15)" strokeWidth={1}/>
+              fill="none" stroke="rgba(0,158,176,0.2)" strokeWidth={1}/>
           ))}
           {/* Axes */}
           {DIMS.map((_,i)=>{
@@ -123,13 +126,13 @@ export function FiveTRadar({ }: Props) {
         <div style={{flex:1,minWidth:140}}>
           <div style={{marginBottom:8}}>
             <div style={{fontFamily:"'Fira Code',monospace",fontSize:22,fontWeight:700,color:allPass?'#22C55E':'#F59E0B'}}>{(overallScore*100).toFixed(1)}%</div>
-            <div style={{fontSize:11,color:'#9CA3AF'}}>綜合 5T 合規分數</div>
+            <div style={{fontSize:11,color:C.muted}}>綜合 5T 合規分數</div>
             <div style={{fontSize:11,marginTop:2,color:allPass?'#22C55E':'#F59E0B'}}>{allPass?'● 全部通過 (≥80%)':'◐ 部分待改善'}</div>
           </div>
           {DIMS.map(d=>(
             <div key={d.key} style={{display:'flex',alignItems:'center',gap:6,marginBottom:6}}>
               <span style={{width:14,fontSize:12,color:d.color,fontWeight:700}}>{d.zh}</span>
-              <div style={{flex:1,height:5,background:'#252530',borderRadius:3}}>
+              <div style={{flex:1,height:5,background:C.surface,borderRadius:3}}>
                 <div style={{height:'100%',width:`${displayed[d.key]*100}%`,background:d.color,borderRadius:3,transition:'width .05s'}}/>
               </div>
               <span style={{fontFamily:"'Fira Code',monospace",fontSize:11,color:d.color,width:36,textAlign:'right'}}>{(displayed[d.key]*100).toFixed(0)}%</span>
