@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/components/AuthProvider';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'ESGGO — 萬能中心 | 5T 永續數據治理平台',
@@ -18,36 +19,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <style>{`
           :root {
-            --bg-color: #F7F8FA;
-            --text-color: #1A1D23;
-            --nav-bg: rgba(247, 248, 250, 0.92);
-            --nav-border: rgba(0, 0, 0, 0.08);
+            --bg-color: #F8FAFC;
+            --text-color: #0F172A;
+            --nav-bg: #FFFFFF;
+            --nav-border: #E2E8F0;
             --card-bg: #FFFFFF;
-            --card-border: rgba(0, 0, 0, 0.08);
-            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 8px -1px rgba(0, 0, 0, 0.02);
-            --surface-bg: #F0F2F5;
-            --muted-color: #6B7280;
-            --scroll-track: #F0F2F5;
-            --scroll-thumb: #009EB0;
-            --logo-text: #009EB0;
-            --accent-teal: #009EB0;
-            --accent-gold: #C9962A;
-            --accent-blue: #2563EB;
-            --accent-purple: #7C3AED;
-            --accent-red: #DC2626;
-            --font-serif: 'Noto Serif TC', 'Lora', serif;
-          }
-          [data-theme="dark"] {
-            --bg-color: #0D0D0D;
-            --text-color: #E8E8E8;
-            --nav-bg: rgba(13, 13, 13, 0.92);
-            --nav-border: rgba(0, 158, 176, 0.18);
-            --card-bg: rgba(20, 20, 24, 0.85);
-            --card-border: rgba(0, 158, 176, 0.2);
-            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
-            --surface-bg: #1A1A1F;
-            --muted-color: #9CA3AF;
-            --scroll-track: #1A1A1F;
+            --card-border: #E2E8F0;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            --surface-bg: #F1F5F9;
+            --muted-color: #64748B;
+            --scroll-track: #F1F5F9;
             --scroll-thumb: #009EB0;
             --logo-text: #009EB0;
             --accent-teal: #009EB0;
@@ -59,14 +40,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }
           *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
           html{scroll-behavior:smooth}
-          body{background:var(--bg-color);color:var(--text-color);font-family:'Noto Sans TC',sans-serif;min-height:100vh;transition:background 0.2s, color 0.2s}
+          body{background:var(--bg-color);color:var(--text-color);font-family:'Noto Sans TC',sans-serif;min-height:100vh}
           ::-webkit-scrollbar{width:4px;height:4px}
           ::-webkit-scrollbar-track{background:var(--scroll-track)}
           ::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px}
-          a{text-decoration:none;color:inherit}
+          a{text-decoration:none;color:inherit;transition:color .15s}
+          a:hover{color:var(--accent-teal)}
           button{font-family:inherit}
-          .nav-link{transition:all .2s}
-          .nav-link:hover{color:var(--hover-color) !important;background:var(--hover-bg) !important}
         `}</style>
       </head>
       <body>
