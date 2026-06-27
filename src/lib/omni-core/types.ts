@@ -12,17 +12,22 @@
  *   通 (Trackable)   — 超越一切的無礙圓通
  */
 
-import { createHash } from 'crypto';
-import { EntropyForge } from './entropy-forge';
+import { createHash } from "crypto";
+import { EntropyForge } from "./entropy-forge";
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 1: 5T Protocol Types
 // ═══════════════════════════════════════════════════════════════
 
-export type FiveTDimension = 'traceable' | 'transparent' | 'tangible' | 'trustworthy' | 'trackable';
+export type FiveTDimension =
+  | "traceable"
+  | "transparent"
+  | "tangible"
+  | "trustworthy"
+  | "trackable";
 
 export interface FiveTScore {
-  traceable: number;   // 0.0 – 1.0
+  traceable: number; // 0.0 – 1.0
   transparent: number;
   tangible: number;
   trustworthy: number;
@@ -37,49 +42,58 @@ export interface FiveTStatus {
   trackable: boolean;
 }
 
-export const FIVE_T_META: Record<FiveTDimension, { zh: string; en: string; symbol: string; color: string }> = {
-  traceable:   { zh: '真',  en: 'Traceable',   symbol: '真',  color: '#3B82F6' },
-  transparent: { zh: '善',  en: 'Transparent',  symbol: '善',  color: '#22C55E' },
-  tangible:    { zh: '美',  en: 'Tangible',     symbol: '美',  color: '#F59E0B' },
-  trustworthy: { zh: '信',  en: 'Trustworthy',  symbol: '信',  color: '#8B5CF6' },
-  trackable:   { zh: '通',  en: 'Trackable',    symbol: '通',  color: '#06B6D4' },
+export const FIVE_T_META: Record<
+  FiveTDimension,
+  { zh: string; en: string; symbol: string; color: string }
+> = {
+  traceable: { zh: "真", en: "Traceable", symbol: "真", color: "#3B82F6" },
+  transparent: { zh: "善", en: "Transparent", symbol: "善", color: "#22C55E" },
+  tangible: { zh: "美", en: "Tangible", symbol: "美", color: "#F59E0B" },
+  trustworthy: { zh: "信", en: "Trustworthy", symbol: "信", color: "#8B5CF6" },
+  trackable: { zh: "通", en: "Trackable", symbol: "通", color: "#06B6D4" },
 };
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 2: Core Component Contract (IComponentCore<T>)
 // ═══════════════════════════════════════════════════════════════
 
-export type ExtractionMethod = 'OCR' | 'IoT' | 'Manual' | 'AI' | 'API';
-export type LifecycleEvent = 'created' | 'updated' | 'verified' | 'locked' | 'archived' | 'restored';
+export type ExtractionMethod = "OCR" | "IoT" | "Manual" | "AI" | "API";
+export type LifecycleEvent =
+  | "created"
+  | "updated"
+  | "verified"
+  | "locked"
+  | "archived"
+  | "restored";
 
 export interface ComponentEvidence {
-  originCause: string;    // 因：原始觸發條件
+  originCause: string; // 因：原始觸發條件
   processTrace: string[]; // 循：InfoOne 流轉路徑
-  finalEffect: string;    // 果：最終執行結果與狀態
+  finalEffect: string; // 果：最終執行結果與狀態
 }
 
 export interface ComponentLifecycleEntry {
   readonly event: LifecycleEvent;
   readonly timestamp: number;
   readonly actor?: string;
-  readonly delta?: string;           // JSON diff string
+  readonly delta?: string; // JSON diff string
   readonly note?: string;
 }
 
 export interface IComponentCore<T = unknown> {
-  readonly uuid: string;             // 萬能永憶主體分發的唯一 ID
-  readonly version: string;          // 語義化版本 (semver)
-  readonly timestamp: number;        // 刻印時間戳
+  readonly uuid: string; // 萬能永憶主體分發的唯一 ID
+  readonly version: string; // 語義化版本 (semver)
+  readonly timestamp: number; // 刻印時間戳
   evidence: {
-    originCause: string;    // 因：原始觸發條件
+    originCause: string; // 因：原始觸發條件
     processTrace: string[]; // 循：InfoOne 流轉路徑
-    finalEffect: string;    // 果：最終執行結果與狀態
+    finalEffect: string; // 果：最終執行結果與狀態
   };
   readonly lifecycle_events: ReadonlyArray<ComponentLifecycleEntry>;
   readonly data: T;
-  readonly isFrozen: boolean;        // Object.freeze 狀態
-  readonly fiveT: FiveTScore;        // 5T 評分快照
-  readonly hash: string;             // SHA-256 整體指紋
+  readonly isFrozen: boolean; // Object.freeze 狀態
+  readonly fiveT: FiveTScore; // 5T 評分快照
+  readonly hash: string; // SHA-256 整體指紋
 }
 
 /** 建立 IComponentCore 實例 */
@@ -90,34 +104,46 @@ export function createComponent<T>(
   actor?: string,
 ): IComponentCore<T> {
   const uuid = `OC-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-  const version = '1.0.0';
+  const version = "1.0.0";
   const timestamp = Date.now();
 
   const purifiedDataStr = EntropyForge.purify(JSON.stringify(data));
   const purifiedEvidence = {
     originCause: EntropyForge.purify(evidence.originCause),
-    processTrace: evidence.processTrace.map(trace => EntropyForge.purify(trace)),
+    processTrace: evidence.processTrace.map((trace) =>
+      EntropyForge.purify(trace),
+    ),
     finalEffect: EntropyForge.purify(evidence.finalEffect),
   };
 
   const fiveTScore: FiveTScore = {
-    traceable:   fiveT?.traceable   ?? 0.8,
+    traceable: fiveT?.traceable ?? 0.8,
     transparent: fiveT?.transparent ?? 0.8,
-    tangible:    fiveT?.tangible    ?? 0.8,
+    tangible: fiveT?.tangible ?? 0.8,
     trustworthy: fiveT?.trustworthy ?? 0.9,
-    trackable:   fiveT?.trackable   ?? 0.8,
+    trackable: fiveT?.trackable ?? 0.8,
   };
 
-  const bodyHash = createHash('sha256')
-    .update(EntropyForge.purify(JSON.stringify({ uuid, version, timestamp, data: purifiedDataStr, evidence: purifiedEvidence })))
-    .digest('hex');
+  const bodyHash = createHash("sha256")
+    .update(
+      EntropyForge.purify(
+        JSON.stringify({
+          uuid,
+          version,
+          timestamp,
+          data: purifiedDataStr,
+          evidence: purifiedEvidence,
+        }),
+      ),
+    )
+    .digest("hex");
 
   const component: IComponentCore<T> = {
     uuid,
     version,
     timestamp,
     evidence: purifiedEvidence,
-    lifecycle_events: [{ event: 'created', timestamp, actor }],
+    lifecycle_events: [{ event: "created", timestamp, actor }],
     data,
     isFrozen: false,
     fiveT: fiveTScore,
@@ -131,9 +157,9 @@ export function createComponent<T>(
 // SECTION 3: OmniNote Types (萬能筆記)
 // ═══════════════════════════════════════════════════════════════
 
-export type NotePriority = 'high' | 'medium' | 'low';
-export type NoteCategory = 'note' | 'task' | 'todo' | 'calendar' | 'reference';
-export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
+export type NotePriority = "high" | "medium" | "low";
+export type NoteCategory = "note" | "task" | "todo" | "calendar" | "reference";
+export type TaskStatus = "pending" | "in_progress" | "completed" | "cancelled";
 
 export interface OmniTask {
   readonly id: string;
@@ -141,8 +167,8 @@ export interface OmniTask {
   description?: string;
   priority: NotePriority;
   status: TaskStatus;
-  dueAt?: number;          // Unix timestamp
-  tags: string[];
+  dueAt?: number; // Unix timestamp
+  tags: readonly string[];
   assignee?: string;
   createdAt: number;
   updatedAt: number;
@@ -154,8 +180,8 @@ export interface OmniNote {
   title: string;
   content: string;
   category: NoteCategory;
-  tags: string[];
-  tasks: OmniTask[];
+  tags: readonly string[];
+  tasks: readonly OmniTask[];
   metadata: Record<string, string | number | boolean>;
   createdAt: number;
   updatedAt: number;
@@ -165,19 +191,19 @@ export interface OmniNote {
 }
 
 // Filter & Sort types
-export type TaskFilterPriority = NotePriority | 'all';
-export type TaskFilterDue = 'all' | 'upcoming' | 'overdue';
-export type TaskSortField = 'dueAt' | 'priority' | 'status' | 'createdAt';
+export type TaskFilterPriority = NotePriority | "all";
+export type TaskFilterDue = "all" | "upcoming" | "overdue";
+export type TaskSortField = "dueAt" | "priority" | "status" | "createdAt";
 
 export interface OmniTaskFilter {
   priority: TaskFilterPriority;
   due: TaskFilterDue;
-  status?: TaskStatus | 'all';
+  status?: TaskStatus | "all";
 }
 
 export interface OmniTaskSort {
   field: TaskSortField;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -185,25 +211,29 @@ export interface OmniTaskSort {
 // ═══════════════════════════════════════════════════════════════
 
 export type CaseType =
-  | 'code_optimization'
-  | 'documentation'
-  | 'data_analysis'
-  | 'esg_report'
-  | 'ui_design'
-  | 'architecture'
-  | 'bug_fix'
-  | 'general';
+  | "code_optimization"
+  | "documentation"
+  | "data_analysis"
+  | "esg_report"
+  | "ui_design"
+  | "architecture"
+  | "bug_fix"
+  | "general";
 
-export type AwakeningLevel = 'dormant' | 'awakening' | 'active' | 'transcendent';
+export type AwakeningLevel =
+  | "dormant"
+  | "awakening"
+  | "active"
+  | "transcendent";
 
 export interface MemoryEntry {
   readonly id: string;
   readonly caseType: CaseType;
   readonly input: string;
   readonly output: string;
-  readonly confidence: number;  // 0.0 – 1.0
+  readonly confidence: number; // 0.0 – 1.0
   readonly timestamp: number;
-  readonly tags: string[];
+  readonly tags: readonly string[];
   relevanceScore?: number;
 }
 
