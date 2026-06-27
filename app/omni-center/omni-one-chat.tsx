@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import xss from 'xss';
 
 const C = { teal:'#009EB0', gold:'#D4AF37', purple:'#8B5CF6', muted:'#9CA3AF', surface:'#1A1A1F', border:'rgba(0,158,176,0.2)', text:'#E8E8E8', green:'#22C55E', red:'#FF4D6D' };
 
@@ -75,7 +76,7 @@ export function OmniOneChat() {
   const ctColor = (ct?:CaseType) => ct==='esg_report'?C.teal:ct==='bug_fix'?C.red:ct==='ui_design'?C.gold:ct==='architecture'?C.purple:C.green;
   const ctLabel = (ct?:CaseType) => ({code_optimization:'CODE',documentation:'DOC',data_analysis:'DATA',esg_report:'ESG',ui_design:'UI',architecture:'ARCH',bug_fix:'BUG',general:'GEN'})[ct||'general']||'GEN';
 
-  const renderText = (t:string) => t
+  const renderText = (t:string) => xss(t)
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
     .replace(/`(.+?)`/g,`<code style="background:#252530;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;color:#22D3EE">$1</code>`)
     .replace(/\n/g,'<br/>');
