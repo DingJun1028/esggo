@@ -1,3 +1,6 @@
+packages:
+  - '.'
+
 allowBuilds:
   '@firebase/util': false
   '@google/genai': false
