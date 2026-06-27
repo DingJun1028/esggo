@@ -16,6 +16,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+.env.example
+.env.local.sample
 
 # vercel
 .vercel
@@ -23,17 +26,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env
 
-# OmniAgent Gateway (local node_modules excluded from repo)
+# OmniAgent Gateway
 omniagent-gateway/node_modules/
 omniagent-gateway/logs/
+omniagent-gateway/package-lock.json
 
 # Local AI tool configs
 .gemini/
 .jules/
 .kilo/
 .playwright-mjs/
+.playwright-mcp/
 .storybook/
 .codeturtle.yml
 .editorconfig
@@ -43,19 +47,180 @@ omniagent-gateway/logs/
 .husky/
 .lintstagedrc.json
 .npmrc
+.vscode/
 
-# Temp files
+# Temp / scratch / backup
 .tmp-*
 tmp_*
 *.bak
 *.bak.*
+*.cpuprofile
+scratch/
+temp/
+temp*.js
+temp*.py
+.next-backup-*/
+.next-broken/
+build_output*.txt
+test_output.txt
+omni-trace.txt
+trace.txt
+files_to_*.txt
+task.md
+dev.pid
 
-# VPS local deployment (synced separately)
+# VPS local deployment
 vps/.next-backup-*/
 vps/.next-broken/
 
-# Omnipotent repository (local cache, not source)
+# Omnipotent repository
 omnipotent-repository/
 
 # Agents local state
 .agents/tmp_log.txt
+
+# Standalone loose files
+NoteSearch.jsx
+Setting.js
+User.js
+script.js
+searchWorker.js
+fix-*.js
+fix-*.cjs
+fix_*.py
+tmp-fix-*.cjs
+index.html
+mongo-init.js
+ctl.ps1
+clean_logs.ps1
+render-build.sh
+page.tsx
+
+# Test / CI artifacts
+playwright-report/
+test-results/
+
+# Logs
+logs/
+
+# Sample / misc
+twse_sample.txt
+vps_env.txt
+whitepaper.md
+soul.md
+patch_supabase.py
+update_supabase.py
+package-lock.json
+
+# Extra non-source directories
+android/
+ios/
+bin/
+cli/
+config/
+dashboard/
+data/
+dataconnect/
+esggo/
+esggo-dashboard/
+esggo-funtions/
+esggo-omnimcp/
+funtions/
+inventory-tracker/
+my-agent/
+omnimcp/
+omniscope/
+packages/
+prisma/
+render_cli/
+server/
+shared-memory/
+skills/
+undefined/
+workers/
+C:/
+
+# PDF.js extracted
+pdfjs-*/
+public/pdfjs_extracted/
+lib/web/cmaps/
+public/lib/
+
+# Pen / design files
+*.pen
+
+# Gemini CLI
+Gemini CLI*/
+
+# Chinese-named dirs
+的角色與技能集：
+
+# Extra docs (non-essential for build)
+ADK_GUIDE.md
+ADR_Index.md
+API_SPECIFICATION.md
+BEST_PRACTICES*.md
+BRAND_ATOMIC_LIBRARY.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DESIGN.md
+DOCUMENT_CENTER.md
+ESGGO_STARTUP_GUIDE.md
+ESG_GO_Brand_Style_Specification.md
+GEMINI.md
+HEALING-SYSTEM.md
+JUN_AI_KEY_ARCHITECTURE.md
+NCBDB_PROTOCOL.md
+OMNICOMPONENT_*.md
+OMNIFACTORY_*.md
+OMNI_GUIDE.md
+OMNI_SKILLS_BOOK.md
+OPTIMIZATION_RECOMMENDATIONS.md
+README_OMNICOMPONENT.md
+README_PROD.md
+ROADMAP.md
+USER-GUIDE.md
+VERCEL_ENV_SETUP.md
+VPS_CONNECTION_GUIDE.md
+VISUAL_FUNCTION_TEST_REPORT.md*
+WALKTHROUGH.md
+WIKI.md
+WIKI_FUNCTION_FLOW.md
+auth_proxy_setup.md
+data_proxy_setup.md
+implementation_plan.md
+ki-esg-2026-001.md
+
+# SQL / data dumps
+*.sql
+logic_registry*.db
+
+# Config variants (keep next.config.js only)
+components.json
+docker-compose.yml
+apphosting.yaml
+chromatic.config.json
+eslint.config.mjs
+next.config.ts
+tailwind.config.mjs
+openapi.yaml
+firebase.json
+firestore.*
+skills-lock.json
+lib_lint.json
+
+# Render / Vercel / GCP
+render.yaml
+Projectesggo.gcp-sa-key-b64.txt
+
+# Supabase (local)
+supabase/
+
+# GitHub workflows (manage separately)
+.github/
+
+# ADRs
+adr/
+
+# Static reports (generated, not source)
+reports/
