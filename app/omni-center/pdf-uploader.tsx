@@ -2,9 +2,6 @@
 import { useState, useRef } from 'react';
 import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 
-// Light theme color tokens
-const C = { teal:'#009EB0', gold:'#D4AF37', purple:'#8B5CF6', muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A', green:'#22C55E', red:'#FF4D6D', bg:'#F8FAFC' };
-
 interface UploadResult {
   success: boolean;
   message: string;
@@ -78,38 +75,28 @@ export function PdfUploader() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div style={{ fontSize: 16, fontWeight: 700, color: C.teal, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div className="flex flex-col gap-4">
+      <div className="text-base font-bold text-accentTeal tracking-wide flex items-center gap-2">
         <Upload size={18} /> RAG 知識庫上傳
       </div>
-      <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.6 }}>
-        上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code style={{color: C.gold, background: C.surface, padding: '1px 4px', borderRadius: 3}}>54686_esg_go_userdb</code> 的 knowledge_chunks 中。
+      <div className="text-[13px] text-textSecondary leading-[1.6]">
+        上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code className="text-accentGold bg-primary px-1 py-[1px] rounded-[3px]">54686_esg_go_userdb</code> 的 knowledge_chunks 中。
       </div>
 
       <div
         onClick={() => fileInputRef.current?.click()}
-        onDragOver={e => { e.preventDefault(); e.currentTarget.style.background = `${C.teal}10`; }}
-        onDragLeave={e => { e.currentTarget.style.background = `${C.surface}`; }}
+        onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('bg-accentTeal/10'); }}
+        onDragLeave={e => { e.currentTarget.classList.remove('bg-accentTeal/10'); }}
         onDrop={e => {
           e.preventDefault();
-          e.currentTarget.style.background = C.surface;
+          e.currentTarget.classList.remove('bg-accentTeal/10');
           const dropFile = e.dataTransfer?.files?.[0];
           if (dropFile && dropFile.type === 'application/pdf') {
             setFile(dropFile);
             setResult(null);
           }
         }}
-        style={{
-          border: `2px dashed ${C.border}`,
-          borderRadius: 12,
-          padding: '40px 20px',
-          textAlign: 'center',
-          cursor: 'pointer',
-          background: C.surface,
-          transition: 'all 0.2s',
-        }}
-        onMouseOver={e => e.currentTarget.style.background = `${C.teal}08`}
-        onMouseOut={e => e.currentTarget.style.background = C.surface}
+        className="border-2 border-dashed border-borderColor rounded-xl py-10 px-5 text-center cursor-pointer bg-primary transition-all duration-200 hover:bg-accentTeal/5 group"
       >
         <input
           type="file"
@@ -118,11 +105,11 @@ export function PdfUploader() {
           style={{ display: 'none' }}
           onChange={handleFileChange}
         />
-        <FileText size={36} color={C.teal} style={{ margin: '0 auto 12px auto' }} />
-        <div style={{ color: C.text, fontWeight: 600, fontSize: 14 }}>
+        <FileText size={36} className="mx-auto mb-3 text-accentTeal group-hover:scale-110 transition-transform duration-200" />
+        <div className="text-textPrimary font-semibold text-sm">
           {file ? file.name : '點擊選擇或拖曳 PDF 檔案至此'}
         </div>
-        <div style={{ color: C.muted, fontSize: 12, marginTop: 8 }}>
+        <div className="text-textSecondary text-xs mt-2">
           {file ? `檔案大小: ${(file.size / 1024 / 1024).toFixed(2)} MB` : '支援 .pdf 格式'}
         </div>
       </div>
@@ -130,41 +117,22 @@ export function PdfUploader() {
       <button
         onClick={handleUpload}
         disabled={!file || uploading}
-        style={{
-          background: !file || uploading ? '#CBD5E1' : C.teal,
-          color: '#FFFFFF',
-          border: 'none',
-          padding: '12px',
-          borderRadius: 8,
-          fontWeight: 700,
-          cursor: !file || uploading ? 'not-allowed' : 'pointer',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-          transition: 'background 0.2s'
-        }}
+        className={`border-none py-3 rounded-lg font-bold flex justify-center items-center gap-2 transition-colors ${
+          !file || uploading ? 'bg-slate-300 dark:bg-slate-700 text-white/70 cursor-not-allowed' : 'bg-accentTeal text-white cursor-pointer hover:bg-accentTeal/90'
+        }`}
       >
         {uploading ? '處理中 (解析與切片)...' : '開始上傳並寫入知識庫'}
       </button>
 
       {result && (
-        <div style={{
-          padding: 16,
-          borderRadius: 8,
-          background: result.success ? `${C.green}10` : `${C.red}10`,
-          border: `1px solid ${result.success ? C.green : C.red}`,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: result.success ? C.green : C.red, fontWeight: 700 }}>
+        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${result.success ? 'bg-accentGreen/10 border-accentGreen' : 'bg-[#FF4D6D]/10 border-[#FF4D6D]'}`}>
+          <div className={`flex items-center gap-2 font-bold ${result.success ? 'text-accentGreen' : 'text-[#FF4D6D]'}`}>
             {result.success ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
             {result.message}
           </div>
           {result.success && result.totalChunks != null && (
-            <div style={{ color: C.text, fontSize: 13, marginTop: 4 }}>
-              解析了 {result.pageCount ?? '?'} 頁，共產生 <strong style={{color: C.teal}}>{result.totalChunks}</strong> 個知識切片。
+            <div className="text-textPrimary text-[13px] mt-1">
+              解析了 {result.pageCount ?? '?'} 頁，共產生 <strong className="text-accentTeal">{result.totalChunks}</strong> 個知識切片。
             </div>
           )}
         </div>

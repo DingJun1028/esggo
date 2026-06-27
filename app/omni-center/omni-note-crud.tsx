@@ -2,9 +2,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 
-// Light theme color tokens
-const C = { teal:'#009EB0', gold:'#D4AF37', red:'#FF4D6D', muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A', green:'#22C55E' };
-
 import { db } from '@/lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
 
@@ -56,45 +53,67 @@ export function OmniNoteCRUD() {
     await deleteDoc(doc(db, 'notes', id));
   }, []);
 
-  const gateColor = (g?:string) => g==='traceable'?'#3B82F6':g==='transparent'?'#22C55E':g==='tangible'?'#F59E0B':g==='trustworthy'?'#8B5CF6':g==='trackable'?'#06B6D4':C.muted;
+  const gateColorVar = (g?:string) => g==='traceable'?'var(--accent-blue, #3B82F6)':g==='transparent'?'var(--accent-green, #22C55E)':g==='tangible'?'var(--accent-gold, #F59E0B)':g==='trustworthy'?'var(--accent-purple, #8B5CF6)':g==='trackable'?'var(--accent-cyan, #06B6D4)':'var(--text-secondary, #64748B)';
 
   const renderMd = (s:string) => {
     const sanitized = sanitizeHtml(s);
     return sanitized
-      .replace(/^### (.+)$/gm,'<h3 style="color:#D4AF37;font-size:14px;margin:8px 0 4px">$1</h3>')
-      .replace(/^## (.+)$/gm,'<h2 style="color:#009EB0;font-size:15px;margin:10px 0 4px">$1</h2>')
-      .replace(/^# (.+)$/gm,'<h1 style="color:#009EB0;font-size:17px;margin:10px 0 6px">$1</h1>')
-      .replace(/\*\*(.+?)\*\*/g,'<strong style="color:#0F172A">$1</strong>')
-      .replace(/`(.+?)`/g,'<code style="background:#F1F5F9;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;color:#06B6D4">$1</code>')
+      .replace(/^### (.+)$/gm,'<h3 style="color:var(--accent-gold);font-size:14px;margin:8px 0 4px">$1</h3>')
+      .replace(/^## (.+)$/gm,'<h2 style="color:var(--accent-teal);font-size:15px;margin:10px 0 4px">$1</h2>')
+      .replace(/^# (.+)$/gm,'<h1 style="color:var(--accent-teal);font-size:17px;margin:10px 0 6px">$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text-primary)">$1</strong>')
+      .replace(/`(.+?)`/g,'<code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;color:var(--accent-cyan)">$1</code>')
       .replace(/\n/g,'<br/>');
   };
 
-  const inputStyle = { width:'100%', background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:'8px 10px', color:C.text, fontSize:13, outline:'none', fontFamily:"'Noto Sans TC',sans-serif" };
-  const btnStyle   = (c:string) => ({ border:'none', borderRadius:8, padding:'6px 14px', fontSize:12, cursor:'pointer', fontWeight:600, background:c, color:'#FFFFFF' });
-
   return (
     <div>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
-        <div style={{fontSize:12,fontWeight:600,color:C.muted,letterSpacing:1}}>萬能筆記 (OmniNote) — CRUD</div>
-        <button onClick={startCreate} style={btnStyle(C.teal)}>+ 新增筆記</button>
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-xs font-semibold text-textSecondary tracking-wider">萬能筆記 (OmniNote) — CRUD</div>
+        <button onClick={startCreate} className="border-none rounded-lg px-3.5 py-1.5 text-xs cursor-pointer font-semibold bg-accentTeal text-white hover:opacity-90 transition-opacity">
+          + 新增筆記
+        </button>
       </div>
 
       {/* Editor */}
       {(creating||editing) && (
-        <div style={{background:C.surface,border:`1px solid ${C.teal}`,borderRadius:12,padding:16,marginBottom:14}}>
-          <div style={{fontSize:12,color:C.teal,marginBottom:10,fontWeight:600}}>{editing?'✏️ 編輯筆記':'✨ 新增筆記'}</div>
-          <input style={{...inputStyle,marginBottom:8}} placeholder="標題" value={draft.title} onChange={e=>setDraft(d=>({...d,title:e.target.value}))} />
-          <div style={{display:'flex',gap:6,marginBottom:8}}>
-            <button onClick={()=>setPreview(null)} style={{...btnStyle(preview===null?C.teal:C.surface),color:preview===null?'#FFFFFF':C.muted,flex:1}}>✏️ 編輯</button>
-            <button onClick={()=>setPreview(draft.content)} style={{...btnStyle(preview!==null?C.gold:C.surface),color:preview!==null?'#FFFFFF':C.muted,flex:1}}>👁 預覽</button>
+        <div className="bg-secondary border border-accentTeal rounded-xl p-4 mb-3.5">
+          <div className="text-xs text-accentTeal mb-2.5 font-semibold">{editing?'✏️ 編輯筆記':'✨ 新增筆記'}</div>
+          <input 
+            className="w-full bg-primary border border-borderColor rounded-lg px-2.5 py-2 text-textPrimary text-[13px] outline-none font-['Noto_Sans_TC',sans-serif] mb-2 focus:border-accentTeal"
+            placeholder="標題" value={draft.title} onChange={e=>setDraft(d=>({...d,title:e.target.value}))} 
+          />
+          
+          <div className="flex gap-1.5 mb-2">
+            <button 
+              onClick={()=>setPreview(null)} 
+              className={`flex-1 border-none rounded-lg px-3.5 py-1.5 text-xs cursor-pointer font-semibold transition-colors ${preview===null ? 'bg-accentTeal text-white' : 'bg-primary text-textSecondary'}`}
+            >
+              ✏️ 編輯
+            </button>
+            <button 
+              onClick={()=>setPreview(draft.content)} 
+              className={`flex-1 border-none rounded-lg px-3.5 py-1.5 text-xs cursor-pointer font-semibold transition-colors ${preview!==null ? 'bg-accentGold text-white' : 'bg-primary text-textSecondary'}`}
+            >
+              👁 預覽
+            </button>
           </div>
+
           {preview!==null
-            ? <div style={{minHeight:100,background:C.surface,border:`1px solid ${C.border}`,borderRadius:8,padding:'10px 12px',fontSize:13,lineHeight:1.8,color:C.text}} dangerouslySetInnerHTML={{__html:renderMd(preview)}} />
-            : <textarea style={{...inputStyle,minHeight:100,resize:'vertical',display:'block'}} placeholder="內容 (支援 Markdown: # ## ### **粗體** `code`)" value={draft.content} onChange={e=>setDraft(d=>({...d,content:e.target.value}))} />
+            ? <div className="min-h-[100px] bg-primary border border-borderColor rounded-lg px-3 py-2.5 text-[13px] leading-[1.8] text-textPrimary" dangerouslySetInnerHTML={{__html:renderMd(preview)}} />
+            : <textarea 
+                className="w-full bg-primary border border-borderColor rounded-lg px-2.5 py-2 text-textPrimary text-[13px] outline-none font-['Noto_Sans_TC',sans-serif] min-h-[100px] resize-y block focus:border-accentTeal" 
+                placeholder="內容 (支援 Markdown: # ## ### **粗體** `code`)" 
+                value={draft.content} onChange={e=>setDraft(d=>({...d,content:e.target.value}))} 
+              />
           }
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
-            <div style={{display:'flex',gap:6}}>
-              <input style={inputStyle} placeholder="標籤 (逗號分隔)" value={draft.tags} onChange={e=>setDraft(d=>({...d,tags:e.target.value}))} />
+
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="flex gap-1.5">
+              <input 
+                className="w-full bg-primary border border-borderColor rounded-lg px-2.5 py-2 text-textPrimary text-[13px] outline-none font-['Noto_Sans_TC',sans-serif] focus:border-accentTeal" 
+                placeholder="標籤 (逗號分隔)" value={draft.tags} onChange={e=>setDraft(d=>({...d,tags:e.target.value}))} 
+              />
               {isReady && (
                 <button 
                   onClick={async () => {
@@ -105,45 +124,63 @@ export function OmniNoteCRUD() {
                     setIsGenerating(false);
                   }}
                   disabled={isGenerating}
-                  style={{...btnStyle(isGenerating?C.muted:C.purple), padding:'6px 10px', flexShrink:0}}
+                  className={`shrink-0 border-none rounded-lg px-2.5 py-1.5 text-xs font-semibold ${isGenerating ? 'bg-primary text-textSecondary cursor-not-allowed' : 'bg-accentPurple text-white cursor-pointer hover:opacity-90'}`}
                   title="Auto Generate Tags via AGNES"
                 >
                   {isGenerating ? '⏳' : '🪄 AI'}
                 </button>
               )}
             </div>
-            <select style={{...inputStyle,cursor:'pointer'}} value={draft.fiveTGate} onChange={e=>setDraft(d=>({...d,fiveTGate:e.target.value}))}>
+            <select 
+              className="w-full bg-primary border border-borderColor rounded-lg px-2.5 py-2 text-textPrimary text-[13px] outline-none font-['Noto_Sans_TC',sans-serif] cursor-pointer focus:border-accentTeal" 
+              value={draft.fiveTGate} onChange={e=>setDraft(d=>({...d,fiveTGate:e.target.value}))}
+            >
               <option value="">5T 門控 (選填)</option>
               {['traceable','transparent','tangible','trustworthy','trackable'].map(g=><option key={g} value={g}>{g}</option>)}
             </select>
           </div>
-          <div style={{display:'flex',gap:8,marginTop:12}}>
-            <button onClick={save} style={btnStyle(C.green)}>💾 儲存</button>
-            <button onClick={cancel} style={{...btnStyle(C.surface),color:C.muted}}>取消</button>
+
+          <div className="flex gap-2 mt-3">
+            <button onClick={save} className="border-none rounded-lg px-3.5 py-1.5 text-xs cursor-pointer font-semibold bg-accentGreen text-white hover:opacity-90 transition-opacity">
+              💾 儲存
+            </button>
+            <button onClick={cancel} className="border-none rounded-lg px-3.5 py-1.5 text-xs cursor-pointer font-semibold bg-primary text-textSecondary hover:opacity-90 transition-opacity">
+              取消
+            </button>
           </div>
         </div>
       )}
 
       {/* Note List */}
-      <div style={{display:'flex',flexDirection:'column',gap:8}}>
-        {notes.length===0 && <div style={{color:C.muted,fontSize:13,textAlign:'center',padding:20}}>尚無筆記，點擊「新增筆記」開始</div>}
+      <div className="flex flex-col gap-2">
+        {notes.length===0 && <div className="text-textSecondary text-[13px] text-center p-5">尚無筆記，點擊「新增筆記」開始</div>}
         {notes.map(n=>(
-          <div key={n.id} style={{background:C.surface,borderRadius:10,padding:'12px 14px',border:`1px solid ${gateColor(n.fiveTGate)}30`}}>
-            <div style={{display:'flex',alignItems:'flex-start',gap:8}}>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontWeight:600,fontSize:14,color:C.text,marginBottom:4}}>{n.title}</div>
-                <div style={{fontSize:12,color:C.muted,lineHeight:1.6,marginBottom:6,
-                  overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical' as const}}>
+          <div key={n.id} className="bg-primary rounded-xl p-3" style={{border:`1px solid ${gateColorVar(n.fiveTGate).replace(')',', 0.3)')}`}}>
+            <div className="flex items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-[14px] text-textPrimary mb-1">{n.title}</div>
+                <div className="text-xs text-textSecondary leading-[1.6] mb-1.5 overflow-hidden line-clamp-2">
                   {n.content}
                 </div>
-                <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
-                  {n.fiveTGate && <span style={{fontSize:10,background:`${gateColor(n.fiveTGate)}20`,color:gateColor(n.fiveTGate),borderRadius:4,padding:'1px 6px'}}>{n.fiveTGate}</span>}
-                  {(n.tags??[]).map(t=><span key={t} style={{fontSize:10,color:C.teal,background:`${C.teal}15`,borderRadius:4,padding:'1px 5px'}}>{t}</span>)}
+                <div className="flex gap-1 flex-wrap">
+                  {n.fiveTGate && (
+                    <span 
+                      className="text-[10px] rounded px-1.5 py-[1px]" 
+                      style={{background:`${gateColorVar(n.fiveTGate).replace(')',', 0.2)')}`, color:gateColorVar(n.fiveTGate)}}
+                    >
+                      {n.fiveTGate}
+                    </span>
+                  )}
+                  {(n.tags??[]).map(t=> (
+                    <span key={t} className="text-[10px] text-accentTeal bg-accentTeal/10 rounded px-1.5 py-[1px]">
+                      {t}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div style={{display:'flex',flexDirection:'column',gap:4,flexShrink:0}}>
-                <button onClick={()=>startEdit(n)} style={{...btnStyle(C.gold),padding:'4px 10px',fontSize:11}}>編輯</button>
-                <button onClick={()=>remove(n.id)} style={{...btnStyle(C.red),padding:'4px 10px',fontSize:11}}>刪除</button>
+              <div className="flex flex-col gap-1 shrink-0">
+                <button onClick={()=>startEdit(n)} className="border-none rounded-lg px-2.5 py-1 text-[11px] cursor-pointer font-semibold bg-accentGold text-white hover:opacity-90 transition-opacity">編輯</button>
+                <button onClick={()=>remove(n.id)} className="border-none rounded-lg px-2.5 py-1 text-[11px] cursor-pointer font-semibold bg-[#FF4D6D] text-white hover:opacity-90 transition-opacity">刪除</button>
               </div>
             </div>
           </div>

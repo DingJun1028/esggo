@@ -12,6 +12,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 // ─── Types ───────────────────────────────────────────────────────────
 type FiveTGate = 'traceable' | 'transparent' | 'tangible' | 'trustworthy' | 'trackable';
 type TaskStatus = 'idle' | 'pending' | 'running' | 'completed' | 'failed';
+type TemplateType = '' | 'gri-standard' | 'tcfd-special' | 'investor-minimal';
 
 interface Company {
   id: string;
@@ -80,11 +81,11 @@ async function fetchCompanies(): Promise<Company[]> {
   }
 }
 
-async function startAsyncReport(companyId: string): Promise<{ taskId: string }> {
+async function startAsyncReport(companyId: string, templateId: string): Promise<{ taskId: string }> {
   const res = await fetch('/api/sustain-write/v5/async', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ companyId }),
+    body: JSON.stringify({ companyId, templateId }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
@@ -160,10 +161,31 @@ function ProgressBar({ progress }: { progress: TaskProgress }) {
 export default function SustainWriteV5Page() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [taskProgress, setTaskProgress] = useState<TaskProgress | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Initialize theme from system or saved preference
+  useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return next;
+    });
+  };
 
   // Load companies on mount
   useEffect(() => {
@@ -195,13 +217,13 @@ export default function SustainWriteV5Page() {
 
   // Start report generation
   const handleGenerate = async () => {
-    if (!selectedCompany) return;
+    if (!selectedCompany || !selectedTemplate) return;
     setLoading(true);
     setError(null);
     setTaskProgress(null);
 
     try {
-      const { taskId } = await startAsyncReport(selectedCompany);
+      const { taskId } = await startAsyncReport(selectedCompany, selectedTemplate);
       startPolling(taskId);
     } catch {
       setLoading(false);
@@ -217,19 +239,28 @@ export default function SustainWriteV5Page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-primary transition-colors duration-300">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-secondary border-b border-borderColor sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-accentTeal rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>
-            <h1 className="text-lg font-semibold text-slate-800">ESGGO v5.1</h1>
+            <h1 className="text-lg font-semibold text-textPrimary">ESGGO v5.1</h1>
           </div>
-          <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
-            OmniBase · 零算力報告
-          </span>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 rounded-md border border-borderColor text-textSecondary hover:text-textPrimary hover:bg-primary transition-colors"
+              title="切換深淺色模式"
+            >
+              {isDarkMode ? '🌙' : '☀️'}
+            </button>
+            <span className="text-xs text-textSecondary bg-primary px-2 py-1 rounded border border-borderColor">
+              OmniBase · 零算力報告 (繁體中文)
+            </span>
+          </div>
         </div>
       </header>
 
@@ -243,37 +274,59 @@ export default function SustainWriteV5Page() {
         </div>
 
         {/* Control Panel */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8">
-          <div className="border-l-4 border-amber-400 pl-4 mb-4">
-            <h2 className="text-base font-semibold text-slate-800">報告生成器</h2>
-            <p className="text-sm text-slate-500 mt-1">選擇公司，啟動非同步 28 章永續報告生成</p>
+        <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
+          <div className="border-l-4 border-accentGold pl-4 mb-4">
+            <h2 className="text-base font-semibold text-textPrimary">模板選擇閘門 (Template Selection Gate)</h2>
+            <p className="text-sm text-textSecondary mt-1">選擇報告模板與對象，以解鎖報告生成引擎</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <select
-              value={selectedCompany}
-              onChange={(e) => setSelectedCompany(e.target.value)}
-              className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none"
-            >
-              <option value="">選擇公司...</option>
-              {companies.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}（{c.industry}）
-                </option>
-              ))}
-            </select>
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-textSecondary mb-1">企業實體</label>
+              <select
+                value={selectedCompany}
+                onChange={(e) => setSelectedCompany(e.target.value)}
+                className="w-full border border-borderColor rounded-lg px-4 py-2.5 text-sm bg-primary text-textPrimary focus:ring-2 focus:ring-accentTeal focus:border-accentTeal outline-none transition-colors"
+              >
+                <option value="">選擇公司...</option>
+                {companies.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}（{c.industry}）
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-textSecondary mb-1">報告模板</label>
+              <select
+                value={selectedTemplate}
+                onChange={(e) => setSelectedTemplate(e.target.value as TemplateType)}
+                className="w-full border border-borderColor rounded-lg px-4 py-2.5 text-sm bg-primary text-textPrimary focus:ring-2 focus:ring-accentGold focus:border-accentGold outline-none transition-colors"
+              >
+                <option value="">選擇模板以解鎖...</option>
+                <option value="gri-standard">GRI 永續準則標準版 (28章)</option>
+                <option value="tcfd-special">TCFD 氣候專項版 (12章)</option>
+                <option value="investor-minimal">投資人摘要精簡版 (5章)</option>
+              </select>
+            </div>
+          </div>
 
+          <div className="flex justify-end mt-6 pt-4 border-t border-borderColor">
             <button
               onClick={handleGenerate}
-              disabled={!selectedCompany || loading}
-              className="px-6 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors"
+              disabled={!selectedCompany || !selectedTemplate || loading}
+              className={`px-8 py-3 text-sm font-medium rounded-lg transition-all ${
+                !selectedCompany || !selectedTemplate
+                  ? 'bg-borderColor text-textSecondary cursor-not-allowed opacity-60'
+                  : 'bg-accentTeal text-white hover:opacity-90 shadow-md'
+              }`}
             >
               {loading ? '生成中...' : '一鍵生成報告'}
             </button>
           </div>
 
           {error && (
-            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            <div className="mt-4 p-3 bg-red-900/10 border border-red-500/20 rounded-lg text-sm text-red-600 dark:text-red-400">
               {error}
             </div>
           )}
@@ -281,13 +334,13 @@ export default function SustainWriteV5Page() {
 
         {/* Progress Panel */}
         {taskProgress && (
-          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8">
+          <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-semibold text-slate-800">生成進度</h3>
+              <h3 className="text-base font-semibold text-textPrimary">生成進度</h3>
               <span className={`text-xs px-2 py-1 rounded font-medium ${
-                taskProgress.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
-                taskProgress.status === 'failed' ? 'bg-red-100 text-red-700' :
-                'bg-blue-100 text-blue-700'
+                taskProgress.status === 'completed' ? 'bg-accentGreen/20 text-accentGreen' :
+                taskProgress.status === 'failed' ? 'bg-red-500/20 text-red-500' :
+                'bg-accentBlue/20 text-accentBlue'
               }`}>
                 {taskProgress.status === 'completed' ? '已完成' :
                  taskProgress.status === 'failed' ? '失敗' : '生成中'}
@@ -297,23 +350,23 @@ export default function SustainWriteV5Page() {
             <ProgressBar progress={taskProgress} />
 
             {taskProgress.result && (
-              <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div className="mt-4 p-4 bg-primary rounded-lg border border-borderColor">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                   <div>
-                    <span className="text-slate-500">總字數</span>
-                    <div className="font-semibold text-slate-800">{taskProgress.result.totalWords.toLocaleString()}</div>
+                    <span className="text-textSecondary">總字數</span>
+                    <div className="font-semibold text-textPrimary">{taskProgress.result.totalWords.toLocaleString()}</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">標籤數</span>
-                    <div className="font-semibold text-slate-800">{taskProgress.result.totalTags}</div>
+                    <span className="text-textSecondary">標籤數</span>
+                    <div className="font-semibold text-textPrimary">{taskProgress.result.totalTags}</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">耗時</span>
-                    <div className="font-semibold text-slate-800">{(taskProgress.result.durationMs / 1000).toFixed(1)}s</div>
+                    <span className="text-textSecondary">耗時</span>
+                    <div className="font-semibold text-textPrimary">{(taskProgress.result.durationMs / 1000).toFixed(1)}s</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Trinity Hash</span>
-                    <div className="font-mono text-xs text-slate-600 truncate">{taskProgress.result.trinityHash}</div>
+                    <span className="text-textSecondary">Trinity Hash</span>
+                    <div className="font-mono text-xs text-textPrimary truncate">{taskProgress.result.trinityHash}</div>
                   </div>
                 </div>
               </div>
@@ -322,16 +375,16 @@ export default function SustainWriteV5Page() {
         )}
 
         {/* 5T Protocol Overview */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6">
-          <h3 className="text-base font-semibold text-slate-800 mb-4">5T 協議閘門</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+        <div className="bg-secondary rounded-lg border border-borderColor p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-textPrimary mb-4">5T 協議閘門</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {(['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable'] as FiveTGate[]).map((gate, i) => (
-              <div key={gate} className={`p-3 rounded-lg border ${GATE_BG[gate]}`}>
+              <div key={gate} className="p-3 rounded-lg border border-borderColor bg-primary">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg font-bold text-slate-700">{i + 1}</span>
+                  <span className="text-lg font-bold text-textPrimary">{i + 1}</span>
                   <FiveTBadge gate={gate} />
                 </div>
-                <div className="text-xs text-slate-600">
+                <div className="text-xs text-textSecondary">
                   {gate === 'traceable' && '數據可溯源追蹤'}
                   {gate === 'transparent' && '算法公開可驗算'}
                   {gate === 'tangible' && '抽象願景具體化'}
@@ -345,9 +398,9 @@ export default function SustainWriteV5Page() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-slate-500">
-          ESGGO v5.1 · OmniBase 萬能系統 · 28 章 × 10K 字 = 280,000 字零算力報告
+      <footer className="border-t border-borderColor bg-secondary mt-12 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-textSecondary">
+          ESGGO v5.1 · OmniBase 萬能系統 · 深色模式 / 淺色模式無縫支援
         </div>
       </footer>
     </div>
