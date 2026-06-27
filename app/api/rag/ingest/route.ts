@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import pdfParse from 'pdf-parse';
-import { ncbRagService } from '@/lib/ncb-utils';
 import { agnesApi } from '@/lib/agnes-api';
+import { db } from '@/lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 function chunkText(text: string, chunkSize = 1000, overlap = 200): string[] {
   const chunks: string[] = [];
@@ -46,16 +47,20 @@ export async function POST(req: Request) {
     // 2. 切片 (Chunking)
     const chunks = chunkText(rawText, 1000, 200);
 
-    // 3. 寫入 NCBDB
-    const promises = chunks.map((chunk, index) => 
-      ncbRagService.saveKnowledgeChunks({
+    // 3. 寫入 Firebase Firestore
+    const promises = chunks.map((chunk, index) => {
+      const finalContent = summaryContext 
+        ? `[Global Context: ${summaryContext}]\n\n${chunk}` 
+        : chunk;
+
+      return addDoc(collection(db, 'rag_knowledge'), {
         user_id: userId,
-        content: chunk,
+        content: finalContent,
         source: file.name,
         chunk_index: index,
         created_at: new Date().toISOString()
-      })
-    );
+      });
+    });
     
     await Promise.all(promises);
 

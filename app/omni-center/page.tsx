@@ -4,6 +4,7 @@ import { OmniNoteCRUD, type NoteData } from './omni-note-crud';
 import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
 import { PdfUploader } from './pdf-uploader';
+import { useAgnesApi } from '../../src/components/AgnesProvider';
 
 const C = { bg:'#F8FAFC', card:'#FFFFFF', border:'#E2E8F0', teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', text:'#0F172A', muted:'#64748B', surface:'#F1F5F9' };
 type Tab = 'dashboard'|'notes'|'chat'|'fiveT'|'rag';
@@ -34,12 +35,27 @@ function polarPoint(a:number, r:number, cx:number, cy:number) {
   return { x:cx+r*Math.cos(a-Math.PI/2), y:cy+r*Math.sin(a-Math.PI/2) };
 }
 
+import { db } from '@/lib/firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+
 export default function OmniCenterPage() {
   const [tab, setTab]   = useState<Tab>('dashboard');
   const [notes, setNotes] = useState<NoteData[]>(DEMO_NOTES);
   const [pulse, setPulse] = useState(false);
+  
+  const { isReady, status } = useAgnesApi();
 
   useEffect(() => { const t = setInterval(()=>setPulse(p=>!p),1200); return()=>clearInterval(t); },[]);
+
+  useEffect(() => {
+    if (!db) return;
+    const q = query(collection(db, 'notes'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NoteData));
+      setNotes(data);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const SCORES = { traceable:0.91, transparent:0.88, tangible:0.90, trustworthy:0.94, trackable:0.87 };
   const overall = Object.values(SCORES).reduce((s,v)=>s+v,0)/5;
@@ -78,6 +94,7 @@ export default function OmniCenterPage() {
           <div style={{fontSize:11,color:C.muted}}>無礙圓通，無作筆記 — v1.0</div>
         </div>
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:6}}>
+          {isReady && <span style={{fontSize:10,background:`${C.purple}20`,color:C.purple,padding:'3px 8px',borderRadius:6,fontWeight:700,letterSpacing:0.5,marginRight:8}}>AGNES CORE</span>}
           <div style={{width:7,height:7,borderRadius:'50%',background:C.green,boxShadow:`0 0 ${pulse?8:4}px ${C.green}`,transition:'box-shadow .6s'}}/>
           <span style={{fontSize:11,color:C.muted}}>系統運行中</span>
         </div>
@@ -154,7 +171,7 @@ export default function OmniCenterPage() {
       {/* Notes Tab */}
       {tab==='notes' && (
         <div className="card">
-          <OmniNoteCRUD notes={notes} onChange={setNotes}/>
+          <OmniNoteCRUD />
         </div>
       )}
 

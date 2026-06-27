@@ -3,6 +3,8 @@ import { ncbVillageService } from '@/lib/ncb-utils';
 
 export async function GET() {
   try {
+    // @deprecated - Village now uses real-time Firebase listeners on the client.
+    // This API route remains as a fallback or for external integrations.
     const projects = await ncbVillageService.getImpactProjects();
     // Fallback data if NCBDB returns empty or fails (for preview purposes)
     const fallbackProjects = [
