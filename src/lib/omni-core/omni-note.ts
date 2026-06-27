@@ -194,7 +194,7 @@ export class OmniNoteManager {
   upsert(note: OmniNote): void {
     const idx = this.notes.findIndex(n => n.id === note.id);
     const updatedNote = idx >= 0 ? { ...note, updatedAt: Date.now() } : note;
-    
+
     if (idx >= 0) {
       this.notes[idx] = updatedNote;
     } else {
@@ -203,7 +203,7 @@ export class OmniNoteManager {
     OmniEventBus.publish(OMNI_TOPICS.NOTE_CREATED, { id: updatedNote.id, title: updatedNote.title });
 
     // Async DB write
-    setDoc(doc(db, 'omni-notes', updatedNote.id), updatedNote).catch(e => 
+    setDoc(doc(db, 'omni-notes', updatedNote.id), updatedNote).catch(e =>
       console.error('Failed to sync note to DB', e)
     );
   }
@@ -266,12 +266,12 @@ export class OmniNoteManager {
     const idx = this.notes.findIndex(n => n.id === id);
     if (idx < 0) return false;
     this.notes.splice(idx, 1);
-    
+
     // Async DB delete
-    deleteDoc(doc(db, 'omni-notes', id)).catch(e => 
+    deleteDoc(doc(db, 'omni-notes', id)).catch(e =>
       console.error('Failed to delete note from DB', e)
     );
-    
+
     return true;
   }
 
