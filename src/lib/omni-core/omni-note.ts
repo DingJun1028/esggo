@@ -9,8 +9,7 @@
  * - 5T 協議門控: 每筆記對標 ESG 報告維度
  */
 
-import { createHash, randomBytes } from "crypto";
-import { EntropyForge } from "./entropy-forge";
+import { createHash, randomBytes } from 'crypto';
 import type {
   OmniNote,
   OmniTask,
@@ -20,8 +19,8 @@ import type {
   FiveTDimension,
   OmniTaskFilter,
   OmniTaskSort,
-} from "./types";
-import { OmniEventBus, OMNI_TOPICS } from "./omni-kernel";
+} from './types';
+import { OmniEventBus, OMNI_TOPICS } from './omni-kernel';
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 1: Task Factory
@@ -38,85 +37,65 @@ export function createTask(
   } = {},
 ): OmniTask {
   const now = Date.now();
-  return Object.freeze({
-    id: `OT-${randomBytes(4).toString("hex").toUpperCase()}`,
-    title: EntropyForge.purify(title),
-    description: opts.description
-      ? EntropyForge.purify(opts.description)
-      : undefined,
-    priority: opts.priority ?? "medium",
-    status: "pending",
+  return {
+    id: `OT-${randomBytes(4).toString('hex').toUpperCase()}`,
+    title,
+    description: opts.description,
+    priority: opts.priority ?? 'medium',
+    status: 'pending',
     dueAt: opts.dueAt,
-    tags: Object.freeze((opts.tags ?? []).map((t) => EntropyForge.purify(t))),
+    tags: opts.tags ?? [],
     assignee: opts.assignee,
     createdAt: now,
     updatedAt: now,
-  });
+  };
 }
 
 /** Toggle task completion */
 export function toggleTaskCompletion(task: OmniTask): OmniTask {
   const now = Date.now();
-  if (task.status === "completed") {
-    return Object.freeze({
-      ...task,
-      status: "pending",
-      completedAt: undefined,
-      updatedAt: now,
-    });
+  if (task.status === 'completed') {
+    return { ...task, status: 'pending', completedAt: undefined, updatedAt: now };
   }
-  return { ...task, status: "completed", completedAt: now, updatedAt: now };
+  return { ...task, status: 'completed', completedAt: now, updatedAt: now };
 }
 
 /** Update task status */
 export function updateTaskStatus(task: OmniTask, status: TaskStatus): OmniTask {
   const now = Date.now();
-  return Object.freeze({
+  return {
     ...task,
     status,
-    completedAt: status === "completed" ? now : task.completedAt,
+    completedAt: status === 'completed' ? now : task.completedAt,
     updatedAt: now,
-  });
+  };
 }
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 2: Task Filter & Sort Engine
 // ═══════════════════════════════════════════════════════════════
 
-const PRIORITY_ORDER: Record<NotePriority, number> = {
-  high: 0,
-  medium: 1,
-  low: 2,
-};
+const PRIORITY_ORDER: Record<NotePriority, number> = { high: 0, medium: 1, low: 2 };
 
-export function filterTasks(
-  tasks: readonly OmniTask[],
-  filter: OmniTaskFilter,
-): OmniTask[] {
+export function filterTasks(tasks: OmniTask[], filter: OmniTaskFilter): OmniTask[] {
   const now = Date.now();
   const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
-  return tasks.filter((task) => {
+  return tasks.filter(task => {
     // Priority filter
-    if (filter.priority !== "all" && task.priority !== filter.priority)
-      return false;
+    if (filter.priority !== 'all' && task.priority !== filter.priority) return false;
 
     // Status filter
-    if (
-      filter.status &&
-      filter.status !== "all" &&
-      task.status !== filter.status
-    )
-      return false;
+    if (filter.status && filter.status !== 'all' && task.status !== filter.status) return false;
 
     // Due date filter
-    if (filter.due !== "all" && task.dueAt !== undefined) {
-      if (filter.due === "upcoming") {
+    if (filter.due !== 'all' && task.dueAt !== undefined) {
+      if (filter.due === 'upcoming') {
         if (task.dueAt < now || task.dueAt > now + ONE_WEEK) return false;
-      } else if (filter.due === "overdue") {
+      } else if (filter.due === 'overdue') {
         if (task.dueAt >= now) return false;
       }
-    } else if (filter.due !== "all" && task.dueAt === undefined) {
+    } else if (filter.due !== 'all' && task.dueAt === undefined) {
       return false;
     }
 
@@ -124,35 +103,27 @@ export function filterTasks(
   });
 }
 
-export function sortTasks(
-  tasks: readonly OmniTask[],
-  sort: OmniTaskSort,
-): OmniTask[] {
+export function sortTasks(tasks: OmniTask[], sort: OmniTaskSort): OmniTask[] {
   const sorted = [...tasks];
   sorted.sort((a, b) => {
     let delta = 0;
     switch (sort.field) {
-      case "dueAt":
+      case 'dueAt':
         delta = (a.dueAt ?? Infinity) - (b.dueAt ?? Infinity);
         break;
-      case "priority":
+      case 'priority':
         delta = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
         break;
-      case "status": {
-        const ORDER: Record<TaskStatus, number> = {
-          in_progress: 0,
-          pending: 1,
-          completed: 2,
-          cancelled: 3,
-        };
+      case 'status': {
+        const ORDER: Record<TaskStatus, number> = { in_progress: 0, pending: 1, completed: 2, cancelled: 3 };
         delta = ORDER[a.status] - ORDER[b.status];
         break;
       }
-      case "createdAt":
+      case 'createdAt':
         delta = a.createdAt - b.createdAt;
         break;
     }
-    return sort.direction === "asc" ? delta : -delta;
+    return sort.direction === 'asc' ? delta : -delta;
   });
   return sorted;
 }
@@ -173,39 +144,30 @@ export function createNote(
   } = {},
 ): OmniNote {
   const now = Date.now();
-  const id = `ON-${randomBytes(4).toString("hex").toUpperCase()}`;
-  const zkpHash = createHash("sha256")
-    .update(`${id}:${title}:${content}`)
-    .digest("hex")
-    .slice(0, 16);
-  return Object.freeze({
+  const id = `ON-${randomBytes(4).toString('hex').toUpperCase()}`;
+  const zkpHash = createHash('sha256').update(`${id}:${title}:${content}`).digest('hex').slice(0, 16);
+  return {
     id,
-    title: EntropyForge.purify(title),
-    content: EntropyForge.purify(content),
-    category: opts.category ?? "note",
-    tags: Object.freeze((opts.tags ?? []).map((t) => EntropyForge.purify(t))),
-    tasks: Object.freeze(opts.tasks ?? []),
+    title,
+    content,
+    category: opts.category ?? 'note',
+    tags: opts.tags ?? [],
+    tasks: opts.tasks ?? [],
     metadata: opts.metadata ?? {},
     createdAt: now,
     updatedAt: now,
-    isFrozen: true,
+    isFrozen: false,
     fiveTGate: opts.fiveTGate,
     zkpHash,
-  });
+  };
 }
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 4: OmniNoteManager
 // ═══════════════════════════════════════════════════════════════
 
-import { db } from "../firebase";
-import {
-  collection,
-  doc,
-  setDoc,
-  getDocs,
-  deleteDoc,
-} from "firebase/firestore";
+import { db } from '../firebase';
+import { collection, doc, setDoc, getDocs, deleteDoc } from 'firebase/firestore';
 
 export class OmniNoteManager {
   private notes: OmniNote[] = [];
@@ -214,7 +176,7 @@ export class OmniNoteManager {
   async loadFromDb(): Promise<void> {
     if (this.dbLoaded) return;
     try {
-      const querySnapshot = await getDocs(collection(db, "omni-notes"));
+      const querySnapshot = await getDocs(collection(db, 'omni-notes'));
       const dbNotes: OmniNote[] = [];
       querySnapshot.forEach((doc) => {
         dbNotes.push(doc.data() as OmniNote);
@@ -224,36 +186,30 @@ export class OmniNoteManager {
       }
       this.dbLoaded = true;
     } catch (e) {
-      console.error("Failed to load notes from DB", e);
+      console.error('Failed to load notes from DB', e);
     }
   }
 
   /** Add or replace a note */
   upsert(note: OmniNote): void {
-    const idx = this.notes.findIndex((n) => n.id === note.id);
-    const updatedNote =
-      idx >= 0
-        ? Object.freeze({ ...note, updatedAt: Date.now(), isFrozen: true })
-        : note;
+    const idx = this.notes.findIndex(n => n.id === note.id);
+    const updatedNote = idx >= 0 ? { ...note, updatedAt: Date.now() } : note;
 
     if (idx >= 0) {
       this.notes[idx] = updatedNote;
     } else {
       this.notes.push(updatedNote);
     }
-    OmniEventBus.publish(OMNI_TOPICS.NOTE_CREATED, {
-      id: updatedNote.id,
-      title: updatedNote.title,
-    });
+    OmniEventBus.publish(OMNI_TOPICS.NOTE_CREATED, { id: updatedNote.id, title: updatedNote.title });
 
     // Async DB write
-    setDoc(doc(db, "omni-notes", updatedNote.id), updatedNote).catch((e) =>
-      console.error("Failed to sync note to DB", e),
+    setDoc(doc(db, 'omni-notes', updatedNote.id), updatedNote).catch(e =>
+      console.error('Failed to sync note to DB', e)
     );
   }
 
   get(id: string): OmniNote | undefined {
-    return this.notes.find((n) => n.id === id);
+    return this.notes.find(n => n.id === id);
   }
 
   getAll(): OmniNote[] {
@@ -261,41 +217,32 @@ export class OmniNoteManager {
   }
 
   getByCategory(category: NoteCategory): OmniNote[] {
-    return this.notes.filter((n) => n.category === category);
+    return this.notes.filter(n => n.category === category);
   }
 
   getByTag(tag: string): OmniNote[] {
-    return this.notes.filter((n) => n.tags.includes(tag));
+    return this.notes.filter(n => n.tags.includes(tag));
   }
 
   /** Get all tasks across all notes (flattened) */
-  getAllTasks(): readonly OmniTask[] {
-    return this.notes.flatMap((n) => n.tasks);
+  getAllTasks(): OmniTask[] {
+    return this.notes.flatMap(n => n.tasks);
   }
 
   /** Toggle task completion by taskId */
   toggleTask(noteId: string, taskId: string): OmniNote | undefined {
     const note = this.get(noteId);
     if (!note) return undefined;
-    const updatedTasks = note.tasks.map((t) =>
+    const updatedTasks = note.tasks.map(t =>
       t.id === taskId ? toggleTaskCompletion(t) : t,
     );
-    const updated: OmniNote = Object.freeze({
-      ...note,
-      tasks: Object.freeze(updatedTasks),
-      updatedAt: Date.now(),
-      isFrozen: true,
-    });
+    const updated: OmniNote = { ...note, tasks: updatedTasks, updatedAt: Date.now() };
     this.upsert(updated);
-    const task = updatedTasks.find((t) => t.id === taskId);
-    if (task?.status === "completed") {
+    const task = updatedTasks.find(t => t.id === taskId);
+    if (task?.status === 'completed') {
       OmniEventBus.publish(OMNI_TOPICS.TASK_COMPLETED, { noteId, taskId });
     } else {
-      OmniEventBus.publish(OMNI_TOPICS.TASK_STATUS_CHANGED, {
-        noteId,
-        taskId,
-        status: task?.status,
-      });
+      OmniEventBus.publish(OMNI_TOPICS.TASK_STATUS_CHANGED, { noteId, taskId, status: task?.status });
     }
     return updated;
   }
@@ -304,30 +251,25 @@ export class OmniNoteManager {
   addTask(noteId: string, task: OmniTask): OmniNote | undefined {
     const note = this.get(noteId);
     if (!note) return undefined;
-    const updated: OmniNote = Object.freeze({
+    const updated: OmniNote = {
       ...note,
-      tasks: Object.freeze([...note.tasks, task]),
+      tasks: [...note.tasks, task],
       updatedAt: Date.now(),
-      isFrozen: true,
-    });
+    };
     this.upsert(updated);
-    OmniEventBus.publish(OMNI_TOPICS.TASK_CREATED, {
-      noteId,
-      taskId: task.id,
-      title: task.title,
-    });
+    OmniEventBus.publish(OMNI_TOPICS.TASK_CREATED, { noteId, taskId: task.id, title: task.title });
     return updated;
   }
 
   /** Remove a note */
   remove(id: string): boolean {
-    const idx = this.notes.findIndex((n) => n.id === id);
+    const idx = this.notes.findIndex(n => n.id === id);
     if (idx < 0) return false;
     this.notes.splice(idx, 1);
 
     // Async DB delete
-    deleteDoc(doc(db, "omni-notes", id)).catch((e) =>
-      console.error("Failed to delete note from DB", e),
+    deleteDoc(doc(db, 'omni-notes', id)).catch(e =>
+      console.error('Failed to delete note from DB', e)
     );
 
     return true;
@@ -350,11 +292,10 @@ export class OmniNoteManager {
     return {
       totalNotes: this.notes.length,
       totalTasks: allTasks.length,
-      completedTasks: allTasks.filter((t) => t.status === "completed").length,
-      highPriorityTasks: allTasks.filter((t) => t.priority === "high").length,
+      completedTasks: allTasks.filter(t => t.status === 'completed').length,
+      highPriorityTasks: allTasks.filter(t => t.priority === 'high').length,
       overdueTasks: allTasks.filter(
-        (t) =>
-          t.dueAt !== undefined && t.dueAt < now && t.status !== "completed",
+        t => t.dueAt !== undefined && t.dueAt < now && t.status !== 'completed',
       ).length,
     };
   }
@@ -375,97 +316,56 @@ export function seedDemoNotes(): void {
 
   // ESG Strategy Note
   const stratNote = createNote(
-    "ESG 永續戰略 2025",
-    "Q3 目標：完成碳排放基準年建立、供應鏈 ESG 評估框架設計、GRI 報告框架確認。",
+    'ESG 永續戰略 2025',
+    'Q3 目標：完成碳排放基準年建立、供應鏈 ESG 評估框架設計、GRI 報告框架確認。',
     {
-      category: "note",
-      tags: ["ESG", "戰略", "2025"],
-      fiveTGate: "transparent",
+      category: 'note',
+      tags: ['ESG', '戰略', '2025'],
+      fiveTGate: 'transparent',
       tasks: [
-        createTask("碳排放基準年建立", {
-          priority: "high",
-          dueAt: now + 3 * DAY,
-          tags: ["碳排"],
-        }),
-        createTask("供應鏈 ESG 評估框架", {
-          priority: "high",
-          dueAt: now + 7 * DAY,
-          tags: ["供應鏈"],
-        }),
-        createTask("GRI 報告框架確認", {
-          priority: "medium",
-          dueAt: now + 14 * DAY,
-          tags: ["GRI"],
-        }),
-        createTask("5T 協議合規審查", {
-          priority: "medium",
-          dueAt: now - DAY,
-          tags: ["5T"],
-          description: "需要法務確認",
-        }),
+        createTask('碳排放基準年建立', { priority: 'high', dueAt: now + 3 * DAY, tags: ['碳排'] }),
+        createTask('供應鏈 ESG 評估框架', { priority: 'high', dueAt: now + 7 * DAY, tags: ['供應鏈'] }),
+        createTask('GRI 報告框架確認', { priority: 'medium', dueAt: now + 14 * DAY, tags: ['GRI'] }),
+        createTask('5T 協議合規審查', { priority: 'medium', dueAt: now - DAY, tags: ['5T'], description: '需要法務確認' }),
       ],
     },
   );
 
   // OmniOne 覺醒系統架構
   const devNote = createNote(
-    "OmniOne 覺醒系統開發記錄",
-    "已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 ESG GO 平台。",
+    'OmniOne 覺醒系統開發記錄',
+    '已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 ESG GO 平台。',
     {
-      category: "note",
-      tags: ["OmniOne", "開發", "AI"],
-      fiveTGate: "trackable",
+      category: 'note',
+      tags: ['OmniOne', '開發', 'AI'],
+      fiveTGate: 'trackable',
       tasks: [
-        createTask("整合 OmniOne 至 ESG GO", {
-          priority: "high",
-          dueAt: now + 2 * DAY,
-          tags: ["整合"],
-        }),
-        createTask("撰寫 SDK 文檔", {
-          priority: "medium",
-          dueAt: now + 10 * DAY,
-          tags: ["文檔"],
-        }),
-        createTask("自主模式壓測", {
-          priority: "low",
-          dueAt: now + 21 * DAY,
-          tags: ["測試"],
-        }),
+        createTask('整合 OmniOne 至 ESG GO', { priority: 'high', dueAt: now + 2 * DAY, tags: ['整合'] }),
+        createTask('撰寫 SDK 文檔', { priority: 'medium', dueAt: now + 10 * DAY, tags: ['文檔'] }),
+        createTask('自主模式壓測', { priority: 'low', dueAt: now + 21 * DAY, tags: ['測試'] }),
       ],
     },
   );
 
   // Data Governance
   const govNote = createNote(
-    "數據治理 KI 整理",
-    "萬能智庫知識項目更新：OmniBase v6.0 Tag 機制、5T 協議最佳實踐、CRDT 同步策略。",
+    '數據治理 KI 整理',
+    '萬能智庫知識項目更新：OmniBase v6.0 Tag 機制、5T 協議最佳實踐、CRDT 同步策略。',
     {
-      category: "reference",
-      tags: ["KI", "知識治理", "5T"],
-      fiveTGate: "trustworthy",
+      category: 'reference',
+      tags: ['KI', '知識治理', '5T'],
+      fiveTGate: 'trustworthy',
       tasks: [
-        createTask("OmniBase v6 文檔更新", {
-          priority: "medium",
-          dueAt: now + 5 * DAY,
-        }),
-        createTask("CRDT 架構評審", { priority: "low", dueAt: now + 30 * DAY }),
+        createTask('OmniBase v6 文檔更新', { priority: 'medium', dueAt: now + 5 * DAY }),
+        createTask('CRDT 架構評審', { priority: 'low', dueAt: now + 30 * DAY }),
       ],
     },
   );
 
   // Mark one task as complete for demo
-  const updatedTasks = [...devNote.tasks];
-  updatedTasks[2] = Object.freeze({
-    ...updatedTasks[2],
-    status: "completed",
-    completedAt: now - DAY,
-  });
-  const frozenDevNote = Object.freeze({
-    ...devNote,
-    tasks: Object.freeze(updatedTasks),
-  });
+  devNote.tasks[2] = { ...devNote.tasks[2], status: 'completed', completedAt: now - DAY };
 
   omniNoteManager.upsert(stratNote);
-  omniNoteManager.upsert(frozenDevNote);
+  omniNoteManager.upsert(devNote);
   omniNoteManager.upsert(govNote);
 }
