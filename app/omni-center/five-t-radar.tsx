@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 interface FiveTData { traceable:number; transparent:number; tangible:number; trustworthy:number; trackable:number; }
 
 const DIMS = [
-  { key:'traceable',   zh:'真', color:'#3B82F6' },
-  { key:'transparent', zh:'善', color:'#22C55E' },
+  { key:'traceable',   zh:'真', color:'var(--accent-blue, #3B82F6)' },
+  { key:'transparent', zh:'善', color:'var(--accent-green, #22C55E)' },
   { key:'tangible',    zh:'美', color:'#F59E0B' },
-  { key:'trustworthy', zh:'信', color:'#8B5CF6' },
-  { key:'trackable',   zh:'通', color:'#06B6D4' },
+  { key:'trustworthy', zh:'信', color:'var(--accent-purple, #8B5CF6)' },
+  { key:'trackable',   zh:'通', color:'var(--accent-cyan, #06B6D4)' },
 ] as const;
 
 type DimKey = typeof DIMS[number]['key'];
@@ -34,9 +34,6 @@ const DEMO_COMPANIES = [
   { name:'中鋼',            scores:{ traceable:0.79, transparent:0.82, tangible:0.75, trustworthy:0.84, trackable:0.78 } },
   { name:'鴻海',            scores:{ traceable:0.88, transparent:0.86, tangible:0.85, trustworthy:0.90, trackable:0.84 } },
 ];
-
-// Light theme color tokens
-const C = { muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A' };
 
 export function FiveTRadar({ }: Props) {
   const [selected, setSelected] = useState(0);
@@ -77,36 +74,37 @@ export function FiveTRadar({ }: Props) {
 
   return (
     <div>
-      <div style={{fontSize:12,fontWeight:600,color:C.muted,letterSpacing:1,marginBottom:10}}>5T 協議即時評分雷達圖</div>
+      <div className="text-xs font-semibold text-textSecondary tracking-wider mb-2.5">5T 協議即時評分雷達圖</div>
 
       {/* Company selector */}
-      <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:12}}>
+      <div className="flex gap-1.5 flex-wrap mb-3">
         {DEMO_COMPANIES.map((c,i)=>(
           <button key={c.name} onClick={()=>setSelected(i)}
-            style={{fontSize:11,padding:'4px 10px',borderRadius:6,cursor:'pointer',border:'none',
-              background:selected===i?'#009EB0':C.surface,color:selected===i?'#FFFFFF':C.muted,transition:'all .2s'}}>
+            className={`text-[11px] px-2.5 py-1 rounded-md cursor-pointer border-none transition-all duration-200 ${
+              selected===i ? 'bg-accentTeal text-white' : 'bg-primary text-textSecondary'
+            }`}>
             {c.name}
           </button>
         ))}
       </div>
 
-      <div style={{display:'flex',gap:16,alignItems:'flex-start',flexWrap:'wrap'}}>
+      <div className="flex gap-4 items-start flex-wrap">
         {/* SVG Radar */}
-        <svg width={240} height={240} style={{flexShrink:0}}>
+        <svg width={240} height={240} className="shrink-0">
           {/* Grid */}
           {gridLevels.map(level=>(
             <polygon key={level}
               points={DIMS.map((_,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,level*MAX_R,CX,CY); return `${p.x},${p.y}`; }).join(' ')}
-              fill="none" stroke="rgba(0,158,176,0.2)" strokeWidth={1}/>
+              fill="none" stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>
           ))}
           {/* Axes */}
           {DIMS.map((_,i)=>{
             const a=(i/5)*Math.PI*2;
             const p=polarPoint(a,MAX_R,CX,CY);
-            return <line key={i} x1={CX} y1={CY} x2={p.x} y2={p.y} stroke="rgba(0,158,176,0.2)" strokeWidth={1}/>;
+            return <line key={i} x1={CX} y1={CY} x2={p.x} y2={p.y} stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>;
           })}
           {/* Score polygon */}
-          <path d={radarPath(displayed,MAX_R,CX,CY)} fill="rgba(0,158,176,0.15)" stroke="#009EB0" strokeWidth={2}/>
+          <path d={radarPath(displayed,MAX_R,CX,CY)} fill="var(--accent-teal)" fillOpacity={0.15} stroke="var(--accent-teal)" strokeWidth={2}/>
           {/* Labels */}
           {DIMS.map((d,i)=>{
             const a=(i/5)*Math.PI*2;
@@ -123,20 +121,20 @@ export function FiveTRadar({ }: Props) {
         </svg>
 
         {/* Scores list */}
-        <div style={{flex:1,minWidth:140}}>
-          <div style={{marginBottom:8}}>
-            <div style={{fontFamily:"'Fira Code',monospace",fontSize:22,fontWeight:700,color:allPass?'#22C55E':'#F59E0B'}}>{(overallScore*100).toFixed(1)}%</div>
-            <div style={{fontSize:11,color:C.muted}}>綜合 5T 合規分數</div>
-            <div style={{fontSize:11,marginTop:2,color:allPass?'#22C55E':'#F59E0B'}}>{allPass?'● 全部通過 (≥80%)':'◐ 部分待改善'}</div>
+        <div className="flex-1 min-w-[140px]">
+          <div className="mb-2">
+            <div className="font-['Fira_Code',monospace] text-[22px] font-bold" style={{color:allPass?'var(--accent-green, #22C55E)':'var(--accent-gold, #D4AF37)'}}>{(overallScore*100).toFixed(1)}%</div>
+            <div className="text-[11px] text-textSecondary">綜合 5T 合規分數</div>
+            <div className="text-[11px] mt-0.5" style={{color:allPass?'var(--accent-green, #22C55E)':'var(--accent-gold, #D4AF37)'}}>{allPass?'● 全部通過 (≥80%)':'◐ 部分待改善'}</div>
           </div>
           {DIMS.map(d=>(
-            <div key={d.key} style={{display:'flex',alignItems:'center',gap:6,marginBottom:6}}>
-              <span style={{width:14,fontSize:12,color:d.color,fontWeight:700}}>{d.zh}</span>
-              <div style={{flex:1,height:5,background:C.surface,borderRadius:3}}>
-                <div style={{height:'100%',width:`${displayed[d.key]*100}%`,background:d.color,borderRadius:3,transition:'width .05s'}}/>
+            <div key={d.key} className="flex items-center gap-1.5 mb-1.5">
+              <span className="w-3.5 text-xs font-bold" style={{color:d.color}}>{d.zh}</span>
+              <div className="flex-1 h-1.5 bg-primary rounded-[3px]">
+                <div className="h-full rounded-[3px] transition-all duration-[50ms]" style={{width:`${displayed[d.key]*100}%`,background:d.color}}/>
               </div>
-              <span style={{fontFamily:"'Fira Code',monospace",fontSize:11,color:d.color,width:36,textAlign:'right'}}>{(displayed[d.key]*100).toFixed(0)}%</span>
-              <span style={{fontSize:10,color:displayed[d.key]>=0.8?'#22C55E':'#FF4D6D'}}>{displayed[d.key]>=0.8?'✓':'✗'}</span>
+              <span className="font-['Fira_Code',monospace] text-[11px] w-9 text-right" style={{color:d.color}}>{(displayed[d.key]*100).toFixed(0)}%</span>
+              <span className="text-[10px]" style={{color:displayed[d.key]>=0.8?'var(--accent-green, #22C55E)':'var(--accent-red, #FF4D6D)'}}>{displayed[d.key]>=0.8?'✓':'✗'}</span>
             </div>
           ))}
         </div>

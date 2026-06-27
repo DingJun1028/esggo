@@ -5,25 +5,25 @@ import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
 import { PdfUploader } from './pdf-uploader';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
+import { Moon, Sun } from 'lucide-react';
 
-const C = { bg:'#F8FAFC', card:'#FFFFFF', border:'#E2E8F0', teal:'#009EB0', gold:'#D4AF37', blue:'#3B82F6', purple:'#8B5CF6', cyan:'#06B6D4', green:'#22C55E', red:'#FF4D6D', text:'#0F172A', muted:'#64748B', surface:'#F1F5F9' };
 type Tab = 'dashboard'|'notes'|'chat'|'fiveT'|'rag';
 
 const FIVE_T = [
-  { key:'traceable',   zh:'真', color:'#3B82F6' },
-  { key:'transparent', zh:'善', color:'#22C55E' },
+  { key:'traceable',   zh:'真', color:'var(--accent-blue, #3B82F6)' },
+  { key:'transparent', zh:'善', color:'var(--accent-green, #22C55E)' },
   { key:'tangible',    zh:'美', color:'#F59E0B' },
-  { key:'trustworthy', zh:'信', color:'#8B5CF6' },
-  { key:'trackable',   zh:'通', color:'#06B6D4' },
+  { key:'trustworthy', zh:'信', color:'var(--accent-purple, #8B5CF6)' },
+  { key:'trackable',   zh:'通', color:'var(--accent-cyan, #06B6D4)' },
 ];
 
 const OMNI_MODULES = [
-  { name:'萬能筆記', en:'OmniNote',     icon:'📝', color:C.teal,   href:'notes'   as Tab },
-  { name:'萬能任務', en:'OmniTask',     icon:'✅', color:C.gold,   href:'notes'   as Tab },
-  { name:'OmniOne', en:'覺醒對話',      icon:'🤖', color:C.purple, href:'chat'    as Tab },
-  { name:'5T 雷達', en:'FiveT Radar',   icon:'📡', color:C.cyan,   href:'fiveT'   as Tab },
-  { name:'RAG 知識', en:'RAG DB',       icon:'📚', color:C.green,  href:'rag'     as Tab },
-  { name:'永續村',   en:'Village',      icon:'🏡', color:C.blue,   href:'/village' },
+  { name:'萬能筆記', en:'OmniNote',     icon:'📝', color:'var(--accent-teal, #009EB0)',   href:'notes'   as Tab },
+  { name:'萬能任務', en:'OmniTask',     icon:'✅', color:'var(--accent-gold, #D4AF37)',   href:'notes'   as Tab },
+  { name:'OmniOne', en:'覺醒對話',      icon:'🤖', color:'var(--accent-purple, #8B5CF6)', href:'chat'    as Tab },
+  { name:'5T 雷達', en:'FiveT Radar',   icon:'📡', color:'var(--accent-cyan, #06B6D4)',   href:'fiveT'   as Tab },
+  { name:'RAG 知識', en:'RAG DB',       icon:'📚', color:'var(--accent-green, #22C55E)',  href:'rag'     as Tab },
+  { name:'永續村',   en:'Village',      icon:'🏡', color:'var(--accent-blue, #3B82F6)',   href:'/village' },
 ];
 
 const DEMO_NOTES: NoteData[] = [
@@ -42,8 +42,23 @@ export default function OmniCenterPage() {
   const [tab, setTab]   = useState<Tab>('dashboard');
   const [notes, setNotes] = useState<NoteData[]>(DEMO_NOTES);
   const [pulse, setPulse] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   
   const { isReady, status } = useAgnesApi();
+
+  useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleDarkMode = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      setIsDarkMode(true);
+    }
+  };
 
   useEffect(() => { const t = setInterval(()=>setPulse(p=>!p),1200); return()=>clearInterval(t); },[]);
 
@@ -76,58 +91,65 @@ export default function OmniCenterPage() {
 
   const tabStyle = (active:boolean) => ({
     display:'flex' as const, alignItems:'center' as const, gap:6, padding:'7px 14px', borderRadius:8, border:'none', cursor:'pointer', fontSize:13, fontWeight:600,
-    background:active?C.teal:'transparent', color:active?'#FFFFFF':C.muted, transition:'all .2s',
+    background:active?'var(--accent-teal, #009EB0)':'transparent', color:active?'#FFFFFF':'var(--text-secondary, #64748B)', transition:'all .2s',
   });
 
   return (
-    <div style={{minHeight:'calc(100vh - 52px)',background:C.bg,color:C.text,fontFamily:"'Noto Sans TC',sans-serif",padding:20}}>
+    <div className="min-h-[calc(100vh-52px)] bg-primary text-textPrimary font-['Noto_Sans_TC',sans-serif] p-5 transition-colors duration-300">
       <style>{`
         @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
-        .card{background:${C.card};border:1px solid ${C.border};border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
       `}</style>
 
       {/* Header */}
-      <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
-        <div style={{width:40,height:40,borderRadius:10,background:C.teal,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,boxShadow:`0 0 ${pulse?20:10}px ${C.teal}60`,transition:'box-shadow .6s'}}>⊙</div>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-10 h-10 rounded-xl bg-accentTeal flex items-center justify-center text-xl shadow-lg transition-shadow duration-600 text-white" style={{boxShadow: pulse ? '0 0 20px var(--accent-teal)' : '0 0 10px rgba(0,158,176,0.6)'}}>⊙</div>
         <div>
-          <h1 style={{fontFamily:"'Montserrat',sans-serif",fontSize:20,fontWeight:700,color:C.teal}}>萬能中心 Omni-Core</h1>
-          <div style={{fontSize:11,color:C.muted}}>無礙圓通，無作筆記 — v1.0</div>
+          <h1 className="font-['Montserrat',sans-serif] text-xl font-bold text-accentTeal">萬能中心 Omni-Core</h1>
+          <div className="text-xs text-textSecondary">無礙圓通，無作筆記 — v1.0</div>
         </div>
-        <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:6}}>
-          {isReady && <span style={{fontSize:10,background:`${C.purple}20`,color:C.purple,padding:'3px 8px',borderRadius:6,fontWeight:700,letterSpacing:0.5,marginRight:8}}>AGNES CORE</span>}
-          <div style={{width:7,height:7,borderRadius:'50%',background:C.green,boxShadow:`0 0 ${pulse?8:4}px ${C.green}`,transition:'box-shadow .6s'}}/>
-          <span style={{fontSize:11,color:C.muted}}>系統運行中</span>
+        <div className="ml-auto flex items-center gap-2">
+          {/* Dark Mode Toggle */}
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2 rounded-full hover:bg-secondary transition-colors text-textSecondary"
+            title="切換深色模式"
+          >
+            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          {isReady && <span className="text-[10px] bg-accentPurple/20 text-accentPurple px-2 py-[3px] rounded-md font-bold tracking-wide mr-2">AGNES CORE</span>}
+          <div className={`w-2 h-2 rounded-full bg-accentGreen transition-shadow duration-600`} style={{boxShadow: pulse ? '0 0 8px var(--accent-green)' : '0 0 4px var(--accent-green)'}}/>
+          <span className="text-xs text-textSecondary">系統運行中</span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{display:'flex',gap:4,marginBottom:16,background:C.surface,padding:4,borderRadius:10,flexWrap:'wrap'}}>
+      <div className="flex gap-1 mb-4 bg-secondary p-1 rounded-xl flex-wrap">
         {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={tabStyle(tab===t.id)}><span>{t.icon}</span>{t.label}</button>)}
       </div>
 
       {/* Dashboard Tab */}
       {tab==='dashboard' && (
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Concentric + 5T Mini */}
-          <div className="card">
-            <div style={{fontSize:11,color:C.muted,fontWeight:600,letterSpacing:1,marginBottom:10}}>同心圓架構 · 5T 綜合評分</div>
-            <div style={{display:'flex',gap:16,alignItems:'center',flexWrap:'wrap'}}>
-              <svg width={200} height={200} style={{flexShrink:0}}>
-                {[75,57,39,21].map((r,i)=><circle key={i} cx={CX} cy={CY} r={r} fill="none" stroke={[C.blue,C.purple,C.teal,C.gold][i]} strokeWidth={pulse&&i===0?2:1} strokeDasharray={i===0?'5 3':undefined} opacity={0.6}/>)}
-                <path d={radarPath} fill={`${C.teal}20`} stroke={C.teal} strokeWidth={2}/>
+          <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+            <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">同心圓架構 · 5T 綜合評分</div>
+            <div className="flex gap-4 items-center flex-wrap">
+              <svg width={200} height={200} className="shrink-0">
+                {[75,57,39,21].map((r,i)=><circle key={i} cx={CX} cy={CY} r={r} fill="none" stroke={['var(--accent-blue)','var(--accent-purple)','var(--accent-teal)','var(--accent-gold)'][i]} strokeWidth={pulse&&i===0?2:1} strokeDasharray={i===0?'5 3':undefined} opacity={0.6}/>)}
+                <path d={radarPath} fill="var(--accent-teal)" fillOpacity={0.2} stroke="var(--accent-teal)" strokeWidth={2}/>
                 {FIVE_T.map((d,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,MR+14,CX,CY); return <text key={d.key} x={p.x} y={p.y+4} textAnchor="middle" fill={d.color} fontSize={12} fontWeight={700}>{d.zh}</text>; })}
-                <circle cx={CX} cy={CY} r={18} fill={C.teal}/>
+                <circle cx={CX} cy={CY} r={18} fill="var(--accent-teal)"/>
                 <text x={CX} y={CY-4} textAnchor="middle" fill="#FFFFFF" fontSize={8} fontWeight={700}>萬能</text>
                 <text x={CX} y={CY+6} textAnchor="middle" fill="#FFFFFF" fontSize={8} fontWeight={700}>中心</text>
               </svg>
-              <div style={{flex:1}}>
-                <div style={{fontFamily:"'Fira Code',monospace",fontSize:28,fontWeight:700,color:C.green,marginBottom:4}}>{(overall*100).toFixed(1)}%</div>
-                <div style={{fontSize:11,color:C.muted,marginBottom:8}}>整體 5T 合規度</div>
+              <div className="flex-1">
+                <div className="font-['Fira_Code',monospace] text-2xl font-bold text-accentGreen mb-1">{(overall*100).toFixed(1)}%</div>
+                <div className="text-xs text-textSecondary mb-2">整體 5T 合規度</div>
                 {FIVE_T.map(d=>(
-                  <div key={d.key} style={{display:'flex',alignItems:'center',gap:6,marginBottom:5}}>
+                  <div key={d.key} className="flex items-center gap-1.5 mb-1.5">
                     <span style={{width:12,color:d.color,fontSize:12,fontWeight:700}}>{d.zh}</span>
-                    <div style={{flex:1,height:4,background:C.surface,borderRadius:2}}><div style={{height:'100%',width:`${SCORES[d.key as keyof typeof SCORES]*100}%`,background:d.color,borderRadius:2}}/></div>
-                    <span style={{fontFamily:"'Fira Code',monospace",fontSize:10,color:d.color}}>{(SCORES[d.key as keyof typeof SCORES]*100).toFixed(0)}%</span>
+                    <div className="flex-1 h-1 bg-primary rounded-full"><div className="h-full rounded-full" style={{width:`${SCORES[d.key as keyof typeof SCORES]*100}%`,background:d.color}}/></div>
+                    <span className="font-['Fira_Code',monospace] text-[10px]" style={{color:d.color}}>{(SCORES[d.key as keyof typeof SCORES]*100).toFixed(0)}%</span>
                   </div>
                 ))}
               </div>
@@ -135,31 +157,32 @@ export default function OmniCenterPage() {
           </div>
 
           {/* Quick Stats */}
-          <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            <div className="card">
-              <div style={{fontSize:11,color:C.muted,fontWeight:600,letterSpacing:1,marginBottom:10}}>系統統計</div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-                {[{l:'筆記數',v:notes.length,c:C.teal},{l:'OmniOne 案件',v:47,c:C.purple},{l:'ZKP 封印',v:28,c:C.blue},{l:'GRI 指標',v:142,c:C.gold}].map(s=>(
-                  <div key={s.l} style={{background:C.surface,borderRadius:8,padding:'8px 10px'}}>
-                    <div style={{fontFamily:"'Fira Code',monospace",fontSize:20,fontWeight:700,color:s.c}}>{s.v}</div>
-                    <div style={{fontSize:11,color:C.muted}}>{s.l}</div>
+          <div className="flex flex-col gap-3">
+            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+              <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">系統統計</div>
+              <div className="grid grid-cols-2 gap-2">
+                {[{l:'筆記數',v:notes.length,c:'var(--accent-teal)'},{l:'OmniOne 案件',v:47,c:'var(--accent-purple)'},{l:'ZKP 封印',v:28,c:'var(--accent-blue)'},{l:'GRI 指標',v:142,c:'var(--accent-gold)'}].map(s=>(
+                  <div key={s.l} className="bg-primary rounded-lg py-2 px-2.5">
+                    <div className="font-['Fira_Code',monospace] text-xl font-bold" style={{color:s.c}}>{s.v}</div>
+                    <div className="text-xs text-textSecondary">{s.l}</div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="card">
-              <div style={{fontSize:11,color:C.muted,fontWeight:600,letterSpacing:1,marginBottom:10}}>萬能模組矩陣</div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6}}>
+            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+              <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">萬能模組矩陣</div>
+              <div className="grid grid-cols-3 gap-1.5">
                 {OMNI_MODULES.map(m=>(
                   <button key={m.name} onClick={()=>{
                     if (m.href.startsWith('/')) window.location.href = m.href;
                     else setTab(m.href as Tab);
                   }}
-                    style={{background:C.surface,border:`1px solid ${m.color}30`,borderRadius:8,padding:'8px 6px',cursor:'pointer',textAlign:'center',transition:'all .2s'}}
-                    onMouseEnter={e=>{e.currentTarget.style.borderColor=m.color;e.currentTarget.style.background=`${m.color}15`;}}
-                    onMouseLeave={e=>{e.currentTarget.style.borderColor=`${m.color}30`;e.currentTarget.style.background=C.surface;}}>
-                    <div style={{fontSize:18,marginBottom:2}}>{m.icon}</div>
-                    <div style={{fontSize:10,color:m.color,fontWeight:600}}>{m.name}</div>
+                    className="bg-primary border border-borderColor rounded-lg py-2 px-1.5 cursor-pointer text-center transition-all duration-200 hover:opacity-80"
+                    style={{ borderColor: `${m.color}30` }}
+                    onMouseEnter={e=>{e.currentTarget.style.borderColor=m.color;}}
+                    onMouseLeave={e=>{e.currentTarget.style.borderColor=`${m.color}30`;}}>
+                    <div className="text-lg mb-0.5">{m.icon}</div>
+                    <div className="text-[10px] font-semibold" style={{color:m.color}}>{m.name}</div>
                   </button>
                 ))}
               </div>
@@ -170,28 +193,28 @@ export default function OmniCenterPage() {
 
       {/* Notes Tab */}
       {tab==='notes' && (
-        <div className="card">
+        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
           <OmniNoteCRUD />
         </div>
       )}
 
       {/* Chat Tab */}
       {tab==='chat' && (
-        <div className="card" style={{minHeight:500}}>
+        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm min-h-[500px]">
           <OmniOneChat/>
         </div>
       )}
 
       {/* 5T Tab */}
       {tab==='fiveT' && (
-        <div className="card">
+        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
           <FiveTRadar/>
         </div>
       )}
 
       {/* RAG Knowledge Base Tab */}
       {tab==='rag' && (
-        <div className="card" style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm max-w-4xl mx-auto">
           <PdfUploader/>
         </div>
       )}
