@@ -224,3 +224,6 @@ adr/
 
 # Static reports (generated, not source)
 reports/
+README.OMNICOMPONENT.md
+TECHNICAL_INTEGRITY.md
+UNIVERSAL_COMPONENT_MATRIX.md
