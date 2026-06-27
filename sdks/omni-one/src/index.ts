@@ -12,6 +12,7 @@
  */
 
 import { createHash, randomBytes } from 'crypto';
+import { agnesApi } from '@/lib/agnes-api';
 // ── Inline types (SDK is standalone) ───────────────────────────
 type CaseType = 'code_optimization'|'documentation'|'data_analysis'|'esg_report'|'ui_design'|'architecture'|'bug_fix'|'general';
 type AwakeningLevel = 'dormant'|'awakening'|'active'|'transcendent';
@@ -136,7 +137,20 @@ export class AwakeningCore {
 
   async execute(plan: string, input: string, caseType: CaseType): Promise<string> {
     this.processingCount++;
-    // Simulate execution — in production would call tools/APIs
+
+    // Try AGNES API integration for specific case types
+    try {
+      if (['documentation', 'general', 'esg_report'].includes(caseType)) {
+        const agnesRes = await agnesApi.processRequest(`[CaseType: ${caseType}] Execute Plan:\n${plan}\n\nInput:\n${input}`);
+        if (agnesRes.success && agnesRes.data?.output) {
+          return `[OmniOne x AGNES] ${agnesRes.data.output}`;
+        }
+      }
+    } catch (e) {
+      console.warn('[OmniOne] AGNES integration fallback', e);
+    }
+
+    // Simulate execution — fallback to mock outputs
     const outputs: Record<CaseType, string> = {
       code_optimization:  `[OmniOne] 已分析代碼結構，識別出 ${Math.floor(Math.random() * 5) + 1} 個優化點。建議使用記憶化、惰性載入或並行處理。`,
       documentation:      `[OmniOne] 已生成結構化文檔草稿，包含概覽、API 參考、使用範例三個部分。`,

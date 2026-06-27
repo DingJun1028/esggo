@@ -6,6 +6,8 @@
  */
 
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
+import { agnesApi } from '@/lib/agnes-api';
+import { createHash } from 'crypto';
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -131,6 +133,8 @@ export function startAsyncTask(
         const completedAt = new Date().toISOString();
         const durationMs = Date.now() - startTime;
 
+        const trinityHash = createHash('sha256').update(`${taskId}:${report?.totalWords ?? wordsSoFar}`).digest('hex');
+        
         const result: TaskProgress = {
           ...current,
           status: 'completed',
@@ -141,8 +145,8 @@ export function startAsyncTask(
           completedAt,
           result: {
             totalWords: report?.totalWords ?? wordsSoFar,
-                    totalTags: report?.chapters?.length ?? totalChapters,
-            trinityHash: report?.trinityHash ?? `trinity-${taskId}`,
+            totalTags: report?.chapters?.length ?? totalChapters,
+            trinityHash,
             durationMs,
             companyId,
           },
@@ -169,31 +173,61 @@ export function startAsyncTask(
 
     const chNum = chapterIndex + 1;
     const gate = chNum <= 3 ? 'traceable' : chNum <= 5 ? 'transparent' : chNum <= 13 ? 'tangible' : chNum <= 24 ? 'trustworthy' : 'trackable';
-    // Estimate words per chapter (~10K)
-    const chapterWords = 10000 + Math.floor(Math.random() * 2000);
-    wordsSoFar += chapterWords;
-    chapterIndex++;
+    const currentTitle = V5_CHAPTERS[chapterIndex]?.title ?? `第${chNum}章`;
 
-    const progress: TaskProgress = {
-      ...current,
-      status: 'running',
-      currentChapter: chapterIndex,
-      totalChapters,
-      chapterTitle: V5_CHAPTERS[chapterIndex - 1]?.title ?? `第${chNum}章`,
-      wordsSoFar,
-      fiveTGate: gate,
-      tagsCreated: chapterIndex,
-      decisionsCount: chapterIndex * 3,
-      percent: Math.round((chapterIndex / totalChapters) * 100),
-      updatedAt: new Date().toISOString(),
-    };
-    tasks.set(taskId, progress);
-    onProgress?.(progress);
+    agnesApi.processRequest(`為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`).then(res => {
+      const generatedText = res.success ? res.data.output : `[Fallback] ${currentTitle} 內容生成中...`;
+      // Estimate words (for Chinese, length is roughly word count)
+      const chapterWords = generatedText.length;
+      wordsSoFar += chapterWords;
+      chapterIndex++;
 
-    // Yield to event loop every chapter (20-80ms per chapter for real work)
-    const delay = 20 + Math.random() * 60;
-    const timeout = setTimeout(processNextChapter, delay);
-    taskTimeouts.set(taskId, timeout);
+      const progress: TaskProgress = {
+        ...current,
+        status: 'running',
+        currentChapter: chapterIndex,
+        totalChapters,
+        chapterTitle: currentTitle,
+        wordsSoFar,
+        fiveTGate: gate,
+        tagsCreated: chapterIndex,
+        decisionsCount: chapterIndex * 3,
+        percent: Math.round((chapterIndex / totalChapters) * 100),
+        updatedAt: new Date().toISOString(),
+      };
+      tasks.set(taskId, progress);
+      onProgress?.(progress);
+
+      // Yield to event loop
+      const delay = 50 + Math.random() * 50;
+      const timeout = setTimeout(processNextChapter, delay);
+      taskTimeouts.set(taskId, timeout);
+    }).catch(err => {
+      console.warn('[V5 Task] AGNES API Failed, using fallback.', err);
+      const chapterWords = 500 + Math.floor(Math.random() * 200);
+      wordsSoFar += chapterWords;
+      chapterIndex++;
+
+      const progress: TaskProgress = {
+        ...current,
+        status: 'running',
+        currentChapter: chapterIndex,
+        totalChapters,
+        chapterTitle: currentTitle,
+        wordsSoFar,
+        fiveTGate: gate,
+        tagsCreated: chapterIndex,
+        decisionsCount: chapterIndex * 3,
+        percent: Math.round((chapterIndex / totalChapters) * 100),
+        updatedAt: new Date().toISOString(),
+      };
+      tasks.set(taskId, progress);
+      onProgress?.(progress);
+
+      const delay = 50 + Math.random() * 50;
+      const timeout = setTimeout(processNextChapter, delay);
+      taskTimeouts.set(taskId, timeout);
+    });
   }
 
   const initialTimeout = setTimeout(processNextChapter, 50);

@@ -1,15 +1,14 @@
 'use client';
-import { useState, useCallback } from 'react';
-import xss from 'xss';
+import { useState, useCallback, useEffect } from 'react';
+import { useAgnesApi } from '../../src/components/AgnesProvider';
 
 // Light theme color tokens
 const C = { teal:'#009EB0', gold:'#D4AF37', red:'#FF4D6D', muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A', green:'#22C55E' };
 
+import { db } from '@/lib/firebase';
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
+
 export interface NoteData { id:string; title:string; content:string; tags:string[]; fiveTGate?:string; createdAt:number; }
-
-function rnd() { return Math.random().toString(36).slice(2,6).toUpperCase(); }
-
-interface Props { notes: NoteData[]; onChange: (notes:NoteData[])=>void; }
 
 /** Basic HTML sanitization: escape <script> and dangerous tags to prevent XSS */
 function sanitizeHtml(html: string): string {
@@ -19,29 +18,43 @@ function sanitizeHtml(html: string): string {
     .replace(/javascript\s*:/gi, '');
 }
 
-export function OmniNoteCRUD({ notes, onChange }: Props) {
+export function OmniNoteCRUD() {
+  const [notes, setNotes] = useState<NoteData[]>([]);
   const [editing, setEditing]   = useState<NoteData|null>(null);
   const [creating, setCreating] = useState(false);
   const [draft, setDraft]       = useState({ title:'', content:'', tags:'', fiveTGate:'' });
   const [preview, setPreview]   = useState<string|null>(null);
+  
+  const { isReady, processMessage } = useAgnesApi();
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  useEffect(() => {
+    if (!db) return;
+    const q = query(collection(db, 'notes'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NoteData));
+      setNotes(data);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const startCreate = () => { setDraft({title:'',content:'',tags:'',fiveTGate:''}); setCreating(true); setEditing(null); };
   const startEdit   = (n:NoteData) => { setDraft({title:n.title,content:n.content,tags:(n.tags??[]).join(', '),fiveTGate:n.fiveTGate||''}); setEditing(n); setCreating(false); };
   const cancel      = () => { setCreating(false); setEditing(null); };
 
-  const save = useCallback(() => {
+  const save = useCallback(async () => {
     const tags = (draft.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
     if (editing) {
-      onChange(notes.map(n => n.id===editing.id ? {...n,...draft,tags} : n));
+      await updateDoc(doc(db, 'notes', editing.id), { title: draft.title||'未命名', content: draft.content, tags, fiveTGate: draft.fiveTGate||null });
     } else {
-      onChange([...notes, {id:`ON-${rnd()}`,title:draft.title||'未命名',content:draft.content,tags,fiveTGate:draft.fiveTGate||undefined,createdAt:Date.now()}]);
+      await addDoc(collection(db, 'notes'), { title: draft.title||'未命名', content: draft.content, tags, fiveTGate: draft.fiveTGate||null, createdAt: Date.now() });
     }
     cancel();
-  }, [draft, editing, notes, onChange]);
+  }, [draft, editing]);
 
-  const remove = useCallback((id:string) => {
-    onChange(notes.filter(n=>n.id!==id));
-  }, [notes, onChange]);
+  const remove = useCallback(async (id:string) => {
+    await deleteDoc(doc(db, 'notes', id));
+  }, []);
 
   const gateColor = (g?:string) => g==='traceable'?'#3B82F6':g==='transparent'?'#22C55E':g==='tangible'?'#F59E0B':g==='trustworthy'?'#8B5CF6':g==='trackable'?'#06B6D4':C.muted;
 
@@ -80,7 +93,25 @@ export function OmniNoteCRUD({ notes, onChange }: Props) {
             : <textarea style={{...inputStyle,minHeight:100,resize:'vertical',display:'block'}} placeholder="內容 (支援 Markdown: # ## ### **粗體** `code`)" value={draft.content} onChange={e=>setDraft(d=>({...d,content:e.target.value}))} />
           }
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:8}}>
-            <input style={inputStyle} placeholder="標籤 (逗號分隔)" value={draft.tags} onChange={e=>setDraft(d=>({...d,tags:e.target.value}))} />
+            <div style={{display:'flex',gap:6}}>
+              <input style={inputStyle} placeholder="標籤 (逗號分隔)" value={draft.tags} onChange={e=>setDraft(d=>({...d,tags:e.target.value}))} />
+              {isReady && (
+                <button 
+                  onClick={async () => {
+                    if(!draft.content) return;
+                    setIsGenerating(true);
+                    const res = await processMessage(`Extract 3 short comma-separated keywords/tags for this text, return ONLY the keywords separated by commas: ${draft.content.substring(0,300)}`);
+                    if(res) setDraft(d=>({...d,tags:res}));
+                    setIsGenerating(false);
+                  }}
+                  disabled={isGenerating}
+                  style={{...btnStyle(isGenerating?C.muted:C.purple), padding:'6px 10px', flexShrink:0}}
+                  title="Auto Generate Tags via AGNES"
+                >
+                  {isGenerating ? '⏳' : '🪄 AI'}
+                </button>
+              )}
+            </div>
             <select style={{...inputStyle,cursor:'pointer'}} value={draft.fiveTGate} onChange={e=>setDraft(d=>({...d,fiveTGate:e.target.value}))}>
               <option value="">5T 門控 (選填)</option>
               {['traceable','transparent','tangible','trustworthy','trackable'].map(g=><option key={g} value={g}>{g}</option>)}

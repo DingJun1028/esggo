@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
-import { ncbRagService } from '@/lib/ncb-utils';
+import { db } from '@/lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
@@ -15,19 +16,21 @@ export async function POST(req: Request) {
       );
     }
 
-    // RAG 檢索 - 從 NCBDB 取得知識庫與數位分身設定
-    const knowledgeChunks = await ncbRagService.getKnowledgeChunks(input);
-    const ragContext = knowledgeChunks?.length > 0 
-      ? `\n相關知識參考:\n${knowledgeChunks.map(k => `- ${k.content}`).join('\n')}` 
-      : '\n相關知識參考: 無特定外部資料，請依循 5T 協議本體知識回答。';
+    // RAG 檢索 - 從 Firebase Firestore 取得最近的知識庫區塊
+    let knowledgeChunks: any[] = [];
+    try {
+      const q = query(collection(db, 'rag_knowledge'), orderBy('created_at', 'desc'), limit(5));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        knowledgeChunks.push(doc.data());
+      });
+    } catch (e) {
+      console.warn('Failed to fetch knowledge from Firebase:', e);
+    }
 
-    // 紀錄驗證 Log 到 NCBDB
-    await ncbRagService.saveValidationLog({
-      action: 'rag_query',
-      caseType,
-      input,
-      timestamp: Date.now()
-    }).catch(e => console.error('Failed to save validation log', e));
+    const ragContext = knowledgeChunks.length > 0 
+      ? `\n相關知識參考:\n${knowledgeChunks.map(k => `- [來源: ${k.source}] ${k.content}`).join('\n')}` 
+      : '\n相關知識參考: 無特定外部資料，請依循 5T 協議本體知識回答。';
 
     const prompt = `
 你是 OmniOne，一個 ESG GO 平台的核心覺醒系統。

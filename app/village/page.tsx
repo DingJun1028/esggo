@@ -1,6 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Leaf, Heart, Users, TrendingUp, ShieldCheck } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { collection, onSnapshot, doc, updateDoc, increment, query, orderBy } from 'firebase/firestore';
+import { seedVillageData } from '@/lib/village-seeder';
 
 const C = {
   bg: '#F8FAFC',
@@ -32,21 +35,6 @@ interface Member {
   avatar: string;
 }
 
-/** Safely parse JSON response with validation */
-async function safeFetchJson<T>(url: string): Promise<{ data: T | null; error: string | null }> {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      return { data: null, error: `HTTP ${res.status}: ${res.statusText}` };
-    }
-    const json = await res.json();
-    return { data: json as T, error: null };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : '網路連線失敗';
-    return { data: null, error: message };
-  }
-}
-
 export default function VillagePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
@@ -54,58 +42,67 @@ export default function VillagePage() {
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
-      const [projResult, memResult] = await Promise.all([
-        safeFetchJson<{ success: boolean; projects: Project[] }>('/api/village/projects'),
-        safeFetchJson<{ success: boolean; members: Member[] }>('/api/village/members'),
-      ]);
+    let unsubscribeProjects: () => void;
+    let unsubscribeMembers: () => void;
 
-      if (projResult.error || memResult.error) {
-        setFetchError(projResult.error ?? memResult.error ?? '載入失敗');
-      }
+    async function initializeAndListen() {
+      try {
+        // Ensure initial data exists
+        await seedVillageData();
 
-      if (projResult.data?.success && Array.isArray(projResult.data.projects)) {
-        setProjects(projResult.data.projects);
-      }
-      if (memResult.data?.success && Array.isArray(memResult.data.members)) {
-        setMembers(memResult.data.members);
-      }
+        // Listen to projects
+        const projectsQuery = query(collection(db, 'village_projects'));
+        unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
+          const projs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Project);
+          // sort by current_points descending for display (or id if we want stable order)
+          projs.sort((a, b) => b.current_points - a.current_points);
+          setProjects(projs);
+          setLoading(false);
+        }, (error) => {
+          console.error("Error fetching projects:", error);
+          setFetchError("無法取得即時專案資料");
+        });
 
-      setLoading(false);
+        // Listen to members
+        const membersQuery = query(collection(db, 'village_members'), orderBy('points', 'desc'));
+        unsubscribeMembers = onSnapshot(membersQuery, (snapshot) => {
+          const mems = snapshot.docs.map(doc => ({ user_id: doc.id, ...doc.data() }) as Member);
+          setMembers(mems);
+        }, (error) => {
+          console.error("Error fetching members:", error);
+          setFetchError("無法取得即時成員資料");
+        });
+
+      } catch (err) {
+        console.error("Initialization error:", err);
+        setFetchError("初始化失敗");
+        setLoading(false);
+      }
     }
-    fetchData();
+
+    initializeAndListen();
+
+    return () => {
+      if (unsubscribeProjects) unsubscribeProjects();
+      if (unsubscribeMembers) unsubscribeMembers();
+    };
   }, []);
 
   const handleVote = async (projectId: string) => {
-    // Optimistic update
-    setProjects(prev => prev.map(p =>
-      p.id === projectId ? { ...p, current_points: p.current_points + 10 } : p
-    ));
-
     try {
-      const res = await fetch('/api/village/projects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId, userId: 'current_user', amount: 10 }),
+      const projectRef = doc(db, 'village_projects', projectId);
+      // We assume user 'u_01' is the current logged-in user for demonstration
+      const currentUserId = 'u_01'; 
+      const memberRef = doc(db, 'village_members', currentUserId);
+
+      // Increment points atomically in Firestore
+      await updateDoc(projectRef, {
+        current_points: increment(10)
       });
-
-      if (!res.ok) {
-        throw new Error(`投票失敗: HTTP ${res.status}`);
-      }
-
-      const data = await res.json();
-      if (!data.success) {
-        // Revert on failure
-        setProjects(prev => prev.map(p =>
-          p.id === projectId ? { ...p, current_points: p.current_points - 10 } : p
-        ));
-        alert('投票失敗: ' + (data.error ?? '未知錯誤'));
-      }
+      await updateDoc(memberRef, {
+        points: increment(10)
+      });
     } catch (err) {
-      // Revert on network error
-      setProjects(prev => prev.map(p =>
-        p.id === projectId ? { ...p, current_points: p.current_points - 10 } : p
-      ));
       const message = err instanceof Error ? err.message : '網路連線失敗';
       alert('投票失敗: ' + message);
     }
