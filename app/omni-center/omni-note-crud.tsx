@@ -1,5 +1,6 @@
 'use client';
 import { useState, useCallback } from 'react';
+import xss from 'xss';
 
 const C = { teal:'#009EB0', gold:'#D4AF37', red:'#FF4D6D', muted:'#9CA3AF', surface:'#1A1A1F', border:'rgba(0,158,176,0.2)', text:'#E8E8E8', green:'#22C55E' };
 
@@ -33,7 +34,7 @@ export function OmniNoteCRUD({ notes, onChange }: Props) {
 
   const gateColor = (g?:string) => g==='traceable'?'#3B82F6':g==='transparent'?'#22C55E':g==='tangible'?'#F59E0B':g==='trustworthy'?'#8B5CF6':g==='trackable'?'#06B6D4':C.muted;
 
-  const renderMd = (s:string) => s
+  const renderMd = (s:string) => xss(s)
     .replace(/^### (.+)$/gm,'<h3 style="color:#D4AF37;font-size:14px;margin:8px 0 4px">$1</h3>')
     .replace(/^## (.+)$/gm,'<h2 style="color:#009EB0;font-size:15px;margin:10px 0 4px">$1</h2>')
     .replace(/^# (.+)$/gm,'<h1 style="color:#009EB0;font-size:17px;margin:10px 0 6px">$1</h1>')
