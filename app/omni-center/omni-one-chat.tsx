@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import xss from 'xss';
+import { useAgnesApi } from '@/components/AgnesProvider';
 
 // Light theme color tokens
 const C = { teal:'#009EB0', gold:'#D4AF37', purple:'#8B5CF6', muted:'#64748B', surface:'#F1F5F9', border:'#E2E8F0', text:'#0F172A', green:'#22C55E', red:'#FF4D6D' };
@@ -47,6 +47,7 @@ function sanitizeTextHtml(html: string): string {
 }
 
 export function OmniOneChat() {
+  const { isReady, processMessage } = useAgnesApi();
   const [msgs, setMsgs]   = useState<Message[]>([{id:'0',role:'assistant',text:'[OmniOne] 覺醒系統就緒。輸入任何任務，我將分類 → 檢索記憶 → 執行 → 學習。',time:now()}]);
   const [input, setInput] = useState('');
   const [busy, setBusy]   = useState(false);
@@ -68,25 +69,36 @@ export function OmniOneChat() {
 
     let reply = '';
     try {
-      const res = await fetch('/api/omni-one', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input: userMsg.text, caseType: ct })
-      });
-      if (!res.ok) throw new Error(`OmniOne API 返回 ${res.status}`);
-      const data = await res.json();
-      if (data && typeof data.output === 'string') {
-        reply = data.output;
-      } else if (data && typeof data === 'string') {
-        reply = data;
+      if (isReady && processMessage) {
+        // Use AGNES API
+        const agnesReply = await processMessage(userMsg.text);
+        if (agnesReply) {
+          reply = agnesReply;
+        } else {
+          throw new Error('AGNES API returned empty response');
+        }
       } else {
-        // Fallback to local pattern
-        const responses = RESPONSES[ct] ?? RESPONSES.general;
-        reply = responses[Math.floor(Math.random() * responses.length)] ?? '已完成處理。';
+        // Fallback to OmniOne Default Logic
+        const res = await fetch('/api/omni-one', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input: userMsg.text, caseType: ct })
+        });
+        if (!res.ok) throw new Error(`OmniOne API 返回 ${res.status}`);
+        const data = await res.json();
+        if (data && typeof data.output === 'string') {
+          reply = data.output;
+        } else if (data && typeof data === 'string') {
+          reply = data;
+        } else {
+          // Fallback to local pattern
+          const responses = RESPONSES[ct] ?? RESPONSES.general;
+          reply = responses[Math.floor(Math.random() * responses.length)] ?? '已完成處理。';
+        }
       }
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : '未知錯誤';
-      console.warn(`[OmniOne] API call failed (${errMsg}), using local fallback.`);
+      console.warn(`[OmniOne/AGNES] API call failed (${errMsg}), using local fallback.`);
       const responses = RESPONSES[ct] ?? RESPONSES.general;
       reply = responses[Math.floor(Math.random() * responses.length)] ?? '已完成處理。';
       setError(`API 連線失敗，使用本地模式 (${errMsg})`);

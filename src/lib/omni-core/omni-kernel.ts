@@ -324,6 +324,8 @@ export class FiveTGatekeeper {
 // SECTION 7: OmniKernel — 同心圓核心（組合所有子系統）
 // ═══════════════════════════════════════════════════════════════
 
+import { agnesApi } from '@/lib/agnes-api';
+
 export class OmniKernel {
   readonly registry: OmniRegistry;
   readonly lifecycle: OmniLifecycleManager;
@@ -331,6 +333,7 @@ export class OmniKernel {
   readonly sync: OmniSyncGateway;
   readonly eventBus: typeof OmniEventBus;
   private _initialized = false;
+  private _agnesMetrics: any = null;
 
   constructor() {
     this.registry = new OmniRegistry();
@@ -345,6 +348,14 @@ export class OmniKernel {
     // Start cache eviction every 60s
     if (typeof setInterval !== 'undefined') {
       setInterval(() => this.cache.evict(), 60_000);
+      setInterval(async () => {
+        try {
+          const res = await agnesApi.getMetrics();
+          if (res.success) this._agnesMetrics = res.data;
+        } catch (e) {
+          console.warn('[OmniKernel] Failed to fetch AGNES metrics', e);
+        }
+      }, 60_000);
     }
     this._initialized = true;
   }
@@ -354,12 +365,14 @@ export class OmniKernel {
     cacheMetrics: { size: number; hitRate: number };
     syncLogCount: number;
     initialized: boolean;
+    agnesStatus: any;
   } {
     return {
       registryCount: this.registry.count(),
       cacheMetrics: this.cache.getMetrics(),
       syncLogCount: this.sync.getLog().length,
       initialized: this._initialized,
+      agnesStatus: this._agnesMetrics || { activeNodes: 0, throughput: '0 req/s' },
     };
   }
 }

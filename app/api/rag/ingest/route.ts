@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pdfParse from 'pdf-parse';
 import { ncbRagService } from '@/lib/ncb-utils';
+import { agnesApi } from '@/lib/agnes-api';
 
 function chunkText(text: string, chunkSize = 1000, overlap = 200): string[] {
   const chunks: string[] = [];
@@ -29,6 +30,18 @@ export async function POST(req: Request) {
     // 1. 解析 PDF
     const pdfData = await pdfParse(buffer);
     const rawText = pdfData.text.replace(/\n+/g, '\n').trim();
+
+    // 1.5 AGNES 預處理 (擷取前 2000 字元進行摘要分析)
+    let summaryContext = '';
+    try {
+      const sampleText = rawText.substring(0, 2000);
+      const agnesRes = await agnesApi.processRequest(`請分析以下文本並提取摘要：\n${sampleText}`);
+      if (agnesRes.success) {
+        summaryContext = agnesRes.data.output;
+      }
+    } catch (e) {
+      console.warn('[AGNES_API] 預處理失敗，繼續執行標準流程', e);
+    }
 
     // 2. 切片 (Chunking)
     const chunks = chunkText(rawText, 1000, 200);
