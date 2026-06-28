@@ -9,10 +9,10 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { companyId, format = 'json', mode = 'standard' } = await req.json();
+  const { companyId, format = 'json', mode = 'standard', brandTone = 'professional' } = await req.json();
 
   if (mode === 'full') {
-    const report = generateFullV5Report(companyId);
+    const report = await generateFullV5Report(companyId, brandTone);
     if (!report) return NextResponse.json({ error: 'Company not found' }, { status: 404 });
     if (format === 'html') {
       return new NextResponse(fullReportToHtml(report), {

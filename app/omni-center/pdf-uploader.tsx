@@ -9,10 +9,20 @@ interface UploadResult {
   pageCount?: number;
 }
 
+interface ProcessedDocument {
+  id: string;
+  sourceFile: string;
+  ocrResult: { text: string; confidence: number };
+  knowledgePoint: { why: string; what: string; how: string; tags: string[] };
+  hashLock: string;
+}
+
 export function PdfUploader() {
+  const [mode, setMode] = useState<'rag' | 'esg_ocr'>('rag');
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
+  const [processedDoc, setProcessedDoc] = useState<ProcessedDocument | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +30,7 @@ export function PdfUploader() {
     if (files && files.length > 0) {
       setFile(files[0]);
       setResult(null);
+      setProcessedDoc(null);
     }
   };
 
@@ -27,13 +38,16 @@ export function PdfUploader() {
     if (!file) return;
     setUploading(true);
     setResult(null);
+    setProcessedDoc(null);
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('fileName', file.name);
     formData.append('userId', 'user_' + Math.random().toString(36).substring(2, 11));
 
     try {
-      const res = await fetch('/api/rag/ingest', {
+      const endpoint = mode === 'rag' ? '/api/rag/ingest' : '/api/sustain-write/v5/documents';
+      const res = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });
@@ -51,15 +65,25 @@ export function PdfUploader() {
         throw new Error(errorMsg);
       }
 
-      const totalChunks = typeof data.totalChunks === 'number' ? data.totalChunks : undefined;
-      const pageCount = typeof data.pageCount === 'number' ? data.pageCount : undefined;
+      if (mode === 'rag') {
+        const totalChunks = typeof data.totalChunks === 'number' ? data.totalChunks : undefined;
+        const pageCount = typeof data.pageCount === 'number' ? data.pageCount : undefined;
 
-      setResult({
-        success: true,
-        message: '上傳並解析成功！已同步至 NCBDB',
-        totalChunks,
-        pageCount
-      });
+        setResult({
+          success: true,
+          message: '上傳並解析成功！已同步至 NCBDB',
+          totalChunks,
+          pageCount
+        });
+      } else {
+        const docData = data.data as ProcessedDocument;
+        setProcessedDoc(docData);
+        setResult({
+          success: true,
+          message: '單據已由 ESGSonnar 完成深度解析與 ZKP 封印'
+        });
+      }
+
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err: unknown) {
@@ -76,11 +100,22 @@ export function PdfUploader() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="text-base font-bold text-accentTeal tracking-wide flex items-center gap-2">
-        <Upload size={18} /> RAG 知識庫上傳
+      <div className="flex items-center justify-between">
+        <div className="text-base font-bold text-accentTeal tracking-wide flex items-center gap-2">
+          <Upload size={18} /> {mode === 'rag' ? 'RAG 知識庫上傳' : 'ESGSonnar 單據智能解析'}
+        </div>
+        <div className="flex gap-2 bg-surface p-1 rounded-lg">
+          <button onClick={() => setMode('rag')} className={`px-3 py-1 text-sm rounded-md transition-colors ${mode === 'rag' ? 'bg-accentTeal text-white' : 'text-textSecondary hover:bg-white/5'}`}>RAG 寫入</button>
+          <button onClick={() => setMode('esg_ocr')} className={`px-3 py-1 text-sm rounded-md transition-colors ${mode === 'esg_ocr' ? 'bg-accentGold text-black font-bold' : 'text-textSecondary hover:bg-white/5'}`}>單據深度解析</button>
+        </div>
       </div>
+      
       <div className="text-[13px] text-textSecondary leading-[1.6]">
-        上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code className="text-accentGold bg-primary px-1 py-[1px] rounded-[3px]">Firestore</code> 的 rag_knowledge 集合中。
+        {mode === 'rag' ? (
+          <>上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code className="text-accentGold bg-primary px-1 py-[1px] rounded-[3px]">Firestore</code> 的 rag_knowledge 集合中。</>
+        ) : (
+          <>上傳企業單據，透過 <strong>ESGSonnar</strong> 進行多模態 OCR 與知識點萃取 (Why, What, How)，並完成 5T 協議的 Trustworthy ZKP 封印。</>
+        )}
       </div>
 
       <div
@@ -135,6 +170,43 @@ export function PdfUploader() {
               解析了 {result.pageCount ?? '?'} 頁，共產生 <strong className="text-accentTeal">{result.totalChunks}</strong> 個知識切片。
             </div>
           )}
+        </div>
+      )}
+
+      {processedDoc && (
+        <div className="flex flex-col gap-3 mt-2 animate-in fade-in slide-in-from-bottom-2">
+          <div className="bg-surface p-4 rounded-xl border border-borderColor shadow-lg">
+            <h4 className="text-accentGold text-sm font-bold flex items-center gap-2 mb-3">
+              <FileText size={16} /> 教學即服務 (Service as Teaching)
+            </h4>
+            <div className="grid gap-3 text-[13px]">
+              <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentTeal">
+                <span className="font-bold text-accentTeal block mb-1">Why 為什麼重要？</span>
+                <span className="text-textPrimary">{processedDoc.knowledgePoint.why}</span>
+              </div>
+              <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentBlue">
+                <span className="font-bold text-accentBlue block mb-1">What 紀錄了什麼？</span>
+                <span className="text-textPrimary">{processedDoc.knowledgePoint.what}</span>
+              </div>
+              <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentPurple">
+                <span className="font-bold text-accentPurple block mb-1">How 如何改善？</span>
+                <span className="text-textPrimary">{processedDoc.knowledgePoint.how}</span>
+              </div>
+            </div>
+            
+            <div className="mt-4 pt-3 border-t border-borderColor/50 flex items-center justify-between">
+              <div className="text-xs font-mono text-textSecondary bg-primary px-2 py-1 rounded">
+                HashLock: {processedDoc.hashLock.substring(0, 16)}...
+              </div>
+              <div className="flex gap-1">
+                {processedDoc.knowledgePoint.tags.map(tag => (
+                  <span key={tag} className="text-[10px] bg-accentGold/20 text-accentGold px-2 py-[2px] rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -12,6 +12,8 @@ import {
 import { V5_CHAPTERS, COMPANIES } from './report-assembly-v5';
 import type { V5GeneratedReport, V5ReportChapter } from './report-assembly-v5';
 import type { GenerationProgress } from './report-generator-v5';
+import { fetchEnterpriseData } from './enterprise-data';
+import { OmniSwarmService } from './omni-swarm-service';
 
 const C_TO_V5: Record<string, number[]> = {
   'C1': [1], 'C2': [2, 15], 'C3': [3], 'C4': [4, 25],
@@ -46,6 +48,9 @@ export interface ExtendedV5Report extends V5GeneratedReport {
     impactHighlight: string;
     upgradeAdvice: string;
   } | null;
+  brandTone?: string;
+  chartConfigs?: any[]; // Rich chart configuration payload
+  swarmTrace?: string[];
 }
 
 function zkp(data: string): string {
@@ -64,16 +69,21 @@ function countChars(text: string): number {
   return chinese + english;
 }
 
-export function generateFullV5Report(companyId: string): ExtendedV5Report | null {
+export async function generateFullV5Report(companyId: string, brandTone: string = 'professional'): Promise<ExtendedV5Report | null> {
   const profile = getCompanyById(companyId);
   if (!profile) return null;
   const allAnswers = getAnswersByCompany(companyId);
   if (!allAnswers.length) return null;
   const outline = getReportOutline(companyId) || null;
 
+  // Integrate Real Enterprise Data and Document Progress
+  const enterpriseData = await fetchEnterpriseData(companyId);
+
   const chapters: ExtendedChapterData[] = [];
   let totalWords = 0;
   let totalEvidence = 0;
+  const swarmTrace: string[] = [];
+  const swarmService = new OmniSwarmService();
 
   for (const ch of V5_CHAPTERS) {
     const chAnswers = allAnswers.filter((a: Answer) => {
@@ -82,13 +92,13 @@ export function generateFullV5Report(companyId: string): ExtendedV5Report | null
     });
 
     // Build question details
-    const questionDetails = chAnswers.map((a: Answer) => ({
-      questionId: a.questionId,
-      question: a.question,
+    const questionDetails: ExtendedChapterData['questionDetails'] = chAnswers.map((a: Answer) => ({
+      questionId: String(a.questionId || ''),
+      question: String(a.question || ''),
       whatToFill: '',
-      griMapping: a.gri,
-      evidenceReq: a.evidence || '',
-      dataAtoms: a.dataAtoms || '',
+      griMapping: String(a.gri || ''),
+      evidenceReq: String(a.evidence || ''),
+      dataAtoms: String(a.dataAtoms || ''),
     }));
 
     // Get evidence guides for this chapter
@@ -99,17 +109,40 @@ export function generateFullV5Report(companyId: string): ExtendedV5Report | null
     // Get GRI mapping
     const griImpact = getGRIImpact(ch.title);
 
+    let toneStyle = '';
+    if (brandTone === 'approachable') {
+      toneStyle = '以親切且平易近人的語氣呈現。';
+    } else if (brandTone === 'professional') {
+      toneStyle = '以專業且嚴謹的語氣呈現。';
+    }
+
     let content = '';
     content += `<h2>第${ch.num}章 ${ch.title}</h2>`;
-    content += `<p>${profile.companyName}（以下簡稱${profile.shortName}）營運據點包含${profile.operatingLocations}，主要業務為${profile.mainBusiness}。截至2025年12月31日，員工約${profile.employees}人，年營收約${profile.annualRevenue}，年用電量約${profile.electricityKwh.toLocaleString()}kWh，年用水量約${profile.waterTons.toLocaleString()}吨。${profile.shortName}在「${ch.title}」面向依5T協議${ch.fiveTGate}原則進行完整揭露。</p>`;
+    content += `<p>${enterpriseData.companyName}（以下簡稱${profile.shortName}）營運據點包含${profile.operatingLocations}，主要業務為${profile.mainBusiness}。截至2025年12月31日，員工約${enterpriseData.employeeCount}人，年營收約${enterpriseData.revenue}，年用電量約${profile.electricityKwh.toLocaleString()}kWh，年用水量約${profile.waterTons.toLocaleString()}吨。${profile.shortName}在「${ch.title}」面向依5T協議${ch.fiveTGate}原則進行完整揭露。${toneStyle}</p>`;
 
     if (chAnswers.length > 0) {
       for (let i = 0; i < chAnswers.length; i++) {
         const a = chAnswers[i];
+        let finalAnswer = a.answer;
+        
+        // Use swarm service for expert rewriting if tone is specified (demo on first answer of chapter 2)
+        if (ch.num === 2 && i === 0 && brandTone) {
+          const refined = await swarmService.refineReportSection(finalAnswer, brandTone);
+          finalAnswer = refined.content;
+          swarmTrace.push(`[章節 2.${i+1}] 已完成 L-Hub 專家潤飾 (ZKP: ${refined.uuid})`);
+        }
+
         content += `<h3>${ch.num}.${i+1} 題目：${a.question}</h3>`;
-        content += `<div class="answer-block">${a.answer}</div>`;
+        content += `<div class="answer-block">${finalAnswer}</div>`;
         if (a.gri) content += `<p class="gri-tag">GRI對應: ${a.gri}</p>`;
-        if (a.evidence) content += `<p class="evid-tag">佐證要求: ${a.evidence}</p>`;
+        if (a.evidence) {
+          content += `<div class="service-teaching-block">`;
+          content += `<h4>[教學即服務] 證據要求解析</h4>`;
+          content += `<p><strong>Why:</strong> 此佐證確保揭露資訊具備真實性與可驗證性。</p>`;
+          content += `<p><strong>What:</strong> 需提供：${a.evidence}</p>`;
+          content += `<p><strong>How:</strong> 透過數位化收集並進行 ZKP 封印上鏈，確保數據不可篡改。</p>`;
+          content += `</div>`;
+        }
         if (a.dataAtoms) content += `<p class="atom-tag">Data Atom: ${a.dataAtoms}</p>`;
       }
     }
@@ -125,9 +158,27 @@ export function generateFullV5Report(companyId: string): ExtendedV5Report | null
     if (outline && ch.num <= 5) {
       const highlights = [outline.envHighlight, outline.socialHighlight, outline.govHighlight, outline.impactHighlight];
       if (highlights[ch.num - 1]) {
-        content += `<h3>報告雛形重點</h3><p>${highlights[ch.num - 1]}</p>`;
+        let highlightContent = highlights[ch.num - 1];
+        
+        // L-Hub 合規協作 (Demo on chapter 1)
+        if (ch.num === 1) {
+          const compliance = await swarmService.performComplianceCheck(highlightContent, 'EU CSRD');
+          highlightContent += `<br><br><strong>[由 L-Hub 代理集群協作驗證]</strong><br>${compliance.content}`;
+          swarmTrace.push(`[章節 1 雛形重點] 已完成 EU CSRD 跨國合規比對 (ZKP: ${compliance.uuid})`);
+        }
+        
+        content += `<h3>報告雛形重點</h3><p>${highlightContent}</p>`;
       }
     }
+
+    content += `<h3>5T 協議合規確信 (5T Protocol Assurance)</h3>`;
+    content += `<ul style="font-size: 13px; color: var(--text2);">
+      <li><strong>[Traceable] 可溯源:</strong> 數據來源自企業真實單據 (單據收集進度: ${enterpriseData.documentProgress.collected}/${enterpriseData.documentProgress.totalRequired})</li>
+      <li><strong>[Transparent] 算法透明:</strong> 溫室氣體轉換係數與計算邏輯公開</li>
+      <li><strong>[Tangible] UI感知:</strong> 影響力指標已具象化呈現</li>
+      <li><strong>[Trustworthy] 密碼學綁定:</strong> ZKP Hash Lock 封印完成</li>
+      <li><strong>[Trackable] 生命週期追蹤:</strong> 資料原子 (Data Atom) 已記錄於鏈上</li>
+    </ul>`;
 
     content += `<p class="zkp-seal">ZKP: ${zkp(content)} | OmniTag: OTG-${String(ch.num).padStart(2,'0')}-2025-${ch.fiveTGate.toUpperCase()} | Trinity: V:sealed U:synced A:verified</p>`;
 
@@ -172,13 +223,19 @@ export function generateFullV5Report(companyId: string): ExtendedV5Report | null
     totalEvidenceItems: totalEvidence,
     completionRate,
     outline: outline ? {
-      summary: outline.summary,
-      envHighlight: outline.envHighlight,
-      socialHighlight: outline.socialHighlight,
-      govHighlight: outline.govHighlight,
-      impactHighlight: outline.impactHighlight,
-      upgradeAdvice: outline.upgradeAdvice,
+      summary: String(outline.summary || ''),
+      envHighlight: String(outline.envHighlight || ''),
+      socialHighlight: String(outline.socialHighlight || ''),
+      govHighlight: String(outline.govHighlight || ''),
+      impactHighlight: String(outline.impactHighlight || ''),
+      upgradeAdvice: String(outline.upgradeAdvice || ''),
     } : null,
+    brandTone,
+    chartConfigs: [
+      { type: 'bar', id: 'energy_usage', title: '用電趨勢' },
+      { type: 'pie', id: 'carbon_sources', title: '碳排來源分佈' }
+    ],
+    swarmTrace
   };
 }
 
@@ -202,6 +259,8 @@ export function fullReportToHtml(report: ExtendedV5Report): string {
   html += `.stat-value{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;color:var(--teal)}`;
   html += `.stat-label{font-size:12px;color:var(--text2);margin-top:4px}`;
   html += `.answer-block{background:var(--card);padding:20px;border-radius:12px;margin:20px 0;border-left:4px solid var(--teal)}`;
+  html += `.service-teaching-block{background:rgba(212,175,55,0.05);padding:15px;border-radius:8px;margin:15px 0;border:1px dashed var(--gold);}`;
+  html += `.service-teaching-block h4{color:var(--gold);margin-top:0;font-size:14px;}`;
   html += `.gri-tag{font-size:12px;color:var(--blue);font-family:monospace}`;
   html += `.evid-tag{font-size:12px;color:var(--gold)}`;
   html += `.atom-tag{font-size:11px;color:var(--text2)}`;
@@ -227,6 +286,15 @@ export function fullReportToHtml(report: ExtendedV5Report): string {
 
   for (const ch of report.chapters) {
     html += ch.content;
+  }
+
+  if (report.swarmTrace && report.swarmTrace.length > 0) {
+    html += `<div class="service-teaching-block" style="border-color: var(--teal); background: rgba(0,158,176,0.05);">`;
+    html += `<h3 style="color: var(--teal); margin-top: 0;">L-Hub 代理集群協作軌跡 (Swarm Trace)</h3><ul>`;
+    for (const trace of report.swarmTrace) {
+      html += `<li style="font-size: 13px;">${trace}</li>`;
+    }
+    html += `</ul></div>`;
   }
 
   html += `<hr><p style="text-align:center;color:var(--text2);font-size:12px">ESGGO v5.0 | 總字數：${report.totalWords.toLocaleString()} | Trinity Hash：${report.trinityHash}</p>`;

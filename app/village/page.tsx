@@ -198,7 +198,7 @@ export default function VillagePage() {
   };
 
   return (
-    <div className="min-h-screen bg-primary text-textPrimary font-sans p-6 md:p-10 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-[#F0F2F5] to-[#E2E8F0] dark:from-[#1E293B] dark:to-[#0F172A] text-textPrimary font-sans p-6 md:p-10 transition-colors duration-500">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accentTeal to-accentGreen flex items-center justify-center shadow-sm">
@@ -244,8 +244,8 @@ export default function VillagePage() {
                 const isLoading = isVoting === proj.id;
                 
                 return (
-                  <div key={proj.id} className={`bg-secondary border border-borderColor rounded-2xl p-6 relative overflow-hidden shadow-sm transition-all duration-300 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:shadow-md'}`}>
-                    <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-accentTeal to-accentGreen transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+                  <div key={proj.id} className={`bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all duration-500 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:shadow-[0_8px_32px_0_rgba(99,166,176,0.2)] hover:-translate-y-1'}`}>
+                    <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-[#63a6b0] to-[#ffd700] transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
 
                     <div className="flex justify-between items-start mb-4">
                       <div>

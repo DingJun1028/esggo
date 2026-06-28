@@ -37,6 +37,7 @@ export type TaskStatus = 'pending' | 'running' | 'processing' | 'completed' | 'f
 export interface TaskProgress {
   readonly taskId: string;
   readonly status: TaskStatus;
+  readonly taskType?: 'report_generation' | 'grammar_rewrite' | 'ocr_processing';
   readonly currentChapter: number;
   readonly totalChapters: number;
   readonly chapterTitle: string;
@@ -81,6 +82,7 @@ function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskP
   return {
     taskId: state.taskId,
     status: state.status as TaskStatus,
+    taskType: 'report_generation',
     currentChapter,
     totalChapters: state.totalChapters,
     chapterTitle,
@@ -120,7 +122,7 @@ export function createTask(companyId: string): string {
 
   // In-memory overlay (for immediate reads)
   const task: TaskProgress = {
-    taskId, status: 'pending', currentChapter: 0, totalChapters: 28,
+    taskId, status: 'pending', taskType: 'report_generation', currentChapter: 0, totalChapters: 28,
     chapterTitle: '', wordsSoFar: 0, fiveTGate: '', tagsCreated: 0,
     decisionsCount: 0,
     percent: 0, startedAt: now, updatedAt: now,
@@ -322,11 +324,11 @@ export function startAsyncTask(
             return { ...chunk, score };
           });
           
-          scored.sort((a, b) => b.score - a.score);
-          const topChunks = scored.slice(0, 3).filter(c => c.score > 0 || scored.length <= 3);
+          scored.sort((a: any, b: any) => b.score - a.score);
+          const topChunks = scored.slice(0, 3).filter((c: any) => c.score > 0 || scored.length <= 3);
           
           if (topChunks.length > 0) {
-            ragContext = topChunks.map(c => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+            ragContext = topChunks.map((c: any) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
           }
         }
       }
@@ -334,11 +336,31 @@ export function startAsyncTask(
       console.warn('Backend RAG Retrieval failed:', e);
     }
 
-    const prompt = ragContext 
-      ? `參考以下真實數據：\\n${ragContext}\\n\\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`
+    let finalPrompt = ragContext 
+      ? `參考以下真實數據：\n${ragContext}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`
       : `為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`;
 
-    agnesApi.processRequest(prompt).then(res => {
+    // L-Hub Delegation Cue for large context (Swarm Routing)
+    if (ragContext && ragContext.length > 500) {
+      try {
+        const lhubRes = await fetch('http://127.0.0.1:3000/api/nexus/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tool: 'lhub_ask',
+            arguments: { task: 'summarize', context: ragContext }
+          })
+        }).then(r => r.json());
+        
+        if (lhubRes.success) {
+          finalPrompt = `根據 L-Hub 蜂群摘要：\n${lhubRes.data}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要。`;
+        }
+      } catch (e) {
+        // Fallback to original prompt
+      }
+    }
+
+    agnesApi.processRequest(finalPrompt).then(res => {
       const generatedText = res.success ? res.data.output : `[Fallback] ${currentTitle} 內容生成中...`;
       const chapterWords = generatedText.length;
       wordsSoFar += chapterWords;
