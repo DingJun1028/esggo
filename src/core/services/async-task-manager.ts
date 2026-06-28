@@ -1,19 +1,38 @@
 /**
- * v5 非同步報告任務管理（真實版）
+ * v5 非同步報告任務管理（Redis 增強版）
  *
  * 真正呼叫 generateV5Report 邏輯，逐章生成並回報進度。
- * 使用 setImmediate 避免阻塞主事件循環。
+ * 使用 Redis 做持久化狀態管理，支援：
+ *  - 多實例共享任務狀態
+ *  - TTL 自動清理
+ *  - 章節進度追蹤
+ *  - 記憶體 fallback（開發環境）
  */
 
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
 import { agnesApi } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
+import {
+  getRedis,
+  isRedisReady,
+  createTaskState,
+  getTaskState,
+  setTaskState,
+  updateChapterProgress,
+  getProgress,
+  setProgressInfo,
+  clearTaskCache,
+  cleanupStaleTasks,
+  type TaskState,
+  type ChapterState,
+  type ProgressInfo,
+} from '@lib/redis';
 
-// ═══════════════════════════════════════════════════════════════
-// Types
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// Types — kept for backward compatibility with existing API routes
+// ═══════════════════════════════════════════════════════════════════════════════
 
-export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+export type TaskStatus = 'pending' | 'running' | 'processing' | 'completed' | 'failed' | 'cancelled';
 
 export interface TaskProgress {
   readonly taskId: string;
@@ -39,22 +58,67 @@ export interface TaskProgress {
   };
 }
 
-// ═══════════════════════════════════════════════════════════════
-// In-Memory Store
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// In-Memory Overlay (for backward compat with TaskProgress shape)
+// ═══════════════════════════════════════════════════════════════════════════════
 
 const tasks = new Map<string, TaskProgress>();
 const taskTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 const taskCancelled = new Set<string>();
 const RESULT_TTL_MS = 3600000;
 
-// ═══════════════════════════════════════════════════════════════
+/** Map a TaskState (Redis) to a TaskProgress (legacy API shape) */
+function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskProgress {
+  const currentChapter = state.completedChapters.length;
+  const runningChapter = Object.entries(state.chapters).find(
+    ([, ch]) => ch.status === 'running'
+  );
+  const wordsSoFar = Object.values(state.chapters).reduce((sum, ch) => sum + (ch.words || 0), 0);
+  const chNum = runningChapter ? parseInt(runningChapter[0], 10) : currentChapter;
+  const gate = chNum <= 3 ? 'traceable' : chNum <= 5 ? 'transparent' : chNum <= 13 ? 'tangible' : chNum <= 24 ? 'trustworthy' : 'trackable';
+  const chapterTitle = V5_CHAPTERS[chNum - 1]?.title ?? `第${chNum}章`;
+
+  return {
+    taskId: state.taskId,
+    status: state.status as TaskStatus,
+    currentChapter,
+    totalChapters: state.totalChapters,
+    chapterTitle,
+    wordsSoFar,
+    fiveTGate: gate,
+    tagsCreated: state.completedChapters.length,
+    decisionsCount: state.completedChapters.length * 3,
+    percent: state.totalChapters > 0
+      ? Math.round((state.completedChapters.length / state.totalChapters) * 100)
+      : 0,
+    startedAt: state.createdAt,
+    updatedAt: state.updatedAt,
+    completedAt: state.status === 'completed' || state.status === 'failed'
+      ? state.updatedAt
+      : undefined,
+    error: state.error,
+    result: state.result
+      ? {
+          totalWords: state.result.totalWords,
+          totalTags: state.result.totalTags,
+          trinityHash: state.result.trinityHash,
+          durationMs: state.result.durationMs,
+          companyId: state.result.companyId,
+        }
+      : undefined,
+    ...extra,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // Task Lifecycle
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
 
 export function createTask(companyId: string): string {
   const taskId = `tsk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const now = new Date().toISOString();
+
+  // In-memory overlay (for immediate reads)
   const task: TaskProgress = {
     taskId, status: 'pending', currentChapter: 0, totalChapters: 28,
     chapterTitle: '', wordsSoFar: 0, fiveTGate: '', tagsCreated: 0,
@@ -62,11 +126,29 @@ export function createTask(companyId: string): string {
     percent: 0, startedAt: now, updatedAt: now,
   };
   tasks.set(taskId, task);
+
+  // Persist to Redis (non-blocking)
+  createTaskState(taskId, companyId, '', 28, 'json').catch(err => {
+    console.warn('[AsyncTask] Redis createTaskState failed:', err?.message);
+  });
+
   return taskId;
 }
 
-export function getTask(taskId: string): TaskProgress | null {
-  return tasks.get(taskId) ?? null;
+export async function getTask(taskId: string): Promise<TaskProgress | null> {
+  // Try in-memory first (fastest, always up-to-date during processing)
+  const memTask = tasks.get(taskId);
+  if (memTask) return memTask;
+
+  // Fall back to Redis
+  try {
+    const state = await getTaskState(taskId);
+    if (state) return stateToProgress(state);
+  } catch (err: any) {
+    console.warn('[AsyncTask] Redis getTaskState failed:', err?.message);
+  }
+
+  return null;
 }
 
 export function getAllTasks(): TaskProgress[] {
@@ -76,10 +158,33 @@ export function getAllTasks(): TaskProgress[] {
 export function cancelTask(taskId: string): boolean {
   const task = tasks.get(taskId);
   if (!task || task.status === 'completed' || task.status === 'failed') return false;
+
   taskCancelled.add(taskId);
   const timeout = taskTimeouts.get(taskId);
   if (timeout) { clearTimeout(timeout); taskTimeouts.delete(taskId); }
-  tasks.set(taskId, { ...task, status: 'cancelled', updatedAt: new Date().toISOString() });
+
+  const updated: TaskProgress = {
+    ...task,
+    status: 'cancelled',
+    updatedAt: new Date().toISOString(),
+  };
+  tasks.set(taskId, updated);
+
+  // Persist cancellation to Redis (non-blocking)
+  setTaskState({
+    taskId,
+    companyId: '',
+    companyName: '',
+    status: 'cancelled',
+    totalChapters: task.totalChapters,
+    completedChapters: [],
+    failedChapters: [],
+    chapters: {},
+    createdAt: task.startedAt,
+    updatedAt: new Date().toISOString(),
+    format: 'json',
+  }).catch(() => {});
+
   return true;
 }
 
@@ -96,12 +201,16 @@ export function cleanupOldTasks(): number {
       }
     }
   }
+
+  // Also clean Redis (non-blocking)
+  cleanupStaleTasks().catch(() => {});
+
   return cleaned;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// Real Async Report Generation
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// Real Async Report Generation (Redis-enhanced)
+// ═══════════════════════════════════════════════════════════════════════════════
 
 export type ProgressCallback = (progress: TaskProgress) => void;
 
@@ -115,12 +224,15 @@ export function startAsyncTask(
 
   tasks.set(taskId, { ...task, status: 'running', updatedAt: new Date().toISOString() });
 
+  // Update Redis status (non-blocking)
+  updateTaskStateRedis(taskId, 'running').catch(() => {});
+
   let chapterIndex = 0;
   const totalChapters = 28;
   let wordsSoFar = 0;
   const startTime = Date.now();
 
-  function processNextChapter() {
+  async function processNextChapter() {
     if (taskCancelled.has(taskId)) return;
 
     const current = tasks.get(taskId);
@@ -134,7 +246,7 @@ export function startAsyncTask(
         const durationMs = Date.now() - startTime;
 
         const trinityHash = createHash('sha256').update(`${taskId}:${report?.totalWords ?? wordsSoFar}`).digest('hex');
-        
+
         const result: TaskProgress = {
           ...current,
           status: 'completed',
@@ -153,20 +265,29 @@ export function startAsyncTask(
         };
         tasks.set(taskId, result);
         onProgress?.(result);
+
+        // Persist to Redis (non-blocking)
+        completeTaskStateRedis(taskId, result).catch(() => {});
+
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-        tasks.set(taskId, {
+        const failed: TaskProgress = {
           ...current,
           status: 'failed',
           updatedAt: new Date().toISOString(),
           error: errorMsg,
-        });
+        };
+        tasks.set(taskId, failed);
+
+        failTaskStateRedis(taskId, errorMsg).catch(() => {});
       }
 
       setTimeout(() => {
         tasks.delete(taskId);
         taskTimeouts.delete(taskId);
         taskCancelled.delete(taskId);
+
+        // Don't delete from Redis — let TTL handle cleanup
       }, RESULT_TTL_MS);
       return;
     }
@@ -175,9 +296,50 @@ export function startAsyncTask(
     const gate = chNum <= 3 ? 'traceable' : chNum <= 5 ? 'transparent' : chNum <= 13 ? 'tangible' : chNum <= 24 ? 'trustworthy' : 'trackable';
     const currentTitle = V5_CHAPTERS[chapterIndex]?.title ?? `第${chNum}章`;
 
-    agnesApi.processRequest(`為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`).then(res => {
+    // Mark chapter as running in Redis
+    updateChapterProgress(taskId, chNum, { status: 'running' }).catch(() => {});
+
+    // RAG Retrieval via adminDb
+    let ragContext = '';
+    try {
+      const { adminDb } = require('@/lib/firebase-admin');
+      if (adminDb) {
+        const snapshot = await adminDb.collection('rag_knowledge').get();
+        const chunks = snapshot.docs.map((d: any) => d.data());
+        
+        if (chunks.length > 0) {
+          // Break currentTitle into keywords (at least 2 chars)
+          const userKeywords = currentTitle.toLowerCase().split(/[\\s、，。]/).filter(k => k.length > 1);
+          // Always add generic keywords that might be in reports
+          if (userKeywords.length === 0) userKeywords.push(currentTitle);
+
+          const scored = chunks.map((chunk: any) => {
+            const content = String(chunk.content || '').toLowerCase();
+            let score = 0;
+            for (const kw of userKeywords) {
+              if (content.includes(kw)) score++;
+            }
+            return { ...chunk, score };
+          });
+          
+          scored.sort((a, b) => b.score - a.score);
+          const topChunks = scored.slice(0, 3).filter(c => c.score > 0 || scored.length <= 3);
+          
+          if (topChunks.length > 0) {
+            ragContext = topChunks.map(c => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Backend RAG Retrieval failed:', e);
+    }
+
+    const prompt = ragContext 
+      ? `參考以下真實數據：\\n${ragContext}\\n\\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`
+      : `為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`;
+
+    agnesApi.processRequest(prompt).then(res => {
       const generatedText = res.success ? res.data.output : `[Fallback] ${currentTitle} 內容生成中...`;
-      // Estimate words (for Chinese, length is roughly word count)
       const chapterWords = generatedText.length;
       wordsSoFar += chapterWords;
       chapterIndex++;
@@ -197,6 +359,25 @@ export function startAsyncTask(
       };
       tasks.set(taskId, progress);
       onProgress?.(progress);
+
+      // Persist chapter completion to Redis (non-blocking)
+      updateChapterProgress(taskId, chNum, {
+        status: 'completed',
+        words: chapterWords,
+        content: generatedText,
+      }).catch(() => {});
+
+      // Update lightweight progress record for polling
+      setProgressInfo({
+        taskId,
+        status: 'running',
+        completed: chapterIndex,
+        total: totalChapters,
+        percentage: Math.round((chapterIndex / totalChapters) * 100),
+        currentChapter: currentTitle,
+        wordsSoFar,
+        updatedAt: new Date().toISOString(),
+      }).catch(() => {});
 
       // Yield to event loop
       const delay = 50 + Math.random() * 50;
@@ -224,6 +405,12 @@ export function startAsyncTask(
       tasks.set(taskId, progress);
       onProgress?.(progress);
 
+      // Persist chapter completion to Redis
+      updateChapterProgress(taskId, chNum, {
+        status: 'completed',
+        words: chapterWords,
+      }).catch(() => {});
+
       const delay = 50 + Math.random() * 50;
       const timeout = setTimeout(processNextChapter, delay);
       taskTimeouts.set(taskId, timeout);
@@ -234,17 +421,58 @@ export function startAsyncTask(
   taskTimeouts.set(taskId, initialTimeout);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// Redis State Helpers (non-blocking wrappers)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function updateTaskStateRedis(taskId: string, status: string): Promise<void> {
+  const state = await getTaskState(taskId);
+  if (state) {
+    await setTaskState({ ...state, status: status as any, updatedAt: new Date().toISOString() });
+  }
+}
+
+async function completeTaskStateRedis(taskId: string, result: TaskProgress): Promise<void> {
+  const state = await getTaskState(taskId);
+  if (!state) return;
+
+  await setTaskState({
+    ...state,
+    status: 'completed',
+    updatedAt: new Date().toISOString(),
+    result: result.result ? {
+      totalWords: result.result.totalWords,
+      totalTags: result.result.totalTags,
+      trinityHash: result.result.trinityHash,
+      durationMs: result.result.durationMs,
+      companyId: result.result.companyId,
+    } : undefined,
+  });
+}
+
+async function failTaskStateRedis(taskId: string, errorMsg: string): Promise<void> {
+  const state = await getTaskState(taskId);
+  if (!state) return;
+
+  await setTaskState({
+    ...state,
+    status: 'failed',
+    updatedAt: new Date().toISOString(),
+    error: errorMsg,
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // Helpers
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
 
 export function getCompanyList() {
   return getV5Companies();
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
 // Global cleanup interval (runs every 5 min)
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
 
 let cleanupInterval: ReturnType<typeof setInterval> | null = null;
 

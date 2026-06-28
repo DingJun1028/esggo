@@ -3,11 +3,11 @@ module.exports = {
     {
       name: 'esggo-core',
       script: 'node',
-      args: 'node_modules/next/dist/bin/next start -p 3000',
-      cwd: 'C:\\var\\www\\esggo',
+      args: 'server.mjs',
+      cwd: '/var/www/esggo',
       env: {
         NODE_ENV: 'production',
-        NEXT_TELEMETRY_DISABLED: '1',
+        PORT: '3000',
       },
       max_memory_restart: '1G',
       restart_delay: 3000,
@@ -17,7 +17,7 @@ module.exports = {
       name: 'omniagent-gateway',
       script: 'node',
       args: 'omni-server.mjs',
-      cwd: 'C:\\var\\www\\esggo\\omniagent-gateway',
+      cwd: '/var/www/esggo/omniagent-gateway',
       env: {
         NODE_ENV: 'production',
         PORT: '8642',

@@ -26,7 +26,7 @@ function radarPath(scores: FiveTData, maxR:number, cx:number, cy:number): string
   }).join(' ') + ' Z';
 }
 
-interface Props { companyName?: string; onFetch?: ()=>Promise<FiveTData>; }
+interface Props { companyName?: string; onFetch?: ()=>Promise<FiveTData>; zkpCount?: number; }
 
 const DEMO_COMPANIES = [
   { name:'台積電 TSMC',    scores:{ traceable:0.94, transparent:0.91, tangible:0.88, trustworthy:0.96, trackable:0.89 } },
@@ -35,12 +35,27 @@ const DEMO_COMPANIES = [
   { name:'鴻海',            scores:{ traceable:0.88, transparent:0.86, tangible:0.85, trustworthy:0.90, trackable:0.84 } },
 ];
 
-export function FiveTRadar({ }: Props) {
+export function FiveTRadar({ zkpCount }: Props) {
   const [selected, setSelected] = useState(0);
   const [displayed, setDisplayed] = useState<FiveTData>({ traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 });
   const [loading, setLoading] = useState(false);
 
-  const target = DEMO_COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 };
+  const traceScore = Math.min(0.99, 0.4 + (zkpCount || 0) * 0.06);
+  const trustScore = Math.min(0.99, 0.5 + (zkpCount || 0) * 0.05);
+  
+  const myTwin = {
+    name: '我的數位雙生',
+    scores: {
+      traceable: traceScore,
+      transparent: 0.85,
+      tangible: 0.80,
+      trustworthy: trustScore,
+      trackable: 0.88
+    }
+  };
+
+  const COMPANIES = [myTwin, ...DEMO_COMPANIES];
+  const target = COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 };
 
   // Animate scores on change
   useEffect(() => {
@@ -78,12 +93,12 @@ export function FiveTRadar({ }: Props) {
 
       {/* Company selector */}
       <div className="flex gap-1.5 flex-wrap mb-3">
-        {DEMO_COMPANIES.map((c,i)=>(
+        {COMPANIES.map((c,i)=>(
           <button key={c.name} onClick={()=>setSelected(i)}
             className={`text-[11px] px-2.5 py-1 rounded-md cursor-pointer border-none transition-all duration-200 ${
               selected===i ? 'bg-accentTeal text-white' : 'bg-primary text-textSecondary'
-            }`}>
-            {c.name}
+            } ${i===0 ? 'font-bold shadow-sm' : ''}`}>
+            {c.name} {i===0 && zkpCount !== undefined ? `(${zkpCount})` : ''}
           </button>
         ))}
       </div>

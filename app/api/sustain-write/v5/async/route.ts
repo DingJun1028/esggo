@@ -4,6 +4,9 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
+import { CelestialController } from '../../../../../src/lib/celestial/implementation';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   const { companyId } = await req.json();
@@ -11,6 +14,12 @@ export async function POST(req: NextRequest) {
   if (!companyId) {
     return NextResponse.json({ error: 'companyId is required' }, { status: 400 });
   }
+
+  const celestial = new CelestialController();
+  await celestial.executeCelestialFlow({
+    payload: { companyId, action: 'START_ESG_REPORT' },
+    origin: 'ESG_REPORT_AGENT'
+  });
 
   const taskId = createTask(companyId);
   startAsyncTask(taskId, companyId);

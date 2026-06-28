@@ -1,7 +1,8 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useAgnesApi } from '@/components/AgnesProvider';
-
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query } from 'firebase/firestore';
 type CaseType = 'code_optimization'|'documentation'|'data_analysis'|'esg_report'|'ui_design'|'architecture'|'bug_fix'|'general';
 
 const PATTERNS: [RegExp, CaseType][] = [
@@ -31,7 +32,7 @@ const RESPONSES: Record<CaseType, string[]> = {
   general: ['已接收任務。正在以覺醒等級 **active** 處理中...完成。請確認輸出是否符合預期。','任務處理完成。信心度：0.92，記憶庫已更新（+1 條新記憶）。'],
 };
 
-interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:CaseType; time:string; ms?:number; model?:string; }
+interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:CaseType; time:string; ms?:number; model?:string; citations?:string[]; }
 
 function now() { return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
 
@@ -66,10 +67,48 @@ export function OmniOneChat() {
     const start = Date.now();
 
     let reply = '';
+    let citations: string[] = [];
     try {
+      // 1. Lightweight Retrieval from Firebase
+      let ragContext = '';
+      try {
+        if (db && ct === 'esg_report') { // Only retrieve for relevant cases to save time
+          const snapshot = await getDocs(query(collection(db, 'rag_knowledge')));
+          const chunks = snapshot.docs.map(d => d.data() as any);
+          
+          if (chunks.length > 0) {
+            // Simple keyword overlap scoring
+            const userKeywords = trimmedInput.toLowerCase().split(/\s+/).filter(k => k.length > 1);
+            const scored = chunks.map(chunk => {
+              const content = chunk.content.toLowerCase();
+              let score = 0;
+              for (const kw of userKeywords) {
+                if (content.includes(kw)) score++;
+              }
+              return { ...chunk, score };
+            });
+            
+            scored.sort((a, b) => b.score - a.score);
+            const topChunks = scored.slice(0, 3).filter(c => c.score > 0 || scored.length <= 3); // pick top 3
+            
+            if (topChunks.length > 0) {
+              const uniqueSources = Array.from(new Set(topChunks.map(c => c.source)));
+              citations = uniqueSources.map(s => String(s));
+              ragContext = topChunks.map(c => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firebase retrieval failed:', e);
+      }
+
       if (isReady && processMessage) {
-        // Use AGNES API (could inject model selection into Agnes in future)
-        const agnesReply = await processMessage(`[Model: ${model}] ${userMsg.text}`);
+        // Use AGNES API
+        const prompt = ragContext 
+          ? `[Model: ${model}] 參考以下知識庫內容來回答問題:\\n${ragContext}\\n\\n問題: ${userMsg.text}`
+          : `[Model: ${model}] ${userMsg.text}`;
+        
+        const agnesReply = await processMessage(prompt);
         if (agnesReply) {
           reply = agnesReply;
         } else {
@@ -80,7 +119,7 @@ export function OmniOneChat() {
         const res = await fetch('/api/omni-one', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input: userMsg.text, caseType: ct, model })
+          body: JSON.stringify({ input: userMsg.text, caseType: ct, model, ragContext })
         });
         if (!res.ok) throw new Error(`OmniOne API 返回 ${res.status}`);
         const data = await res.json();
@@ -103,7 +142,7 @@ export function OmniOneChat() {
     }
 
     const ms = Date.now()-start;
-    const aiMsg: Message = {id:`${Date.now()}a`, role:'assistant', text:reply, caseType:ct, time:now(), ms, model};
+    const aiMsg: Message = {id:`${Date.now()}a`, role:'assistant', text:reply, caseType:ct, time:now(), ms, model, citations};
     setMsgs(m=>[...m,aiMsg]);
     setBusy(false);
   };
@@ -163,6 +202,16 @@ export function OmniOneChat() {
                 </div>
               )}
               <div className="text-[13px] text-textPrimary leading-[1.7]" dangerouslySetInnerHTML={{__html:renderText(m.text)}} />
+              {m.citations && m.citations.length > 0 && (
+                <div className="mt-2 pt-2 border-t border-borderColor/50 flex flex-wrap gap-1">
+                  <span className="text-[10px] text-textSecondary mr-1">引用來源:</span>
+                  {m.citations.map((cit, idx) => (
+                    <span key={idx} className="text-[10px] bg-accentGold/20 text-accentGold border border-accentGold/30 rounded px-1.5 py-[1px]">
+                      {cit}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="text-[10px] text-textSecondary mt-0.5">{m.time}</div>
           </div>

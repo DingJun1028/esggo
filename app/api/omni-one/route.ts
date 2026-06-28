@@ -7,7 +7,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 export async function POST(req: Request) {
   try {
-    const { input, caseType } = await req.json();
+    const { input, caseType, ragContext: clientRagContext } = await req.json();
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
@@ -16,20 +16,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // RAG 檢索 - 從 Firebase Firestore 取得最近的知識庫區塊
-    let knowledgeChunks: any[] = [];
-    try {
-      const q = query(collection(db, 'rag_knowledge'), orderBy('created_at', 'desc'), limit(5));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        knowledgeChunks.push(doc.data());
-      });
-    } catch (e) {
-      console.warn('Failed to fetch knowledge from Firebase:', e);
-    }
-
-    const ragContext = knowledgeChunks.length > 0 
-      ? `\n相關知識參考:\n${knowledgeChunks.map(k => `- [來源: ${k.source}] ${k.content}`).join('\n')}` 
+    const ragContext = clientRagContext 
+      ? `\n相關知識參考:\n${clientRagContext}` 
       : '\n相關知識參考: 無特定外部資料，請依循 5T 協議本體知識回答。';
 
     const prompt = `

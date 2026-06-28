@@ -1,0 +1,61 @@
+[WARN] Moving @types/node that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving eslint that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving @types/react-dom that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving @types/react that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving eslint-config-next that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving @google/genai that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving postcss that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving firebase that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving typescript that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving firebase-admin that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving tailwindcss that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving ioredis that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving lucide-react that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving next that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving pdf-parse that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving react that was installed by a different package manager to "node_modules/.ignored"
+[WARN] Moving react-dom that was installed by a different package manager to "node_modules/.ignored"
+Progress: resolved 1, reused 0, downloaded 0, added 0
+[WARN] deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+[WARN] deprecated next@14.2.3: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
+Progress: resolved 7, reused 6, downloaded 0, added 0
+Progress: resolved 7, reused 7, downloaded 0, added 0
+Progress: resolved 8, reused 7, downloaded 0, added 0
+Progress: resolved 77, reused 37, downloaded 1, added 0
+Progress: resolved 143, reused 130, downloaded 1, added 0
+Progress: resolved 269, reused 253, downloaded 2, added 0
+Progress: resolved 283, reused 271, downloaded 3, added 0
+Progress: resolved 327, reused 308, downloaded 3, added 0
+Progress: resolved 522, reused 484, downloaded 7, added 0
+[WARN] 8 deprecated subdependencies found: @humanwhocodes/config-array@0.13.0, @humanwhocodes/object-schema@2.0.3, glob@10.3.10, glob@7.2.3, inflight@1.0.6, node-domexception@1.0.0, rimraf@3.0.2, uuid@9.0.1
+Packages: +85 -1
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+Progress: resolved 594, reused 556, downloaded 8, added 10
+Progress: resolved 594, reused 556, downloaded 8, added 41
+Progress: resolved 594, reused 556, downloaded 8, added 84
+Progress: resolved 594, reused 556, downloaded 8, added 85
+Progress: resolved 594, reused 556, downloaded 8, added 85, done
+
+dependencies:
++ @google/genai 2.10.0
++ firebase 12.15.0
++ firebase-admin 14.1.0
++ ioredis 5.11.1
++ lucide-react 0.378.0 (1.21.0 is available)
+- next
++ next 14.2.3 (16.2.9 is available) deprecated
++ pdf-parse 1.1.4 (2.4.5 is available)
++ react 18.3.1 (19.2.7 is available)
++ react-dom 18.3.1 (19.2.7 is available)
+
+devDependencies:
++ @types/node 20.19.43 (26.0.1 is available)
++ @types/react 18.3.31 (19.2.17 is available)
++ @types/react-dom 18.3.7 (19.2.3 is available)
++ eslint 8.57.1 (10.6.0 is available) deprecated
++ eslint-config-next 14.2.3 (16.2.9 is available)
++ postcss 8.5.15
++ tailwindcss 3.4.19 (4.3.1 is available)
++ typescript 5.9.3 (6.0.3 is available)
+
+Done in 26.8s using pnpm v11.5.2

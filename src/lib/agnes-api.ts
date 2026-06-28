@@ -18,7 +18,7 @@ export class AgnesClient {
   private apiSecret: string;
 
   constructor(apiKey?: string, apiSecret?: string) {
-    this.apiKey = apiKey || process.env.NEXT_PUBLIC_AGNES_API_KEY || 'default_key';
+    this.apiKey = apiKey || process.env.NEXT_PUBLIC_AGNES_API_KEY || process.env.AGNES_API || 'default_key';
     this.apiSecret = apiSecret || process.env.AGNES_API_SECRET || 'default_secret';
   }
 
