@@ -84,7 +84,7 @@ export function ZkpVault() {
             return (
               <div 
                 key={record.id} 
-                className="bg-primary border border-borderColor rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 relative group"
+                className="bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-xl overflow-hidden shadow-[0_4px_16px_0_rgba(31,38,135,0.07)] hover:shadow-[0_8px_32px_0_rgba(99,166,176,0.2)] hover:-translate-y-1 transition-all duration-500 relative group"
                 style={{ animation: `fadeIn 0.5s ease-out ${i * 0.1}s both` }}
               >
                 {/* Accent line */}

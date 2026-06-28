@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { taskId: string } },
+  { params }: { params: Promise<{ taskId: string }> },
 ) {
-  const { taskId } = params;
+  const { taskId } = await params;
 
   if (!taskId) {
     return NextResponse.json({ error: 'taskId is required' }, { status: 400 });
@@ -27,9 +27,9 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { taskId: string } },
+  { params }: { params: Promise<{ taskId: string }> },
 ) {
-  const { taskId } = params;
+  const { taskId } = await params;
   const cancelled = cancelTask(taskId);
 
   if (!cancelled) {

@@ -1,19 +1,18 @@
-import * as admin from 'firebase-admin';
+import { getApps, initializeApp, cert, applicationDefault } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
-if (!admin.apps.length) {
-  // Try to initialize from env variable (typically in serverless environments)
-  // For local development, you might need to set FIREBASE_SERVICE_ACCOUNT_KEY env var
+if (!getApps().length) {
   try {
     const serviceAccountKeyStr = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
     if (serviceAccountKeyStr) {
       const serviceAccount = JSON.parse(serviceAccountKeyStr);
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
+      initializeApp({
+        credential: cert(serviceAccount)
       });
     } else {
-      // Fallback to application default credentials
-      admin.initializeApp({
-          credential: admin.credential.applicationDefault()
+      initializeApp({
+        credential: applicationDefault()
       });
     }
   } catch (error) {
@@ -21,5 +20,5 @@ if (!admin.apps.length) {
   }
 }
 
-export const adminDb = admin.firestore();
-export const adminAuth = admin.auth();
+export const adminDb = getFirestore();
+export const adminAuth = getAuth();
