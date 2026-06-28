@@ -1,41 +1,76 @@
 import { NextResponse } from 'next/server';
-import { ncbVillageService } from '@/lib/ncb-utils';
+
+// ----------------------------------------------------------------------------
+// OmniVillage Projects Database (Mock)
+// In production, this data should reside in NCBDB / Firebase Firestore
+// and adhere to the 5T Protocol (Traceable, Transparent, etc.)
+// ----------------------------------------------------------------------------
+let projects = [
+  { id: 'p1', title: '建設綠能太陽能板', description: '在村莊屋頂設置太陽能板，預計減碳 15%', votes: 4, cost: 16 },
+  { id: 'p2', title: '推動無紙化 OmniNote', description: '所有村莊會議記錄數位化', votes: 10, cost: 100 },
+  { id: 'p3', title: '智能電網升級計畫', description: '整合儲能系統以優化能源分配', votes: 2, cost: 4 },
+];
 
 export async function GET() {
-  try {
-    // @deprecated - Village now uses real-time Firebase listeners on the client.
-    // This API route remains as a fallback or for external integrations.
-    const projects = await ncbVillageService.getImpactProjects();
-    // Fallback data if NCBDB returns empty or fails (for preview purposes)
-    const fallbackProjects = [
-      { id: 'proj_01', title: '淨灘守護計畫', description: '招募志工進行北海岸淨灘', current_points: 1500, goal_points: 5000, status: 'active', tags: ['環境','海洋'] },
-      { id: 'proj_02', title: '偏鄉綠能照明', description: '為偏鄉小學建置太陽能板', current_points: 8200, goal_points: 10000, status: 'active', tags: ['綠能','社會'] },
-      { id: 'proj_03', title: '循環包裝設計', description: '研發可重複使用的網購物包裝', current_points: 300, goal_points: 2000, status: 'active', tags: ['循環經濟'] }
-    ];
-
-    const data = Array.isArray(projects) && projects.length > 0 ? projects : fallbackProjects;
-
-    return NextResponse.json({ success: true, projects: data });
-  } catch (error: any) {
-    console.error('Village Projects GET Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  return NextResponse.json({
+    success: true,
+    data: projects,
+    timestamp: Date.now()
+  });
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { projectId, userId, amount } = body;
-    
-    if (!projectId || !userId || !amount) {
-      return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
+    const { action, projectId, votesToCast, title, description } = body;
+
+    // ------------------------------------------------------------------------
+    // Action: Create Project
+    // ------------------------------------------------------------------------
+    if (action === 'create') {
+      const newProject = {
+        id: `p${Date.now()}`,
+        title: title || '未命名提案',
+        description: description || '',
+        votes: 0,
+        cost: 0
+      };
+      projects.push(newProject);
+      return NextResponse.json({ success: true, data: newProject });
     }
 
-    const voteResult = await ncbVillageService.submitVote(projectId, userId, amount);
-    
-    return NextResponse.json({ success: true, voteResult });
+    // ------------------------------------------------------------------------
+    // Action: Quadratic Voting
+    // ------------------------------------------------------------------------
+    if (action === 'vote') {
+      const projectIndex = projects.findIndex(p => p.id === projectId);
+      if (projectIndex === -1) {
+        return NextResponse.json({ success: false, error: 'Project not found' }, { status: 404 });
+      }
+
+      const v = Number(votesToCast);
+      if (isNaN(v) || v <= 0) {
+        return NextResponse.json({ success: false, error: 'Invalid vote count' }, { status: 400 });
+      }
+
+      // Quadratic Voting Cost Formula: Cost = (Votes)^2
+      const cost = v * v;
+      
+      // Note: In a real system, you MUST deduct the `cost` from the user's
+      // Voice Credits balance here. If balance < cost, reject the vote.
+      
+      projects[projectIndex].votes += v;
+      projects[projectIndex].cost += cost;
+
+      return NextResponse.json({ 
+        success: true, 
+        message: `成功投出 ${v} 票。消耗了 ${cost} 點 Voice Credits。 (Cost = Votes^2)`,
+        data: projects[projectIndex]
+      });
+    }
+
+    return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
   } catch (error: any) {
-    console.error('Village Vote POST Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

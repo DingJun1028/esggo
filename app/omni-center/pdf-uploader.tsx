@@ -80,7 +80,7 @@ export function PdfUploader() {
         <Upload size={18} /> RAG 知識庫上傳
       </div>
       <div className="text-[13px] text-textSecondary leading-[1.6]">
-        上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code className="text-accentGold bg-primary px-1 py-[1px] rounded-[3px]">54686_esg_go_userdb</code> 的 knowledge_chunks 中。
+        上傳永續報告書 (PDF)，Omni-Core 將自動解析並進行切片 (Chunking)，寫入 <code className="text-accentGold bg-primary px-1 py-[1px] rounded-[3px]">Firestore</code> 的 rag_knowledge 集合中。
       </div>
 
       <div

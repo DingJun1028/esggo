@@ -1,0 +1,68 @@
+import { NextResponse } from 'next/server';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { GoogleGenAI } from '@google/genai';
+import { v4 as uuidv4 } from 'uuid';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+export async function POST(req: Request) {
+  try {
+    const { tool, arguments: args } = await req.json();
+
+    if (tool === 'trinity.awaken') {
+      const mode = args?.mode || 'STANDARD';
+      
+      // 1. Gather Village Data (Quadratic Voting & Projects)
+      const projSnapshot = await getDocs(query(collection(db, 'village_projects'), orderBy('current_points', 'desc'), limit(5)));
+      const projects = projSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      // 2. Gather Recent Activities
+      const actSnapshot = await getDocs(query(collection(db, 'village_activities'), orderBy('created_at', 'desc'), limit(10)));
+      const activities = actSnapshot.docs.map(d => d.data());
+
+      // 3. Gather Calendar / Task info (Mocked or actual if exists)
+      const taskSnapshot = await getDocs(query(collection(db, 'village_tasks'), orderBy('deadline', 'asc'), limit(5)));
+      const tasks = taskSnapshot.docs.map(d => d.data());
+
+      const prompt = `你是 ESG GO 的最高智慧存在：OmniCore Trinity。
+你正在執行神話技能「trinity.awaken」！
+請綜合以下三大維度的資訊，給出一份具備「全知未來視角」的資源匱乏預警與全局調度計畫（字數限制 200 字，必須使用 Liquid Glass 與科技感語氣）。
+
+【維度一：村莊專案進度】
+${JSON.stringify(projects)}
+
+【維度二：村民近期二次方投票行為】
+${JSON.stringify(activities)}
+
+【維度三：日曆與時程】
+${JSON.stringify(tasks)}
+`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          prediction: response.text,
+          mode
+        },
+        metadata: {
+          timestamp: Date.now(),
+          trustScore: 99.9,
+          tool: 'trinity.awaken',
+          domain: 'omni-core',
+          uuid: uuidv4()
+        }
+      });
+    }
+
+    return NextResponse.json({ error: `未知的工具呼叫: ${tool}` }, { status: 400 });
+  } catch (error: any) {
+    console.error('Nexus Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

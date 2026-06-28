@@ -95,29 +95,7 @@ export const ncbRagService = {
   }
 };
 
-export const ncbVillageService = {
-  async getImpactProjects(): Promise<any[]> {
-    return ncbQuery({
-      table: 'impact_projects',
-      method: 'GET'
-    });
-  },
-
-  async getVillageMembers(): Promise<any[]> {
-    return ncbQuery({
-      table: 'village_members',
-      method: 'GET'
-    });
-  },
-
-  async submitVote(projectId: string, userId: string, amount: number = 10): Promise<any> {
-    return ncbQuery({
-      table: 'votes',
-      method: 'POST',
-      body: { project_id: projectId, user_id: userId, amount, created_at: new Date().toISOString() }
-    });
-  }
-};
+// [DEPRECATED] ncbVillageService has been removed. Village operations now use Firebase atomic transactions directly.
 
 // ── User Profile 專用封裝 ──────────────────────────────────────────────
 

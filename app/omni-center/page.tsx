@@ -4,10 +4,14 @@ import { OmniNoteCRUD, type NoteData } from './omni-note-crud';
 import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
 import { PdfUploader } from './pdf-uploader';
+import { ZkpVault } from './zkp-vault';
+import { RagKnowledgeManager } from './rag-knowledge-manager';
+import { WuzuoNoteView } from './wuzuo-note-view';
+import { OmniCalendarView } from './omni-calendar-view';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 
-type Tab = 'dashboard'|'notes'|'chat'|'fiveT'|'rag';
+type Tab = 'dashboard'|'notes'|'tasks'|'chat'|'fiveT'|'rag'|'zkp'|'calendar';
 
 const FIVE_T = [
   { key:'traceable',   zh:'真', color:'var(--accent-blue, #3B82F6)' },
@@ -19,7 +23,8 @@ const FIVE_T = [
 
 const OMNI_MODULES = [
   { name:'萬能筆記', en:'OmniNote',     icon:'📝', color:'var(--accent-teal, #009EB0)',   href:'notes'   as Tab },
-  { name:'萬能任務', en:'OmniTask',     icon:'✅', color:'var(--accent-gold, #D4AF37)',   href:'notes'   as Tab },
+  { name:'萬能任務', en:'OmniTask',     icon:'✅', color:'var(--accent-gold, #D4AF37)',   href:'tasks'   as Tab },
+  { name:'萬能日曆', en:'OmniCalendar', icon:'📅', color:'var(--accent-blue, #3B82F6)',   href:'calendar' as Tab },
   { name:'OmniOne', en:'覺醒對話',      icon:'🤖', color:'var(--accent-purple, #8B5CF6)', href:'chat'    as Tab },
   { name:'5T 雷達', en:'FiveT Radar',   icon:'📡', color:'var(--accent-cyan, #06B6D4)',   href:'fiveT'   as Tab },
   { name:'RAG 知識', en:'RAG DB',       icon:'📚', color:'var(--accent-green, #22C55E)',  href:'rag'     as Tab },
@@ -41,6 +46,7 @@ import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 export default function OmniCenterPage() {
   const [tab, setTab]   = useState<Tab>('dashboard');
   const [notes, setNotes] = useState<NoteData[]>(DEMO_NOTES);
+  const [zkpCount, setZkpCount] = useState<number>(0);
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   
@@ -69,7 +75,14 @@ export default function OmniCenterPage() {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NoteData));
       setNotes(data);
     });
-    return () => unsubscribe();
+    
+    // Listen for ZKP count
+    const qZkp = query(collection(db, 'votes'));
+    const unsubZkp = onSnapshot(qZkp, (snapshot) => {
+      setZkpCount(snapshot.size);
+    });
+    
+    return () => { unsubscribe(); unsubZkp(); };
   }, []);
 
   const SCORES = { traceable:0.91, transparent:0.88, tangible:0.90, trustworthy:0.94, trackable:0.87 };
@@ -84,9 +97,12 @@ export default function OmniCenterPage() {
   const tabs: {id:Tab; label:string; icon:string}[] = [
     {id:'dashboard',label:'儀表板',icon:'◎'},
     {id:'notes',    label:'萬能筆記',icon:'📝'},
+    {id:'tasks',    label:'萬能任務',icon:'✅'},
+    {id:'calendar', label:'萬能日曆',icon:'📅'},
     {id:'chat',     label:'OmniOne 對話',icon:'🤖'},
     {id:'fiveT',    label:'5T 雷達圖',icon:'📡'},
     {id:'rag',      label:'知識治理',icon:'📚'},
+    {id:'zkp',      label:'ZKP 憑證館',icon:'🛡️'},
   ];
 
   const tabStyle = (active:boolean) => ({
@@ -161,7 +177,7 @@ export default function OmniCenterPage() {
             <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
               <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">系統統計</div>
               <div className="grid grid-cols-2 gap-2">
-                {[{l:'筆記數',v:notes.length,c:'var(--accent-teal)'},{l:'OmniOne 案件',v:47,c:'var(--accent-purple)'},{l:'ZKP 封印',v:28,c:'var(--accent-blue)'},{l:'GRI 指標',v:142,c:'var(--accent-gold)'}].map(s=>(
+                {[{l:'筆記數',v:notes.length,c:'var(--accent-teal)'},{l:'OmniOne 案件',v:47,c:'var(--accent-purple)'},{l:'ZKP 封印',v:zkpCount,c:'var(--accent-blue)'},{l:'GRI 指標',v:142,c:'var(--accent-gold)'}].map(s=>(
                   <div key={s.l} className="bg-primary rounded-lg py-2 px-2.5">
                     <div className="font-['Fira_Code',monospace] text-xl font-bold" style={{color:s.c}}>{s.v}</div>
                     <div className="text-xs text-textSecondary">{s.l}</div>
@@ -198,6 +214,20 @@ export default function OmniCenterPage() {
         </div>
       )}
 
+      {/* Tasks Tab */}
+      {tab==='tasks' && (
+        <div className="max-w-4xl mx-auto">
+          <WuzuoNoteView />
+        </div>
+      )}
+
+      {/* Calendar Tab */}
+      {tab==='calendar' && (
+        <div className="max-w-6xl mx-auto">
+          <OmniCalendarView />
+        </div>
+      )}
+
       {/* Chat Tab */}
       {tab==='chat' && (
         <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm min-h-[500px]">
@@ -208,7 +238,7 @@ export default function OmniCenterPage() {
       {/* 5T Tab */}
       {tab==='fiveT' && (
         <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
-          <FiveTRadar/>
+          <FiveTRadar zkpCount={zkpCount} />
         </div>
       )}
 
@@ -216,6 +246,14 @@ export default function OmniCenterPage() {
       {tab==='rag' && (
         <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm max-w-4xl mx-auto">
           <PdfUploader/>
+          <RagKnowledgeManager/>
+        </div>
+      )}
+
+      {/* ZKP Vault Tab */}
+      {tab==='zkp' && (
+        <div className="max-w-5xl mx-auto">
+          <ZkpVault/>
         </div>
       )}
     </div>

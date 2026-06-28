@@ -1,0 +1,92 @@
+import { NextResponse } from 'next/server';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { GoogleGenAI } from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+// Cosine similarity for standard array numbers
+function cosineSimilarity(vecA: number[], vecB: number[]) {
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
+export async function POST(req: Request) {
+  try {
+    const { prompt, tenantId = 'default_tenant', userId = 'default_user' } = await req.json();
+
+    if (!prompt) {
+      return NextResponse.json({ error: '無效的請求參數' }, { status: 400 });
+    }
+
+    // 1. Generate embedding for user prompt
+    let promptEmbedding: number[] = [];
+    try {
+      const embedRes = await ai.models.embedContent({
+        model: 'text-embedding-004',
+        contents: prompt
+      });
+      promptEmbedding = embedRes.embeddings?.[0]?.values || [];
+    } catch (e) {
+      console.warn('Embedding generation failed:', e);
+      return NextResponse.json({ error: '無法生成查詢向量' }, { status: 500 });
+    }
+
+    // 2. Fetch documents (in a real production vector DB this would be a nearest neighbor search)
+    // For standard firestore, we fetch and do in-memory search (okay for small village data)
+    const ragRef = collection(db, 'rag_knowledge');
+    const q = query(ragRef, where('user_id', '==', userId)); 
+    // In multi-tenant, it might be where('tenantId', '==', tenantId)
+    const snapshot = await getDocs(q);
+
+    const scoredDocs: { content: string, score: number, source: string }[] = [];
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.embedding && data.embedding.length > 0 && promptEmbedding.length > 0) {
+        const score = cosineSimilarity(promptEmbedding, data.embedding);
+        scoredDocs.push({
+          content: data.content,
+          score,
+          source: data.source
+        });
+      }
+    });
+
+    // 3. Sort by similarity and pick top 3
+    scoredDocs.sort((a, b) => b.score - a.score);
+    const topK = scoredDocs.slice(0, 3);
+    const contextStr = topK.map((d, i) => `[Source ${i+1}: ${d.source}]\n${d.content}`).join('\n\n');
+
+    // 4. Generate final answer using Gemini Flash
+    const finalPrompt = `你是 ESG GO 的企業智庫助理 (OmniGemini RAG)。請根據以下歷史永續報告內容，回答使用者的問題。如果內容與問題無關，請使用常識回答，但註明未從知識庫找到明確佐證。
+
+【知識庫內容】
+${contextStr}
+
+【使用者問題】
+${prompt}`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: finalPrompt,
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      answer: response.text,
+      references: topK.map(d => d.source)
+    });
+  } catch (error: any) {
+    console.error('RAG Query Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

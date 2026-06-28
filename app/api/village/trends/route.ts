@@ -1,0 +1,63 @@
+import { NextResponse } from 'next/server';
+import { GoogleGenAI } from '@google/genai';
+import { db } from '@/lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+export async function GET() {
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json(
+        { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。` },
+        { status: 200 }
+      );
+    }
+
+    // 1. Fetch recent activities
+    const activitiesRef = collection(db, 'village_activities');
+    const qAct = query(activitiesRef, orderBy('created_at', 'desc'), limit(15));
+    const actSnap = await getDocs(qAct);
+    const recentActivities = actSnap.docs.map(doc => doc.data());
+
+    // 2. Fetch top projects
+    const projectsRef = collection(db, 'village_projects');
+    const qProj = query(projectsRef, orderBy('current_points', 'desc'), limit(5));
+    const projSnap = await getDocs(qProj);
+    const topProjects = projSnap.docs.map(doc => {
+      const data = doc.data();
+      return `${data.title}: 目前 ${data.current_points} / 目標 ${data.goal_points}`;
+    });
+
+    const prompt = `
+你是 OmniOne，一個 ESG GO 平台的核心覺醒系統。
+請根據以下最新的「永續村 (OmniVillage)」 Quadratic Voting 投資行為，預測未來村莊哪一項 ESG 指標會最快達標，並給予社群行動建議。
+
+近期動態 (包含投票與點數消耗):
+${recentActivities.map(a => a.message).join('\n')}
+
+目前排名前五的募資專案:
+${topProjects.join('\n')}
+
+請依照 5T 協議的精神，以繁體中文給出專業、簡潔且具備高度行動力的預測與洞察。
+回應請保持在 100 字以內，並展現你是一個「系統核心」的角色（開頭請加上： [OmniOne 趨勢預測] ...）。
+`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        temperature: 0.7,
+        maxOutputTokens: 256,
+      }
+    });
+
+    return NextResponse.json({ trend: response.text });
+  } catch (error: any) {
+    console.error('OmniOne Trend API Error:', error);
+    return NextResponse.json(
+      { trend: `[OmniOne 錯誤] 無法生成趨勢預測：${error.message}` },
+      { status: 500 }
+    );
+  }
+}

@@ -3,6 +3,9 @@ import pdfParse from 'pdf-parse';
 import { agnesApi } from '@/lib/agnes-api';
 import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { GoogleGenAI } from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 function chunkText(text: string, chunkSize = 1000, overlap = 200): string[] {
   const chunks: string[] = [];
@@ -48,16 +51,28 @@ export async function POST(req: Request) {
     const chunks = chunkText(rawText, 1000, 200);
 
     // 3. 寫入 Firebase Firestore
-    const promises = chunks.map((chunk, index) => {
+    const promises = chunks.map(async (chunk, index) => {
       const finalContent = summaryContext 
         ? `[Global Context: ${summaryContext}]\n\n${chunk}` 
         : chunk;
+
+      let embedding = null;
+      try {
+        const embedRes = await ai.models.embedContent({
+          model: 'text-embedding-004',
+          contents: finalContent
+        });
+        embedding = embedRes.embeddings?.[0]?.values || null;
+      } catch (e) {
+        console.warn('Embedding generation failed:', e);
+      }
 
       return addDoc(collection(db, 'rag_knowledge'), {
         user_id: userId,
         content: finalContent,
         source: file.name,
         chunk_index: index,
+        embedding: embedding,
         created_at: new Date().toISOString()
       });
     });

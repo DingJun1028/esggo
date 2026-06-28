@@ -10,6 +10,11 @@ const nextConfig = {
       },
     },
   },
+  webpack: (config, { defaultLoaders }) => {
+    // Support @lib/* path alias for lib/ directory
+    config.resolve.alias['@lib'] = require('path').resolve(__dirname, 'lib');
+    return config;
+  },
 };
 
 module.exports = nextConfig;

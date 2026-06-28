@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import { ncbVillageService } from '@/lib/ncb-utils';
 
 export async function GET() {
   try {
     // @deprecated - Village now uses real-time Firebase listeners on the client.
     // This API route remains as a fallback or for external integrations.
-    const members = await ncbVillageService.getVillageMembers();
     
     // Fallback data if NCBDB returns empty or fails
     const fallbackMembers = [
@@ -16,9 +14,7 @@ export async function GET() {
       { user_id: 'u_05', name: 'Eve S.', title: '減碳達人', points: 9800, avatar: 'ES' },
     ];
 
-    const data = Array.isArray(members) && members.length > 0 ? members : fallbackMembers;
-
-    return NextResponse.json({ success: true, members: data });
+    return NextResponse.json({ success: true, members: fallbackMembers });
   } catch (error: any) {
     console.error('Village Members GET Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
