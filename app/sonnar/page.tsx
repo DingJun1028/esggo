@@ -268,7 +268,7 @@ export default function SonnarDashboard() {
   // ─── Render ─────────────────────────────────────────────────
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.text, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4" />
           <p style={{ color: SOLID_CARD_TOKENS.textSecondary }}>ESGSonar 初始化中...</p>
@@ -280,32 +280,32 @@ export default function SonnarDashboard() {
   return (
     <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.text }}>
       {/* ─── Header ─── */}
-      <header style={{ borderBottom: `1px solid ${TOKENS.border}`, padding: '16px 24px', background: TOKENS.surface }}>
+      <header style={{ borderBottom: `1px solid ${SOLID_CARD_TOKENS.border}`, background: SOLID_CARD_TOKENS.surface }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: `linear-gradient(135deg, ${TOKENS.teal}, ${TOKENS.zkpBlue})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '18px', color: '#fff' }}>S</div>
+            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: `linear-gradient(135deg, ${SOLID_CARD_TOKENS.teal}, ${SOLID_CARD_TOKENS.zkpBlue})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '18px', color: '#fff' }}>S</div>
             <div>
-              <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: TOKENS.teal }}>ESGSonar</h1>
-              <p style={{ fontSize: '12px', color: TOKENS.textSecondary, margin: 0 }}>ESG 法規信號雷達 — 20 源監控</p>
+              <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: SOLID_CARD_TOKENS.teal }}>ESGSonar</h1>
+              <p style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary, margin: 0 }}>ESG 法規信號雷達 — 20 源監控</p>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: wsConnected ? TOKENS.success : TOKENS.error }} />
-              <span style={{ fontSize: '12px', color: TOKENS.textSecondary }}>{wsConnected ? 'WS 即時' : '輪詢 30s'}</span>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: wsConnected ? SOLID_CARD_TOKENS.success : SOLID_CARD_TOKENS.error }} />
+              <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary }}>{wsConnected ? 'WS 即時' : '輪詢 30s'}</span>
             </div>
             {criticalAlerts.length > 0 && (
               <Badge variant="error">{criticalAlerts.length} 嚴重</Badge>
             )}
             {wsEvents.length > 0 && (
-              <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>事件: {wsEvents.length}</span>
+              <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textMuted }}>事件: {wsEvents.length}</span>
             )}
           </div>
         </div>
       </header>
 
       {/* ─── Tabs ─── */}
-      <nav style={{ borderBottom: `1px solid ${TOKENS.border}`, padding: '0 24px', background: TOKENS.surface }}>
+      <nav style={{ borderBottom: `1px solid ${SOLID_CARD_TOKENS.border}`, background: SOLID_CARD_TOKENS.surface }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '24px' }}>
           {(['overview', 'crawl', 'alerts'] as const).map(tab => (
             <button
@@ -315,13 +315,12 @@ export default function SonnarDashboard() {
                 padding: '12px 0',
                 fontSize: '14px',
                 fontWeight: 600,
-                borderBottom: `2px solid ${activeTab === tab ? TOKENS.teal : 'transparent'}`,
-                color: activeTab === tab ? TOKENS.teal : TOKENS.textSecondary,
+                color: activeTab === tab ? SOLID_CARD_TOKENS.teal : SOLID_CARD_TOKENS.textSecondary,
                 background: 'none',
                 border: 'none',
                 borderBottomWidth: '2px',
                 borderBottomStyle: 'solid',
-                borderBottomColor: activeTab === tab ? TOKENS.teal : 'transparent',
+                borderBottomColor: activeTab === tab ? SOLID_CARD_TOKENS.teal : 'transparent',
                 cursor: 'pointer',
               }}
             >
@@ -351,7 +350,7 @@ export default function SonnarDashboard() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px', textAlign: 'center' }}>
                 {Object.entries(REGION_LABELS).map(([key, label]) => (
                   <div key={key}>
-                    <p style={{ fontSize: '11px', color: TOKENS.textSecondary, marginBottom: '4px' }}>{label}</p>
+                    <p style={{ fontSize: '11px', color: SOLID_CARD_TOKENS.textSecondary, marginBottom: '4px' }}>{label}</p>
                     <div style={{ height: '80px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                       <div
                         style={{
@@ -359,7 +358,7 @@ export default function SonnarDashboard() {
                           borderRadius: '4px 4px 0 0',
                           height: `${((regionCounts[key] || 0) / maxRegionCount) * 100}%`,
                           minHeight: regionCounts[key] ? '4px' : '0',
-                          background: key === 'TW' ? TOKENS.teal : key === 'EU' ? TOKENS.zkpBlue : key === 'INT' ? TOKENS.gold : key === 'US' ? '#F59E0B' : key === 'AP' ? '#EC4899' : TOKENS.textMuted,
+                          background: key === 'TW' ? SOLID_CARD_TOKENS.teal : key === 'EU' ? SOLID_CARD_TOKENS.zkpBlue : key === 'INT' ? SOLID_CARD_TOKENS.gold : key === 'US' ? '#F59E0B' : key === 'AP' ? '#EC4899' : SOLID_CARD_TOKENS.textMuted,
                           transition: 'height 0.5s',
                         }}
                       />
@@ -401,19 +400,19 @@ export default function SonnarDashboard() {
 
                   {/* Signal bar */}
                   <div style={{ marginTop: '8px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: TOKENS.textSecondary, marginBottom: '4px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary, marginBottom: '4px' }}>
                       <span>信號強度</span>
                       <span>{signal.signalStrength}%</span>
                     </div>
                     <ProgressBar
                       value={signal.signalStrength}
-                      color={signal.signalStrength > 80 ? TOKENS.error : signal.signalStrength > 50 ? TOKENS.warning : TOKENS.teal}
+                      color={signal.signalStrength > 80 ? SOLID_CARD_TOKENS.error : signal.signalStrength > 50 ? SOLID_CARD_TOKENS.warning : SOLID_CARD_TOKENS.teal}
                     />
                   </div>
 
-                  <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: TOKENS.textSecondary, marginTop: '8px' }}>
-                    <span>新增: <span style={{ color: TOKENS.success }}>{signal.newItems}</span></span>
-                    <span>變動: <span style={{ color: TOKENS.warning }}>{signal.changedItems}</span></span>
+                  <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary, marginTop: '8px' }}>
+                    <span>新增: <span style={{ color: SOLID_CARD_TOKENS.success }}>{signal.newItems}</span></span>
+                    <span>變動: <span style={{ color: SOLID_CARD_TOKENS.warning }}>{signal.changedItems}</span></span>
                   </div>
 
                   {signal.topics.length > 0 && (
@@ -436,14 +435,14 @@ export default function SonnarDashboard() {
                   <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(topics.length, 10)}, 1fr)`, marginTop: '12px' }}>
                     {topics.slice(0, 10).map(t => (
                       <div key={t.topic} style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '12px', color: TOKENS.text }}>{t.topic}</span>
-                        <span style={{ display: 'block', fontSize: '11px', color: TOKENS.textMuted }}>{TREND_ICONS[t.trend]} {t.count}</span>
+                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.text }}>{t.topic}</span>
+                        <span style={{ display: 'block', fontSize: '11px', color: SOLID_CARD_TOKENS.textMuted }}>{TREND_ICONS[t.trend]} {t.count}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
-                <p style={{ color: TOKENS.textMuted, fontSize: '14px' }}>尚無主題資料</p>
+                <p style={{ color: SOLID_CARD_TOKENS.textMuted, fontSize: '14px' }}>尚無主題資料</p>
               )}
             </SolidCard>
 
@@ -453,8 +452,8 @@ export default function SonnarDashboard() {
                 <CardHeader title="即時事件流" />
                 <div style={{ maxHeight: '128px', overflowY: 'auto' }}>
                   {wsEvents.slice(-10).reverse().map((ev, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: TOKENS.textSecondary, marginBottom: '4px' }}>
-                      <span style={{ color: TOKENS.textMuted }}>{new Date(ev.ts).toLocaleTimeString()}</span>
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary, marginBottom: '4px' }}>
+                      <span style={{ color: SOLID_CARD_TOKENS.textMuted }}>{new Date(ev.ts).toLocaleTimeString()}</span>
                       <Badge
                         variant={ev.type === 'alert_new' ? 'error' : ev.type === 'crawl_complete' ? 'success' : 'muted'}
                         size="sm"
@@ -497,7 +496,7 @@ export default function SonnarDashboard() {
               if (regionSources.length === 0) return null;
               return (
                 <div key={region} style={{ marginBottom: '16px' }}>
-                  <h3 style={{ fontSize: '12px', fontWeight: 600, color: TOKENS.textSecondary, textTransform: 'uppercase', marginBottom: '8px' }}>{REGION_LABELS[region.toUpperCase()] || region}</h3>
+                  <h3 style={{ fontSize: '12px', fontWeight: 600, color: SOLID_CARD_TOKENS.textSecondary, textTransform: 'uppercase', marginBottom: '8px' }}>{REGION_LABELS[region.toUpperCase()] || region}</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {regionSources.map(source => (
                       <SolidCard key={source.sourceId}>
@@ -505,9 +504,9 @@ export default function SonnarDashboard() {
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                               <h4 style={{ fontSize: '14px', fontWeight: 600, margin: 0 }}>{source.sourceName}</h4>
-                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: source.enabled ? TOKENS.success : TOKENS.textMuted }} />
+                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: source.enabled ? SOLID_CARD_TOKENS.success : SOLID_CARD_TOKENS.textMuted }} />
                             </div>
-                            <div style={{ fontSize: '12px', color: TOKENS.textMuted, marginTop: '2px' }}>
+                            <div style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textMuted, marginTop: '2px' }}>
                               運行 {source.totalRuns} 次 · 成功 {source.successfulRuns} · 失敗 {source.failedRuns}
                               {source.lastItemsFound !== undefined && ` · 上次 ${source.lastItemsFound} 項`}
                             </div>
@@ -527,7 +526,7 @@ export default function SonnarDashboard() {
                 </div>
               );
             })}
-          </div>
+          </Section>
         )}
 
         {/* ═══ Alerts Tab ═══ */}
@@ -555,12 +554,12 @@ export default function SonnarDashboard() {
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                         <Badge variant={SEVERITY_VARIANTS[alert.severity] || 'muted'}>{alert.severity.toUpperCase()}</Badge>
-                        <span style={{ fontSize: '12px', color: TOKENS.textSecondary }}>{alert.sourceName}</span>
-                        <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>{alert.alertType}</span>
-                        <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>{new Date(alert.createdAt).toLocaleString()}</span>
+                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary }}>{alert.sourceName}</span>
+                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textMuted }}>{alert.alertType}</span>
+                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textMuted }}>{new Date(alert.createdAt).toLocaleString()}</span>
                       </div>
                       <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 4px' }}>{alert.title}</h3>
-                      <p style={{ fontSize: '13px', color: TOKENS.textSecondary, margin: 0 }}>{alert.summary}</p>
+                      <p style={{ fontSize: '13px', color: SOLID_CARD_TOKENS.textSecondary, margin: 0 }}>{alert.summary}</p>
                     </div>
                     {!alert.acknowledged && (
                       <Button variant="secondary" size="sm" onClick={() => acknowledgeAlert(alert.id)}>確認</Button>
@@ -569,7 +568,7 @@ export default function SonnarDashboard() {
                 </SolidCard>
               ))}
               {alerts.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '48px 0', color: TOKENS.textMuted }}>目前無異常警報 ✅</div>
+                <div style={{ textAlign: 'center', padding: '48px 0', color: SOLID_CARD_TOKENS.textMuted }}>目前無異常警報 ✅</div>
               )}
             </div>
           </Section>
