@@ -1,0 +1,34 @@
+/**
+ * GET /api/user/leaderboard?limit=20
+ * Returns top users by total points
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getUserGrowthService, TIER_ICONS, TIER_LABELS } from '@/core/services/user-growth-service';
+
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: NextRequest) {
+  try {
+    const limit = parseInt(req.nextUrl.searchParams.get('limit') || '20');
+
+    const service = getUserGrowthService();
+    const topUsers = await service.getLeaderboard(limit);
+
+    const ranked = topUsers.map((u, i) => ({
+      rank: i + 1,
+      displayName: u.displayName,
+      tier: u.tier,
+      tierLabel: TIER_LABELS[u.tier] || u.tier,
+      tierIcon: TIER_ICONS[u.tier] || '�',
+      level: u.level,
+      totalPoints: u.totalPoints,
+      streakDays: u.streakDays,
+    }));
+
+    return NextResponse.json({ success: true, leaderboard: ranked });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
