@@ -1,6 +1,17 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  SolidCard,
+  CardHeader,
+  MetricCard,
+  Badge,
+  Button,
+  Section,
+  ProgressBar,
+  Grid,
+  SOLID_CARD_TOKENS,
+} from '@/components/ui/solid-card';
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -52,11 +63,11 @@ interface WSEvent {
 
 // ─── Constants ────────────────────────────────────────────────
 
-const SEVERITY_COLORS: Record<string, string> = {
-  critical: 'bg-red-600 text-white',
-  high: 'bg-orange-500 text-white',
-  medium: 'bg-yellow-500 text-black',
-  low: 'bg-blue-400 text-white',
+const SEVERITY_VARIANTS: Record<string, 'error' | 'warning' | 'blue' | 'muted'> = {
+  critical: 'error',
+  high: 'warning',
+  medium: 'warning',
+  low: 'muted',
 };
 
 const REGION_LABELS: Record<string, string> = {
@@ -257,57 +268,62 @@ export default function SonnarDashboard() {
   // ─── Render ─────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-        <div className="text-center">
+      <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
           <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-gray-400">ESGSonar 初始化中...</p>
+          <p style={{ color: SOLID_CARD_TOKENS.textSecondary }}>ESGSonar 初始化中...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.text }}>
       {/* ─── Header ─── */}
-      <header className="border-b border-gray-800 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center text-lg font-bold">S</div>
+      <header style={{ borderBottom: `1px solid ${TOKENS.border}`, padding: '16px 24px', background: TOKENS.surface }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: `linear-gradient(135deg, ${TOKENS.teal}, ${TOKENS.zkpBlue})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '18px', color: '#fff' }}>S</div>
             <div>
-              <h1 className="text-xl font-bold">ESGSonar</h1>
-              <p className="text-xs text-gray-400">ESG 法規信號雷達 — 20 源監控</p>
+              <h1 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: TOKENS.teal }}>ESGSonar</h1>
+              <p style={{ fontSize: '12px', color: TOKENS.textSecondary, margin: 0 }}>ESG 法規信號雷達 — 20 源監控</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            {/* WS status */}
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-              <span className="text-xs text-gray-400">{wsConnected ? 'WS 即時' : '輪詢 30s'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: wsConnected ? TOKENS.success : TOKENS.error }} />
+              <span style={{ fontSize: '12px', color: TOKENS.textSecondary }}>{wsConnected ? 'WS 即時' : '輪詢 30s'}</span>
             </div>
-            {/* Critical alerts badge */}
             {criticalAlerts.length > 0 && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-red-600 text-white animate-pulse">
-                {criticalAlerts.length} 嚴重
-              </span>
+              <Badge variant="error">{criticalAlerts.length} 嚴重</Badge>
             )}
-            {/* Event log dot */}
             {wsEvents.length > 0 && (
-              <span className="text-xs text-gray-500">事件: {wsEvents.length}</span>
+              <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>事件: {wsEvents.length}</span>
             )}
           </div>
         </div>
       </header>
 
       {/* ─── Tabs ─── */}
-      <nav className="border-b border-gray-800 px-6">
-        <div className="max-w-7xl mx-auto flex gap-6">
+      <nav style={{ borderBottom: `1px solid ${TOKENS.border}`, padding: '0 24px', background: TOKENS.surface }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '24px' }}>
           {(['overview', 'crawl', 'alerts'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-3 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab ? 'border-teal-400 text-teal-400' : 'border-transparent text-gray-400 hover:text-gray-200'
-              }`}
+              style={{
+                padding: '12px 0',
+                fontSize: '14px',
+                fontWeight: 600,
+                borderBottom: `2px solid ${activeTab === tab ? TOKENS.teal : 'transparent'}`,
+                color: activeTab === tab ? TOKENS.teal : TOKENS.textSecondary,
+                background: 'none',
+                border: 'none',
+                borderBottomWidth: '2px',
+                borderBottomStyle: 'solid',
+                borderBottomColor: activeTab === tab ? TOKENS.teal : 'transparent',
+                cursor: 'pointer',
+              }}
             >
               {tab === 'overview' && '信號雷達'}
               {tab === 'crawl' && '爬蟲控制'}
@@ -317,164 +333,147 @@ export default function SonnarDashboard() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px' }}>
         {/* ═══ Overview Tab ═══ */}
         {activeTab === 'overview' && (
           <>
             {/* ─── Summary KPI Row ─── */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <p className="text-xs text-gray-400 mb-1">監控來源</p>
-                <p className="text-2xl font-bold text-teal-400">{signals.length}</p>
-              </div>
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <p className="text-xs text-gray-400 mb-1">異常信號</p>
-                <p className="text-2xl font-bold text-orange-400">{signals.filter(s => s.anomaly).length}</p>
-              </div>
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <p className="text-xs text-gray-400 mb-1">未讀警報</p>
-                <p className="text-2xl font-bold text-red-400">{unackAlerts.length}</p>
-              </div>
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <p className="text-xs text-gray-400 mb-1">主題數</p>
-                <p className="text-2xl font-bold text-blue-400">{topics.length}</p>
-              </div>
-            </div>
+            <Grid columns={4} gap={16} style={{ marginBottom: '24px' }}>
+              <MetricCard label="監控來源" value={signals.length} unit="源" />
+              <MetricCard label="異常信號" value={signals.filter(s => s.anomaly).length} trend={signals.filter(s => s.anomaly).length > 0 ? 'up' : 'neutral'} />
+              <MetricCard label="未讀警報" value={unackAlerts.length} trend={unackAlerts.length > 0 ? 'up' : 'neutral'} />
+              <MetricCard label="主題數" value={topics.length} />
+            </Grid>
 
             {/* ─── Region Distribution Chart ─── */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-              <h3 className="font-semibold mb-4">來源區域分布</h3>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+            <SolidCard>
+              <CardHeader title="來源區域分布" />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px', textAlign: 'center' }}>
                 {Object.entries(REGION_LABELS).map(([key, label]) => (
-                  <div key={key} className="text-center">
-                    <p className="text-xs text-gray-400 mb-1">{label}</p>
-                    <div className="h-20 flex items-end justify-center">
+                  <div key={key}>
+                    <p style={{ fontSize: '11px', color: TOKENS.textSecondary, marginBottom: '4px' }}>{label}</p>
+                    <div style={{ height: '80px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                       <div
-                        className={`w-8 ${REGION_COLORS[key] || 'bg-gray-500'} rounded-t transition-all duration-500`}
-                        style={{ height: `${((regionCounts[key] || 0) / maxRegionCount) * 100}%`, minHeight: regionCounts[key] ? '4px' : '0' }}
+                        style={{
+                          width: '32px',
+                          borderRadius: '4px 4px 0 0',
+                          height: `${((regionCounts[key] || 0) / maxRegionCount) * 100}%`,
+                          minHeight: regionCounts[key] ? '4px' : '0',
+                          background: key === 'TW' ? TOKENS.teal : key === 'EU' ? TOKENS.zkpBlue : key === 'INT' ? TOKENS.gold : key === 'US' ? '#F59E0B' : key === 'AP' ? '#EC4899' : TOKENS.textMuted,
+                          transition: 'height 0.5s',
+                        }}
                       />
                     </div>
-                    <p className="text-sm font-medium mt-1">{regionCounts[key] || 0}</p>
+                    <p style={{ fontSize: '14px', fontWeight: 600, marginTop: '4px' }}>{regionCounts[key] || 0}</p>
                   </div>
                 ))}
               </div>
-            </div>
+            </SolidCard>
 
             {/* ─── Region Filter ─── */}
-            <div className="flex flex-wrap gap-2">
-              <button
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+              <Button
+                variant={regionFilter === 'all' ? 'primary' : 'ghost'}
+                size="sm"
                 onClick={() => setRegionFilter('all')}
-                className={`px-3 py-1 rounded-lg text-xs transition-colors ${regionFilter === 'all' ? 'bg-teal-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-              >全部</button>
+              >全部</Button>
               {Object.entries(REGION_LABELS).map(([key, label]) => (
-                <button
+                <Button
                   key={key}
+                  variant={regionFilter === key ? 'primary' : 'ghost'}
+                  size="sm"
                   onClick={() => setRegionFilter(key)}
-                  className={`px-3 py-1 rounded-lg text-xs transition-colors ${regionFilter === key ? 'bg-teal-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-                >{label}</button>
+                >{label}</Button>
               ))}
             </div>
 
             {/* ─── Signal Cards (with sparkline) ─── */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Grid columns={3} gap={16}>
               {filteredSignals.map(signal => (
-                <div
-                  key={signal.source.id}
-                  className={`rounded-xl border p-5 ${
-                    signal.anomaly ? 'border-orange-500/50 bg-orange-500/5' : 'border-gray-800 bg-gray-900'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-sm truncate">{signal.source.name}</h3>
-                    {signal.anomaly && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">⚠ 異常</span>
-                    )}
+                <SolidCard key={signal.source.id} variant={signal.anomaly ? 'warning' : 'default'}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 600, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{signal.source.name}</h3>
+                    {signal.anomaly && <Badge variant="warning">⚠ 異常</Badge>}
                   </div>
 
                   {/* Sparkline */}
                   <Sparkline data={signalHistory.current[signal.source.id] || []} />
 
                   {/* Signal bar */}
-                  <div className="mt-2">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                  <div style={{ marginTop: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: TOKENS.textSecondary, marginBottom: '4px' }}>
                       <span>信號強度</span>
                       <span>{signal.signalStrength}%</span>
                     </div>
-                    <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${
-                          signal.signalStrength > 80 ? 'bg-red-500' :
-                          signal.signalStrength > 50 ? 'bg-yellow-500' : 'bg-teal-500'
-                        }`}
-                        style={{ width: `${signal.signalStrength}%` }}
-                      />
-                    </div>
+                    <ProgressBar
+                      value={signal.signalStrength}
+                      color={signal.signalStrength > 80 ? TOKENS.error : signal.signalStrength > 50 ? TOKENS.warning : TOKENS.teal}
+                    />
                   </div>
 
-                  <div className="flex gap-4 text-xs text-gray-400 mt-2">
-                    <span>新增: <span className="text-green-400">{signal.newItems}</span></span>
-                    <span>變動: <span className="text-yellow-400">{signal.changedItems}</span></span>
+                  <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: TOKENS.textSecondary, marginTop: '8px' }}>
+                    <span>新增: <span style={{ color: TOKENS.success }}>{signal.newItems}</span></span>
+                    <span>變動: <span style={{ color: TOKENS.warning }}>{signal.changedItems}</span></span>
                   </div>
 
                   {signal.topics.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1">
+                    <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                       {signal.topics.slice(0, 4).map(t => (
-                        <span key={t} className="text-xs px-1.5 py-0.5 rounded bg-gray-800 text-gray-300">{t}</span>
+                        <Badge key={t} variant="muted" size="sm">{t}</Badge>
                       ))}
                     </div>
                   )}
-                </div>
+                </SolidCard>
               ))}
-            </div>
+            </Grid>
 
             {/* ─── Topic Bar Chart ─── */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-              <h3 className="font-semibold mb-4">ESG 主題趨勢</h3>
+            <SolidCard>
+              <CardHeader title="ESG 主題趨勢" />
               {topics.length > 0 ? (
-                <div className="space-y-3">
-                  {/* Bar chart */}
+                <div>
                   <BarChart data={topicBarData} maxVal={maxTopicCount} color="bg-teal-500" />
-                  {/* Labels */}
-                  <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(topics.length, 10)}, 1fr)` }}>
+                  <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(topics.length, 10)}, 1fr)`, marginTop: '12px' }}>
                     {topics.slice(0, 10).map(t => (
-                      <div key={t.topic} className="text-center">
-                        <span className="text-xs text-gray-300">{t.topic}</span>
-                        <span className="block text-xs text-gray-500">{TREND_ICONS[t.trend]} {t.count}</span>
+                      <div key={t.topic} style={{ textAlign: 'center' }}>
+                        <span style={{ fontSize: '12px', color: TOKENS.text }}>{t.topic}</span>
+                        <span style={{ display: 'block', fontSize: '11px', color: TOKENS.textMuted }}>{TREND_ICONS[t.trend]} {t.count}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">尚無主題資料</p>
+                <p style={{ color: TOKENS.textMuted, fontSize: '14px' }}>尚無主題資料</p>
               )}
-            </div>
+            </SolidCard>
 
             {/* ─── WS Event Log ─── */}
             {wsEvents.length > 0 && (
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-                <h3 className="font-semibold mb-3 text-sm">即時事件流</h3>
-                <div className="space-y-1 max-h-32 overflow-y-auto">
+              <SolidCard>
+                <CardHeader title="即時事件流" />
+                <div style={{ maxHeight: '128px', overflowY: 'auto' }}>
                   {wsEvents.slice(-10).reverse().map((ev, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-gray-400">
-                      <span className="text-gray-600">{new Date(ev.ts).toLocaleTimeString()}</span>
-                      <span className={`px-1.5 py-0.5 rounded text-gray-300 ${
-                        ev.type === 'alert_new' ? 'bg-red-800' :
-                        ev.type === 'crawl_complete' ? 'bg-green-800' : 'bg-gray-800'
-                      }`}>{ev.type}</span>
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: TOKENS.textSecondary, marginBottom: '4px' }}>
+                      <span style={{ color: TOKENS.textMuted }}>{new Date(ev.ts).toLocaleTimeString()}</span>
+                      <Badge
+                        variant={ev.type === 'alert_new' ? 'error' : ev.type === 'crawl_complete' ? 'success' : 'muted'}
+                        size="sm"
+                      >{ev.type}</Badge>
                     </div>
                   ))}
                 </div>
-              </div>
+              </SolidCard>
             )}
           </>
         )}
 
         {/* ═══ Crawl Control Tab ═══ */}
         {activeTab === 'crawl' && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">爬蟲控制</h2>
-              <button
+          <Section title="爬蟲控制" subtitle="管理 ESGSonar 所有法規來源的排程與手動執行">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div />
+              <Button
+                variant="primary"
                 onClick={async () => {
                   setCrawling('all');
                   try {
@@ -487,10 +486,9 @@ export default function SonnarDashboard() {
                   } finally { setCrawling(null); }
                 }}
                 disabled={crawling !== null}
-                className="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 rounded-lg text-sm font-medium transition-colors"
               >
                 {crawling === 'all' ? '執行中...' : '全部執行'}
-              </button>
+              </Button>
             </div>
 
             {/* Group by region */}
@@ -498,29 +496,32 @@ export default function SonnarDashboard() {
               const regionSources = sources.filter(s => s.sourceId.startsWith(region));
               if (regionSources.length === 0) return null;
               return (
-                <div key={region}>
-                  <h3 className="text-xs font-medium text-gray-400 uppercase mb-2">{REGION_LABELS[region.toUpperCase()] || region}</h3>
-                  <div className="space-y-2">
+                <div key={region} style={{ marginBottom: '16px' }}>
+                  <h3 style={{ fontSize: '12px', fontWeight: 600, color: TOKENS.textSecondary, textTransform: 'uppercase', marginBottom: '8px' }}>{REGION_LABELS[region.toUpperCase()] || region}</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {regionSources.map(source => (
-                      <div key={source.sourceId} className="flex items-center justify-between p-3 rounded-xl border border-gray-800 bg-gray-900">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-medium text-sm">{source.sourceName}</h4>
-                            <span className={`w-1.5 h-1.5 rounded-full ${source.enabled ? 'bg-green-400' : 'bg-gray-600'}`} />
+                      <SolidCard key={source.sourceId}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <h4 style={{ fontSize: '14px', fontWeight: 600, margin: 0 }}>{source.sourceName}</h4>
+                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: source.enabled ? TOKENS.success : TOKENS.textMuted }} />
+                            </div>
+                            <div style={{ fontSize: '12px', color: TOKENS.textMuted, marginTop: '2px' }}>
+                              運行 {source.totalRuns} 次 · 成功 {source.successfulRuns} · 失敗 {source.failedRuns}
+                              {source.lastItemsFound !== undefined && ` · 上次 ${source.lastItemsFound} 項`}
+                            </div>
                           </div>
-                          <div className="text-xs text-gray-500 mt-0.5">
-                            運行 {source.totalRuns} 次 · 成功 {source.successfulRuns} · 失敗 {source.failedRuns}
-                            {source.lastItemsFound !== undefined && ` · 上次 ${source.lastItemsFound} 項`}
-                          </div>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => triggerCrawl(source.sourceId)}
+                            disabled={crawling !== null || !source.enabled}
+                          >
+                            {crawling === source.sourceId ? '爬取中...' : '立即爬取'}
+                          </Button>
                         </div>
-                        <button
-                          onClick={() => triggerCrawl(source.sourceId)}
-                          disabled={crawling !== null || !source.enabled}
-                          className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 rounded-lg text-xs transition-colors"
-                        >
-                          {crawling === source.sourceId ? '爬取中...' : '立即爬取'}
-                        </button>
-                      </div>
+                      </SolidCard>
                     ))}
                   </div>
                 </div>
@@ -531,60 +532,47 @@ export default function SonnarDashboard() {
 
         {/* ═══ Alerts Tab ═══ */}
         {activeTab === 'alerts' && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">異常警報</h2>
-              <span className="text-sm text-gray-400">未讀: {unackAlerts.length} / 共 {alerts.length}</span>
-            </div>
-
+          <Section title="異常警報" subtitle={`未讀: ${unackAlerts.length} / 共 ${alerts.length}`}>
             {/* Severity filter tabs */}
-            <div className="flex gap-2">
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
               {['all', 'critical', 'high', 'medium', 'low'].map(sev => (
-                <button
+                <Button
                   key={sev}
-                  className="px-3 py-1 rounded-lg text-xs bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  variant={sev === 'all' ? 'primary' : 'ghost'}
+                  size="sm"
+                  onClick={() => {/* severity filter */}}
                 >
                   {sev === 'all' ? '全部' : sev.toUpperCase()}
                   {sev !== 'all' && ` (${alerts.filter(a => a.severity === sev).length})`}
-                </button>
+                </Button>
               ))}
             </div>
 
-            <div className="space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {alerts.map(alert => (
-                <div
-                  key={alert.id}
-                  className={`p-4 rounded-xl border transition-opacity ${
-                    alert.acknowledged ? 'border-gray-800 bg-gray-900/50 opacity-60' : 'border-gray-800 bg-gray-900'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${SEVERITY_COLORS[alert.severity] || 'bg-gray-600'}`}>
-                          {alert.severity.toUpperCase()}
-                        </span>
-                        <span className="text-xs text-gray-400">{alert.sourceName}</span>
-                        <span className="text-xs text-gray-500">{alert.alertType}</span>
-                        <span className="text-xs text-gray-600">{new Date(alert.createdAt).toLocaleString()}</span>
+                <SolidCard key={alert.id} variant={alert.acknowledged ? 'default' : 'highlight'}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                        <Badge variant={SEVERITY_VARIANTS[alert.severity] || 'muted'}>{alert.severity.toUpperCase()}</Badge>
+                        <span style={{ fontSize: '12px', color: TOKENS.textSecondary }}>{alert.sourceName}</span>
+                        <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>{alert.alertType}</span>
+                        <span style={{ fontSize: '12px', color: TOKENS.textMuted }}>{new Date(alert.createdAt).toLocaleString()}</span>
                       </div>
-                      <h3 className="font-medium">{alert.title}</h3>
-                      <p className="text-sm text-gray-400 mt-1">{alert.summary}</p>
+                      <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 4px' }}>{alert.title}</h3>
+                      <p style={{ fontSize: '13px', color: TOKENS.textSecondary, margin: 0 }}>{alert.summary}</p>
                     </div>
                     {!alert.acknowledged && (
-                      <button
-                        onClick={() => acknowledgeAlert(alert.id)}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors shrink-0"
-                      >確認</button>
+                      <Button variant="secondary" size="sm" onClick={() => acknowledgeAlert(alert.id)}>確認</Button>
                     )}
                   </div>
-                </div>
+                </SolidCard>
               ))}
               {alerts.length === 0 && (
-                <div className="text-center py-12 text-gray-500">目前無異常警報 ✅</div>
+                <div style={{ textAlign: 'center', padding: '48px 0', color: TOKENS.textMuted }}>目前無異常警報 ✅</div>
               )}
             </div>
-          </div>
+          </Section>
         )}
       </main>
     </div>
