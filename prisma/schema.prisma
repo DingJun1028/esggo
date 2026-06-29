@@ -139,3 +139,114 @@ model NotificationLog {
   error       String?
   createdAt   DateTime @default(now())
 }
+
+// ═══════════════════════════════════════════════════════════════
+// User Growth System — Tier / XP / Achievements / Tasks
+// ═══════════════════════════════════════════════════════════════
+
+/// 用戶成長帳戶：記錄等級、經驗值、任務進度
+model UserGrowth {
+  id            String   @id @default(cuid())
+  userId        String   @unique  // Firebase Auth UID 或匿名 ID
+  email         String?
+  displayName   String   @default("永續觀察者")
+  tier          String   @default("seed") // seed → sprout → bloom → forest → guardian
+  level         Int      @default(1)      // 1-99
+  xp            Int      @default(0)
+  totalPoints   Int      @default(0)      // 歷史累積（不消耗）
+  streakDays    Int      @default(0)      // 連續登入天數
+  lastActiveAt  DateTime @default(now())
+  avatarUrl     String?
+  joinedAt      DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  achievements  UserAchievement[]
+  tasks         UserTask[]
+  subscriptions Subscription[]
+
+  @@index([tier])
+  @@index([totalPoints])
+}
+
+/// 等級constants映射（代碼名義，data/store 管理）
+/// seed=種子(0) / sprout=發芽(<1000) / bloom=綻放(<5000) / forest=森林(<20000) / guardian=守護者(>=20000)
+
+/// 成就徽章定義
+model Achievement {
+  id          String   @id @default(cuid())
+  slug        String   @unique  // e.g. "first_report", "streak_7", "esg_master"
+  title       String
+  description String
+  icon        String   // emoji 或 icon URL
+  category    String   // engagement / knowledge / community / milestone
+  tierRequired String  @default("seed") // 最低等級要求
+  xpReward    Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  users       UserAchievement[]
+}
+
+/// 用戶已解鎖的成就
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  user          UserGrowth @relation(fields: [userId], references: [id])
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+/// 每日成長任務
+model GrowthTask {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  category    String   // daily / weekly / monthly / special
+  xpReward    Int      @default(10)
+  streakBonus Int      @default(5)      // 連續完成 extra
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  userTasks   UserTask[]
+}
+
+/// 用戶任務進度
+model UserTask {
+  id          String   @id @default(cuid())
+  userId        String
+  taskId      String
+  status      String   @default("pending") // pending / in_progress / completed / claimed
+  progress    Int      @default(0)      // 0-100
+  completedAt DateTime?
+  claimedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  user        UserGrowth @relation(fields: [userId], references: [id])
+  task        GrowthTask  @relation(fields: [taskId], references: [id])
+
+  @@unique([userId, taskId])
+  @@index([userId])
+  @@index([status])
+}
+
+/// 用戶訂閱（資訊源的關注）
+model Subscription {
+  id          String   @id @default(cuid())
+  userId      String
+  subType     String   // company / keyword / source / region / industry
+  targetId    String   // e.g. sourceId or companyId or keyword
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  user        UserGrowth @relation(fields: [userId], references: [id])
+
+  @@unique([userId, subType, targetId])
+  @@index([userId])
+}
