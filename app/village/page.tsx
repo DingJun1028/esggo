@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Leaf, Heart, Users, TrendingUp, ShieldCheck, Clock, Activity, Minus, Plus } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, doc, runTransaction, query, orderBy } from 'firebase/firestore';
-import { seedVillageData } from '@/lib/village-seeder';
+// seedVillageData removed — should be API route, not client import
 import { OmniBaseCard } from '@/components/omni-base-card';
 
 interface Project {
