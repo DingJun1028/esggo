@@ -10,6 +10,7 @@
  */
 
 import { createHash, randomBytes } from 'crypto';
+import { EntropyForge } from './entropy-forge';
 import type {
   OmniNote,
   OmniTask,
@@ -37,10 +38,10 @@ export function createTask(
   } = {},
 ): OmniTask {
   const now = Date.now();
-  return {
+  return Object.freeze({
     id: `OT-${randomBytes(4).toString('hex').toUpperCase()}`,
-    title,
-    description: opts.description,
+    title: EntropyForge.purify(title),
+    description: opts.description ? EntropyForge.purify(opts.description) : undefined,
     priority: opts.priority ?? 'medium',
     status: 'pending',
     dueAt: opts.dueAt,
@@ -48,27 +49,27 @@ export function createTask(
     assignee: opts.assignee,
     createdAt: now,
     updatedAt: now,
-  };
+  });
 }
 
 /** Toggle task completion */
 export function toggleTaskCompletion(task: OmniTask): OmniTask {
   const now = Date.now();
   if (task.status === 'completed') {
-    return { ...task, status: 'pending', completedAt: undefined, updatedAt: now };
+    return Object.freeze({ ...task, status: 'pending', completedAt: undefined, updatedAt: now });
   }
-  return { ...task, status: 'completed', completedAt: now, updatedAt: now };
+  return Object.freeze({ ...task, status: 'completed', completedAt: now, updatedAt: now });
 }
 
 /** Update task status */
 export function updateTaskStatus(task: OmniTask, status: TaskStatus): OmniTask {
   const now = Date.now();
-  return {
+  return Object.freeze({
     ...task,
     status,
     completedAt: status === 'completed' ? now : task.completedAt,
     updatedAt: now,
-  };
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -145,21 +146,23 @@ export function createNote(
 ): OmniNote {
   const now = Date.now();
   const id = `ON-${randomBytes(4).toString('hex').toUpperCase()}`;
-  const zkpHash = createHash('sha256').update(`${id}:${title}:${content}`).digest('hex').slice(0, 16);
-  return {
+  const purifiedTitle = EntropyForge.purify(title);
+  const purifiedContent = EntropyForge.purify(content);
+  const zkpHash = createHash('sha256').update(`${id}:${purifiedTitle}:${purifiedContent}`).digest('hex').slice(0, 16);
+  return Object.freeze({
     id,
-    title,
-    content,
+    title: purifiedTitle,
+    content: purifiedContent,
     category: opts.category ?? 'note',
     tags: opts.tags ?? [],
     tasks: opts.tasks ?? [],
     metadata: opts.metadata ?? {},
     createdAt: now,
     updatedAt: now,
-    isFrozen: false,
+    isFrozen: true,
     fiveTGate: opts.fiveTGate,
     zkpHash,
-  };
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -193,7 +196,7 @@ export class OmniNoteManager {
   /** Add or replace a note */
   upsert(note: OmniNote): void {
     const idx = this.notes.findIndex(n => n.id === note.id);
-    const updatedNote = idx >= 0 ? { ...note, updatedAt: Date.now() } : note;
+    const updatedNote = Object.freeze(idx >= 0 ? { ...note, updatedAt: Date.now() } : note);
 
     if (idx >= 0) {
       this.notes[idx] = updatedNote;
@@ -236,7 +239,7 @@ export class OmniNoteManager {
     const updatedTasks = note.tasks.map(t =>
       t.id === taskId ? toggleTaskCompletion(t) : t,
     );
-    const updated: OmniNote = { ...note, tasks: updatedTasks, updatedAt: Date.now() };
+    const updated: OmniNote = Object.freeze({ ...note, tasks: updatedTasks, updatedAt: Date.now() });
     this.upsert(updated);
     const task = updatedTasks.find(t => t.id === taskId);
     if (task?.status === 'completed') {
@@ -251,11 +254,11 @@ export class OmniNoteManager {
   addTask(noteId: string, task: OmniTask): OmniNote | undefined {
     const note = this.get(noteId);
     if (!note) return undefined;
-    const updated: OmniNote = {
+    const updated: OmniNote = Object.freeze({
       ...note,
       tasks: [...note.tasks, task],
       updatedAt: Date.now(),
-    };
+    });
     this.upsert(updated);
     OmniEventBus.publish(OMNI_TOPICS.TASK_CREATED, { noteId, taskId: task.id, title: task.title });
     return updated;
