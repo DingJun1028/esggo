@@ -1,0 +1,119 @@
+// ============================================================
+// Pris ESGSonar data layer (free tierCompatible)
+// prisma/schema.prisma
+// ============================================================
+// Uses SQLite for local dev, PostgreSQL for production (free tier on Supabase/Neon)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"  // Change to "postgresql" for VPS
+  url      = env("DATABASE_URL")
+}
+
+// Crawled regulations & announcements
+model Regulation {
+  id          String   @id @default(cuid())
+  sourceId    String
+  sourceName  String
+  title       String
+  url         String   @unique
+  content     String   @default("")
+  status      String   @default("active") // active, amended, revoked
+  hash        String   // SHA-256 of content
+  oldHash     String?  // Previous hash (for change detection)
+  publishedAt String?
+  crawledAt   String   @default(now())
+  updatedAt   String   @default(now())
+  version     Int      @default(1)
+  CrawlHistory CrawlHistory[]
+  
+  @@index([sourceId])
+  @@index([crawledAt])
+}
+
+// Annual/ESG reports from companies
+model CompanyReport {
+  id            String   @id @default(cuid())
+  companyId     String
+  companyName   String
+  reportType    String   // esg_report, annual_report, impact_report
+  year          Int
+  url           String   @unique
+  pdfUrl        String?
+  content       String   @default("")
+  hash          String
+  oldHash       String?
+  version       Int      @default(1)
+  status        String   @default("published")
+  crawledAt     String   @default(now())
+  updatedAt     String   @default(now())
+  CrawlHistory  CrawlHistory[]
+  
+  @@index([companyId])
+  @@index([reportType])
+}
+
+// ESG Tags for categorization
+model ESGTag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  pillar      String   // Environmental / Social / Governance
+  category    String   // e.g. "碳排", "勞動", "董事會"
+  description String   @default("")
+}
+
+// Crawl history log
+model CrawlHistory {
+  id            String   @id @default(cuid())
+  sourceId      String
+  sourceType    Regulation @relation(fields: [regulationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "CrawlHistory_regulationId_Regulation_fk")
+  regulationId  String?
+  companyReportId String?
+  companyReport CompanyReport @relation(fields: [companyReportId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "CrawlHistory_companyReportId_CompanyReport_fk")
+  itemsFound    Int      @default(0)
+  newItems      Int      @default(0)
+  changedItems  Int      @default(0)
+  errorCount    Int      @default(0)
+  duration      Int      // ms
+  timestamp     String   @default(now())
+  
+  @@index([sourceId])
+  @@index([timestamp])
+}
+
+// Detected changes & alerts
+model Alert {
+  id          String   @id @default(cuid())
+  sourceId    String
+  sourceName  String
+  alertType   String   // new_regulation, amended, policy_change, risk_event
+  severity    String   @default("medium") // low, medium, high, critical
+  title       String
+  summary     String   @default("")
+  url         String
+  hash        String
+  oldContent  String?  @default("")
+  newContent  String?  @default("")
+  esgPillar   String   @default("") // environmental / social / governance
+  acknowledged Boolean @default(false)
+  createdAt   String   @default(now())
+  
+  @@index([sourceId])
+  @@index([severity])
+  @@index([acknowledged])
+  @@index([createdAt])
+}
+
+// Notification log
+model NotificationLog {
+  id          String   @id @default(cuid())
+  alertId     String
+  channel     String   // email, telegram, webhook, in_app
+  status      String   @default("pending") // pending, sent, failed
+  sentAt      String?
+  error       String?
+  createdAt   String   @default(now())
+}
