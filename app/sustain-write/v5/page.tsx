@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { FileText, ChevronDown, ChevronUp } from 'lucide-react';
 
 /**
  * ESGGO v5.1 — OmniBase Style Frontend
@@ -37,16 +38,28 @@ interface TaskProgress {
     totalTags: number;
     trinityHash: string;
     durationMs: number;
+    companyId: string;
   };
+}
+
+interface EvidenceCard {
+  id: string;
+  chapter: string;
+  receiptName: string;
+  why: string;
+  what: string;
+  how: string;
+  tags: string[];
+  hashLock: string;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────
 const GATE_COLORS: Record<FiveTGate, string> = {
-  traceable: 'bg-blue-500',
-  transparent: 'bg-emerald-500',
-  tangible: 'bg-amber-500',
-  trustworthy: 'bg-purple-500',
-  trackable: 'bg-cyan-500',
+  traceable: 'bg-accentBlue',
+  transparent: 'bg-accentGreen',
+  tangible: 'bg-accentGold',
+  trustworthy: 'bg-accentPurple',
+  trackable: 'bg-accentTeal',
 };
 
 const GATE_LABELS: Record<FiveTGate, string> = {
@@ -58,11 +71,11 @@ const GATE_LABELS: Record<FiveTGate, string> = {
 };
 
 const GATE_BG: Record<FiveTGate, string> = {
-  traceable: 'bg-blue-50 border-blue-200',
-  transparent: 'bg-emerald-50 border-emerald-200',
-  tangible: 'bg-amber-50 border-amber-200',
-  trustworthy: 'bg-purple-50 border-purple-200',
-  trackable: 'bg-cyan-50 border-cyan-200',
+  traceable: 'bg-accentBlue/10 border-accentBlue/30',
+  transparent: 'bg-accentGreen/10 border-accentGreen/30',
+  tangible: 'bg-accentGold/10 border-accentGold/30',
+  trustworthy: 'bg-accentPurple/10 border-accentPurple/30',
+  trackable: 'bg-accentTeal/10 border-accentTeal/30',
 };
 
 // ─── API Helpers ─────────────────────────────────────────────────────
@@ -114,9 +127,9 @@ async function fetchTaskProgress(taskId: string): Promise<TaskProgress> {
 
 function StatCard({ value, label, accent }: { value: string | number; label: string; accent: string }) {
   return (
-    <div className="bg-white rounded-lg border border-slate-200 p-4 text-center">
+    <div className="bg-primary rounded-lg border border-borderColor p-4 text-center">
       <div className={`text-2xl font-bold ${accent}`}>{value}</div>
-      <div className="text-xs text-slate-500 mt-1">{label}</div>
+      <div className="text-xs text-textSecondary mt-1">{label}</div>
     </div>
   );
 }
@@ -133,21 +146,21 @@ function ProgressBar({ progress }: { progress: TaskProgress }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between text-sm">
-        <span className="text-slate-600">
+        <span className="text-textSecondary">
           第 {progress.currentChapter}/{progress.totalChapters} 章：{progress.chapterTitle}
         </span>
-        <span className="font-medium text-teal-600">{progress.percent}%</span>
+        <span className="font-medium text-accentTeal">{progress.percent}%</span>
       </div>
-      <div className="w-full bg-slate-100 rounded-full h-2">
+      <div className="w-full bg-secondary rounded-full h-2">
         <div
-          className="bg-teal-500 h-2 rounded-full transition-all duration-300"
+          className="bg-accentTeal h-2 rounded-full transition-all duration-300"
           style={{ width: `${progress.percent}%` }}
         />
       </div>
-      <div className="grid grid-cols-4 gap-3 text-xs text-slate-500">
-        <div><span className="font-medium text-slate-700">{progress.wordsSoFar.toLocaleString()}</span> 字</div>
-        <div><span className="font-medium text-slate-700">{progress.tagsCreated}</span> 標籤</div>
-        <div><span className="font-medium text-slate-700">{progress.decisionsCount}</span> 決策</div>
+      <div className="grid grid-cols-4 gap-3 text-xs text-textSecondary">
+        <div><span className="font-medium text-textPrimary">{progress.wordsSoFar.toLocaleString()}</span> 字</div>
+        <div><span className="font-medium text-textPrimary">{progress.tagsCreated}</span> 標籤</div>
+        <div><span className="font-medium text-textPrimary">{progress.decisionsCount}</span> 決策</div>
         <div>
           <FiveTBadge gate={progress.fiveTGate as FiveTGate | undefined ?? 'traceable'} />
         </div>
@@ -167,6 +180,12 @@ export default function SustainWriteV5Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [previewContent, setPreviewContent] = useState<string | null>(null);
+  const [previewFormat, setPreviewFormat] = useState<'html' | 'md' | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [evidenceCards, setEvidenceCards] = useState<EvidenceCard[]>([]);
+  const [loadingEvidence, setLoadingEvidence] = useState(false);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   // Initialize theme from system or saved preference
   useEffect(() => {
@@ -216,6 +235,21 @@ export default function SustainWriteV5Page() {
   }, []);
 
   // Start report generation
+  useEffect(() => {
+    if (!selectedCompany) {
+      setEvidenceCards([]);
+      return;
+    }
+    setLoadingEvidence(true);
+    fetch(`/api/sustain-write/v5/evidence?companyId=${selectedCompany}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.evidence) setEvidenceCards(data.evidence);
+      })
+      .catch(console.error)
+      .finally(() => setLoadingEvidence(false));
+  }, [selectedCompany]);
+
   const handleGenerate = async () => {
     if (!selectedCompany || !selectedTemplate) return;
     setLoading(true);
@@ -228,6 +262,36 @@ export default function SustainWriteV5Page() {
     } catch {
       setLoading(false);
       setError('啟動任務失敗');
+    }
+  };
+
+  const handleDownload = (format: 'html' | 'md') => {
+    if (!taskProgress?.result?.companyId) return;
+    window.open(`/api/sustain-write/v5/download?companyId=${taskProgress.result.companyId}&format=${format}`, '_blank');
+  };
+
+  const handlePreview = async (format: 'html' | 'md') => {
+    if (!taskProgress?.result?.companyId) return;
+    
+    if (previewFormat === format && previewContent) {
+      // Toggle off if already viewing this format
+      setPreviewContent(null);
+      setPreviewFormat(null);
+      return;
+    }
+
+    setPreviewLoading(true);
+    setPreviewFormat(format);
+    try {
+      const res = await fetch(`/api/sustain-write/v5/preview?companyId=${taskProgress.result.companyId}&format=${format}`);
+      if (!res.ok) throw new Error('Preview failed');
+      const text = await res.text();
+      setPreviewContent(text);
+    } catch (err) {
+      console.error(err);
+      alert('無法載入預覽');
+    } finally {
+      setPreviewLoading(false);
     }
   };
 
@@ -267,10 +331,10 @@ export default function SustainWriteV5Page() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard value={28} label="章節數" accent="text-teal-600" />
-          <StatCard value="280K" label="總字數目標" accent="text-amber-600" />
-          <StatCard value="5T" label="真善美信通" accent="text-blue-600" />
-          <StatCard value="ZKP" label="零知識證明" accent="text-purple-600" />
+          <StatCard value={28} label="章節數" accent="text-accentTeal" />
+          <StatCard value="280K" label="總字數目標" accent="text-accentGold" />
+          <StatCard value="5T" label="真善美信通" accent="text-accentBlue" />
+          <StatCard value="ZKP" label="零知識證明" accent="text-accentPurple" />
         </div>
 
         {/* Control Panel */}
@@ -369,8 +433,152 @@ export default function SustainWriteV5Page() {
                     <div className="font-mono text-xs text-textPrimary truncate">{taskProgress.result.trinityHash}</div>
                   </div>
                 </div>
+
+                {taskProgress.status === 'completed' && (
+                  <div className="mt-6 pt-4 border-t border-borderColor flex flex-wrap gap-3">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handlePreview('html')}
+                        className={`px-4 py-2 text-sm font-medium rounded border transition-colors ${
+                          previewFormat === 'html' && previewContent
+                            ? 'bg-accentTeal text-white border-accentTeal'
+                            : 'bg-primary border-borderColor text-textPrimary hover:bg-secondary'
+                        }`}
+                      >
+                        {previewLoading && previewFormat === 'html' ? '載入中...' : '👁️ 預覽 HTML'}
+                      </button>
+                      <button
+                        onClick={() => handlePreview('md')}
+                        className={`px-4 py-2 text-sm font-medium rounded border transition-colors ${
+                          previewFormat === 'md' && previewContent
+                            ? 'bg-accentTeal text-white border-accentTeal'
+                            : 'bg-primary border-borderColor text-textPrimary hover:bg-secondary'
+                        }`}
+                      >
+                        {previewLoading && previewFormat === 'md' ? '載入中...' : '👁️ 預覽 Markdown'}
+                      </button>
+                    </div>
+                    <div className="h-6 w-px bg-borderColor hidden sm:block self-center mx-2"></div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleDownload('html')}
+                        className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-textPrimary hover:border-accentTeal transition-colors"
+                      >
+                        ⬇️ 下載 HTML
+                      </button>
+                      <button
+                        onClick={() => handleDownload('md')}
+                        className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-textPrimary hover:border-accentTeal transition-colors"
+                      >
+                        ⬇️ 下載 Markdown
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Evidence & Knowledge Panel */}
+        {selectedCompany && evidenceCards.length > 0 && (
+          <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
+            <div className="border-l-4 border-accentGold pl-4 mb-4">
+              <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
+                <FileText size={18} className="text-accentGold" /> 
+                企業知識庫與單據解析 (Omni-Knowledge Base)
+              </h2>
+              <p className="text-sm text-textSecondary mt-1">匯入的佐證資料清單與 ESGSonnar 萃取的知識小卡 (Why, What, How)</p>
+            </div>
+            
+            <div className="flex flex-col gap-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+              {loadingEvidence ? (
+                <div className="text-sm text-textSecondary text-center py-4">載入單據與知識點中...</div>
+              ) : (
+                evidenceCards.map((card) => (
+                  <div key={card.id} className="bg-primary p-4 rounded-xl border border-borderColor shadow-sm transition-all hover:border-accentTeal/50">
+                    <div 
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => setExpandedCardId(expandedCardId === card.id ? null : card.id)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold bg-accentTeal/10 text-accentTeal px-2 py-1 rounded">
+                          {card.chapter.split(' ')[0]}
+                        </span>
+                        <span className="text-sm font-semibold text-textPrimary">{card.receiptName}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="hidden sm:flex gap-1">
+                          {card.tags.map(tag => (
+                            <span key={tag} className="text-[10px] bg-accentGold/20 text-accentGold px-2 py-[2px] rounded-full">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        {expandedCardId === card.id ? <ChevronUp size={16} className="text-textSecondary" /> : <ChevronDown size={16} className="text-textSecondary" />}
+                      </div>
+                    </div>
+
+                    {expandedCardId === card.id && (
+                      <div className="mt-4 pt-3 border-t border-borderColor/50 animate-in fade-in slide-in-from-top-2">
+                        <div className="grid gap-3 text-[13px]">
+                          <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentTeal">
+                            <span className="font-bold text-accentTeal block mb-1">Why 為什麼重要？</span>
+                            <span className="text-textPrimary">{card.why}</span>
+                          </div>
+                          <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentBlue">
+                            <span className="font-bold text-accentBlue block mb-1">What 紀錄了什麼？</span>
+                            <span className="text-textPrimary">{card.what}</span>
+                          </div>
+                          <div className="bg-primary/50 p-3 rounded-lg border-l-2 border-accentPurple">
+                            <span className="font-bold text-accentPurple block mb-1">How 如何改善？</span>
+                            <span className="text-textPrimary">{card.how}</span>
+                          </div>
+                        </div>
+                        <div className="mt-3 text-xs font-mono text-textSecondary bg-secondary px-2 py-1 rounded inline-block">
+                          HashLock: {card.hashLock.substring(0, 24)}...
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Preview Panel */}
+        {previewContent && taskProgress?.status === 'completed' && (
+          <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm transition-all">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-borderColor">
+              <h3 className="text-base font-semibold text-textPrimary">
+                報告預覽 ({previewFormat === 'html' ? 'HTML' : 'Markdown'})
+              </h3>
+              <button
+                onClick={() => {
+                  setPreviewContent(null);
+                  setPreviewFormat(null);
+                }}
+                className="text-textSecondary hover:text-textPrimary"
+              >
+                ✕ 關閉
+              </button>
+            </div>
+            
+            <div className="w-full bg-primary rounded border border-borderColor overflow-hidden" style={{ minHeight: '600px', maxHeight: '800px', overflowY: 'auto' }}>
+              {previewFormat === 'html' ? (
+                <iframe
+                  srcDoc={previewContent}
+                  title="HTML Preview"
+                  className="w-full h-[600px] sm:h-[800px] border-none"
+                  sandbox="allow-same-origin allow-scripts"
+                />
+              ) : (
+                <pre className="p-6 text-sm font-mono text-textPrimary whitespace-pre-wrap">
+                  {previewContent}
+                </pre>
+              )}
+            </div>
           </div>
         )}
 

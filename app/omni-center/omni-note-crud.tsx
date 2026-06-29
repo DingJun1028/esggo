@@ -53,7 +53,7 @@ export function OmniNoteCRUD() {
     await deleteDoc(doc(db, 'notes', id));
   }, []);
 
-  const gateColorVar = (g?:string) => g==='traceable'?'var(--accent-blue, #3B82F6)':g==='transparent'?'var(--accent-green, #22C55E)':g==='tangible'?'var(--accent-gold, #F59E0B)':g==='trustworthy'?'var(--accent-purple, #8B5CF6)':g==='trackable'?'var(--accent-cyan, #06B6D4)':'var(--text-secondary, #64748B)';
+  const gateColorVar = (g?:string) => g==='traceable'?'var(--accent-blue)':g==='transparent'?'var(--accent-green)':g==='tangible'?'var(--accent-gold)':g==='trustworthy'?'var(--accent-purple)':g==='trackable'?'var(--accent-cyan)':'var(--text-secondary)';
 
   const renderMd = (s:string) => {
     const sanitized = sanitizeHtml(s);
@@ -155,7 +155,7 @@ export function OmniNoteCRUD() {
       <div className="flex flex-col gap-2">
         {notes.length===0 && <div className="text-textSecondary text-[13px] text-center p-5">尚無筆記，點擊「新增筆記」開始</div>}
         {notes.map(n=>(
-          <div key={n.id} className="bg-primary rounded-xl p-3" style={{border:`1px solid ${gateColorVar(n.fiveTGate).replace(')',', 0.3)')}`}}>
+          <div key={n.id} className="bg-primary rounded-xl p-3 border" style={{ borderColor: gateColorVar(n.fiveTGate) }}>
             <div className="flex items-start gap-2">
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-[14px] text-textPrimary mb-1">{n.title}</div>
@@ -165,8 +165,8 @@ export function OmniNoteCRUD() {
                 <div className="flex gap-1 flex-wrap">
                   {n.fiveTGate && (
                     <span 
-                      className="text-[10px] rounded px-1.5 py-[1px]" 
-                      style={{background:`${gateColorVar(n.fiveTGate).replace(')',', 0.2)')}`, color:gateColorVar(n.fiveTGate)}}
+                      className="text-[10px] rounded px-1.5 py-[1px] font-bold" 
+                      style={{ color: gateColorVar(n.fiveTGate), backgroundColor: 'var(--bg-secondary)', border: `1px solid ${gateColorVar(n.fiveTGate)}` }}
                     >
                       {n.fiveTGate}
                     </span>

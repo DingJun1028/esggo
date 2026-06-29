@@ -1,29 +1,24 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { adminDb } from '@/lib/firebase-admin';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.AGNES_API || '' });
 
 export async function GET() {
   try {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!process.env.GEMINI_API_KEY && !process.env.AGNES_API) {
       return NextResponse.json(
-        { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。` },
+        { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY 或 AGNES_API。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。` },
         { status: 200 }
       );
     }
 
     // 1. Fetch recent activities
-    const activitiesRef = collection(db, 'village_activities');
-    const qAct = query(activitiesRef, orderBy('created_at', 'desc'), limit(15));
-    const actSnap = await getDocs(qAct);
+    const actSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(15).get();
     const recentActivities = actSnap.docs.map(doc => doc.data());
 
     // 2. Fetch top projects
-    const projectsRef = collection(db, 'village_projects');
-    const qProj = query(projectsRef, orderBy('current_points', 'desc'), limit(5));
-    const projSnap = await getDocs(qProj);
+    const projSnap = await adminDb.collection('village_projects').orderBy('current_points', 'desc').limit(5).get();
     const topProjects = projSnap.docs.map(doc => {
       const data = doc.data();
       return `${data.title}: 目前 ${data.current_points} / 目標 ${data.goal_points}`;

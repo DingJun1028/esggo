@@ -104,7 +104,7 @@ export function PdfUploader() {
         <div className="text-base font-bold text-accentTeal tracking-wide flex items-center gap-2">
           <Upload size={18} /> {mode === 'rag' ? 'RAG 知識庫上傳' : 'ESGSonnar 單據智能解析'}
         </div>
-        <div className="flex gap-2 bg-surface p-1 rounded-lg">
+        <div className="flex gap-2 bg-secondary p-1 rounded-lg">
           <button onClick={() => setMode('rag')} className={`px-3 py-1 text-sm rounded-md transition-colors ${mode === 'rag' ? 'bg-accentTeal text-white' : 'text-textSecondary hover:bg-white/5'}`}>RAG 寫入</button>
           <button onClick={() => setMode('esg_ocr')} className={`px-3 py-1 text-sm rounded-md transition-colors ${mode === 'esg_ocr' ? 'bg-accentGold text-black font-bold' : 'text-textSecondary hover:bg-white/5'}`}>單據深度解析</button>
         </div>
@@ -175,7 +175,7 @@ export function PdfUploader() {
 
       {processedDoc && (
         <div className="flex flex-col gap-3 mt-2 animate-in fade-in slide-in-from-bottom-2">
-          <div className="bg-surface p-4 rounded-xl border border-borderColor shadow-lg">
+          <div className="bg-secondary p-4 rounded-xl border border-borderColor shadow-lg">
             <h4 className="text-accentGold text-sm font-bold flex items-center gap-2 mb-3">
               <FileText size={16} /> 教學即服務 (Service as Teaching)
             </h4>

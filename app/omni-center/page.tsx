@@ -10,25 +10,26 @@ import { WuzuoNoteView } from './wuzuo-note-view';
 import { OmniCalendarView } from './omni-calendar-view';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
+import { OmniBaseCard } from '@/components/omni-base-card';
 
 type Tab = 'dashboard'|'notes'|'tasks'|'chat'|'fiveT'|'rag'|'zkp'|'calendar';
 
 const FIVE_T = [
-  { key:'traceable',   zh:'真', color:'var(--accent-blue, #3B82F6)' },
-  { key:'transparent', zh:'善', color:'var(--accent-green, #22C55E)' },
-  { key:'tangible',    zh:'美', color:'#F59E0B' },
-  { key:'trustworthy', zh:'信', color:'var(--accent-purple, #8B5CF6)' },
-  { key:'trackable',   zh:'通', color:'var(--accent-cyan, #06B6D4)' },
+  { key:'traceable',   zh:'真', color:'var(--accent-blue)' },
+  { key:'transparent', zh:'善', color:'var(--accent-green)' },
+  { key:'tangible',    zh:'美', color:'var(--accent-gold)' },
+  { key:'trustworthy', zh:'信', color:'var(--accent-purple)' },
+  { key:'trackable',   zh:'通', color:'var(--accent-cyan)' },
 ];
 
 const OMNI_MODULES = [
-  { name:'萬能筆記', en:'OmniNote',     icon:'📝', color:'var(--accent-teal, #009EB0)',   href:'notes'   as Tab },
-  { name:'萬能任務', en:'OmniTask',     icon:'✅', color:'var(--accent-gold, #D4AF37)',   href:'tasks'   as Tab },
-  { name:'萬能日曆', en:'OmniCalendar', icon:'📅', color:'var(--accent-blue, #3B82F6)',   href:'calendar' as Tab },
-  { name:'OmniOne', en:'覺醒對話',      icon:'🤖', color:'var(--accent-purple, #8B5CF6)', href:'chat'    as Tab },
-  { name:'5T 雷達', en:'FiveT Radar',   icon:'📡', color:'var(--accent-cyan, #06B6D4)',   href:'fiveT'   as Tab },
-  { name:'RAG 知識', en:'RAG DB',       icon:'📚', color:'var(--accent-green, #22C55E)',  href:'rag'     as Tab },
-  { name:'永續村',   en:'Village',      icon:'🏡', color:'var(--accent-blue, #3B82F6)',   href:'/village' },
+  { name:'萬能筆記', en:'OmniNote',     icon:'📝', borderColor:'border-accentTeal',   textColor:'text-accentTeal',   href:'notes'   as Tab },
+  { name:'萬能任務', en:'OmniTask',     icon:'✅', borderColor:'border-accentGold',   textColor:'text-accentGold',   href:'tasks'   as Tab },
+  { name:'萬能日曆', en:'OmniCalendar', icon:'📅', borderColor:'border-accentBlue',   textColor:'text-accentBlue',   href:'calendar' as Tab },
+  { name:'萬能對話', en:'OmniChat',      icon:'🤖', borderColor:'border-accentPurple', textColor:'text-accentPurple', href:'chat'    as Tab },
+  { name:'萬能雷達', en:'OmniRadar',   icon:'📡', borderColor:'border-accentCyan',   textColor:'text-accentCyan',   href:'fiveT'   as Tab },
+  { name:'萬能智庫', en:'OmniBrain',       icon:'📚', borderColor:'border-accentGreen',  textColor:'text-accentGreen',  href:'rag'     as Tab },
+  { name:'萬能憑證', en:'OmniVault',      icon:'🔒', borderColor:'border-accentBlue',   textColor:'text-accentBlue',   href:'zkp' as Tab },
 ];
 
 const DEMO_NOTES: NoteData[] = [
@@ -95,30 +96,25 @@ export default function OmniCenterPage() {
   }).join(' ')+' Z';
 
   const tabs: {id:Tab; label:string; icon:string}[] = [
-    {id:'dashboard',label:'儀表板',icon:'◎'},
+    {id:'dashboard',label:'萬能總攬',icon:'◎'},
     {id:'notes',    label:'萬能筆記',icon:'📝'},
     {id:'tasks',    label:'萬能任務',icon:'✅'},
     {id:'calendar', label:'萬能日曆',icon:'📅'},
-    {id:'chat',     label:'OmniOne 對話',icon:'🤖'},
-    {id:'fiveT',    label:'5T 雷達圖',icon:'📡'},
-    {id:'rag',      label:'知識治理',icon:'📚'},
-    {id:'zkp',      label:'ZKP 憑證館',icon:'🛡️'},
+    {id:'chat',     label:'萬能對話',icon:'🤖'},
+    {id:'fiveT',    label:'萬能雷達',icon:'📡'},
+    {id:'rag',      label:'萬能智庫',icon:'📚'},
+    {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
   ];
 
-  const tabStyle = (active:boolean) => ({
-    display:'flex' as const, alignItems:'center' as const, gap:6, padding:'7px 14px', borderRadius:8, border:'none', cursor:'pointer', fontSize:13, fontWeight:600,
-    background:active?'var(--accent-teal, #009EB0)':'transparent', color:active?'#FFFFFF':'var(--text-secondary, #64748B)', transition:'all .2s',
-  });
-
   return (
-    <div className="min-h-[calc(100vh-52px)] bg-primary text-textPrimary font-['Noto_Sans_TC',sans-serif] p-5 transition-colors duration-300">
+    <div className="min-h-[calc(100vh-52px)] p-5">
       <style>{`
         @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
       `}</style>
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-accentTeal flex items-center justify-center text-xl shadow-lg transition-shadow duration-600 text-white" style={{boxShadow: pulse ? '0 0 20px var(--accent-teal)' : '0 0 10px rgba(0,158,176,0.6)'}}>⊙</div>
+        <div className={`w-10 h-10 rounded-xl bg-accentTeal flex items-center justify-center text-xl text-white transition-shadow duration-700 ${pulse ? 'shadow-[0_0_20px_var(--accent-teal)]' : 'shadow-[0_0_10px_rgba(0,158,176,0.6)]'}`}>⊙</div>
         <div>
           <h1 className="font-['Montserrat',sans-serif] text-xl font-bold text-accentTeal">萬能中心 Omni-Core</h1>
           <div className="text-xs text-textSecondary">無礙圓通，無作筆記 — v1.0</div>
@@ -133,21 +129,29 @@ export default function OmniCenterPage() {
             {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           {isReady && <span className="text-[10px] bg-accentPurple/20 text-accentPurple px-2 py-[3px] rounded-md font-bold tracking-wide mr-2">AGNES CORE</span>}
-          <div className={`w-2 h-2 rounded-full bg-accentGreen transition-shadow duration-600`} style={{boxShadow: pulse ? '0 0 8px var(--accent-green)' : '0 0 4px var(--accent-green)'}}/>
+          <div className={`w-2 h-2 rounded-full bg-accentGreen transition-shadow duration-700 ${pulse ? 'shadow-[0_0_8px_var(--accent-green)]' : 'shadow-[0_0_4px_var(--accent-green)]'}`}/>
           <span className="text-xs text-textSecondary">系統運行中</span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4 bg-secondary p-1 rounded-xl flex-wrap">
-        {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={tabStyle(tab===t.id)}><span>{t.icon}</span>{t.label}</button>)}
+      <div className="flex gap-1 mb-4 bg-secondary p-1 rounded-xl flex-wrap shadow-sm">
+        {tabs.map(t=>(
+          <button 
+            key={t.id} 
+            onClick={()=>setTab(t.id)} 
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[13px] font-semibold transition-colors duration-200 ${tab === t.id ? 'bg-accentTeal text-white shadow-sm' : 'bg-transparent text-textSecondary hover:bg-borderColor/50'}`}
+          >
+            <span>{t.icon}</span>{t.label}
+          </button>
+        ))}
       </div>
 
       {/* Dashboard Tab */}
       {tab==='dashboard' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Concentric + 5T Mini */}
-          <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+          <OmniBaseCard className="!p-4" statusIndicator="trustworthy" hashLock="0x7f48e3a...b5c">
             <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">同心圓架構 · 5T 綜合評分</div>
             <div className="flex gap-4 items-center flex-wrap">
               <svg width={200} height={200} className="shrink-0">
@@ -170,22 +174,23 @@ export default function OmniCenterPage() {
                 ))}
               </div>
             </div>
-          </div>
+          </OmniBaseCard>
 
           {/* Quick Stats */}
-          <div className="flex flex-col gap-3">
-            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+          <div className="flex flex-col gap-4">
+            <OmniBaseCard className="!p-4">
               <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">系統統計</div>
               <div className="grid grid-cols-2 gap-2">
-                {[{l:'筆記數',v:notes.length,c:'var(--accent-teal)'},{l:'OmniOne 案件',v:47,c:'var(--accent-purple)'},{l:'ZKP 封印',v:zkpCount,c:'var(--accent-blue)'},{l:'GRI 指標',v:142,c:'var(--accent-gold)'}].map(s=>(
+                {[{l:'筆記數',v:notes.length,c:'text-accentTeal'},{l:'OmniOne 案件',v:47,c:'text-accentPurple'},{l:'ZKP 封印',v:zkpCount,c:'text-accentBlue'},{l:'GRI 指標',v:142,c:'text-accentGold'}].map(s=>(
                   <div key={s.l} className="bg-primary rounded-lg py-2 px-2.5">
-                    <div className="font-['Fira_Code',monospace] text-xl font-bold" style={{color:s.c}}>{s.v}</div>
+                    <div className={`font-['Fira_Code',monospace] text-xl font-bold ${s.c}`}>{s.v}</div>
                     <div className="text-xs text-textSecondary">{s.l}</div>
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+            </OmniBaseCard>
+            
+            <OmniBaseCard className="!p-4">
               <div className="text-xs text-textSecondary font-semibold tracking-wider mb-2.5">萬能模組矩陣</div>
               <div className="grid grid-cols-3 gap-1.5">
                 {OMNI_MODULES.map(m=>(
@@ -193,25 +198,22 @@ export default function OmniCenterPage() {
                     if (m.href.startsWith('/')) window.location.href = m.href;
                     else setTab(m.href as Tab);
                   }}
-                    className="bg-primary border border-borderColor rounded-lg py-2 px-1.5 cursor-pointer text-center transition-all duration-200 hover:opacity-80"
-                    style={{ borderColor: `${m.color}30` }}
-                    onMouseEnter={e=>{e.currentTarget.style.borderColor=m.color;}}
-                    onMouseLeave={e=>{e.currentTarget.style.borderColor=`${m.color}30`;}}>
+                    className={`bg-primary border border-borderColor/50 rounded-lg py-2 px-1.5 cursor-pointer text-center transition-all duration-200 hover:opacity-80 hover:${m.borderColor}`}>
                     <div className="text-lg mb-0.5">{m.icon}</div>
-                    <div className="text-[10px] font-semibold" style={{color:m.color}}>{m.name}</div>
+                    <div className={`text-[10px] font-semibold ${m.textColor}`}>{m.name}</div>
                   </button>
                 ))}
               </div>
-            </div>
+            </OmniBaseCard>
           </div>
         </div>
       )}
 
       {/* Notes Tab */}
       {tab==='notes' && (
-        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+        <OmniBaseCard className="!p-4">
           <OmniNoteCRUD />
-        </div>
+        </OmniBaseCard>
       )}
 
       {/* Tasks Tab */}
@@ -230,24 +232,24 @@ export default function OmniCenterPage() {
 
       {/* Chat Tab */}
       {tab==='chat' && (
-        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm min-h-[500px]">
+        <OmniBaseCard className="!p-4 min-h-[500px]">
           <OmniOneChat/>
-        </div>
+        </OmniBaseCard>
       )}
 
       {/* 5T Tab */}
       {tab==='fiveT' && (
-        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+        <OmniBaseCard className="!p-4">
           <FiveTRadar zkpCount={zkpCount} />
-        </div>
+        </OmniBaseCard>
       )}
 
       {/* RAG Knowledge Base Tab */}
       {tab==='rag' && (
-        <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm max-w-4xl mx-auto">
+        <OmniBaseCard className="!p-4 max-w-4xl mx-auto">
           <PdfUploader/>
           <RagKnowledgeManager/>
-        </div>
+        </OmniBaseCard>
       )}
 
       {/* ZKP Vault Tab */}

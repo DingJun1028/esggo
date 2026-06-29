@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 interface FiveTData { traceable:number; transparent:number; tangible:number; trustworthy:number; trackable:number; }
 
 const DIMS = [
-  { key:'traceable',   zh:'真', color:'var(--accent-blue, #3B82F6)' },
-  { key:'transparent', zh:'善', color:'var(--accent-green, #22C55E)' },
-  { key:'tangible',    zh:'美', color:'#F59E0B' },
-  { key:'trustworthy', zh:'信', color:'var(--accent-purple, #8B5CF6)' },
-  { key:'trackable',   zh:'通', color:'var(--accent-cyan, #06B6D4)' },
+  { key:'traceable',   zh:'真', color:'var(--accent-blue)' },
+  { key:'transparent', zh:'善', color:'var(--accent-green)' },
+  { key:'tangible',    zh:'美', color:'var(--accent-gold)' },
+  { key:'trustworthy', zh:'信', color:'var(--accent-purple)' },
+  { key:'trackable',   zh:'通', color:'var(--accent-cyan)' },
 ] as const;
 
 type DimKey = typeof DIMS[number]['key'];
@@ -138,9 +138,9 @@ export function FiveTRadar({ zkpCount }: Props) {
         {/* Scores list */}
         <div className="flex-1 min-w-[140px]">
           <div className="mb-2">
-            <div className="font-['Fira_Code',monospace] text-[22px] font-bold" style={{color:allPass?'var(--accent-green, #22C55E)':'var(--accent-gold, #D4AF37)'}}>{(overallScore*100).toFixed(1)}%</div>
+            <div className={`font-['Fira_Code',monospace] text-[22px] font-bold ${allPass?'text-accentGreen':'text-accentGold'}`}>{(overallScore*100).toFixed(1)}%</div>
             <div className="text-[11px] text-textSecondary">綜合 5T 合規分數</div>
-            <div className="text-[11px] mt-0.5" style={{color:allPass?'var(--accent-green, #22C55E)':'var(--accent-gold, #D4AF37)'}}>{allPass?'● 全部通過 (≥80%)':'◐ 部分待改善'}</div>
+            <div className={`text-[11px] mt-0.5 ${allPass?'text-accentGreen':'text-accentGold'}`}>{allPass?'● 全部通過 (≥80%)':'◐ 部分待改善'}</div>
           </div>
           {DIMS.map(d=>(
             <div key={d.key} className="flex items-center gap-1.5 mb-1.5">
@@ -149,7 +149,7 @@ export function FiveTRadar({ zkpCount }: Props) {
                 <div className="h-full rounded-[3px] transition-all duration-[50ms]" style={{width:`${displayed[d.key]*100}%`,background:d.color}}/>
               </div>
               <span className="font-['Fira_Code',monospace] text-[11px] w-9 text-right" style={{color:d.color}}>{(displayed[d.key]*100).toFixed(0)}%</span>
-              <span className="text-[10px]" style={{color:displayed[d.key]>=0.8?'var(--accent-green, #22C55E)':'var(--accent-red, #FF4D6D)'}}>{displayed[d.key]>=0.8?'✓':'✗'}</span>
+              <span className={`text-[10px] ${displayed[d.key]>=0.8?'text-accentGreen':'text-accentRed'}`}>{displayed[d.key]>=0.8?'✓':'✗'}</span>
             </div>
           ))}
         </div>

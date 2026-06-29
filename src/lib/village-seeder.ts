@@ -1,5 +1,4 @@
-import { db } from './firebase';
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
+import { adminDb } from './firebase-admin';
 
 const defaultProjects = [
   { id: 'proj_01', title: '淨灘守護計畫', description: '招募志工進行北海岸淨灘', current_points: 1500, goal_points: 5000, status: 'active', tags: ['環境','海洋'] },
@@ -17,19 +16,19 @@ const defaultMembers = [
 
 export async function seedVillageData() {
   try {
-    const projectsSnapshot = await getDocs(collection(db, 'village_projects'));
+    const projectsSnapshot = await adminDb.collection('village_projects').get();
     if (projectsSnapshot.empty) {
       console.log('Seeding village projects...');
       for (const proj of defaultProjects) {
-        await setDoc(doc(db, 'village_projects', proj.id), proj);
+        await adminDb.collection('village_projects').doc(proj.id).set(proj);
       }
     }
 
-    const membersSnapshot = await getDocs(collection(db, 'village_members'));
+    const membersSnapshot = await adminDb.collection('village_members').get();
     if (membersSnapshot.empty) {
       console.log('Seeding village members...');
       for (const member of defaultMembers) {
-        await setDoc(doc(db, 'village_members', member.user_id), member);
+        await adminDb.collection('village_members').doc(member.user_id).set(member);
       }
     }
   } catch (error) {

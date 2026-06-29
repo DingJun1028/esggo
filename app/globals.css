@@ -15,6 +15,9 @@
     --accent-purple: #8B5CF6;
     --accent-cyan: #06B6D4;
     --accent-green: #22C55E;
+    
+    --scroll-track: #f1f5f9;
+    --scroll-thumb: #009EB0;
   }
 
   .dark {
@@ -29,9 +32,37 @@
     --accent-purple: #a78bfa;
     --accent-cyan: #22d3ee;
     --accent-green: #4ade80;
+    
+    --scroll-track: #1e293b;
+    --scroll-thumb: #00b5ca;
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  @apply bg-primary text-primary transition-colors duration-300;
+  @apply bg-primary text-primary transition-colors duration-300 font-sans min-h-screen;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 2px;
+}
+
+/* Base Link */
+a {
+  @apply transition-colors duration-150;
+}
+a:hover {
+  @apply text-accentTeal;
 }

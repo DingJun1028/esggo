@@ -38,7 +38,30 @@ export class ZKPIntegrityModule implements IWuZuoMiaoDe {
 }
 
 export class CelestialController {
+  private static instance: CelestialController;
+
+  public static getInstance(): CelestialController {
+    if (!CelestialController.instance) {
+      CelestialController.instance = new CelestialController();
+    }
+    return CelestialController.instance;
+  }
+
   // 6字心法與5標準流程: 感知 -> 封印 -> 流轉 -> 校準 -> 沉澱
+
+  public initiateFlow(flowName: string): string {
+    const traceId = randomUUID();
+    console.log(`[Celestial] Initiated flow: ${flowName} (Trace ID: ${traceId})`);
+    return traceId;
+  }
+
+  public recordMetric(metricName: string, value: number, metadata?: any): void {
+    console.log(`[Celestial] Metric recorded: ${metricName}=${value}`, metadata);
+  }
+
+  public detectEntropy(traceId: string, anomalyType: string): void {
+    console.warn(`[Celestial] Entropy detected! Trace ID: ${traceId}, Anomaly: ${anomalyType}`);
+  }
 
   async executeCelestialFlow(input: InputData | any) {
     // 1. 感知異常 (Sense)
