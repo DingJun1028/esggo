@@ -7,6 +7,37 @@ export interface ISyncPayload {
   category: string;
 }
 
+/**
+ * ✅ 將長文本分塊，確保每塊 ≤ 2000 字元（Notion API 限制）
+ * 以換行符為分割優先點，避免截斷語義。
+ */
+function chunkContent(text: string, maxChunkSize = 1900): string[] {
+  const chunks: string[] = [];
+  const lines = text.split('\n');
+  let current = '';
+
+  for (const line of lines) {
+    // 若加上此行仍在上限內，繼續累積
+    if ((current + '\n' + line).length <= maxChunkSize) {
+      current = current ? current + '\n' + line : line;
+    } else {
+      // 此行加入會超過上限：先 push 當前 chunk
+      if (current) chunks.push(current);
+      // 若單行本身超過上限，強制分割
+      if (line.length > maxChunkSize) {
+        for (let i = 0; i < line.length; i += maxChunkSize) {
+          chunks.push(line.slice(i, i + maxChunkSize));
+        }
+        current = '';
+      } else {
+        current = line;
+      }
+    }
+  }
+  if (current) chunks.push(current);
+  return chunks;
+}
+
 export class NotionSyncService {
   private client: Client;
   private databaseId: string;
@@ -30,46 +61,37 @@ export class NotionSyncService {
     }
 
     try {
-      // Chunk content if too long (simplified block creation)
-      const contentBlock = {
-        object: 'block',
-        type: 'paragraph',
+      // ✅ 修復：使用 chunkContent() 分塊，確保完整文件同步（無截斷）
+      const contentChunks = chunkContent(payload.content);
+      this.celestial.recordMetric('NotionSync.Chunks', contentChunks.length, { title: payload.title });
+
+      const contentBlocks = contentChunks.map(chunk => ({
+        object: 'block' as const,
+        type: 'paragraph' as const,
         paragraph: {
           rich_text: [
             {
-              type: 'text',
-              text: {
-                content: payload.content.substring(0, 2000) // limit for safety
-              }
-            }
-          ]
-        }
-      };
+              type: 'text' as const,
+              text: { content: chunk },
+            },
+          ],
+        },
+      }));
 
       const response = await this.client.pages.create({
         parent: { database_id: this.databaseId },
         properties: {
           Title: {
-            title: [
-              {
-                text: {
-                  content: payload.title
-                }
-              }
-            ]
+            title: [{ text: { content: payload.title } }],
           },
           Category: {
-            select: {
-              name: payload.category
-            }
+            select: { name: payload.category },
           },
           Status: {
-            status: {
-              name: 'Trustworthy' // 符合 5T 協議
-            }
-          }
+            status: { name: 'Trustworthy' }, // 符合 5T 協議
+          },
         },
-        children: [contentBlock as any] // 為了避免繁雜的型別宣告暫時用 any
+        children: contentBlocks as any,
       });
 
       this.celestial.recordMetric('NotionSync.Success', 1, { pageId: response.id });
