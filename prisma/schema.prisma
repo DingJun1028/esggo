@@ -25,10 +25,10 @@ model Regulation {
   hash        String   // SHA-256 of content
   oldHash     String?  // Previous hash (for change detection)
   publishedAt String?
-  crawledAt   String   @default(now())
-  updatedAt   String   @default(now())
+  crawledAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
   version     Int      @default(1)
-  CrawlHistory CrawlHistory[]
+  crawlHistory CrawlHistory[]
   
   @@index([sourceId])
   @@index([crawledAt])
@@ -48,9 +48,9 @@ model CompanyReport {
   oldHash       String?
   version       Int      @default(1)
   status        String   @default("published")
-  crawledAt     String   @default(now())
-  updatedAt     String   @default(now())
-  CrawlHistory  CrawlHistory[]
+  crawledAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  crawlHistory  CrawlHistory[]
   
   @@index([companyId])
   @@index([reportType])
@@ -67,18 +67,18 @@ model ESGTag {
 
 // Crawl history log
 model CrawlHistory {
-  id            String   @id @default(cuid())
-  sourceId      String
-  sourceType    Regulation @relation(fields: [regulationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "CrawlHistory_regulationId_Regulation_fk")
-  regulationId  String?
+  id              String   @id @default(cuid())
+  sourceId        String
+  regulationId    String?
+  regulation      Regulation? @relation(fields: [regulationId], references: [id], onDelete: Cascade)
   companyReportId String?
-  companyReport CompanyReport @relation(fields: [companyReportId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "CrawlHistory_companyReportId_CompanyReport_fk")
-  itemsFound    Int      @default(0)
-  newItems      Int      @default(0)
-  changedItems  Int      @default(0)
-  errorCount    Int      @default(0)
-  duration      Int      // ms
-  timestamp     String   @default(now())
+  companyReport   CompanyReport? @relation(fields: [companyReportId], references: [id], onDelete: Cascade)
+  itemsFound      Int      @default(0)
+  newItems        Int      @default(0)
+  changedItems    Int      @default(0)
+  errorCount      Int      @default(0)
+  duration        Int      // ms
+  timestamp       DateTime @default(now())
   
   @@index([sourceId])
   @@index([timestamp])
@@ -99,7 +99,7 @@ model Alert {
   newContent  String?  @default("")
   esgPillar   String   @default("") // environmental / social / governance
   acknowledged Boolean @default(false)
-  createdAt   String   @default(now())
+  createdAt   DateTime @default(now())
   
   @@index([sourceId])
   @@index([severity])
@@ -113,7 +113,7 @@ model NotificationLog {
   alertId     String
   channel     String   // email, telegram, webhook, in_app
   status      String   @default("pending") // pending, sent, failed
-  sentAt      String?
+  sentAt      DateTime?
   error       String?
-  createdAt   String   @default(now())
+  createdAt   DateTime @default(now())
 }

@@ -25,12 +25,14 @@ export interface SchedulerStatus {
   enabledJobs: number;
   lastResults: Array<{ sourceId: string; itemsFound: number; duration: number; timestamp: string }>;
 }
+import { processCrawlResult, type BridgeResult } from '../../core/sonnar/sonar-bridge';
 
 // Singleton scheduler instance
 class CrawlerScheduler {
   private jobs: Map<string, ScheduledJob> = new Map();
   private timers: Map<string, ReturnType<typeof setInterval>> = new Map();
   private results: Map<string, CrawlResult[]> = new Map();
+  private bridgeResults: Map<string, BridgeResult[]> = new Map();
   
   constructor() {
     this.init();
@@ -105,6 +107,17 @@ class CrawlerScheduler {
       if (history.length > 50) history.pop();
       this.results.set(sourceId, history);
       
+      // Bridge to subscription engine
+      try {
+        const bridgeResult = processCrawlResult(result);
+        const bridgeHistory = this.bridgeResults.get(sourceId) || [];
+        bridgeHistory.unshift(bridgeResult);
+        if (bridgeHistory.length > 50) bridgeHistory.pop();
+        this.bridgeResults.set(sourceId, bridgeHistory);
+      } catch (bridgeErr) {
+        console.error(`[Scheduler] Bridge error for ${sourceId}:`, bridgeErr);
+      }
+      
       return result;
     } catch (err) {
       if (job) job.failedRuns++;
@@ -140,6 +153,11 @@ class CrawlerScheduler {
   /** Get result history for a source */
   getHistory(sourceId: string): CrawlResult[] {
     return this.results.get(sourceId) || [];
+  }
+
+  /** Get bridge results for a source */
+  getBridgeResults(sourceId: string): BridgeResult[] {
+    return this.bridgeResults.get(sourceId) || [];
   }
 
   /** Toggle job enabled/disabled */

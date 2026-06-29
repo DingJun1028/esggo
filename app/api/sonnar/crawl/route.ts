@@ -59,6 +59,16 @@ export async function POST(req: NextRequest) {
           { status: 404 }
         );
       }
+      
+      // Get bridge results (last bridge for this source)
+      const bridgeHistory = crawlerScheduler.getBridgeResults(sourceId);
+      const bridge = bridgeHistory[0] || {
+        eventsGenerated: 0,
+        matches: [],
+        itemsProcessed: 0,
+        errors: [],
+      };
+      
       return NextResponse.json({
         success: true,
         data: {
@@ -69,6 +79,15 @@ export async function POST(req: NextRequest) {
             itemsFound: result.itemsFound,
             duration: result.duration,
             timestamp: result.timestamp,
+          },
+          bridge: {
+            eventsGenerated: bridge.eventsGenerated,
+            subscriptionMatches: bridge.matches.length,
+            topMatches: bridge.matches.slice(0, 5).map((m: any) => ({
+              subscriber: m.subscriberName,
+              target: m.subscriptionTarget,
+              score: m.relevanceScore,
+            })),
           },
         },
       });
