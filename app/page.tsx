@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import LoginButton from "@/components/LoginButton";
 import { useEffect, useState } from "react";
+import type { User } from "firebase/auth";
 
 const NAV_MODULES = [
   {
@@ -134,7 +135,7 @@ export default function HomePage() {
             {loading ? "驗證中..." : user ? `✅ ${user.email}` : "⭕ 未登入"}
           </span>
           <span style={{ color: "#ffd700", fontWeight: 700 }}>Gemini 2.5 Flash</span>
-          <LoginButton />
+          <LoginButton user={user ?? null} />
         </div>
       </header>
 
