@@ -1,5 +1,3 @@
-import { getRedis, memoryFallback } from '@lib/redis/client';
-
 export interface RateLimitResult {
   success: boolean;
   limit: number;
@@ -8,7 +6,7 @@ export interface RateLimitResult {
 }
 
 /**
- * A lightweight, Redis-backed rate limiter using a sliding window or fixed window approach.
+ * A lightweight, Redis-backed rate limiter using a fixed window approach.
  * Falls back to in-memory store if Redis is unavailable.
  */
 export async function rateLimit(identifier: string, limit: number, windowSeconds: number): Promise<RateLimitResult> {
@@ -16,16 +14,22 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
   const reset = now + windowSeconds * 1000;
   const key = `ratelimit:${identifier}`;
 
-  const redis = await getRedis();
+  // Lazy import Redis to avoid build-time connection issues
+  let redis: any = null;
+  try {
+    const { getRedis } = await import('@lib/redis/client');
+    redis = await getRedis();
+  } catch {
+    // Redis module unavailable — use in-memory fallback
+  }
 
   if (redis) {
     try {
-      // Using a simple fixed window counter for Redis
       const pipeline = redis.pipeline();
       pipeline.incr(key);
       pipeline.pttl(key);
       const results = await pipeline.exec();
-      
+
       const count = results[0][1] as number;
       const ttl = results[1][1] as number;
 
@@ -50,7 +54,8 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
   }
 }
 
-function memoryRateLimit(key: string, limit: number, windowSeconds: number, now: number, reset: number): RateLimitResult {
+async function memoryRateLimit(key: string, limit: number, windowSeconds: number, now: number, reset: number): Promise<RateLimitResult> {
+  const { memoryFallback } = await import('@lib/redis/client');
   const record = memoryFallback.get(key) || { count: 0, reset: 0 };
   
   if (now > record.reset) {

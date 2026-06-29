@@ -107,6 +107,28 @@ model Alert {
   @@index([createdAt])
 }
 
+// PDF Report Parse Results
+model PDFParseResult {
+  id              String   @id @default(cuid())
+  fileName        String
+  fileSize        Int
+  title           String
+  pageCount       Int
+  totalWords      Int
+  esgKeywordDensity Float
+  companies       String   @default("[]")  // JSON array
+  metrics         String   @default("[]")  // JSON array
+  years           String   @default("[]")  // JSON array
+  sections        String   @default("[]")  // JSON array
+  esgCategories   String   @default("{}")  // JSON object
+  textPreview     String   @default("")
+  rawText         String   @default("")    // Truncated to 100KB
+  parsedAt        DateTime @default(now())
+  
+  @@index([fileName])
+  @@index([parsedAt])
+}
+
 // Notification log
 model NotificationLog {
   id          String   @id @default(cuid())
