@@ -10,7 +10,6 @@ module.exports = {
         PORT: 3000,
         DATABASE_URL: 'file:./dev.db',
       },
-      // Health check: ping /api/health every 30s
       instances: 1,
       autorestart: true,
       max_restarts: 10,
@@ -22,11 +21,11 @@ module.exports = {
     {
       name: 'omniagent-gateway',
       script: 'node',
-      args: './src/services/scheduler/crawler-scheduler-boot.js',
+      args: './omniagent-gateway/omni-server.mjs',
       cwd: 'C:\\var\\www\\esggo',
       env: {
         NODE_ENV: 'production',
-        PORT: 8643,
+        PORT: 8642,
         DATABASE_URL: 'file:./dev.db',
       },
       instances: 1,
