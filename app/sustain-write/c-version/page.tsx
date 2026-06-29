@@ -90,21 +90,21 @@ export default function CVersionReportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-primary">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-secondary border-b border-borderColor sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white font-bold text-lg">
               C
             </div>
             <div>
-              <h1 className="text-lg font-bold text-slate-900">C版專業永續報告</h1>
-              <p className="text-xs text-slate-500">5T 協議 · OmniTag 萬能標籤 · v3.7</p>
+              <h1 className="text-lg font-bold text-textPrimary">C版專業永續報告</h1>
+              <p className="text-xs text-textSecondary">5T 協議 · OmniTag 萬能標籤 · v3.7</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200">
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-accentTeal/10 text-accentTeal border border-accentTeal/30">
               真 → 善 → 美 → 信 → 通
             </span>
           </div>
@@ -113,19 +113,19 @@ export default function CVersionReportPage() {
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         {/* 控制面板 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">
+        <div className="bg-secondary rounded-2xl shadow-sm border border-borderColor p-6 mb-8">
+          <h2 className="text-xl font-bold text-textPrimary mb-4">
             📊 報告生成器
           </h2>
           <div className="flex flex-wrap gap-4 items-end">
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-textPrimary mb-2">
                 選擇企業（10家擬真公司）
               </label>
               <select
                 value={selectedCompany}
                 onChange={e => setSelectedCompany(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-lg border border-borderColor bg-primary text-textPrimary focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 <option value="">請選擇公司...</option>
                 {companies.map(c => (
@@ -138,7 +138,7 @@ export default function CVersionReportPage() {
             <button
               onClick={generateReport}
               disabled={!selectedCompany || loading}
-              className="px-6 py-3 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 rounded-lg bg-accentTeal text-white font-semibold hover:bg-accentTeal hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? '生成中...' : '⚡ 生成報告'}
             </button>
@@ -146,13 +146,13 @@ export default function CVersionReportPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => downloadReport('html')}
-                  className="px-4 py-3 rounded-lg border-2 border-teal-600 text-teal-600 font-semibold hover:bg-teal-50 transition-colors"
+                  className="px-4 py-3 rounded-lg border-2 border-accentTeal text-accentTeal font-semibold hover:bg-accentTeal/10 transition-colors"
                 >
                   📄 HTML
                 </button>
                 <button
                   onClick={() => downloadReport('markdown')}
-                  className="px-4 py-3 rounded-lg border-2 border-teal-600 text-teal-600 font-semibold hover:bg-teal-50 transition-colors"
+                  className="px-4 py-3 rounded-lg border-2 border-accentTeal text-accentTeal font-semibold hover:bg-accentTeal/10 transition-colors"
                 >
                   📝 Markdown
                 </button>
@@ -169,11 +169,11 @@ export default function CVersionReportPage() {
         {/* 載入中 */}
         {loading && (
           <div className="text-center py-16">
-            <div className="inline-block w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-600">正在通過 5T 檢驗門，生成專業報告中...</p>
+            <div className="inline-block w-12 h-12 border-4 border-accentTeal/30 border-t-teal-600 rounded-full animate-spin mb-4"></div>
+            <p className="text-textSecondary">正在通過 5T 檢驗門，生成專業報告中...</p>
             <div className="flex justify-center gap-2 mt-4">
               {['真', '善', '美', '信', '通'].map((gate, i) => (
-                <span key={gate} className="px-3 py-1 rounded-full text-xs bg-slate-100 text-slate-500 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
+                <span key={gate} className="px-3 py-1 rounded-full text-xs bg-primary border border-borderColor text-textSecondary animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
                   {gate}
                 </span>
               ))}
@@ -185,12 +185,12 @@ export default function CVersionReportPage() {
         {report && !loading && (
           <div className="space-y-6">
             {/* 5T 狀態概覽 */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div className="bg-secondary rounded-2xl shadow-sm border border-borderColor p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-lg font-bold text-textPrimary">
                   5T 協議合規狀態 — {report.companyName}
                 </h3>
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-textSecondary">
                   總字數：{report.totalWords.toLocaleString()} 字
                 </span>
               </div>
@@ -203,7 +203,7 @@ export default function CVersionReportPage() {
                       className={`text-center p-4 rounded-xl border-2 transition-all ${
                         passed
                           ? 'border-current bg-opacity-5'
-                          : 'border-slate-200 bg-slate-50 opacity-50'
+                          : 'border-borderColor bg-primary opacity-50'
                       }`}
                       style={{ borderColor: passed ? info.color : undefined }}
                     >
@@ -211,7 +211,7 @@ export default function CVersionReportPage() {
                       <div className="font-bold text-lg" style={{ color: passed ? info.color : '#94a3b8' }}>
                         {info.name}
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">
+                      <div className="text-xs text-textSecondary mt-1">
                         {passed ? '已通過' : '待驗證'}
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export default function CVersionReportPage() {
             </div>
 
             {/* 章節導航 */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+            <div className="bg-secondary rounded-2xl shadow-sm border border-borderColor p-4">
               <div className="flex gap-2 overflow-x-auto">
                 {report.chapters.map((ch, i) => {
                   const info = GATE_INFO[ch.fiveTGate];
@@ -232,7 +232,7 @@ export default function CVersionReportPage() {
                       className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                         activeChapter === i
                           ? 'text-white shadow-md'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          : 'bg-primary border border-borderColor text-textSecondary hover:bg-secondary border border-borderColor'
                       }`}
                       style={{
                         backgroundColor: activeChapter === i ? info.color : undefined,
@@ -247,7 +247,7 @@ export default function CVersionReportPage() {
 
             {/* 章節內容 */}
             {report.chapters[activeChapter] && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+              <div className="bg-secondary rounded-2xl shadow-sm border border-borderColor p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold"
@@ -256,10 +256,10 @@ export default function CVersionReportPage() {
                     {GATE_INFO[report.chapters[activeChapter].fiveTGate].name}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-bold text-textPrimary">
                       {report.chapters[activeChapter].title}
                     </h2>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-textSecondary">
                       {report.chapters[activeChapter].wordCount} 字 · OmniTag 已驗證
                     </p>
                   </div>
@@ -268,13 +268,13 @@ export default function CVersionReportPage() {
                 <div className="prose prose-slate max-w-none">
                   {report.chapters[activeChapter].content.split('\n\n').map((para, pi) => {
                     if (para.startsWith('### ')) {
-                      return <h3 key={pi} className="text-lg font-bold text-slate-800 mt-6 mb-3">{para.replace('### ', '')}</h3>;
+                      return <h3 key={pi} className="text-lg font-bold text-textPrimary mt-6 mb-3">{para.replace('### ', '')}</h3>;
                     }
                     if (para.startsWith('[OmniTag:')) {
                       const text = para.replace(/\[OmniTag:[^\]]+\]\s*/, '');
                       return (
-                        <p key={pi} className="mb-4 text-slate-700 leading-relaxed">
-                          <span className="inline-block bg-slate-800 text-cyan-300 px-2 py-0.5 rounded text-xs font-mono mr-2">
+                        <p key={pi} className="mb-4 text-textPrimary leading-relaxed">
+                          <span className="inline-block bg-secondary text-accentTeal px-2 py-0.5 rounded text-xs font-mono mr-2">
                             {para.match(/\[OmniTag:([^\]]+)\]/)?.[1].substring(0, 8)}
                           </span>
                           {text}
@@ -297,7 +297,7 @@ export default function CVersionReportPage() {
                       );
                     }
                     if (para.trim()) {
-                      return <p key={pi} className="mb-4 text-slate-700 leading-relaxed text-justify">{para}</p>;
+                      return <p key={pi} className="mb-4 text-textPrimary leading-relaxed text-justify">{para}</p>;
                     }
                     return null;
                   })}
@@ -306,7 +306,7 @@ export default function CVersionReportPage() {
             )}
 
             {/* 頁腳 */}
-            <div className="text-center py-6 text-sm text-slate-500">
+            <div className="text-center py-6 text-sm text-textSecondary">
               <p>報告生成時間：{report.generatedAt}</p>
               <p className="mt-1">ESGGO 善向永續 · C版專業永續報告系統 v3.7 · 5T 真善美信通</p>
             </div>
@@ -317,8 +317,8 @@ export default function CVersionReportPage() {
         {!report && !loading && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📋</div>
-            <h3 className="text-xl font-bold text-slate-700 mb-2">選擇企業開始生成報告</h3>
-            <p className="text-slate-500 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-textPrimary mb-2">選擇企業開始生成報告</h3>
+            <p className="text-textSecondary max-w-md mx-auto">
               本系統包含 10 家擬真企業的完整 ESG 資料，涵蓋 140 題專業題庫與 1400 筆高擬真填答。
               選擇企業後，系統將自動通過 5T 檢驗（真→善→美→信→通），生成專業永續報告。
             </p>

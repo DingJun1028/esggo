@@ -147,7 +147,7 @@ export function OmniOneChat() {
     setBusy(false);
   };
 
-  const ctColorVar = (ct?:CaseType) => ct==='esg_report'?'var(--accent-teal, #009EB0)':ct==='bug_fix'?'var(--accent-red, #FF4D6D)':ct==='ui_design'?'var(--accent-gold, #D4AF37)':ct==='architecture'?'var(--accent-purple, #8B5CF6)':'var(--accent-green, #22C55E)';
+  const ctColorVar = (ct?:CaseType) => ct==='esg_report'?'var(--accent-teal)':ct==='bug_fix'?'var(--accent-red)':ct==='ui_design'?'var(--accent-gold)':ct==='architecture'?'var(--accent-purple)':'var(--accent-green)';
   const ctLabel = (ct?:CaseType) => ({code_optimization:'CODE',documentation:'DOC',data_analysis:'DATA',esg_report:'ESG',ui_design:'UI',architecture:'ARCH',bug_fix:'BUG',general:'GEN'})[ct||'general']||'GEN';
 
   const renderText = (t:string) => {

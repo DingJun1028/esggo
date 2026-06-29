@@ -1,25 +1,42 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
-# pnpm is used in this repo
+# 升級系統套件以修復已知的 Alpine 漏洞
+RUN apk upgrade --no-cache
+# 啟用 corepack 以支援 pnpm
 RUN corepack enable pnpm
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
+
+# 複製 package.json 與 lock 檔案
+COPY package.json pnpm-lock.yaml* ./
+# 安裝所有相依套件
+RUN pnpm install --frozen-lockfile
 
 FROM node:22-alpine AS builder
 WORKDIR /app
+RUN apk upgrade --no-cache
 RUN corepack enable pnpm
+
+# 複製所有原始碼
 COPY . .
-# install all deps for build
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# 從 deps 階段複製 node_modules
+COPY --from=deps /app/node_modules ./node_modules
+
+# 執行建置
 RUN pnpm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
+RUN apk upgrade --no-cache
+RUN corepack enable pnpm
+
+# 複製構建出的靜態資源與 .next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+# 拷貝完整的 node_modules 以解決 ADR-005 提到的 "sh: next: not found" 問題
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
-CMD ["npm", "start"]
+
+# 啟動服務
+CMD ["pnpm", "start"]

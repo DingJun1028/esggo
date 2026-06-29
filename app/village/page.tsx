@@ -4,6 +4,7 @@ import { Leaf, Heart, Users, TrendingUp, ShieldCheck, Clock, Activity, Minus, Pl
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, doc, runTransaction, query, orderBy } from 'firebase/firestore';
 import { seedVillageData } from '@/lib/village-seeder';
+import { OmniBaseCard } from '@/components/omni-base-card';
 
 interface Project {
   id: string;
@@ -55,53 +56,35 @@ export default function VillagePage() {
   const [activities, setActivities] = useState<ActivityLog[]>([]);
 
   useEffect(() => {
-    let unsubscribeProjects: () => void;
-    let unsubscribeMembers: () => void;
-    let unsubscribeActivities: () => void;
+    // No firebase client listeners used here anymore
 
-    async function initializeAndListen() {
+    async function fetchData() {
       try {
-        await seedVillageData();
-
-        const projectsQuery = query(collection(db, 'village_projects'));
-        unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
-          const projs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Project);
-          projs.sort((a, b) => b.current_points - a.current_points);
-          setProjects(projs);
+        const res = await fetch('/api/village/data');
+        if (!res.ok) throw new Error('無法取得資料');
+        const data = await res.json();
+        
+        if (data.success) {
+          setProjects(data.projects);
+          setMembers(data.members);
+          setActivities(data.activities);
           setLoading(false);
-        }, (error) => {
-          console.error("Error fetching projects:", error);
-          setFetchError("無法取得即時專案資料");
-        });
-
-        const membersQuery = query(collection(db, 'village_members'), orderBy('points', 'desc'));
-        unsubscribeMembers = onSnapshot(membersQuery, (snapshot) => {
-          const mems = snapshot.docs.map(doc => ({ user_id: doc.id, ...doc.data() }) as Member);
-          setMembers(mems);
-        }, (error) => {
-          console.error("Error fetching members:", error);
-          setFetchError("無法取得即時成員資料");
-        });
-
-        const activitiesQuery = query(collection(db, 'village_activities'), orderBy('created_at', 'desc'));
-        unsubscribeActivities = onSnapshot(activitiesQuery, (snapshot) => {
-          const acts = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              message: data.message,
-              time: formatRelativeTime(data.created_at)
-            } as ActivityLog;
-          });
-          setActivities(acts.slice(0, 10)); // keep last 10
-        });
-
-      } catch (err) {
-        console.error("Initialization error:", err);
-        setFetchError("初始化失敗");
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err: any) {
+        console.error("Fetch error:", err);
+        setFetchError("無法取得即時資料");
         setLoading(false);
       }
     }
+
+    let pollInterval: NodeJS.Timeout;
+    async function initializeAndListen() {
+      await fetchData(); // Initial fetch
+      pollInterval = setInterval(fetchData, 5000); // Poll every 5 seconds for updates
+    }
+
 
     async function fetchTrend() {
       setIsGeneratingTrend(true);
@@ -120,9 +103,7 @@ export default function VillagePage() {
     fetchTrend();
 
     return () => {
-      if (unsubscribeProjects) unsubscribeProjects();
-      if (unsubscribeMembers) unsubscribeMembers();
-      if (unsubscribeActivities) unsubscribeActivities();
+      if (pollInterval) clearInterval(pollInterval);
     };
   }, []);
 
@@ -198,7 +179,7 @@ export default function VillagePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0F2F5] to-[#E2E8F0] dark:from-[#1E293B] dark:to-[#0F172A] text-textPrimary font-sans p-6 md:p-10 transition-colors duration-500">
+    <div className="min-h-screen bg-primary text-textPrimary font-sans p-6 md:p-10 transition-colors duration-500">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accentTeal to-accentGreen flex items-center justify-center shadow-sm">
@@ -244,7 +225,7 @@ export default function VillagePage() {
                 const isLoading = isVoting === proj.id;
                 
                 return (
-                  <div key={proj.id} className={`bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all duration-500 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:shadow-[0_8px_32px_0_rgba(99,166,176,0.2)] hover:-translate-y-1'}`}>
+                  <OmniBaseCard key={proj.id} variant="liquid-glass" statusIndicator="trustworthy" hashLock={proj.id} className={`transition-all duration-500 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:-translate-y-1'}`}>
                     <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-[#63a6b0] to-[#ffd700] transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
 
                     <div className="flex justify-between items-start mb-4">
@@ -301,7 +282,7 @@ export default function VillagePage() {
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </OmniBaseCard>
                 );
               })}
             </div>
@@ -316,7 +297,7 @@ export default function VillagePage() {
             <h2 className="text-lg text-accentTeal flex items-center gap-2 mb-4 font-bold">
               <Activity size={20} /> OmniOne 趨勢預測
             </h2>
-            <div className="bg-gradient-to-br from-secondary/80 to-secondary backdrop-blur-md border border-accentTeal/30 rounded-2xl p-5 shadow-[0_4px_24px_-4px_rgba(99,166,176,0.15)] relative overflow-hidden group transition-all duration-500 hover:shadow-[0_8px_32px_-4px_rgba(99,166,176,0.25)]">
+            <OmniBaseCard variant="liquid-glass" className="group">
               {/* Liquid Glass Glare */}
               <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-2xl" />
               <div className="absolute -inset-x-20 top-0 h-px bg-gradient-to-r from-transparent via-accentTeal/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
@@ -333,14 +314,14 @@ export default function VillagePage() {
               ) : (
                 <div className="text-sm text-textSecondary">尚無趨勢預測資料。</div>
               )}
-            </div>
+            </OmniBaseCard>
           </div>
 
           <div>
             <h2 className="text-lg text-accentGold flex items-center gap-2 mb-4 font-bold">
               <Users size={20} /> 村民貢獻榜
             </h2>
-            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+            <OmniBaseCard className="p-4 shadow-sm">
               {loading ? (
                 <div className="text-textSecondary">載入中...</div>
               ) : members.length === 0 ? (
@@ -349,13 +330,13 @@ export default function VillagePage() {
                 <div className="flex flex-col gap-3">
                   {members.map((mem, i) => (
                     <div key={mem.user_id} className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${i === 0 ? 'bg-accentGold/10 border border-accentGold/30' : 'bg-primary border border-transparent'}`}>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-[#000] ${i === 0 ? 'bg-accentGold' : 'bg-accentTeal'}`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-black ${i === 0 ? 'bg-accentGold' : 'bg-accentTeal'}`}>
                         {mem.avatar}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div className="text-sm font-bold text-textPrimary">{mem.name}</div>
-                          {i === 0 && <span className="text-[10px] bg-accentGold text-[#000] px-1.5 py-0.5 rounded font-black tracking-wide">TOP 1</span>}
+                          {i === 0 && <span className="text-[10px] bg-accentGold text-black px-1.5 py-0.5 rounded font-black tracking-wide">TOP 1</span>}
                         </div>
                         <div className="text-xs text-textSecondary mt-0.5">{mem.title}</div>
                       </div>
@@ -366,14 +347,14 @@ export default function VillagePage() {
                   ))}
                 </div>
               )}
-            </div>
+            </OmniBaseCard>
           </div>
 
           <div>
             <h2 className="text-lg text-textSecondary flex items-center gap-2 mb-4 font-bold">
               <Activity size={20} /> 村落動態
             </h2>
-            <div className="bg-secondary border border-borderColor rounded-2xl p-4 shadow-sm">
+            <OmniBaseCard className="p-4 shadow-sm">
               <div className="flex flex-col gap-4">
                 {activities.map((act) => (
                   <div key={act.id} className="flex gap-3 items-start">
@@ -385,7 +366,7 @@ export default function VillagePage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </OmniBaseCard>
           </div>
         </div>
       </div>
