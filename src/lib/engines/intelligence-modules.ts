@@ -522,7 +522,7 @@ export function buildRadarSnapshot(opts: {
   opts.logisticsRisks.forEach(l => { count('supply_chain'); countRegion(l.route); });
   opts.opportunities.forEach(o => { count('investment'); });
 
-  const topSignals = [];
+  const topSignals: Signal[] = [];
   return {
     date: new Date().toISOString(),
     topSignals,

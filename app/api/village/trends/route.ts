@@ -1,8 +1,21 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { adminDb } from '@/lib/firebase-admin';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.AGNES_API || '' });
+
+interface ActivityData {
+  message: string;
+  [key: string]: unknown;
+}
+
+interface ProjectData {
+  title: string;
+  current_points: number;
+  goal_points: number;
+  [key: string]: unknown;
+}
 
 export async function GET() {
   try {
@@ -13,14 +26,12 @@ export async function GET() {
       );
     }
 
-    // 1. Fetch recent activities
     const actSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(15).get();
-    const recentActivities = actSnap.docs.map(doc => doc.data());
+    const recentActivities = actSnap.docs.map((doc: QueryDocumentSnapshot) => doc.data() as ActivityData);
 
-    // 2. Fetch top projects
     const projSnap = await adminDb.collection('village_projects').orderBy('current_points', 'desc').limit(5).get();
-    const topProjects = projSnap.docs.map(doc => {
-      const data = doc.data();
+    const topProjects = projSnap.docs.map((doc: QueryDocumentSnapshot) => {
+      const data = doc.data() as ProjectData;
       return `${data.title}: 目前 ${data.current_points} / 目標 ${data.goal_points}`;
     });
 
@@ -29,7 +40,7 @@ export async function GET() {
 請根據以下最新的「永續村 (OmniVillage)」 Quadratic Voting 投資行為，預測未來村莊哪一項 ESG 指標會最快達標，並給予社群行動建議。
 
 近期動態 (包含投票與點數消耗):
-${recentActivities.map(a => a.message).join('\n')}
+${recentActivities.map((a: ActivityData) => a.message).join('\n')}
 
 目前排名前五的募資專案:
 ${topProjects.join('\n')}
@@ -48,10 +59,11 @@ ${topProjects.join('\n')}
     });
 
     return NextResponse.json({ trend: response.text });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { trend: `[OmniOne 錯誤] 無法生成趨勢預測：${error.message}` },
+      { trend: `[OmniOne 錯誤] 無法生成趨勢預測：${message}` },
       { status: 500 }
     );
   }

@@ -4,17 +4,13 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import type { User } from 'firebase/auth';
 import { onAuthChange } from '@/lib/auth';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-  isAuthenticated: false,
-});
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -36,5 +32,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth(): AuthContextType {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    return { user: null, loading: true, isAuthenticated: false };
+  }
+  return context;
 }
