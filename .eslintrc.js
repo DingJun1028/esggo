@@ -1,11 +1,26 @@
 module.exports = {
-  extends: ['plugin:@next/next/recommended'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  extends: [
+    'plugin:@next/next/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   rules: {
     '@next/next/no-img-element': 'off',
     'react/no-unescaped-entities': 'off',
     'react/jsx-no-target-blank': 'off',
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-require-imports': 'warn',
+    '@typescript-eslint/no-var-requires': 'warn',
   },
-  ignorePatterns: ['node_modules/', '.next/', 'out/', '*.cjs', '*.mjs'],
+  ignorePatterns: ['node_modules/', '.next/', 'out/', '*.cjs', '*.mjs', 'dist/', 'build/'],
   settings: {
     react: {
       version: 'detect',

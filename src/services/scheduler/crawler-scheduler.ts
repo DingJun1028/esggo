@@ -4,7 +4,7 @@
 // ============================================================
 
 import { createAllCrawlers } from '../../crawlers/crawler-factory';
-import type { BaseCrawler, CrawlResult } from '../../crawlers/base-crawler';
+import type { CrawlResult } from '../../crawlers/base-crawler';
 
 export interface ScheduledJob {
   id: string;

@@ -633,7 +633,7 @@ if (TELEGRAM_BOT_TOKEN) {
 
       try {
         // Echo with AI prefix (simple echo handler — extend as needed)
-        const reply = `🤖 *OmniAgent Gateway*\\n\\n收到訊息：\\n${text}`;
+        const reply = `🤖 *OmniAgent Gateway*\n\n收到訊息：\n${text}`;
         await safeSend(chatId, reply);
       } catch (err) {
         console.error(`[Telegram] Error handling message: ${err.message}`);
