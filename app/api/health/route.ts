@@ -8,7 +8,7 @@ export async function GET() {
   // ESGSonar gateway status
   let sonnarStatus = 'unavailable';
   try {
-    const gatewayRes = await fetch('http://localhost:8643/health', {
+    const gatewayRes = await fetch('http://localhost:8642/health', {
       signal: AbortSignal.timeout(2000),
     });
     if (gatewayRes.ok) sonnarStatus = 'healthy';

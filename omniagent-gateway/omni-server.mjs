@@ -494,8 +494,92 @@ app.post('/api/sync/bus', async (req, res) => {
   res.json({ ok: true, clients_notified: wssClients.size });
 });
 
+// ── ESGSonar Crawler Routes ──────────────────────────────────────
+// Crawl trigger & scheduler status (bridged from crawler-scheduler)
+
+let sonnarCrawlCount = 0;
+let sonnarLastCrawlTime = null;
+
+/** Signal esggo-core :3000 to run a crawl */
+async function signalCoreCrawl(sourceId) {
+  try {
+    const res = await fetch('http://localhost:3000/api/sonnar/crawl', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sourceId === '__all__' ? { all: true } : { sourceId }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('[Sonar] Failed to signal core:', err.message);
+    return null;
+  }
+}
+
+// GET /sonnar/status — Crawler scheduler overview
+app.get('/sonnar/status', async (_req, res) => {
+  try {
+    const r = await fetch('http://localhost:3000/api/sonnar/crawl', { signal: AbortSignal.timeout(3000) });
+    const data = await r.json();
+    res.json({ success: true, scheduler: data.data?.status, jobs: data.data?.jobs, gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime } });
+  } catch {
+    res.json({ success: false, scheduler: 'core unreachable', gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime } });
+  }
+});
+
+// POST /sonnar/crawl — Trigger crawl from gateway
+app.post('/sonnar/crawl', async (req, res) => {
+  const { sourceId, all } = req.body || {};
+  const target = all ? '__all__' : (sourceId || 'unknown');
+  sonnarCrawlCount++;
+  sonnarLastCrawlTime = new Date().toISOString();
+  const result = await signalCoreCrawl(target);
+  res.json({ success: !!result, trigger: target, crawlCount: sonnarCrawlCount, timestamp: sonnarLastCrawlTime, coreResult: result });
+});
+
+// GET /sonnar/alerts — Recent alerts
+app.get('/sonnar/alerts', async (_req, res) => {
+  try {
+    const r = await fetch('http://localhost:3000/api/sonnar/alerts', { signal: AbortSignal.timeout(3000) });
+    const data = await r.json();
+    res.json(data);
+  } catch {
+    res.json({ success: false, error: 'core unreachable' });
+  }
+});
+
+// GET /sonnar/radar — Signal radar overview
+app.get('/sonnar/radar', async (_req, res) => {
+  try {
+    const r = await fetch('http://localhost:3000/api/sonnar/radar', { signal: AbortSignal.timeout(3000) });
+    const data = await r.json();
+    res.json(data);
+  } catch {
+    res.json({ success: false, error: 'core unreachable' });
+  }
+});
+
+// Periodic crawl scheduler (default: every 4 hours)
+const SONNAR_CRAWL_INTERVAL = 4 * 3600 * 1000;
+let sonnarPeriodicTimer = null;
+
+function startSonnarPeriodicCrawl() {
+  console.log(`[Sonar] Periodic crawl interval: ${SONNAR_CRAWL_INTERVAL / 3600000}h`);
+  sonnarPeriodicTimer = setInterval(async () => {
+    console.log('[Sonar] Periodic crawl trigger...');
+    const result = await signalCoreCrawl('__all__');
+    if (result) {
+      sonnarCrawlCount++;
+      sonnarLastCrawlTime = new Date().toISOString();
+      console.log('[Sonar] Crawl result:', result.success ? 'OK' : 'FAILED');
+    }
+  }, SONNAR_CRAWL_INTERVAL);
+}
+
+// Start after 60s initial delay
+setTimeout(startSonnarPeriodicCrawl, 60000);
+
 // 404 + error handlers
-app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events','/api/sync/bus'] }));
+app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events','/api/sync/bus','/sonnar/status','/sonnar/crawl','/sonnar/alerts','/sonnar/radar'] }));
 app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
 
 // ── Start ─────────────────────────────────────────────────────
@@ -506,6 +590,7 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`   URL    : http://${VPS_IP}:${PORT}`);
   console.log(`   WS     : ws://${VPS_IP}:${PORT} (OmniAgentBus Bridge)`);
   console.log(`   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter(s=>s.status==='transcended').length} transcended)`);
+  console.log(`   Sonar  : /sonnar/status /sonnar/crawl /sonnar/alerts /sonnar/radar`);
   console.log('═══════════════════════════════════════════════════════');
 });
 
