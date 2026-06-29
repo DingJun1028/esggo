@@ -125,37 +125,81 @@ export class CelestialController {
     return data;
   }
 
-  private engraveToRepository(artifact: any, metadata: any) {
-    // 寫入 OmniVault 或資料庫
-    console.log(`[Celestial] Engraved to repository:`, metadata);
+  private async engraveToRepository(artifact: any, metadata: any) {
+    // 沉澱：寫入 OmniVault (Alert 表) — 5T Trackable
+    try {
+      const { PrismaClient } = await import('@prisma/client');
+      const prisma = new PrismaClient();
+      await prisma.alert.create({
+        data: {
+          sourceId: 'celestial-flow',
+          sourceName: metadata.strategy || 'CelestialController',
+          alertType: 'system_event',
+          severity: 'low',
+          title: `沉澱: ${metadata.status || 'Verified'}`,
+          summary: JSON.stringify(metadata).slice(0, 500),
+          url: '',
+          hash: artifact.uuid || '',
+          esgPillar: '',
+        },
+      });
+      await prisma.$disconnect();
+      console.log(`[Celestial] Engraved to repository: ${metadata.status}`);
+    } catch (dbErr) {
+      // Fallback: console only (DB may be unavailable in edge runtimes)
+      console.warn(`[Celestial] DB engrave failed, console fallback:`, metadata);
+    }
   }
 
   private async handleFailure(error: any, sealedData: any) {
     console.error(`[Celestial] Anomaly detected. Initiating self-healing protocol...`);
     
-    // 降級自癒機制 (Graceful Degradation)
-    // 1. 隔離失效現場，保留可用狀態
-    const fallbackData = {
-      ...sealedData,
-      state: "Recovered",
-      degradationTriggered: true
-    };
+    // 1. 隔離失效現場，保留可用狀態 (WuZuoMiaoDe: 零干預降級)
+    const fallbackData: Record<string, unknown> = {};
+    for (const key of Object.keys(sealedData)) {
+      try { (fallbackData as any)[key] = (sealedData as any)[key]; } catch {}
+    }
+    fallbackData.state = 'Recovered';
+    fallbackData.degradationTriggered = true;
     
-    // 2. 錯誤知識化 (Write to Notion KI)
+    // 2. DB 持久化異常事件
+    try {
+      const { PrismaClient } = await import('@prisma/client');
+      const prisma = new PrismaClient();
+      await prisma.alert.create({
+        data: {
+          sourceId: 'celestial-self-healing',
+          sourceName: 'OmniOrchestrator',
+          alertType: 'system_anomaly',
+          severity: 'high',
+          title: `[Self-Healing] 系統異常: ${String(error.message || error).slice(0, 200)}`,
+          summary: `UUID: ${sealedData.uuid}\n已觸發自癒協議，WuZuoMiaoDe 降級保護。`,
+          url: '',
+          hash: sealedData.uuid || '',
+          esgPillar: '',
+        },
+      });
+      await prisma.$disconnect();
+    } catch {}
+
+    // 3. 錯誤知識化 (Write to Notion KI / Stub)
     const kiPayload = {
       title: `[Self-Healing KI] 系統異常紀錄: ${new Date().toISOString()}`,
-      content: `發現異常錯誤：${error.message}\n封印數據 UUID: ${sealedData.uuid}\n已觸發自癒協議，保護系統狀態免於崩潰。`
+      content: `發現異常錯誤：${error.message}\n封印數據 UUID: ${sealedData.uuid}\n已觸發自癒協議，保護系統狀態免於崩潰。`,
     };
-    
     try {
-      // 模擬將 KI 寫入 Notion (知識維度整合)
-      console.log(`[Celestial] Creating Knowledge Item in Notion:`, kiPayload.title);
-      // await fetch('/api/nexus/agent', { method: 'POST', body: JSON.stringify({ tool: 'notion_sync', arguments: kiPayload }) });
-      console.log(`[Celestial] Notion KI created successfully. System stabilized.`);
+      const notionMod = await import('../../core/services/notion-sync-service');
+      if ('NotionSyncService' in notionMod) {
+        const svc = new notionMod.NotionSyncService();
+        await svc.syncAsset(kiPayload as any);
+        console.log(`[Celestial] Notion KI created. System stabilized.`);
+      } else {
+        console.warn(`[Celestial] NotionSyncService not available`);
+      }
     } catch (e) {
-      console.error(`[Celestial] Failed to write KI, but system is still isolated.`, e);
+      console.warn(`[Celestial] Notion KI skipped (unavailable): ${e}`);
     }
-    
+
     return fallbackData;
   }
 }
