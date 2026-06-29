@@ -59,6 +59,9 @@ export interface CrawlOptions {
 
 export abstract class BaseCrawler {
   protected config: CrawlerConfig;
+
+  /** Public read-only access to config (for factory/scheduler) */
+  get sourceConfig(): CrawlerConfig { return this.config; }
   protected retryCount = 3;
   protected retryDelay = 2000; // ms, exponential backoff
 
