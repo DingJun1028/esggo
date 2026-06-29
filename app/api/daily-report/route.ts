@@ -1,0 +1,38 @@
+/**
+ * GET /api/daily-report — list recent reports
+ * GET /api/daily-report?date=YYYY-MM-DD — get specific date
+ * GET /api/daily-report — get today's ( */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getDailyReportService } from '@/core/services/daily-report-service';
+
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: NextRequest) {
+  try {
+    const service = getDailyReportService();
+    const dateParam = req.nextUrl.searchParams.get('date');
+    const todayParam = req.nextUrl.searchParams.get('today');
+    const limit = parseInt(req.nextUrl.searchParams.get('limit') || '30');
+
+    if (todayParam === 'true') {
+      const report = await service.getTodayReport();
+      return NextResponse.json({ success: true, report });
+    }
+
+    if (dateParam) {
+      const date = new Date(dateParam);
+      const reports = await service.listReports(1, 'published');
+      // Find by date string match
+      // Quick approach: generate if not exists
+      const report = await service.generateReport(date);
+      return NextResponse.json({ success: true, report });
+    }
+
+    const reports = await service.listReports(limit, 'published');
+    return NextResponse.json({ success: true, reports, count: reports.length });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
