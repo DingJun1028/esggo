@@ -250,3 +250,47 @@ model Subscription {
   @@unique([userId, subType, targetId])
   @@index([userId])
 }
+
+// ═══════════════════════════════════════════════════════════════
+// Daily Observer Report — 永續觀察者日報
+// ═══════════════════════════════════════════════════════════════
+
+/// 每日觀測日報（自動生成或手動編修）
+model DailyReport {
+  id            String   @id @default(cuid())
+  reportDate    DateTime @unique  // 日報日期（只取 date 部分）
+  title         String
+  summary       String   @default("")  // AI/自動生成的摘要
+  highlights    String   @default("[]") // JSON: 3-5 條焦點新聞
+  tagStats      String   @default("{}") // JSON: 各主題標籤統計
+  sourceCount   Int      @default(0)   // 本日資訊源數量
+  alertCount    Int      @default(0)   // 本日快訊數量
+  topSources    String   @default("[]") // JSON: 最多更新的來源
+  status        String   @default("draft") // draft / published / archived
+  publishedAt   DateTime?
+  editorNote    String?  // 主編的話
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  @@index([reportDate])
+  @@index([status])
+}
+
+/// 日報內的單條快訊（關聯 Alert）
+model DailyReportItem {
+  id            String   @id @default(cuid())
+  reportId      String
+  alertId       String?  // 對應 Alert.id（可選）
+  itemType      String   // regulation / report / company / topic / opinion
+  title         String
+  summary       String   @default("")
+  sourceName    String?
+  sourceUrl     String?
+  severity      String   @default("low")
+  esgPillar     String   @default("")
+  orderIndex    Int      @default(0)  // 排序
+  createdAt     DateTime @default(now())
+
+  @@index([reportId])
+  @@index([itemType])
+}
