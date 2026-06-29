@@ -47,12 +47,16 @@ export function OmniCalendarView() {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
 
+  // ✅ 修復：統一使用 ISO 格式 yyyy-MM-dd（month + 1 轉為 1-indexed，補零對齊）
   const tasksByDate = useMemo(() => {
     const map: Record<string, OmniTask[]> = {};
     tasks.forEach(t => {
       if (!t.dueDate) return;
       const d = new Date(t.dueDate);
-      const dateStr = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0'); // 1-indexed, zero-padded
+      const dd = String(d.getDate()).padStart(2, '0');
+      const dateStr = `${yyyy}-${mm}-${dd}`;
       if (!map[dateStr]) map[dateStr] = [];
       map[dateStr].push(t);
     });
@@ -73,7 +77,10 @@ export function OmniCalendarView() {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${month}-${day}`;
+      // ✅ 修復：與 tasksByDate 格式對齊 — month + 1 轉為 1-indexed，補零
+      const mm = String(month + 1).padStart(2, '0');
+      const dd = String(day).padStart(2, '0');
+      const dateStr = `${year}-${mm}-${dd}`;
       const dayTasks = tasksByDate[dateStr] || [];
       const isToday = isCurrentMonth && today.getDate() === day;
 
