@@ -367,9 +367,10 @@ export function startReportGeneration(
   const task = tasks.get(taskId);
   if (!task) return;
   
-  import('../../chapter-templates/index').then(({ getChapterTemplate }) => {
+  import('../../../chapter-templates/index').then(({ getChapterTemplate }) => {
     import('../repositories/sustain-write-answer-database').then(({ getAnswersByCompany }) => {
       const companyAnswers = answers.length > 0 ? answers : getAnswersByCompany(companyId);
+      const typedAnswers = companyAnswers as { chapterNum: number; content: string; [key: string]: unknown }[];
       
       // Update task to running
       const runningState: TaskProgress = {
@@ -395,7 +396,7 @@ export function startReportGeneration(
           companyId,
           companyName,
           profile,
-          companyAnswers,
+          typedAnswers as any[],
           getChapterTemplate(chNum),
           startTime
         ).then(result => {

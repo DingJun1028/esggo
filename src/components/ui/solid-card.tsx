@@ -280,13 +280,14 @@ export function Section({ title, subtitle, children, className }: SectionProps) 
 
 // --- Grid ----------------------------------------------------------
 
-export function Grid({ children, columns = 3, gap = 16 }: { children: React.ReactNode; columns?: number; gap?: number }) {
+export function Grid({ children, columns = 3, gap = 16, style }: { children: React.ReactNode; columns?: number; gap?: number; style?: React.CSSProperties }) {
   return (
     <div
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
         gap: `${gap}px`,
+        ...style,
       }}
       className="solid-grid"
     >

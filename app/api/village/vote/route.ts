@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { rateLimit } from '@/lib/rate-limit';
 import { CelestialController } from '../../../../src/lib/celestial/implementation';
+import type { DocumentSnapshot, Transaction } from 'firebase-admin/firestore';
 
 export async function POST(req: Request) {
   try {
@@ -11,14 +12,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '無效的請求參數' }, { status: 400 });
     }
 
-    // Rate Limiting: Max 5 votes per 60 seconds per user
     const rl = await rateLimit(`vote_${tenantId}_${userId}`, 5, 60);
     if (!rl.success) {
       return NextResponse.json({ error: '投票頻率過高，請稍後再試' }, { status: 429 });
     }
 
-    // Cost formula: Votes^2 * 10
-    // Power formula: Votes * 10
     const cost = amount * amount * 10;
     const power = amount * 10;
 
@@ -26,15 +24,15 @@ export async function POST(req: Request) {
     const memberRef = adminDb.collection('village_members').doc(userId);
     const activityRef = adminDb.collection('village_activities').doc();
 
-    await adminDb.runTransaction(async (t) => {
-      const projectDoc = await t.get(projectRef);
-      const memberDoc = await t.get(memberRef);
+    await adminDb.runTransaction(async (t: Transaction) => {
+      const projectDoc = (await t.get(projectRef)) as unknown as DocumentSnapshot;
+      const memberDoc = (await t.get(memberRef)) as unknown as DocumentSnapshot;
 
       if (!projectDoc.exists) throw new Error('專案不存在');
       if (!memberDoc.exists) throw new Error('會員不存在');
 
-      const projectData = projectDoc.data();
-      const memberData = memberDoc.data();
+      const projectData = projectDoc.data() as { current_points: number; title: string; [key: string]: unknown };
+      const memberData = memberDoc.data() as { points: number; name: string; [key: string]: unknown };
 
       if ((memberData?.points || 0) < cost) {
         throw new Error('您的 PTS 點數不足');

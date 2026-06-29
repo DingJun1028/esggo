@@ -82,3 +82,8 @@ export function getSourceCount(): number {
   registerAll();
   return registry.size;
 }
+
+/** Register a custom crawler factory */
+export function registerCrawler(sourceId: string, factory: () => BaseCrawler): void {
+  registry.set(sourceId, factory);
+}
