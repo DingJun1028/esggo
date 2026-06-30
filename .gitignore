@@ -118,7 +118,7 @@ bin/
 cli/scratch/
 config/
 dashboard/
-data/
+/data/
 dataconnect/
 esggo/
 esggo-dashboard/
