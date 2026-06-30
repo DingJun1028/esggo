@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 // In production, this data should reside in NCBDB / Firebase Firestore
 // and adhere to the 5T Protocol (Traceable, Transparent, etc.)
 // ----------------------------------------------------------------------------
-let projects = [
+const projects = [
   { id: 'p1', title: '建設綠能太陽能板', description: '在村莊屋頂設置太陽能板，預計減碳 15%', votes: 4, cost: 16 },
   { id: 'p2', title: '推動無紙化 OmniNote', description: '所有村莊會議記錄數位化', votes: 10, cost: 100 },
   { id: 'p3', title: '智能電網升級計畫', description: '整合儲能系統以優化能源分配', votes: 2, cost: 4 },

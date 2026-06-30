@@ -7,10 +7,8 @@
 // Free-tier compatible
 // ============================================================
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pdfParse = require('pdf-parse');
-
-// --- Types --------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pdfParse: (dataBuffer: Buffer) => Promise<any> = require('pdf-parse');
 
 export type ESGCategory = 'environmental' | 'social' | 'governance' | 'general';
 

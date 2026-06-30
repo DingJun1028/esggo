@@ -4,25 +4,21 @@
 // ============================================================
 
 import type { BaseCrawler } from './base-crawler';
+import {
+  FSCCrawler, MOENVCrawler, MOEACrawler, GazetteCrawler,
+  TWSECrawler, TPEXCrawler, MOFCrawler,
+  EUCSRDCrawler, EUESRSCrawler, IFRSCrawler, GRICrawler,
+  TCFDCrawler, UNFCCCCrawler,
+  SECCrawler, SECGovCrawler,
+  JapanFSACrawler, HKEXCrawler,
+  MSCIESGCrawler, SustainalyticsCrawler, CDPCrawler,
+} from './sources-crawlers';
 
-// Lazy-import map: sourceId → crawler class
 const registry = new Map<string, () => BaseCrawler>();
 
 function registerAll() {
-  if (registry.size > 0) return; // already registered
+  if (registry.size > 0) return;
 
-  // Import all source crawlers (lazy to avoid loading all at once)
-  const {
-    FSCCrawler, MOENVCrawler, MOEACrawler, GazetteCrawler,
-    TWSECrawler, TPEXCrawler, MOFCrawler,
-    EUCSRDCrawler, EUESRSCrawler, IFRSCrawler, GRICrawler,
-    TCFDCrawler, UNFCCCCrawler,
-    SECCrawler, SECGovCrawler,
-    JapanFSACrawler, HKEXCrawler,
-    MSCIESGCrawler, SustainalyticsCrawler, CDPCrawler,
-  } = require('./sources-crawlers');
-
-  // ─── 台灣 🇹🇼 ────
   registry.set('tw-fsc',      () => new FSCCrawler());
   registry.set('tw-moenv',    () => new MOENVCrawler());
   registry.set('tw-moea',     () => new MOEACrawler());
@@ -31,7 +27,6 @@ function registerAll() {
   registry.set('tw-tpex',     () => new TPEXCrawler());
   registry.set('tw-mof',      () => new MOFCrawler());
 
-  // ─── 國際 🌍 ────
   registry.set('eu-csrd',     () => new EUCSRDCrawler());
   registry.set('eu-esrs',     () => new EUESRSCrawler());
   registry.set('int-ifrs',    () => new IFRSCrawler());
@@ -39,15 +34,12 @@ function registerAll() {
   registry.set('int-tcfd',    () => new TCFDCrawler());
   registry.set('int-unfccc',  () => new UNFCCCCrawler());
 
-  // ─── 美國 🇺🇸 ────
   registry.set('us-sec',      () => new SECCrawler());
   registry.set('us-sec-gov',  () => new SECGovCrawler());
 
-  // ─── 亞太 🌏 ────
   registry.set('ap-jp-fsa',   () => new JapanFSACrawler());
   registry.set('ap-hkex',     () => new HKEXCrawler());
 
-  // ─── 第三方 📊 ────
   registry.set('3p-msci',     () => new MSCIESGCrawler());
   registry.set('3p-sustainalytics', () => new SustainalyticsCrawler());
   registry.set('3p-cdp',      () => new CDPCrawler());
