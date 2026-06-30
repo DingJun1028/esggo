@@ -609,6 +609,10 @@ if (TELEGRAM_BOT_TOKEN) {
     async function safeSend(chatId, text, options = {}) {
       const MAX_LEN = 4000;
       let sendText = text;
+      if (typeof sendText === 'string') {
+        // Ensure literal \\n (backslash-n) becomes actual newline
+        sendText = sendText.replace(/\\n/g, '\n');
+      }
       if (typeof sendText === 'string' && sendText.length > MAX_LEN) {
         sendText = sendText.slice(0, MAX_LEN) + '\n\n...（訊息已截斷）';
       }

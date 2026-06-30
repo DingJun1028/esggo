@@ -36,6 +36,7 @@ function GlobalNav() {
     { href: '/',                  label: '首頁',     icon: '⊙', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
     { href: '/omni-center',       label: '萬能中心',  icon: '◎', color: 'hover:text-accentGold hover:bg-accentGold/10' },
     { href: '/sustain-write/v5',  label: 'ESG 報告', icon: '📊', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
+    { href: '/emm',              label: 'EMM IDE', icon: '🔍', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
   ];
   return (
     <nav className="sticky top-0 z-[200] bg-secondary/80 backdrop-blur-md border-b border-borderColor px-5 h-[52px] flex items-center justify-between gap-4">
