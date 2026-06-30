@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "bin": {
-    "esggo": "./cli/omni.mjs"
+    "esggo": "./packages/cli/src/omni.mjs"
   },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
@@ -12,6 +16,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@esggo/shared": "workspace:*",
+    "@esggo/ui": "workspace:*",
     "@google/genai": "^2.10.0",
     "@notionhq/client": "^5.22.0",
     "@prisma/client": "^5.22.0",

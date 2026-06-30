@@ -32,6 +32,18 @@
       ],
       "@lib/*": [
         "./lib/*"
+      ],
+      "@esggo/shared": [
+        "./packages/shared/src"
+      ],
+      "@esggo/shared/*": [
+        "./packages/shared/src/*"
+      ],
+      "@esggo/ui": [
+        "./packages/ui/src"
+      ],
+      "@esggo/ui/*": [
+        "./packages/ui/src/*"
       ]
     }
   },
@@ -40,7 +52,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

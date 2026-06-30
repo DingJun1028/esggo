@@ -128,8 +128,9 @@ inventory-tracker/
 my-agent/
 omnimcp/
 omniscope/
-packages/
-prisma/
+prisma/dev.db
+prisma/node_modules/
+#packages/
 render_cli/
 server/
 shared-memory/
