@@ -94,8 +94,6 @@ mongo-init.js
 ctl.ps1
 clean_logs.ps1
 render-build.sh
-page.tsx
-
 # Test / CI artifacts
 playwright-report/
 test-results/
