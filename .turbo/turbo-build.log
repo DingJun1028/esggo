@@ -1,0 +1,89 @@
+$ cross-env NEXT_TELEMETRY_DISABLED=1 next build
+⚠ `eslint` configuration in next.config.js is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+⚠ Invalid next.config.js options detected: 
+⚠     Unrecognized key(s) in object: 'eslint'
+⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+▲ Next.js 16.2.9 (Turbopack)
+- Environments: .env.local, .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 16.1s
+  Skipping validation of types
+  Finished TypeScript config validation in 23ms ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/28) ...
+  Generating static pages using 15 workers (7/28) 
+  Generating static pages using 15 workers (14/28) 
+  Generating static pages using 15 workers (21/28) 
+✓ Generating static pages using 15 workers (28/28) in 829ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/agnes
+├ ƒ /api/ai/generate
+├ ƒ /api/async
+├ ƒ /api/cron
+├ ƒ /api/daily-report
+├ ƒ /api/daily-report/generate
+├ ƒ /api/data/export
+├ ƒ /api/emm/metrics
+├ ƒ /api/emm/metrics/stream
+├ ƒ /api/health
+├ ƒ /api/memory
+├ ƒ /api/nexus
+├ ƒ /api/nexus/agent
+├ ƒ /api/omni-agent
+├ ƒ /api/omni-agent/console
+├ ƒ /api/omni-one
+├ ƒ /api/omni/plugins
+├ ƒ /api/pdf/parse
+├ ƒ /api/rag/ingest
+├ ƒ /api/rag/query
+├ ƒ /api/sonnar/alerts
+├ ƒ /api/sonnar/crawl
+├ ƒ /api/sonnar/document-progress
+├ ƒ /api/sonnar/enterprise
+├ ƒ /api/sonnar/knowledge
+├ ƒ /api/sonnar/ocr
+├ ƒ /api/sonnar/radar
+├ ƒ /api/sonnar/sustainability
+├ ƒ /api/sustain-center/dashboard
+├ ƒ /api/sustain-write/c-version
+├ ƒ /api/sustain-write/v5
+├ ƒ /api/sustain-write/v5/async
+├ ƒ /api/sustain-write/v5/documents
+├ ƒ /api/sustain-write/v5/download
+├ ƒ /api/sustain-write/v5/evidence
+├ ƒ /api/sustain-write/v5/grammar
+├ ƒ /api/sustain-write/v5/preview
+├ ƒ /api/sustain-write/v5/progress/[taskId]
+├ ƒ /api/user/growth
+├ ƒ /api/user/growth/xp
+├ ƒ /api/user/leaderboard
+├ ƒ /api/user/subscription
+├ ƒ /api/user/tasks
+├ ƒ /api/village/data
+├ ƒ /api/village/members
+├ ƒ /api/village/projects
+├ ƒ /api/village/trends
+├ ƒ /api/village/vote
+├ ƒ /daily
+├ ƒ /emm
+├ ƒ /omni-agent
+├ ƒ /omni-agent/console
+├ ƒ /omni-base
+├ ƒ /omni-center
+├ ƒ /profile
+├ ƒ /sonnar
+├ ƒ /sustain-center
+├ ƒ /sustain-write/c-version
+├ ƒ /sustain-write/v5
+├ ƒ /village
+├ ƒ /wiki
+└ ƒ /wiki/[slug]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
