@@ -35,7 +35,7 @@ export type SubscriptionType =
 
 export interface AlertCondition {
   event: 'new_content' | 'price_change' | 'policy_update' | 'penalty' | 'filing';
-  threshold?: number;       // 變動�值 (如價格波動 > 5%)
+  threshold?: number;       // 變動?值 (如價格波動 > 5%)
   frequency: 'realtime' | 'daily_digest' | 'weekly_digest';
 }
 
