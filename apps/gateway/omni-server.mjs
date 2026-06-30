@@ -208,6 +208,8 @@ const busEvents = [];
 
 // ── Express + HTTP Server ─────────────────────────────────────
 const app = express();
+app.set('trust proxy', 1); // trust first proxy (Nginx) for rate-limiter X-Forwarded-For
+
 const httpServer = createServer(app);
 
 // WebSocket setup
@@ -611,7 +613,7 @@ if (TELEGRAM_BOT_TOKEN) {
       const MAX_LEN = 4000;
       let sendText = text;
       if (typeof sendText === 'string') {
-        // Ensure literal \\n (backslash-n) becomes actual newline
+        // Ensure literal \n (backslash-n) becomes actual newline
         sendText = sendText.replace(/\\n/g, '\n');
       }
       if (typeof sendText === 'string' && sendText.length > MAX_LEN) {
