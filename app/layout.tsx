@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/components/AuthProvider';
 import { AgnesProvider } from '@/components/AgnesProvider';
@@ -18,6 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&family=Noto+Serif+TC:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Fira+Code&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <script dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem('esggo-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()`
+        }} />
       </head>
       <body className="bg-primary text-textPrimary font-sans min-h-screen transition-colors duration-300">
         <AuthProvider>
@@ -29,6 +33,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
+}
+
+function toggleTheme() {
+  const d = document.documentElement;
+  const isDark = d.classList.toggle('dark');
+  localStorage.setItem('esggo-theme', isDark ? 'dark' : 'light');
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = isDark ? '🌙' : '☀️';
 }
 
 function GlobalNav() {
@@ -54,6 +66,9 @@ function GlobalNav() {
             </a>
           ))}
         </div>
+        <button onClick={toggleTheme} className="w-7 h-7 flex items-center justify-center rounded-md text-textSecondary hover:text-accentTeal hover:bg-accentTeal/10 transition-all text-sm" title="切換主題">
+          <span id="theme-icon">☀️</span>
+        </button>
         <div className="border-l border-borderColor h-5"/>
       </div>
     </nav>

@@ -2,7 +2,6 @@
  * Daily Observer Report — 永續觀察者日報專區
  * Page /daily — Today's ESG digest with archive
  */
-
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
