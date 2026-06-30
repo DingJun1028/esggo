@@ -85,11 +85,11 @@ function now() {
   });
 }
 
-import xss from "xss";
+import DOMPurify from "isomorphic-dompurify";
 
 /** Basic sanitization for dangerouslySetInnerHTML content */
 function sanitizeTextHtml(html: string): string {
-  return xss(html);
+  return DOMPurify.sanitize(html);
 }
 
 export function OmniOneChat() {

@@ -191,10 +191,10 @@ function formatUptime(ms: number): string {
   return `${h}h ${m}m`;
 }
 
-import xss from "xss";
+import DOMPurify from "isomorphic-dompurify";
 
 function sanitizeHtml(html: string): string {
-  return xss(html);
+  return DOMPurify.sanitize(html);
 }
 
 function renderMarkdown(text: string): string {

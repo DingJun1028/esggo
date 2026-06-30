@@ -107,13 +107,13 @@ export function validateResponse<T>(
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
-import xss from "xss";
+import DOMPurify from "isomorphic-dompurify";
 
 /**
  * Basic HTML sanitizer for dangerouslySetInnerHTML.
  */
 export function sanitizeHtml(html: string): string {
-  return xss(html);
+  return DOMPurify.sanitize(html);
 }
 
 // ─── Debug Logger ──────────────────────────────────────────────────

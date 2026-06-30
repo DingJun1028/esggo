@@ -23,11 +23,11 @@ export interface NoteData {
   createdAt: number;
 }
 
-import xss from "xss";
+import DOMPurify from "isomorphic-dompurify";
 
 /** Basic HTML sanitization: escape <script> and dangerous tags to prevent XSS */
 function sanitizeHtml(html: string): string {
-  return xss(html);
+  return DOMPurify.sanitize(html);
 }
 
 export function OmniNoteCRUD() {
