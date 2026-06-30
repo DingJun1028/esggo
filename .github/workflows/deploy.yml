@@ -1,0 +1,66 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check encoding
+        run: node scripts/encoding-check.mjs
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Next.js build
+        run: pnpm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Sync to VPS
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+          ARGS: -rlptz --delete --exclude='.env*' --exclude='node_modules' --exclude='.next' --exclude='*.db' --exclude='logs'
+          SOURCE: .
+          REMOTE_HOST: ${{ secrets.VPS_HOST }}
+          REMOTE_USER: ${{ secrets.VPS_USER }}
+          TARGET: /var/www/esggo
+
+      - name: Restart services
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/esggo
+            pnpm install --frozen-lockfile --no-optional 2>&1 || true
+            pnpm run build 2>&1 || true
+            pm2 reload ecosystem.config.cjs 2>&1 || pm2 start ecosystem.config.cjs 2>&1
+            pm2 save
+            echo "=== Health Check ==="
+            sleep 5
+            curl -sf http://localhost:3000/api/health && echo " - Next.js OK" || echo " - Next.js FAIL"
+            curl -sf http://localhost:8642/status && echo " - Gateway OK" || echo " - Gateway FAIL"
