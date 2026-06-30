@@ -1,6 +1,6 @@
 
 import { IWuZuoMiaoDe, InputData } from './interfaces';
-import { randomUUID, createHash } from 'crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { EntropyForge } from '../omni-core/entropy-forge';
 
 export class ZKPIntegrityModule implements IWuZuoMiaoDe {
