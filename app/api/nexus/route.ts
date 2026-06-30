@@ -4,7 +4,9 @@ import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { GoogleGenAI } from '@google/genai';
 import { v4 as uuidv4 } from 'uuid';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
+const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
 export async function POST(req: Request) {
   try {
@@ -12,6 +14,44 @@ export async function POST(req: Request) {
 
     if (tool === 'trinity.awaken') {
       const mode = args?.mode || 'STANDARD';
+      
+      if (!HAS_API_KEY) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            prediction: '[OmniCore 模擬] 尚未配置 GEMINI_API_KEY，無法執行全知未來視角分析。',
+            mode
+          },
+          metadata: {
+            timestamp: Date.now(),
+            trustScore: 50,
+            tool: 'trinity.awaken',
+            domain: 'omni-core',
+            uuid: uuidv4(),
+            provider: 'mock'
+          }
+        });
+      }
+
+      if (!USE_REAL_AI) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            prediction: '[OmniCore 免費層] 全知分析就緒，待切換至付費層模式獲得完整視角。',
+            mode
+          },
+          metadata: {
+            timestamp: Date.now(),
+            trustScore: 75,
+            tool: 'trinity.awaken',
+            domain: 'omni-core',
+            uuid: uuidv4(),
+            provider: 'mock'
+          }
+        });
+      }
+
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       
       // 1. Gather Village Data (Quadratic Voting & Projects)
       const projSnapshot = await getDocs(query(collection(db, 'village_projects'), orderBy('current_points', 'desc'), limit(5)));
@@ -55,7 +95,8 @@ ${JSON.stringify(tasks)}
           trustScore: 99.9,
           tool: 'trinity.awaken',
           domain: 'omni-core',
-          uuid: uuidv4()
+          uuid: uuidv4(),
+          provider: 'gemini'
         }
       });
     }

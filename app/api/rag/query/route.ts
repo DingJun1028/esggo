@@ -3,7 +3,9 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { GoogleGenAI } from '@google/genai';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
+const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
 // Cosine similarity for standard array numbers
 function cosineSimilarity(vecA: number[], vecB: number[]) {
@@ -27,8 +29,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '無效的請求參數' }, { status: 400 });
     }
 
+    if (!HAS_API_KEY) {
+      return NextResponse.json({ 
+        success: true, 
+        answer: '[OmniRAG 模擬回覆] 尚未配置 GEMINI_API_KEY，請設定後獲得真實 AI 回應。',
+        references: [],
+        provider: 'mock'
+      });
+    }
+
+    if (!USE_REAL_AI) {
+      return NextResponse.json({ 
+        success: true, 
+        answer: '[OmniRAG 免費層] 根據檢索到的內容，本主題暫無深入分析數據。',
+        references: [],
+        provider: 'mock'
+      });
+    }
+
     // 1. Generate embedding for user prompt
     let promptEmbedding: number[] = [];
+    const { GoogleGenAI } = await import('@google/genai');
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+    
     try {
       const embedRes = await ai.models.embedContent({
         model: 'text-embedding-004',
@@ -83,7 +106,8 @@ ${prompt}`;
     return NextResponse.json({ 
       success: true, 
       answer: response.text,
-      references: topK.map(d => d.source)
+      references: topK.map(d => d.source),
+      provider: 'gemini'
     });
   } catch (error: any) {
     console.error('RAG Query Error:', error);

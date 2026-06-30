@@ -5,7 +5,9 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { GoogleGenAI } from '@google/genai';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
+const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
 function chunkText(text: string, chunkSize = 1000, overlap = 200): string[] {
   const chunks: string[] = [];
@@ -57,14 +59,18 @@ export async function POST(req: Request) {
         : chunk;
 
       let embedding = null;
-      try {
-        const embedRes = await ai.models.embedContent({
-          model: 'text-embedding-004',
-          contents: finalContent
-        });
-        embedding = embedRes.embeddings?.[0]?.values || null;
-      } catch (e) {
-        console.warn('Embedding generation failed:', e);
+      if (USE_REAL_AI) {
+        try {
+          const { GoogleGenAI } = await import('@google/genai');
+          const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+          const embedRes = await ai.models.embedContent({
+            model: 'text-embedding-004',
+            contents: finalContent
+          });
+          embedding = embedRes.embeddings?.[0]?.values || null;
+        } catch (e) {
+          console.warn('Embedding generation failed:', e);
+        }
       }
 
       return addDoc(collection(db, 'rag_knowledge'), {
@@ -73,7 +79,8 @@ export async function POST(req: Request) {
         source: file.name,
         chunk_index: index,
         embedding: embedding,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        provider: USE_REAL_AI ? 'gemini' : 'mock'
       });
     });
     
@@ -83,7 +90,8 @@ export async function POST(req: Request) {
       success: true,
       message: 'PDF 解析與 Chunking 寫入成功',
       totalChunks: chunks.length,
-      pageCount: pdfData.numpages
+      pageCount: pdfData.numpages,
+      provider: USE_REAL_AI ? 'gemini' : 'mock'
     });
 
   } catch (error: any) {

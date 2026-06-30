@@ -3,7 +3,9 @@ import { GoogleGenAI } from '@google/genai';
 import { adminDb } from '@/lib/firebase-admin';
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.AGNES_API || '' });
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const HAS_API_KEY = !!(process.env.GEMINI_API_KEY || process.env.AGNES_API);
+const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
 interface ActivityData {
   message: string;
@@ -19,12 +21,21 @@ interface ProjectData {
 
 export async function GET() {
   try {
-    if (!process.env.GEMINI_API_KEY && !process.env.AGNES_API) {
+    if (!HAS_API_KEY) {
       return NextResponse.json(
-        { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY 或 AGNES_API。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。` },
+        { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY 或 AGNES_API。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。`, provider: 'mock' },
         { status: 200 }
       );
     }
+
+    if (!USE_REAL_AI) {
+      return NextResponse.json(
+        { trend: '[OmniOne 模擬趨勢] 目前正處於免費層模式，根據歷史數據顯示，永續能源指標最有潛力於 14 天內達成目標。', provider: 'mock' },
+        { status: 200 }
+      );
+    }
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.AGNES_API || '' });
 
     const actSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(15).get();
     const recentActivities = actSnap.docs.map((doc: QueryDocumentSnapshot) => doc.data() as ActivityData);
@@ -58,7 +69,7 @@ ${topProjects.join('\n')}
       }
     });
 
-    return NextResponse.json({ trend: response.text });
+    return NextResponse.json({ trend: response.text, provider: 'gemini' });
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';

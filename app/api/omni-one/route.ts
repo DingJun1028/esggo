@@ -3,18 +3,29 @@ import { GoogleGenAI } from '@google/genai';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
+const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
 export async function POST(req: Request) {
   try {
     const { input, caseType, ragContext: clientRagContext } = await req.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!HAS_API_KEY) {
       return NextResponse.json(
-        { output: `[系統提示] 尚未配置 GEMINI_API_KEY。此為模擬回應：收到了任務「${input}」，分類為 ${caseType}。` },
+        { output: `[系統提示] 尚未配置 GEMINI_API_KEY。此為模擬回應：收到了任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
         { status: 200 }
       );
     }
+
+    if (!USE_REAL_AI) {
+      return NextResponse.json(
+        { output: `[OmniOne 模擬] 免費層模式下，任務分類完成：${caseType}。`, provider: 'mock' },
+        { status: 200 }
+      );
+    }
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
     const ragContext = clientRagContext 
       ? `\n相關知識參考:\n${clientRagContext}` 
