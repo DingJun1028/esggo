@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+// pre-commit hook — Encoding validation via Node.js
+// Git will run this via the system Node.js (cross-platform compatible)
+
+const { execSync } = require('child_process');
+
+try {
+  execSync('node scripts/encoding-check.mjs --staged', { stdio: 'inherit', encoding: 'utf-8' });
+} catch {
+  process.exit(1);
+}

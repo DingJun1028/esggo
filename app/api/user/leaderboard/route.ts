@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
       displayName: u.displayName,
       tier: u.tier,
       tierLabel: TIER_LABELS[u.tier] || u.tier,
-      tierIcon: TIER_ICONS[u.tier] || '�',
+      tierIcon: TIER_ICONS[u.tier] || '?',
       level: u.level,
       totalPoints: u.totalPoints,
       streakDays: u.streakDays,
