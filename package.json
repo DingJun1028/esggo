@@ -2,6 +2,9 @@
   "name": "esggo",
   "version": "1.0.0",
   "private": true,
+  "bin": {
+    "esggo": "./cli/omni.mjs"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
