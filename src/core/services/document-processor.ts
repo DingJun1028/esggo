@@ -1,6 +1,5 @@
 // src/core/services/document-processor.ts
-import { randomUUID } from 'crypto';
-
+import { randomUUID, createHash } from 'crypto';
 import { sonnarClient } from './esg-sonnar-client';
 
 export interface DocumentOcrResult {
@@ -44,7 +43,7 @@ export async function processDocumentWithOcr(fileBuffer: Buffer, fileName: strin
 
   // 5T Protocol: Generate Hash Lock for Trustworthy requirement
   const hashLockPayload = `${id}-${timestamp}-${ocrExtract.text}`;
-  const hashLock = require('crypto').createHash('sha256').update(hashLockPayload).digest('hex');
+  const hashLock = createHash('sha256').update(hashLockPayload).digest('hex');
 
   return {
     id,
