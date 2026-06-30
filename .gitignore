@@ -45,7 +45,6 @@ omniagent-gateway/package-lock.json
 .editorconfig
 .dockerignore
 .gcloudignore
-.gitattributes
 .husky/
 .lintstagedrc.json
 .npmrc
