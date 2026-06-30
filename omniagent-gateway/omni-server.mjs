@@ -64,8 +64,9 @@ const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)
 const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('hex');
 
 // ── AI Clients ────────────────────────────────────────────────
-const gemini = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
-console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'}`);
+const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
+const gemini = GEMINI_API_KEY && !FREE_TIER_ONLY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'} | Free-tier: ${FREE_TIER_ONLY}`);
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [

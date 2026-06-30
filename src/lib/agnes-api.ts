@@ -38,17 +38,18 @@ const SYSTEM_PROMPT = `你是 ESGGO 永續報告 AI 助手，專注於 ESG（環
 export class AgnesClient {
   private apiKey: string;
   private modelIndex: number = 0;
+  private freeTierOnly: boolean;
 
   constructor(apiKey?: string) {
     this.apiKey = apiKey || process.env.OPENROUTER_API_KEY || '';
+    this.freeTierOnly = process.env.FREE_TIER_ONLY === 'false' ? false : true;
   }
 
   /**
    * Process a request via OpenRouter :free models
    */
   async processRequest(input: string, context?: { systemPrompt?: string; temperature?: number }): Promise<AgnesResponse> {
-    if (!this.apiKey) {
-      // Fallback to mock if no API key
+    if (!this.apiKey || this.freeTierOnly) {
       return this.mockResponse(input);
     }
 
