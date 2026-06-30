@@ -62,7 +62,7 @@ export function OmniNoteCRUD() {
       .replace(/^## (.+)$/gm,'<h2 style="color:var(--accent-teal);font-size:15px;margin:10px 0 4px">$1</h2>')
       .replace(/^# (.+)$/gm,'<h1 style="color:var(--accent-teal);font-size:17px;margin:10px 0 6px">$1</h1>')
       .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text-primary)">$1</strong>')
-      .replace(/`(.+?)`/g,'<code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;color:var(--accent-cyan)">$1</code>')
+      .replace(/`(.+?)`/g,'<code style="background:var(--bg);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px;color:var(--accent-cyan)">$1</code>')
       .replace(/\n/g,'<br/>');
   };
 
@@ -166,7 +166,7 @@ export function OmniNoteCRUD() {
                   {n.fiveTGate && (
                     <span 
                       className="text-[10px] rounded px-1.5 py-[1px] font-bold" 
-                      style={{ color: gateColorVar(n.fiveTGate), backgroundColor: 'var(--bg-secondary)', border: `1px solid ${gateColorVar(n.fiveTGate)}` }}
+                      style={{ color: gateColorVar(n.fiveTGate), backgroundColor: 'var(--surface)', border: `1px solid ${gateColorVar(n.fiveTGate)}` }}
                     >
                       {n.fiveTGate}
                     </span>
