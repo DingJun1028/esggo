@@ -119,7 +119,7 @@ export function createComponent<T>(
     evidence: purifiedEvidence,
     lifecycle_events: [{ event: 'created', timestamp, actor }],
     data,
-    isFrozen: false,
+    isFrozen: true,
     fiveT: fiveTScore,
     hash: bodyHash,
   };
