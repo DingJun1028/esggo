@@ -10,6 +10,7 @@
  */
 
 import { createHash, randomBytes } from 'crypto';
+import { EntropyForge } from './entropy-forge';
 import type {
   IComponentCore,
   LifecycleEvent,
@@ -265,13 +266,14 @@ export class OmniSyncGateway {
   private readonly syncLog: SyncRecord[] = [];
 
   sync(sourceId: string, data: unknown, targets: SyncTarget[]): SyncRecord {
-    const hash = createHash('sha256').update(JSON.stringify(data)).digest('hex').slice(0, 16);
-    const record: SyncRecord = {
+    const purifiedDataStr = EntropyForge.purify(JSON.stringify(data));
+    const hash = createHash('sha256').update(purifiedDataStr).digest('hex').slice(0, 16);
+    const record: SyncRecord = Object.freeze({
       source: sourceId,
       targets,
       syncedAt: Date.now(),
       hash,
-    };
+    });
     this.syncLog.push(record);
     OmniEventBus.publish(OMNI_TOPICS.SYNC_COMPLETED, {
       sourceId,
