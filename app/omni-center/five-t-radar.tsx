@@ -11,8 +11,6 @@ const DIMS = [
   { key:'trackable',   zh:'通', color:'var(--accent-cyan)' },
 ] as const;
 
-type DimKey = typeof DIMS[number]['key'];
-
 function polarPoint(angle:number, r:number, cx:number, cy:number) {
   return { x: cx + r * Math.cos(angle - Math.PI/2), y: cy + r * Math.sin(angle - Math.PI/2) };
 }
@@ -38,7 +36,6 @@ const DEMO_COMPANIES = [
 export function FiveTRadar({ zkpCount }: Props) {
   const [selected, setSelected] = useState(0);
   const [displayed, setDisplayed] = useState<FiveTData>({ traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 });
-  const [loading, setLoading] = useState(false);
 
   const traceScore = Math.min(0.99, 0.4 + (zkpCount || 0) * 0.06);
   const trustScore = Math.min(0.99, 0.5 + (zkpCount || 0) * 0.05);
@@ -57,9 +54,7 @@ export function FiveTRadar({ zkpCount }: Props) {
   const COMPANIES = [myTwin, ...DEMO_COMPANIES];
   const target = COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 };
 
-  // Animate scores on change
   useEffect(() => {
-    setLoading(true);
     let frame = 0;
     const FRAMES = 30;
     const start = { ...displayed };
@@ -75,11 +70,9 @@ export function FiveTRadar({ zkpCount }: Props) {
         trackable:   start.trackable   + (target.trackable   - start.trackable)   * ease,
       });
       if (frame < FRAMES) requestAnimationFrame(animate);
-      else { setDisplayed(target); setLoading(false); }
     };
     requestAnimationFrame(animate);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [selected, target, displayed]);
 
   const CX = 120, CY = 120, MAX_R = 90;
   const gridLevels = [0.25, 0.5, 0.75, 1.0];

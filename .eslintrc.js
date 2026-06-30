@@ -10,6 +10,7 @@ module.exports = {
   extends: [
     'plugin:@next/next/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
   ],
   rules: {
     '@next/next/no-img-element': 'off',
