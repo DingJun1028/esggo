@@ -258,3 +258,7 @@ export function ProgressBar({ value, max = 100, color }: { value: number; max?: 
     </div>
   );
 }
+
+// 向下相容 — 與 @esggo/shared DESIGN_TOKENS 同步
+import { DESIGN_TOKENS } from '@esggo/shared';
+export const SOLID_CARD_TOKENS = DESIGN_TOKENS;
