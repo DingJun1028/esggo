@@ -48,7 +48,11 @@ function GlobalNav() {
     { href: '/',                  label: '首頁',     icon: '⊙', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
     { href: '/omni-center',       label: '萬能中心',  icon: '◎', color: 'hover:text-accentGold hover:bg-accentGold/10' },
     { href: '/sustain-write/v5',  label: 'ESG 報告', icon: '📊', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
-    { href: '/emm',              label: 'EMM IDE', icon: '🔍', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
+    { href: '/village',          label: '永續村',   icon: '🏘️', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
+    { href: '/daily',            label: '每日永續', icon: '📅', color: 'hover:text-accentGold hover:bg-accentGold/10' },
+    { href: '/sonnar',           label: 'Sonnar',  icon: '🔎', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
+    { href: '/emm',              label: 'EMM IDE', icon: '🛠️', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
+    { href: '/profile',          label: '個人檔案', icon: '👤', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
   ];
   return (
     <nav className="sticky top-0 z-[200] bg-secondary/80 backdrop-blur-md border-b border-borderColor px-5 h-[52px] flex items-center justify-between gap-4">

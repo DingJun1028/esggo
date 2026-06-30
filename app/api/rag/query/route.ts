@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { GoogleGenAI } from '@google/genai';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
