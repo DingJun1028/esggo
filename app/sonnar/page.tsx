@@ -11,7 +11,7 @@ import {
   ProgressBar,
   Grid,
   SOLID_CARD_TOKENS,
-} from '@/components/ui/solid-card';
+} from '@esggo/ui';
 
 // ─── Types ────────────────────────────────────────────────────
 
