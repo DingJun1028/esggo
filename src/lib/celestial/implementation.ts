@@ -1,12 +1,17 @@
 
 import { IWuZuoMiaoDe, InputData } from './interfaces';
-import { randomUUID } from 'crypto';
+import { randomUUID, createHash } from 'node:crypto';
+import { EntropyForge } from '../omni-core/entropy-forge';
 
 export class ZKPIntegrityModule implements IWuZuoMiaoDe {
   public uuid: string = randomUUID();
   public timestamp: number = Date.now();
-  public version: "1.0.0" = "1.0.0";
-  public evidence: string[] = [];
+  public version: string = "1.0.0";
+  public evidence = {
+    originCause: 'System Genesis',
+    processTrace: [] as string[],
+    finalEffect: 'Awaiting'
+  };
   public state: "Awakened" | "Repairing" | "Calibrating" | "Stable" = "Awakened";
 
   private subscribers: Array<(data: any) => void> = [];
@@ -23,14 +28,14 @@ export class ZKPIntegrityModule implements IWuZuoMiaoDe {
   governance = {
     seal: <T>(data: T): Readonly<T> => {
       // 封印：固定關鍵資料，避免狀態被任意改寫
-      this.evidence.push(`[SEAL] Data sealed at ${new Date().toISOString()}`);
+      this.evidence.processTrace.push(`[SEAL] Data sealed at ${new Date().toISOString()}`);
       return Object.freeze({ ...data, sealTimestamp: Date.now() });
     },
     purify: (entropyLevel: number) => {
       // 無作妙德：低干預修復
       if (entropyLevel > 0.8) {
         this.state = "Calibrating";
-        this.evidence.push(`[PURIFY] Entropy reduction triggered. Level: ${entropyLevel}`);
+        this.evidence.processTrace.push(`[PURIFY] Entropy reduction triggered. Level: ${entropyLevel}`);
         this.state = "Stable";
       }
     }
@@ -68,10 +73,17 @@ export class CelestialController {
     const deviation = this.detectDeviation(input);
 
     // 2. 封印：確保數據安全 (Seal)
+    const uuid = randomUUID();
+    const sealTimestamp = Date.now();
+    const payloadStr = JSON.stringify({ uuid, sealTimestamp, ...input });
+    const hash = createHash('sha256').update(payloadStr).digest('hex');
+
     const sealedData = Object.freeze({
       ...input,
-      sealTimestamp: Date.now(),
-      uuid: randomUUID()
+      sealTimestamp,
+      uuid,
+      isFrozen: true,
+      hash
     });
 
     try {
@@ -119,6 +131,12 @@ export class CelestialController {
       if (typeof sanitized.amount === 'string') sanitized.amount = Number(sanitized.amount) || 0;
       if (typeof sanitized.cost === 'string') sanitized.cost = Number(sanitized.cost) || 0;
       
+      for (const key of Object.keys(sanitized)) {
+        if (typeof sanitized[key] === 'string') {
+          sanitized[key] = EntropyForge.purify(sanitized[key]);
+        }
+      }
+
       return Object.freeze(sanitized);
     }
     
