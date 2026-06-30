@@ -82,6 +82,6 @@ describe('ZKPIntegrityModule', () => {
     zkpModule.governance.purify(0.9); // high entropy
     
     // It should log a purify event
-    expect(zkpModule.evidence.some(e => e.includes('[PURIFY]'))).toBe(true);
+    expect(zkpModule.evidence.processTrace.some(e => e.includes('[PURIFY]'))).toBe(true);
   });
 });
