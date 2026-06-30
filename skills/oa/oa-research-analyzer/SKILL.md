@@ -1,6 +1,6 @@
 ---
 name: oa-research-analyzer
-description: "Use when the user wants ESG research analysis: policy tracking, regulation comparison, best practice benchmarking, trend analysis. Load when user mentions research, policy, regulation, benchmark, trend analysis."
+description: "Use when the user wants ESG research analysis: policy tracking, regulation comparison, best practice benchmarking, trend analysis. Load when user mentions research, analysis, policy, regulation, benchmarking, trends."
 version: 2.0.0
 author: ESGGO OmniAgent
 license: MIT
@@ -14,24 +14,23 @@ metadata:
 
 ## Overview
 
-ESG 研究分析：政策追蹤、法規比較、最佳實踐基準、趨勢分析。支援多源匯總、交叉驗證、結構化輸出。
+ESG 領域研究分析：政策追蹤、法規比對、最佳實踐基準、趨勢分析。結合網頁搜尋、資料庫查詢、記憶碎片綜合分析。
 
 ## When to Use
 
-- 用戶說「研究」、「政策分析」、「法規比較」、「基準研究」、「趨勢分析」
-- 需要決策支援資料
+- 用戶說「研究」、「分析」、「政策追蹤」、「法規比對」、「趨勢分析」
+- 需要深度 ESG 知識支援決策
 
 **Don't use for:** 資料探索（用 `oa-data-explorer`）、合規掃描（用 `oa-audit-scanner`）
 
-## Research Domains
+## Research Types
 
-| 領域 | 來源 | 更新頻率 |
-|------|------|----------|
-| 台灣金管會法規 | FSC 官網、法規資料庫 | 即時 |
-| 國際準則 | GRI、ISSB、TCFD、SASB | 版本發布時 |
-| 氣候政策 | UNFCCC、各國 NDC | 季度 |
-| 產業最佳實踐 | CDP、DJSI、MSCI、Sustainalytics | 年度 |
-| 綠色金融 | 綠色分類法、綠債標準 | 半年度 |
+| 類型 | 說明 | 輸出 |
+|------|------|------|
+| 政策追蹤 | 監控全球/台灣 ESG 政策變化 | 週報、變更日誌 |
+| 法規比對 | 比較不同司法管轄區要求 | 比對表、缺口分析 |
+| 基準研究 | 行業最佳實踐、領先者案例 | 基準報告、關鍵指標 |
+| 趨勢分析 | 識別新興議題、技術、標準 | 趨勢雷達、影響評估 |
 
 ## Core Workflow
 
@@ -39,67 +38,71 @@ ESG 研究分析：政策追蹤、法規比較、最佳實踐基準、趨勢分�
 
 ```typescript
 {
-  question: "台灣金管會最新永續報告書規範 vs ISSB S1/S2 差異？",
-  scope: ["Taiwan FSC", "ISSB"],
-  output_format: "comparison_table",
-  deadline: "2026-07-01"
+  question: "2025 年台灣製造業碳邊境調整機制 (CBAM) 應對策略",
+  scope: ["Taiwan", "Manufacturing", "CBAM", "Carbon"],
+  depth: "comprehensive",  // quick | standard | comprehensive
+  sources: ["gov", "ngo", "academic", "industry", "news"]
 }
 ```
 
 ### Step 2: 多源蒐集
 
 ```bash
-# 爬蟲 + API + 手工整理
-node scripts/research-crawl.js --source=fsc --topic=sustainability-reporting
-node scripts/research-crawl.js --source=issb --topic=s1-s2
+# 網頁搜尋
+web_search "CBAM Taiwan manufacturing 2025"
+
+# 學術搜尋
+arxiv_search "carbon border adjustment mechanism"
+
+# 政府文件
+search_files "CBAM" --path=/data/policy-docs
+
+# 記憶碎片
+oa-memory-shards query "CBAM"
 ```
 
-### Step 3: 交叉驗證
+### Step 3: 綜合分析
 
 ```typescript
-// 對照官方原文、二手解讀、專家評論
-const verified = await crossVerify(sources, {
-  primary_weight: 0.6,
-  secondary_weight: 0.3,
-  expert_weight: 0.1
-});
+// 結構化分析框架
+{
+  executive_summary: "...",
+  regulatory_landscape: { taiwan: [], eu: [], us: [], global: [] },
+  industry_impact: { high: [], medium: [], low: [] },
+  best_practices: { company: [], action: [], result: [] },
+  recommendations: { immediate: [], short_term: [], long_term: [] },
+  risk_assessment: { financial: [], operational: [], reputational: [] },
+  sources: [...]
+}
 ```
 
-### Step 4: 結構化輸出
+### Step 4: 輸出交付物
 
-```markdown
-# 研究報告：台灣永續報告書規範 vs ISSB S1/S2 差異分析
+- **快速版**: 1 頁摘要 + 關鍵來源
+- **標準版**: 5-10 頁報告 + 比對表
+- **完整版**: 20+ 頁深度報告 + 附錄
 
-## 執行摘要
-...
+## Data Sources
 
-## 詳細比較表
-| 維度 | 台灣金管會 | ISSB S1/S2 | 差異等級 | 影響 |
-|------|------------|------------|----------|------|
-| 適用對象 | 上市櫃公司 | 所有實體（自願/強制） | 高 | 範圍擴大 |
-| 氣候揭露 | TCFD 基礎 | IFRS S2 完整 | 高 | 需補強 |
-| ... | ... | ... | ... | ... |
-
-## 行動建議
-1. 立即：對照 S2 補齊氣候揭露
-2. 短期：建立 ISSB 對照表
-3. 中期：導入雙軌編製流程
-
-## 來源與引用
-[1] 金管會 113 年修正版...
-[2] ISSB S1/S2 正式版...
-```
+| 來源 | 類型 | 更新頻率 |
+|------|------|----------|
+| 環保署、經貿談判辦公室 | 政府文件 | 即時 |
+| GRI, SASB, TCFD, ISSB | 標準制定 | 季度 |
+| CDP, SBTi, TNFD | 框架組織 | 月度 |
+| 產業技術研究院 (ITRI) | 智庫報告 | 月度 |
+| 國際能源署 (IEA) | 數據與分析 | 年度 |
 
 ## Common Pitfalls
 
-1. **非官方來源** — 優先引用官方原文，二手來源標註
-2. **版本過舊** — 每次研究檢查來源發布日期
-3. **缺乏可執行建議** — 必須給出具體下一步
+1. **來源偏單一** — 必須三角驗證（政府+學術+產業）
+2. **時效性** — ESG 政策變動快，必須標註查證日期
+3. **在地化缺失** — 國際趨勢必須轉譯為台灣情境
 
 ## Verification Checklist
 
 - [ ] 研究問題明確
 - [ ] 多源蒐集完成
-- [ ] 交叉驗證通過
-- [ ] 輸出結構化、可執行
+- [ ] 三角驗證關鍵論點
+- [ ] 結構化輸出
 - [ ] 來源完整引用
+- [ ] 5T 驗證通過
