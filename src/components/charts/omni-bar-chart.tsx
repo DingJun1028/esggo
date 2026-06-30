@@ -30,7 +30,7 @@ export function OmniBarChart({
   const barWidth = Math.min((graphWidth / data.length) * 0.6, 40);
   const barSpacing = (graphWidth - (barWidth * data.length)) / (data.length + 1);
 
-  const defaultColor = 'var(--accentTeal, #63a6b0)';
+  const defaultColor = 'var(--accent-teal)';
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>

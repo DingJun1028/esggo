@@ -28,10 +28,10 @@ export function OmniPieChart({
 
   // Fallback palette
   const colors = [
-    'var(--accentTeal, #63a6b0)',
-    'var(--accentGold, #ffd700)',
-    'var(--accentBlue, #4A90E2)',
-    'var(--accentPurple, #9B51E0)',
+    'var(--accent-teal)',
+    'var(--accent-gold)',
+    'var(--accent-blue)',
+    'var(--accent-purple)',
     '#E74C3C'
   ];
 
@@ -117,7 +117,7 @@ export function OmniPieChart({
             {donut && (
               <circle
                 r={radius * 0.6}
-                fill="var(--surface, #F0F2F5)" // matches container background
+                fill="var(--surface)"
                 className="pointer-events-none"
               />
             )}
