@@ -60,6 +60,8 @@ jobs:
             pnpm run build 2>&1 || true
             pm2 reload ecosystem.config.cjs 2>&1 || pm2 start ecosystem.config.cjs 2>&1
             pm2 save
+            echo "=== VPS Persistence ==="
+            bash scripts/vps-setup.sh 2>&1 || true
             echo "=== Health Check ==="
             sleep 5
             curl -sf http://localhost:3000/api/health && echo " - Next.js OK" || echo " - Next.js FAIL"
