@@ -99,23 +99,13 @@ export function validateResponse<T>(
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
+import xss from 'xss';
+
 /**
  * Basic HTML sanitizer for dangerouslySetInnerHTML.
- * Strips <script>, <iframe>, <object>, <embed>, and event handlers.
- * This is NOT a complete sanitizer — use DOMPurify for production.
  */
 export function sanitizeHtml(html: string): string {
-  return html
-    // Remove script tags and content
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Remove dangerous tags
-    .replace(/<\/?(?:iframe|object|embed|form|input|textarea|select|button)[^>]*>/gi, '')
-    // Remove event handlers (on*)
-    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    // Remove javascript: URLs
-    .replace(/href\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/gi, 'href="#"')
-    // Remove data: URLs in src
-    .replace(/src\s*=\s*(?:"data:[^"]*"|'data:[^']*')/gi, '');
+  return xss(html);
 }
 
 // ─── Debug Logger ──────────────────────────────────────────────────
