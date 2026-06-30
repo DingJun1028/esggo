@@ -1,0 +1,71 @@
+import { NextResponse } from 'next/server';
+import { adminDb } from '@/lib/firebase-admin';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { seedVillageData } from '@/lib/village-seeder';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+interface VillageProject {
+  id: string;
+  current_points: number;
+  [key: string]: unknown;
+}
+
+interface VillageMember {
+  user_id: string;
+  points: number;
+  [key: string]: unknown;
+}
+
+interface VillageActivity {
+  id: string;
+  message: string;
+  created_at: string;
+  [key: string]: unknown;
+}
+
+export async function GET() {
+  try {
+    await seedVillageData();
+
+    const projectsSnap = await adminDb.collection('village_projects').get();
+    const projects = projectsSnap.docs.map((doc: QueryDocumentSnapshot) => ({ id: doc.id, ...doc.data() })) as VillageProject[];
+    projects.sort((a: VillageProject, b: VillageProject) => b.current_points - a.current_points);
+
+    const membersSnap = await adminDb.collection('village_members').orderBy('points', 'desc').get();
+    const members = membersSnap.docs.map((doc: QueryDocumentSnapshot) => ({ user_id: doc.id, ...doc.data() })) as VillageMember[];
+
+    const activitiesSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(10).get();
+    
+    const formatRelativeTime = (isoString: string) => {
+      if (!isoString) return '';
+      const diff = Date.now() - new Date(isoString).getTime();
+      if (diff < 60000) return '剛剝';
+      if (diff < 3600000) return `${Math.floor(diff/60000)}分鐘前`;
+      if (diff < 86400000) return `${Math.floor(diff/3600000)}小時前`;
+      return `${Math.floor(diff/86400000)}天前`;
+    };
+
+    const activities = activitiesSnap.docs.map((doc: QueryDocumentSnapshot) => {
+      const data = doc.data() as VillageActivity;
+      return {
+        id: doc.id,
+        message: data.message,
+        time: formatRelativeTime(data.created_at)
+      };
+    });
+
+    return NextResponse.json({
+      success: true,
+      projects,
+      members,
+      activities
+    });
+
+  } catch (error: unknown) {
+    console.error('Village Data Error:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}

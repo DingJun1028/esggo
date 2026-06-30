@@ -39,7 +39,7 @@ export interface ButtonProps {
   className?: string;
 }
 
-interface SectionProps {
+export interface SectionProps {
   title?: string;
   subtitle?: string;
   children: React.ReactNode;

@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        totalEntries: health?.keyCount || 0,
-        totalKeys: health?.keyCount || 0,
+        totalEntries: health?.keys || 0,
+        totalKeys: health?.keys || 0,
         redisConnected: health?.connected || false,
         provider: health?.connected ? 'redis' : 'memory',
         uptimeSeconds: process.uptime(),
