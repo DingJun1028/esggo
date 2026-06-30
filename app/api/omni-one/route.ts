@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
@@ -25,6 +27,7 @@ export async function POST(req: Request) {
       );
     }
 
+    const { GoogleGenAI } = await import('@google/genai');
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
     const ragContext = clientRagContext 

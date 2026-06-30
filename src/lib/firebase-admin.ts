@@ -1,13 +1,20 @@
 /**
- * Firebase Admin SDK — Server-only singleton
+ * Firebase Admin SDK — Server-only singleton (lazy init)
  *
  * 使用方式：僅限 API Routes / Server Components 呼叫。
- * 不可在 'use client' 元件中 import。 */
+ * 不可在 'use client' 元件中 import。
+ *
+ * firebase-admin v14 API：apps→getApps(), credential.applicationDefault(),
+ * firestore 改用 require('firebase-admin/firestore').getFirestore(app)。
+ */
 
 import * as firebaseAdmin from 'firebase-admin';
 const admin = firebaseAdmin as any;
 
-function getAdminApp(): any {
+let _app: any = null;
+let _db: any = null;
+
+function initAdminApp(): any {
   if (typeof admin.getApps === 'function' && admin.getApps().length > 0) {
     return admin.getApps()[0];
   }
@@ -33,26 +40,22 @@ function getAdminApp(): any {
   return admin.initializeApp({ credential: appCred, projectId });
 }
 
-export const adminApp = getAdminApp();
-
-/**
- * firebase-admin v14 改了導出結構：
- * - admin.firestore(app) → 改用 require('firebase-admin/firestore').getFirestore(app)
- * 使用 lazy init 避免 build 時期崩潰。
- */
-let _db: any = null;
+export function getAdminApp(): any {
+  if (_app) return _app;
+  _app = initAdminApp();
+  return _app;
+}
 
 function getDb(): any {
   if (_db) return _db;
   try {
     const firestoreNS = require('firebase-admin/firestore');
     _db = firestoreNS.getFirestore
-      ? firestoreNS.getFirestore(adminApp)
-      : firestoreNS.firestore?.(adminApp);
+      ? firestoreNS.getFirestore(getAdminApp())
+      : firestoreNS.firestore?.(getAdminApp());
   } catch {
-    // fallback: firebase-admin/firestore 不存在，直接用 admin 頂級
     try {
-      _db = (admin as any).firestore?.(adminApp);
+      _db = (admin as any).firestore?.(getAdminApp());
     } catch {
       console.warn('[FirebaseAdmin] Firestore unavailable');
     }
@@ -66,7 +69,8 @@ export const adminDb = {
   runTransaction: (fn: any) => getDb()?.runTransaction(fn),
   batch: () => getDb()?.batch(),
 };
- const asyncTasksCol = {
+
+const asyncTasksCol = {
   doc: (id: string) => adminDb.collection('async_tasks').doc(id),
   get: (id: string) => adminDb.collection('async_tasks').doc(id).get(),
   set: (id: string, data: any) => adminDb.collection('async_tasks').doc(id).set(data),

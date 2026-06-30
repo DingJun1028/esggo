@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
 import { rateLimit } from '@/lib/rate-limit';
-import { CelestialController } from '../../../../src/lib/celestial/implementation';
-import type { DocumentSnapshot, Transaction } from 'firebase-admin/firestore';
+import { CelestialController } from '@/lib/celestial/implementation';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {
@@ -20,13 +21,14 @@ export async function POST(req: Request) {
     const cost = amount * amount * 10;
     const power = amount * 10;
 
+    const { adminDb } = await import('@/lib/firebase-admin');
     const projectRef = adminDb.collection('village_projects').doc(projectId);
     const memberRef = adminDb.collection('village_members').doc(userId);
     const activityRef = adminDb.collection('village_activities').doc();
 
-    await adminDb.runTransaction(async (t: Transaction) => {
-      const projectDoc = (await t.get(projectRef)) as unknown as DocumentSnapshot;
-      const memberDoc = (await t.get(memberRef)) as unknown as DocumentSnapshot;
+    await adminDb.runTransaction(async (t: any) => {
+      const projectDoc = (await t.get(projectRef)) as any;
+      const memberDoc = (await t.get(memberRef)) as any;
 
       if (!projectDoc.exists) throw new Error('專案不存在');
       if (!memberDoc.exists) throw new Error('會員不存在');

@@ -268,7 +268,7 @@ export default function SonnarDashboard() {
   // ─── Render ─────────────────────────────────────────────────
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.text, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.textPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div className="animate-spin w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4" />
           <p style={{ color: SOLID_CARD_TOKENS.textSecondary }}>ESGSonar 初始化中...</p>
@@ -278,7 +278,7 @@ export default function SonnarDashboard() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.text }}>
+    <div style={{ minHeight: '100vh', background: SOLID_CARD_TOKENS.bg, color: SOLID_CARD_TOKENS.textPrimary }}>
       {/* ─── Header ─── */}
       <header style={{ borderBottom: `1px solid ${SOLID_CARD_TOKENS.border}`, background: SOLID_CARD_TOKENS.surface }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -435,7 +435,7 @@ export default function SonnarDashboard() {
                   <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(topics.length, 10)}, 1fr)`, marginTop: '12px' }}>
                     {topics.slice(0, 10).map(t => (
                       <div key={t.topic} style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.text }}>{t.topic}</span>
+                        <span style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textPrimary }}>{t.topic}</span>
                         <span style={{ display: 'block', fontSize: '11px', color: SOLID_CARD_TOKENS.textMuted }}>{TREND_ICONS[t.trend]} {t.count}</span>
                       </div>
                     ))}

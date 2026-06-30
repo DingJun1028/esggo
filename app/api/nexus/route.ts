@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { GoogleGenAI } from '@google/genai';
 import { v4 as uuidv4 } from 'uuid';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
         });
       }
 
+      const { GoogleGenAI } = await import('@google/genai');
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       
       // 1. Gather Village Data (Quadratic Voting & Projects)
