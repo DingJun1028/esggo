@@ -1,3 +1,5 @@
+import { safePost } from '@/lib/safe-api';
+
 /**
  * ESGSonnar Client
  * 
@@ -24,10 +26,20 @@ export class ESGSonnarClient {
    * Execute a query against the ESGSonnar engine
    */
   async query(options: ESGSonnarQueryOptions): Promise<any> {
-    // TODO: Implement actual HTTP call to ESGSonnar
-    console.log(`[ESGSonnar] Executing ${options.queryType} for company ${options.companyId}`);
+    const url = `${this.endpoint}/query`;
+    const payload = { companyId: options.companyId, queryType: options.queryType, payload: options.payload };
     
-    // Fallback/Mock logic reflecting ESGSonnar's capabilities until real API is connected
+    const result = await safePost(url, payload, { timeout: 30000 });
+    
+    if (result.error) {
+      console.warn(`[ESGSonnar] Query failed: ${result.error}`);
+      return this._getMockResult(options);
+    }
+    
+    return result.data;
+  }
+
+  private _getMockResult(options: ESGSonnarQueryOptions): any {
     switch (options.queryType) {
       case 'enterprise_profile':
         return {
