@@ -11,6 +11,7 @@
  *  - POST /evolve  → Trigger OmniAgent→OmniAgent evolution pull
  *  - POST /swarm/broadcast → Swarm task event relay
  *  - Multi-model routing with skill-based model selection
+ *  - Global error handlers for uncaught exceptions
  */
 
 import express from 'express';
@@ -62,6 +63,30 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.
 const startTime = Date.now();
 const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
 const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('hex');
+
+// ── Global Error Tracking ──────────────────────────────────────
+const errorMetrics = {
+  totalErrors: 0,
+  recentErrors: [] as Array<{ts: number, error: string, stack?: string}>,
+  uncaughtExceptions: 0,
+  unhandledRejections: 0,
+};
+
+function logError(type: string, error: any) {
+  const errorEntry = {
+    ts: Date.now(),
+    error: String(error?.message || error),
+    stack: error?.stack?.slice(0, 500),
+  };
+  
+  errorMetrics.recentErrors.unshift(errorEntry);
+  if (errorMetrics.recentErrors.length > 50) {
+    errorMetrics.recentErrors.pop();
+  }
+  errorMetrics.totalErrors++;
+  
+  console.error(`[OmniGateway] [${type}] ${errorEntry.error}`);
+}
 
 // ── AI Clients ────────────────────────────────────────────────
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
@@ -252,7 +277,7 @@ function requireAuth(req, res, next) {
 
 // ── Routes ────────────────────────────────────────────────────
 
-app.get('/health', (_req, res) => res.json({ ok: true, ts: Date.now(), ws_clients: wssClients.size }));
+app.get('/health', (_req, res) => res.json({ ok: true, ts: Date.now(), ws_clients: wssClients.size, errors: errorMetrics.totalErrors }));
 
 app.get('/status', (_req, res) => {
   const mem = process.memoryUsage();
@@ -266,6 +291,7 @@ app.get('/status', (_req, res) => {
     websocket: { enabled: true, clients: wssClients.size },
     skills: { total: SKILL_REGISTRY.length, transcended: SKILL_REGISTRY.filter(s => s.status === 'transcended').length },
     evolution: { logs: evolutionLog.length, last: evolutionLog.at(-1)?.ts || null },
+    errors: errorMetrics,
     uptime_seconds: Math.floor((Date.now() - startTime) / 1000),
     memory: { used_mb: (mem.heapUsed / 1024 / 1024).toFixed(1), rss_mb: (mem.rss / 1024 / 1024).toFixed(1) },
     endpoints: ['/health', '/status', '/models', '/skills', '/execute', '/stream', '/omni-jules', '/evolve', '/swarm/broadcast'],
@@ -356,6 +382,7 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
     broadcastWS({ type: 'MANIFEST', source: 'Gateway', payload: { taskId: task.id, artId } });
     res.json(result);
   } catch (err) {
+    logError('EXECUTE', err);
     broadcastWS({ type: 'HEAL', source: 'Gateway', payload: { taskId: task.id, error: err.message } });
     res.status(500).json({ error: err.message });
   }
@@ -401,6 +428,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
     send('done', { message: 'Stream complete' });
     broadcastWS({ type: 'SEAL', source: 'StreamGateway', payload: { hash } });
   } catch (err) {
+    logError('STREAM', err);
     send('error', { message: err.message });
   }
 
@@ -440,6 +468,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
       provider: aiResult.provider,
     });
   } catch (err) {
+    logError('OMNI_JULES', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -581,7 +610,10 @@ setTimeout(startSonnarPeriodicCrawl, 60000);
 
 // 404 + error handlers
 app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events'] }));
-app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
+app.use((err, _req, res, _next) => {
+  logError('EXPRESS', err);
+  res.status(500).json({ error: err.message });
+});
 
 // ── Start ─────────────────────────────────────────────────────
 httpServer.listen(PORT, '0.0.0.0', () => {
@@ -595,6 +627,36 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   console.log('═══════════════════════════════════════════════════════');
 });
 
+// ── Global Error Handlers ──────────────────────────────────────
+process.on('uncaughtException', (err) => {
+  errorMetrics.uncaughtExceptions++;
+  logError('UNCAUGHT_EXCEPTION', err);
+  
+  // 嘗試通知 Telegram
+  if (bot) {
+    try {
+      bot.sendMessage(
+        process.env.TELEGRAM_CHAT_ID || '',
+        `🚨 [OmniGateway] Uncaught Exception:\n${err.message}\n${err.stack?.slice(0, 300)}`
+      ).catch(() => {});
+    } catch {}
+  }
+  
+  // 廣播到 WebSocket
+  broadcastWS({ type: 'CRITICAL_ERROR', source: 'Process', payload: { error: err.message } });
+  
+  console.error('[OmniGateway] Process will exit in 5 seconds...');
+  setTimeout(() => process.exit(1), 5000);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  errorMetrics.unhandledRejections++;
+  logError('UNHANDLED_REJECTION', new Error(String(reason)));
+  
+  // 廣播到 WebSocket
+  broadcastWS({ type: 'UNHANDLED_REJECTION', source: 'Process', payload: { reason: String(reason) } });
+});
+
 // ── Telegram Bot ──────────────────────────────────────────────
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
@@ -606,16 +668,13 @@ if (TELEGRAM_BOT_TOKEN) {
     bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
     console.log('[Telegram] ✅ Bot started (polling)');
 
-    // ✨ Safe send helper with improved newline handling
+    // Safe send helper with improved newline handling
     async function safeSend(chatId, text, options = {}) {
       const MAX_LEN = 4000;
       let sendText = text;
       
       if (typeof sendText === 'string') {
-        // Fix 1: Handle double-escaped backslash-n (\\\\n → \n)
         sendText = sendText.replace(/\\\\n/g, '\n');
-        
-        // Fix 2: Handle single-escaped backslash-n (\\n → \n)
         if (sendText.includes('\\n')) {
           sendText = sendText.replace(/\\n/g, '\n');
         }
@@ -625,7 +684,6 @@ if (TELEGRAM_BOT_TOKEN) {
         sendText = sendText.slice(0, MAX_LEN) + '\n\n...（訊息已截斷）';
       }
       
-      // Remove parse_mode to avoid complex escaping issues
       const sendOptions = { ...options };
       
       try {
@@ -644,7 +702,6 @@ if (TELEGRAM_BOT_TOKEN) {
       console.log(`[Telegram] 📩 Received from ${chatId}: ${text.slice(0, 80)}`);
 
       try {
-        // Echo with proper newline handling
         const reply = `🤖 *OmniAgent Gateway*\n\n收到訊息：\n${text}`;
         await safeSend(chatId, reply);
       } catch (err) {
@@ -667,5 +724,11 @@ if (TELEGRAM_BOT_TOKEN) {
 }
 
 // ── Signal Handlers ──────────────────────────────────────────
-process.on('SIGTERM', () => { httpServer.close(() => process.exit(0)); });
-process.on('SIGINT',  () => { httpServer.close(() => process.exit(0)); });
+process.on('SIGTERM', () => { 
+  console.log('[OmniGateway] SIGTERM received, shutting down gracefully...');
+  httpServer.close(() => process.exit(0)); 
+});
+process.on('SIGINT',  () => { 
+  console.log('[OmniGateway] SIGINT received, shutting down gracefully...');
+  httpServer.close(() => process.exit(0)); 
+});
