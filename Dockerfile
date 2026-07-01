@@ -6,7 +6,7 @@ RUN apk upgrade --no-cache
 RUN corepack enable pnpm
 
 # 複製 package.json 與 lock 檔案
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 # 安裝所有相依套件
 RUN pnpm install --frozen-lockfile
 
@@ -35,6 +35,7 @@ COPY --from=builder /app/.next ./.next
 # 拷貝完整的 node_modules 以解決 ADR-005 提到的 "sh: next: not found" 問題
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-workspace.yaml* ./
 
 EXPOSE 3000
 
