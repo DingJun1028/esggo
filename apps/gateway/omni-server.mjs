@@ -42,13 +42,13 @@ try {
 } catch { console.warn('[OmniGateway] No .env file — using process env'); }
 
 // ── Config ────────────────────────────────────────────────────
-const PORT           = Number(process.env.PORT || 8642);
+const PORT = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
-const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
-const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
-const SITE_NAME      = 'ESGGO OmniAgent Gateway';
+const VPS_IP = process.env.VPS_IP || '161.118.248.180';
+const GATEWAY_KEY = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
+const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
+const SITE_NAME = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
   SITE_URL,
   `http://${VPS_IP}`,
@@ -60,7 +60,7 @@ const DEFAULT_ALLOWED_ORIGINS = [
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(',')).split(',').map((origin) => origin.trim()).filter(Boolean);
 
 const startTime = Date.now();
-const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
+const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('hex');
 
 // ── AI Clients ────────────────────────────────────────────────
@@ -70,25 +70,25 @@ console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPE
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [
-  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
-  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'transcended' },
-  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
-  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
-  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
-  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
-  { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
-  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'absorbed' },
+  { id: 'gri_report_draft', name: 'GRI 報告草稿生成', origin: 'omniagent:data_synthesis', model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
+  { id: 'carbon_calculation', name: 'ISO 14064 碳排計算', origin: 'omniagent:code_generation', model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E', fiveT: 'T1', status: 'transcended' },
+  { id: 'compliance_review', name: 'CSRD/GRI 合規審查', origin: 'omniagent:web_search', model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
+  { id: 'evidence_ocr', name: '碳排帳單 OCR 提取', origin: 'omniagent:file_analysis', model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
+  { id: 'email_archival', name: 'ESG 郵件自動歸檔', origin: 'omniagent:email_reading', model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
+  { id: 'stakeholder_analysis', name: '利害關係人問卷分析', origin: 'omniagent:data_synthesis', model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
+  { id: 'omni_jules_heal', name: 'OmniJules 自動修復', origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free', esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
+  { id: 'swarm_orchestration', name: 'OmniAgent 蜂群調度', origin: 'omniagent:multi_agent', model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'absorbed' },
 ];
 
 // ── Free Models List ──────────────────────────────────────────
 let FREE_MODELS = [
-  { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
-  { id: 'meta-llama/llama-3.2-90b-vision:free',               name: 'Meta: Llama 3.2 90B Vision (Free)' },
-  { id: 'google/gemma-3-27b-it:free',                        name: 'Google: Gemma 3 27B (Vision)' },
-  { id: 'qwen/qwen3-vl-8b:free',                            name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
-  { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B' },
-  { id: 'nousresearch/hermes-3-llama-3.1-405b:free',        name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
-  { id: 'openai/gpt-oss-120b:free',                         name: 'OpenAI: GPT-OSS 120B' },
+  { id: 'mistralai/mistral-small-3.1-24b:free', name: 'Mistral: Small 3.1 24B (Default)' },
+  { id: 'meta-llama/llama-3.2-90b-vision:free', name: 'Meta: Llama 3.2 90B Vision (Free)' },
+  { id: 'google/gemma-3-27b-it:free', name: 'Google: Gemma 3 27B (Vision)' },
+  { id: 'qwen/qwen3-vl-8b:free', name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
+  { id: 'google/gemma-4-31b-it:free', name: 'Google: Gemma 4 31B' },
+  { id: 'nousresearch/hermes-3-llama-3.1-405b:free', name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
+  { id: 'openai/gpt-oss-120b:free', name: 'OpenAI: GPT-OSS 120B' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
@@ -106,9 +106,9 @@ async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PRO
       role: 'user',
       content: imageUrl
         ? [
-            { type: 'text', text: userPrompt },
-            { type: 'image_url', image_url: { url: imageUrl } },
-          ]
+          { type: 'text', text: userPrompt },
+          { type: 'image_url', image_url: { url: imageUrl } },
+        ]
         : userPrompt,
     },
   ];
@@ -185,10 +185,10 @@ async function dispatchAI(task, skillId) {
 
   // 4. Mock
   const mock = {
-    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工健康安全。\n\n> ⚠️ OmniAgent Mock 模式 — 請設定 AI API Key 啟用真實推理`,
-    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**\n\n> Hash Lock: ${hashLock(task)}`,
-    compliance_review:    `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
-    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動降維自癒，自動生成修復子任務。\n\n### 傳法 (Impart)\n此修復模式已寫入 OmniAgent 技能書。`,
+    gri_report_draft: `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工健康安全。\n\n> ⚠️ OmniAgent Mock 模式 — 請設定 AI API Key 啟用真實推理`,
+    carbon_calculation: `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**\n\n> Hash Lock: ${hashLock(task)}`,
+    compliance_review: `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
+    omni_jules_heal: `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動降維自癒，自動生成修復子任務。\n\n### 傳法 (Impart)\n此修復模式已寫入 OmniAgent 技能書。`,
   };
   const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
   return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
@@ -199,7 +199,7 @@ async function dispatchAI(task, skillId) {
 const wssClients = new Set();
 function broadcastWS(event) {
   const msg = JSON.stringify({ ...event, timestamp: Date.now() });
-  wssClients.forEach(ws => { try { ws.send(msg); } catch {} });
+  wssClients.forEach(ws => { try { ws.send(msg); } catch { } });
 }
 
 // ── Evolution Log (in-memory) ─────────────────────────────────
@@ -223,7 +223,7 @@ wss.on('connection', (ws, req) => {
     try {
       const msg = JSON.parse(data.toString());
       broadcastWS({ type: 'RELAY', ...msg });
-    } catch {}
+    } catch { }
   });
 });
 
@@ -262,7 +262,7 @@ app.get('/status', (_req, res) => {
     status: 'online', version: '3.0.0',
     gateway_name: 'ESGGO OmniAgent Gateway',
     origin: 'Hermes (Open Source) → OmniAgent (ESGGO Evolved)',
-    platform: 'Ubuntu 24.04 / Oracle Cloud ARM64',
+    platform: 'Ubuntu 24.04  Cloud ARM64',
     vps_ip: VPS_IP,
     providers: { gemini: !!gemini, openrouter: !!OPENROUTER_KEY, free_models: FREE_MODELS.length, mock_fallback: true },
     websocket: { enabled: true, clients: wssClients.size },
@@ -582,7 +582,7 @@ function startSonnarPeriodicCrawl() {
 setTimeout(startSonnarPeriodicCrawl, 60000);
 
 // 404 + error handlers
-app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events','/api/sync/bus','/sonnar/status','/sonnar/crawl','/sonnar/alerts','/sonnar/radar'] }));
+app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health', '/status', '/models', '/skills', '/execute', '/stream', '/omni-jules', '/evolve', '/swarm/broadcast', '/swarm/events', '/api/sync/bus', '/sonnar/status', '/sonnar/crawl', '/sonnar/alerts', '/sonnar/radar'] }));
 app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
 
 // ── Start ─────────────────────────────────────────────────────
@@ -592,14 +592,14 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`   Origin : OmniAgent (Open Source) → ESGGO OmniAgent`);
   console.log(`   URL    : http://${VPS_IP}:${PORT}`);
   console.log(`   WS     : ws://${VPS_IP}:${PORT} (OmniAgentBus Bridge)`);
-  console.log(`   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter(s=>s.status==='transcended').length} transcended)`);
+  console.log(`   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter(s => s.status === 'transcended').length} transcended)`);
   console.log(`   Sonar  : /sonnar/status /sonnar/crawl /sonnar/alerts /sonnar/radar`);
   console.log('═══════════════════════════════════════════════════════');
 });
 
 // ── Telegram Bot ──────────────────────────────────────────────
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 let bot = null;
 if (TELEGRAM_BOT_TOKEN) {
@@ -613,8 +613,24 @@ if (TELEGRAM_BOT_TOKEN) {
       const MAX_LEN = 4000;
       let sendText = text;
       if (typeof sendText === 'string') {
-        // Ensure literal \n (backslash-n) becomes actual newline
-        sendText = sendText.replace(/\\n/g, '\n');
+        // Handle multiple levels of newline escaping:
+        // 1. Double-escaped: \\n (literal backslash-n) → \n (actual newline)
+        // 2. Triple-escaped: \\\\n → \\n → \n
+        // 3. JSON-encoded: \u000a or \n in JSON string
+        // Use a loop to handle multiple levels of escaping
+        let prevText = '';
+        while (sendText !== prevText) {
+          prevText = sendText;
+          // Replace literal \n (backslash followed by n) with actual newline
+          sendText = sendText.replace(/\\n/g, '\n');
+          // Replace literal \r (carriage return) if present
+          sendText = sendText.replace(/\\r/g, '\r');
+          // Replace literal \t (tab) if present
+          sendText = sendText.replace(/\\t/g, '\t');
+        }
+        // Also handle Unicode escape sequences like \u000a
+        sendText = sendText.replace(/\\u000a/gi, '\n');
+        sendText = sendText.replace(/\\u000d/gi, '\r');
       }
       if (typeof sendText === 'string' && sendText.length > MAX_LEN) {
         sendText = sendText.slice(0, MAX_LEN) + '\n\n...（訊息已截斷）';
@@ -646,7 +662,7 @@ if (TELEGRAM_BOT_TOKEN) {
         console.error(`[Telegram] Error handling message: ${err.message}`);
         try {
           await bot.sendMessage(chatId, '⚠️ 處理訊息時發生錯誤，請稍後再試。');
-        } catch {}
+        } catch { }
       }
     });
 
@@ -663,4 +679,4 @@ if (TELEGRAM_BOT_TOKEN) {
 
 // ── Signal Handlers ──────────────────────────────────────────
 process.on('SIGTERM', () => { httpServer.close(() => process.exit(0)); });
-process.on('SIGINT',  () => { httpServer.close(() => process.exit(0)); });
+process.on('SIGINT', () => { httpServer.close(() => process.exit(0)); });
