@@ -14,7 +14,12 @@ import xss from 'xss';
  * Architecture: Connects to /api/omni-agent/console
  */
 
+<<<<<<< Updated upstream
 import { useState, useRef, useEffect, useCallback } from "react";
+=======
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { sanitizeHtml } from '@/lib/safe-api';
+>>>>>>> Stashed changes
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -192,10 +197,13 @@ function formatUptime(ms: number): string {
   return `${h}h ${m}m`;
 }
 
+<<<<<<< Updated upstream
 function sanitizeHtml(html: string): string {
   return xss(html);
 }
 
+=======
+>>>>>>> Stashed changes
 function renderMarkdown(text: string): string {
   const sanitized = sanitizeHtml(text);
   return sanitized

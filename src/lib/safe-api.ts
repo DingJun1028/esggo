@@ -100,6 +100,7 @@ export function validateResponse<T>(
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
+<<<<<<< Updated upstream
 /**
  * Basic HTML sanitizer for dangerouslySetInnerHTML.
  * Strips <script>, <iframe>, <object>, <embed>, and event handlers.
@@ -108,6 +109,54 @@ export function validateResponse<T>(
 export function sanitizeHtml(html: string): string {
   return xss(html);
 }
+=======
+import xss from 'xss';
+
+const xssOptions = {
+  whiteList: {
+    span: ['class', 'style'],
+    div: ['class', 'style'],
+    h1: ['style'],
+    h2: ['style'],
+    h3: ['style'],
+    strong: [],
+    em: [],
+    code: ['class', 'style'],
+    br: [],
+    p: [],
+    ul: [],
+    ol: [],
+    li: [],
+    a: ['href'],
+    table: [],
+    thead: [],
+    tbody: [],
+    tr: [],
+    th: [],
+    td: [],
+    blockquote: ['style'],
+    pre: [],
+    hr: [],
+    b: [],
+    i: [],
+    u: [],
+    s: [],
+    sub: [],
+    sup: [],
+    small: [],
+    mark: [],
+    del: [],
+    ins: [],
+    figure: [],
+    figcaption: [],
+    img: ['src', 'alt', 'width', 'height'],
+  },
+  stripIgnoreTag: true,
+  stripIgnoreTagBody: ['script', 'style', 'iframe', 'object', 'embed'],
+};
+
+export const sanitizeHtml = (html: string): string => xss(html, xssOptions);
+>>>>>>> Stashed changes
 
 // ─── Debug Logger ──────────────────────────────────────────────────
 
