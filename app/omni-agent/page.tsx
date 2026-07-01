@@ -1,4 +1,5 @@
 "use client";
+import xss from 'xss';
 
 /**
  * OmniAgent Console UI — /omni-agent
@@ -192,10 +193,7 @@ function formatUptime(ms: number): string {
 }
 
 function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
-    .replace(/javascript\s*:/gi, "");
+  return xss(html);
 }
 
 function renderMarkdown(text: string): string {
