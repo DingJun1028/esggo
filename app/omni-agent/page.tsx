@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * OmniAgent Console UI — /omni-agent
@@ -13,7 +13,7 @@
  * Architecture: Connects to /api/omni-agent/console
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from "react";
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -21,7 +21,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   text: string;
   time: string;
   actions?: string[];
@@ -32,7 +32,7 @@ interface SubAgent {
   id: string;
   name: string;
   role: string;
-  status: 'idle' | 'running' | 'complete' | 'error';
+  status: "idle" | "running" | "complete" | "error";
   progress: number;
   lastTask: string;
   startedAt: number;
@@ -91,39 +91,81 @@ interface CoreStats {
 // ═══════════════════════════════════════════════════════════════
 
 const COLORS = {
-  teal: '#009EB0',
-  tealLight: '#00C2AB',
-  gold: '#D4AF37',
-  zkpBlue: '#3B82F6',
-  purple: '#8B5CF6',
-  red: '#FF4D6D',
-  green: '#22C55E',
-  cyan: '#06B6D4',
-  amber: '#F59E0B',
-  white: '#FFFFFF',
-  slate50: '#F8FAFC',
-  slate100: '#F1F5F9',
-  slate200: '#E2E8F0',
-  slate400: '#94A3B8',
-  slate600: '#475569',
-  slate900: '#0F172A',
+  teal: "#009EB0",
+  tealLight: "#00C2AB",
+  gold: "#D4AF37",
+  zkpBlue: "#3B82F6",
+  purple: "#8B5CF6",
+  red: "#FF4D6D",
+  green: "#22C55E",
+  cyan: "#06B6D4",
+  amber: "#F59E0B",
+  white: "#FFFFFF",
+  slate50: "#F8FAFC",
+  slate100: "#F1F5F9",
+  slate200: "#E2E8F0",
+  slate400: "#94A3B8",
+  slate600: "#475569",
+  slate900: "#0F172A",
 };
 
 const GATE_COLORS: Record<string, string> = {
-  traceable: '#3B82F6',
-  transparent: '#22C55E',
-  tangible: '#F59E0B',
-  trustworthy: '#8B5CF6',
-  trackable: '#06B6D4',
+  traceable: "#3B82F6",
+  transparent: "#22C55E",
+  tangible: "#F59E0B",
+  trustworthy: "#8B5CF6",
+  trackable: "#06B6D4",
 };
 
 const QUICK_COMMANDS: QuickCommand[] = [
-  { id: 'cmd-status', label: '系統狀態', icon: '◎', action: 'status', color: '#009EB0', description: '查看 OmniAgent 核心運行狀態' },
-  { id: 'cmd-evolve', label: 'Agent 進化', icon: '🧬', action: 'evolve', color: '#8B5CF6', description: '觸發 Agent 自主進化程序' },
-  { id: 'cmd-assemble', label: '報告組裝', icon: '📊', action: 'assemble', color: '#3B82F6', description: '啟動 ESG 報告組裝管線' },
-  { id: 'cmd-sync', label: '全域同步', icon: '🔄', action: 'sync', color: '#D4AF37', description: '執行 OmniSyncGateway 全域對標' },
-  { id: 'cmd-zkp-seal', label: 'ZKP 封印', icon: '🔒', action: 'zkp_seal', color: '#22C55E', description: '對當前報告執行零知識證明封印' },
-  { id: 'cmd-5t-verify', label: '5T 驗證', icon: '📡', action: '5t_verify', color: '#06B6D4', description: '執行 5T 協議全維度驗證' },
+  {
+    id: "cmd-status",
+    label: "系統狀態",
+    icon: "◎",
+    action: "status",
+    color: "#009EB0",
+    description: "查看 OmniAgent 核心運行狀態",
+  },
+  {
+    id: "cmd-evolve",
+    label: "Agent 進化",
+    icon: "🧬",
+    action: "evolve",
+    color: "#8B5CF6",
+    description: "觸發 Agent 自主進化程序",
+  },
+  {
+    id: "cmd-assemble",
+    label: "報告組裝",
+    icon: "📊",
+    action: "assemble",
+    color: "#3B82F6",
+    description: "啟動 ESG 報告組裝管線",
+  },
+  {
+    id: "cmd-sync",
+    label: "全域同步",
+    icon: "🔄",
+    action: "sync",
+    color: "#D4AF37",
+    description: "執行 OmniSyncGateway 全域對標",
+  },
+  {
+    id: "cmd-zkp-seal",
+    label: "ZKP 封印",
+    icon: "🔒",
+    action: "zkp_seal",
+    color: "#22C55E",
+    description: "對當前報告執行零知識證明封印",
+  },
+  {
+    id: "cmd-5t-verify",
+    label: "5T 驗證",
+    icon: "📡",
+    action: "5t_verify",
+    color: "#06B6D4",
+    description: "執行 5T 協議全維度驗證",
+  },
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -131,7 +173,11 @@ const QUICK_COMMANDS: QuickCommand[] = [
 // ═══════════════════════════════════════════════════════════════
 
 function now(): string {
-  return new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  return new Date().toLocaleTimeString("zh-TW", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 }
 
 function uid(): string {
@@ -147,31 +193,40 @@ function formatUptime(ms: number): string {
 
 function sanitizeHtml(html: string): string {
   return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript\s*:/gi, '');
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
+    .replace(/javascript\s*:/gi, "");
 }
 
 function renderMarkdown(text: string): string {
   const sanitized = sanitizeHtml(text);
   return sanitized
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-textPrimary">$1</strong>')
-    .replace(/`(.+?)`/g, `<code class="bg-secondary px-1.5 py-[1px] rounded font-mono text-[11px] text-teal-700">$1</code>`)
+    .replace(
+      /\*\*(.+?)\*\*/g,
+      '<strong class="font-semibold text-textPrimary">$1</strong>',
+    )
+    .replace(
+      /`(.+?)`/g,
+      `<code class="bg-secondary px-1.5 py-[1px] rounded font-mono text-[11px] text-teal-700">$1</code>`,
+    )
     .replace(/• /g, '<span class="text-accentTeal">•</span> ')
     .replace(/✅/g, '<span class="text-accentGreen">✅</span>')
     .replace(/✓/g, '<span class="text-accentGreen">✓</span>')
     .replace(/\|(.+)\|/g, (match) => {
-      const cells = match.split('|').filter(Boolean).map(c => c.trim());
-      if (cells.every(c => /^[\-=]+$/.test(c))) return '';
-      return `<div class="grid grid-cols-${cells.length} gap-2 text-[11px] py-1 border-b border-borderColor">${cells.map(c => `<span>${c}</span>`).join('')}</div>`;
+      const cells = match
+        .split("|")
+        .filter(Boolean)
+        .map((c) => c.trim());
+      if (cells.every((c) => /^[\-=]+$/.test(c))) return "";
+      return `<div class="grid grid-cols-${cells.length} gap-2 text-[11px] py-1 border-b border-borderColor">${cells.map((c) => `<span>${c}</span>`).join("")}</div>`;
     })
-    .replace(/\n/g, '<br/>');
+    .replace(/\n/g, "<br/>");
 }
 
 async function apiCall(type: string, payload?: any): Promise<any> {
-  const res = await fetch('/api/omni-agent/console', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const res = await fetch("/api/omni-agent/console", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ type, payload }),
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
@@ -182,36 +237,52 @@ async function apiCall(type: string, payload?: any): Promise<any> {
 // Sub-Agent Panel Component
 // ═══════════════════════════════════════════════════════════════
 
-function SubAgentPanel({ agents, onDispatch }: { agents: SubAgent[]; onDispatch: (agent: SubAgent) => void }) {
+function SubAgentPanel({
+  agents,
+  onDispatch,
+}: {
+  agents: SubAgent[];
+  onDispatch: (agent: SubAgent) => void;
+}) {
   const statusColor = (status: string) => {
     switch (status) {
-      case 'running': return COLORS.amber;
-      case 'complete': return COLORS.green;
-      case 'error': return COLORS.red;
-      default: return COLORS.slate400;
+      case "running":
+        return COLORS.amber;
+      case "complete":
+        return COLORS.green;
+      case "error":
+        return COLORS.red;
+      default:
+        return COLORS.slate400;
     }
   };
 
   const statusLabel = (status: string) => {
     switch (status) {
-      case 'running': return '執行中';
-      case 'complete': return '完成';
-      case 'error': return '錯誤';
-      default: return '閒置';
+      case "running":
+        return "執行中";
+      case "complete":
+        return "完成";
+      case "error":
+        return "錯誤";
+      default:
+        return "閒置";
     }
   };
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">5T 子代理面板</h3>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
+          5T 子代理面板
+        </h3>
         <span className="text-[10px] bg-accentTeal/10 text-accentTeal px-2 py-0.5 rounded-full font-mono">
-          {agents.filter(a => a.status === 'running').length}/{agents.length}
+          {agents.filter((a) => a.status === "running").length}/{agents.length}
         </span>
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-        {agents.map(agent => (
+        {agents.map((agent) => (
           <div
             key={agent.id}
             className="bg-primary border border-borderColor rounded-xl p-3 transition-all duration-200 hover:shadow-sm hover:border-slate-300"
@@ -220,9 +291,17 @@ function SubAgentPanel({ agents, onDispatch }: { agents: SubAgent[]; onDispatch:
               <div className="flex items-center gap-2">
                 <div
                   className="w-2 h-2 rounded-full transition-colors duration-300"
-                  style={{ backgroundColor: statusColor(agent.status), boxShadow: agent.status === 'running' ? `0 0 6px ${statusColor(agent.status)}` : 'none' }}
+                  style={{
+                    backgroundColor: statusColor(agent.status),
+                    boxShadow:
+                      agent.status === "running"
+                        ? `0 0 6px ${statusColor(agent.status)}`
+                        : "none",
+                  }}
                 />
-                <span className="text-[12px] font-semibold text-textPrimary">{agent.name}</span>
+                <span className="text-[12px] font-semibold text-textPrimary">
+                  {agent.name}
+                </span>
               </div>
               <span
                 className="text-[9px] font-bold px-1.5 py-0.5 rounded"
@@ -252,11 +331,17 @@ function SubAgentPanel({ agents, onDispatch }: { agents: SubAgent[]; onDispatch:
               </span>
               <button
                 onClick={() => onDispatch(agent)}
-                disabled={agent.status === 'running'}
+                disabled={agent.status === "running"}
                 className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors disabled:opacity-40"
                 style={{
-                  backgroundColor: agent.status === 'running' ? COLORS.slate100 : `${GATE_COLORS[agent.role] || COLORS.teal}15`,
-                  color: agent.status === 'running' ? COLORS.slate400 : GATE_COLORS[agent.role] || COLORS.teal,
+                  backgroundColor:
+                    agent.status === "running"
+                      ? COLORS.slate100
+                      : `${GATE_COLORS[agent.role] || COLORS.teal}15`,
+                  color:
+                    agent.status === "running"
+                      ? COLORS.slate400
+                      : GATE_COLORS[agent.role] || COLORS.teal,
                 }}
               >
                 派遣
@@ -283,43 +368,90 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
   }
 
   const statCards = [
-    { label: '註冊組件', value: stats.kernel.registryCount, color: COLORS.teal, icon: '⊙' },
-    { label: '快取命中率', value: `${(stats.kernel.cacheMetrics.hitRate * 100).toFixed(0)}%`, color: COLORS.zkpBlue, icon: '⚡' },
-    { label: '同步記錄', value: stats.kernel.syncLogCount, color: COLORS.gold, icon: '🔄' },
-    { label: 'AGNES 節點', value: stats.kernel.agnesStatus.activeNodes, color: COLORS.purple, icon: '🤖' },
-    { label: '吞吐量', value: stats.kernel.agnesStatus.throughput, color: COLORS.cyan, icon: '📈' },
-    { label: '運行時間', value: formatUptime(stats.uptime), color: COLORS.green, icon: '⏱' },
+    {
+      label: "註冊組件",
+      value: stats.kernel.registryCount,
+      color: COLORS.teal,
+      icon: "⊙",
+    },
+    {
+      label: "快取命中率",
+      value: `${(stats.kernel.cacheMetrics.hitRate * 100).toFixed(0)}%`,
+      color: COLORS.zkpBlue,
+      icon: "⚡",
+    },
+    {
+      label: "同步記錄",
+      value: stats.kernel.syncLogCount,
+      color: COLORS.gold,
+      icon: "🔄",
+    },
+    {
+      label: "AGNES 節點",
+      value: stats.kernel.agnesStatus.activeNodes,
+      color: COLORS.purple,
+      icon: "🤖",
+    },
+    {
+      label: "吞吐量",
+      value: stats.kernel.agnesStatus.throughput,
+      color: COLORS.cyan,
+      icon: "📈",
+    },
+    {
+      label: "運行時間",
+      value: formatUptime(stats.uptime),
+      color: COLORS.green,
+      icon: "⏱",
+    },
   ];
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">核心統計</h3>
-        <span className="text-[10px] font-mono text-textSecondary">v{stats.agent.version}</span>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
+          核心統計
+        </h3>
+        <span className="text-[10px] font-mono text-textSecondary">
+          v{stats.agent.version}
+        </span>
       </div>
 
       {/* Agent Status Badge */}
       <div className="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-100 rounded-xl p-3 mb-3">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-2.5 h-2.5 rounded-full bg-accentTeal/100 animate-pulse" />
-          <span className="text-[12px] font-bold text-teal-700">{stats.agent.name}</span>
+          <span className="text-[12px] font-bold text-teal-700">
+            {stats.agent.name}
+          </span>
         </div>
         <div className="text-[10px] text-textSecondary">
-          狀態：<span className="font-semibold text-accentTeal">{stats.agent.status}</span> ·
-          併發：{stats.agent.maxConcurrent} ·
-          格式：{stats.agent.supportedFormats.join(', ')}
+          狀態：
+          <span className="font-semibold text-accentTeal">
+            {stats.agent.status}
+          </span>{" "}
+          · 併發：{stats.agent.maxConcurrent} · 格式：
+          {stats.agent.supportedFormats.join(", ")}
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        {statCards.map(card => (
-          <div key={card.label} className="bg-primary border border-borderColor rounded-lg p-2.5 hover:border-borderColor transition-colors">
+        {statCards.map((card) => (
+          <div
+            key={card.label}
+            className="bg-primary border border-borderColor rounded-lg p-2.5 hover:border-borderColor transition-colors"
+          >
             <div className="flex items-center gap-1.5 mb-1">
               <span className="text-sm">{card.icon}</span>
-              <span className="text-[10px] text-textSecondary font-medium">{card.label}</span>
+              <span className="text-[10px] text-textSecondary font-medium">
+                {card.label}
+              </span>
             </div>
-            <div className="font-mono text-base font-bold" style={{ color: card.color }}>
+            <div
+              className="font-mono text-base font-bold"
+              style={{ color: card.color }}
+            >
               {card.value}
             </div>
           </div>
@@ -328,15 +460,21 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
 
       {/* 5T Capabilities */}
       <div className="mt-auto">
-        <div className="text-[10px] text-textSecondary font-semibold mb-1.5">5T 能力矩陣</div>
+        <div className="text-[10px] text-textSecondary font-semibold mb-1.5">
+          5T 能力矩陣
+        </div>
         <div className="space-y-1.5">
-          {stats.capabilities.map(cap => (
+          {stats.capabilities.map((cap) => (
             <div key={cap.id} className="flex items-center gap-2">
               <div
                 className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: GATE_COLORS[cap.gate] || COLORS.slate400 }}
+                style={{
+                  backgroundColor: GATE_COLORS[cap.gate] || COLORS.slate400,
+                }}
               />
-              <span className="text-[10px] text-textSecondary flex-1">{cap.name}</span>
+              <span className="text-[10px] text-textSecondary flex-1">
+                {cap.name}
+              </span>
               <div className="w-12 h-1 bg-secondary rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full"
@@ -361,30 +499,42 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
 // Quick Commands Component
 // ═══════════════════════════════════════════════════════════════
 
-function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }) {
+function QuickCommands({
+  onExecute,
+}: {
+  onExecute: (cmd: QuickCommand) => void;
+}) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">快速命令</h3>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
+          快速命令
+        </h3>
         <span className="text-[10px] text-textSecondary">點擊執行</span>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        {QUICK_COMMANDS.map(cmd => (
+        {QUICK_COMMANDS.map((cmd) => (
           <button
             key={cmd.id}
             onClick={() => onExecute(cmd)}
             className="bg-primary border border-borderColor rounded-xl p-3 text-left transition-all duration-200 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 active:translate-y-0 group"
           >
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-base group-hover:scale-110 transition-transform">{cmd.icon}</span>
-              <span className="text-[11px] font-semibold text-textPrimary">{cmd.label}</span>
+              <span className="text-base group-hover:scale-110 transition-transform">
+                {cmd.icon}
+              </span>
+              <span className="text-[11px] font-semibold text-textPrimary">
+                {cmd.label}
+              </span>
             </div>
-            <div className="text-[9px] text-textSecondary leading-tight">{cmd.description}</div>
+            <div className="text-[9px] text-textSecondary leading-tight">
+              {cmd.description}
+            </div>
             <div className="mt-2 h-0.5 rounded-full overflow-hidden bg-secondary">
               <div
                 className="h-full rounded-full transition-all duration-300 group-hover:w-full"
-                style={{ width: '0%', backgroundColor: cmd.color }}
+                style={{ width: "0%", backgroundColor: cmd.color }}
               />
             </div>
           </button>
@@ -401,104 +551,112 @@ function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }
 function ChatInterface() {
   const [msgs, setMsgs] = useState<Message[]>([
     {
-      id: '0',
-      role: 'assistant',
-      text: '**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制台。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。',
+      id: "0",
+      role: "assistant",
+      text: "**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制台。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。",
       time: now(),
     },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs]);
 
   const send = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed || busy) return;
 
-    const userMsg: Message = { id: uid(), role: 'user', text: trimmed, time: now() };
-    setMsgs(m => [...m, userMsg]);
-    setInput('');
+    const userMsg: Message = {
+      id: uid(),
+      role: "user",
+      text: trimmed,
+      time: now(),
+    };
+    setMsgs((m) => [...m, userMsg]);
+    setInput("");
     setBusy(true);
 
     const start = Date.now();
 
     try {
-      const res = await apiCall('chat', { input: trimmed });
+      const res = await apiCall("chat", { input: trimmed });
       const ms = Date.now() - start;
 
       if (res.success) {
         const aiMsg: Message = {
           id: uid(),
-          role: 'assistant',
+          role: "assistant",
           text: res.data.reply,
           time: now(),
           actions: res.data.actions,
           ms,
         };
-        setMsgs(m => [...m, aiMsg]);
+        setMsgs((m) => [...m, aiMsg]);
       } else {
         const errMsg: Message = {
           id: uid(),
-          role: 'assistant',
-          text: `錯誤：${res.error || '未知錯誤'}`,
+          role: "assistant",
+          text: `錯誤：${res.error || "未知錯誤"}`,
           time: now(),
         };
-        setMsgs(m => [...m, errMsg]);
+        setMsgs((m) => [...m, errMsg]);
       }
     } catch {
       const fallbackMsg: Message = {
         id: uid(),
-        role: 'assistant',
-        text: '**連線失敗** ⚠️\n\n無法連接 OmniAgent API。請確認服務正在運行。',
+        role: "assistant",
+        text: "**連線失敗** ⚠️\n\n無法連接 OmniAgent API。請確認服務正在運行。",
         time: now(),
       };
-      setMsgs(m => [...m, fallbackMsg]);
+      setMsgs((m) => [...m, fallbackMsg]);
     }
 
     setBusy(false);
   }, [input, busy]);
 
-  const handleQuickCommand = useCallback(async (cmd: QuickCommand) => {
-    if (busy) return;
-    setBusy(true);
+  const handleQuickCommand = useCallback(
+    async (cmd: QuickCommand) => {
+      if (busy) return;
+      setBusy(true);
 
-    const userMsg: Message = {
-      id: uid(),
-      role: 'user',
-      text: `${cmd.icon} ${cmd.label}`,
-      time: now(),
-    };
-    setMsgs(m => [...m, userMsg]);
-
-    try {
-      const res = await apiCall('quick_command', { commandId: cmd.id });
-      if (res.success) {
-        const aiMsg: Message = {
-          id: uid(),
-          role: 'assistant',
-          text: res.data.reply,
-          time: now(),
-          actions: res.data.actions,
-        };
-        setMsgs(m => [...m, aiMsg]);
-      }
-    } catch {
-      // Fallback: show command description
-      const aiMsg: Message = {
+      const userMsg: Message = {
         id: uid(),
-        role: 'assistant',
-        text: `**${cmd.label}** 已觸發\n\n${cmd.description}`,
+        role: "user",
+        text: `${cmd.icon} ${cmd.label}`,
         time: now(),
       };
-      setMsgs(m => [...m, aiMsg]);
-    }
+      setMsgs((m) => [...m, userMsg]);
 
-    setBusy(false);
-  }, [busy]);
+      try {
+        const res = await apiCall("quick_command", { commandId: cmd.id });
+        if (res.success) {
+          const aiMsg: Message = {
+            id: uid(),
+            role: "assistant",
+            text: res.data.reply,
+            time: now(),
+            actions: res.data.actions,
+          };
+          setMsgs((m) => [...m, aiMsg]);
+        }
+      } catch {
+        // Fallback: show command description
+        const aiMsg: Message = {
+          id: uid(),
+          role: "assistant",
+          text: `**${cmd.label}** 已觸發\n\n${cmd.description}`,
+          time: now(),
+        };
+        setMsgs((m) => [...m, aiMsg]);
+      }
+
+      setBusy(false);
+    },
+    [busy],
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -506,36 +664,48 @@ function ChatInterface() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-accentTeal/100 animate-pulse" />
-          <h3 className="text-xs font-semibold text-textSecondary tracking-wider">OmniAgent 對話</h3>
+          <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
+            OmniAgent 對話
+          </h3>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-[9px] bg-accentTeal/10 text-accentTeal px-2 py-0.5 rounded-full font-bold">LIVE</span>
-          <span className="text-[9px] text-textSecondary font-mono">{msgs.length} msgs</span>
+          <span className="text-[9px] bg-accentTeal/10 text-accentTeal px-2 py-0.5 rounded-full font-bold">
+            LIVE
+          </span>
+          <span className="text-[9px] text-textSecondary font-mono">
+            {msgs.length} msgs
+          </span>
         </div>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-3 pr-1 min-h-0">
-        {msgs.map(m => (
-          <div key={m.id} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+        {msgs.map((m) => (
+          <div
+            key={m.id}
+            className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
+          >
             <div
               className={`max-w-[90%] border rounded-2xl px-4 py-2.5 ${
-                m.role === 'user'
-                  ? 'bg-accentTeal/100 border-teal-500 text-white rounded-br-md'
-                  : 'bg-primary border-borderColor rounded-bl-md shadow-sm'
+                m.role === "user"
+                  ? "bg-accentTeal/100 border-teal-500 text-white rounded-br-md"
+                  : "bg-primary border-borderColor rounded-bl-md shadow-sm"
               }`}
             >
               {m.actions && m.actions.length > 0 && (
                 <div className="flex gap-1 mb-1.5 flex-wrap">
-                  {m.actions.map(a => (
-                    <span key={a} className="text-[9px] bg-secondary text-textSecondary px-1.5 py-0.5 rounded font-mono">
+                  {m.actions.map((a) => (
+                    <span
+                      key={a}
+                      className="text-[9px] bg-secondary text-textSecondary px-1.5 py-0.5 rounded font-mono"
+                    >
                       {a}
                     </span>
                   ))}
                 </div>
               )}
               <div
-                className={`text-[13px] leading-relaxed ${m.role === 'user' ? 'text-white' : 'text-textPrimary'}`}
+                className={`text-[13px] leading-relaxed ${m.role === "user" ? "text-white" : "text-textPrimary"}`}
                 dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }}
               />
             </div>
@@ -548,7 +718,7 @@ function ChatInterface() {
         {busy && (
           <div className="flex items-start">
             <div className="bg-primary border border-borderColor rounded-2xl rounded-bl-md px-4 py-3 flex gap-1.5 shadow-sm">
-              {[0, 1, 2].map(i => (
+              {[0, 1, 2].map((i) => (
                 <div
                   key={i}
                   className="w-2 h-2 rounded-full bg-teal-400"
@@ -563,10 +733,12 @@ function ChatInterface() {
 
       {/* Quick Suggestions */}
       <div className="flex gap-1.5 flex-wrap my-2">
-        {['系統狀態', '5T 驗證', '幫助'].map(s => (
+        {["系統狀態", "5T 驗證", "幫助"].map((s) => (
           <button
             key={s}
-            onClick={() => { setInput(s); }}
+            onClick={() => {
+              setInput(s);
+            }}
             className="text-[10px] bg-accentTeal/10 border border-teal-200 text-accentTeal rounded-lg px-2.5 py-1 hover:bg-teal-100 transition-colors font-medium"
           >
             {s}
@@ -577,9 +749,15 @@ function ChatInterface() {
       {/* Input */}
       <div className="flex gap-2 mt-auto">
         <input
+          aria-label="輸入指令或自然語言任務"
           value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              send();
+            }
+          }}
           placeholder="輸入指令或自然語言任務..."
           disabled={busy}
           className="flex-1 bg-primary border border-borderColor rounded-xl px-4 py-2.5 text-[13px] text-textPrimary outline-none font-['Noto_Sans_TC',sans-serif] focus:border-teal-400 focus:ring-2 focus:ring-teal-100 transition-all disabled:opacity-50 placeholder:text-slate-300"
@@ -589,11 +767,11 @@ function ChatInterface() {
           disabled={busy || !input.trim()}
           className={`border-none rounded-xl px-4 py-2.5 font-bold text-[13px] transition-all ${
             busy || !input.trim()
-              ? 'bg-slate-200 text-textSecondary cursor-not-allowed'
-              : 'bg-accentTeal/100 text-white cursor-pointer hover:bg-teal-600 hover:shadow-md active:scale-95'
+              ? "bg-slate-200 text-textSecondary cursor-not-allowed"
+              : "bg-accentTeal/100 text-white cursor-pointer hover:bg-teal-600 hover:shadow-md active:scale-95"
           }`}
         >
-          {busy ? '…' : '發送'}
+          {busy ? "…" : "發送"}
         </button>
       </div>
     </div>
@@ -607,20 +785,22 @@ function ChatInterface() {
 export default function OmniAgentConsolePage() {
   const [subAgents, setSubAgents] = useState<SubAgent[]>([]);
   const [stats, setStats] = useState<CoreStats | null>(null);
-  const [activePanel, setActivePanel] = useState<'stats' | 'agents' | 'commands'>('stats');
+  const [activePanel, setActivePanel] = useState<
+    "stats" | "agents" | "commands"
+  >("stats");
 
   // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall('get_stats'),
-          apiCall('get_sub_agents'),
+          apiCall("get_stats"),
+          apiCall("get_sub_agents"),
         ]);
         if (statsRes.success) setStats(statsRes.data);
         if (agentsRes.success) setSubAgents(agentsRes.data);
       } catch (err) {
-        console.warn('[OmniAgent Console] Failed to fetch initial data:', err);
+        console.warn("[OmniAgent Console] Failed to fetch initial data:", err);
       }
     };
     fetchData();
@@ -629,39 +809,43 @@ export default function OmniAgentConsolePage() {
     const interval = setInterval(async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall('get_stats'),
-          apiCall('get_sub_agents'),
+          apiCall("get_stats"),
+          apiCall("get_sub_agents"),
         ]);
         if (statsRes.success) setStats(statsRes.data);
         if (agentsRes.success) setSubAgents(agentsRes.data);
-      } catch { /* silent */ }
-      }, 5000);
+      } catch {
+        /* silent */
+      }
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleDispatchAgent = useCallback(async (agent: SubAgent) => {
     try {
-      const res = await apiCall('dispatch_sub_agent', {
+      const res = await apiCall("dispatch_sub_agent", {
         agentId: agent.id,
         task: `手動派遣任務 @ ${now()}`,
       });
       if (res.success) {
-        setSubAgents(prev => prev.map(a => a.id === agent.id ? res.data.agent : a));
+        setSubAgents((prev) =>
+          prev.map((a) => (a.id === agent.id ? res.data.agent : a)),
+        );
       }
     } catch (err) {
-      console.warn('[OmniAgent Console] Failed to dispatch agent:', err);
+      console.warn("[OmniAgent Console] Failed to dispatch agent:", err);
     }
   }, []);
 
   const handleQuickCommand = useCallback(async (cmd: QuickCommand) => {
     try {
-      await apiCall('quick_command', { commandId: cmd.id });
+      await apiCall("quick_command", { commandId: cmd.id });
       // Refresh stats after command
-      const statsRes = await apiCall('get_stats');
+      const statsRes = await apiCall("get_stats");
       if (statsRes.success) setStats(statsRes.data);
     } catch (err) {
-      console.warn('[OmniAgent Console] Quick command failed:', err);
+      console.warn("[OmniAgent Console] Quick command failed:", err);
     }
   }, []);
 
@@ -690,8 +874,12 @@ export default function OmniAgentConsolePage() {
               ⊙
             </div>
             <div>
-              <h1 className="text-base font-bold text-textPrimary tracking-tight">OmniAgent Console</h1>
-              <p className="text-[10px] text-textSecondary">萬能中心 · 統一指揮介面 v1.0</p>
+              <h1 className="text-base font-bold text-textPrimary tracking-tight">
+                OmniAgent Console
+              </h1>
+              <p className="text-[10px] text-textSecondary">
+                萬能中心 · 統一指揮介面 v1.0
+              </p>
             </div>
           </div>
 
@@ -699,14 +887,31 @@ export default function OmniAgentConsolePage() {
             {/* Live indicator */}
             <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1">
               <div className="w-1.5 h-1.5 rounded-full bg-accentGreen animate-pulse" />
-              <span className="text-[10px] font-semibold text-green-700">ONLINE</span>
+              <span className="text-[10px] font-semibold text-green-700">
+                ONLINE
+              </span>
             </div>
 
             {/* Stats summary */}
             <div className="hidden md:flex items-center gap-4 text-[10px] text-textSecondary font-mono">
-              <span>Agent: <span className="text-accentTeal font-bold">{stats?.agent.status || '...'}</span></span>
-              <span>Cache: <span className="text-blue-600 font-bold">{stats?.kernel.cacheMetrics.size || 0}</span></span>
-              <span>Nodes: <span className="text-purple-600 font-bold">{stats?.kernel.agnesStatus.activeNodes || 0}</span></span>
+              <span>
+                Agent:{" "}
+                <span className="text-accentTeal font-bold">
+                  {stats?.agent.status || "..."}
+                </span>
+              </span>
+              <span>
+                Cache:{" "}
+                <span className="text-blue-600 font-bold">
+                  {stats?.kernel.cacheMetrics.size || 0}
+                </span>
+              </span>
+              <span>
+                Nodes:{" "}
+                <span className="text-purple-600 font-bold">
+                  {stats?.kernel.agnesStatus.activeNodes || 0}
+                </span>
+              </span>
             </div>
 
             {/* Back link */}
@@ -723,7 +928,6 @@ export default function OmniAgentConsolePage() {
       {/* Main Layout */}
       <main className="max-w-[1600px] mx-auto p-4 md:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 h-[calc(100vh-100px)]">
-
           {/* Left: Chat Interface (7 cols) */}
           <div className="lg:col-span-7 bg-primary border border-borderColor rounded-2xl shadow-sm p-4 md:p-5 flex flex-col overflow-hidden">
             <ChatInterface />
@@ -731,23 +935,30 @@ export default function OmniAgentConsolePage() {
 
           {/* Right: Side Panel (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-4 md:gap-6 overflow-hidden">
-
             {/* Panel Tabs */}
             <div className="bg-primary border border-borderColor rounded-2xl shadow-sm flex flex-col overflow-hidden flex-1 min-h-0">
               {/* Tab Bar */}
-              <div className="flex border-b border-borderColor shrink-0">
-                {([
-                  { id: 'stats', label: '核心統計', icon: '◎' },
-                  { id: 'agents', label: '子代理', icon: '🤖' },
-                  { id: 'commands', label: '快速命令', icon: '⚡' },
-                ] as const).map(tab => (
+              <div
+                className="flex border-b border-borderColor shrink-0"
+                role="tablist"
+                aria-label="控制台面板切換"
+              >
+                {(
+                  [
+                    { id: "stats", label: "核心統計", icon: "◎" },
+                    { id: "agents", label: "子代理", icon: "🤖" },
+                    { id: "commands", label: "快速命令", icon: "⚡" },
+                  ] as const
+                ).map((tab) => (
                   <button
                     key={tab.id}
+                    role="tab"
+                    aria-selected={activePanel === tab.id}
                     onClick={() => setActivePanel(tab.id)}
-                    className={`flex-1 py-2.5 text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 py-2.5 text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-current ${
                       activePanel === tab.id
-                        ? 'text-accentTeal border-b-2 border-teal-500 bg-accentTeal/10/50'
-                        : 'text-textSecondary hover:text-textSecondary'
+                        ? "text-accentTeal border-b-2 border-teal-500 bg-accentTeal/10/50"
+                        : "text-textSecondary hover:text-textSecondary"
                     }`}
                   >
                     <span>{tab.icon}</span>
@@ -758,9 +969,16 @@ export default function OmniAgentConsolePage() {
 
               {/* Panel Content */}
               <div className="flex-1 overflow-y-auto p-4">
-                {activePanel === 'stats' && <CoreStatsDisplay stats={stats} />}
-                {activePanel === 'agents' && <SubAgentPanel agents={subAgents} onDispatch={handleDispatchAgent} />}
-                {activePanel === 'commands' && <QuickCommands onExecute={handleQuickCommand} />}
+                {activePanel === "stats" && <CoreStatsDisplay stats={stats} />}
+                {activePanel === "agents" && (
+                  <SubAgentPanel
+                    agents={subAgents}
+                    onDispatch={handleDispatchAgent}
+                  />
+                )}
+                {activePanel === "commands" && (
+                  <QuickCommands onExecute={handleQuickCommand} />
+                )}
               </div>
             </div>
           </div>
