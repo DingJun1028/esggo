@@ -4,6 +4,7 @@ import { useAgnesApi } from '../../src/components/AgnesProvider';
 
 import { db } from '@/lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
+<<<<<<< Updated upstream
 import xss from 'xss';
 
 export interface NoteData { id:string; title:string; content:string; tags:string[]; fiveTGate?:string; createdAt:number; }
@@ -13,6 +14,12 @@ function sanitizeHtml(html: string): string {
   return xss(html);
 }
 
+=======
+import { sanitizeHtml } from '@/lib/safe-api';
+
+export interface NoteData { id:string; title:string; content:string; tags:string[]; fiveTGate?:string; createdAt:number; }
+
+>>>>>>> Stashed changes
 export function OmniNoteCRUD() {
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [editing, setEditing]   = useState<NoteData|null>(null);
@@ -98,7 +105,7 @@ export function OmniNoteCRUD() {
           </div>
 
           {preview!==null
-            ? <div className="min-h-[100px] bg-primary border border-borderColor rounded-lg px-3 py-2.5 text-[13px] leading-[1.8] text-textPrimary" dangerouslySetInnerHTML={{__html:renderMd(preview)}} />
+            ? <div className="min-h-[100px] bg-primary border border-borderColor rounded-lg px-3 py-2.5 text-[13px] leading-[1.8] text-textPrimary" dangerouslySetInnerHTML={{__html: renderMd(preview)}} />
             : <textarea 
                 className="w-full bg-primary border border-borderColor rounded-lg px-2.5 py-2 text-textPrimary text-[13px] outline-none font-['Noto_Sans_TC',sans-serif] min-h-[100px] resize-y block focus:border-accentTeal" 
                 placeholder="內容 (支援 Markdown: # ## ### **粗體** `code`)" 

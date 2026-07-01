@@ -4,6 +4,7 @@ import { useAgnesApi } from '@/components/AgnesProvider';
 import xss from 'xss';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
+import { sanitizeHtml } from '@/lib/safe-api';
 type CaseType = 'code_optimization'|'documentation'|'data_analysis'|'esg_report'|'ui_design'|'architecture'|'bug_fix'|'general';
 
 const PATTERNS: [RegExp, CaseType][] = [
@@ -37,11 +38,14 @@ interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:C
 
 function now() { return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
 
+<<<<<<< Updated upstream
 /** Basic sanitization for dangerouslySetInnerHTML content */
 function sanitizeTextHtml(html: string): string {
   return xss(html);
 }
 
+=======
+>>>>>>> Stashed changes
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
   const [model, setModel] = useState<string>('Qwen');
@@ -145,12 +149,12 @@ export function OmniOneChat() {
     setBusy(false);
   };
 
-  const ctColorVar = (ct?:CaseType) => ct==='esg_report'?'var(--accent-teal)':ct==='bug_fix'?'var(--accent-red)':ct==='ui_design'?'var(--accent-gold)':ct==='architecture'?'var(--accent-purple)':'var(--accent-green)';
-  const ctLabel = (ct?:CaseType) => ({code_optimization:'CODE',documentation:'DOC',data_analysis:'DATA',esg_report:'ESG',ui_design:'UI',architecture:'ARCH',bug_fix:'BUG',general:'GEN'})[ct||'general']||'GEN';
+const ctColorVar = (ct?:CaseType) => ct==='esg_report'?'var(--accent-teal)':ct==='bug_fix'?'var(--accent-red)':ct==='ui_design'?'var(--accent-gold)':ct==='architecture'?'var(--accent-purple)':'var(--accent-green)';
+const ctLabel = (ct?:CaseType) => ({code_optimization:'CODE',documentation:'DOC',data_analysis:'DATA',esg_report:'ESG',ui_design:'UI',architecture:'ARCH',bug_fix:'BUG',general:'GEN'})[ct||'general']||'GEN';
 
-  const renderText = (t:string) => {
-    const sanitized = sanitizeTextHtml(t);
-    return sanitized
+const renderText = (t:string) => {
+  const sanitized = sanitizeHtml(t);
+  return sanitized
       .replace(/\*\*(.+?)\*\*/g,'<strong class="text-textPrimary">$1</strong>')
       .replace(/`(.+?)`/g,`<code class="bg-primary px-1.5 py-[1px] rounded-[3px] font-mono text-[11px] text-accentCyan">$1</code>`)
       .replace(/\n/g,'<br/>');

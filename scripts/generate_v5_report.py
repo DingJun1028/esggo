@@ -37,7 +37,7 @@ for row in ws_questions.iter_rows(min_row=2, values_only=True):
 print(f"  Loaded {len(questions)} questions")
 
 # 3. High-fidelity answers (1400)
-ws_answers = wb['03_C版完整填答1400筆'
+ws_answers = wb['03_C版完整填答1400筆']
 answers_by_company = {}
 for row in ws_answers.iter_rows(min_row=2, values_only=True):
     if row[0] and row[6]:
@@ -224,7 +224,7 @@ def generate_chapter(ch_num, answers, profile, questions):
         parts.append(f'依金管会「上市柜公司永续报告书画作业办法」及GRI准则规范，本公司已于{year}年度建立完整的{topic}管理机制，')
         parts.append(f'并依据PDCA（计划-执行-检查-行动）循环持续改善。具体成效包括：建立量化指标系统、设定短期/中期/长期目标、')
         parts.append(f'定期追踪执行成果，并向董事会提报执行报告。此外，公司亦透过与外部利害关系人的对话机制，')
-        parts.append(f'{_short}持续关注与回应各方对于{topic}面向的关切与期待。')
+        parts.append(f'{short}持续关注与回应各方对于{topic}面向的关切与期待。')
         parts.append(f'</p>')
         parts.append(f'<p>')
         parts.append(f'{year}年度{topic}具体成果摘要如下：已举办{4 + ch_num % 6}场内部训练课程，')
