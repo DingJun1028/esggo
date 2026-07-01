@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useAgnesApi } from '@/components/AgnesProvider';
+import xss from 'xss';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
 type CaseType = 'code_optimization'|'documentation'|'data_analysis'|'esg_report'|'ui_design'|'architecture'|'bug_fix'|'general';
@@ -38,10 +39,7 @@ function now() { return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',mi
 
 /** Basic sanitization for dangerouslySetInnerHTML content */
 function sanitizeTextHtml(html: string): string {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript\s*:/gi, '');
+  return xss(html);
 }
 
 export function OmniOneChat() {
