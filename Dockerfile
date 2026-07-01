@@ -35,7 +35,6 @@ COPY --from=builder /app/.next ./.next
 # 拷貝完整的 node_modules 以解決 ADR-005 提到的 "sh: next: not found" 問題
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/next.config.ts ./next.config.ts
 
 EXPOSE 3000
 
