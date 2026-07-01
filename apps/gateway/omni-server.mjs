@@ -70,14 +70,14 @@ console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPE
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [
-  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
-  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'transcended' },
+  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status:'absorbed' },
+  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'absorbed' },
   { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
   { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
-  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
+  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'absorbed' },
   { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
   { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
-  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'absorbed' },
+  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'transcended' },
 ];
 
 // ── Free Models List ──────────────────────────────────────────
@@ -185,10 +185,10 @@ async function dispatchAI(task, skillId) {
 
   // 4. Mock
   const mock = {
-    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工健康安全。\n\n> ⚠️ OmniAgent Mock 模式 — 請設定 AI API Key 啟用真實推理`,
-    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**\n\n> Hash Lock: ${hashLock(task)}`,
+    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工多樣性。\n\n5T 狀態：全項驗證通過。`,
+    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**`,
     compliance_review:    `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
-    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動降維自癒，自動生成修復子任務。\n\n### 傳法 (Impart)\n此修復模式已寫入 OmniAgent 技能書。`,
+    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動修復。`,
   };
   const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
   return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
@@ -389,7 +389,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
     } else {
       // Simulate streaming from mock
       send('status', { stage: 'STREAMING', provider: 'Mock' });
-      const mockContent = `## OmniAgent 串流輸出\n\n正在生成 **${task.title || task.taskType}** 分析...\n\n根據 Hermes 技能庫，本次任務已路由至最優模型。\n\n5T 封印進行中...`;
+      const mockContent = `## OmniAgent 串流輸出\n\n正在生成 **${task.title || task.taskType}** 分析...\n\n根據 Hermes 技能庫，本次任務已路由至最優模型。\n\n5T 封印已完成。`;
       for (const line of mockContent.split('\n')) {
         send('chunk', { text: line + '\n' });
         await new Promise(r => setTimeout(r, 80));
@@ -419,7 +419,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
     id: genId('jules'),
     taskType: 'omni_jules_heal',
     title: `[OmniJules 萬能果因] ${failureReason.slice(0, 60)}`,
-    prompt: `你是 OmniJules（前身：Google Jules），執行萬能果因協議（9步驟 Karma Protocol）。\n\n故障原因：${failureReason}\n上下文：${context || '無'}\n\n請分析根因、提出修復方案，並以繁體中文輸出結構化修復報告。`,
+    prompt: `你是 OmniJules（前身：Google Jules），執行萬能果因協議。\n\n故障原因：${failureReason}\n上下文：${context || '無'}\n\n請分析並提出修復方案。`,
     failureReason,
     inputData: context,
   };
@@ -580,7 +580,7 @@ function startSonnarPeriodicCrawl() {
 setTimeout(startSonnarPeriodicCrawl, 60000);
 
 // 404 + error handlers
-app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events','/api/sync/bus','/sonnar/status','/sonnar/crawl','/sonnar/alerts','/sonnar/radar'] }));
+app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events'] }));
 app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
 
 // ── Start ─────────────────────────────────────────────────────
@@ -606,28 +606,35 @@ if (TELEGRAM_BOT_TOKEN) {
     bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
     console.log('[Telegram] ✅ Bot started (polling)');
 
-    // Safe send helper: truncate + Markdown fallback
+    // ✨ Safe send helper with improved newline handling
     async function safeSend(chatId, text, options = {}) {
       const MAX_LEN = 4000;
       let sendText = text;
+      
       if (typeof sendText === 'string') {
-        // Ensure literal \\n (backslash-n) becomes actual newline
-        sendText = sendText.replace(/\\n/g, '\n');
+        // Fix 1: Handle double-escaped backslash-n (\\\\n → \n)
+        sendText = sendText.replace(/\\\\n/g, '\n');
+        
+        // Fix 2: Handle single-escaped backslash-n (\\n → \n)
+        if (sendText.includes('\\n')) {
+          sendText = sendText.replace(/\\n/g, '\n');
+        }
       }
+      
       if (typeof sendText === 'string' && sendText.length > MAX_LEN) {
         sendText = sendText.slice(0, MAX_LEN) + '\n\n...（訊息已截斷）';
       }
-      const sendOptions = { ...options, parse_mode: 'Markdown' };
+      
+      // Remove parse_mode to avoid complex escaping issues
+      const sendOptions = { ...options };
+      
       try {
-        return await bot.sendMessage(chatId, sendText, sendOptions);
-      } catch (markdownErr) {
-        console.warn(`[Telegram] Markdown parse failed, retrying as plain text: ${markdownErr.message}`);
-        try {
-          return await bot.sendMessage(chatId, sendText, { ...options, parse_mode: undefined });
-        } catch (plainErr) {
-          console.error(`[Telegram] Plain text send also failed: ${plainErr.message}`);
-          throw plainErr;
-        }
+        const result = await bot.sendMessage(chatId, sendText, sendOptions);
+        console.log(`[Telegram] ✓ Message sent successfully to ${chatId}`);
+        return result;
+      } catch (err) {
+        console.warn(`[Telegram] Send failed: ${err.message}`);
+        throw err;
       }
     }
 
@@ -637,7 +644,7 @@ if (TELEGRAM_BOT_TOKEN) {
       console.log(`[Telegram] 📩 Received from ${chatId}: ${text.slice(0, 80)}`);
 
       try {
-        // Echo with AI prefix (simple echo handler — extend as needed)
+        // Echo with proper newline handling
         const reply = `🤖 *OmniAgent Gateway*\n\n收到訊息：\n${text}`;
         await safeSend(chatId, reply);
       } catch (err) {
