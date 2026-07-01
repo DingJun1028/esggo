@@ -4,15 +4,13 @@ import { useAgnesApi } from '../../src/components/AgnesProvider';
 
 import { db } from '@/lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import xss from 'xss';
 
 export interface NoteData { id:string; title:string; content:string; tags:string[]; fiveTGate?:string; createdAt:number; }
 
 /** Basic HTML sanitization: escape <script> and dangerous tags to prevent XSS */
 function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript\s*:/gi, '');
+  return xss(html);
 }
 
 export function OmniNoteCRUD() {
