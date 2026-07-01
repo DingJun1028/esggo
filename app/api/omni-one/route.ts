@@ -9,26 +9,77 @@ const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
 const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
 
+// ✨ 改進：添加超時控制和降級策略
+const REQUEST_TIMEOUT = 15000; // 15秒超時
+const FALLBACK_RESPONSES = {
+  esg_report: '[OmniOne] ESG 報告任務已收到。系統將使用知識庫模板進行初步分析。',
+  bug_fix: '[OmniOne] 缺陷修復任務已識別。推薦方案：檢查日誌、運行測試、備份數據後進行修改。',
+  ui_design: '[OmniOne] UI 設計任務已分類。建議參考設計系統文檔並創建原型。',
+  architecture: '[OmniOne] 架構相關任務已收到。將評估系統設計和依賴關係。',
+  general: '[OmniOne] 任務已收到並分類。系統將盡快處理您的請求。'
+};
+
+// ✨ 改進：添加 OpenRouter 作為備選方案
+async function callOpenRouter(prompt: string) {
+  const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
+  if (!OPENROUTER_KEY) return null;
+
+  try {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENROUTER_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'mistralai/mistral-small-3.1-24b:free',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 256,
+      }),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    });
+    
+    if (!res.ok) {
+      console.warn(`[OmniOne] OpenRouter failed: ${res.status}`);
+      return null;
+    }
+
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch (err: any) {
+    console.warn(`[OmniOne] OpenRouter error: ${err.message}`);
+    return null;
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const { input, caseType, ragContext: clientRagContext } = await req.json();
 
+    // ✨ 改進：驗證輸入
+    if (!input || !caseType) {
+      return NextResponse.json(
+        { output: '[OmniOne] 錯誤：缺少必要參數 (input/caseType)', provider: 'error' },
+        { status: 400 }
+      );
+    }
+
+    // ✨ 改進：如果沒有 API Key，返回模擬回應
     if (!HAS_API_KEY) {
       return NextResponse.json(
-        { output: `[系統提示] 尚未配置 GEMINI_API_KEY。此為模擬回應：收到了任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
+        { output: `[OmniOne 模擬] 收到任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
         { status: 200 }
       );
     }
 
+    // ✨ 改進：如果免費層，返回預設回應
     if (!USE_REAL_AI) {
       return NextResponse.json(
-        { output: `[OmniOne 模擬] 免費層模式下，任務分類完成：${caseType}。`, provider: 'mock' },
+        { output: FALLBACK_RESPONSES[caseType as keyof typeof FALLBACK_RESPONSES] || FALLBACK_RESPONSES.general, provider: 'mock' },
         { status: 200 }
       );
     }
-
-    const { GoogleGenAI } = await import('@google/genai');
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
     const ragContext = clientRagContext 
       ? `\n相關知識參考:\n${clientRagContext}` 
@@ -46,20 +97,72 @@ ${input}
 回應請保持在 100 字以內，並展現你是一個「系統核心」的角色（可適時帶有系統提示詞風格，如 [OmniOne] 分析完成...）。
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        temperature: 0.7,
-        maxOutputTokens: 256,
+    let response = null;
+    let provider = 'gemini';
+
+    // 嘗試 1: Gemini API（主要方案）
+    try {
+      console.log('[OmniOne] 嘗試 Gemini API...');
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+      
+      const result = await Promise.race([
+        ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt,
+          config: {
+            temperature: 0.7,
+            maxOutputTokens: 256,
+          }
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
+        )
+      ]);
+      
+      response = (result as any).text;
+      console.log('[OmniOne] ✓ Gemini 成功');
+    } catch (geminiErr: any) {
+      console.warn(`[OmniOne] Gemini 失敗: ${geminiErr.message}`);
+      
+      // 嘗試 2: OpenRouter API（備選方案）
+      try {
+        console.log('[OmniOne] 嘗試 OpenRouter API...');
+        response = await callOpenRouter(prompt);
+        if (response) {
+          provider = 'openrouter';
+          console.log('[OmniOne] ✓ OpenRouter 成功');
+        }
+      } catch (openrouterErr: any) {
+        console.warn(`[OmniOne] OpenRouter 失敗: ${openrouterErr.message}`);
       }
+    }
+
+    // 如果所有 AI 都失敗，使用預設回應
+    if (!response) {
+      console.warn(`[OmniOne] 所有 AI 提供者失敗，使用預設回應`);
+      response = FALLBACK_RESPONSES[caseType as keyof typeof FALLBACK_RESPONSES] || FALLBACK_RESPONSES.general;
+      provider = 'fallback';
+    }
+
+    return NextResponse.json({ 
+      output: response,
+      provider,
+      caseType,
+      timestamp: new Date().toISOString(),
     });
 
-    return NextResponse.json({ output: response.text });
   } catch (error: any) {
-    console.error('OmniOne LLM API Error:', error);
+    console.error('[OmniOne] 嚴重錯誤:', error);
+    
+    // ✨ 改進：返回結構化錯誤信息
     return NextResponse.json(
-      { output: `[OmniOne 錯誤] 系統連接異常：${error.message}` },
+      { 
+        output: '[OmniOne] 系統故障。請稍後重試或聯繫支援團隊。',
+        error: error.message,
+        provider: 'error',
+        timestamp: new Date().toISOString(),
+      },
       { status: 500 }
     );
   }
