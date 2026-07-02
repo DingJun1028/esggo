@@ -7,7 +7,3 @@
 ## 2024-08-15 - Focus Visibility on Hover-Revealed Elements
 **Learning:** Elements that are revealed on hover using `opacity-0 group-hover:opacity-100` (like action buttons in grid cards) become invisible focus traps for keyboard users unless they explicitly include `focus-within:opacity-100` on their wrapper/container.
 **Action:** Always ensure that hover-revealed interactive elements apply `focus-within:opacity-100` alongside `group-hover:opacity-100` so they become visible when navigating via keyboard (Tab). Additionally, these hidden elements must have context-aware `aria-label` attributes to prevent repetitive generic readouts by screen readers when focused blindly.
-
-## 2024-05-18 - Keyboard Navigation Verification
-**Learning:** When visually verifying keyboard accessibility (like `focus-visible` styles) using Playwright scripts, directly calling `locator.focus()` on the targeted interactive element is much more reliable and robust than simulating a sequence of `Tab` key presses.
-**Action:** Use `.focus()` directly on specific elements for visual verification of focus states instead of manual tab sequences.
