@@ -58,6 +58,7 @@
   ],
   "exclude": [
     "node_modules",
-    "fake_answer_fix.ts"
+    "fake_answer_fix.ts",
+    "apps/gateway/omni-server.ts"
   ]
 }
