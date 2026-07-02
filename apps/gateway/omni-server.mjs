@@ -91,13 +91,10 @@ let FREE_MODELS = [
   { id: 'google/gemma-4-31b-it:free', name: 'Google: Gemma 4 31B (Free)', provider: 'openrouter:free, hermes:free' },
   { id: 'nousresearch/hermes-3-llama-3.1-405b:free', name: 'Nous: Hermes 3 405B (Free)', provider: 'openrouter:free, hermes:free' },
   { id: 'openai/gpt-oss-120b:free', name: 'OpenAI: GPT-OSS 120B (Free)', provider: 'openrouter:free, openai:free' },
-  // Hermes-specific free series
+  // Hermes-specific free series (confirmed on OpenRouter)
   { id: 'nousresearch/hermes-3-pro-70b:free', name: 'Hermes 3 Pro 70B (Free)', provider: 'hermes:free' },
   { id: 'nousresearch/hermes-2-llama-3.1-405b:free', name: 'Hermes 2 Llama 3.1 405B (Free)', provider: 'hermes:free' },
   { id: 'nousresearch/hermes-3-70b:free', name: 'Hermes 3 70B (Free)', provider: 'hermes:free' },
-  { id: 'nousresearch/hermes-4-70b:free', name: 'Hermes 4 70B (Free)', provider: 'hermes:free' },
-  { id: 'nousresearch/hermes-3-llama-70:free', name: 'Hermes 3 LL (Free)', provider: 'hermes:free' },
-  { id: 'hermes-2-dpo:free', name: 'Hermes 2 DPO (Free)', provider: 'hermes:free' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
