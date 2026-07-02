@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -75,9 +76,6 @@ ${topProjects.join('\n')}
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json(
-      { trend: `[OmniOne 錯誤] 無法生成趨勢預測：${message}` },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', `[OmniOne 錯誤] 無法生成趨勢預測：${message}`);
   }
 }

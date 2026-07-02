@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { DiffResult } from '@/core/sonnar/diff-engine';
 import { getRegisteredSources } from '@/crawlers/crawler-factory';
+import { jsonError } from '@/lib/api-utils';
 
 /**
  * Signal Radar — aggregates all detected ESG signals across sources

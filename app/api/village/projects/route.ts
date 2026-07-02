@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 // ----------------------------------------------------------------------------
 // OmniVillage Projects Database (Mock)
@@ -45,12 +46,12 @@ export async function POST(req: Request) {
     if (action === 'vote') {
       const projectIndex = projects.findIndex(p => p.id === projectId);
       if (projectIndex === -1) {
-        return NextResponse.json({ success: false, error: 'Project not found' }, { status: 404 });
+        return jsonError('PROJECT_NOT_FOUND');
       }
 
       const v = Number(votesToCast);
       if (isNaN(v) || v <= 0) {
-        return NextResponse.json({ success: false, error: 'Invalid vote count' }, { status: 400 });
+        return jsonError('INVALID_PARAMS', 'Invalid vote count');
       }
 
       // Quadratic Voting Cost Formula: Cost = (Votes)^2
@@ -69,8 +70,8 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
+    return jsonError('INVALID_ACTION', 'Invalid action');
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', error.message);
   }
 }

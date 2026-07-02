@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, report });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }

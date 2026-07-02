@@ -3,7 +3,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import { AgnesProvider } from '@/components/AgnesProvider';
 import { GlobalNav } from './components/global-nav';
 import './globals.css';
-import { ThemeProvider } from '../components/theme-client';
+import ThemeProvider from './components/theme-client';
 
 export const metadata: Metadata = {
   title: 'ESGGO — 萬能中心 | 5T 永續數據治理平台',

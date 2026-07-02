@@ -4,6 +4,7 @@
 // ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 interface AlertItem {
   id: string;
@@ -103,14 +104,14 @@ export async function POST(req: NextRequest) {
     if (action === 'acknowledge' && alertId) {
       const alert = alertStore.find(a => a.id === alertId);
       if (!alert) {
-        return NextResponse.json({ success: false, error: 'Alert not found' }, { status: 404 });
+        return jsonError('ALERT_NOT_FOUND');
       }
       alert.acknowledged = true;
       return NextResponse.json({ success: true, data: { alertId, acknowledged: true } });
     }
 
-    return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
+    return jsonError('INVALID_ACTION', 'Invalid action');
   } catch (err) {
-    return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', 'Server error');
   }
 }

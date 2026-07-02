@@ -24,6 +24,7 @@ import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { ERROR_CODES, jsonError, jsonSuccess } from './errors.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -81,14 +82,19 @@ const SKILL_REGISTRY = [
 ];
 
 // ── Free Models List ──────────────────────────────────────────
+// OpenRouter free models (free) — includes OpenAI OSS and Hermes free series
 let FREE_MODELS = [
-  { id: 'mistralai/mistral-small-3.1-24b:free', name: 'Mistral: Small 3.1 24B (Default)' },
-  { id: 'meta-llama/llama-3.2-90b-vision:free', name: 'Meta: Llama 3.2 90B Vision (Free)' },
-  { id: 'google/gemma-3-27b-it:free', name: 'Google: Gemma 3 27B (Vision)' },
-  { id: 'qwen/qwen3-vl-8b:free', name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
-  { id: 'google/gemma-4-31b-it:free', name: 'Google: Gemma 4 31B' },
-  { id: 'nousresearch/hermes-3-llama-3.1-405b:free', name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
-  { id: 'openai/gpt-oss-120b:free', name: 'OpenAI: GPT-OSS 120B' },
+  { id: 'mistralai/mistral-small-3.1-24b:free', name: 'Mistral: Small 3.1 24B (Free)', provider: 'openrouter:free, hermes:free' },
+  { id: 'meta-llama/llama-3.2-90b-vision:free', name: 'Meta: Llama 3.2 90B Vision (Free)', provider: 'openrouter:free, hermes:free' },
+  { id: 'google/gemma-3-27b-it:free', name: 'Google: Gemma 3 27B (Free)', provider: 'openrouter:free, hermes:free' },
+  { id: 'qwen/qwen3-vl-8b:free', name: 'Qwen: Qwen3-VL 8B (Free Vision)', provider: 'openrouter:free, hermes:free' },
+  { id: 'google/gemma-4-31b-it:free', name: 'Google: Gemma 4 31B (Free)', provider: 'openrouter:free, hermes:free' },
+  { id: 'nousresearch/hermes-3-llama-3.1-405b:free', name: 'Nous: Hermes 3 405B (Free)', provider: 'openrouter:free, hermes:free' },
+  { id: 'openai/gpt-oss-120b:free', name: 'OpenAI: GPT-OSS 120B (Free)', provider: 'openrouter:free, openai:free' },
+  // Hermes-specific free series
+  { id: 'nousresearch/hermes-3-pro-70b:free', name: 'Hermes 3 Pro 70B (Free)', provider: 'hermes:free' },
+  { id: 'nousresearch/hermes-2-llama-3.1-405b:free', name: 'Hermes 2 Llama 3.1 405B (Free)', provider: 'hermes:free' },
+  { id: 'nousresearch/hermes-3-70b:free', name: 'Hermes 3 70B (Free)', provider: 'hermes:free' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
@@ -247,7 +253,7 @@ const aiLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'AI r
 function requireAuth(req, res, next) {
   const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || req.headers['authorization'] || '').replace('Bearer ', '');
   if (!token || token !== GATEWAY_KEY) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
+    return jsonError(res, 'UNAUTHORIZED', 'Invalid API Key');
   }
   next();
 }
@@ -291,14 +297,14 @@ app.get('/skills', (_req, res) => {
 // GET /skills/:id — Single skill detail
 app.get('/skills/:id', (req, res) => {
   const skill = SKILL_REGISTRY.find(s => s.id === req.params.id);
-  if (!skill) return res.status(404).json({ error: 'Skill not found' });
+  if (!skill) return jsonError(res, 'SKILL_NOT_FOUND');
   res.json(skill);
 });
 
 // POST /execute — Standard AI task execution
 app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
   const { task, skillId } = req.body;
-  if (!task?.id || !task?.taskType) return res.status(400).json({ error: 'task.id and task.taskType required' });
+  if (!task?.id || !task?.taskType) return jsonError(res, 'TASK_REQUIRED');
 
   const resolved = skillId || task.taskType;
   console.log(`[OmniGateway] Execute: ${task.id} | skill=${resolved}`);
@@ -317,16 +323,15 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
       const bridgeData = await bridgeRes.json();
       if (bridgeData.taskId) {
         broadcastWS({ type: 'MANIFEST', source: 'ESG-Bridge', payload: { taskId: task.id, taskId: bridgeData.taskId } });
-        return res.json({
-          success: true,
+        return jsonSuccess(res, {
           bridge: { target: 'nextjs', endpoint: '/api/sustain-write/v5/async' },
           taskId: bridgeData.taskId,
           progressUrl: `/api/sustain-write/v5/progress/${bridgeData.taskId}`,
-        });
+        }, 'success');
       }
-      return res.status(502).json({ error: 'Bridge returned failure', detail: bridgeData });
+      return jsonError(res, 'BRIDGE_FAILURE', 'Bridge returned failure');
     } catch (err) {
-      return res.status(502).json({ error: 'Bridge unreachable: ' + err.message });
+      return jsonError(res, 'BRIDGE_UNREACHABLE', 'Bridge unreachable: ' + err.message);
     }
   }
 
@@ -356,10 +361,10 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
     };
 
     broadcastWS({ type: 'MANIFEST', source: 'Gateway', payload: { taskId: task.id, artId } });
-    res.json(result);
+    return jsonSuccess(res, result, 'success');
   } catch (err) {
     broadcastWS({ type: 'HEAL', source: 'Gateway', payload: { taskId: task.id, error: err.message } });
-    res.status(500).json({ error: err.message });
+    return jsonError(res, 'INTERNAL_ERROR', err.message);
   }
 });
 
@@ -412,7 +417,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
 // POST /omni-jules — OmniJules self-healing (Google Jules lineage)
 app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
   const { failureReason, sourceTaskId, context } = req.body;
-  if (!failureReason) return res.status(400).json({ error: 'failureReason required' });
+  if (!failureReason) return jsonError(res, 'FAILURE_REASON_REQUIRED');
 
   console.log(`[OmniJules] 🛡️ Healing request: ${failureReason.slice(0, 80)}`);
   broadcastWS({ type: 'HEAL', source: 'OmniJules', payload: { sourceTaskId, stage: 'KARMA_INITIATED' } });
@@ -432,7 +437,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
 
     broadcastWS({ type: 'SEAL', source: 'OmniJules', payload: { sourceTaskId, hash, stage: 'KARMA_SEALED' } });
 
-    res.json({
+    return jsonSuccess(res, {
       jules_version: '1.0.0-esggo',
       origin: 'Google Jules → OmniJules (ESGGO Adapted)',
       karmaProtocol: { phase1: '覺察與導向', phase2: '轉化與顯化', phase3: '確信與進化' },
@@ -440,9 +445,9 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
       hash_lock: hash,
       status: 'HEALED',
       provider: aiResult.provider,
-    });
+    }, 'success');
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return jsonError(res, 'INTERNAL_ERROR', err.message);
   }
 });
 
@@ -478,11 +483,11 @@ app.get('/evolve', (_req, res) => res.json({ total: evolutionLog.length, log: ev
 // POST /swarm/broadcast — Swarm task event relay (from Next.js API)
 app.post('/swarm/broadcast', async (req, res) => {
   const event = req.body;
-  if (!event) return res.status(400).json({ error: 'event body required' });
+  if (!event) return jsonError(res, 'EVENT_REQUIRED');
   busEvents.push({ ...event, ts: Date.now() });
   if (busEvents.length > 200) busEvents.shift(); // ring buffer
   broadcastWS({ type: event.stage || 'SWARM', source: 'SwarmBroadcast', payload: event });
-  res.json({ ok: true, clients_notified: wssClients.size });
+  return jsonSuccess(res, { clients_notified: wssClients.size }, 'ok');
 });
 
 // GET /swarm/events — Recent bus events
@@ -490,11 +495,11 @@ app.get('/swarm/events', (_req, res) => res.json({ total: busEvents.length, even
 
 app.post('/api/sync/bus', async (req, res) => {
   const event = req.body;
-  if (!event) return res.status(400).json({ error: 'event body required' });
+  if (!event) return jsonError(res, 'EVENT_REQUIRED');
   busEvents.push({ ...event, ts: Date.now() });
   if (busEvents.length > 200) busEvents.shift();
   broadcastWS({ type: 'SYNC', source: 'AgentBus', payload: event });
-  res.json({ ok: true, clients_notified: wssClients.size });
+  return jsonSuccess(res, { clients_notified: wssClients.size }, 'ok');
 });
 
 // ── ESGSonar Crawler Routes ──────────────────────────────────────
@@ -582,8 +587,8 @@ function startSonnarPeriodicCrawl() {
 setTimeout(startSonnarPeriodicCrawl, 60000);
 
 // 404 + error handlers
-app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health', '/status', '/models', '/skills', '/execute', '/stream', '/omni-jules', '/evolve', '/swarm/broadcast', '/swarm/events', '/api/sync/bus', '/sonnar/status', '/sonnar/crawl', '/sonnar/alerts', '/sonnar/radar'] }));
-app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
+app.use((_req, res) => jsonError(res, 'NOT_FOUND', 'Not found'));
+app.use((err, _req, res, _next) => jsonError(res, 'INTERNAL_ERROR', err.message));
 
 // ── Start ─────────────────────────────────────────────────────
 httpServer.listen(PORT, '0.0.0.0', () => {
@@ -678,5 +683,26 @@ if (TELEGRAM_BOT_TOKEN) {
 }
 
 // ── Signal Handlers ──────────────────────────────────────────
+process.on('uncaughtException', (err) => {
+  console.error('[OmniGateway] Uncaught Exception:', err);
+  // Notify Telegram if available
+  if (bot) {
+    try {
+      bot.sendMessage(TELEGRAM_CHAT_ID, `🚨 *OmniGateway Crash*\n\n\`\`\`${err.stack?.slice(0, 3000)}\`\`\``, { parse_mode: 'Markdown' }).catch(() => {});
+    } catch {}
+  }
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[OmniGateway] Unhandled Rejection at:', promise, 'reason:', reason);
+  if (bot) {
+    try {
+      bot.sendMessage(TELEGRAM_CHAT_ID, `🚨 *OmniGateway Unhandled Rejection*\n\n\`\`\`${String(reason)?.slice(0, 3000)}\`\`\``, { parse_mode: 'Markdown' }).catch(() => {});
+    } catch {}
+  }
+  process.exit(1);
+});
+
 process.on('SIGTERM', () => { httpServer.close(() => process.exit(0)); });
-process.on('SIGINT', () => { httpServer.close(() => process.exit(0)); });
+process.on('SIGINT',  () => { httpServer.close(() => process.exit(0)); });

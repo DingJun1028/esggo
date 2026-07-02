@@ -32,7 +32,7 @@ export async function GET() {
   }
 
   // 2) Sonnar aggregate from internal API
-  let sonnar: SonnarAggregate = {
+  const sonnar: SonnarAggregate = {
     crawlCount: 0,
     lastCrawl: null,
     jobsActive: 0,

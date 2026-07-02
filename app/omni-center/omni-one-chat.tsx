@@ -38,14 +38,11 @@ interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:C
 
 function now() { return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
 
-<<<<<<< Updated upstream
 /** Basic sanitization for dangerouslySetInnerHTML content */
 function sanitizeTextHtml(html: string): string {
-  return xss(html);
+  return sanitizeHtml(html);
 }
 
-=======
->>>>>>> Stashed changes
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
   const [model, setModel] = useState<string>('Qwen');

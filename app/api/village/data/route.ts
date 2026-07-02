@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { seedVillageData } from '@/lib/village-seeder';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -65,6 +66,6 @@ export async function GET() {
   } catch (error: unknown) {
     console.error('Village Data Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }
