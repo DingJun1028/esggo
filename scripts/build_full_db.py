@@ -20,7 +20,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         print(f"Error: Input file not found: {data_path}")
         sys.exit(1)
 
-    with open(data_path, 'r', encoding='utf-8') as f:
+    with open(data_path, encoding='utf-8') as f:
         data = json.load(f)
 
     lines = []
@@ -110,7 +110,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
     lines.append('  readonly investorMapping: string;')
     lines.append('  readonly aiTranslationLogic: string;')
     lines.append('}')
-    
+
     # Company Profiles
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -134,7 +134,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    waterTons: {p["waterTons"]},')
         lines.append('  },')
     lines.append('];')
-    
+
     # Questions
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -152,7 +152,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    evidence: "{esc(q["evidence"])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # Answers (all 1400)
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -170,7 +170,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    gri: "{esc(a["gri"])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # Functions
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -200,7 +200,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
     lines.append('export function getGRIImpact(chapter: string): GRIImpactMapping | undefined {')
     lines.append('  return GRI_IMPACT.find(g => g.chapter === chapter);')
     lines.append('}')
-    
+
     # Report Outlines
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -221,7 +221,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    upgradeAdvice: "{esc(r["upgradeAdvice"][:100])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # Evidence Guide
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -238,7 +238,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    purpose: "{esc(e["purpose"][:100])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # Dashboard Metrics
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -255,7 +255,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    govPurpose: "{esc(d["govPurpose"][:100])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # GRI Impact
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -271,7 +271,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
         lines.append(f'    investorMapping: "{esc(g["investorMapping"])}",')
         lines.append('  },')
     lines.append('];')
-    
+
     # Stats
     lines.append('')
     lines.append('// ═══════════════════════════════════════════════')
@@ -284,12 +284,12 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
     lines.append(f'export const TOTAL_EVIDENCE_GUIDES = {len(data["evidenceGuide"])};')
     lines.append(f'export const TOTAL_DASHBOARD_METRICS = {len(data["dashboardMetrics"])};')
     lines.append(f'export const TOTAL_GRI_MAPPINGS = {len(data["griImpact"])};')
-    
+
     output = '\n'.join(lines)
     with open('lib/sustain-write/answer-database.ts', 'w', encoding='utf-8') as f:
         f.write(output)
     print(f"answer-database.ts: {len(output):,} bytes, {len(lines):,} lines")
-    
+
 
 if __name__ == "__main__":
     build_database()

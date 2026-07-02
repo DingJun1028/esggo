@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Generate answer-database.ts from ESG report Excel file."""
 
+
 import openpyxl
-import json
-import re
 
 EXCEL_PATH = r"C:/var/www/esggo/tmp_answers.xlsx"
 OUTPUT_PATH = r"C:/var/www/esggo/lib/answer-database.ts"
@@ -24,7 +23,7 @@ def escape_ts_string(s: str) -> str:
 def main() -> None:
     """Main entry point: parse Excel and generate TypeScript."""
     wb = openpyxl.load_workbook(EXCEL_PATH, data_only=True)
-    
+
     # ========== 1. Parse Company Profiles ==========
     ws_profile = wb["01_10家公司Profile"]
     companies = []
@@ -45,30 +44,30 @@ def main() -> None:
             "waterTons": str(ws_profile.cell(row=row, column=12).value or "").strip(),
         }
         companies.append(company)
-    
+
     print(f"Parsed {len(companies)} companies")
-    
+
     # ========== 2. Parse Answers ==========
     ws_answers = wb["03_C版完整填答1400筆"]
     answers = []
     instance_to_company = {}
-    
+
     for row in range(2, ws_answers.max_row + 1):
         instance_id = ws_answers.cell(row=row, column=1).value
         if not instance_id:
             continue
         instance_id = str(instance_id).strip()
-    
+
         company_name = str(ws_answers.cell(row=row, column=3).value or "").strip()
         question_id = str(ws_answers.cell(row=row, column=4).value or "").strip()
         chapter = str(ws_answers.cell(row=row, column=5).value or "").strip()
         answer_text = str(ws_answers.cell(row=row, column=7).value or "").strip()
         gri = str(ws_answers.cell(row=row, column=9).value or "").strip()
         direction = str(ws_answers.cell(row=row, column=11).value or "").strip()
-    
+
         if instance_id not in instance_to_company:
             instance_to_company[instance_id] = company_name
-    
+
         answers.append({
             "instanceId": instance_id,
             "questionId": question_id,
@@ -77,11 +76,11 @@ def main() -> None:
             "gri": gri,
             "direction": direction,
         })
-    
+
     print(f"Parsed {len(answers)} answers")
-    
+
     # ========== 3. Generate TypeScript ==========
-    
+
     # Group answers by instanceId
     answers_by_company = {}
     for a in answers:
@@ -89,7 +88,7 @@ def main() -> None:
         if cid not in answers_by_company:
             answers_by_company[cid] = []
         answers_by_company[cid].append(a)
-    
+
     lines = []
     lines.append("// Auto-generated from ESG report Excel - 2026-06-26")
     lines.append("// DO NOT EDIT MANUALLY")
@@ -117,7 +116,7 @@ def main() -> None:
     lines.append("  waterTons: string;")
     lines.append("}")
     lines.append("")
-    
+
     # COMPANIES array
     lines.append("export const COMPANIES: CompanyProfile[] = [")
     for c in companies:
@@ -135,14 +134,14 @@ def main() -> None:
         lines.append("  },")
     lines.append("];")
     lines.append("")
-    
+
     # INSTANCE_TO_COMPANY mapping
     lines.append("const INSTANCE_TO_COMPANY: Record<string, string> = {")
     for cid, cname in sorted(instance_to_company.items()):
         lines.append(f"  '{cid}': '{escape_ts_string(cname)}',")
     lines.append("};")
     lines.append("")
-    
+
     # Per-company answer arrays
     for cid in sorted(answers_by_company.keys()):
         company_answers = answers_by_company[cid]
@@ -160,7 +159,7 @@ def main() -> None:
             lines.append("  },")
         lines.append("];")
         lines.append("")
-    
+
     # getAnswersByCompany function
     lines.append("export function getAnswersByCompany(companyId: string): V5Answer[] {")
     lines.append("  switch (companyId) {")
@@ -171,22 +170,22 @@ def main() -> None:
     lines.append("  }")
     lines.append("}")
     lines.append("")
-    
+
     # getCompanyName helper
     lines.append("export function getCompanyName(instanceId: string): string {")
     lines.append("  return INSTANCE_TO_COMPANY[instanceId] || \"\";")
     lines.append("}")
     lines.append("")
-    
+
     output = "\n".join(lines)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(output)
-    
+
     print(f"\nGenerated: {OUTPUT_PATH}")
     print(f"File size: {len(output)} bytes")
     print(f"Total answers: {len(answers)}")
     print(f"Total companies: {len(companies)}")
-    print(f"\nAnswers per company:")
+    print("\nAnswers per company:")
     for cid in sorted(answers_by_company.keys()):
         print(f"  {cid}: {len(answers_by_company[cid])} answers")
 
