@@ -1,0 +1,66 @@
+# Git
+.git
+.gitignore
+
+# Dependencies — installed inside container
+node_modules/
+/.pnpm-store
+packages/*/node_modules
+apps/*/node_modules
+
+# Build artifacts
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# Local env files
+.env
+.env.*
+.env*.local
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+
+# Documentation (not needed in runtime)
+docs/
+*.md
+README*
+
+# Tests (not needed in runtime)
+tests/
+coverage/
+
+# Reports (generated at runtime)
+reports/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github/
+
+# Temp / scratch
+tmp_*
+temp/
+scratch/
