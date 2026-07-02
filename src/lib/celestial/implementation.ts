@@ -75,7 +75,16 @@ export class CelestialController {
     // 2. 封印：確保數據安全 (Seal)
     const uuid = randomUUID();
     const sealTimestamp = Date.now();
-    const payloadStr = JSON.stringify({ uuid, sealTimestamp, ...input });
+
+    // 初始化 evidence
+    const originCauseStr = typeof input.origin === 'string' ? input.origin : 'External Input';
+    const initialEvidence = {
+      originCause: EntropyForge.purify(originCauseStr),
+      processTrace: [`[SENSE] Flow initiated. Trace ID: ${uuid}`],
+      finalEffect: 'Sealed'
+    };
+
+    const payloadStr = JSON.stringify({ uuid, sealTimestamp, evidence: initialEvidence, ...input });
     const hash = createHash('sha256').update(payloadStr).digest('hex');
 
     const sealedData = Object.freeze({
@@ -83,7 +92,8 @@ export class CelestialController {
       sealTimestamp,
       uuid,
       isFrozen: true,
-      hash
+      hash,
+      evidence: initialEvidence
     });
 
     try {
@@ -137,9 +147,25 @@ export class CelestialController {
         }
       }
 
+      if (sanitized.evidence) {
+        const newEvidence = { ...sanitized.evidence };
+        newEvidence.processTrace = [...newEvidence.processTrace, `[PURIFY] Entropy reduction applied.`];
+        newEvidence.finalEffect = 'Purified';
+        sanitized.evidence = newEvidence;
+      }
+
       return Object.freeze(sanitized);
     }
     
+    if (data && data.evidence) {
+       const sanitized = { ...data };
+       const newEvidence = { ...sanitized.evidence };
+       newEvidence.processTrace = [...newEvidence.processTrace, `[ALIGN] Validation passed.`];
+       newEvidence.finalEffect = 'Aligned';
+       sanitized.evidence = newEvidence;
+       return Object.freeze(sanitized);
+    }
+
     return data;
   }
 
