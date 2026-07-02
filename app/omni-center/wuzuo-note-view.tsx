@@ -160,6 +160,7 @@ export function WuzuoNoteView() {
     try {
       for (const t of INITIAL_TASKS) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, ...rest } = t;
         await addDoc(collection(db, "omni_tasks"), rest);
       }
@@ -181,6 +182,7 @@ export function WuzuoNoteView() {
 
     // Due Date Filter
     if (filterDueDate !== "All") {
+      // eslint-disable-next-line react-hooks/purity
       // eslint-disable-next-line react-hooks/purity
       const now = Date.now();
       if (filterDueDate === "Upcoming") {
@@ -326,6 +328,7 @@ export function WuzuoNoteView() {
           processedTasks.map((task) => {
             const isCompleted = task.status === "Completed";
             // eslint-disable-next-line react-hooks/purity
+            // eslint-disable-next-line react-hooks/purity
             const isOverdue = !isCompleted && task.dueDate < Date.now();
             const dateStr = new Date(task.dueDate).toLocaleDateString("zh-TW", {
               month: "short",
@@ -348,7 +351,12 @@ export function WuzuoNoteView() {
                       ? `標記為未完成: ${task.title}`
                       : `標記為已完成: ${task.title}`
                   }
-                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary
+                  aria-label={
+                    isCompleted
+                      ? `標記為未完成: ${task.title}`
+                      : `標記為已完成: ${task.title}`
+                  }
+                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary
                     ${
                       isCompleted
                         ? "border-accentGreen bg-accentGreen"
