@@ -3,11 +3,20 @@
 
 import json
 import os
+import sys
+from pathlib import Path
 
 import openpyxl
 
-EXCEL = r"C:\Users\Administrator\OneDrive\Documents\@ESG_GO_C版_10家公司_極致擬真完整模擬填答_完全對齊A版欄位.xlsx"
-OUT = r"C:\var\www\esggo\lib\sustain-write"
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import SUSTAIN_WRITE_DIR, get_full_excel  # noqa: E402
+
+EXCEL = str(get_full_excel())
+OUT = str(SUSTAIN_WRITE_DIR)
 
 
 def parse_question_bank(wb) -> list:

@@ -21,7 +21,7 @@ module.exports = {
     '@typescript-eslint/no-require-imports': 'warn',
     '@typescript-eslint/no-var-requires': 'warn',
   },
-  ignorePatterns: ['node_modules/', '.next/', 'out/', '*.cjs', '*.mjs', 'dist/', 'build/'],
+  ignorePatterns: ['node_modules/', '.next/', 'out/', '*.cjs', '*.mjs', 'dist/', 'build/', 'assets/vendor/'],
   settings: {
     react: {
       version: 'detect',

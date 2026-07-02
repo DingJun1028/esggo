@@ -8,7 +8,7 @@ const globals = require('globals');
 
 module.exports = [
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs'],
+    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/'],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],

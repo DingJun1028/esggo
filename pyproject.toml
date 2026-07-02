@@ -40,6 +40,11 @@ select = ["E", "F", "W", "I", "N", "UP", "SIM"]
 [tool.ruff.lint.per-file-ignores]
 "scripts/generate_esg_data.py" = ["E501"]
 "scripts/generate_v5_report.py" = ["E501"]
+"tests/*.py" = ["E402"]
+"generate_answer_db.py" = ["E402"]
+"parse-esg.py" = ["E402"]
+"scripts/build_full_db.py" = ["E402"]
+"scripts/gen.py" = ["E402"]
 
 [tool.ruff.format]
 quote-style = "single"

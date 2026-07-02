@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """Generate answer-database.ts from ESG report Excel file."""
 
+import sys
+from pathlib import Path
 
 import openpyxl
 
-EXCEL_PATH = r"C:/var/www/esggo/tmp_answers.xlsx"
-OUTPUT_PATH = r"C:/var/www/esggo/lib/answer-database.ts"
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import get_answer_database_ts, get_tmp_excel  # noqa: E402
+
+EXCEL_PATH = str(get_tmp_excel())
+OUTPUT_PATH = str(get_answer_database_ts())
 
 
 def escape_ts_string(s: str) -> str:
