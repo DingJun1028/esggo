@@ -221,6 +221,20 @@ supabase/
 # ADRs
 adr/
 
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+*.egg
+dist/
+*.whl
+.python-version
+
+# IDE
+.idea/
+.vscode/
+
 # Static reports (generated, not source)
 reports/
 README.OMNICOMPONENT.md

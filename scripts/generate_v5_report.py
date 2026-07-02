@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """ESGGO v5.0 — Generate 280K character sustainability report from Excel data"""
 
-import openpyxl
-import json
-import re
-import os
 import hashlib
 import math
+import os
+import re
 from datetime import datetime
+
+import openpyxl
 
 # Paths
 EXCEL_PATH = r'C:\var\www\esggo\tmp_answers.xlsx'
@@ -98,91 +98,90 @@ def generate_chapter(ch_num, answers, profile, questions):
     year = '2025'
     employees = profile['employees']
     revenue = profile['annualRevenue']
-    industry = profile['industryType']
     locations = profile['operatingLocations']
     electricity = profile['electricityKwh']
     water = profile['waterTons']
     business = profile['mainBusiness']
-    
+
     # Determine 5T gate for this chapter
     gates = ['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable']
     gate = gates[(ch_num - 1) % 5]
     gate_color = FIVE_T_COLORS[gate]
     gate_labels = {'traceable': '真', 'transparent': '善', 'tangible': '美', 'trustworthy': '信', 'trackable': '通'}
     gate_label = gate_labels[gate]
-    
+
     parts = []
     parts.append(f'<h2>第{ch_num}章 {title} <span style="font-size:12px;color:{gate_color}">[{gate_label}]</span></h2>')
-    
+
     # Opening paragraph with company data
-    parts.append(f'<section class="chapter-intro">')
+    parts.append('<section class="chapter-intro">')
     parts.append(f'<p>{company}（以下简称{short}）成立于台湾，营运据点包含{locations}，')
     parts.append(f'主要业务为{business}。截至{year}年12月31日，')
     parts.append(f'员工人数约{employees}人，年合并营收约{revenue}，')
     parts.append(f'年用电量约{electricity:,} kWh，年用水量约{water:,}吨。')
     parts.append(f'{short}在「{title}」面向的{year}年度具体作为，依5T协议{gate_label}（{gate}）原则进行揭露。</p>')
-    parts.append(f'</section>')
-    
+    parts.append('</section>')
+
     # Table of contents for the chapter
-    parts.append(f'<section class="chapter-toc">')
-    parts.append(f'<h3>章节架构</h3>')
-    parts.append(f'<ul>')
+    parts.append('<section class="chapter-toc">')
+    parts.append('<h3>章节架构</h3>')
+    parts.append('<ul>')
     subsections = ['管理策略', '目标与绩效', '风险与机会', '外部合作', '未来展望']
     for i, sub in enumerate(subsections):
         parts.append(f'<li>{ch_num}.{i+1} {sub}</li>')
-    parts.append(f'</ul>')
-    parts.append(f'</section>')
-    
+    parts.append('</ul>')
+    parts.append('</section>')
+
     # Add high-fidelity answers as main content
     if answers:
-        parts.append(f'<section class="chapter-content">')
-        parts.append(f'<h3>核心揭露事项</h3>')
-        
+        parts.append('<section class="chapter-content">')
+        parts.append('<h3>核心揭露事项</h3>')
+
         for i, ans_obj in enumerate(answers):
             ans = ans_obj['answer']
             qid = ans_obj['questionId']
             qinfo = questions.get(qid, {})
             gri = ans_obj.get('gri', '')
             direction = ans_obj.get('direction', '')
-            
+
             parts.append(f'<div class="answer-block" id="{qid}">')
             parts.append(f'<h3>{ch_num}.{i+1} {qinfo.get("question", "揭露事项")}</h3>')
-            parts.append(f'<div class="answer-content">')
+            parts.append('<div class="answer-content">')
             parts.append(f'{ans}')
-            parts.append(f'</div>')
-            
+            parts.append('</div>')
+
             if gri:
                 parts.append(f'<p class="gri-tag">GRI: {gri}</p>')
             if direction:
                 parts.append(f'<p class="direction-tag">报告方向: {direction}</p>')
-            
-            parts.append(f'</div>')
-        
-        parts.append(f'</section>')
+
+            parts.append('</div>')
+
+        parts.append('</section>')
     else:
         # Generate content from template if no answers
-        parts.append(f'<section class="chapter-content">')
-        parts.append(f'<h3>核心揭露事项</h3>')
-        
+        parts.append('<section class="chapter-content">')
+        parts.append('<h3>核心揭露事项</h3>')
+
         template_paras = [
             f'{short}于{year}年度依「{title}」相关规范进行完整揭露。公司高层对此面向高度重视，设立专责单位推动相关策略，并将执行成果定期向董事会报告。',
             f'在具体作为方面，{short}透过三大主轴推动{title}相关工作：第一，建立完整监测与回报机制，确保信息透明度；第二，设定量化目标并追踪达成率；第三，与外部利害关系人保持良好沟通，回应各方关注议题。',
             f'{year}年度具体绩效指标包括：员工满意度调查达85%、供应商评鉴合格率92%、客户抱怨处理时效48小时内完成等。 aforementioned data has been verified by third-party assurance providers.',
             f'面对未来挑战，{short}将持续深化{title}工作，包括但不限于：导入数字化管理工具、强化供应链伙伴关系、提升信息透明度等。公司期望透过系统化的管理作为，为环境与社会创造正面影响力。',
         ]
-        
+
         for para in template_paras:
             parts.append(f'<p>{para}</p>')
-        
-        parts.append(f'</section>')
-    
+
+        parts.append('</section>')
+
     # Add data table
-    parts.append(f'<section class="chapter-data">')
-    parts.append(f'<h3>关键绩效指标</h3>')
-    parts.append(f'<table class="data-table">')
+    parts.append('<section class="chapter-data">')
+    parts.append('<h3>关键绩效指标</h3>')
+    parts.append('<table class="data-table">')
     parts.append(f'<thead><tr><th>指标名称</th><th>{year}</th><th>前年度</th><th>目标</th><th>达成率</th><th>GRI</th></tr></thead>')
-    parts.append(f'<tbody>')
-    
+    parts.append('<tbody>')
+
     # Generate KPIs based on chapter topic
     kpis = [
         ('完成率', '92%', '85%', '95%', '97%', 'GRI 2-7'),
@@ -191,21 +190,21 @@ def generate_chapter(ch_num, answers, profile, questions):
         ('满意度', '85%', '78%', '90%', '94%', 'GRI 413-1'),
         ('训练时数', '45小时', '40小时', '50小时', '90%', 'GRI 404-1'),
     ]
-    
+
     for kpi in kpis:
         parts.append(f'<tr><td>{kpi[0]}</td><td>{kpi[1]}</td><td>{kpi[2]}</td><td>{kpi[3]}</td><td>{kpi[4]}</td><td>{kpi[5]}</td></tr>')
-    
-    parts.append(f'</tbody></table>')
-    parts.append(f'</section>')
-    
+
+    parts.append('</tbody></table>')
+    parts.append('</section>')
+
     # SVG Chart
     chart_type = ['bar', 'pie', 'line', 'radar'][ch_num % 4]
     chart_svg = generate_svg_chart(ch_num, chart_type, title)
-    parts.append(f'<section class="chapter-chart">')
-    parts.append(f'<h3>可视化图表</h3>')
+    parts.append('<section class="chapter-chart">')
+    parts.append('<h3>可视化图表</h3>')
     parts.append(chart_svg)
-    parts.append(f'</section>')
-    
+    parts.append('</section>')
+
     # Extension blocks to fill word count
     ext_topics = {
         'governance': ['治理架构深化', '内部控制机制', '审计功能强化', '董事多元性', '薪酬与绩效连结'],
@@ -213,52 +212,52 @@ def generate_chapter(ch_num, answers, profile, questions):
         'social': ['人才发展', '多元平等', '社区参与', '客户关怀', '供应链人权'],
         'transparency': ['信息揭露', 'GRI索引', '第三方保证', '利害关系人沟通', '持续改善'],
     }
-    
+
     topic_key = gate if gate in ext_topics else 'transparency'
     topics = ext_topics.get(topic_key, ext_topics['transparency'])
-    
-    parts.append(f'<section class="chapter-extensions">')
+
+    parts.append('<section class="chapter-extensions">')
     for i, topic in enumerate(topics):
         parts.append(f'<h3>专题深化：{topic}</h3>')
         parts.append(f'<p>{short}在{topic}面向的作为如下：</p>')
-        parts.append(f'<p>')
+        parts.append('<p>')
         parts.append(f'依金管会「上市柜公司永续报告书画作业办法」及GRI准则规范，本公司已于{year}年度建立完整的{topic}管理机制，')
-        parts.append(f'并依据PDCA（计划-执行-检查-行动）循环持续改善。具体成效包括：建立量化指标系统、设定短期/中期/长期目标、')
-        parts.append(f'定期追踪执行成果，并向董事会提报执行报告。此外，公司亦透过与外部利害关系人的对话机制，')
+        parts.append('并依据PDCA（计划-执行-检查-行动）循环持续改善。具体成效包括：建立量化指标系统、设定短期/中期/长期目标、')
+        parts.append('定期追踪执行成果，并向董事会提报执行报告。此外，公司亦透过与外部利害关系人的对话机制，')
         parts.append(f'{short}持续关注与回应各方对于{topic}面向的关切与期待。')
-        parts.append(f'</p>')
-        parts.append(f'<p>')
+        parts.append('</p>')
+        parts.append('<p>')
         parts.append(f'{year}年度{topic}具体成果摘要如下：已举办{4 + ch_num % 6}场内部训练课程，')
         parts.append(f'参与人数约{50 + ch_num * 10}人；完成{ch_num % 5 + 2}件改善案；')
         parts.append(f'外部评核获得{85 + ch_num % 10}分（满分100分）。')
         parts.append(f'{short}将持续强化{topic}相关工作，为利害关系人创造长期价值。')
-        parts.append(f'</p>')
-    parts.append(f'</section>')
-    
+        parts.append('</p>')
+    parts.append('</section>')
+
     # ZKP seal
     ch_hash = zkp_hash(''.join(parts))
-    parts.append(f'<div class="zkp-seal">')
+    parts.append('<div class="zkp-seal">')
     parts.append(f'<p><strong>ZKP Seal:</strong> <code>{ch_hash}</code></p>')
     parts.append(f'<p><strong>OmniTag:</strong> OTG-{ch_num:02d}-{year}-{gate.upper()}</p>')
-    parts.append(f'<p><strong>Trinity Binding:</strong> VAULT:sealed | USER:synced | Agent:verified</p>')
-    parts.append(f'</div>')
-    
+    parts.append('<p><strong>Trinity Binding:</strong> VAULT:sealed | USER:synced | Agent:verified</p>')
+    parts.append('</div>')
+
     return '\n'.join(parts)
 
 def generate_svg_chart(ch_num, chart_type, title):
     """Generate simple SVG chart"""
     colors = ['#009EB0', '#D4AF37', '#3B82F6', '#FF4D6D', '#22C55E', '#8B5CF6', '#06B6D4', '#F59E0B']
-    
-    svg = f'<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:12px;">'
+
+    svg = '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:12px;">'
     svg += f'<text x="250" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">{title} — 绩效分布</text>'
-    
+
     if chart_type == 'bar':
         values = [15 + ch_num * 3, 28 + ch_num * 2, 42 + ch_num, 35 + ch_num * 2, 22 + ch_num]
         max_val = max(values)
         bar_width = 60
         bar_gap = 20
         x_start = (500 - (len(values) * (bar_width + bar_gap) - bar_gap)) / 2
-        
+
         for i, val in enumerate(values):
             bar_h = (val / max_val) * 180
             x = x_start + i * (bar_width + bar_gap)
@@ -267,12 +266,12 @@ def generate_svg_chart(ch_num, chart_type, title):
             svg += f'<rect x="{x}" y="{y}" width="{bar_width}" height="{bar_h}" fill="{color}" rx="3"/>'
             svg += f'<text x="{x + bar_width/2}" y="{y - 5}" text-anchor="middle" font-size="11" fill="#475569">{val}</text>'
             svg += f'<text x="{x + bar_width/2}" y="260" text-anchor="middle" font-size="10" fill="#64748b">项目{i+1}</text>'
-    
+
     elif chart_type == 'pie':
         values = [30 + ch_num, 25 + ch_num, 20 + ch_num, 15 + ch_num, 10 + ch_num]
         total = sum(values)
         angles = [v / total * 360 for v in values]
-        
+
         cx, cy, r = 250, 140, 80
         start_angle = 0
         for i, angle in enumerate(angles):
@@ -285,15 +284,15 @@ def generate_svg_chart(ch_num, chart_type, title):
             color = colors[i % len(colors)]
             svg += f'<path d="M{cx},{cy} L{x1:.1f},{y1:.1f} A{r},{r} 0 {large_arc} 1 {x2:.1f},{y2:.1f} Z" fill="{color}" stroke="white" stroke-width="1"/>'
             start_angle = end_angle
-    
+
     elif chart_type == 'line':
         points = [(50, 240 - i * 10 - ch_num * 2) for i in range(5)]
         for i in range(len(points) - 1):
             svg += f'<line x1="{points[i][0]}" y1="{points[i][1]}" x2="{points[i+1][0]}" y2="{points[i+1][1]}" stroke="#009EB0" stroke-width="2"/>'
         for x, y in points:
             svg += f'<circle cx="{x}" cy="{y}" r="4" fill="#009EB0"/>'
-        svg += f'<path d="M50,200 Q150,180 250,160 T450,120" fill="none" stroke="#D4AF37" stroke-width="2"/>'
-    
+        svg += '<path d="M50,200 Q150,180 250,160 T450,120" fill="none" stroke="#D4AF37" stroke-width="2"/>'
+
     elif chart_type == 'radar':
         cx, cy = 250, 140
         values = [0.7 + ch_num % 4 * 0.05, 0.8, 0.75 + ch_num % 3 * 0.05, 0.85, 0.7, 0.9]
@@ -309,7 +308,7 @@ def generate_svg_chart(ch_num, chart_type, title):
             my = cy + max_r * math.sin(angle)
             svg += f'<line x1="{cx}" y1="{cy}" x2="{mx:.1f}" y2="{my:.1f}" stroke="#e2e8f0" stroke-width="1"/>'
             svg += f'<text x="{mx:.1f}" y="{my:.1f}" text-anchor="middle" font-size="11" fill="#475569">{labels[i]}</text>'
-        
+
         radar_points = []
         for i, val in enumerate(values):
             angle = 2 * math.pi * i / n - math.pi / 2
@@ -318,8 +317,8 @@ def generate_svg_chart(ch_num, chart_type, title):
             y = cy + r * math.sin(angle)
             radar_points.append(f'{x:.1f},{y:.1f}')
         svg += f'<polygon points="{" ".join(radar_points)}" fill="rgba(0,158,176,0.2)" stroke="#009EB0" stroke-width="2"/>'
-    
-    svg += f'</svg>'
+
+    svg += '</svg>'
     return svg
 
 
@@ -327,7 +326,7 @@ def generate_report(company_id):
     """Generate full HTML report for a company"""
     profile = profiles[company_id]
     company_answers = answers_by_company.get(company_id, [])
-    
+
     # Build v5 chapter answers
     v5_chapters = {}
     for ans in company_answers:
@@ -337,7 +336,7 @@ def generate_report(company_id):
             if v5_ch not in v5_chapters:
                 v5_chapters[v5_ch] = []
             v5_chapters[v5_ch].append(ans)
-    
+
     # HTML header
     html = f'''<!DOCTYPE html>
 <html lang="zh-TW">
@@ -408,15 +407,15 @@ p {{ margin: 12px 0; text-align: justify; }}
     # Generate each chapter
     total_words = 0
     chapter_words = {}
-    
+
     for ch_num in range(1, 29):
         title = V5_TITLES.get(ch_num, f'第{ch_num}章')
         gate = ['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable'][(ch_num - 1) % 5]
         gate_label = {'traceable': '真', 'transparent': '善', 'tangible': '美', 'trustworthy': '信', 'trackable': '通'}[gate]
         html += f'<tr><td>{ch_num}</td><td>{title}</td><td>{gate_label}</td><td id="wc-{ch_num}">...</td></tr>\n'
-    
+
     html += '</table>\n'
-    
+
     # Generate chapter content
     for ch_num in range(1, 29):
         answers = v5_chapters.get(ch_num, [])
@@ -425,10 +424,10 @@ p {{ margin: 12px 0; text-align: justify; }}
         chapter_words[ch_num] = ch_words
         total_words += ch_words
         html += f'\n<!-- Chapter {ch_num}: {ch_words:,} words -->\n{chapter_html}\n'
-    
+
     # Trinity hash
     trinity_hash = zkp_hash(str(total_words) + company_id)
-    
+
     # Footer
     html += f'''
 <div class="footer">
@@ -444,7 +443,7 @@ p {{ margin: 12px 0; text-align: justify; }}
 </body>
 </html>
 '''
-    
+
     return html, total_words
 
 
@@ -456,13 +455,13 @@ print("="*60)
 for company_id in list(profiles.keys()):
     print(f"\nGenerating report for {company_id}...", end=" ")
     html, total_words = generate_report(company_id)
-    
+
     filename = f'esg-report-2025-{company_id}.html'
     filepath = os.path.join(OUTPUT_DIR, filename)
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(html)
-    
+
     file_size = os.path.getsize(filepath)
     print(f"{total_words:,} words, {file_size:,} bytes")
 

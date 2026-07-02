@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Parse ESG Excel file and generate TypeScript question bank, answer database, and report templates."""
 
-import openpyxl
-import json
 import re
 from collections import defaultdict
+
+import openpyxl
 
 EXCEL_PATH = r'C:\Users\Administrator\OneDrive\Documents\@ESG_GO_C版_10家公司_極致擬真完整模擬填答_完全對齊A版欄位.xlsx'
 OUTPUT_DIR = r'C:\var\www\esggo\lib\sustain-write'
@@ -36,17 +36,17 @@ def to_camel_case(text):
 def generate_question_bank(wb):
     """Parse sheet 02 and generate question-bank.ts"""
     ws = wb['02_C版140題題庫']
-    
+
     questions = []
     chapters_order = []
     chapter_questions = defaultdict(list)
-    
+
     rows = list(ws.iter_rows(min_row=2, values_only=True))
-    
+
     for row in rows:
         if not row[0]:
             continue
-        
+
         q_id = sanitize_ts_string(row[0])
         chapter = sanitize_ts_string(row[1])
         question_text = sanitize_ts_string(row[2])
@@ -55,10 +55,10 @@ def generate_question_bank(wb):
         gri_impact = sanitize_ts_string(row[5])
         evidence = sanitize_ts_string(row[6])
         ai_help = sanitize_ts_string(row[7])
-        
+
         if chapter not in chapters_order:
             chapters_order.append(chapter)
-        
+
         q = {
             'id': q_id,
             'chapter': chapter,
@@ -71,7 +71,7 @@ def generate_question_bank(wb):
         }
         questions.append(q)
         chapter_questions[chapter].append(q)
-    
+
     # Generate TypeScript
     lines = []
     lines.append('/**')
@@ -98,7 +98,7 @@ def generate_question_bank(wb):
     lines.append('  questions: Question[];')
     lines.append('}')
     lines.append('')
-    
+
     # GRI mappings per chapter
     gri_mappings = {
         'C1 組織與報告邊界': 'GRI 2-1, 2-3, 2-6',
@@ -114,7 +114,7 @@ def generate_question_bank(wb):
         'C11 Impact與投資人敘事': 'GRI 201-1, 203-1, 203-2, Impact: 財務重大性, 社會影響評估',
         'C12 查核、佐證與資料治理': 'GRI 1, GRI 2, 確信標準, ISAE 3000, AA1000',
     }
-    
+
     lines.append('/** 章節定義與GRI對應 */')
     lines.append('export const CHAPTER_DEFINITIONS: { code: string; name: string; griMapping: string }[] = [')
     for ch in chapters_order:
@@ -122,7 +122,7 @@ def generate_question_bank(wb):
         lines.append(f"  {{ code: '{code}', name: '{ch}', griMapping: '{gri_mappings.get(ch, '')}' }},")
     lines.append('];')
     lines.append('')
-    
+
     # All questions array
     lines.append('/** 完整題庫 (140題) */')
     lines.append('export const QUESTION_BANK: Question[] = [')
@@ -139,7 +139,7 @@ def generate_question_bank(wb):
         lines.append('  },')
     lines.append('];')
     lines.append('')
-    
+
     # Questions by chapter
     # Questions by chapter
     lines.append('export const QUESTIONS_BY_CHAPTER: ChapterQuestions[] = [')
@@ -157,7 +157,7 @@ def generate_question_bank(wb):
         lines.append('  },')
     lines.append('];')
     lines.append('')
-    
+
     # Helper functions
     lines.append('/** 根據題目ID取得題目 */')
     lines.append('export function getQuestionById(id: string): Question | undefined {')
@@ -173,23 +173,23 @@ def generate_question_bank(wb):
     lines.append('export function getAllChapterCodes(): string[] {')
     lines.append('  return CHAPTER_DEFINITIONS.map(c => c.code);')
     lines.append('}')
-    
+
     return '\n'.join(lines)
 
 
 def generate_answer_database(wb):
     """Parse sheet 03 and generate answer-database.ts"""
     ws = wb['03_C版完整填答1400筆']
-    
+
     answers = []
     companies = {}
-    
+
     rows = list(ws.iter_rows(min_row=2, values_only=True))
-    
+
     for row in rows:
         if not row[0]:
             continue
-        
+
         instance_id = row[0]
         company_type = row[1]
         company_name = row[2]
@@ -203,10 +203,10 @@ def generate_answer_database(wb):
         ai_report_direction = row[10]
         data_maturity = row[11]
         data_gap = row[12]
-        
+
         if company_name:
             companies[company_name] = company_type
-        
+
         answers.append({
             'instanceId': instance_id,
             'companyType': company_type,
@@ -222,7 +222,7 @@ def generate_answer_database(wb):
             'dataMaturity': data_maturity,
             'dataGap': data_gap,
         })
-    
+
     # Generate TypeScript
     lines = []
     lines.append('/**')
@@ -258,7 +258,7 @@ def generate_answer_database(wb):
     lines.append('  answersByChapter: Record<string, Answer[]>;')
     lines.append('}')
     lines.append('')
-    
+
     # Company list
     lines.append('/** 10家模擬公司列表 */')
     lines.append('export const COMPANIES: CompanyProfile[] = [')
@@ -266,7 +266,7 @@ def generate_answer_database(wb):
         lines.append(f"  {{ name: '{sanitize_ts_string(name)}', type: '{sanitize_ts_string(ctype)}' }},")
     lines.append('];')
     lines.append('')
-    
+
     # All answers
     lines.append('/** 完整填答資料庫 (1400筆) */')
     lines.append('export const ANSWER_DATABASE: Answer[] = [')
@@ -288,7 +288,7 @@ def generate_answer_database(wb):
         lines.append('  },')
     lines.append('];')
     lines.append('')
-    
+
     # Helper functions
     lines.append('/** 根據公司名稱取得所有填答 */')
     lines.append('export function getAnswersByCompany(companyName: string): Answer[] {')
@@ -339,13 +339,13 @@ def generate_answer_database(wb):
     lines.append('export function getDataGaps(companyName: string): Answer[] {')
     lines.append('  return getAnswersByCompany(companyName).filter(a => a.dataGap && a.dataGap.length > 0);')
     lines.append('}')
-    
+
     return '\n'.join(lines)
 
 
 def generate_report_templates():
     """Generate report-templates.ts with chapter definitions and templates"""
-    
+
     lines = []
     lines.append('/**')
     lines.append(' * C版專業永續報告範本與章節定義')
@@ -388,7 +388,7 @@ def generate_report_templates():
     lines.append('  evidenceRequired: string[];')
     lines.append('}')
     lines.append('')
-    
+
     # Chapter definitions
     lines.append('/**')
     lines.append(' * C版專業永續報告 12章節定義')
@@ -481,7 +481,7 @@ def generate_report_templates():
     lines.append('  },')
     lines.append('];')
     lines.append('')
-    
+
     # Report section templates
     lines.append('/**')
     lines.append(' * 報告段落範本 (使用 {{placeholder}} 語法)')
@@ -562,7 +562,7 @@ def generate_report_templates():
     lines.append('  },')
     lines.append('];')
     lines.append('')
-    
+
     # Assemble report function
     lines.append('/**')
     lines.append(' * 組合完整永續報告')
@@ -709,7 +709,7 @@ def generate_report_templates():
     lines.append('export function getChapterTemplate(chapterCode: string): ReportSectionTemplate | undefined {')
     lines.append('  return REPORT_SECTION_TEMPLATES.find(t => t.chapterCode === chapterCode);')
     lines.append('}')
-    
+
     return '\n'.join(lines)
 
 
@@ -717,7 +717,7 @@ def main():
     print('Loading Excel file...')
     wb = openpyxl.load_workbook(EXCEL_PATH, read_only=True, data_only=True)
     print(f'Sheet names: {wb.sheetnames}')
-    
+
     # Generate question bank
     print('Generating question-bank.ts...')
     qb_content = generate_question_bank(wb)
@@ -725,7 +725,7 @@ def main():
     with open(qb_path, 'w', encoding='utf-8') as f:
         f.write(qb_content)
     print(f'  Written: {qb_path} ({len(qb_content)} chars)')
-    
+
     # Generate answer database
     print('Generating answer-database.ts...')
     ad_content = generate_answer_database(wb)
@@ -733,7 +733,7 @@ def main():
     with open(ad_path, 'w', encoding='utf-8') as f:
         f.write(ad_content)
     print(f'  Written: {ad_path} ({len(ad_content)} chars)')
-    
+
     # Generate report templates
     print('Generating report-templates.ts...')
     rt_content = generate_report_templates()
@@ -741,7 +741,7 @@ def main():
     with open(rt_path, 'w', encoding='utf-8') as f:
         f.write(rt_content)
     print(f'  Written: {rt_path} ({len(rt_content)} chars)')
-    
+
     wb.close()
     print('\nDone! All files generated successfully.')
 
