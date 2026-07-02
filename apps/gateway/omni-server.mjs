@@ -95,6 +95,9 @@ let FREE_MODELS = [
   { id: 'nousresearch/hermes-3-pro-70b:free', name: 'Hermes 3 Pro 70B (Free)', provider: 'hermes:free' },
   { id: 'nousresearch/hermes-2-llama-3.1-405b:free', name: 'Hermes 2 Llama 3.1 405B (Free)', provider: 'hermes:free' },
   { id: 'nousresearch/hermes-3-70b:free', name: 'Hermes 3 70B (Free)', provider: 'hermes:free' },
+  { id: 'nousresearch/hermes-4-70b:free', name: 'Hermes 4 70B (Free)', provider: 'hermes:free' },
+  { id: 'nousresearch/hermes-3-llama-70:free', name: 'Hermes 3 LL (Free)', provider: 'hermes:free' },
+  { id: 'hermes-2-dpo:free', name: 'Hermes 2 DPO (Free)', provider: 'hermes:free' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
