@@ -188,7 +188,7 @@ export function WuzuoNoteView() {
           <button 
             onClick={seedData} 
             disabled={isSeeding}
-            className="text-[12px] bg-accentTeal text-white font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
+            className="text-[12px] bg-accentTeal text-white font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
           >
             {isSeeding ? '匯入中...' : '🪄 一鍵匯入展示任務'}
           </button>
@@ -267,7 +267,8 @@ export function WuzuoNoteView() {
                 {/* Custom Checkbox (Liquid Circle) */}
                 <button 
                   onClick={() => toggleStatus(task)}
-                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center
+                  aria-label={isCompleted ? `標記為未完成: ${task.title}` : `標記為已完成: ${task.title}`}
+                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary
                     ${isCompleted 
                       ? 'border-accentGreen bg-accentGreen' 
                       : 'border-textSecondary/40 bg-transparent hover:border-accentTeal'}`}
