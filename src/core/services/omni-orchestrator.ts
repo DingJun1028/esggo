@@ -1,4 +1,6 @@
 import { CelestialController } from '@/lib/celestial/implementation';
+import { plantOmniSeed, IOmniSeed } from '../sonnar/omni-seed';
+import { trinityHash } from '../sonnar/hash-lock';
 
 export interface OrchestratorContext {
   traceId: string;
@@ -56,6 +58,34 @@ export class OmniOrchestrator {
       console.log(`[OmniOrchestrator] Entropy Reduction complete. Anomaly sealed. System restored to TRANSCENDED state.`);
     } catch (sealError) {
       console.error(`[OmniOrchestrator] CRITICAL: Failed to seal anomaly!`, sealError);
+    }
+
+    // Plant an OmniSeed to create an immutable frozen audit seal in #記憶聖所
+    try {
+      const auditEvidence = {
+        errorType: 'SYSTEM_ANOMALY',
+        detail: errorDetail,
+        traceId: context.traceId,
+        sourceOrigin: context.sourceOrigin,
+        action: 'SELF_HEALING_COMPLETED',
+      };
+      
+      const hashLock = trinityHash(context.traceId, JSON.stringify(auditEvidence), String(context.timestamp));
+      
+      const dormantSeed: IOmniSeed = {
+        uuid: context.traceId,
+        version: '1.0.0-audit',
+        timestamp: context.timestamp,
+        evidence: auditEvidence,
+        hashLock,
+        entropyControl: 0.1,
+        status: 'dormant'
+      };
+      
+      const auditSeal = plantOmniSeed(dormantSeed, '#記憶聖所');
+      console.log(`[OmniOrchestrator] Immutable OmniSeed Audit Seal generated in #記憶聖所. HashLock: ${auditSeal.hashLock}`);
+    } catch (omniSeedError) {
+      console.error(`[OmniOrchestrator] Failed to plant OmniSeed Audit Seal:`, omniSeedError);
     }
   }
 }
