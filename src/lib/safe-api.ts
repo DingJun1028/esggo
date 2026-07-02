@@ -4,6 +4,7 @@
  * Centralized error handling, type-safe API calls, and debug logging.
  * All API calls in the app should use these utilities for consistency.
  */
+import xss from 'xss';
 
 // ─── Types ─────────────────────────────────────────────────────────
 
@@ -105,17 +106,7 @@ export function validateResponse<T>(
  * This is NOT a complete sanitizer — use DOMPurify for production.
  */
 export function sanitizeHtml(html: string): string {
-  return html
-    // Remove script tags and content
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Remove dangerous tags
-    .replace(/<\/?(?:iframe|object|embed|form|input|textarea|select|button)[^>]*>/gi, '')
-    // Remove event handlers (on*)
-    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    // Remove javascript: URLs
-    .replace(/href\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/gi, 'href="#"')
-    // Remove data: URLs in src
-    .replace(/src\s*=\s*(?:"data:[^"]*"|'data:[^']*')/gi, '');
+  return xss(html);
 }
 
 // ─── Debug Logger ──────────────────────────────────────────────────
