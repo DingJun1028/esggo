@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { omniOrchestrator } from '@/core/services/omni-orchestrator';
+import { jsonError } from '@/lib/api-utils';
 
 export async function POST(req: Request) {
   try {
@@ -36,9 +37,9 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ error: 'Tool not found' }, { status: 404 });
+    return jsonError('SKILL_NOT_FOUND', 'Tool not found');
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', err.message);
   }
 }
 

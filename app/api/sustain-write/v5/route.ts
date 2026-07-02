@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown, getV5Companies } from '@/core/services/report-generator-v5';
 import { generateFullV5Report, fullReportToHtml } from '@/core/services/report-generator-v5-full';
+import { jsonError } from '@/lib/api-utils';
 
 export async function GET() {
   const companies = getV5Companies();
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   if (mode === 'full') {
     const report = await generateFullV5Report(companyId, brandTone);
-    if (!report) return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+    if (!report) return jsonError('COMPANY_NOT_FOUND');
     if (format === 'html') {
       return new NextResponse(fullReportToHtml(report), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' }
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   const report = generateV5Report(companyId);
-  if (!report) return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+  if (!report) return jsonError('COMPANY_NOT_FOUND');
 
   if (format === 'html') {
     return new NextResponse(reportV5ToHtml(report), {

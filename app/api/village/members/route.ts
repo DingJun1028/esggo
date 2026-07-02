@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 export async function GET() {
   try {
@@ -17,6 +18,6 @@ export async function GET() {
     return NextResponse.json({ success: true, members: fallbackMembers });
   } catch (error: any) {
     console.error('Village Members GET Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', error.message);
   }
 }

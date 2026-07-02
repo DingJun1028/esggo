@@ -11,15 +11,15 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
+    "start": "next start",
+    "lint": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
     "turbo:dev": "next dev",
     "turbo:build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "turbo:start": "next start",
-    "turbo:lint": "next lint"
+    "turbo:lint": "eslint . --fix"
   },
   "dependencies": {
     "@esggo/shared": "workspace:*",
@@ -44,8 +44,8 @@
   "overrides": {
     "glob": ">=10.5.0",
     "minimatch": ">=9.0.7",
-    "postcss": ">=8.5.10",
-    "uuid": ">=11.1.1"
+    "postcss": "^8.5.16",
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -54,14 +54,19 @@
     "@types/uuid": "~11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "cross-env": "^10.1.0",
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-next": "^16.0.0",
-    "eslint-plugin-next": "^0.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
     "next": "^16.0.0",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.4.1",
     "turbo": "^2",
     "typescript": "^5",
+    "typescript-eslint": "^8.62.1",
     "vitest": "^4.1.9"
   }
 }

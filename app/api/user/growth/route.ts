@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
   try {
     const userId = req.nextUrl.searchParams.get('userId');
     if (!userId) {
-      return NextResponse.json({ error: 'userId required' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', 'userId required');
     }
 
     const service = getUserGrowthService();
@@ -28,6 +29,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, profile });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }

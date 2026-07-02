@@ -3,6 +3,7 @@
  * OmniAgent 統一執行入口
  */
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,10 +40,7 @@ export async function POST(req: NextRequest) {
       });
 
     default:
-      return NextResponse.json({
-        error: 'Unknown action',
-        availableActions: ['assemble', 'status', 'evolve'],
-      }, { status: 400 });
+      return jsonError('UNKNOWN_TOOL', `Unknown action: ${action}`);
   }
 }
 

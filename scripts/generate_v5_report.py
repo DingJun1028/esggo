@@ -6,6 +6,7 @@ import json
 import re
 import os
 import hashlib
+import math
 from datetime import datetime
 
 # Paths
@@ -37,7 +38,7 @@ for row in ws_questions.iter_rows(min_row=2, values_only=True):
 print(f"  Loaded {len(questions)} questions")
 
 # 3. High-fidelity answers (1400)
-ws_answers = wb['03_C版完整填答1400筆'
+ws_answers = wb['03_C版完整填答1400筆']
 answers_by_company = {}
 for row in ws_answers.iter_rows(min_row=2, values_only=True):
     if row[0] and row[6]:
@@ -224,7 +225,7 @@ def generate_chapter(ch_num, answers, profile, questions):
         parts.append(f'依金管会「上市柜公司永续报告书画作业办法」及GRI准则规范，本公司已于{year}年度建立完整的{topic}管理机制，')
         parts.append(f'并依据PDCA（计划-执行-检查-行动）循环持续改善。具体成效包括：建立量化指标系统、设定短期/中期/长期目标、')
         parts.append(f'定期追踪执行成果，并向董事会提报执行报告。此外，公司亦透过与外部利害关系人的对话机制，')
-        parts.append(f'{_short}持续关注与回应各方对于{topic}面向的关切与期待。')
+        parts.append(f'{short}持续关注与回应各方对于{topic}面向的关切与期待。')
         parts.append(f'</p>')
         parts.append(f'<p>')
         parts.append(f'{year}年度{topic}具体成果摘要如下：已举办{4 + ch_num % 6}场内部训练课程，')
@@ -276,17 +277,17 @@ def generate_svg_chart(ch_num, chart_type, title):
         start_angle = 0
         for i, angle in enumerate(angles):
             end_angle = start_angle + angle
-            x1 = cx + r * __import__('math').cos(__import__('math').radians(start_angle - 90))
-            y1 = cy + r * __import__('math').sin(__import__('math').radians(start_angle - 90))
-            x2 = cx + r * __import__('math').cos(__import__('math').radians(end_angle - 90))
-            y2 = cy + r * __import__('math').sin(__import__('math').radians(end_angle - 90))
+            x1 = cx + r * math.cos(math.radians(start_angle - 90))
+            y1 = cy + r * math.sin(math.radians(start_angle - 90))
+            x2 = cx + r * math.cos(math.radians(end_angle - 90))
+            y2 = cy + r * math.sin(math.radians(end_angle - 90))
             large_arc = 1 if angle > 180 else 0
             color = colors[i % len(colors)]
             svg += f'<path d="M{cx},{cy} L{x1:.1f},{y1:.1f} A{r},{r} 0 {large_arc} 1 {x2:.1f},{y2:.1f} Z" fill="{color}" stroke="white" stroke-width="1"/>'
             start_angle = end_angle
     
     elif chart_type == 'line':
-        points = [(50, 240 - i * 10 - ch_num * 2) for i, colors_item in enumerate(colors[:5])]
+        points = [(50, 240 - i * 10 - ch_num * 2) for i in range(5)]
         for i in range(len(points) - 1):
             svg += f'<line x1="{points[i][0]}" y1="{points[i][1]}" x2="{points[i+1][0]}" y2="{points[i+1][1]}" stroke="#009EB0" stroke-width="2"/>'
         for x, y in points:
@@ -299,22 +300,22 @@ def generate_svg_chart(ch_num, chart_type, title):
         labels = ['治理', '环境', '社会', '经济', '科技', '透明度']
         n = len(values)
         for i in range(n):
-            angle = 2 * __import__('math').pi * i / n - __import__('math').pi / 2
+            angle = 2 * math.pi * i / n - math.pi / 2
             r = 80 * values[i]
-            x = cx + r * __import__('math').cos(angle)
-            y = cy + r * __import__('math').sin(angle)
+            x = cx + r * math.cos(angle)
+            y = cy + r * math.sin(angle)
             max_r = 80
-            mx = cx + max_r * __import__('math').cos(angle)
-            my = cy + max_r * __import__('math').sin(angle)
+            mx = cx + max_r * math.cos(angle)
+            my = cy + max_r * math.sin(angle)
             svg += f'<line x1="{cx}" y1="{cy}" x2="{mx:.1f}" y2="{my:.1f}" stroke="#e2e8f0" stroke-width="1"/>'
             svg += f'<text x="{mx:.1f}" y="{my:.1f}" text-anchor="middle" font-size="11" fill="#475569">{labels[i]}</text>'
         
         radar_points = []
         for i, val in enumerate(values):
-            angle = 2 * __import__('math').pi * i / n - __import__('math').pi / 2
+            angle = 2 * math.pi * i / n - math.pi / 2
             r = 80 * val
-            x = cx + r * __import__('math').cos(angle)
-            y = cy + r * __import__('math').sin(angle)
+            x = cx + r * math.cos(angle)
+            y = cy + r * math.sin(angle)
             radar_points.append(f'{x:.1f},{y:.1f}')
         svg += f'<polygon points="{" ".join(radar_points)}" fill="rgba(0,158,176,0.2)" stroke="#009EB0" stroke-width="2"/>'
     

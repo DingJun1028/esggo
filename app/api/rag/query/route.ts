@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import { jsonError, validateParams } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -27,8 +28,9 @@ export async function POST(req: Request) {
   try {
     const { prompt, tenantId = 'default_tenant', userId = 'default_user' } = await req.json();
 
-    if (!prompt) {
-      return NextResponse.json({ error: '無效的請求參數' }, { status: 400 });
+    const paramValidation = validateParams({ prompt });
+    if (!paramValidation.valid) {
+      return jsonError('INVALID_PARAMS', 'prompt 為必填參數');
     }
 
     if (!HAS_API_KEY) {
@@ -113,6 +115,6 @@ ${prompt}`;
     });
   } catch (error: any) {
     console.error('RAG Query Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonError('RAG_QUERY_FAILED', error.message);
   }
 }
