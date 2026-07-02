@@ -6,6 +6,8 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import { plantOmniSeed, IOmniSeed } from '../sonnar/omni-seed';
+import { trinityHash } from '../sonnar/hash-lock';
 
 // ─── Tier Thresholds ──────────────────────────────────────────
 
@@ -67,6 +69,32 @@ class UserGrowthService {
   async getOrCreateUser(userId: string, email?: string, displayName?: string) {
     const existing = await this.prisma.userGrowth.findUnique({ where: { userId } });
     if (existing) return existing;
+
+    // Create the genesis OmniSeed for the new user!
+    const genesisEvidence = {
+      email: email || 'anonymous@esggo.org',
+      displayName: displayName || '永續觀察者',
+      role: '永續觀察者',
+      origin: 'USER_GROWTH_SYSTEM',
+    };
+    
+    // Generate Trinity Hash Lock for this user's genesis
+    const hashLock = trinityHash(userId, JSON.stringify(genesisEvidence), String(Date.now()));
+    
+    // Assemble the dormant seed
+    const dormantSeed: IOmniSeed = {
+      uuid: userId,
+      version: '1.0.0-genesis',
+      timestamp: Date.now(),
+      evidence: genesisEvidence,
+      hashLock,
+      entropyControl: 0.1,
+      status: 'dormant'
+    };
+    
+    // Plant and awaken the seed into the concentric core
+    const genesisSeed = plantOmniSeed(dormantSeed, '#同心圓中心');
+    console.log(`[UserGrowth] Planted Genesis OmniSeed for user: ${userId}, HashLock: ${genesisSeed.hashLock}`);
 
     return this.prisma.userGrowth.create({
       data: {
