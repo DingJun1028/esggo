@@ -4,6 +4,14 @@
 import json
 import os
 import sys
+from pathlib import Path
+
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import SUSTAIN_WRITE_DIR, ensure_dirs  # noqa: E402
 
 
 def esc(s: str) -> str:
@@ -13,8 +21,12 @@ def esc(s: str) -> str:
     return s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ').replace('\r', '')
 
 
-def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib/sustain-write/answer-database.ts') -> None:
+def build_database(data_path: str = 'v5_full_data.json', output_path: str | None = None) -> None:
     """Build answer-database.ts from JSON data file."""
+    if output_path is None:
+        ensure_dirs()
+        output_path = str(SUSTAIN_WRITE_DIR / 'answer-database.ts')
+
     # Validate input file
     if not os.path.exists(data_path):
         print(f"Error: Input file not found: {data_path}")
@@ -286,7 +298,7 @@ def build_database(data_path: str = 'v5_full_data.json', output_path: str = 'lib
     lines.append(f'export const TOTAL_GRI_MAPPINGS = {len(data["griImpact"])};')
 
     output = '\n'.join(lines)
-    with open('lib/sustain-write/answer-database.ts', 'w', encoding='utf-8') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         f.write(output)
     print(f"answer-database.ts: {len(output):,} bytes, {len(lines):,} lines")
 

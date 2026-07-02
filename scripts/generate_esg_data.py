@@ -2,12 +2,21 @@
 """Parse ESG Excel file and generate TypeScript question bank, answer database, and report templates."""
 
 import re
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 import openpyxl
 
-EXCEL_PATH = r'C:\Users\Administrator\OneDrive\Documents\@ESG_GO_C版_10家公司_極致擬真完整模擬填答_完全對齊A版欄位.xlsx'
-OUTPUT_DIR = r'C:\var\www\esggo\lib\sustain-write'
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import SUSTAIN_WRITE_DIR, get_full_excel  # noqa: E402
+
+EXCEL_PATH = str(get_full_excel())
+OUTPUT_DIR = str(SUSTAIN_WRITE_DIR)
 
 def sanitize_ts_string(s):
     """Escape a string for TypeScript single-quoted string literal."""

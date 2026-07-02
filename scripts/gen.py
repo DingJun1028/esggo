@@ -3,11 +3,20 @@
 
 import json
 import os
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 import openpyxl
 
-EXCEL = r"C:/var/www/esggo/tmp_answers.xlsx"
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import get_tmp_excel  # noqa: E402
+
+EXCEL = str(get_tmp_excel())
 OUTDIR = r"C:/var/www/esggo/reports"
 
 

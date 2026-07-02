@@ -8,9 +8,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from generate_answer_db import escape_ts_string
-from scripts.build_full_db import esc as esc_double
-from scripts.generate_esg_data import sanitize_ts_string
+from generate_answer_db import escape_ts_string  # noqa: E402
+from scripts.build_full_db import esc as esc_double  # noqa: E402
+from scripts.generate_esg_data import sanitize_ts_string  # noqa: E402
 
 
 class TestEscapeTsString:

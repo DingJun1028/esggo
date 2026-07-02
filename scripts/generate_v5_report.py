@@ -5,13 +5,22 @@ import hashlib
 import math
 import os
 import re
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import openpyxl
 
+# Ensure project root is in path for config imports
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from esggo.config import REPORTS_DIR, get_tmp_excel  # noqa: E402
+
 # Paths
-EXCEL_PATH = r'C:\var\www\esggo\tmp_answers.xlsx'
-OUTPUT_DIR = r'C:\var\www\esggo\reports'
+EXCEL_PATH = str(get_tmp_excel())
+OUTPUT_DIR = str(REPORTS_DIR)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 print("Loading Excel data...")
