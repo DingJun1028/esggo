@@ -100,18 +100,6 @@ export function validateResponse<T>(
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
-<<<<<<< Updated upstream
-/**
- * Basic HTML sanitizer for dangerouslySetInnerHTML.
- * Strips <script>, <iframe>, <object>, <embed>, and event handlers.
- * This is NOT a complete sanitizer — use DOMPurify for production.
- */
-export function sanitizeHtml(html: string): string {
-  return xss(html);
-}
-=======
-import xss from 'xss';
-
 const xssOptions = {
   whiteList: {
     span: ['class', 'style'],
@@ -156,7 +144,6 @@ const xssOptions = {
 };
 
 export const sanitizeHtml = (html: string): string => xss(html, xssOptions);
->>>>>>> Stashed changes
 
 // ─── Debug Logger ──────────────────────────────────────────────────
 

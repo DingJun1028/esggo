@@ -3,6 +3,7 @@ import pdfParse from 'pdf-parse';
 import { agnesApi } from '@/lib/agnes-api';
 import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     const userId = formData.get('userId') as string || 'default_user';
 
     if (!file) {
-      return NextResponse.json({ error: '未提供 PDF 檔案' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', '未提供 PDF 檔案');
     }
 
     // 將 File 轉換為 Buffer
@@ -98,9 +99,6 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error('PDF Ingestion Error:', error);
-    return NextResponse.json(
-      { error: `解析失敗: ${error.message}` },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', `解析失敗: ${error.message}`);
   }
 }

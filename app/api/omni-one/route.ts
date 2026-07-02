@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -58,9 +59,6 @@ ${input}
     return NextResponse.json({ output: response.text });
   } catch (error: any) {
     console.error('OmniOne LLM API Error:', error);
-    return NextResponse.json(
-      { output: `[OmniOne 錯誤] 系統連接異常：${error.message}` },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', `[OmniOne 錯誤] 系統連接異常：${error.message}`);
   }
 }

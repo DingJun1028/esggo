@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 export async function GET() {
   return NextResponse.json({
@@ -37,9 +38,9 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, data: result });
       }
       default:
-        return NextResponse.json({ success: false, error: `Unknown job: ${job}` }, { status: 400 });
+        return jsonError('INVALID_ACTION', `Unknown job: ${job}`);
     }
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', error.message);
   }
 }
