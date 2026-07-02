@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { crawlerScheduler } from '@/services/scheduler/crawler-scheduler';
+import { jsonError } from '@/lib/api-utils';
 
 // GET /api/sonnar/crawl — Get scheduler status & job list
 export async function GET() {
@@ -54,10 +55,7 @@ export async function POST(req: NextRequest) {
     if (sourceId) {
       const result = await crawlerScheduler.crawlNow(sourceId);
       if (!result) {
-        return NextResponse.json(
-          { success: false, error: `Unknown source: ${sourceId}` },
-          { status: 404 }
-        );
+        return jsonError('SOURCE_NOT_FOUND', `Unknown source: ${sourceId}`);
       }
       
       // Get bridge results (last bridge for this source)
@@ -93,15 +91,9 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      { success: false, error: 'Provide sourceId or all: true' },
-      { status: 400 }
-    );
+    return jsonError('INVALID_PARAMS', 'Provide sourceId or all: true');
   } catch (err) {
     console.error('[Sonar Crawl API] Error:', err);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return jsonError('CRAWL_ERROR', 'Internal server error');
   }
 }

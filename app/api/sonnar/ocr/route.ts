@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +28,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error('[Sonar OCR] Error:', err);
-    return NextResponse.json({ success: false, error: 'Invalid request' }, { status: 400 });
+    return jsonError('INTERNAL_ERROR', 'Invalid request');
   }
 }

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       firebaseProgress = data.documentProgress as Record<string, unknown> || null;
     }
   } catch {
-    // Firebase not available
+    // Firebase not available — use free-tier fallback
   }
 
   const progress = firebaseProgress ? {

@@ -1,0 +1,1913 @@
+$ turbo run lint
+â€¢ turbo 2.10.0
+
+   â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+   â€¢ Running lint in 6 packages
+   â€¢ Remote caching disabled
+
+esggo:lint: cache miss, executing 938fdb905deb3674
+esggo:lint: $ turbo run lint
+esggo:lint: â€¢ turbo 2.10.0
+esggo:lint: 
+esggo:lint:    â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+esggo:lint:    â€¢ Running lint in 6 packages
+esggo:lint:    â€¢ Remote caching disabled
+esggo:lint: 
+esggo:lint: esggo:lint: cache miss, executing 3703a6ee05fef329
+esggo:lint: esggo:lint: $ turbo run lint
+esggo:lint: esggo:lint: â€¢ turbo 2.10.0
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:    â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+esggo:lint: esggo:lint:    â€¢ Running lint in 6 packages
+esggo:lint: esggo:lint:    â€¢ Remote caching disabled
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: cache miss, executing 51628cba463dc938
+esggo:lint: esggo:lint: esggo:lint: $ turbo run lint
+esggo:lint: esggo:lint: esggo:lint: â€¢ turbo 2.10.0
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:    â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+esggo:lint: esggo:lint: esggo:lint:    â€¢ Running lint in 6 packages
+esggo:lint: esggo:lint: esggo:lint:    â€¢ Remote caching disabled
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: cache miss, executing e1e78944c930a9eb
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: $ turbo run lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: â€¢ turbo 2.10.0
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Running lint in 6 packages
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Remote caching disabled
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: cache miss, executing fcdff61348f55694
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: $ turbo run lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: â€¢ turbo 2.10.0
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Packages in scope: @esggo/cli, @esggo/config, @esggo/shared, @esggo/ui, esggo, omniagent-gateway
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Running lint in 6 packages
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:    â€¢ Remote caching disabled
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: cache miss, executing 62a2dfa71620977e
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: $ turbo run lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 'turbo' ¤£¬O¤º³¡©Î¥~³¡©R¥O¡B¥i°õ¦æªºµ{¦¡©Î§å¦¸ÀÉ¡C
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    747ms 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    1.619s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    2.582s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    3.536s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    4.506s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    5.345s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+nt: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    3.536s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    4.506s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    5.345s 
+esggo:lint: Failed:    esggo#lint
+esggo:esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    1.619s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    2.582s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    3.536s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    4.506s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    5.345s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    6.213s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    7.075s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    8.144s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    9.063s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    6.213s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    3.536s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    4.506s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    5.345s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    6.213s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    7.075s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    8.144s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    9.063s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    9.942s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    10.84s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    11.738s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    8.144s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggoesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint:esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    6.213s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    7.075s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    8.144s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    9.063s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    9.942s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    10.84s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    11.738s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    12.667s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    13.656s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    9.942s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    10.84s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 toesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    9.063s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    9.942s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    10.84s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    11.738s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    12.667s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    13.656s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    14.782s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    15.874s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+int: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    10.84s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    11.738s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    12.667s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:linesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:linesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    10.84s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    11.738s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    12.667s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    13.656s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    14.782s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    15.874s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    16.748s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    17.589s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+ exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    12.667s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    13.656s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggoesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    11.738s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    12.667s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    13.656s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    14.782s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    15.874s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    18.578s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    19.439s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    13.656s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Tesggo:lint: esggo:lint: esggo:lint: esggo:liesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    15.874s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    19.439s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    20.264s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+sggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    14.782s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    15.874s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit coesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    14.782s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    15.874s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    21.215s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    22.25s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+o:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: eesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    22.25s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    23.261s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+t: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    16.748s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    24.031s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    24.826s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+nt: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    18.578s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    24.826s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    25.652s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    19.439s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215sesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    17.589s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    25.652s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    26.507s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+ esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    20.264s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lesggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    26.507s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    27.401s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+ailed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    21.215s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    28.298s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    29.285s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+nt: esggo:lint: esggo:lint:   Time:    22.25s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    28.298s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    29.285s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    30.268s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+ggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    23.261s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:liesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    28.298s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    29.285s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    30.268s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    31.096s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.031s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    28.298s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    29.285s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    30.268s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    31.096s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    31.9s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+go:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    24.826s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggesggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    28.298s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    29.285s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    30.268s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    31.096s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    31.9s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    32.728s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.
+sggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    25.652s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    26.507s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    27.401s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    28.298s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    29.285s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:   Time:    30.268s 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint: esggo:lint:   Time:    31.096s 
+esggo:lint: esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint: esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: esggo:lint: Cached:    0 cached, 1 total
+esggo:lint: esggo:lint:   Time:    31.9s 
+esggo:lint: esggo:lint: Failed:    esggo#lint
+esggo:lint: esggo:lint: 
+esggo:lint: esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+esggo:lint:  ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+esggo:lint: 
+esggo:lint:  Tasks:    0 successful, 1 total
+esggo:lint: Cached:    0 cached, 1 total
+esggo:lint:   Time:    32.728s 
+esggo:lint: Failed:    esggo#lint
+esggo:lint: 
+esggo:lint:  ERROR  run failed: command  exited (1)
+esggo:lint: [ELIFECYCLE] Command failed with exit code 1.
+ ERROR  esggo#lint: command (C:\var\www\esggo\) C:\Program Files\nodejs\pnpm.CMD run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    33.625s 
+Failed:    esggo#lint
+
+ ERROR  run failed: command  exited (1)
+[ELIFECYCLE] Command failed with exit code 1.

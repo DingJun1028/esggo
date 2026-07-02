@@ -14,7 +14,8 @@ import xss from 'xss';
  * Architecture: Connects to /api/omni-agent/console
  */
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { sanitizeHtml } from '@/lib/safe-api';
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -190,10 +191,6 @@ function formatUptime(ms: number): string {
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
   return `${h}h ${m}m`;
-}
-
-function sanitizeHtml(html: string): string {
-  return xss(html);
 }
 
 function renderMarkdown(text: string): string {

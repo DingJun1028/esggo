@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -107,6 +108,6 @@ ${JSON.stringify(tasks)}
     return NextResponse.json({ error: `未知的工具呼叫: ${tool}` }, { status: 400 });
   } catch (error: any) {
     console.error('Nexus Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', error.message);
   }
 }
