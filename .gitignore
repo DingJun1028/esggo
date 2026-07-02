@@ -20,6 +20,7 @@ yarn-error.log*
 .env*.local
 .env
 .env.example
+!vps/.env.example
 .env.local.sample
 
 # vercel
@@ -43,8 +44,6 @@ omniagent-gateway/package-lock.json
 .storybook/
 .codeturtle.yml
 .editorconfig
-.dockerignore
-.gcloudignore
 .husky/
 .lintstagedrc.json
 .npmrc
