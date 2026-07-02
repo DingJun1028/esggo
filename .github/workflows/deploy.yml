@@ -38,6 +38,16 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: 1
 
+      - name: Backup before deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            echo "=== Backup Start ==="
+            bash /var/www/esggo/vps/backup.sh --db-only 2>&1 || echo "Backup skipped (first deploy?)"
+
       - name: Sync to VPS
         uses: easingthemes/ssh-deploy@main
         with:
@@ -49,12 +59,14 @@ jobs:
           TARGET: /var/www/esggo
 
       - name: Restart services
+        id: deploy
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -o pipefail
             cd /var/www/esggo
             pnpm install --frozen-lockfile 2>&1 || true
             pnpm run build 2>&1 || true
@@ -62,7 +74,32 @@ jobs:
             pm2 save
             echo "=== VPS Persistence ==="
             bash scripts/vps-setup.sh 2>&1 || true
+
+      - name: Health check
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
             echo "=== Health Check ==="
-            sleep 5
-            curl -sf http://localhost:3000/api/health && echo " - Next.js OK" || echo " - Next.js FAIL"
-            curl -sf http://localhost:8642/status && echo " - Gateway OK" || echo " - Gateway FAIL"
+            sleep 8
+            NEXTJS_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/health 2>/dev/null || echo '000')
+            GATEWAY_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8642/status 2>/dev/null || echo '000')
+            echo "Next.js: ${NEXTJS_STATUS}"
+            echo "Gateway: ${GATEWAY_STATUS}"
+            if [ "${NEXTJS_STATUS}" != "200" ] || [ "${GATEWAY_STATUS}" != "200" ]; then
+              echo "=== Health check FAILED! Attempting rollback... ==="
+              LATEST_BACKUP=$(ls -d /var/backups/esggo/20* 2>/dev/null | sort -r | head -1)
+              if [ -n "${LATEST_BACKUP}" ]; then
+                echo "Rolling back to: ${LATEST_BACKUP}"
+                bash /var/www/esggo/vps/backup.sh restore "$(basename "${LATEST_BACKUP}")" 2>&1
+                echo "=== Rollback complete ==="
+              else
+                echo "No backup found for rollback!"
+                exit 1
+              fi
+            else
+              echo "=== All services healthy ==="
+            fi
