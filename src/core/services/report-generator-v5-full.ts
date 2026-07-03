@@ -128,8 +128,10 @@ export async function generateFullV5Report(companyId: string, brandTone: string 
         // Use swarm service for expert rewriting if tone is specified (demo on first answer of chapter 2)
         if (ch.num === 2 && i === 0 && brandTone) {
           const refined = await swarmService.refineReportSection(finalAnswer, brandTone);
-          finalAnswer = refined.content;
-          swarmTrace.push(`[章節 2.${i+1}] 已完成 L-Hub 專家潤飾 (ZKP: ${refined.uuid})`);
+          if (refined && typeof refined.content === 'string') {
+            finalAnswer = refined.content;
+            swarmTrace.push(`[章節 2.${i+1}] 已完成 L-Hub 專家潤飾 (ZKP: ${String(refined.uuid)})`);
+          }
         }
 
         content += `<h3>${ch.num}.${i+1} 題目：${a.question}</h3>`;
@@ -163,8 +165,10 @@ export async function generateFullV5Report(companyId: string, brandTone: string 
         // L-Hub 合規協作 (Demo on chapter 1)
         if (ch.num === 1) {
           const compliance = await swarmService.performComplianceCheck(highlightContent, 'EU CSRD');
-          highlightContent += `<br><br><strong>[由 L-Hub 代理集群協作驗證]</strong><br>${compliance.content}`;
-          swarmTrace.push(`[章節 1 雛形重點] 已完成 EU CSRD 跨國合規比對 (ZKP: ${compliance.uuid})`);
+          if (compliance && typeof compliance.content === 'string') {
+            highlightContent += `<br><br><strong>[由 L-Hub 代理集群協作驗證]</strong><br>${compliance.content}`;
+            swarmTrace.push(`[章節 1 雛形重點] 已完成 EU CSRD 跨國合規比對 (ZKP: ${String(compliance.uuid)})`);
+          }
         }
         
         content += `<h3>報告雛形重點</h3><p>${highlightContent}</p>`;

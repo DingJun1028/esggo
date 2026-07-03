@@ -186,8 +186,19 @@ export class OmniTagFactory {
 
 // === 5T 報告組裝引擎 ===
 
+export interface ReportAnswer {
+  questionId: string;
+  chapter: string;
+  answer?: string;
+}
+
+export interface CompanyProfile {
+  companyName?: string;
+  [key: string]: unknown;
+}
+
 export class FiveTReportEngine {
-  static assemble(companyId: string, answers: any[], profile: any): GeneratedReport {
+  static assemble(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): GeneratedReport {
     const fiveTStatus = {
       traceable: true,
       transparent: true,
@@ -216,8 +227,8 @@ export class FiveTReportEngine {
     };
   }
 
-  private static buildTraceableChapter(companyId: string, answers: any[], profile: any): ReportChapter {
-    const orgAnswers = answers.filter((a: any) => a.questionId.indexOf('C1') === 0);
+  private static buildTraceableChapter(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): ReportChapter {
+    const orgAnswers = answers.filter((a: ReportAnswer) => a.questionId.indexOf('C1') === 0);
     const content = this.generateNarrative(orgAnswers, profile, '組織溯源與報告邊界');
     const tags = orgAnswers.map(() => OmniTagFactory.create({ lifecycle: 'verified' }));
 
@@ -227,13 +238,13 @@ export class FiveTReportEngine {
       fiveTGate: 'traceable',
       content,
       omniTags: tags,
-      evidenceRefs: orgAnswers.map((a: any) => a.questionId),
+      evidenceRefs: orgAnswers.map((a: ReportAnswer) => a.questionId),
       wordCount: content.length,
     };
   }
 
-  private static buildTransparentChapter(companyId: string, answers: any[], profile: any): ReportChapter {
-    const govAnswers = answers.filter((a: any) => a.questionId.indexOf('C2') === 0 || a.questionId.indexOf('C3') === 0);
+  private static buildTransparentChapter(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): ReportChapter {
+    const govAnswers = answers.filter((a: ReportAnswer) => a.questionId.indexOf('C2') === 0 || a.questionId.indexOf('C3') === 0);
     const content = this.generateNarrative(govAnswers, profile, '治理透明與重大性驗算');
     const tags = govAnswers.map(() => OmniTagFactory.create({ lifecycle: 'verified' }));
 
@@ -243,13 +254,13 @@ export class FiveTReportEngine {
       fiveTGate: 'transparent',
       content,
       omniTags: tags,
-      evidenceRefs: govAnswers.map((a: any) => a.questionId),
+      evidenceRefs: govAnswers.map((a: ReportAnswer) => a.questionId),
       wordCount: content.length,
     };
   }
 
-  private static buildTangibleChapter(companyId: string, answers: any[], profile: any): ReportChapter {
-    const envAnswers = answers.filter((a: any) =>
+  private static buildTangibleChapter(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): ReportChapter {
+    const envAnswers = answers.filter((a: ReportAnswer) =>
       a.questionId.indexOf('C4') === 0 || a.questionId.indexOf('C5') === 0 ||
       a.questionId.indexOf('C6') === 0 || a.questionId.indexOf('C7') === 0 ||
       a.questionId.indexOf('C8') === 0
@@ -263,13 +274,13 @@ export class FiveTReportEngine {
       fiveTGate: 'tangible',
       content,
       omniTags: tags,
-      evidenceRefs: envAnswers.map((a: any) => a.questionId),
+      evidenceRefs: envAnswers.map((a: ReportAnswer) => a.questionId),
       wordCount: content.length,
     };
   }
 
-  private static buildTrustworthyChapter(companyId: string, answers: any[], profile: any): ReportChapter {
-    const riskAnswers = answers.filter((a: any) => a.questionId.indexOf('C9') === 0 || a.questionId.indexOf('C10') === 0);
+  private static buildTrustworthyChapter(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): ReportChapter {
+    const riskAnswers = answers.filter((a: ReportAnswer) => a.questionId.indexOf('C9') === 0 || a.questionId.indexOf('C10') === 0);
     const content = this.generateNarrative(riskAnswers, profile, '風險管理與數據可信度');
     const tags = riskAnswers.map(() => OmniTagFactory.create({ lifecycle: 'anchored' }));
 
@@ -279,13 +290,13 @@ export class FiveTReportEngine {
       fiveTGate: 'trustworthy',
       content,
       omniTags: tags,
-      evidenceRefs: riskAnswers.map((a: any) => a.questionId),
+      evidenceRefs: riskAnswers.map((a: ReportAnswer) => a.questionId),
       wordCount: content.length,
     };
   }
 
-  private static buildTrackableChapter(companyId: string, answers: any[], profile: any): ReportChapter {
-    const supplyAnswers = answers.filter((a: any) => a.questionId.indexOf('C11') === 0 || a.questionId.indexOf('C12') === 0);
+  private static buildTrackableChapter(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): ReportChapter {
+    const supplyAnswers = answers.filter((a: ReportAnswer) => a.questionId.indexOf('C11') === 0 || a.questionId.indexOf('C12') === 0);
     const content = this.generateNarrative(supplyAnswers, profile, '供應鏈追蹤與生命週期');
     const tags = supplyAnswers.map(() => OmniTagFactory.create({ lifecycle: 'synced' }));
 
@@ -295,12 +306,12 @@ export class FiveTReportEngine {
       fiveTGate: 'trackable',
       content,
       omniTags: tags,
-      evidenceRefs: supplyAnswers.map((a: any) => a.questionId),
+      evidenceRefs: supplyAnswers.map((a: ReportAnswer) => a.questionId),
       wordCount: content.length,
     };
   }
 
-  private static generateNarrative(answers: any[], profile: any, section: string): string {
+  private static generateNarrative(answers: ReportAnswer[], profile: CompanyProfile | null, section: string): string {
     if (!answers.length) return '';
 
     const paragraphs: string[] = [];

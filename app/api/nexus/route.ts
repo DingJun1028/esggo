@@ -131,8 +131,9 @@ ${JSON.stringify(tasks)}
     }
 
     return NextResponse.json({ error: `未知的工具呼叫: ${tool}` }, { status: 400 });
-  } catch (error: any) {
-    console.error('Nexus Error:', error);
-    return jsonError('INTERNAL_ERROR', error.message);
+  } catch (error) {
+    const err = error as Error;
+    console.error('Nexus Error:', err);
+    return jsonError('INTERNAL_ERROR', err.message || 'Unknown error');
   }
 }

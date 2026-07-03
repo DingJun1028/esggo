@@ -43,12 +43,10 @@ describe('OmniSeed Core Contract & Hook', () => {
     const awakened = plantOmniSeed(mockSeed, '#同心圓中心');
     
     expect(() => {
-      // @ts-expect-error - Expected TS error due to readonly fields
       (awakened as unknown as { entropyControl: number }).entropyControl = 0.5;
     }).toThrow();
 
     expect(() => {
-      // @ts-expect-error - Expected TS error due to readonly fields
       (awakened as unknown as { status: string }).status = 'dormant';
     }).toThrow();
   });
