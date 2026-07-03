@@ -26,12 +26,18 @@ if [ -z "$OPENROUTER_API_KEY" ]; then
     echo
 fi
 
+if [ -z "$GATEWAY_API_KEY" ]; then
+    echo "Please set GATEWAY_API_KEY environment variable."
+    read -s -p "Enter Gateway API key: " GATEWAY_API_KEY
+    echo
+fi
+
 cat > "$HERMES_HOME/.env" << EOF
 PORT=8642
 GEMINI_API_KEY=${GEMINI_API_KEY:-}
 OPENROUTER_API_KEY=$OPENROUTER_API_KEY
 VPS_IP=$(curl -s ifconfig.me)
-GATEWAY_API_KEY=${GATEWAY_API_KEY:-omniagent_gold_2026}
+GATEWAY_API_KEY=$GATEWAY_API_KEY
 FREE_TIER_ONLY=true
 EOF
 
@@ -49,7 +55,7 @@ Environment=OPENROUTER_API_KEY=$OPENROUTER_API_KEY
 ExecStart=$(which node) $HOME/apps/gateway/omni-server.mjs
 Environment=GEMINI_API_KEY=${GEMINI_API_KEY:-}
 Environment=VPS_IP=$(curl -s ifconfig.me)
-Environment=GATEWAY_API_KEY=${GATEWAY_API_KEY:-omniagent_gold_2026}
+Environment=GATEWAY_API_KEY=$GATEWAY_API_KEY
 Restart=always
 RestartSec=10
 StandardOutput=journal
