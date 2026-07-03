@@ -45,13 +45,14 @@ export default function SustainCenterPage() {
         try {
           const msg = JSON.parse(event.data);
           if (msg.type === 'HEARTBEAT' || msg.type === 'status') {
+            const data = msg.payload || msg.data || msg;
             setHeartbeat(prev => ({
               ...prev,
-              wsClients: msg.data?.clients || msg.clients || prev.wsClients,
-              uptime: msg.data?.uptime || msg.uptime || prev.uptime,
-              memoryUsage: msg.data?.memory || msg.memory || prev.memoryUsage,
-              status: msg.data?.status || msg.status || 'Healthy',
-              errorCount: msg.data?.errors || msg.errors || prev.errorCount
+              wsClients: data.clients ?? prev.wsClients,
+              uptime: data.uptime ?? prev.uptime,
+              memoryUsage: data.memory?.used_mb ?? data.memory ?? prev.memoryUsage,
+              status: data.status || 'Healthy',
+              errorCount: data.errors ?? prev.errorCount
             }));
           }
         } catch (e) {}

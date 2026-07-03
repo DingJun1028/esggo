@@ -67,12 +67,12 @@ const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('h
 // ── Global Error Tracking ──────────────────────────────────────
 const errorMetrics = {
   totalErrors: 0,
-  recentErrors: [] as Array<{ts: number, error: string, stack?: string}>,
+  recentErrors: [],
   uncaughtExceptions: 0,
   unhandledRejections: 0,
 };
 
-function logError(type: string, error: any) {
+function logError(type, error) {
   const errorEntry = {
     ts: Date.now(),
     error: String(error?.message || error),
@@ -226,6 +226,24 @@ function broadcastWS(event) {
   const msg = JSON.stringify({ ...event, timestamp: Date.now() });
   wssClients.forEach(ws => { try { ws.send(msg); } catch {} });
 }
+
+// ── Heartbeat Broadcaster ─────────────────────────────────────
+setInterval(() => {
+  if (wssClients.size > 0) {
+    const mem = process.memoryUsage();
+    broadcastWS({
+      type: 'HEARTBEAT',
+      source: 'Gateway',
+      payload: {
+        uptime: Math.floor((Date.now() - startTime) / 1000),
+        clients: wssClients.size,
+        memory: { used_mb: (mem.heapUsed / 1024 / 1024).toFixed(1), rss_mb: (mem.rss / 1024 / 1024).toFixed(1) },
+        errors: errorMetrics.totalErrors,
+        timestamp: Date.now()
+      }
+    });
+  }
+}, 3000);
 
 // ── Evolution Log (in-memory) ─────────────────────────────────
 const evolutionLog = [];

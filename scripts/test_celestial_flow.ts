@@ -21,8 +21,8 @@ async function runComprehensiveTest() {
       origin: 'VILLAGE_VOTE'
     });
     console.log("✅ Track 1 成功！");
-    console.log(" - 獲得 UUID:", purifiedVote.uuid);
-    console.log(" - 封印時間戳 (Seal Timestamp):", purifiedVote.sealTimestamp);
+    console.log(" - 獲得 UUID:", purifiedVote!.uuid);
+    console.log(" - 封印時間戳 (Seal Timestamp):", (purifiedVote as any).sealTimestamp);
     console.log(" - 資料是否凍結 (isFrozen):", Object.isFrozen(purifiedVote));
   } catch (e) {
     console.error("❌ Track 1 失敗", e);
@@ -40,8 +40,8 @@ async function runComprehensiveTest() {
       origin: 'ESG_REPORT_AGENT'
     });
     console.log("✅ Track 2 成功！");
-    console.log(" - 獲得 UUID:", purifiedAgent.uuid);
-    console.log(" - 封印時間戳 (Seal Timestamp):", purifiedAgent.sealTimestamp);
+    console.log(" - 獲得 UUID:", purifiedAgent!.uuid);
+    console.log(" - 封印時間戳 (Seal Timestamp):", (purifiedAgent as any).sealTimestamp);
     console.log(" - 資料是否凍結 (isFrozen):", Object.isFrozen(purifiedAgent));
   } catch (e) {
     console.error("❌ Track 2 失敗", e);

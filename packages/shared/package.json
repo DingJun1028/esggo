@@ -10,8 +10,7 @@
     "./types": "./src/types/index.ts",
     "./tokens": "./src/tokens/index.ts"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

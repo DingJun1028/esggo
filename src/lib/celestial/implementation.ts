@@ -3,6 +3,24 @@ import { IWuZuoMiaoDe, InputData } from './interfaces';
 import { randomUUID, createHash } from 'node:crypto';
 import { EntropyForge } from '../omni-core/entropy-forge';
 
+export interface CelestialData {
+  [key: string]: unknown;
+  amount?: unknown;
+  cost?: unknown;
+  uuid?: string;
+  id?: string;
+  project_id?: string;
+  evidence?: { processTrace: string[]; finalEffect: string };
+  origin?: unknown;
+}
+
+export interface CelestialMetadata {
+  [key: string]: unknown;
+  strategy?: string;
+  status?: string;
+  timestamp?: number;
+}
+
 export class ZKPIntegrityModule implements IWuZuoMiaoDe {
   public uuid: string = randomUUID();
   public timestamp: number = Date.now();
@@ -14,14 +32,14 @@ export class ZKPIntegrityModule implements IWuZuoMiaoDe {
   };
   public state: "Awakened" | "Repairing" | "Calibrating" | "Stable" = "Awakened";
 
-  private subscribers: Array<(data: any) => void> = [];
+  private subscribers: Array<(data: unknown) => void> = [];
 
   stream<T>(data: T): void {
     // 圓通無礙：流轉控制 (Non-blocking observable pattern)
     this.subscribers.forEach(sub => setTimeout(() => sub(data), 0));
   }
 
-  subscribe(callback: (data: any) => void) {
+  subscribe(callback: (data: unknown) => void) {
     this.subscribers.push(callback);
   }
 
@@ -60,7 +78,7 @@ export class CelestialController {
     return traceId;
   }
 
-  public recordMetric(metricName: string, value: number, metadata?: any): void {
+  public recordMetric(metricName: string, value: number, metadata?: CelestialMetadata): void {
     console.log(`[Celestial] Metric recorded: ${metricName}=${value}`, metadata);
   }
 
@@ -68,7 +86,7 @@ export class CelestialController {
     console.warn(`[Celestial] Entropy detected! Trace ID: ${traceId}, Anomaly: ${anomalyType}`);
   }
 
-  async executeCelestialFlow(input: InputData | any) {
+  async executeCelestialFlow(input: InputData | CelestialData) {
     // 1. 感知異常 (Sense)
     const deviation = this.detectDeviation(input);
 
@@ -114,23 +132,24 @@ export class CelestialController {
     }
   }
 
-  private detectDeviation(input: InputData | any) {
+  private detectDeviation(input: InputData | CelestialData) {
     if (!input) return true;
     
     // Check for structural degradation (missing critical fields)
     let entropyScore = 0;
-    if (input.amount !== undefined && typeof input.amount !== 'number') entropyScore += 0.4;
-    if (input.cost !== undefined && typeof input.cost !== 'number') entropyScore += 0.4;
+    const inputData = input as CelestialData;
+    if (inputData.amount !== undefined && typeof inputData.amount !== 'number') entropyScore += 0.4;
+    if (inputData.cost !== undefined && typeof inputData.cost !== 'number') entropyScore += 0.4;
     
     // If it's a chart config or complex object, check for missing values
-    if (typeof input === 'object' && !input.uuid && !input.id && !input.project_id) {
+    if (typeof input === 'object' && !inputData.uuid && !inputData.id && !inputData.project_id) {
       entropyScore += 0.3;
     }
     
     return entropyScore > 0.5; // Deviation threshold
   }
 
-  private async purifyAndAlign(data: any) {
+  private async purifyAndAlign(data: CelestialData) {
     // 圓通無礙：確保狀態一致性 (Entropy Reduction)
     const deviation = this.detectDeviation(data);
     
@@ -159,7 +178,7 @@ export class CelestialController {
     
     if (data && data.evidence) {
        const sanitized = { ...data };
-       const newEvidence = { ...sanitized.evidence };
+       const newEvidence = { ...(sanitized.evidence as any) };
        newEvidence.processTrace = [...newEvidence.processTrace, `[ALIGN] Validation passed.`];
        newEvidence.finalEffect = 'Aligned';
        sanitized.evidence = newEvidence;
@@ -169,7 +188,7 @@ export class CelestialController {
     return data;
   }
 
-  private async engraveToRepository(artifact: any, metadata: any) {
+  private async engraveToRepository(artifact: CelestialData, metadata: CelestialMetadata) {
     // 沉澱：寫入 OmniVault (Alert 表) — 5T Trackable
     try {
       const { PrismaClient } = await import('@prisma/client');
@@ -195,13 +214,13 @@ export class CelestialController {
     }
   }
 
-  private async handleFailure(error: any, sealedData: any) {
+  private async handleFailure(error: unknown, sealedData: CelestialData) {
     console.error(`[Celestial] Anomaly detected. Initiating self-healing protocol...`);
     
     // 1. 隔離失效現場，保留可用狀態 (WuZuoMiaoDe: 零干預降級)
     const fallbackData: Record<string, unknown> = {};
     for (const key of Object.keys(sealedData)) {
-      try { (fallbackData as any)[key] = (sealedData as any)[key]; } catch {}
+      try { fallbackData[key] = sealedData[key]; } catch {}
     }
     fallbackData.state = 'Recovered';
     fallbackData.degradationTriggered = true;
@@ -216,7 +235,7 @@ export class CelestialController {
           sourceName: 'OmniOrchestrator',
           alertType: 'system_anomaly',
           severity: 'high',
-          title: `[Self-Healing] 系統異常: ${String(error.message || error).slice(0, 200)}`,
+          title: `[Self-Healing] 系統異常: ${String((error as Error).message || error).slice(0, 200)}`,
           summary: `UUID: ${sealedData.uuid}\n已觸發自癒協議，WuZuoMiaoDe 降級保護。`,
           url: '',
           hash: sealedData.uuid || '',
@@ -229,13 +248,13 @@ export class CelestialController {
     // 3. 錯誤知識化 (Write to Notion KI / Stub)
     const kiPayload = {
       title: `[Self-Healing KI] 系統異常紀錄: ${new Date().toISOString()}`,
-      content: `發現異常錯誤：${error.message}\n封印數據 UUID: ${sealedData.uuid}\n已觸發自癒協議，保護系統狀態免於崩潰。`,
+      content: `發現異常錯誤：${(error as Error).message || error}\n封印數據 UUID: ${sealedData.uuid}\n已觸發自癒協議，保護系統狀態免於崩潰。`,
     };
     try {
       const notionMod = await import('../../core/services/notion-sync-service');
       if ('NotionSyncService' in notionMod) {
         const svc = new notionMod.NotionSyncService();
-        await svc.syncAsset(kiPayload as any);
+        await svc.syncAsset(kiPayload as never);
         console.log(`[Celestial] Notion KI created. System stabilized.`);
       } else {
         console.warn(`[Celestial] NotionSyncService not available`);
