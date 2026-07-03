@@ -35,8 +35,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install dependencies
-        run: pip install openpyxl pytest
+      - name: Install Python dependencies
+        run: |
+          pip install openpyxl pytest
+          pip install -e .
       - name: Run tests
         run: python -m pytest tests/ -v
 
@@ -45,6 +47,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.2
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
