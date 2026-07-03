@@ -7,3 +7,7 @@
 ## 2024-08-15 - Focus Visibility on Hover-Revealed Elements
 **Learning:** Elements that are revealed on hover using `opacity-0 group-hover:opacity-100` (like action buttons in grid cards) become invisible focus traps for keyboard users unless they explicitly include `focus-within:opacity-100` on their wrapper/container.
 **Action:** Always ensure that hover-revealed interactive elements apply `focus-within:opacity-100` alongside `group-hover:opacity-100` so they become visible when navigating via keyboard (Tab). Additionally, these hidden elements must have context-aware `aria-label` attributes to prevent repetitive generic readouts by screen readers when focused blindly.
+
+## 2024-10-27 - Icon-only Buttons and Navigation Focus Visibility
+**Learning:** Top-level navigation items and icon-only buttons (like the theme toggle) were missing clear visual focus indicators, and icon-only elements relied solely on the `title` attribute for screen readers, which is inconsistently supported. Additionally, relying on browser default focus rings against varied background themes can lead to invisible focus states.
+**Action:** Consistently add explicit `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to all `<a>` navigation links and `<button>` elements. Ensure all icon-only buttons receive an explicit `aria-label` matching their `title` attribute to guarantee proper screen reader announcement.
