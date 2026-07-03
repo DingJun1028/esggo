@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { AuthProvider } from '@/components/AuthProvider';
 import { AgnesProvider } from '@/components/AgnesProvider';
 import { GlobalNav } from './components/global-nav';
+import { OmniErrorBoundary } from '@/core/services/error-boundary';
 import './globals.css';
 import ThemeProvider from './components/theme-client';
 
@@ -26,7 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <AgnesProvider>
               <GlobalNav />
-              <main>{children}</main>
+              <main>
+                <OmniErrorBoundary>
+                  {children}
+                </OmniErrorBoundary>
+              </main>
             </AgnesProvider>
           </AuthProvider>
         </ThemeProvider>
