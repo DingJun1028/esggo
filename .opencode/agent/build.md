@@ -1,6 +1,6 @@
 ---
 name: build
-model: google/gemini-2.5-flash-lite
+model: openrouter/deepseek/deepseek-v4-flash
 description: Primary coding agent for implementation tasks
 mode: primary
 tools:

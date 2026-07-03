@@ -46,7 +46,7 @@
     }
   },
   "models": {
-    "large": { "model": "google/gemini-2.5-flash-lite", "provider": "atomic" },
-    "small": { "model": "google/gemini-2.5-flash-lite", "provider": "atomic" }
+    "large": { "model": "deepseek/deepseek-v4-flash", "provider": "atomic" },
+    "small": { "model": "deepseek/deepseek-v4-flash", "provider": "atomic" }
   }
 }

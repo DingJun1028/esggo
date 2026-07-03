@@ -23,19 +23,24 @@ const AgnesApiContext = createContext<AgnesApiContextType>({
 });
 
 export function AgnesProvider({ children }: { children: ReactNode }) {
-  const [apiKey, setApiKey] = useState<string | null>(null);
-  const [status, setStatus] = useState<'disconnected' | 'connecting' | 'connected' | 'error'>('disconnected');
-  const [isReady, setIsReady] = useState(false);
-
-  // Auto-initialize from environment if available
-  useEffect(() => {
-    const envKey = process.env.NEXT_PUBLIC_AGNES_API_KEY;
-    if (envKey) {
-      setApiKey(envKey);
-      setStatus('connected');
-      setIsReady(true);
+  const [apiKey, setApiKey] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return process.env.NEXT_PUBLIC_AGNES_API_KEY || null;
     }
-  }, []);
+    return null;
+  });
+  const [status, setStatus] = useState<'disconnected' | 'connecting' | 'connected' | 'error'>(() => {
+    if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_AGNES_API_KEY) {
+      return 'connected';
+    }
+    return 'disconnected';
+  });
+  const [isReady, setIsReady] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !!process.env.NEXT_PUBLIC_AGNES_API_KEY;
+    }
+    return false;
+  });
 
   const connect = async () => {
     setStatus('connecting');
