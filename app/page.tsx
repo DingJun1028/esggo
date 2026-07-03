@@ -126,7 +126,7 @@ export default function HomePage() {
             }}
           />
           <span style={{ fontSize: 14, color: "#63a6b0", fontWeight: 600, letterSpacing: "0.04em" }}>
-            ESGGO ♾️ OmniCore v5.0 — TRANSCENDED
+            OmniCore ♾️ ESGGO v5.1 — TRANSCENDED
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "24px", fontSize: 13, color: "#94a3b8" }}>
@@ -177,13 +177,13 @@ export default function HomePage() {
             animation: "shimmer 3s linear infinite",
           }}
         >
-          ESG GO
+          OmniCore
         </div>
         <p style={{ fontSize: 18, color: "#94a3b8", maxWidth: 520, margin: "0 auto 12px", lineHeight: 1.7 }}>
           善向永續 · 全通之心 · 無作妙德
         </p>
         <p style={{ fontSize: 14, color: "#64748b", maxWidth: 480, margin: "0 auto 40px" }}>
-          以 5T 協議驅動的企業 ESG 治理平台 — 從碳排計算到永續報告，全程 AI 賦能、可驗算、不可篡改。
+          以 5T 協議驅動的萬能 (Omni) ESG 治理平台 — 從碳排計算到永續報告，全程 AI 賦能、可驗算、不可篡改。
         </p>
 
         {/* 5T 指示器 */}
@@ -307,7 +307,7 @@ export default function HomePage() {
           fontSize: 12,
         }}
       >
-        <span>⚡ ESGGO v5.0 · OmniCore TRANSCENDED · 5T Protocol Active ♾️</span>
+        <span>⚡ OmniCore ♾️ ESGGO v5.1 · TRANSCENDED · 5T Protocol Active ♾️</span>
         <span style={{ color: "#63a6b0" }}>
           上善若水，善向永續。知識即資產，服務即教學。
         </span>

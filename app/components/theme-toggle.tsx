@@ -2,23 +2,22 @@
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
+function getInitialTheme(): 'dark' | 'light' {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('esggo-theme') as 'dark' | 'light' | null;
+    if (saved) return saved;
+  }
+  return 'light';
+}
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [theme, setTheme] = useState<'dark' | 'light'>(getInitialTheme);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('esggo-theme') as 'dark' | 'light';
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      if (savedTheme === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
-    } else {
-      // Default to light theme as base
-      setTheme('light');
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }, [theme]);
 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';

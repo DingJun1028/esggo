@@ -7,8 +7,9 @@ const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 const globals = require('globals');
 
 module.exports = [
+  ...typescriptEslint.configs.recommended,
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/'],
+    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/'],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
@@ -74,5 +75,4 @@ module.exports = [
       '@typescript-eslint/no-var-requires': 'warn',
     },
   },
-  ...typescriptEslint.configs.recommended,
 ];

@@ -68,87 +68,89 @@ export default function ChatPanel({ isOpen, onClose, contextText }) {
   };
 
   const handleSend = async (e, overrideText = null) => {
-    e?.preventDefault();
-    const textToSend = overrideText || input;
-    if (!textToSend.trim() || isLoading) return;
+      e?.preventDefault();
+      const textToSend = overrideText || input;
+      if (!textToSend.trim() || isLoading) return;
 
-    if (!overrideText) setInput('');
-    setIsLoading(true);
+      if (!overrideText) setInput('');
+      setIsLoading(true);
 
-    const currentMessages = [...messages, { role: 'user', content: textToSend.trim() }];
+      const currentMessages = [...messages, { role: 'user', content: textToSend.trim() }];
 
-    // Add empty placeholder model message
-    const nextIdx = currentMessages.length;
-    let thinking = '';
-    let reply = '';
-    let suggestions = [];
+      // Add empty placeholder model message
+      const nextIdx = currentMessages.length;
 
-    setMessages([...currentMessages, { role: 'model', content: '', thoughts: '', suggestions: [] }]);
+      // Use refs for mutable values that get updated in the async loop
+      const thinkingRef = { current: '' };
+      const replyRef = { current: '' };
+      const suggestionsRef = { current: [] as string[] };
 
-    try {
-      // Use Fetch API for Server-Sent Events (SSE) streaming!
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: contextText ? `[Context: ${contextText}] ${textToSend.trim()}` : textToSend.trim(),
-          history: currentMessages.slice(0, -1)
-        })
-      });
+      setMessages([...currentMessages, { role: 'model', content: '', thoughts: '', suggestions: [] }]);
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
+      try {
+        // Use Fetch API for Server-Sent Events (SSE) streaming!
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: contextText ? `[Context: ${contextText}] ${textToSend.trim()}` : textToSend.trim(),
+            history: currentMessages.slice(0, -1)
+          })
+        });
 
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
 
-        setIsLoading(false); // Hide global loader
-        buffer += decoder.decode(value, { stream: true });
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
 
-        const lines = buffer.split('\n');
-        buffer = lines.pop(); // Keep incomplete fragments
+          setIsLoading(false); // Hide global loader
+          buffer += decoder.decode(value, { stream: true });
 
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const dataStr = line.replace('data: ', '').trim();
-            if (dataStr === '[DONE]') break;
-            if (dataStr) {
-              try {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.type === 'THOUGHT') {
-                  thinking += parsed.content + '\n';
-                } else if (parsed.type === 'SUGGESTION') {
-                  suggestions.push(parsed.content);
-                } else {
-                  reply += parsed.content;
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // Keep incomplete fragments
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.replace('data: ', '').trim();
+              if (dataStr === '[DONE]') break;
+              if (dataStr) {
+                try {
+                  const parsed = JSON.parse(dataStr);
+                  if (parsed.type === 'THOUGHT') {
+                    thinkingRef.current += parsed.content + '\n';
+                  } else if (parsed.type === 'SUGGESTION') {
+                    suggestionsRef.current.push(parsed.content);
+                  } else {
+                    replyRef.current += parsed.content;
+                  }
+
+                  setMessages(prev => {
+                    const updated = [...prev];
+                    updated[nextIdx] = {
+                      role: 'model',
+                      content: replyRef.current,
+                      thoughts: thinkingRef.current,
+                      suggestions: suggestionsRef.current
+                    };
+                    return updated;
+                  });
+                } catch (e) {
+                  console.error('JSON parse fail:', dataStr);
                 }
-
-                setMessages(prev => {
-                  const updated = [...prev];
-                  updated[nextIdx] = {
-                    role: 'model',
-                    content: reply,
-                    thoughts: thinking,
-                    suggestions: suggestions
-                  };
-                  return updated;
-                });
-              } catch (e) {
-                console.error('JSON parse fail:', dataStr);
               }
             }
           }
         }
+      } catch (error) {
+        console.error(error);
+        setMessages([...currentMessages, { role: 'model', content: `⚠️ Error connecting to server.` }]);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      setMessages([...currentMessages, { role: 'model', content: `⚠️ Error connecting to server.` }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   return (
     <div className={`fixed top-0 right-0 h-full w-[400px] bg-white dark:bg-[#1a1a1a] shadow-2xl flex flex-col transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
