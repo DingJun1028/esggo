@@ -106,7 +106,7 @@ const SKILL_REGISTRY = [
 ];
 
 // ── Free Models List ──────────────────────────────────────────
-let FREE_MODELS = [
+const FREE_MODELS = [
   { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
   { id: 'meta-llama/llama-3.2-90b-vision:free',               name: 'Meta: Llama 3.2 90B Vision (Free)' },
   { id: 'google/gemma-3-27b-it:free',                        name: 'Google: Gemma 3 27B (Vision)' },
