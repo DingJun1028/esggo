@@ -14,6 +14,5 @@ def get_answer_database_ts():
 def ensure_dirs():
     pass
 
-
 def get_full_excel():
     return PROJECT_ROOT / 'full_answers.xlsx'
