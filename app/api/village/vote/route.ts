@@ -34,9 +34,9 @@ export async function POST(req: Request) {
     const activityRef = adminDb.collection('village_activities').doc();
 
     try {
-      await adminDb.runTransaction(async (t: any) => {
-        const projectDoc = (await t.get(projectRef)) as any;
-        const memberDoc = (await t.get(memberRef)) as any;
+      await adminDb.runTransaction(async (t: { get: (ref: any) => Promise<any>; update: (ref: any, data: any) => void; set: (ref: any, data: any) => void }) => {
+        const projectDoc = await t.get(projectRef);
+        const memberDoc = await t.get(memberRef);
 
         if (!projectDoc.exists) {
           throw new Error('PROJECT_NOT_FOUND');
@@ -82,8 +82,8 @@ export async function POST(req: Request) {
         // Write the purified and sealed data to Firestore
         t.set(activityRef, { ...activityData, uuid: purifiedData?.uuid, sealTimestamp: purifiedData?.sealTimestamp });
       });
-    } catch (txError: any) {
-      const errorCode = txError.message;
+    } catch (txError) {
+      const errorCode = (txError as Error).message;
       if (errorCode === 'PROJECT_NOT_FOUND') {
         return jsonError('PROJECT_NOT_FOUND');
       }
@@ -102,8 +102,8 @@ export async function POST(req: Request) {
       cost,
       power
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Village Vote Error:', error);
-    return jsonError('INTERNAL_ERROR', error.message);
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }
