@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { OmniDataAnalyticsPanel } from '@/components/omni-data-analytics-panel';
 import { InsightGrid } from '@/components/sustain-center/insight-grid';
 import { TrustLedger } from '@/components/sustain-center/trust-ledger';
+import { HeartbeatMonitor, HeartbeatMetrics } from '@/components/sustain-center/heartbeat-monitor';
 import { Loader2, Globe, Activity } from 'lucide-react';
 import { OmniDataAnalyticsConfig } from '@/types/esg-charts';
 
@@ -21,6 +22,54 @@ interface DashboardData {
 export default function SustainCenterPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [heartbeat, setHeartbeat] = useState<HeartbeatMetrics>({
+    wsClients: 0,
+    uptime: 0,
+    errorCount: 0,
+    memoryUsage: 0,
+    status: 'Healthy'
+  });
+  const [wsConnected, setWsConnected] = useState(false);
+
+  useEffect(() => {
+    // Connect to WebSocket gateway for Heartbeat
+    let ws: WebSocket;
+    const connectWs = () => {
+      // In production, this might point to wss://gateway...
+      const wsUrl = process.env.NEXT_PUBLIC_GATEWAY_WS_URL || 'ws://localhost:8642';
+      ws = new WebSocket(wsUrl);
+      
+      ws.onopen = () => setWsConnected(true);
+      ws.onclose = () => setWsConnected(false);
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'HEARTBEAT' || msg.type === 'status') {
+            setHeartbeat(prev => ({
+              ...prev,
+              wsClients: msg.data?.clients || msg.clients || prev.wsClients,
+              uptime: msg.data?.uptime || msg.uptime || prev.uptime,
+              memoryUsage: msg.data?.memory || msg.memory || prev.memoryUsage,
+              status: msg.data?.status || msg.status || 'Healthy',
+              errorCount: msg.data?.errors || msg.errors || prev.errorCount
+            }));
+          }
+        } catch (e) {}
+      };
+    };
+    
+    connectWs();
+    const interval = setInterval(() => {
+      if (ws && ws.readyState === WebSocket.CLOSED) {
+        connectWs();
+      }
+    }, 5000); // Reconnect loop
+
+    return () => {
+      clearInterval(interval);
+      if (ws) ws.close();
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -79,12 +128,13 @@ export default function SustainCenterPage() {
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-accentTeal to-white drop-shadow-[0_0_15px_rgba(99,166,176,0.3)]">
                 萬能永續中心
               </h1>
-              <p className="text-textSecondary max-w-xl text-sm leading-relaxed">
+              <p className="text-textSecondary max-w-xl text-sm leading-relaxed mb-6">
                 全景式 ESG 治理與確信樞紐。基於 ESGSonnar 萃取單據智慧，並透過 5T 協議確保所有資產不可篡改，實現無縫顯化的自癒網絡。
               </p>
+              <HeartbeatMonitor metrics={heartbeat} connected={wsConnected} />
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col gap-6">
               <div className="bg-surface/60 backdrop-blur-xl border border-borderColor/50 p-4 rounded-xl flex flex-col items-end min-w-[140px] shadow-[0_0_20px_rgba(0,0,0,0.2)]">
                 <span className="text-textSecondary text-xs mb-1 flex items-center gap-1"><Globe size={12}/> ESG 總評級</span>
                 <span className="text-3xl font-bold text-accentGold">{data.summaryMetrics.esgScore}</span>

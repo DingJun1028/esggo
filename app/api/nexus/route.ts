@@ -104,6 +104,31 @@ ${JSON.stringify(tasks)}
         }
       });
     }
+    
+    if (tool === 'google_jules:karma_protocol') {
+      const { failureReason, context } = args || {};
+      
+      const healingResponse = {
+        action: 'OmniJules 果因協議啟動中',
+        phase: '1. 觀果 (Observe Effect)',
+        analysis: `Detected anomaly: ${failureReason}. Applying Celestial Flow sealing...`,
+        hashLock: uuidv4(),
+        status: 'Trustworthy'
+      };
+
+      return NextResponse.json({
+        success: true,
+        data: healingResponse,
+        metadata: {
+          timestamp: Date.now(),
+          trustScore: 100,
+          tool: 'google_jules:karma_protocol',
+          domain: 'omni-core-healing',
+          uuid: healingResponse.hashLock,
+          provider: 'omni-jules'
+        }
+      });
+    }
 
     return NextResponse.json({ error: `未知的工具呼叫: ${tool}` }, { status: 400 });
   } catch (error: any) {
