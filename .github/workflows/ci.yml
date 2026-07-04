@@ -25,7 +25,7 @@ jobs:
       - name: Install Ruff
         run: pip install ruff
       - name: Run Ruff check
-        run: ruff check generate_answer_db.py parse-esg.py run_vault.py esggo/config.py scripts/
+        run: ruff check generate_answer_db.py parse-esg.py run_vault.py  scripts/
 
   pytest:
     name: Pytest

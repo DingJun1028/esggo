@@ -243,3 +243,4 @@ UNIVERSAL_COMPONENT_MATRIX.md
 
 .vercel
 .env*.local
+.venv/
