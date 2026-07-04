@@ -47,8 +47,9 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-google/gemma-4-31b-it:free}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-meta-llama/llama-3.3-70b-instruct:free}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
       - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}

@@ -1,0 +1,17 @@
+[Unit]
+Description=ESGGO Telegram Alert Relay for Alertmanager
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/telegram-alert.sh
+Restart=always
+RestartSec=5
+User=root
+
+# Logging
+StandardOutput=append:/var/log/telegram-alert.log
+StandardError=append:/var/log/telegram-alert.log
+
+[Install]
+WantedBy=multi-user.target

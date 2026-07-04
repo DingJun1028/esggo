@@ -10,6 +10,11 @@ export interface AgnesApiContextType {
   connect: () => Promise<void>;
   disconnect: () => void;
   processMessage: (message: string) => Promise<string | null>;
+  // AI Provider 狀態
+  provider: string | null;
+  modelName: string | null;
+  usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number } | null;
+  lastResponseMs: number | null;
 }
 
 const AgnesApiContext = createContext<AgnesApiContextType>({
@@ -20,6 +25,10 @@ const AgnesApiContext = createContext<AgnesApiContextType>({
   connect: async () => {},
   disconnect: () => {},
   processMessage: async () => null,
+  provider: null,
+  modelName: null,
+  usage: null,
+  lastResponseMs: null,
 });
 
 export function AgnesProvider({ children }: { children: ReactNode }) {
@@ -41,6 +50,11 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
     }
     return false;
   });
+  // AI Provider 狀態追蹤
+  const [provider, setProvider] = useState<string | null>(null);
+  const [modelName, setModelName] = useState<string | null>(null);
+  const [usage, setUsage] = useState<{ prompt_tokens: number; completion_tokens: number; total_tokens: number } | null>(null);
+  const [lastResponseMs, setLastResponseMs] = useState<number | null>(null);
 
   const connect = async () => {
     setStatus('connecting');
@@ -63,6 +77,7 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
   // Delegate processing to the backend route to avoid exposing secrets
   const processMessage = async (message: string): Promise<string | null> => {
     if (!isReady) return null;
+    const startMs = Date.now();
     try {
       const res = await fetch('/api/agnes', {
         method: 'POST',
@@ -71,9 +86,18 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
+      // 從 metadata 中提取 Provider/Model 資訊
+      if (data.metadata) {
+        setProvider(data.metadata.provider || null);
+        setModelName(data.metadata.model || null);
+        setUsage(data.metadata.usage || null);
+      }
+      setLastResponseMs(Date.now() - startMs);
       return data.data?.output || null;
     } catch (e) {
       console.error('[AGNES_API] Process Error:', e);
+      setProvider('error');
+      setLastResponseMs(Date.now() - startMs);
       return null;
     }
   };
@@ -86,6 +110,10 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
     connect,
     disconnect,
     processMessage,
+    provider,
+    modelName,
+    usage,
+    lastResponseMs,
   };
 
   return (

@@ -19,10 +19,60 @@ const FALLBACK_RESPONSES = {
   general: '[OmniOne] 任務已收到並分類。系統將盡快處理您的請求。'
 };
 
+// ✨ OpenRouter :free models rotation
+const OR_MODELS = [
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'mistralai/mistral-small-3.1-24b:free',
+  'google/gemma-4-31b-it:free',
+  'qwen/qwen3-next-80b-a3b-instruct:free',
+];
+let orModelIdx = 0;
+
+// ✨ Groq free models (30 req/min, no daily cap)
+const GROQ_MODELS = [
+  'llama-3.3-70b-versatile',
+  'llama-3.1-8b-instant',
+  'gemma2-9b-it',
+];
+let groqModelIdx = 0;
+
+// ✨ 改進：添加 Groq 作為超快免費備選
+async function callGroq(prompt: string): Promise<string | null> {
+  const GROQ_API_KEY = process.env.GROQ_API_KEY;
+  if (!GROQ_API_KEY) return null;
+  const model = GROQ_MODELS[groqModelIdx % GROQ_MODELS.length];
+  groqModelIdx++;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 256,
+      }),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    });
+    if (!res.ok) { console.warn(`[OmniOne] Groq failed: ${res.status}`); return null; }
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch (err: any) {
+    console.warn(`[OmniOne] Groq error: ${err.message}`);
+    return null;
+  }
+}
+
 // ✨ 改進：添加 OpenRouter 作為備選方案
 async function callOpenRouter(prompt: string) {
   const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
   if (!OPENROUTER_KEY) return null;
+  const model = OR_MODELS[orModelIdx % OR_MODELS.length];
+  orModelIdx++;
 
   try {
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -32,7 +82,7 @@ async function callOpenRouter(prompt: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'mistralai/mistral-small-3.1-24b:free',
+        model,
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
         max_tokens: 256,
@@ -65,18 +115,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✨ 改進：如果沒有 API Key，返回模擬回應
-    if (!HAS_API_KEY) {
+    // ✨ 改進：如果沒有任何 API Key，返回模擬回應
+    const HAS_OPENROUTER = !!process.env.OPENROUTER_API_KEY;
+    const HAS_GROQ = !!process.env.GROQ_API_KEY;
+    if (!HAS_API_KEY && !HAS_OPENROUTER && !HAS_GROQ) {
       return NextResponse.json(
         { output: `[OmniOne 模擬] 收到任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
-        { status: 200 }
-      );
-    }
-
-    // ✨ 改進：如果免費層，返回預設回應
-    if (!USE_REAL_AI) {
-      return NextResponse.json(
-        { output: FALLBACK_RESPONSES[caseType as keyof typeof FALLBACK_RESPONSES] || FALLBACK_RESPONSES.general, provider: 'mock' },
         { status: 200 }
       );
     }
@@ -101,31 +145,49 @@ ${input}
     let provider = 'gemini';
 
     // 嘗試 1: Gemini API（主要方案）
-    try {
-      console.log('[OmniOne] 嘗試 Gemini API...');
-      const { GoogleGenAI } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-      
-      const result = await Promise.race([
-        ai.models.generateContent({
-          model: 'gemini-2.5-flash',
-          contents: prompt,
-          config: {
-            temperature: 0.7,
-            maxOutputTokens: 256,
-          }
-        }),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
-        )
-      ]);
-      
-      response = (result as any).text;
-      console.log('[OmniOne] ✓ Gemini 成功');
-    } catch (geminiErr: any) {
-      console.warn(`[OmniOne] Gemini 失敗: ${geminiErr.message}`);
-      
-      // 嘗試 2: OpenRouter API（備選方案）
+    if (HAS_API_KEY && !FREE_TIER_ONLY) {
+      try {
+        console.log('[OmniOne] 嘗試 Gemini API...');
+        const { GoogleGenAI } = await import('@google/genai');
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+        
+        const result = await Promise.race([
+          ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+              temperature: 0.7,
+              maxOutputTokens: 256,
+            }
+          }),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
+          )
+        ]);
+        
+        response = (result as any).text;
+        console.log('[OmniOne] ✓ Gemini 成功');
+      } catch (geminiErr: any) {
+        console.warn(`[OmniOne] Gemini 失敗: ${geminiErr.message}`);
+      }
+    }
+
+    // 嘗試 2: Groq（超快免費，30 req/min）
+    if (!response && HAS_GROQ) {
+      try {
+        console.log('[OmniOne] 嘗試 Groq API...');
+        response = await callGroq(prompt);
+        if (response) {
+          provider = 'groq';
+          console.log('[OmniOne] ✓ Groq 成功');
+        }
+      } catch (groqErr: any) {
+        console.warn(`[OmniOne] Groq 失敗: ${groqErr.message}`);
+      }
+    }
+
+    // 嘗試 3: OpenRouter :free（備選方案）
+    if (!response && HAS_OPENROUTER) {
       try {
         console.log('[OmniOne] 嘗試 OpenRouter API...');
         response = await callOpenRouter(prompt);

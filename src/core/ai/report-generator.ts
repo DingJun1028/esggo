@@ -63,11 +63,18 @@ export interface ReportMetadata {
 }
 
 // --- OpenRouter :free Models (round-robin) ------------------------
+// ⚠️ 所有模型必須帶 :free 後綴，才能使用 200 req/day 免費額度
 
 const FREE_MODELS: string[] = [
-  'google/gemma-2-9b-it:free',
-  'meta-llama/llama-3.1-8b-instruct:free',
-  'qwen/qwen-2-7b-instruct:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'mistralai/mistral-small-3.1-24b:free',
+  'google/gemma-4-31b-it:free',
+  'qwen/qwen3-next-80b-a3b-instruct:free',
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'meta-llama/llama-3.2-90b-vision:free',
+  'openai/gpt-oss-120b:free',
+  'google/gemma-3-27b-it:free',
+  'qwen/qwen3-vl-8b:free',
   'google/gemma-2-27b-it:free',
   'meta-llama/llama-3.2-3b-instruct:free',
 ];

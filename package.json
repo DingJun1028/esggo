@@ -26,6 +26,7 @@
     "@esggo/ui": "workspace:*",
     "@google/genai": "^2.10.0",
     "@notionhq/client": "^5.22.0",
+    "@notionhq/workers": "^0.4.0",
     "@prisma/client": "^5.22.0",
     "@tailwindcss/typography": "^0.5.20",
     "@upstash/redis": "^1.38.0",
