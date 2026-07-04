@@ -10,6 +10,10 @@ import './sdg-mapping';
 import './compliance-review';
 import './gri-report-draft';
 import './materiality-matrix';
+import './stakeholder-analysis';
+import './email-archival';
+import './evidence-ocr';
+import './report-assembly';
 
 // 重新匯出基底類別和註冊函數
 export {
