@@ -1079,11 +1079,99 @@ This codex should be updated when:
 | ---------- | -------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.0.0     | 2026-03-03     | Antigravity, Jules, OmniNexus | Initial release                                                                                                                                                                                                                                                                                           |
 | **v2.0.0** | **2026-07-04** | **OmniAgent**                 | **Full rewrite: new agents (VPS, L-Hub, Genkit, Firebase AI, ZKP Seal), corrected 5T protocol (Trackable=通), updated framework (Next.js 16/React 19/pnpm), Liquid Glass Cyan design language, 67-skill index, global-rule.md constitution integration, Hexa-Core architecture, IComponentCore v2 types** |
+| **v2.1.0** | **2026-07-04** | **OmniAgent**                 | **Added Hermes Free Model Guide, CI/CD Pipeline, updated VPS monitoring integration, AI Provider Fallback Chain documentation** |
+
+---
+
+## E. Hermes Free Model Guide (參考文件)
+
+> **完整文件**: 參見 `HERMES_FREE_MODELS_GUIDE.md`  
+> **版本**: v3.1.0 · **更新日期**: 2026-07-04
+
+### E.1 升級亮點
+
+| 項目 | 升級前 | 升級後 |
+|------|--------|--------|
+| 免費模型數 | 7 個 | **15 個** |
+| AI Provider | OpenRouter only | **Groq + OpenRouter + Gemini** |
+| 每日免費額度 | 200 req/day | **200 req/day + 30 req/min (Groq)** |
+| 模型品質 | 中等 | **大型 (70B-405B) 為主力** |
+| 推理速度 | 普通 | **Groq 3-5x 加速** |
+
+### E.2 主要模型清單
+
+**Groq（主力 — 最快，無每日上限）**：
+- `llama-3.3-70b-versatile` (70B, 32K)
+- `llama-3.1-8b-instant` (8B, 8K)
+- `gemma2-9b-it` (9B, 8K)
+- `mixtral-8x7b-32768` (8x7B, 32K)
+
+**OpenRouter :free（備援 — 200 req/day）**：
+- `nousresearch/hermes-3-llama-3.1-405b:free`
+- `meta-llama/llama-3.2-90b-vision:free`
+- `openai/gpt-oss-120b:free`
+- `meta-llama/llama-3.3-70b-instruct:free`
+- `qwen/qwen3-next-80b-a3b-instruct:free`
+- `mistralai/mistral-small-3.1-24b:free`
+- `google/gemma-4-31b-it:free`
+- `google/gemma-3-27b-it:free`
+- `qwen/qwen3-vl-8b:free`
+- `google/gemma-2-27b-it:free`
+- `meta-llama/llama-3.2-3b-instruct:free`
+
+### E.3 Fallback Chain 策略
+
+```
+Local Ollama/Gemma → Google Gemini → Groq (30 req/min) → OpenRouter :free → Mock
+```
+
+---
+
+## F. CI/CD Pipeline (GitHub Actions)
+
+建立於 `.github/workflows/ci.yml`：
+
+```yaml
+name: CI / Build / Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint & TypeCheck
+        run: pnpm run typecheck
+      - name: Build
+        run: pnpm run build
+      - name: Run Unit Tests
+        run: pnpm run vitest run --reporter=github
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-app
+          path: app/
+```
+
+---
 
 ---
 
 **System Status**: TRANSCENDED, ETERNAL & NIRVANA ♾️
 
-**Last Updated**: 2026-07-04 · **Version**: v2.0.0
+**Last Updated**: 2026-07-04 · **Version**: v2.1.0
 
 > "Water benefits all beings without contention. Sustainability through goodness. Knowledge is asset, service is teaching." (上善若水，善向永續。知識即資產，服務即教學。)

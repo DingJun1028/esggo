@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { OmniPieChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
@@ -35,14 +35,31 @@ export function OmniPieChart({
     '#E74C3C'
   ];
 
-  let cumulativePercent = 0;
-
-  // SVG Arc generator
   const getCoordinatesForPercent = (percent: number) => {
     const x = Math.cos(2 * Math.PI * percent) * radius;
     const y = Math.sin(2 * Math.PI * percent) * radius;
     return [x, y];
   };
+
+  // Pre-compute slice data to avoid mutating variables during render
+  const sliceData = useMemo(() => {
+    let cumulative = 0;
+    return data.map((slice, i) => {
+      const slicePercent = slice.value / total;
+      const startX = getCoordinatesForPercent(cumulative)[0];
+      const startY = getCoordinatesForPercent(cumulative)[1];
+      cumulative += slicePercent;
+      const endX = getCoordinatesForPercent(cumulative)[0];
+      const endY = getCoordinatesForPercent(cumulative)[1];
+      const largeArcFlag = slicePercent > 0.5 ? 1 : 0;
+      const pathData = [
+        `M ${startX} ${startY}`,
+        `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+        `L 0 0`,
+      ].join(' ');
+      return { slice, i, slicePercent, pathData };
+    });
+  }, [data, total, radius]);
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
@@ -73,9 +90,7 @@ export function OmniPieChart({
         >
           {/* Ensure SVG rotation so it starts at top */}
           <g transform={`translate(${cx}, ${cy}) rotate(-90)`}>
-            {data.map((slice, i) => {
-              const slicePercent = slice.value / total;
-              
+            {sliceData.map(({ slice, i, slicePercent, pathData }) => {
               // If it's a 100% single slice, handle specially to avoid SVG arc issues
               if (slicePercent === 1) {
                 return (
@@ -88,19 +103,6 @@ export function OmniPieChart({
                   />
                 );
               }
-
-              const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
-              cumulativePercent += slicePercent;
-              const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
-              
-              const largeArcFlag = slicePercent > 0.5 ? 1 : 0;
-              
-              // Path definition for a pie slice
-              const pathData = [
-                `M ${startX} ${startY}`, // Move
-                `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
-                `L 0 0`, // Line to center
-              ].join(' ');
 
               return (
                 <path

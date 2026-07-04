@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { OmniBaseCard } from '@/components/omni-base-card';
@@ -42,7 +43,7 @@ export default function WikiPage({ params }: WikiPageProps) {
         variant="liquid-glass" 
         className="!p-8 md:!p-12"
         statusIndicator="trustworthy"
-        hashLock={`0x${Math.random().toString(16).slice(2,10)}...`}
+        hashLock={`0x${crypto.createHash('md5').update(decodedSlug).digest('hex').slice(0, 8)}...`}
       >
         <div className="border-b border-borderColor/30 pb-6 mb-8">
           <div className="flex items-center justify-between mb-2">

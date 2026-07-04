@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import Link from 'next/link';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
@@ -29,6 +30,7 @@ export default function WikiIndexPage() {
         {files.map(file => {
           const slug = file.replace(/\.md$/, '');
           const title = slug.replace(/-/g, ' ');
+          const hashLock = `0x${crypto.createHash('md5').update(slug).digest('hex').slice(0, 8)}...`;
 
           return (
             <Link key={slug} href={`/wiki/${encodeURIComponent(slug)}`}>
@@ -36,7 +38,7 @@ export default function WikiIndexPage() {
                 variant="liquid-glass" 
                 className="h-full flex flex-col transition-transform hover:-translate-y-1 hover:shadow-lg !p-5"
                 statusIndicator="trustworthy"
-                hashLock={`0x${Math.random().toString(16).slice(2,10)}...`}
+                hashLock={hashLock}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-8 h-8 rounded-lg bg-accentTeal/10 flex items-center justify-center text-accentTeal font-bold">
