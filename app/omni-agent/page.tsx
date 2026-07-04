@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import xss from 'xss';
 
 /**
@@ -14,7 +14,7 @@ import xss from 'xss';
  * Architecture: Connects to /api/omni-agent/console
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { sanitizeHtml } from '@/lib/safe-api';
 
 // ═══════════════════════════════════════════════════════════════
@@ -23,7 +23,7 @@ import { sanitizeHtml } from '@/lib/safe-api';
 
 interface Message {
   id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   text: string;
   time: string;
   actions?: string[];
@@ -34,7 +34,7 @@ interface SubAgent {
   id: string;
   name: string;
   role: string;
-  status: "idle" | "running" | "complete" | "error";
+  status: 'idle' | 'running' | 'complete' | 'error';
   progress: number;
   lastTask: string;
   startedAt: number;
@@ -93,80 +93,80 @@ interface CoreStats {
 // ═══════════════════════════════════════════════════════════════
 
 const COLORS = {
-  teal: "#009EB0",
-  tealLight: "#00C2AB",
-  gold: "#D4AF37",
-  zkpBlue: "#3B82F6",
-  purple: "#8B5CF6",
-  red: "#FF4D6D",
-  green: "#22C55E",
-  cyan: "#06B6D4",
-  amber: "#F59E0B",
-  white: "#FFFFFF",
-  slate50: "#F8FAFC",
-  slate100: "#F1F5F9",
-  slate200: "#E2E8F0",
-  slate400: "#94A3B8",
-  slate600: "#475569",
-  slate900: "#0F172A",
+  teal: '#009EB0',
+  tealLight: '#00C2AB',
+  gold: '#D4AF37',
+  zkpBlue: '#3B82F6',
+  purple: '#8B5CF6',
+  red: '#FF4D6D',
+  green: '#22C55E',
+  cyan: '#06B6D4',
+  amber: '#F59E0B',
+  white: '#FFFFFF',
+  slate50: '#F8FAFC',
+  slate100: '#F1F5F9',
+  slate200: '#E2E8F0',
+  slate400: '#94A3B8',
+  slate600: '#475569',
+  slate900: '#0F172A',
 };
 
 const GATE_COLORS: Record<string, string> = {
-  traceable: "#3B82F6",
-  transparent: "#22C55E",
-  tangible: "#F59E0B",
-  trustworthy: "#8B5CF6",
-  trackable: "#06B6D4",
+  traceable: '#3B82F6',
+  transparent: '#22C55E',
+  tangible: '#F59E0B',
+  trustworthy: '#8B5CF6',
+  trackable: '#06B6D4',
 };
 
 const QUICK_COMMANDS: QuickCommand[] = [
   {
-    id: "cmd-status",
-    label: "系統狀態",
-    icon: "◎",
-    action: "status",
-    color: "#009EB0",
-    description: "查看 OmniAgent 核心運行狀態",
+    id: 'cmd-status',
+    label: '系統狀態',
+    icon: '◎',
+    action: 'status',
+    color: '#009EB0',
+    description: '查看 OmniAgent 核心運行狀態',
   },
   {
-    id: "cmd-evolve",
-    label: "Agent 進化",
-    icon: "🧬",
-    action: "evolve",
-    color: "#8B5CF6",
-    description: "觸發 Agent 自主進化程序",
+    id: 'cmd-evolve',
+    label: 'Agent 進化',
+    icon: '🧬',
+    action: 'evolve',
+    color: '#8B5CF6',
+    description: '觸發 Agent 自主進化程序',
   },
   {
-    id: "cmd-assemble",
-    label: "報告組裝",
-    icon: "📊",
-    action: "assemble",
-    color: "#3B82F6",
-    description: "啟動 ESG 報告組裝管線",
+    id: 'cmd-assemble',
+    label: '報告組裝',
+    icon: '📊',
+    action: 'assemble',
+    color: '#3B82F6',
+    description: '啟動 ESG 報告組裝管線',
   },
   {
-    id: "cmd-sync",
-    label: "全域同步",
-    icon: "🔄",
-    action: "sync",
-    color: "#D4AF37",
-    description: "執行 OmniSyncGateway 全域對標",
+    id: 'cmd-sync',
+    label: '全域同步',
+    icon: '🔄',
+    action: 'sync',
+    color: '#D4AF37',
+    description: '執行 OmniSyncGateway 全域對標',
   },
   {
-    id: "cmd-zkp-seal",
-    label: "ZKP 封印",
-    icon: "🔒",
-    action: "zkp_seal",
-    color: "#22C55E",
-    description: "對當前報告執行零知識證明封印",
+    id: 'cmd-zkp-seal',
+    label: 'ZKP 封印',
+    icon: '🔒',
+    action: 'zkp_seal',
+    color: '#22C55E',
+    description: '對當前報告執行零知識證明封印',
   },
   {
-    id: "cmd-5t-verify",
-    label: "5T 驗證",
-    icon: "📡",
-    action: "5t_verify",
-    color: "#06B6D4",
-    description: "執行 5T 協議全維度驗證",
+    id: 'cmd-5t-verify',
+    label: '5T 驗證',
+    icon: '📡',
+    action: '5t_verify',
+    color: '#06B6D4',
+    description: '執行 5T 協議全維度驗證',
   },
 ];
 
@@ -175,10 +175,10 @@ const QUICK_COMMANDS: QuickCommand[] = [
 // ═══════════════════════════════════════════════════════════════
 
 function now(): string {
-  return new Date().toLocaleTimeString("zh-TW", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+  return new Date().toLocaleTimeString('zh-TW', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
   });
 }
 
@@ -196,10 +196,7 @@ function formatUptime(ms: number): string {
 function renderMarkdown(text: string): string {
   const sanitized = sanitizeHtml(text);
   return sanitized
-    .replace(
-      /\*\*(.+?)\*\*/g,
-      '<strong class="font-semibold text-textPrimary">$1</strong>',
-    )
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-textPrimary">$1</strong>')
     .replace(
       /`(.+?)`/g,
       `<code class="bg-secondary px-1.5 py-[1px] rounded font-mono text-[11px] text-teal-700">$1</code>`,
@@ -207,21 +204,21 @@ function renderMarkdown(text: string): string {
     .replace(/• /g, '<span class="text-accentTeal">•</span> ')
     .replace(/✅/g, '<span class="text-accentGreen">✅</span>')
     .replace(/✓/g, '<span class="text-accentGreen">✓</span>')
-    .replace(/\|(.+)\|/g, (match) => {
+    .replace(/\|(.+)\|/g, (match: string) => {
       const cells = match
-        .split("|")
+        .split('|')
         .filter(Boolean)
-        .map((c) => c.trim());
-      if (cells.every((c) => /^[\-=]+$/.test(c))) return "";
-      return `<div class="grid grid-cols-${cells.length} gap-2 text-[11px] py-1 border-b border-borderColor">${cells.map((c) => `<span>${c}</span>`).join("")}</div>`;
+        .map((c: string) => c.trim());
+      if (cells.every((c: string) => /^[\-=]+$/.test(c))) return '';
+      return `<div class="grid grid-cols-${cells.length} gap-2 text-[11px] py-1 border-b border-borderColor">${cells.map((c: string) => `<span>${c}</span>`).join('')}</div>`;
     })
-    .replace(/\n/g, "<br/>");
+    .replace(/\n/g, '<br/>');
 }
 
 async function apiCall(type: string, payload?: any): Promise<any> {
-  const res = await fetch("/api/omni-agent/console", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const res = await fetch('/api/omni-agent/console', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type, payload }),
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
@@ -241,11 +238,11 @@ function SubAgentPanel({
 }) {
   const statusColor = (status: string) => {
     switch (status) {
-      case "running":
+      case 'running':
         return COLORS.amber;
-      case "complete":
+      case 'complete':
         return COLORS.green;
-      case "error":
+      case 'error':
         return COLORS.red;
       default:
         return COLORS.slate400;
@@ -254,25 +251,23 @@ function SubAgentPanel({
 
   const statusLabel = (status: string) => {
     switch (status) {
-      case "running":
-        return "執行中";
-      case "complete":
-        return "完成";
-      case "error":
-        return "錯誤";
+      case 'running':
+        return '執行中';
+      case 'complete':
+        return '完成';
+      case 'error':
+        return '錯誤';
       default:
-        return "閒置";
+        return '閒置';
     }
   };
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
-          5T 子代理面板
-        </h3>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">5T 子代理面板</h3>
         <span className="text-[10px] bg-accentTeal/10 text-accentTeal px-2 py-0.5 rounded-full font-mono">
-          {agents.filter((a) => a.status === "running").length}/{agents.length}
+          {agents.filter((a) => a.status === 'running').length}/{agents.length}
         </span>
       </div>
 
@@ -289,14 +284,10 @@ function SubAgentPanel({
                   style={{
                     backgroundColor: statusColor(agent.status),
                     boxShadow:
-                      agent.status === "running"
-                        ? `0 0 6px ${statusColor(agent.status)}`
-                        : "none",
+                      agent.status === 'running' ? `0 0 6px ${statusColor(agent.status)}` : 'none',
                   }}
                 />
-                <span className="text-[12px] font-semibold text-textPrimary">
-                  {agent.name}
-                </span>
+                <span className="text-[12px] font-semibold text-textPrimary">{agent.name}</span>
               </div>
               <span
                 className="text-[9px] font-bold px-1.5 py-0.5 rounded"
@@ -326,15 +317,15 @@ function SubAgentPanel({
               </span>
               <button
                 onClick={() => onDispatch(agent)}
-                disabled={agent.status === "running"}
+                disabled={agent.status === 'running'}
                 className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors disabled:opacity-40"
                 style={{
                   backgroundColor:
-                    agent.status === "running"
+                    agent.status === 'running'
                       ? COLORS.slate100
                       : `${GATE_COLORS[agent.role] || COLORS.teal}15`,
                   color:
-                    agent.status === "running"
+                    agent.status === 'running'
                       ? COLORS.slate400
                       : GATE_COLORS[agent.role] || COLORS.teal,
                 }}
@@ -364,69 +355,61 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
 
   const statCards = [
     {
-      label: "註冊組件",
+      label: '註冊組件',
       value: stats.kernel.registryCount,
       color: COLORS.teal,
-      icon: "⊙",
+      icon: '⊙',
     },
     {
-      label: "快取命中率",
+      label: '快取命中率',
       value: `${(stats.kernel.cacheMetrics.hitRate * 100).toFixed(0)}%`,
       color: COLORS.zkpBlue,
-      icon: "⚡",
+      icon: '⚡',
     },
     {
-      label: "同步記錄",
+      label: '同步記錄',
       value: stats.kernel.syncLogCount,
       color: COLORS.gold,
-      icon: "🔄",
+      icon: '🔄',
     },
     {
-      label: "AGNES 節點",
+      label: 'AGNES 節點',
       value: stats.kernel.agnesStatus.activeNodes,
       color: COLORS.purple,
-      icon: "🤖",
+      icon: '🤖',
     },
     {
-      label: "吞吐量",
+      label: '吞吐量',
       value: stats.kernel.agnesStatus.throughput,
       color: COLORS.cyan,
-      icon: "📈",
+      icon: '📈',
     },
     {
-      label: "運行時間",
+      label: '運行時間',
       value: formatUptime(stats.uptime),
       color: COLORS.green,
-      icon: "⏱",
+      icon: '⏱',
     },
   ];
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
-          核心統計
-        </h3>
-        <span className="text-[10px] font-mono text-textSecondary">
-          v{stats.agent.version}
-        </span>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">核心統計</h3>
+        <span className="text-[10px] font-mono text-textSecondary">v{stats.agent.version}</span>
       </div>
 
       {/* Agent Status Badge */}
       <div className="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-100 rounded-xl p-3 mb-3">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-2.5 h-2.5 rounded-full bg-accentTeal/100 animate-pulse" />
-          <span className="text-[12px] font-bold text-teal-700">
-            {stats.agent.name}
-          </span>
+          <span className="text-[12px] font-bold text-teal-700">{stats.agent.name}</span>
         </div>
         <div className="text-[10px] text-textSecondary">
           狀態：
-          <span className="font-semibold text-accentTeal">
-            {stats.agent.status}
-          </span>{" "}
-          · 併發：{stats.agent.maxConcurrent} · 格式：
-          {stats.agent.supportedFormats.join(", ")}
+          <span className="font-semibold text-accentTeal">{stats.agent.status}</span> · 併發：
+          {stats.agent.maxConcurrent} · 格式：
+          {stats.agent.supportedFormats.join(', ')}
         </div>
       </div>
 
@@ -439,14 +422,9 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
           >
             <div className="flex items-center gap-1.5 mb-1">
               <span className="text-sm">{card.icon}</span>
-              <span className="text-[10px] text-textSecondary font-medium">
-                {card.label}
-              </span>
+              <span className="text-[10px] text-textSecondary font-medium">{card.label}</span>
             </div>
-            <div
-              className="font-mono text-base font-bold"
-              style={{ color: card.color }}
-            >
+            <div className="font-mono text-base font-bold" style={{ color: card.color }}>
               {card.value}
             </div>
           </div>
@@ -455,9 +433,7 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
 
       {/* 5T Capabilities */}
       <div className="mt-auto">
-        <div className="text-[10px] text-textSecondary font-semibold mb-1.5">
-          5T 能力矩陣
-        </div>
+        <div className="text-[10px] text-textSecondary font-semibold mb-1.5">5T 能力矩陣</div>
         <div className="space-y-1.5">
           {stats.capabilities.map((cap) => (
             <div key={cap.id} className="flex items-center gap-2">
@@ -467,9 +443,7 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
                   backgroundColor: GATE_COLORS[cap.gate] || COLORS.slate400,
                 }}
               />
-              <span className="text-[10px] text-textSecondary flex-1">
-                {cap.name}
-              </span>
+              <span className="text-[10px] text-textSecondary flex-1">{cap.name}</span>
               <div className="w-12 h-1 bg-secondary rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full"
@@ -494,17 +468,11 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
 // Quick Commands Component
 // ═══════════════════════════════════════════════════════════════
 
-function QuickCommands({
-  onExecute,
-}: {
-  onExecute: (cmd: QuickCommand) => void;
-}) {
+function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">
-          快速命令
-        </h3>
+        <h3 className="text-xs font-semibold text-textSecondary tracking-wider">快速命令</h3>
         <span className="text-[10px] text-textSecondary">點擊執行</span>
       </div>
 
@@ -519,17 +487,13 @@ function QuickCommands({
               <span className="text-base group-hover:scale-110 transition-transform">
                 {cmd.icon}
               </span>
-              <span className="text-[11px] font-semibold text-textPrimary">
-                {cmd.label}
-              </span>
+              <span className="text-[11px] font-semibold text-textPrimary">{cmd.label}</span>
             </div>
-            <div className="text-[9px] text-textSecondary leading-tight">
-              {cmd.description}
-            </div>
+            <div className="text-[9px] text-textSecondary leading-tight">{cmd.description}</div>
             <div className="mt-2 h-0.5 rounded-full overflow-hidden bg-secondary">
               <div
                 className="h-full rounded-full transition-all duration-300 group-hover:w-full"
-                style={{ width: "0%", backgroundColor: cmd.color }}
+                style={{ width: '0%', backgroundColor: cmd.color }}
               />
             </div>
           </button>
@@ -543,21 +507,54 @@ function QuickCommands({
 // Chat Interface Component
 // ═══════════════════════════════════════════════════════════════
 
+const RenderedMessage = React.memo(({ m }: { m: Message }) => (
+  <div className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+    <div
+      className={`max-w-[90%] border rounded-2xl px-4 py-2.5 ${
+        m.role === 'user'
+          ? 'bg-accentTeal/100 border-teal-500 text-white rounded-br-md'
+          : 'bg-primary border-borderColor rounded-bl-md shadow-sm'
+      }`}
+    >
+      {m.actions && m.actions.length > 0 && (
+        <div className="flex gap-1 mb-1.5 flex-wrap">
+          {m.actions.map((a) => (
+            <span
+              key={a}
+              className="text-[9px] bg-secondary text-textSecondary px-1.5 py-0.5 rounded font-mono"
+            >
+              {a}
+            </span>
+          ))}
+        </div>
+      )}
+      <div
+        className={`text-[13px] leading-relaxed ${m.role === 'user' ? 'text-white' : 'text-textPrimary'}`}
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }}
+      />
+    </div>
+    <div className="text-[10px] text-textSecondary mt-1 flex items-center gap-1.5">
+      <span>{m.time}</span>
+      {m.ms && <span className="font-mono">({m.ms}ms)</span>}
+    </div>
+  </div>
+));
+
 function ChatInterface() {
   const [msgs, setMsgs] = useState<Message[]>([
     {
-      id: "0",
-      role: "assistant",
-      text: "**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制台。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。",
+      id: '0',
+      role: 'assistant',
+      text: '**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制台。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。',
       time: now(),
     },
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [msgs]);
 
   const send = useCallback(async () => {
@@ -566,24 +563,24 @@ function ChatInterface() {
 
     const userMsg: Message = {
       id: uid(),
-      role: "user",
+      role: 'user',
       text: trimmed,
       time: now(),
     };
     setMsgs((m) => [...m, userMsg]);
-    setInput("");
+    setInput('');
     setBusy(true);
 
     const start = Date.now();
 
     try {
-      const res = await apiCall("chat", { input: trimmed });
+      const res = await apiCall('chat', { input: trimmed });
       const ms = Date.now() - start;
 
       if (res.success) {
         const aiMsg: Message = {
           id: uid(),
-          role: "assistant",
+          role: 'assistant',
           text: res.data.reply,
           time: now(),
           actions: res.data.actions,
@@ -593,8 +590,8 @@ function ChatInterface() {
       } else {
         const errMsg: Message = {
           id: uid(),
-          role: "assistant",
-          text: `錯誤：${res.error || "未知錯誤"}`,
+          role: 'assistant',
+          text: `錯誤：${res.error || '未知錯誤'}`,
           time: now(),
         };
         setMsgs((m) => [...m, errMsg]);
@@ -602,8 +599,8 @@ function ChatInterface() {
     } catch {
       const fallbackMsg: Message = {
         id: uid(),
-        role: "assistant",
-        text: "**連線失敗** ⚠️\n\n無法連接 OmniAgent API。請確認服務正在運行。",
+        role: 'assistant',
+        text: '**連線失敗** ⚠️\n\n無法連接 OmniAgent API。請確認服務正在運行。',
         time: now(),
       };
       setMsgs((m) => [...m, fallbackMsg]);
@@ -619,18 +616,18 @@ function ChatInterface() {
 
       const userMsg: Message = {
         id: uid(),
-        role: "user",
+        role: 'user',
         text: `${cmd.icon} ${cmd.label}`,
         time: now(),
       };
       setMsgs((m) => [...m, userMsg]);
 
       try {
-        const res = await apiCall("quick_command", { commandId: cmd.id });
+        const res = await apiCall('quick_command', { commandId: cmd.id });
         if (res.success) {
           const aiMsg: Message = {
             id: uid(),
-            role: "assistant",
+            role: 'assistant',
             text: res.data.reply,
             time: now(),
             actions: res.data.actions,
@@ -641,7 +638,7 @@ function ChatInterface() {
         // Fallback: show command description
         const aiMsg: Message = {
           id: uid(),
-          role: "assistant",
+          role: 'assistant',
           text: `**${cmd.label}** 已觸發\n\n${cmd.description}`,
           time: now(),
         };
@@ -667,48 +664,14 @@ function ChatInterface() {
           <span className="text-[9px] bg-accentTeal/10 text-accentTeal px-2 py-0.5 rounded-full font-bold">
             LIVE
           </span>
-          <span className="text-[9px] text-textSecondary font-mono">
-            {msgs.length} msgs
-          </span>
+          <span className="text-[9px] text-textSecondary font-mono">{msgs.length} msgs</span>
         </div>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-3 pr-1 min-h-0">
         {msgs.map((m) => (
-          <div
-            key={m.id}
-            className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
-          >
-            <div
-              className={`max-w-[90%] border rounded-2xl px-4 py-2.5 ${
-                m.role === "user"
-                  ? "bg-accentTeal/100 border-teal-500 text-white rounded-br-md"
-                  : "bg-primary border-borderColor rounded-bl-md shadow-sm"
-              }`}
-            >
-              {m.actions && m.actions.length > 0 && (
-                <div className="flex gap-1 mb-1.5 flex-wrap">
-                  {m.actions.map((a) => (
-                    <span
-                      key={a}
-                      className="text-[9px] bg-secondary text-textSecondary px-1.5 py-0.5 rounded font-mono"
-                    >
-                      {a}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <div
-                className={`text-[13px] leading-relaxed ${m.role === "user" ? "text-white" : "text-textPrimary"}`}
-                dangerouslySetInnerHTML={{ __html: renderMarkdown(m.text) }}
-              />
-            </div>
-            <div className="text-[10px] text-textSecondary mt-1 flex items-center gap-1.5">
-              <span>{m.time}</span>
-              {m.ms && <span className="font-mono">({m.ms}ms)</span>}
-            </div>
-          </div>
+          <RenderedMessage key={m.id} m={m} />
         ))}
         {busy && (
           <div className="flex items-start">
@@ -728,7 +691,7 @@ function ChatInterface() {
 
       {/* Quick Suggestions */}
       <div className="flex gap-1.5 flex-wrap my-2">
-        {["系統狀態", "5T 驗證", "幫助"].map((s) => (
+        {['系統狀態', '5T 驗證', '幫助'].map((s) => (
           <button
             key={s}
             onClick={() => {
@@ -748,7 +711,7 @@ function ChatInterface() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
+            if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               send();
             }
@@ -762,11 +725,11 @@ function ChatInterface() {
           disabled={busy || !input.trim()}
           className={`border-none rounded-xl px-4 py-2.5 font-bold text-[13px] transition-all ${
             busy || !input.trim()
-              ? "bg-slate-200 text-textSecondary cursor-not-allowed"
-              : "bg-accentTeal/100 text-white cursor-pointer hover:bg-teal-600 hover:shadow-md active:scale-95"
+              ? 'bg-slate-200 text-textSecondary cursor-not-allowed'
+              : 'bg-accentTeal/100 text-white cursor-pointer hover:bg-teal-600 hover:shadow-md active:scale-95'
           }`}
         >
-          {busy ? "…" : "發送"}
+          {busy ? '…' : '發送'}
         </button>
       </div>
     </div>
@@ -780,22 +743,20 @@ function ChatInterface() {
 export default function OmniAgentConsolePage() {
   const [subAgents, setSubAgents] = useState<SubAgent[]>([]);
   const [stats, setStats] = useState<CoreStats | null>(null);
-  const [activePanel, setActivePanel] = useState<
-    "stats" | "agents" | "commands"
-  >("stats");
+  const [activePanel, setActivePanel] = useState<'stats' | 'agents' | 'commands'>('stats');
 
   // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall("get_stats"),
-          apiCall("get_sub_agents"),
+          apiCall('get_stats'),
+          apiCall('get_sub_agents'),
         ]);
         if (statsRes.success) setStats(statsRes.data);
         if (agentsRes.success) setSubAgents(agentsRes.data);
       } catch (err) {
-        console.warn("[OmniAgent Console] Failed to fetch initial data:", err);
+        console.warn('[OmniAgent Console] Failed to fetch initial data:', err);
       }
     };
     fetchData();
@@ -804,8 +765,8 @@ export default function OmniAgentConsolePage() {
     const interval = setInterval(async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall("get_stats"),
-          apiCall("get_sub_agents"),
+          apiCall('get_stats'),
+          apiCall('get_sub_agents'),
         ]);
         if (statsRes.success) setStats(statsRes.data);
         if (agentsRes.success) setSubAgents(agentsRes.data);
@@ -819,28 +780,26 @@ export default function OmniAgentConsolePage() {
 
   const handleDispatchAgent = useCallback(async (agent: SubAgent) => {
     try {
-      const res = await apiCall("dispatch_sub_agent", {
+      const res = await apiCall('dispatch_sub_agent', {
         agentId: agent.id,
         task: `手動派遣任務 @ ${now()}`,
       });
       if (res.success) {
-        setSubAgents((prev) =>
-          prev.map((a) => (a.id === agent.id ? res.data.agent : a)),
-        );
+        setSubAgents((prev) => prev.map((a) => (a.id === agent.id ? res.data.agent : a)));
       }
     } catch (err) {
-      console.warn("[OmniAgent Console] Failed to dispatch agent:", err);
+      console.warn('[OmniAgent Console] Failed to dispatch agent:', err);
     }
   }, []);
 
   const handleQuickCommand = useCallback(async (cmd: QuickCommand) => {
     try {
-      await apiCall("quick_command", { commandId: cmd.id });
+      await apiCall('quick_command', { commandId: cmd.id });
       // Refresh stats after command
-      const statsRes = await apiCall("get_stats");
+      const statsRes = await apiCall('get_stats');
       if (statsRes.success) setStats(statsRes.data);
     } catch (err) {
-      console.warn("[OmniAgent Console] Quick command failed:", err);
+      console.warn('[OmniAgent Console] Quick command failed:', err);
     }
   }, []);
 
@@ -872,9 +831,7 @@ export default function OmniAgentConsolePage() {
               <h1 className="text-base font-bold text-textPrimary tracking-tight">
                 OmniAgent Console
               </h1>
-              <p className="text-[10px] text-textSecondary">
-                萬能中心 · 統一指揮介面 v1.0
-              </p>
+              <p className="text-[10px] text-textSecondary">萬能中心 · 統一指揮介面 v1.0</p>
             </div>
           </div>
 
@@ -882,27 +839,23 @@ export default function OmniAgentConsolePage() {
             {/* Live indicator */}
             <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1">
               <div className="w-1.5 h-1.5 rounded-full bg-accentGreen animate-pulse" />
-              <span className="text-[10px] font-semibold text-green-700">
-                ONLINE
-              </span>
+              <span className="text-[10px] font-semibold text-green-700">ONLINE</span>
             </div>
 
             {/* Stats summary */}
             <div className="hidden md:flex items-center gap-4 text-[10px] text-textSecondary font-mono">
               <span>
-                Agent:{" "}
-                <span className="text-accentTeal font-bold">
-                  {stats?.agent.status || "..."}
-                </span>
+                Agent:{' '}
+                <span className="text-accentTeal font-bold">{stats?.agent.status || '...'}</span>
               </span>
               <span>
-                Cache:{" "}
+                Cache:{' '}
                 <span className="text-blue-600 font-bold">
                   {stats?.kernel.cacheMetrics.size || 0}
                 </span>
               </span>
               <span>
-                Nodes:{" "}
+                Nodes:{' '}
                 <span className="text-purple-600 font-bold">
                   {stats?.kernel.agnesStatus.activeNodes || 0}
                 </span>
@@ -940,9 +893,9 @@ export default function OmniAgentConsolePage() {
               >
                 {(
                   [
-                    { id: "stats", label: "核心統計", icon: "◎" },
-                    { id: "agents", label: "子代理", icon: "🤖" },
-                    { id: "commands", label: "快速命令", icon: "⚡" },
+                    { id: 'stats', label: '核心統計', icon: '◎' },
+                    { id: 'agents', label: '子代理', icon: '🤖' },
+                    { id: 'commands', label: '快速命令', icon: '⚡' },
                   ] as const
                 ).map((tab) => (
                   <button
@@ -952,8 +905,8 @@ export default function OmniAgentConsolePage() {
                     onClick={() => setActivePanel(tab.id)}
                     className={`flex-1 py-2.5 text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-current ${
                       activePanel === tab.id
-                        ? "text-accentTeal border-b-2 border-teal-500 bg-accentTeal/10/50"
-                        : "text-textSecondary hover:text-textSecondary"
+                        ? 'text-accentTeal border-b-2 border-teal-500 bg-accentTeal/10/50'
+                        : 'text-textSecondary hover:text-textSecondary'
                     }`}
                   >
                     <span>{tab.icon}</span>
@@ -964,16 +917,11 @@ export default function OmniAgentConsolePage() {
 
               {/* Panel Content */}
               <div className="flex-1 overflow-y-auto p-4">
-                {activePanel === "stats" && <CoreStatsDisplay stats={stats} />}
-                {activePanel === "agents" && (
-                  <SubAgentPanel
-                    agents={subAgents}
-                    onDispatch={handleDispatchAgent}
-                  />
+                {activePanel === 'stats' && <CoreStatsDisplay stats={stats} />}
+                {activePanel === 'agents' && (
+                  <SubAgentPanel agents={subAgents} onDispatch={handleDispatchAgent} />
                 )}
-                {activePanel === "commands" && (
-                  <QuickCommands onExecute={handleQuickCommand} />
-                )}
+                {activePanel === 'commands' && <QuickCommands onExecute={handleQuickCommand} />}
               </div>
             </div>
           </div>
