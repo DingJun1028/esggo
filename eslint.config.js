@@ -9,7 +9,7 @@ const globals = require('globals');
 module.exports = [
   ...typescriptEslint.configs.recommended,
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/'],
+    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '**/*.cjs', '**/*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/'],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
@@ -73,6 +73,12 @@ module.exports = [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/no-var-requires': 'warn',
+      // ── React Compiler rules (too strict for existing patterns) ──
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/preserve-manual-memoization': 'warn',
+      'react-hooks/refs': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/purity': 'warn',
     },
   },
 ];

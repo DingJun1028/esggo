@@ -25,6 +25,7 @@ import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { inferTaskType, routeModel, formatRoutingResult } from './model-router.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -203,14 +204,18 @@ async function callGroq(userPrompt, systemPrompt = ESG_SYSTEM_PROMPT, modelId = 
   return j.choices?.[0]?.message?.content || '';
 }
 
-// ── AI Dispatcher ─────────────────────────────────────────────
-// Fallback chain: Local Ollama → Gemini → Groq (free, fast) → OpenRouter (:free) → Mock
+// ── AI Dispatcher (Smart Routing) ─────────────────────────────
+// Fallback chain: Local Ollama → Smart Routing (Primary → Fallback1 → Fallback2) → Mock
 async function dispatchAI(task, skillId) {
   const prompt = task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
   const imageUrl = task.imageUrl || task.image_url || null;
   const skill = SKILL_REGISTRY.find(s => s.id === skillId);
-  const model = skill?.model || 'llava-phi3:latest';
   const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
+
+  // ══ 智慧模型路由 ══════════════════════════════════════════
+  const taskType = inferTaskType(prompt);
+  const routing = routeModel(taskType);
+  console.log(`[OmniGateway] Smart Routing: ${formatRoutingResult(routing, taskType)}`);
 
   // 1. Try local Ollama/Gemma server first (vision-capable)
   if (localServer && imageUrl) {
@@ -227,46 +232,61 @@ async function dispatchAI(task, skillId) {
       });
       if (response.ok) {
         const data = await response.json();
-        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision' };
+        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision', taskType };
       }
     } catch (e) {
       console.warn('[OmniGateway] Local server fallback:', e.message);
     }
   }
 
-  // 2. Try Gemini first
-  if (gemini) {
-    try {
-      const m = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const r = await m.generateContent([ESG_SYSTEM_PROMPT, prompt]);
-      return { content: r.response.text(), provider: 'Google Gemini', model: 'gemini-1.5-flash' };
-    } catch (e) {
-      console.warn('[OmniGateway] Gemini fallback:', e.message);
+  // ══ 嘗試 1: Primary Model (Smart Routing) ══════════════════
+  const { primary, fallback1, fallback2 } = routing;
+  try {
+    console.log(`[OmniGateway] Trying primary: ${primary.provider}/${primary.model}`);
+    if (primary.provider === 'groq' && GROQ_API_KEY) {
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, primary.model);
+      return { content, provider: 'Groq', model: primary.model, taskType, strategy: routing.strategy };
     }
+    if (primary.provider === 'openrouter' && OPENROUTER_KEY) {
+      const content = await callOpenRouter(primary.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: primary.model, taskType, strategy: routing.strategy };
+    }
+  } catch (e) {
+    console.warn(`[OmniGateway] Primary ${primary.provider}/${primary.model} failed:`, e.message);
   }
 
-  // 3. Groq (Free tier: 30 req/min, no daily cap — fastest inference)
-  if (GROQ_API_KEY) {
-    try {
-      const groqModel = skill?.groq_model || GROQ_MODELS[0].id;
-      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, groqModel);
-      return { content, provider: 'Groq', model: groqModel };
-    } catch (e) {
-      console.warn('[OmniGateway] Groq fallback:', e.message);
+  // ══ 嘗試 2: Fallback 1 ═════════════════════════════════════
+  try {
+    console.log(`[OmniGateway] Trying fallback1: ${fallback1.provider}/${fallback1.model}`);
+    if (fallback1.provider === 'groq' && GROQ_API_KEY) {
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback1.model);
+      return { content, provider: 'Groq', model: fallback1.model, taskType, strategy: routing.strategy };
     }
+    if (fallback1.provider === 'openrouter' && OPENROUTER_KEY) {
+      const content = await callOpenRouter(fallback1.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: fallback1.model, taskType, strategy: routing.strategy };
+    }
+  } catch (e) {
+    console.warn(`[OmniGateway] Fallback1 ${fallback1.provider}/${fallback1.model} failed:`, e.message);
   }
 
-  // 4. OpenRouter with skill-selected model (vision-capable)
-  if (OPENROUTER_KEY) {
-    try {
-      const content = await callOpenRouter(model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
-      return { content, provider: 'OpenRouter', model };
-    } catch (e) {
-      console.warn('[OmniGateway] OpenRouter fallback:', e.message);
+  // ══ 嘗試 3: Fallback 2 ═════════════════════════════════════
+  try {
+    console.log(`[OmniGateway] Trying fallback2: ${fallback2.provider}/${fallback2.model}`);
+    if (fallback2.provider === 'groq' && GROQ_API_KEY) {
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback2.model);
+      return { content, provider: 'Groq', model: fallback2.model, taskType, strategy: routing.strategy };
     }
+    if (fallback2.provider === 'openrouter' && OPENROUTER_KEY) {
+      const content = await callOpenRouter(fallback2.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: fallback2.model, taskType, strategy: routing.strategy };
+    }
+  } catch (e) {
+    console.warn(`[OmniGateway] Fallback2 ${fallback2.provider}/${fallback2.model} failed:`, e.message);
   }
 
-  // 5. Mock
+  // ══ 所有 AI 失敗 → Mock ══════════════════════════════════════
+  console.warn('[OmniGateway] All providers failed, using mock response');
   const mock = {
     gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工多樣性。\n\n5T 狀態：全項驗證通過。`,
     carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**`,
@@ -274,7 +294,7 @@ async function dispatchAI(task, skillId) {
     omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動修復。`,
   };
   const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
-  return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
+  return { content, provider: 'Mock', model: 'mock-v3.0', taskType, strategy: 'mock_fallback' };
 }
 
 

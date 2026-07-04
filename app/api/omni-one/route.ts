@@ -1,113 +1,147 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { routeModel, inferTaskType, formatRoutingResult } from '@/core/ai/model-router';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
-const HAS_API_KEY = !!process.env.GEMINI_API_KEY;
-const USE_REAL_AI = HAS_API_KEY && !FREE_TIER_ONLY;
+const REQUEST_TIMEOUT = 15000;
 
-// ✨ 改進：添加超時控制和降級策略
-const REQUEST_TIMEOUT = 15000; // 15秒超時
-const FALLBACK_RESPONSES = {
+const FALLBACK_RESPONSES: Record<string, string> = {
   esg_report: '[OmniOne] ESG 報告任務已收到。系統將使用知識庫模板進行初步分析。',
   bug_fix: '[OmniOne] 缺陷修復任務已識別。推薦方案：檢查日誌、運行測試、備份數據後進行修改。',
   ui_design: '[OmniOne] UI 設計任務已分類。建議參考設計系統文檔並創建原型。',
   architecture: '[OmniOne] 架構相關任務已收到。將評估系統設計和依賴關係。',
-  general: '[OmniOne] 任務已收到並分類。系統將盡快處理您的請求。'
+  general: '[OmniOne] 任務已收到並分類。系統將盡快處理您的請求。',
 };
 
-// ✨ OpenRouter :free models rotation
-const OR_MODELS = [
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'mistralai/mistral-small-3.1-24b:free',
-  'google/gemma-4-31b-it:free',
-  'qwen/qwen3-next-80b-a3b-instruct:free',
-];
-let orModelIdx = 0;
-
-// ✨ Groq free models (30 req/min, no daily cap)
-const GROQ_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant',
-  'gemma2-9b-it',
-];
-let groqModelIdx = 0;
-
-// ✨ 改進：添加 Groq 作為超快免費備選
-async function callGroq(prompt: string): Promise<string | null> {
-  const GROQ_API_KEY = process.env.GROQ_API_KEY;
-  if (!GROQ_API_KEY) return null;
-  const model = GROQ_MODELS[groqModelIdx % GROQ_MODELS.length];
-  groqModelIdx++;
+// ── Groq API Caller ──────────────────────────────────────────
+async function callGroq(
+  prompt: string,
+  model: string,
+  maxTokens: number,
+  temperature: number
+): Promise<string | null> {
+  const API_KEY = process.env.GROQ_API_KEY;
+  if (!API_KEY) return null;
 
   try {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Authorization': `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model,
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        max_tokens: 256,
+        temperature,
+        max_tokens: maxTokens,
       }),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT),
     });
-    if (!res.ok) { console.warn(`[OmniOne] Groq failed: ${res.status}`); return null; }
+    if (!res.ok) {
+      console.warn(`[OmniOne] Groq ${model} failed: ${res.status}`);
+      return null;
+    }
     const data = await res.json();
     return data.choices?.[0]?.message?.content || null;
   } catch (err: any) {
-    console.warn(`[OmniOne] Groq error: ${err.message}`);
+    console.warn(`[OmniOne] Groq ${model} error: ${err.message}`);
     return null;
   }
 }
 
-// ✨ 改進：添加 OpenRouter 作為備選方案
-async function callOpenRouter(prompt: string) {
-  const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
-  if (!OPENROUTER_KEY) return null;
-  const model = OR_MODELS[orModelIdx % OR_MODELS.length];
-  orModelIdx++;
+// ── OpenRouter API Caller ────────────────────────────────────
+async function callOpenRouter(
+  prompt: string,
+  model: string,
+  maxTokens: number,
+  temperature: number
+): Promise<string | null> {
+  const API_KEY = process.env.OPENROUTER_API_KEY;
+  if (!API_KEY) return null;
 
   try {
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENROUTER_KEY}`,
+        'Authorization': `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model,
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        max_tokens: 256,
+        temperature,
+        max_tokens: maxTokens,
       }),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT),
     });
-    
     if (!res.ok) {
-      console.warn(`[OmniOne] OpenRouter failed: ${res.status}`);
+      console.warn(`[OmniOne] OpenRouter ${model} failed: ${res.status}`);
       return null;
     }
-
     const data = await res.json();
     return data.choices?.[0]?.message?.content || null;
   } catch (err: any) {
-    console.warn(`[OmniOne] OpenRouter error: ${err.message}`);
+    console.warn(`[OmniOne] OpenRouter ${model} error: ${err.message}`);
     return null;
   }
 }
 
+// ── Gemini API Caller ────────────────────────────────────────
+async function callGemini(
+  prompt: string,
+  maxTokens: number,
+  temperature: number
+): Promise<string | null> {
+  const API_KEY = process.env.GEMINI_API_KEY;
+  if (!API_KEY) return null;
+
+  try {
+    const { GoogleGenAI } = await import('@google/genai');
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const result = await Promise.race([
+      ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: { temperature, maxOutputTokens: maxTokens },
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
+      ),
+    ]);
+    return (result as any).text || null;
+  } catch (err: any) {
+    console.warn(`[OmniOne] Gemini error: ${err.message}`);
+    return null;
+  }
+}
+
+// ── 根據 provider 型別呼叫對應 API ─────────────────────────
+async function callProvider(
+  provider: string,
+  prompt: string,
+  model: string,
+  maxTokens: number,
+  temperature: number
+): Promise<string | null> {
+  switch (provider) {
+    case 'groq':
+      return callGroq(prompt, model, maxTokens, temperature);
+    case 'openrouter':
+      return callOpenRouter(prompt, model, maxTokens, temperature);
+    case 'gemini':
+      return callGemini(prompt, maxTokens, temperature);
+    default:
+      return null;
+  }
+}
+
+// ── POST Handler ─────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
     const { input, caseType, ragContext: clientRagContext } = await req.json();
 
-    // ✨ 改進：驗證輸入
     if (!input || !caseType) {
       return NextResponse.json(
         { output: '[OmniOne] 錯誤：缺少必要參數 (input/caseType)', provider: 'error' },
@@ -115,18 +149,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✨ 改進：如果沒有任何 API Key，返回模擬回應
-    const HAS_OPENROUTER = !!process.env.OPENROUTER_API_KEY;
+    // 檢查是否有任何 API Key
     const HAS_GROQ = !!process.env.GROQ_API_KEY;
-    if (!HAS_API_KEY && !HAS_OPENROUTER && !HAS_GROQ) {
+    const HAS_OPENROUTER = !!process.env.OPENROUTER_API_KEY;
+    const HAS_GEMINI = !!process.env.GEMINI_API_KEY;
+    if (!HAS_GROQ && !HAS_OPENROUTER && !HAS_GEMINI) {
       return NextResponse.json(
         { output: `[OmniOne 模擬] 收到任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
         { status: 200 }
       );
     }
 
-    const ragContext = clientRagContext 
-      ? `\n相關知識參考:\n${clientRagContext}` 
+    // ══ 智慧模型路由 ══════════════════════════════════════════
+    // 1. 從 caseType 推斷 ESG 任務類型
+    const taskType = inferTaskType(input);
+    // 2. 根據任務類型選擇最佳模型路由
+    const routing = routeModel(taskType);
+    console.log(`[OmniOne] Smart Routing: ${formatRoutingResult(routing)}`);
+
+    const ragContext = clientRagContext
+      ? `\n相關知識參考:\n${clientRagContext}`
       : '\n相關知識參考: 無特定外部資料，請依循 5T 協議本體知識回答。';
 
     const prompt = `
@@ -142,84 +184,68 @@ ${input}
 `;
 
     let response = null;
-    let provider = 'gemini';
+    let provider = 'unknown';
+    let modelUsed = '';
 
-    // 嘗試 1: Gemini API（主要方案）
-    if (HAS_API_KEY && !FREE_TIER_ONLY) {
-      try {
-        console.log('[OmniOne] 嘗試 Gemini API...');
-        const { GoogleGenAI } = await import('@google/genai');
-        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-        
-        const result = await Promise.race([
-          ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: prompt,
-            config: {
-              temperature: 0.7,
-              maxOutputTokens: 256,
-            }
-          }),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
-          )
-        ]);
-        
-        response = (result as any).text;
-        console.log('[OmniOne] ✓ Gemini 成功');
-      } catch (geminiErr: any) {
-        console.warn(`[OmniOne] Gemini 失敗: ${geminiErr.message}`);
-      }
+    // ══ 嘗試 1: Primary Model ═══════════════════════════════
+    const { primary, fallback1, fallback2 } = routing;
+    console.log(`[OmniOne] Trying primary: ${primary.provider}/${primary.model}`);
+    response = await callProvider(
+      primary.provider, prompt, primary.model, primary.maxTokens, primary.temperature
+    );
+    if (response) {
+      provider = primary.provider;
+      modelUsed = primary.model;
     }
 
-    // 嘗試 2: Groq（超快免費，30 req/min）
-    if (!response && HAS_GROQ) {
-      try {
-        console.log('[OmniOne] 嘗試 Groq API...');
-        response = await callGroq(prompt);
-        if (response) {
-          provider = 'groq';
-          console.log('[OmniOne] ✓ Groq 成功');
-        }
-      } catch (groqErr: any) {
-        console.warn(`[OmniOne] Groq 失敗: ${groqErr.message}`);
-      }
-    }
-
-    // 嘗試 3: OpenRouter :free（備選方案）
-    if (!response && HAS_OPENROUTER) {
-      try {
-        console.log('[OmniOne] 嘗試 OpenRouter API...');
-        response = await callOpenRouter(prompt);
-        if (response) {
-          provider = 'openrouter';
-          console.log('[OmniOne] ✓ OpenRouter 成功');
-        }
-      } catch (openrouterErr: any) {
-        console.warn(`[OmniOne] OpenRouter 失敗: ${openrouterErr.message}`);
-      }
-    }
-
-    // 如果所有 AI 都失敗，使用預設回應
+    // ══ 嘗試 2: Fallback 1 ═════════════════════════════════
     if (!response) {
-      console.warn(`[OmniOne] 所有 AI 提供者失敗，使用預設回應`);
-      response = FALLBACK_RESPONSES[caseType as keyof typeof FALLBACK_RESPONSES] || FALLBACK_RESPONSES.general;
-      provider = 'fallback';
+      console.log(`[OmniOne] Trying fallback1: ${fallback1.provider}/${fallback1.model}`);
+      response = await callProvider(
+        fallback1.provider, prompt, fallback1.model, fallback1.maxTokens, fallback1.temperature
+      );
+      if (response) {
+        provider = fallback1.provider;
+        modelUsed = fallback1.model;
+      }
     }
 
-    return NextResponse.json({ 
+    // ══ 嘗試 3: Fallback 2 ═════════════════════════════════
+    if (!response) {
+      console.log(`[OmniOne] Trying fallback2: ${fallback2.provider}/${fallback2.model}`);
+      response = await callProvider(
+        fallback2.provider, prompt, fallback2.model, fallback2.maxTokens, fallback2.temperature
+      );
+      if (response) {
+        provider = fallback2.provider;
+        modelUsed = fallback2.model;
+      }
+    }
+
+    // ══ 所有 AI 失敗 → 預設回應 ══════════════════════════════
+    if (!response) {
+      console.warn('[OmniOne] All providers failed, using fallback response');
+      response = FALLBACK_RESPONSES[caseType] || FALLBACK_RESPONSES.general;
+      provider = 'fallback';
+      modelUsed = 'none';
+    }
+
+    console.log(`[OmniOne] ✓ Success: provider=${provider}, model=${modelUsed}`);
+
+    return NextResponse.json({
       output: response,
       provider,
+      model: modelUsed,
+      taskType,
+      strategy: routing.strategy,
       caseType,
       timestamp: new Date().toISOString(),
     });
 
   } catch (error: any) {
-    console.error('[OmniOne] 嚴重錯誤:', error);
-    
-    // ✨ 改進：返回結構化錯誤信息
+    console.error('[OmniOne] Critical error:', error);
     return NextResponse.json(
-      { 
+      {
         output: '[OmniOne] 系統故障。請稍後重試或聯繫支援團隊。',
         error: error.message,
         provider: 'error',

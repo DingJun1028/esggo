@@ -126,7 +126,43 @@ export default function SonnarDashboard() {
   const [wsEvents, setWsEvents] = useState<WSEvent[]>([]);
 
   // Signal history (for sparklines) — keep last 20 ticks per source
-  const signalHistory = useRef<Record<string, number[]>>({});
+  const [signalHistory, setSignalHistory] = useState<Record<string, number[]>>({});
+  const signalHistoryRef = useRef<Record<string, number[]>>({});
+
+  // ─── Fetch ──────────────────────────────────────────────────
+  const fetchStatus = useCallback(async () => {
+    try {
+      const [crawlRes, radarRes, alertsRes] = await Promise.all([
+        fetch('/api/sonnar/crawl'),
+        fetch('/api/sonnar/radar'),
+        fetch('/api/sonnar/alerts'),
+      ]);
+      const crawlData = await crawlRes.json();
+      const radarData = await radarRes.json();
+      const alertsData = await alertsRes.json();
+
+      if (crawlData.success) setSources(crawlData.data.jobs || []);
+      if (radarData.success) {
+        const sigs = radarData.data.signals || [];
+        setSignals(sigs);
+        setTopics(radarData.data.topicsAggregated || []);
+
+        // Update signal history for sparklines
+        const newHistory = { ...signalHistoryRef.current };
+        sigs.forEach((s: RadarSignal) => {
+          const hist = newHistory[s.source.id] || [];
+          newHistory[s.source.id] = [...hist.slice(-19), s.signalStrength];
+        });
+        signalHistoryRef.current = newHistory;
+        setSignalHistory(newHistory);
+      }
+      if (alertsData.success) setAlerts(alertsData.data.alerts || []);
+    } catch (err) {
+      console.error('[Sonar] Fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ─── WebSocket ──────────────────────────────────────────────
   useEffect(() => {
@@ -169,39 +205,7 @@ export default function SonnarDashboard() {
       ws?.close();
       clearTimeout(reconnectTimer);
     };
-  }, []);
-
-  // ─── Fetch ──────────────────────────────────────────────────
-  const fetchStatus = useCallback(async () => {
-    try {
-      const [crawlRes, radarRes, alertsRes] = await Promise.all([
-        fetch('/api/sonnar/crawl'),
-        fetch('/api/sonnar/radar'),
-        fetch('/api/sonnar/alerts'),
-      ]);
-      const crawlData = await crawlRes.json();
-      const radarData = await radarRes.json();
-      const alertsData = await alertsRes.json();
-
-      if (crawlData.success) setSources(crawlData.data.jobs || []);
-      if (radarData.success) {
-        const sigs = radarData.data.signals || [];
-        setSignals(sigs);
-        setTopics(radarData.data.topicsAggregated || []);
-
-        // Update signal history for sparklines
-        sigs.forEach((s: RadarSignal) => {
-          const hist = signalHistory.current[s.source.id] || [];
-          signalHistory.current[s.source.id] = [...hist.slice(-19), s.signalStrength];
-        });
-      }
-      if (alertsData.success) setAlerts(alertsData.data.alerts || []);
-    } catch (err) {
-      console.error('[Sonar] Fetch error:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  }, [fetchStatus]);
 
   useEffect(() => {
     fetchStatus();
@@ -396,7 +400,7 @@ export default function SonnarDashboard() {
                   </div>
 
                   {/* Sparkline */}
-                  <Sparkline data={signalHistory.current[signal.source.id] || []} />
+                  <Sparkline data={signalHistory[signal.source.id] || []} />
 
                   {/* Signal bar */}
                   <div style={{ marginTop: '8px' }}>
