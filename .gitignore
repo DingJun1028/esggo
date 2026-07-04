@@ -119,7 +119,6 @@ config/
 dashboard/
 /data/
 dataconnect/
-esggo/
 esggo-dashboard/
 esggo-funtions/
 esggo-omnimcp/
