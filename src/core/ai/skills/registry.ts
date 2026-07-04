@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
 // ESGGO Skill Registry
-// 自動註冊所有 ESG 技能
+// 自動註冊所有 ESG 技能 + MECE 最佳實踐
 // ═══════════════════════════════════════════════════════════════
 
 // 導入所有技能（會自動觸發 registerSkill）
@@ -23,3 +23,23 @@ export type {
   SkillResult,
   SkillContext,
 } from './index';
+
+// 匯出 MECE 最佳實踐框架
+export {
+  getAllPractices,
+  getPracticesByPillar,
+  getPracticesByCategory,
+  getPracticesByLevel,
+  getPracticeById,
+  calculateOverallScore,
+  validateMECECompleteness,
+  validateMECEExclusivity,
+} from './best-practices';
+
+export type {
+  BestPractice,
+  PracticeAssessment,
+  ESGPillar,
+  PracticeLevel,
+  PracticeStatus,
+} from './best-practices';
