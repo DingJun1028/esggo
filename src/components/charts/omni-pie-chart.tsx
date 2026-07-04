@@ -16,24 +16,13 @@ export function OmniPieChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  if (!data || data.length === 0) return <div>No data available</div>;
-
-  const total = data.reduce((sum, d) => sum + d.value, 0);
-  
-  // Base SVG configuration
+  // Base SVG configuration (computed before hooks so useMemo can reference them)
   const viewBoxSize = 300;
   const radius = viewBoxSize / 2 - 20;
   const cx = viewBoxSize / 2;
   const cy = viewBoxSize / 2;
 
-  // Fallback palette
-  const colors = [
-    'var(--accent-teal)',
-    'var(--accent-gold)',
-    'var(--accent-blue)',
-    'var(--accent-purple)',
-    '#E74C3C'
-  ];
+  const total = data && data.length > 0 ? data.reduce((sum, d) => sum + d.value, 0) : 0;
 
   const getCoordinatesForPercent = (percent: number) => {
     const x = Math.cos(2 * Math.PI * percent) * radius;
@@ -43,6 +32,7 @@ export function OmniPieChart({
 
   // Pre-compute slice data to avoid mutating variables during render
   const sliceData = useMemo(() => {
+    if (!data || data.length === 0 || total === 0) return [];
     let cumulative = 0;
     return data.map((slice, i) => {
       const slicePercent = slice.value / total;
@@ -60,6 +50,17 @@ export function OmniPieChart({
       return { slice, i, slicePercent, pathData };
     });
   }, [data, total, radius]);
+
+  if (!data || data.length === 0) return <div>No data available</div>;
+
+  // Fallback palette
+  const colors = [
+    'var(--accent-teal)',
+    'var(--accent-gold)',
+    'var(--accent-blue)',
+    'var(--accent-purple)',
+    '#E74C3C'
+  ];
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
