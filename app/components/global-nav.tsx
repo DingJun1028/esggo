@@ -3,6 +3,7 @@
 const NAV = [
   { href: '/',                  label: '首頁',     icon: '⊙', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
   { href: '/omni-center',       label: '萬能中心',  icon: '◎', color: 'hover:text-accentGold hover:bg-accentGold/10' },
+  { href: '/omni-todo',         label: '萬能待辦',  icon: '📋', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
   { href: '/sustain-write/v5',  label: 'ESG 報告', icon: '📊', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
   { href: '/village',          label: '永續村',   icon: '🏘️', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
   { href: '/daily',            label: '每日永續', icon: '📅', color: 'hover:text-accentGold hover:bg-accentGold/10' },
