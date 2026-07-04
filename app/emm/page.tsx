@@ -39,12 +39,21 @@ interface GatewayMetrics {
   skills_transcended: number;
   providers: {
     gemini: boolean;
+    groq: boolean;
     openrouter: boolean;
+    free_models: number;
     telegram: boolean;
   };
 }
 
 interface ModelStatus {
+  groq?: {
+    ok: boolean;
+    models_available?: number;
+    rate_limit?: string;
+    status?: number;
+    error?: string;
+  };
   openrouter?: {
     ok: boolean;
     free_models_available?: number;
@@ -338,6 +347,10 @@ export default function EMMIDEDashboard() {
               <MetricRow label="Skills" value={`${gw.skills_loaded} (${gw.skills_transcended} transcended)`} />
               <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700 space-y-2">
                 <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Groq</span>
+                  <StatusDot ok={gw.providers.groq} />
+                </div>
+                <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500 dark:text-gray-400">Gemini</span>
                   <StatusDot ok={gw.providers.gemini} />
                 </div>
@@ -349,6 +362,10 @@ export default function EMMIDEDashboard() {
                   <span className="text-xs text-gray-500 dark:text-gray-400">Telegram</span>
                   <StatusDot ok={gw.providers.telegram} />
                 </div>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 dark:border-slate-700">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Free Models</span>
+                  <span className="text-sm font-mono font-semibold text-emerald-500">{gw.providers.free_models}</span>
+                </div>
               </div>
             </>
           ) : (
@@ -358,8 +375,39 @@ export default function EMMIDEDashboard() {
 
         {/* AI Models Card */}
         <Card title="AI Models" icon="🧠" accent="teal">
-          {models?.openrouter ? (
+          {models?.groq ? (
             <>
+              <div className="flex items-center gap-2 mb-3">
+                <StatusDot ok={models.groq.ok} />
+                <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                  Groq {models.groq.ok ? 'Online' : 'Error'}
+                </span>
+              </div>
+              {models.groq.ok && (
+                <>
+                  <MetricRow label="Models" value={models.groq.models_available || 4} />
+                  <MetricRow label="Rate Limit" value={models.groq.rate_limit || '30 req/min'} />
+                  <div className="mt-2">
+                    <span className="text-[10px] text-gray-400">Primary Models:</span>
+                    <div className="mt-1 space-y-1">
+                      {['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it', 'mixtral-8x7b-32768'].map((m, i) => (
+                        <div key={i} className="text-[10px] font-mono bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300 truncate">
+                          {m}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              {models.groq.error && (
+                <div className="text-xs text-red-500 mt-2">{models.groq.error}</div>
+              )}
+            </>
+          ) : (
+            <div className="text-xs text-gray-400">No Groq data</div>
+          )}
+          {models?.openrouter && (
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-3">
                 <StatusDot ok={models.openrouter.ok} />
                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
@@ -372,7 +420,7 @@ export default function EMMIDEDashboard() {
                   <div className="mt-2">
                     <span className="text-[10px] text-gray-400">Top Free Models:</span>
                     <div className="mt-1 space-y-1">
-                      {(models.openrouter.top_free || []).map((m, i) => (
+                      {(models.openrouter.top_free || []).slice(0, 3).map((m, i) => (
                         <div key={i} className="text-[10px] font-mono bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300 truncate">
                           {m}
                         </div>
@@ -384,9 +432,7 @@ export default function EMMIDEDashboard() {
               {models.openrouter.error && (
                 <div className="text-xs text-red-500 mt-2">{models.openrouter.error}</div>
               )}
-            </>
-          ) : (
-            <div className="text-xs text-gray-400">No model data</div>
+            </div>
           )}
         </Card>
 

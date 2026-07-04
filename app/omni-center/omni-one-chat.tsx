@@ -34,7 +34,7 @@ const RESPONSES: Record<CaseType, string[]> = {
   general: ['已接收任務。正在以覺醒等級 **active** 處理中...完成。請確認輸出是否符合預期。','任務處理完成。信心度：0.92，記憶庫已更新（+1 條新記憶）。'],
 };
 
-interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:CaseType; time:string; ms?:number; model?:string; citations?:string[]; }
+interface Message { id:string; role:'user'|'assistant'; text:string; caseType?:CaseType; time:string; ms?:number; model?:string; provider?:string; tokens?:number; citations?:string[]; }
 
 function now() { return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
 
@@ -44,8 +44,8 @@ function sanitizeTextHtml(html: string): string {
 }
 
 export function OmniOneChat() {
-  const { isReady, processMessage } = useAgnesApi();
-  const [model, setModel] = useState<string>('Qwen');
+  const { isReady, processMessage, provider: agnesProvider, modelName: agnesModel, usage: agnesUsage, lastResponseMs } = useAgnesApi();
+  const [model, setModel] = useState<string>('Groq Llama 3.3 70B');
   const [msgs, setMsgs]   = useState<Message[]>([{id:'0',role:'assistant',text:'[OmniOne] 覺醒系統就緒。輸入任何任務，我將分類 → 檢索記憶 → 執行 → 學習。',time:now()}]);
   const [input, setInput] = useState('');
   const [busy, setBusy]   = useState(false);
@@ -67,6 +67,9 @@ export function OmniOneChat() {
 
     let reply = '';
     let citations: string[] = [];
+    let providerName = '';
+    let actualModel = model;
+    let tokenCount = 0;
     try {
       // 1. Lightweight Retrieval from Firebase
       let ragContext = '';
@@ -110,6 +113,10 @@ export function OmniOneChat() {
         const agnesReply = await processMessage(prompt);
         if (agnesReply) {
           reply = agnesReply;
+          // 從 AgnesProvider 取得實際使用的 Provider/Model
+          providerName = agnesProvider || 'unknown';
+          actualModel = agnesModel || model;
+          tokenCount = agnesUsage?.total_tokens || 0;
         } else {
           throw new Error('AGNES API returned empty response');
         }
@@ -124,6 +131,8 @@ export function OmniOneChat() {
         const data = await res.json();
         if (data && typeof data.output === 'string') {
           reply = data.output;
+          providerName = data.provider || 'openrouter';
+          actualModel = data.model || model;
         } else if (data && typeof data === 'string') {
           reply = data;
         } else {
@@ -141,7 +150,7 @@ export function OmniOneChat() {
     }
 
     const ms = Date.now()-start;
-    const aiMsg: Message = {id:`${Date.now()}a`, role:'assistant', text:reply, caseType:ct, time:now(), ms, model, citations};
+    const aiMsg: Message = {id:`${Date.now()}a`, role:'assistant', text:reply, caseType:ct, time:now(), ms, model:actualModel, provider:providerName, tokens:tokenCount, citations};
     setMsgs(m=>[...m,aiMsg]);
     setBusy(false);
   };
@@ -165,7 +174,7 @@ const renderText = (t:string) => {
         <div className="text-xs font-semibold text-textSecondary tracking-wider">OmniOne 覺醒對話框</div>
         {/* Model Switcher */}
         <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg p-1">
-          {['Qwen', 'Gemini Pro', 'Gemini Flash'].map(m => (
+          {['Groq Llama 3.3 70B', 'Groq Gemma 2 9B', 'OpenRouter Hermes 405B'].map(m => (
             <button
               key={m}
               onClick={() => setModel(m)}
@@ -189,15 +198,26 @@ const renderText = (t:string) => {
         {msgs.map(m=>(
           <div key={m.id} className={`flex flex-col ${m.role==='user'?'items-end':'items-start'}`}>
             <div className={`max-w-[85%] border rounded-xl px-3 py-2 ${m.role==='user'?'bg-accentTeal/20 border-accentTeal rounded-tr-sm':'bg-primary border-borderColor rounded-tl-sm'}`}>
-              {(m.caseType || m.model) && (
+              {(m.caseType || m.model || m.provider) && (
                 <div className="mb-1 flex items-center gap-1.5">
                   {m.caseType && (
                     <span className="text-[10px] text-white rounded px-1.5 py-[1px] font-mono font-bold" style={{background:ctColorVar(m.caseType)}}>
                       [{ctLabel(m.caseType)}]
                     </span>
                   )}
+                  {m.provider && (
+                    <span className={`text-[9px] rounded px-1.5 py-[1px] font-bold ${
+                      m.provider === 'groq' ? 'bg-accentGreen/20 text-accentGreen' :
+                      m.provider === 'openrouter' ? 'bg-accentPurple/20 text-accentPurple' :
+                      m.provider === 'gemini' ? 'bg-accentBlue/20 text-accentBlue' :
+                      'bg-accentGold/20 text-accentGold'
+                    }`}>
+                      {m.provider.toUpperCase()}
+                    </span>
+                  )}
                   {m.model && <span className="text-[9px] bg-accentPurple/20 text-accentPurple rounded px-1.5 py-[1px] font-bold">{m.model}</span>}
                   {m.ms && <span className="text-[10px] text-textSecondary">{m.ms}ms</span>}
+                  {m.tokens ? <span className="text-[9px] text-textSecondary">{m.tokens} tok</span> : null}
                 </div>
               )}
               <div className="text-[13px] text-textPrimary leading-[1.7]" dangerouslySetInnerHTML={{__html:renderText(m.text)}} />

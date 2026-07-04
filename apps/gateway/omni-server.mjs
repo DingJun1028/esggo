@@ -46,6 +46,7 @@ try {
 const PORT           = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
+const GROQ_API_KEY   = process.env.GROQ_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
 const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
@@ -91,29 +92,36 @@ function logError(type, error) {
 // ── AI Clients ────────────────────────────────────────────────
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const gemini = GEMINI_API_KEY && !FREE_TIER_ONLY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
-console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'} | Free-tier: ${FREE_TIER_ONLY}`);
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
+// 每個技能同時綁定 OpenRouter 模型和 Groq 模型（Groq 優先，速度快 3-5 倍）
 const SKILL_REGISTRY = [
-  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status:'absorbed' },
-  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'absorbed' },
-  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
-  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
-  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'absorbed' },
-  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
-  { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
-  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'transcended' },
+  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free',  groq_model: 'llama-3.3-70b-versatile',     esgDomain: 'E/S/G', fiveT: 'T2', status:'absorbed' },
+  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free',  groq_model: 'llama-3.3-70b-versatile',     esgDomain: 'E',     fiveT: 'T1', status: 'absorbed' },
+  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', groq_model: 'llama-3.3-70b-versatile',     esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
+  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free',                 groq_model: 'gemma2-9b-it',               esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
+  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', groq_model: 'llama-3.1-8b-instant',        esgDomain: 'G', fiveT: 'T1', status: 'absorbed' },
+  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', groq_model: 'llama-3.3-70b-versatile',     esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
+  { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',              groq_model: 'llama-3.3-70b-versatile',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
+  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free',  groq_model: 'llama-3.1-8b-instant',        esgDomain: 'SYS', fiveT: 'T5', status: 'transcended' },
 ];
 
-// ── Free Models List ──────────────────────────────────────────
+// ── Free Models List (OpenRouter :free — 200 req/day) ────────
 let FREE_MODELS = [
-  { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
-  { id: 'meta-llama/llama-3.2-90b-vision:free',               name: 'Meta: Llama 3.2 90B Vision (Free)' },
-  { id: 'google/gemma-3-27b-it:free',                        name: 'Google: Gemma 3 27B (Vision)' },
-  { id: 'qwen/qwen3-vl-8b:free',                            name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
-  { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B' },
-  { id: 'nousresearch/hermes-3-llama-3.1-405b:free',        name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
-  { id: 'openai/gpt-oss-120b:free',                         name: 'OpenAI: GPT-OSS 120B' },
+  // === Large / Premium Tier (70B-405B) ===
+  { id: 'nousresearch/hermes-3-llama-3.1-405b:free',  name: 'Nous: Hermes 3 405B (OmniAgent Origin)', tier: 'premium' },
+  { id: 'meta-llama/llama-3.2-90b-vision:free',       name: 'Meta: Llama 3.2 90B Vision',              tier: 'premium' },
+  { id: 'openai/gpt-oss-120b:free',                  name: 'OpenAI: GPT-OSS 120B',                    tier: 'premium' },
+  { id: 'meta-llama/llama-3.3-70b-instruct:free',    name: 'Meta: Llama 3.3 70B Instruct',            tier: 'large' },
+  { id: 'qwen/qwen3-next-80b-a3b-instruct:free',    name: 'Qwen: Qwen3 Next 80B (MoE)',              tier: 'large' },
+  // === Mid Tier (20B-31B) ===
+  { id: 'mistralai/mistral-small-3.1-24b:free',       name: 'Mistral: Small 3.1 24B (Default)',         tier: 'mid' },
+  { id: 'google/gemma-4-31b-it:free',                name: 'Google: Gemma 4 31B',                      tier: 'mid' },
+  { id: 'google/gemma-3-27b-it:free',                name: 'Google: Gemma 3 27B (Vision)',              tier: 'mid' },
+  // === Light / Vision Tier (7B-8B) ===
+  { id: 'qwen/qwen3-vl-8b:free',                    name: 'Qwen: Qwen3-VL 8B (Free Vision)',          tier: 'light' },
+  { id: 'google/gemma-2-27b-it:free',                name: 'Google: Gemma 2 27B',                       tier: 'mid' },
+  { id: 'meta-llama/llama-3.2-3b-instruct:free',     name: 'Meta: Llama 3.2 3B Instruct (Tiny)',        tier: 'light' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
@@ -157,7 +165,46 @@ async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PRO
   return j.choices?.[0]?.message?.content || '';
 }
 
+// ── Groq Call (Free tier: 30 req/min, no daily cap) ──────────
+// Groq is the fastest free inference provider for Llama / Mixtral models
+const GROQ_MODELS = [
+  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B (Groq Free)', maxTokens: 32768 },
+  { id: 'llama-3.1-8b-instant',    name: 'Llama 3.1 8B Instant (Groq Free)', maxTokens: 8192 },
+  { id: 'gemma2-9b-it',            name: 'Gemma 2 9B (Groq Free)', maxTokens: 8192 },
+  { id: 'mixtral-8x7b-32768',      name: 'Mixtral 8x7B (Groq Free)', maxTokens: 32768 },
+];
+
+// ── Startup Log ──────────────────────────────────────────────
+console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'} | Groq: ${GROQ_API_KEY ? '✅' : '❌'} | Free-tier: ${FREE_TIER_ONLY}`);
+console.log(`[OmniGateway] Free models: ${FREE_MODELS.length} | Groq models: ${GROQ_MODELS.length} | Skills: ${SKILL_REGISTRY.length}`);
+
+async function callGroq(userPrompt, systemPrompt = ESG_SYSTEM_PROMPT, modelId = null) {
+  if (!GROQ_API_KEY) throw new Error('No GROQ_API_KEY');
+  const model = modelId || GROQ_MODELS[0].id;
+  const modelInfo = GROQ_MODELS.find(m => m.id === model) || GROQ_MODELS[0];
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${GROQ_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature: 0.7,
+      max_tokens: Math.min(4096, modelInfo.maxTokens),
+    }),
+  });
+  if (!res.ok) throw new Error(`Groq ${res.status}: ${await res.text()}`);
+  const j = await res.json();
+  return j.choices?.[0]?.message?.content || '';
+}
+
 // ── AI Dispatcher ─────────────────────────────────────────────
+// Fallback chain: Local Ollama → Gemini → Groq (free, fast) → OpenRouter (:free) → Mock
 async function dispatchAI(task, skillId) {
   const prompt = task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
   const imageUrl = task.imageUrl || task.image_url || null;
@@ -198,7 +245,18 @@ async function dispatchAI(task, skillId) {
     }
   }
 
-  // 3. OpenRouter with skill-selected model (vision-capable)
+  // 3. Groq (Free tier: 30 req/min, no daily cap — fastest inference)
+  if (GROQ_API_KEY) {
+    try {
+      const groqModel = skill?.groq_model || GROQ_MODELS[0].id;
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, groqModel);
+      return { content, provider: 'Groq', model: groqModel };
+    } catch (e) {
+      console.warn('[OmniGateway] Groq fallback:', e.message);
+    }
+  }
+
+  // 4. OpenRouter with skill-selected model (vision-capable)
   if (OPENROUTER_KEY) {
     try {
       const content = await callOpenRouter(model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
@@ -208,7 +266,7 @@ async function dispatchAI(task, skillId) {
     }
   }
 
-  // 4. Mock
+  // 5. Mock
   const mock = {
     gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工多樣性。\n\n5T 狀態：全項驗證通過。`,
     carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**`,
@@ -305,7 +363,7 @@ app.get('/status', (_req, res) => {
     origin: 'Hermes (Open Source) → OmniAgent (ESGGO Evolved)',
     platform: 'Ubuntu 24.04 / Oracle Cloud ARM64',
     vps_ip: VPS_IP,
-    providers: { gemini: !!gemini, openrouter: !!OPENROUTER_KEY, free_models: FREE_MODELS.length, mock_fallback: true },
+    providers: { gemini: !!gemini, openrouter: !!OPENROUTER_KEY, groq: !!GROQ_API_KEY, free_models: FREE_MODELS.length, groq_models: GROQ_MODELS.length, mock_fallback: true },
     websocket: { enabled: true, clients: wssClients.size },
     skills: { total: SKILL_REGISTRY.length, transcended: SKILL_REGISTRY.filter(s => s.status === 'transcended').length },
     evolution: { logs: evolutionLog.length, last: evolutionLog.at(-1)?.ts || null },
@@ -316,7 +374,11 @@ app.get('/status', (_req, res) => {
   });
 });
 
-app.get('/models', (_, res) => res.json({ provider: 'OpenRouter', free_models: FREE_MODELS, default: FREE_MODELS[0]?.id, count: FREE_MODELS.length }));
+app.get('/models', (_, res) => res.json({
+  openrouter: { provider: 'OpenRouter', free_models: FREE_MODELS, default: FREE_MODELS[0]?.id, count: FREE_MODELS.length },
+  groq: { provider: 'Groq', models: GROQ_MODELS, default: GROQ_MODELS[0]?.id, count: GROQ_MODELS.length, note: '30 req/min, no daily cap — fastest free inference' },
+  total_free: FREE_MODELS.length + GROQ_MODELS.length,
+}));
 
 // GET /skills — OmniAgent-absorbed skill registry
 app.get('/skills', (_req, res) => {
