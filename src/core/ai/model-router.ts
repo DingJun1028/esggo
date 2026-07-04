@@ -4,7 +4,10 @@
 // ═══════════════════════════════════════════════════════════════
 
 // 匯入技能系統（自動註冊所有 ESG 技能）
-import { getSkill, getAllSkills, type SkillContext } from './skills/registry';
+import { getSkill, getAllSkills } from './skills/registry';
+import type { SkillContext } from './skills/registry';
+
+export type { SkillContext };
 
 export type ESGTaskType =
   | 'carbon_calculation'    // ISO 14064 碳排計算
