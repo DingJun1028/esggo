@@ -40,19 +40,16 @@ try {
     const v = t.slice(idx + 1).trim();
     if (!(k in process.env)) process.env[k] = v;
   }
-} catch {
-  console.warn('[OmniGateway] No .env file — using process env');
-}
+} catch { console.warn('[OmniGateway] No .env file — using process env'); }
 
 // ── Config ────────────────────────────────────────────────────
-const PORT = Number(process.env.PORT || 8642);
+const PORT           = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
-const VPS_IP = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
-const SITE_URL =
-  process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
-const SITE_NAME = 'ESGGO OmniAgent Gateway';
+const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
+const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
+const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
   SITE_URL,
   `http://${VPS_IP}`,
@@ -61,19 +58,16 @@ const DEFAULT_ALLOWED_ORIGINS = [
   `http://127.0.0.1:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
   `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
 ];
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(','))
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(',')).split(',').map((origin) => origin.trim()).filter(Boolean);
 
 const startTime = Date.now();
-const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
 const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('hex');
 
 // ── Global Error Tracking ──────────────────────────────────────
 const errorMetrics = {
   totalErrors: 0,
-  recentErrors: [] as Array<{ ts: number; error: string; stack?: string }>,
+  recentErrors: [] as Array<{ts: number, error: string, stack?: string}>,
   uncaughtExceptions: 0,
   unhandledRejections: 0,
 };
@@ -97,98 +91,29 @@ function logError(type: string, error: any) {
 // ── AI Clients ────────────────────────────────────────────────
 const FREE_TIER_ONLY = process.env.FREE_TIER_ONLY !== 'false';
 const gemini = GEMINI_API_KEY && !FREE_TIER_ONLY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
-console.log(
-  `[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'} | Free-tier: ${FREE_TIER_ONLY}`,
-);
+console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'} | Free-tier: ${FREE_TIER_ONLY}`);
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [
-  {
-    id: 'gri_report_draft',
-    name: 'GRI 報告草稿生成',
-    origin: 'omniagent:data_synthesis',
-    model: 'meta-llama/llama-3.2-90b-vision:free',
-    esgDomain: 'E/S/G',
-    fiveT: 'T2',
-    status: 'absorbed',
-  },
-  {
-    id: 'carbon_calculation',
-    name: 'ISO 14064 碳排計算',
-    origin: 'omniagent:code_generation',
-    model: 'mistralai/mistral-small-3.1-24b:free',
-    esgDomain: 'E',
-    fiveT: 'T1',
-    status: 'absorbed',
-  },
-  {
-    id: 'compliance_review',
-    name: 'CSRD/GRI 合規審查',
-    origin: 'omniagent:web_search',
-    model: 'qwen/qwen3-next-80b-a3b-instruct:free',
-    esgDomain: 'G',
-    fiveT: 'T2',
-    status: 'absorbed',
-  },
-  {
-    id: 'evidence_ocr',
-    name: '碳排帳單 OCR 提取',
-    origin: 'omniagent:file_analysis',
-    model: 'qwen/qwen3-vl-8b:free',
-    esgDomain: 'E',
-    fiveT: 'T1',
-    status: 'absorbed',
-  },
-  {
-    id: 'email_archival',
-    name: 'ESG 郵件自動歸檔',
-    origin: 'omniagent:email_reading',
-    model: 'meta-llama/llama-3.3-70b-instruct:free',
-    esgDomain: 'G',
-    fiveT: 'T1',
-    status: 'absorbed',
-  },
-  {
-    id: 'stakeholder_analysis',
-    name: '利害關係人問卷分析',
-    origin: 'omniagent:data_synthesis',
-    model: 'qwen/qwen3-next-80b-a3b-instruct:free',
-    esgDomain: 'S',
-    fiveT: 'T3',
-    status: 'absorbed',
-  },
-  {
-    id: 'omni_jules_heal',
-    name: 'OmniJules 自動修復',
-    origin: 'google_jules:karma_protocol',
-    model: 'openai/gpt-oss-120b:free',
-    esgDomain: 'SYS',
-    fiveT: 'T4',
-    status: 'transcended',
-  },
-  {
-    id: 'swarm_orchestration',
-    name: 'OmniAgent 蜂群調度',
-    origin: 'omniagent:multi_agent',
-    model: 'mistralai/mistral-small-3.1-24b:free',
-    esgDomain: 'SYS',
-    fiveT: 'T5',
-    status: 'transcended',
-  },
+  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status:'absorbed' },
+  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'absorbed' },
+  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
+  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
+  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'absorbed' },
+  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
+  { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
+  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'transcended' },
 ];
 
 // ── Free Models List ──────────────────────────────────────────
-let FREE_MODELS = [
-  { id: 'mistralai/mistral-small-3.1-24b:free', name: 'Mistral: Small 3.1 24B (Default)' },
-  { id: 'meta-llama/llama-3.2-90b-vision:free', name: 'Meta: Llama 3.2 90B Vision (Free)' },
-  { id: 'google/gemma-3-27b-it:free', name: 'Google: Gemma 3 27B (Vision)' },
-  { id: 'qwen/qwen3-vl-8b:free', name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
-  { id: 'google/gemma-4-31b-it:free', name: 'Google: Gemma 4 31B' },
-  {
-    id: 'nousresearch/hermes-3-llama-3.1-405b:free',
-    name: 'Nous: Hermes 3 405B (OmniAgent Origin)',
-  },
-  { id: 'openai/gpt-oss-120b:free', name: 'OpenAI: GPT-OSS 120B' },
+const FREE_MODELS = [
+  { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
+  { id: 'meta-llama/llama-3.2-90b-vision:free',               name: 'Meta: Llama 3.2 90B Vision (Free)' },
+  { id: 'google/gemma-3-27b-it:free',                        name: 'Google: Gemma 3 27B (Vision)' },
+  { id: 'qwen/qwen3-vl-8b:free',                            name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
+  { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B' },
+  { id: 'nousresearch/hermes-3-llama-3.1-405b:free',        name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
+  { id: 'openai/gpt-oss-120b:free',                         name: 'OpenAI: GPT-OSS 120B' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
@@ -198,12 +123,7 @@ const ESG_SYSTEM_PROMPT = `你是 ESGGO 平台的 OmniAgent AI 助手（Open Sou
 所有輸出須符合 5T 誠信協議：可溯源、透明、可感知、可信任、可追蹤。`;
 
 // ── OpenRouter Call ───────────────────────────────────────────
-async function callOpenRouter(
-  modelId,
-  userPrompt,
-  systemPrompt = ESG_SYSTEM_PROMPT,
-  imageUrl = null,
-) {
+async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PROMPT, imageUrl = null) {
   if (!OPENROUTER_KEY) throw new Error('No OPENROUTER_API_KEY');
   const messages = [
     { role: 'system', content: systemPrompt },
@@ -220,7 +140,7 @@ async function callOpenRouter(
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${OPENROUTER_KEY}`,
+      'Authorization': `Bearer ${OPENROUTER_KEY}`,
       'HTTP-Referer': SITE_URL,
       'X-Title': SITE_NAME,
       'Content-Type': 'application/json',
@@ -239,10 +159,9 @@ async function callOpenRouter(
 
 // ── AI Dispatcher ─────────────────────────────────────────────
 async function dispatchAI(task, skillId) {
-  const prompt =
-    task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
+  const prompt = task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
   const imageUrl = task.imageUrl || task.image_url || null;
-  const skill = SKILL_REGISTRY.find((s) => s.id === skillId);
+  const skill = SKILL_REGISTRY.find(s => s.id === skillId);
   const model = skill?.model || 'llava-phi3:latest';
   const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
 
@@ -256,16 +175,12 @@ async function dispatchAI(task, skillId) {
           model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision',
           prompt: `${ESG_SYSTEM_PROMPT}\n\n${prompt}`,
           image: imageUrl.startsWith('data:') ? imageUrl : undefined,
-          stream: false,
-        }),
+          stream: false
+        })
       });
       if (response.ok) {
         const data = await response.json();
-        return {
-          content: data.response || data.content,
-          provider: 'Local',
-          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision',
-        };
+        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision' };
       }
     } catch (e) {
       console.warn('[OmniGateway] Local server fallback:', e.message);
@@ -295,25 +210,21 @@ async function dispatchAI(task, skillId) {
 
   // 4. Mock
   const mock = {
-    gri_report_draft: `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工多樣性。\n\n5T 狀態：全項驗證通過。`,
-    carbon_calculation: `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**`,
-    compliance_review: `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
-    omni_jules_heal: `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動修復。`,
+    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工多樣性。\n\n5T 狀態：全項驗證通過。`,
+    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**`,
+    compliance_review:    `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
+    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動修復。`,
   };
-  const content =
-    mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
+  const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
   return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
 }
+
 
 // ── WebSocket Server ──────────────────────────────────────────
 const wssClients = new Set();
 function broadcastWS(event) {
   const msg = JSON.stringify({ ...event, timestamp: Date.now() });
-  wssClients.forEach((ws) => {
-    try {
-      ws.send(msg);
-    } catch {}
-  });
+  wssClients.forEach(ws => { try { ws.send(msg); } catch {} });
 }
 
 // ── Evolution Log (in-memory) ─────────────────────────────────
@@ -329,16 +240,8 @@ const wss = new WebSocketServer({ server: httpServer });
 wss.on('connection', (ws, req) => {
   wssClients.add(ws);
   console.log(`[OmniGateway] 🔌 WS client connected (total: ${wssClients.size})`);
-  ws.send(
-    JSON.stringify({
-      type: 'CONNECTED',
-      message: 'OmniAgentBus WebSocket Bridge Active',
-      ts: Date.now(),
-    }),
-  );
-  ws.on('close', () => {
-    wssClients.delete(ws);
-  });
+  ws.send(JSON.stringify({ type: 'CONNECTED', message: 'OmniAgentBus WebSocket Bridge Active', ts: Date.now() }));
+  ws.on('close', () => { wssClients.delete(ws); });
   ws.on('message', (data) => {
     try {
       const msg = JSON.parse(data.toString());
@@ -350,13 +253,9 @@ wss.on('connection', (ws, req) => {
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
 
 const corsOptions = {
-  origin:
-    ALLOWED_ORIGINS.length > 0
-      ? (origin, cb) =>
-          !origin || ALLOWED_ORIGINS.includes(origin)
-            ? cb(null, true)
-            : cb(new Error(`CORS: ${origin}`))
-      : '*',
+  origin: ALLOWED_ORIGINS.length > 0
+    ? (origin, cb) => (!origin || ALLOWED_ORIGINS.includes(origin) ? cb(null, true) : cb(new Error(`CORS: ${origin}`)))
+    : '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Omni-Token', 'X-Api-Key'],
 };
@@ -365,95 +264,48 @@ app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '4mb' }));
 app.use(rateLimit({ windowMs: 60_000, max: 120 }));
 
-const aiLimiter = rateLimit({
-  windowMs: 60_000,
-  max: 30,
-  message: { error: 'AI rate limit: max 30 req/min' },
-});
+const aiLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'AI rate limit: max 30 req/min' } });
 
 // ── Auth Middleware ───────────────────────────────────────────
 function requireAuth(req, res, next) {
-  const token = (
-    req.headers['x-omni-token'] ||
-    req.headers['x-api-key'] ||
-    req.headers['authorization'] ||
-    ''
-  ).replace('Bearer ', '');
+  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || req.headers['authorization'] || '').replace('Bearer ', '');
   if (!token || token !== GATEWAY_KEY) {
-    return res
-      .status(401)
-      .json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
+    return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
   }
   next();
 }
 
 // ── Routes ────────────────────────────────────────────────────
 
-app.get('/health', (_req, res) =>
-  res.json({
-    ok: true,
-    ts: Date.now(),
-    ws_clients: wssClients.size,
-    errors: errorMetrics.totalErrors,
-  }),
-);
+app.get('/health', (_req, res) => res.json({ ok: true, ts: Date.now(), ws_clients: wssClients.size, errors: errorMetrics.totalErrors }));
 
 app.get('/status', (_req, res) => {
   const mem = process.memoryUsage();
   res.json({
-    status: 'online',
-    version: '3.0.0',
+    status: 'online', version: '3.0.0',
     gateway_name: 'ESGGO OmniAgent Gateway',
     origin: 'Hermes (Open Source) → OmniAgent (ESGGO Evolved)',
     platform: 'Ubuntu 24.04 / Oracle Cloud ARM64',
     vps_ip: VPS_IP,
-    providers: {
-      gemini: !!gemini,
-      openrouter: !!OPENROUTER_KEY,
-      free_models: FREE_MODELS.length,
-      mock_fallback: true,
-    },
+    providers: { gemini: !!gemini, openrouter: !!OPENROUTER_KEY, free_models: FREE_MODELS.length, mock_fallback: true },
     websocket: { enabled: true, clients: wssClients.size },
-    skills: {
-      total: SKILL_REGISTRY.length,
-      transcended: SKILL_REGISTRY.filter((s) => s.status === 'transcended').length,
-    },
+    skills: { total: SKILL_REGISTRY.length, transcended: SKILL_REGISTRY.filter(s => s.status === 'transcended').length },
     evolution: { logs: evolutionLog.length, last: evolutionLog.at(-1)?.ts || null },
     errors: errorMetrics,
     uptime_seconds: Math.floor((Date.now() - startTime) / 1000),
-    memory: {
-      used_mb: (mem.heapUsed / 1024 / 1024).toFixed(1),
-      rss_mb: (mem.rss / 1024 / 1024).toFixed(1),
-    },
-    endpoints: [
-      '/health',
-      '/status',
-      '/models',
-      '/skills',
-      '/execute',
-      '/stream',
-      '/omni-jules',
-      '/evolve',
-      '/swarm/broadcast',
-    ],
+    memory: { used_mb: (mem.heapUsed / 1024 / 1024).toFixed(1), rss_mb: (mem.rss / 1024 / 1024).toFixed(1) },
+    endpoints: ['/health', '/status', '/models', '/skills', '/execute', '/stream', '/omni-jules', '/evolve', '/swarm/broadcast'],
   });
 });
 
-app.get('/models', (_, res) =>
-  res.json({
-    provider: 'OpenRouter',
-    free_models: FREE_MODELS,
-    default: FREE_MODELS[0]?.id,
-    count: FREE_MODELS.length,
-  }),
-);
+app.get('/models', (_, res) => res.json({ provider: 'OpenRouter', free_models: FREE_MODELS, default: FREE_MODELS[0]?.id, count: FREE_MODELS.length }));
 
 // GET /skills — OmniAgent-absorbed skill registry
 app.get('/skills', (_req, res) => {
   res.json({
     total: SKILL_REGISTRY.length,
     source: 'OmniAgent Open Source + Google Jules → ESGGO OmniAgent',
-    skills: SKILL_REGISTRY.map((s) => ({
+    skills: SKILL_REGISTRY.map(s => ({
       ...s,
       description: `ESG Domain: ${s.esgDomain} | 5T Tag: ${s.fiveT} | Origin: ${s.origin}`,
     })),
@@ -462,7 +314,7 @@ app.get('/skills', (_req, res) => {
 
 // GET /skills/:id — Single skill detail
 app.get('/skills/:id', (req, res) => {
-  const skill = SKILL_REGISTRY.find((s) => s.id === req.params.id);
+  const skill = SKILL_REGISTRY.find(s => s.id === req.params.id);
   if (!skill) return res.status(404).json({ error: 'Skill not found' });
   res.json(skill);
 });
@@ -470,25 +322,17 @@ app.get('/skills/:id', (req, res) => {
 // POST /execute — Standard AI task execution
 app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
   const { task, skillId } = req.body;
-  if (!task?.id || !task?.taskType)
-    return res.status(400).json({ error: 'task.id and task.taskType required' });
+  if (!task?.id || !task?.taskType) return res.status(400).json({ error: 'task.id and task.taskType required' });
 
   const resolved = skillId || task.taskType;
   console.log(`[OmniGateway] Execute: ${task.id} | skill=${resolved}`);
 
-  broadcastWS({
-    type: 'OBSERVE',
-    source: 'Gateway',
-    payload: { taskId: task.id, skill: resolved },
-  });
+  broadcastWS({ type: 'OBSERVE', source: 'Gateway', payload: { taskId: task.id, skill: resolved } });
 
   // ── ESG Report Bridge: delegate to Next.js async API ──
   if (task.taskType === 'esg-report' || task.taskType === 'sustain-write') {
     try {
-      const siteUrl =
-        process.env.SITE_URL ||
-        process.env.NEXT_PUBLIC_APP_URL ||
-        `http://${VPS_IP || '127.0.0.1'}:3000`;
+      const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP || '127.0.0.1'}:3000`;
       const bridgeRes = await fetch(`${siteUrl}/api/sustain-write/v5/async`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -496,11 +340,7 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
       });
       const bridgeData = await bridgeRes.json();
       if (bridgeData.taskId) {
-        broadcastWS({
-          type: 'MANIFEST',
-          source: 'ESG-Bridge',
-          payload: { taskId: task.id, taskId: bridgeData.taskId },
-        });
+        broadcastWS({ type: 'MANIFEST', source: 'ESG-Bridge', payload: { taskId: task.id, taskId: bridgeData.taskId } });
         return res.json({
           success: true,
           bridge: { target: 'nextjs', endpoint: '/api/sustain-write/v5/async' },
@@ -522,26 +362,18 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
 
     const result = {
       execution: {
-        id: execId,
-        taskId: task.id,
-        runtime: 'omniagent-gateway-v3',
-        runtimeVersion: '3.0.0',
-        modelProvider: aiResult.provider,
-        modelName: aiResult.model,
-        status: 'completed',
-        startedAt: ts,
-        finishedAt: new Date().toISOString(),
+        id: execId, taskId: task.id,
+        runtime: 'omniagent-gateway-v3', runtimeVersion: '3.0.0',
+        modelProvider: aiResult.provider, modelName: aiResult.model,
+        status: 'completed', startedAt: ts, finishedAt: new Date().toISOString(),
         outputRefIds: [artId],
       },
       artifact: {
-        id: artId,
-        executionId: execId,
-        taskId: task.id,
+        id: artId, executionId: execId, taskId: task.id,
         title: `${task.title || task.taskType} — OmniAgent v3`,
         content: aiResult.content,
         hashLock: hashLock(aiResult.content),
-        reviewStatus: 'awaiting_review',
-        version: 1,
+        reviewStatus: 'awaiting_review', version: 1,
         fiveT: { T1: true, T2: true, T4: true, T5: true },
         createdAt: ts,
       },
@@ -551,11 +383,7 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
     res.json(result);
   } catch (err) {
     logError('EXECUTE', err);
-    broadcastWS({
-      type: 'HEAL',
-      source: 'Gateway',
-      payload: { taskId: task.id, error: err.message },
-    });
+    broadcastWS({ type: 'HEAL', source: 'Gateway', payload: { taskId: task.id, error: err.message } });
     res.status(500).json({ error: err.message });
   }
 });
@@ -591,7 +419,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
       const mockContent = `## OmniAgent 串流輸出\n\n正在生成 **${task.title || task.taskType}** 分析...\n\n根據 Hermes 技能庫，本次任務已路由至最優模型。\n\n5T 封印已完成。`;
       for (const line of mockContent.split('\n')) {
         send('chunk', { text: line + '\n' });
-        await new Promise((r) => setTimeout(r, 80));
+        await new Promise(r => setTimeout(r, 80));
       }
     }
 
@@ -613,11 +441,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
   if (!failureReason) return res.status(400).json({ error: 'failureReason required' });
 
   console.log(`[OmniJules] 🛡️ Healing request: ${failureReason.slice(0, 80)}`);
-  broadcastWS({
-    type: 'HEAL',
-    source: 'OmniJules',
-    payload: { sourceTaskId, stage: 'KARMA_INITIATED' },
-  });
+  broadcastWS({ type: 'HEAL', source: 'OmniJules', payload: { sourceTaskId, stage: 'KARMA_INITIATED' } });
 
   const healTask = {
     id: genId('jules'),
@@ -632,11 +456,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
     const aiResult = await dispatchAI(healTask, 'omni_jules_heal');
     const hash = hashLock({ failureReason, healed: aiResult.content });
 
-    broadcastWS({
-      type: 'SEAL',
-      source: 'OmniJules',
-      payload: { sourceTaskId, hash, stage: 'KARMA_SEALED' },
-    });
+    broadcastWS({ type: 'SEAL', source: 'OmniJules', payload: { sourceTaskId, hash, stage: 'KARMA_SEALED' } });
 
     res.json({
       jules_version: '1.0.0-esggo',
@@ -658,20 +478,16 @@ app.post('/evolve', requireAuth, async (req, res) => {
   const { omniagentVersion = 'v3.0.0', notes = [] } = req.body;
 
   console.log(`[OmniGateway] 🧬 Evolution triggered: OmniAgent ${omniagentVersion} → OmniAgent`);
-  broadcastWS({
-    type: 'OBSERVE',
-    source: 'EvolutionEngine',
-    payload: { omniagentVersion, stage: 'ABSORBING' },
-  });
+  broadcastWS({ type: 'OBSERVE', source: 'EvolutionEngine', payload: { omniagentVersion, stage: 'ABSORBING' } });
 
-  await new Promise((r) => setTimeout(r, 800));
+  await new Promise(r => setTimeout(r, 800));
 
   const entry = {
     id: genId('evo'),
     ts: new Date().toISOString(),
     fromOmniAgent: omniagentVersion,
     toOmniAgent: '3.0.0',
-    skillsAbsorbed: SKILL_REGISTRY.filter((s) => s.status !== 'pending').length,
+    skillsAbsorbed: SKILL_REGISTRY.filter(s => s.status !== 'pending').length,
     hash: hashLock({ omniagentVersion, ts: Date.now() }),
     notes,
     status: 'transcended',
@@ -680,11 +496,7 @@ app.post('/evolve', requireAuth, async (req, res) => {
 
   broadcastWS({ type: 'MANIFEST', source: 'EvolutionEngine', payload: entry });
 
-  res.json({
-    message: `OmniAgent ${omniagentVersion} → OmniAgent evolution complete`,
-    entry,
-    total_evolutions: evolutionLog.length,
-  });
+  res.json({ message: `OmniAgent ${omniagentVersion} → OmniAgent evolution complete`, entry, total_evolutions: evolutionLog.length });
 });
 
 // GET /evolve — Evolution history
@@ -701,9 +513,7 @@ app.post('/swarm/broadcast', async (req, res) => {
 });
 
 // GET /swarm/events — Recent bus events
-app.get('/swarm/events', (_req, res) =>
-  res.json({ total: busEvents.length, events: busEvents.slice(-50) }),
-);
+app.get('/swarm/events', (_req, res) => res.json({ total: busEvents.length, events: busEvents.slice(-50) }));
 
 app.post('/api/sync/bus', async (req, res) => {
   const event = req.body;
@@ -738,47 +548,28 @@ async function signalCoreCrawl(sourceId) {
 // GET /sonnar/status — Crawler scheduler overview
 app.get('/sonnar/status', async (_req, res) => {
   try {
-    const r = await fetch('http://localhost:3000/api/sonnar/crawl', {
-      signal: AbortSignal.timeout(3000),
-    });
+    const r = await fetch('http://localhost:3000/api/sonnar/crawl', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
-    res.json({
-      success: true,
-      scheduler: data.data?.status,
-      jobs: data.data?.jobs,
-      gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime },
-    });
+    res.json({ success: true, scheduler: data.data?.status, jobs: data.data?.jobs, gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime } });
   } catch {
-    res.json({
-      success: false,
-      scheduler: 'core unreachable',
-      gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime },
-    });
+    res.json({ success: false, scheduler: 'core unreachable', gateway: { crawlCount: sonnarCrawlCount, lastCrawlTime: sonnarLastCrawlTime } });
   }
 });
 
 // POST /sonnar/crawl — Trigger crawl from gateway
 app.post('/sonnar/crawl', async (req, res) => {
   const { sourceId, all } = req.body || {};
-  const target = all ? '__all__' : sourceId || 'unknown';
+  const target = all ? '__all__' : (sourceId || 'unknown');
   sonnarCrawlCount++;
   sonnarLastCrawlTime = new Date().toISOString();
   const result = await signalCoreCrawl(target);
-  res.json({
-    success: !!result,
-    trigger: target,
-    crawlCount: sonnarCrawlCount,
-    timestamp: sonnarLastCrawlTime,
-    coreResult: result,
-  });
+  res.json({ success: !!result, trigger: target, crawlCount: sonnarCrawlCount, timestamp: sonnarLastCrawlTime, coreResult: result });
 });
 
 // GET /sonnar/alerts — Recent alerts
 app.get('/sonnar/alerts', async (_req, res) => {
   try {
-    const r = await fetch('http://localhost:3000/api/sonnar/alerts', {
-      signal: AbortSignal.timeout(3000),
-    });
+    const r = await fetch('http://localhost:3000/api/sonnar/alerts', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
     res.json(data);
   } catch {
@@ -789,9 +580,7 @@ app.get('/sonnar/alerts', async (_req, res) => {
 // GET /sonnar/radar — Signal radar overview
 app.get('/sonnar/radar', async (_req, res) => {
   try {
-    const r = await fetch('http://localhost:3000/api/sonnar/radar', {
-      signal: AbortSignal.timeout(3000),
-    });
+    const r = await fetch('http://localhost:3000/api/sonnar/radar', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
     res.json(data);
   } catch {
@@ -820,25 +609,7 @@ function startSonnarPeriodicCrawl() {
 setTimeout(startSonnarPeriodicCrawl, 60000);
 
 // 404 + error handlers
-app.use((_req, res) =>
-  res
-    .status(404)
-    .json({
-      error: 'Not found',
-      endpoints: [
-        '/health',
-        '/status',
-        '/models',
-        '/skills',
-        '/execute',
-        '/stream',
-        '/omni-jules',
-        '/evolve',
-        '/swarm/broadcast',
-        '/swarm/events',
-      ],
-    }),
-);
+app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events'] }));
 app.use((err, _req, res, _next) => {
   logError('EXPRESS', err);
   res.status(500).json({ error: err.message });
@@ -851,9 +622,7 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`   Origin : OmniAgent (Open Source) → ESGGO OmniAgent`);
   console.log(`   URL    : http://${VPS_IP}:${PORT}`);
   console.log(`   WS     : ws://${VPS_IP}:${PORT} (OmniAgentBus Bridge)`);
-  console.log(
-    `   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter((s) => s.status === 'transcended').length} transcended)`,
-  );
+  console.log(`   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter(s=>s.status==='transcended').length} transcended)`);
   console.log(`   Sonar  : /sonnar/status /sonnar/crawl /sonnar/alerts /sonnar/radar`);
   console.log('═══════════════════════════════════════════════════════');
 });
@@ -866,12 +635,10 @@ process.on('uncaughtException', (err) => {
   // 嘗試通知 Telegram
   if (bot) {
     try {
-      bot
-        .sendMessage(
-          process.env.TELEGRAM_CHAT_ID || '',
-          `🚨 [OmniGateway] Uncaught Exception:\n${err.message}\n${err.stack?.slice(0, 300)}`,
-        )
-        .catch(() => {});
+      bot.sendMessage(
+        process.env.TELEGRAM_CHAT_ID || '',
+        `🚨 [OmniGateway] Uncaught Exception:\n${err.message}\n${err.stack?.slice(0, 300)}`
+      ).catch(() => {});
     } catch {}
   }
 
@@ -887,16 +654,12 @@ process.on('unhandledRejection', (reason, promise) => {
   logError('UNHANDLED_REJECTION', new Error(String(reason)));
 
   // 廣播到 WebSocket
-  broadcastWS({
-    type: 'UNHANDLED_REJECTION',
-    source: 'Process',
-    payload: { reason: String(reason) },
-  });
+  broadcastWS({ type: 'UNHANDLED_REJECTION', source: 'Process', payload: { reason: String(reason) } });
 });
 
 // ── Telegram Bot ──────────────────────────────────────────────
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const TELEGRAM_CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
 
 let bot = null;
 if (TELEGRAM_BOT_TOKEN) {
@@ -952,6 +715,7 @@ if (TELEGRAM_BOT_TOKEN) {
     bot.on('polling_error', (err) => {
       console.error(`[Telegram] Polling error: ${err.message}`);
     });
+
   } catch (err) {
     console.error(`[Telegram] ❌ Failed to init bot: ${err.message}`);
   }
@@ -964,7 +728,7 @@ process.on('SIGTERM', () => {
   console.log('[OmniGateway] SIGTERM received, shutting down gracefully...');
   httpServer.close(() => process.exit(0));
 });
-process.on('SIGINT', () => {
+process.on('SIGINT',  () => {
   console.log('[OmniGateway] SIGINT received, shutting down gracefully...');
   httpServer.close(() => process.exit(0));
 });
