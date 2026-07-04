@@ -38,10 +38,6 @@ export function MECEBestPracticesView() {
   const [filterPillar, setFilterPillar] = useState<'all' | 'E' | 'S' | 'G'>('all');
   const [filterLevel, setFilterLevel] = useState<'all' | 'basic' | 'intermediate' | 'advanced'>('all');
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   const loadData = async () => {
     try {
       const [practicesRes, validationRes] = await Promise.all([
@@ -68,6 +64,10 @@ export function MECEBestPracticesView() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const filtered = practices.filter(p => {
     if (filterPillar !== 'all' && p.pillar !== filterPillar) return false;
