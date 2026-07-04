@@ -75,7 +75,7 @@ class CarbonCalculationSkill extends ESGSkill {
     return !!(ctx.company || ctx.data);
   }
 
-  postProcess(response: string, ctx: SkillContext): string {
+  postProcess(response: string, _ctx: SkillContext): string {
     // 添加免責聲明
     return `${response}
 

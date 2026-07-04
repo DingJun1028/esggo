@@ -20,10 +20,6 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
   const [loading, setLoading] = useState(true);
   const [selectedPillar, setSelectedPillar] = useState<'all' | 'E' | 'S' | 'G'>('all');
 
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
   const fetchSkills = async () => {
     try {
       const res = await fetch('/api/esg/skills', { method: 'POST' });
@@ -37,6 +33,10 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
 
   const getPillarColor = (taskType: string) => {
     if (taskType.includes('carbon') || taskType.includes('tcfd') || taskType.includes('sdg')) {
