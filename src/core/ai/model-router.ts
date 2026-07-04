@@ -1,7 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
 // ESGGO Smart Model Router
-// 根據 ESG 任務類型自動選擇最佳免費模型
+// 根據 ESG 任務類型自動選擇最佳免費模型 + 技能整合
 // ═══════════════════════════════════════════════════════════════
+
+// 匯入技能系統（自動註冊所有 ESG 技能）
+import { getSkill, getAllSkills, type SkillContext } from './skills/registry';
 
 export type ESGTaskType =
   | 'carbon_calculation'    // ISO 14064 碳排計算
@@ -328,4 +331,49 @@ export function getRoutingTable(): Record<string, RoutingResult> {
  */
 export function formatRoutingResult(result: RoutingResult): string {
   return `[${result.taskType}] Strategy: ${result.strategy} | Primary: ${result.primary.provider}/${result.primary.model} | Fallback1: ${result.fallback1.provider}/${result.fallback1.model} | Fallback2: ${result.fallback2.provider}/${result.fallback2.model}`;
+}
+
+// ── 技能整合 ─────────────────────────────────────────────────
+
+/**
+ * 根據任務類型獲取對應的 ESG 技能
+ */
+export function getESGSkill(taskType: string) {
+  return getSkill(taskType);
+}
+
+/**
+ * 獲取所有可用的 ESG 技能列表
+ */
+export function getAvailableSkills() {
+  return getAllSkills().map(skill => skill.getInfo());
+}
+
+/**
+ * 為指定任務生成完整的提示詞（系統 + 用戶）
+ */
+export function generatePrompts(taskType: string, ctx: SkillContext) {
+  const skill = getSkill(taskType);
+  if (!skill) {
+    return {
+      system: '你是 ESG GO 的 AI 助手，請用繁體中文回答 ESG 相關問題。',
+      user: ctx.data ? JSON.stringify(ctx.data) : '',
+      skillId: null,
+    };
+  }
+
+  return {
+    system: skill.systemPrompt(ctx),
+    user: skill.userPrompt(ctx),
+    skillId: skill.id,
+  };
+}
+
+/**
+ * 後處理 AI 回應（套用技能特定的後處理）
+ */
+export function postProcessResponse(taskType: string, response: string, ctx: SkillContext): string {
+  const skill = getSkill(taskType);
+  if (!skill) return response;
+  return skill.postProcess(response, ctx);
 }
