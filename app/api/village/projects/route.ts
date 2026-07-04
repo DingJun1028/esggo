@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { jsonError } from '@/lib/api-utils';
+import { EntropyForge } from '@/lib/omni-core/entropy-forge';
 
 // ----------------------------------------------------------------------------
 // OmniVillage Projects Database (Mock)
@@ -31,8 +32,8 @@ export async function POST(req: Request) {
     if (action === 'create') {
       const newProject = {
         id: `p${Date.now()}`,
-        title: title || '未命名提案',
-        description: description || '',
+        title: title ? EntropyForge.purify(title) : '未命名提案',
+        description: description ? EntropyForge.purify(description) : '',
         votes: 0,
         cost: 0
       };
