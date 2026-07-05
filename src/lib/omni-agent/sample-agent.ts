@@ -1,5 +1,5 @@
-import { IBusEvent } from '@/lib/omni-core/contracts';
-import { OmniAgent } from '@/lib/omni-agent';
+import { IBusEvent } from '../omni-core/contracts';
+import { OmniAgent } from './index';
 
 /**
  * 最小化範例 Agent：僅記錄事件並回傳確認。

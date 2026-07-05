@@ -57,9 +57,9 @@ export function gapFillNumeric(series: (number | null)[]): (number | null)[] {
     if (v !== null && !Number.isNaN(v)) return v;
     const prev = series.slice(0, i).reverse().find(x => x !== null && !Number.isNaN(x));
     const next = series.slice(i + 1).find(x => x !== null && !Number.isNaN(x));
-    if (prev !== undefined && next !== undefined) return (prev + next) / 2;
-    if (prev !== undefined) return prev;
-    if (next !== undefined) return next;
+    if (prev != null && next != null) return (prev + next) / 2;
+    if (prev != null) return prev;
+    if (next != null) return next;
     return null;
   });
 }

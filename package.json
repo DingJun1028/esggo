@@ -14,8 +14,8 @@
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "next start",
-    "lint": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
+    "lint": "ts-node scripts/celestial-gate.ts",
+    "typecheck": "tsc -p tsconfig.core.json",
     "turbo:dev": "next dev",
     "turbo:build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "turbo:start": "next start",
@@ -64,6 +64,7 @@
     "next": "^16.0.0",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.1",
     "turbo": "^2",
     "typescript": "^5",
     "vitest": "^4.1.9"

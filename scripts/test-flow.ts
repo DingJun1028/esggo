@@ -1,6 +1,6 @@
-import { enhancedOmniBus } from '@/lib/omni-agent-bus';
-import { sampleAgent } from '@/lib/omni-agent/sample-agent';
-import { IBusEvent } from '@/lib/omni-core/contracts';
+import { enhancedOmniBus } from '../src/lib/omni-agent-bus';
+import { sampleAgent } from '../src/lib/omni-agent/sample-agent';
+import { IBusEvent } from '../src/lib/omni-core/contracts';
 
 async function runTest() {
   console.log('🧪 開始 OmniAgent 事件流測試');
