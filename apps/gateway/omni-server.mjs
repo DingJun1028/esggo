@@ -110,7 +110,6 @@ const SKILL_REGISTRY = [
 // ── Free Models List (OpenRouter :free — 200 req/day) ────────
 let FREE_MODELS = [
   // === Large / Premium Tier (70B-405B) ===
-  { id: 'nousresearch/hermes-3-llama-3.1-405b:free',  name: 'Nous: Hermes 3 405B (OmniAgent Origin)', tier: 'premium' },
   { id: 'meta-llama/llama-3.2-90b-vision:free',       name: 'Meta: Llama 3.2 90B Vision',              tier: 'premium' },
   { id: 'openai/gpt-oss-120b:free',                  name: 'OpenAI: GPT-OSS 120B',                    tier: 'premium' },
   { id: 'meta-llama/llama-3.3-70b-instruct:free',    name: 'Meta: Llama 3.3 70B Instruct',            tier: 'large' },
@@ -417,6 +416,73 @@ app.get('/skills/:id', (req, res) => {
   const skill = SKILL_REGISTRY.find(s => s.id === req.params.id);
   if (!skill) return res.status(404).json({ error: 'Skill not found' });
   res.json(skill);
+});
+
+// POST /esg/skills — ESG Skills list with routing info
+app.post('/esg/skills', (req, res) => {
+  const esgSkills = [
+    { id: 'carbon-calculation', taskType: 'carbon_calculation', name: '碳排計算 (ISO 14064)', pillar: 'E' },
+    { id: 'tcfd-analysis', taskType: 'tcfd_analysis', name: 'TCFD 氣候風險分析', pillar: 'E' },
+    { id: 'sdg-mapping', taskType: 'sdg_mapping', name: 'SDG 目標對應', pillar: 'E' },
+    { id: 'compliance-review', taskType: 'compliance_review', name: '合規審查 (GRI/CSRD)', pillar: 'S' },
+    { id: 'gri-report-draft', taskType: 'gri_report_draft', name: 'GRI 報告草稿', pillar: 'G' },
+    { id: 'materiality-matrix', taskType: 'materiality_matrix', name: '重大性矩陣', pillar: 'G' },
+    { id: 'stakeholder-analysis', taskType: 'stakeholder_analysis', name: '利害關係人分析', pillar: 'S' },
+    { id: 'email-archival', taskType: 'email_archival', name: '郵件自動歸檔', pillar: 'G' },
+    { id: 'evidence-ocr', taskType: 'evidence_ocr', name: '帳單 OCR 提取', pillar: 'E' },
+    { id: 'report-assembly', taskType: 'report_assembly', name: '報告組裝', pillar: 'G' },
+  ];
+
+  const skillsWithRouting = esgSkills.map(skill => ({
+    ...skill,
+    routing: routeModel(skill.taskType),
+  }));
+
+  res.json({
+    total: skillsWithRouting.length,
+    skills: skillsWithRouting,
+  });
+});
+
+// POST /esg/skills/:taskType — Execute ESG skill with prompts
+app.post('/esg/skills/:taskType', requireAuth, aiLimiter, async (req, res) => {
+  const { taskType } = req.params;
+  const { company, year, language, data } = req.body;
+
+  const esgSkills = {
+    carbon_calculation: { system: '你是 ESG GO 碳排計算專家，精通 ISO 14064。', name: '碳排計算' },
+    tcfd_analysis: { system: '你是 ESG GO TCFD 氣候風險分析專家。', name: 'TCFD 分析' },
+    sdg_mapping: { system: '你是 ESG GO SDG 目標對應專家。', name: 'SDG 對應' },
+    compliance_review: { system: '你是 ESG GO 合規審查專家，精通 GRI/CSRD/TCFD/ISSB。', name: '合規審查' },
+    gri_report_draft: { system: '你是 ESG GO GRI 報告撰寫專家。', name: 'GRI 報告' },
+    materiality_matrix: { system: '你是 ESG GO 重大性評估專家。', name: '重大性矩陣' },
+    stakeholder_analysis: { system: '你是 ESG GO 利害關係人分析專家。', name: '利害關係人分析' },
+    email_archival: { system: '你是 ESG GO 郵件歸檔專家。', name: '郵件歸檔' },
+    evidence_ocr: { system: '你是 ESG GO OCR 數據提取專家。', name: 'OCR 提取' },
+    report_assembly: { system: '你是 ESG GO 報告組裝專家。', name: '報告組裝' },
+  };
+
+  const skill = esgSkills[taskType];
+  if (!skill) return res.status(404).json({ error: `Unknown task type: ${taskType}` });
+
+  const routing = routeModel(taskType);
+  console.log(`[OmniGateway] ESG Skill: ${taskType} | ${skill.name} | Routing: ${formatRoutingResult(routing)}`);
+
+  res.json({
+    success: true,
+    skillId: taskType,
+    skillName: skill.name,
+    routing: {
+      primary: `${routing.primary.provider}/${routing.primary.model}`,
+      fallback1: `${routing.fallback1.provider}/${routing.fallback1.model}`,
+      fallback2: `${routing.fallback2.provider}/${routing.fallback2.model}`,
+    },
+    prompts: {
+      system: skill.system,
+      user: `請為 ${company || '該公司'} ${year || '2024'} 年度進行${skill.name}。`,
+    },
+    context: { company, year, language, data },
+  });
 });
 
 // POST /execute — Standard AI task execution

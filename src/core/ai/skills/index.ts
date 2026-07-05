@@ -76,10 +76,8 @@ export function registerSkill(skill: ESGSkill): void {
 }
 
 export function getSkill(taskType: string): ESGSkill | undefined {
-  for (const skill of skillRegistry.values()) {
-    if (skill.taskType === taskType) return skill;
-  }
-  return undefined;
+  const skills = Array.from(skillRegistry.values());
+  return skills.find(skill => skill.taskType === taskType);
 }
 
 export function getAllSkills(): ESGSkill[] {

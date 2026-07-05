@@ -23,28 +23,30 @@ export function inferTaskType(message) {
 }
 
 // ── 模型配置 ─────────────────────────────────────────────────
-const MODELS = {
-  groq_llama70b: { provider: 'groq', model: 'llama-3.3-70b-versatile', maxTokens: 256, temperature: 0.7 },
-  groq_llama8b:  { provider: 'groq', model: 'llama-3.1-8b-instant',    maxTokens: 256, temperature: 0.5 },
-  groq_gemma:    { provider: 'groq', model: 'gemma2-9b-it',            maxTokens: 256, temperature: 0.6 },
-  or_hermes405b: { provider: 'openrouter', model: 'nousresearch/hermes-3-llama-3.1-405b:free', maxTokens: 512, temperature: 0.7 },
+  // OpenRouter :free (品質王, 200 req/day)
   or_qwen80b:    { provider: 'openrouter', model: 'qwen/qwen3-next-80b-a3b-instruct:free',    maxTokens: 512, temperature: 0.7 },
-  or_mistral24b: { provider: 'openrouter', model: 'mistralai/mistral-small-3.1-24b:free',     maxTokens: 256, temperature: 0.6 },
+  or_llama90b:   { provider: 'openrouter', model: 'meta-llama/llama-3.2-90b-vision:free',     maxTokens: 512, temperature: 0.7 },
   or_llama70b:   { provider: 'openrouter', model: 'meta-llama/llama-3.3-70b-instruct:free',   maxTokens: 256, temperature: 0.7 },
-};
+  or_mistral24b: { provider: 'openrouter', model: 'mistralai/mistral-small-3.1-24b:free',     maxTokens: 256, temperature: 0.6 },
+  or_gemma31b:   { provider: 'openrouter', model: 'google/gemma-4-31b-it:free',               maxTokens: 256, temperature: 0.6 },
+  or_deepseek_r1:    { provider: 'openrouter', model: 'deepseek/deepseek-r1:free',           maxTokens: 512, temperature: 0.6 },
+  or_phi4:          { provider: 'openrouter', model: 'microsoft/phi-4:free',                 maxTokens: 256, temperature: 0.5 },
+  or_gemini20_flash: { provider: 'openrouter', model: 'google/gemini-2.0-flash-exp:free',    maxTokens: 512, temperature: 0.7 },
+  or_gemma212b:     { provider: 'openrouter', model: 'google/gemma-2-12b-it:free',           maxTokens: 256, temperature: 0.6 },
+  or_commandr_plus: { provider: 'openrouter', model: 'cohere/command-r-plus-08-2024:free',   maxTokens: 512, temperature: 0.7 },
 
 // ── 路由表 ───────────────────────────────────────────────────
 const ROUTING_TABLE = {
   carbon_calculation:    { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.groq_llama8b },
-  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
+  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b, fallback2: MODELS.groq_llama70b },
+  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b, fallback2: MODELS.groq_llama70b },
+  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b, fallback2: MODELS.groq_llama70b },
   sdg_mapping:           { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,   fallback2: MODELS.or_mistral24b },
-  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
+  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b, fallback2: MODELS.groq_llama70b },
   evidence_ocr:          { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
   email_archival:        { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
   stakeholder_analysis:  { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,   fallback2: MODELS.groq_llama8b },
-  omni_jules_heal:       { primary: MODELS.or_hermes405b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.or_llama70b },
+  omni_jules_heal:       { primary: MODELS.or_llama90b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.or_llama70b },
   swarm_orchestration:   { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
   general:               { primary: MODELS.groq_llama70b, fallback1: MODELS.or_llama70b,   fallback2: MODELS.or_mistral24b },
 };

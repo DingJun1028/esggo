@@ -44,6 +44,12 @@
       ],
       "@esggo/ui/*": [
         "./packages/ui/src/*"
+      ],
+      "@esggo/errors": [
+        "./packages/errors/src"
+      ],
+      "@esggo/errors/*": [
+        "./packages/errors/src/*"
       ]
     }
   },

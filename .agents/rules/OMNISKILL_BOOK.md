@@ -1095,7 +1095,7 @@ This codex should be updated when:
 | 免費模型數 | 7 個 | **15 個** |
 | AI Provider | OpenRouter only | **Groq + OpenRouter + Gemini** |
 | 每日免費額度 | 200 req/day | **200 req/day + 30 req/min (Groq)** |
-| 模型品質 | 中等 | **大型 (70B-405B) 為主力** |
+| 模型品質 | 中等 | **大型 (70B-90B) 為主力** |
 | 推理速度 | 普通 | **Groq 3-5x 加速** |
 
 ### E.2 主要模型清單
@@ -1107,14 +1107,16 @@ This codex should be updated when:
 - `mixtral-8x7b-32768` (8x7B, 32K)
 
 **OpenRouter :free（備援 — 200 req/day）**：
-- `nousresearch/hermes-3-llama-3.1-405b:free`
-- `meta-llama/llama-3.2-90b-vision:free`
-- `openai/gpt-oss-120b:free`
-- `meta-llama/llama-3.3-70b-instruct:free`
-- `qwen/qwen3-next-80b-a3b-instruct:free`
-- `mistralai/mistral-small-3.1-24b:free`
-- `google/gemma-4-31b-it:free`
-- `google/gemma-3-27b-it:free`
+- `meta-llama/llama-3.2-90b-vision:free` (90B Vision)
+- `qwen/qwen3-next-80b-a3b-instruct:free` (80B A3B)
+- `meta-llama/llama-3.3-70b-instruct:free` (70B)
+- `mistralai/mistral-small-3.1-24b:free` (24B)
+- `google/gemma-4-31b-it:free` (31B)
+- `google/gemma-2-12b-it:free` (12B)
+- `deepseek/deepseek-r1:free` (DeepSeek R1)
+- `microsoft/phi-4:free` (Phi-4)
+- `google/gemini-2.0-flash-exp:free` (Gemini 2.0 Flash)
+- `cohere/command-r-plus-08-2024:free` (Command R Plus)
 - `qwen/qwen3-vl-8b:free`
 - `google/gemma-2-27b-it:free`
 - `meta-llama/llama-3.2-3b-instruct:free`
