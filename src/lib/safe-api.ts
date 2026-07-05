@@ -1,6 +1,6 @@
 /**
  * ESGGO Safe Fetch Utilities
- * 
+ *
  * Centralized error handling, type-safe API calls, and debug logging.
  * All API calls in the app should use these utilities for consistency.
  */
@@ -28,7 +28,7 @@ export interface ApiClientConfig {
  */
 export async function safeFetch<T>(
   url: string,
-  options?: RequestInit & { timeout?: number }
+  options?: RequestInit & { timeout?: number },
 ): Promise<ApiResult<T>> {
   const controller = new AbortController();
   const timeoutMs = options?.timeout ?? 15000;
@@ -41,7 +41,7 @@ export async function safeFetch<T>(
     });
 
     if (!res.ok) {
-      const errorBody = await res.text().catch(() => 'Unknown error');
+      const errorBody = await res.text().catch(() => "Unknown error");
       return {
         data: null,
         error: `HTTP ${res.status}: ${res.statusText} — ${errorBody.slice(0, 200)}`,
@@ -52,10 +52,10 @@ export async function safeFetch<T>(
     const json: T = await res.json();
     return { data: json, error: null, status: res.status };
   } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
+    if (err instanceof DOMException && err.name === "AbortError") {
       return { data: null, error: `請求逾時 (${timeoutMs}ms)`, status: null };
     }
-    const message = err instanceof Error ? err.message : '網路連線失敗';
+    const message = err instanceof Error ? err.message : "網路連線失敗";
     return { data: null, error: message, status: null };
   } finally {
     clearTimeout(timeoutId);
@@ -67,11 +67,11 @@ export async function safeFetch<T>(
 export async function safePost<T>(
   url: string,
   body: unknown,
-  options?: { timeout?: number }
+  options?: { timeout?: number },
 ): Promise<ApiResult<T>> {
   return safeFetch<T>(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
     timeout: options?.timeout,
   });
@@ -86,77 +86,49 @@ export async function safePost<T>(
 export function validateResponse<T>(
   result: ApiResult<T>,
   validator: (data: T) => boolean,
-  label?: string
+  label?: string,
 ): ApiResult<T> {
   if (result.error) return result;
   if (!result.data) {
-    return { data: null, error: `${label ?? 'API'} 回應為空`, status: result.status };
+    return {
+      data: null,
+      error: `${label ?? "API"} 回應為空`,
+      status: result.status,
+    };
   }
   if (!validator(result.data)) {
-    return { data: null, error: `${label ?? 'API'} 回應格式不正確`, status: result.status };
+    return {
+      data: null,
+      error: `${label ?? "API"} 回應格式不正確`,
+      status: result.status,
+    };
   }
   return result;
 }
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
-const xssOptions = {
-  whiteList: {
-    span: ['class', 'style'],
-    div: ['class', 'style'],
-    h1: ['style'],
-    h2: ['style'],
-    h3: ['style'],
-    strong: [],
-    em: [],
-    code: ['class', 'style'],
-    br: [],
-    p: [],
-    ul: [],
-    ol: [],
-    li: [],
-    a: ['href'],
-    table: [],
-    thead: [],
-    tbody: [],
-    tr: [],
-    th: [],
-    td: [],
-    blockquote: ['style'],
-    pre: [],
-    hr: [],
-    b: [],
-    i: [],
-    u: [],
-    s: [],
-    sub: [],
-    sup: [],
-    small: [],
-    mark: [],
-    del: [],
-    ins: [],
-    figure: [],
-    figcaption: [],
-    img: ['src', 'alt', 'width', 'height'],
-  },
-  stripIgnoreTag: true,
-  stripIgnoreTagBody: ['script', 'style', 'iframe', 'object', 'embed'],
-};
+import DOMPurify from "isomorphic-dompurify";
 
-export const sanitizeHtml = (html: string): string => xss(html, xssOptions);
+/**
+ * Basic HTML sanitizer for dangerouslySetInnerHTML.
+ */
+export function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html);
+}
 
 // ─── Debug Logger ──────────────────────────────────────────────────
 
-const DEBUG = process.env.NODE_ENV === 'development';
+const DEBUG = process.env.NODE_ENV === "development";
 
 export const logger = {
   info: (module: string, message: string, data?: unknown) => {
-    if (DEBUG) console.log(`[ESGGO:${module}]`, message, data ?? '');
+    if (DEBUG) console.log(`[ESGGO:${module}]`, message, data ?? "");
   },
   warn: (module: string, message: string, data?: unknown) => {
-    console.warn(`[ESGGO:${module}]`, message, data ?? '');
+    console.warn(`[ESGGO:${module}]`, message, data ?? "");
   },
   error: (module: string, message: string, error?: unknown) => {
-    console.error(`[ESGGO:${module}]`, message, error ?? '');
+    console.error(`[ESGGO:${module}]`, message, error ?? "");
   },
 };
