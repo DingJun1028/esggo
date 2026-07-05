@@ -3,7 +3,7 @@
 
 param(
     [string]$Port = "8642",
-    [string]$GatewayApiKey = "omniagent_gold_2026"
+    [string]$GatewayApiKey = ""
 )
 
 Write-Host "=== [萬能網關] OmniAgent Gateway v3.0 部署 (Windows) ===" -ForegroundColor Cyan
@@ -20,7 +20,17 @@ npm install express cors helmet express-rate-limit ws @google/generative-ai --pr
 
 # 3. Configure environment
 $env:PORT = $Port
-$env:GATEWAY_API_KEY = $GatewayApiKey
+
+if ([string]::IsNullOrEmpty($GatewayApiKey) -and [string]::IsNullOrEmpty($env:GATEWAY_API_KEY)) {
+    Write-Host "Please set GATEWAY_API_KEY environment variable or pass -GatewayApiKey" -ForegroundColor Yellow
+    $GatewayApiKey = Read-Host "Enter Gateway API key"
+}
+
+if (-not [string]::IsNullOrEmpty($GatewayApiKey)) {
+    $env:GATEWAY_API_KEY = $GatewayApiKey
+} else {
+    $GatewayApiKey = $env:GATEWAY_API_KEY
+}
 
 if ([string]::IsNullOrEmpty($env:OPENROUTER_API_KEY)) {
     Write-Host "Please set OPENROUTER_API_KEY environment variable." -ForegroundColor Yellow

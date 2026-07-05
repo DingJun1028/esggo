@@ -6,7 +6,12 @@ const app = express();
 const port = 8642;
 
 const API_KEY = process.env.GEMINI_API_KEY;
-const GATEWAY_KEY = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'hermes_gold_2026';
+const GATEWAY_KEY = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY;
+if (!GATEWAY_KEY) {
+  console.warn(
+    '[OmniGateway] WARNING: GATEWAY_API_KEY is not set. Gateway requests may be unauthorized or fail.',
+  );
+}
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 app.use(cors());
@@ -22,14 +27,19 @@ app.get('/status', (req, res) => {
     system_name: 'OmniAgent + ESG Go',
     uptime: process.uptime(),
     active_workers: 8,
-    memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`
+    memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
   });
 });
 
 function requireAuth(req, res, next) {
-  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || '').replace('Bearer ', '');
-  if (!token || token !== GATEWAY_KEY) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
+  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || '').replace(
+    'Bearer ',
+    '',
+  );
+  if (!GATEWAY_KEY || !token || token !== GATEWAY_KEY) {
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
   }
   next();
 }
