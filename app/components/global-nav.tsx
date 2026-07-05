@@ -1,15 +1,55 @@
 'use client';
 
 const NAV = [
-  { href: '/',                  label: '首頁',     icon: '⊙', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
-  { href: '/omni-center',       label: '萬能中心',  icon: '◎', color: 'hover:text-accentGold hover:bg-accentGold/10' },
-  { href: '/omni-todo',         label: '萬能待辦',  icon: '📋', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
-  { href: '/sustain-write/v5',  label: 'ESG 報告', icon: '📊', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
-  { href: '/village',          label: '永續村',   icon: '🏘️', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
-  { href: '/daily',            label: '每日永續', icon: '📅', color: 'hover:text-accentGold hover:bg-accentGold/10' },
-  { href: '/sonnar',           label: 'Sonnar',  icon: '🔎', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
-  { href: '/emm',              label: 'EMM IDE', icon: '🛠️', color: 'hover:text-accentPurple hover:bg-accentPurple/10' },
-  { href: '/profile',          label: '個人檔案', icon: '👤', color: 'hover:text-accentBlue hover:bg-accentBlue/10' },
+  { href: '/', label: '首頁', icon: '⊙', color: 'hover:text-accentTeal hover:bg-accentTeal/10' },
+  {
+    href: '/omni-center',
+    label: '萬能中心',
+    icon: '◎',
+    color: 'hover:text-accentGold hover:bg-accentGold/10',
+  },
+  {
+    href: '/omni-todo',
+    label: '萬能待辦',
+    icon: '📋',
+    color: 'hover:text-accentTeal hover:bg-accentTeal/10',
+  },
+  {
+    href: '/sustain-write/v5',
+    label: 'ESG 報告',
+    icon: '📊',
+    color: 'hover:text-accentBlue hover:bg-accentBlue/10',
+  },
+  {
+    href: '/village',
+    label: '永續村',
+    icon: '🏘️',
+    color: 'hover:text-accentTeal hover:bg-accentTeal/10',
+  },
+  {
+    href: '/daily',
+    label: '每日永續',
+    icon: '📅',
+    color: 'hover:text-accentGold hover:bg-accentGold/10',
+  },
+  {
+    href: '/sonnar',
+    label: 'Sonnar',
+    icon: '🔎',
+    color: 'hover:text-accentPurple hover:bg-accentPurple/10',
+  },
+  {
+    href: '/emm',
+    label: 'EMM IDE',
+    icon: '🛠️',
+    color: 'hover:text-accentPurple hover:bg-accentPurple/10',
+  },
+  {
+    href: '/profile',
+    label: '個人檔案',
+    icon: '👤',
+    color: 'hover:text-accentBlue hover:bg-accentBlue/10',
+  },
 ];
 
 function toggleTheme() {
@@ -38,7 +78,7 @@ export function GlobalNav() {
             <a
               key={n.href}
               href={n.href}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] text-textSecondary transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${n.color}`}
+className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] text-textSecondary transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${n.color}`}
             >
               <span>{n.icon}</span>
               <span>{n.label}</span>
