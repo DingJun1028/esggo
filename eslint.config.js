@@ -9,7 +9,7 @@ const globals = require('globals');
 module.exports = [
   ...typescriptEslint.configs.recommended,
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '**/*.cjs', '**/*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/'],
+    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/', 'scripts/*.cjs', 'eslint.config.js', '.agents/**'],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
