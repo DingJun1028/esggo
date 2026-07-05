@@ -1,0 +1,1 @@
+['ne 1 ]; then\n  echo "Usage: $0 "message""\n  exit 1\nfi\n\nMESSAGE="$1"\n\ncurl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \n  -d chat_id="${CHAT_ID}" \n  -d text="ESGGO Alert: ${MESSAGE}" \n  -d parse_mode="HTML', 'exit 0']
