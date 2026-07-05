@@ -1,10 +1,35 @@
-/**
- * ESGGO C版專業永續報告系統
- * 
- * 5T 協議：真 → 善 → 美 → 信 → 通
- * OmniTag 萬能標籤：量子糾纏式雙向同步定位
- * */
+// src/lib/sustain-write/index.ts
+// Re-export key utilities from each module
 
-export * from './omni-tag';
-export * from './c-version';
-export * from './ui-design';
+// Theme Manager
+export { ThemeManager, type ThemeMode, type BrandTheme, DEFAULT_THEMES } from './theme-manager';
+
+// Data Processing
+export {
+  type DataField,
+  type DataQualityIssue,
+  validateField,
+  detectOutliers,
+  normalizeValue,
+  summarizeMetric,
+  gapFillNumeric,
+} from './data-processing';
+
+// Business Intelligence
+export {
+  type MarketSignal,
+  type CompetitorSnapshot,
+  estimateGap,
+  benchmarkPercentile,
+  summarizeTrend,
+  BizIntelligenceEngine,
+  bizIntelligence,
+} from './biz-intelligence';
+
+// C-Version Report API
+export {
+  getAvailableCompanies,
+  assembleCVersionReport,
+  reportToHtml,
+  reportToMarkdown,
+} from './c-version';

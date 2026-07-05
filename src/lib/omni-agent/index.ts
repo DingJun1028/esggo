@@ -6,18 +6,13 @@
  */
 
 import { createHash } from 'crypto';
+import { IBusEvent, ComponentCore, OmniAgent as IOmniAgent, LifecycleStage } from '@/lib/omni-core/contracts';
 
-// ═══════════════════════════════════════════════════════════════
-// Types
-// ═══════════════════════════════════════════════════════════════
-
+/* --- Core Types --- */
 export type AgentMode = 'autonomous' | 'supervised' | 'debug';
-
 export type AgentStatus = 'idle' | 'processing' | 'assembling' | 'verifying' | 'complete' | 'error';
-
 export type AssemblyPhase = 'loading' | 'tagging' | 'selecting' | 'filling' | 'verifying' | 'sealing' | 'done';
-
-type Gate = 'traceable' | 'transparent' | 'tangible' | 'trustworthy' | 'trackable';
+export type Gate = 'traceable' | 'transparent' | 'tangible' | 'trustworthy' | 'trackable';
 
 export interface AgentCapability {
   readonly id: string;
@@ -57,6 +52,9 @@ export interface AssemblyResult {
   readonly durationMs: number;
   readonly completedAt: string;
 }
+
+export type { IBusEvent, ComponentCore, LifecycleStage };
+export type { IOmniAgent, IOmniAgentBus, IOmniAgentGateway, IBlackboard } from '@/lib/omni-core/contracts';
 
 // ═══════════════════════════════════════════════════════════════
 // 5T Gate Verification (Pure Functions — No External Dependencies)
@@ -115,9 +113,19 @@ export { DEFAULT_CAPABILITIES, decisionHash };
 
 let agentInstance: OmniAgent | null = null;
 
-export class OmniAgent {
+export class OmniAgent implements IOmniAgent {
+  readonly signature: ComponentCore;
   private status: AgentStatus = 'idle';
   private decisions: AgentDecision[] = [];
+
+  constructor() {
+    this.signature = {
+      uuid: `agent-${Date.now()}`,
+      version: '2.1.0',
+      timestamp: Date.now(),
+      evidence: {},
+    };
+  }
 
   static getInstance(): OmniAgent {
     if (!agentInstance) {
@@ -126,8 +134,24 @@ export class OmniAgent {
     return agentInstance;
   }
 
+  getSignature(): ComponentCore {
+    return this.signature;
+  }
+
   getStatus(): AgentStatus {
     return this.status;
+  }
+
+  async execute(event: IBusEvent): Promise<void> {
+    console.log(`[OmniAgent] 執行事件: ${event.topic}, payload:`, event.payload);
+    this.status = 'processing';
+    // 這裡可以加入實際業務邏輯
+    this.status = 'complete';
+  }
+
+  onMartialLaw(reason: string): void {
+    console.warn(`[OmniAgent] 收到全域戒嚴令: ${reason}`);
+    this.status = 'idle';
   }
 
   async assembleReport(
@@ -144,7 +168,6 @@ export class OmniAgent {
       const ch = chapters[i];
       totalWords += ch.wordCount;
 
-      // Record decision
       const ts = Date.now();
       lastDecisionHash = decisionHash(lastDecisionHash, ch.title, `Processed ${ch.id}`, ts);
       this.decisions.push({
@@ -156,7 +179,6 @@ export class OmniAgent {
         hash: lastDecisionHash,
       });
 
-      // Report progress
       onProgress?.({
         phase: 'verifying',
         currentChapter: i + 1,

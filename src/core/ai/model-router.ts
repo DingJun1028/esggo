@@ -25,7 +25,7 @@ export type ESGTaskType =
   | 'general';              // 通用任務
 
 export interface ModelConfig {
-  provider: 'groq' | 'openrouter' | 'gemini';
+  provider: 'groq' | 'openrouter' | 'gemini' | 'cloudflare' | 'together' | 'mistral';
   model: string;
   maxTokens: number;
   temperature: number;
@@ -77,20 +77,6 @@ const MODELS = {
   },
 
   // OpenRouter :free 模型 (品質王)
-  or_hermes405b: {
-    provider: 'openrouter' as const,
-    model: 'nousresearch/hermes-3-llama-3.1-405b:free',
-    maxTokens: 512,
-    temperature: 0.7,
-    reasoning: 'Hermes 405B: 最大免費模型，複雜推理',
-  },
-  or_llama90b: {
-    provider: 'openrouter' as const,
-    model: 'meta-llama/llama-3.2-90b-vision:free',
-    maxTokens: 512,
-    temperature: 0.7,
-    reasoning: 'Llama 90B Vision: 多模態，適合圖表分析',
-  },
   or_qwen80b: {
     provider: 'openrouter' as const,
     model: 'qwen/qwen3-next-80b-a3b-instruct:free',
@@ -98,12 +84,12 @@ const MODELS = {
     temperature: 0.7,
     reasoning: 'Qwen 80B: 中文最強，適合 ESG 報告',
   },
-  or_mistral24b: {
+  or_llama90b: {
     provider: 'openrouter' as const,
-    model: 'mistralai/mistral-small-3.1-24b:free',
-    maxTokens: 256,
-    temperature: 0.6,
-    reasoning: 'Mistral 24B: 均衡中型',
+    model: 'meta-llama/llama-3.2-90b-vision:free',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Llama 90B Vision: 多模態，適合圖表分析',
   },
   or_gemma31b: {
     provider: 'openrouter' as const,
@@ -119,6 +105,96 @@ const MODELS = {
     temperature: 0.7,
     reasoning: 'Llama 70B: 通用高品質',
   },
+  or_deepseek_r1: {
+    provider: 'openrouter' as const,
+    model: 'deepseek/deepseek-r1:free',
+    maxTokens: 512,
+    temperature: 0.6,
+    reasoning: 'DeepSeek R1: 深度推理，適合複雜分析',
+  },
+  or_phi4: {
+    provider: 'openrouter' as const,
+    model: 'microsoft/phi-4:free',
+    maxTokens: 256,
+    temperature: 0.5,
+    reasoning: 'Phi-4: 微軟輕量高效',
+  },
+  or_gemini20_flash: {
+    provider: 'openrouter' as const,
+    model: 'google/gemini-2.0-flash-exp:free',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Gemini 2.0 Flash: 多模態，長上下文',
+  },
+  or_gemma212b: {
+    provider: 'openrouter' as const,
+    model: 'google/gemma-2-12b-it:free',
+    maxTokens: 256,
+    temperature: 0.6,
+    reasoning: 'Gemma 2 12B: 輕量高效',
+  },
+  or_commandr_plus: {
+    provider: 'openrouter' as const,
+    model: 'cohere/command-r-plus-08-2024:free',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Command R Plus: 工具呼叫與搜尋',
+  },
+
+  // Cloudflare AI Workers (免費 10K req/day)
+  cf_llama70b: {
+    provider: 'cloudflare' as const,
+    model: '@cf/meta/llama-3.3-70b-instruct-fp16',
+    maxTokens: 256,
+    temperature: 0.7,
+    reasoning: 'Cloudflare Llama 70B: 全球邊緣節點，低延遲',
+  },
+  cf_llama8b: {
+    provider: 'cloudflare' as const,
+    model: '@cf/meta/llama-3.1-8b-instruct-fp16',
+    maxTokens: 256,
+    temperature: 0.5,
+    reasoning: 'Cloudflare Llama 8B: 輕量快速',
+  },
+  cf_mistral7b: {
+    provider: 'cloudflare' as const,
+    model: '@cf/mistralai/mistral-7b-instruct-v0.2',
+    maxTokens: 256,
+    temperature: 0.6,
+    reasoning: 'Cloudflare Mistral 7B: 均衡輕量',
+  },
+
+  // Together.ai (免費 $25/月額度)
+  tg_llama70b: {
+    provider: 'together' as const,
+    model: 'meta-llama/Llama-3-70b-chat-hf',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Together Llama 70B: 高品質推理',
+  },
+  tg_qwen72b: {
+    provider: 'together' as const,
+    model: 'Qwen/Qwen2.5-72B-Instruct-Turbo',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Together Qwen 72B: 中文強',
+  },
+
+  // Mistral AI (免費 tier)
+  mistral_mistral: {
+    provider: 'mistral' as const,
+    model: 'mistral-large-latest',
+    maxTokens: 512,
+    temperature: 0.7,
+    reasoning: 'Mistral Large: 高品質通用',
+  },
+  mistral_mistral_small: {
+    provider: 'mistral' as const,
+    model: 'mistral-small-latest',
+    maxTokens: 256,
+    temperature: 0.6,
+    reasoning: 'Mistral Small: 快速輕量',
+  },
 } as const;
 
 // ── 任務類型 → 最佳模型路由表 ────────────────────────────────
@@ -127,7 +203,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   carbon_calculation: {
     primary: MODELS.groq_llama70b_instruct, // Llama 70B 處理大量數據
     fallback1: MODELS.or_qwen80b,        // Qwen 中文數學強
-    fallback2: MODELS.groq_llama70b,
+    fallback2: MODELS.cf_llama70b,        // Cloudflare 全球邊緣
     taskType: 'carbon_calculation',
     strategy: '長上下文 + 數學推理',
   },
@@ -135,8 +211,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // CSRD/GRI 合規審查: 需要深度理解法規
   compliance_review: {
     primary: MODELS.or_qwen80b,          // 中文法規理解最強
-    fallback1: MODELS.or_hermes405b,     // 405B 複雜推理
-    fallback2: MODELS.groq_llama70b,
+    fallback1: MODELS.or_llama90b,     // 90B 複雜推理
+    fallback2: MODELS.tg_llama70b,       // Together 高品質
     taskType: 'compliance_review',
     strategy: '中文法規理解 + 深度推理',
   },
@@ -144,8 +220,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // GRI 報告草稿: 需要結構化輸出
   gri_report_draft: {
     primary: MODELS.or_qwen80b,          // 中文報告生成最強
-    fallback1: MODELS.or_hermes405b,
-    fallback2: MODELS.groq_llama70b,
+    fallback1: MODELS.or_llama90b,
+    fallback2: MODELS.tg_qwen72b,        // Together Qwen 中文
     taskType: 'gri_report_draft',
     strategy: '結構化中文報告生成',
   },
@@ -153,8 +229,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 帳單 OCR 提取: 需要精確提取
   evidence_ocr: {
     primary: MODELS.groq_llama8b,        // 輕量快速
-    fallback1: MODELS.groq_gemma,
-    fallback2: MODELS.or_mistral24b,
+    fallback1: MODELS.cf_llama8b,        // Cloudflare 輕量
+    fallback2: MODELS.mistral_mistral_small, // Mistral 小模型
     taskType: 'evidence_ocr',
     strategy: '快速精確提取',
   },
@@ -162,8 +238,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 郵件自動歸檔: 需要分類能力
   email_archival: {
     primary: MODELS.groq_llama8b,        // 極速分類
-    fallback1: MODELS.groq_gemma,
-    fallback2: MODELS.or_mistral24b,
+    fallback1: MODELS.cf_llama8b,        // Cloudflare 分類
+    fallback2: MODELS.mistral_mistral_small,
     taskType: 'email_archival',
     strategy: '極速分類',
   },
@@ -172,16 +248,16 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   stakeholder_analysis: {
     primary: MODELS.groq_llama70b_instruct, // Llama 70B 處理大量問卷
     fallback1: MODELS.or_qwen80b,
-    fallback2: MODELS.groq_llama70b,
+    fallback2: MODELS.tg_llama70b,
     taskType: 'stakeholder_analysis',
     strategy: '長上下文統計分析',
   },
 
   // 自動修復: 需要程式碼理解
   omni_jules_heal: {
-    primary: MODELS.or_hermes405b,       // 最大模型處理複雜邏輯
+    primary: MODELS.or_llama90b,       // 90B 處理複雜邏輯
     fallback1: MODELS.groq_llama70b,
-    fallback2: MODELS.or_llama70b,
+    fallback2: MODELS.tg_llama70b,
     taskType: 'omni_jules_heal',
     strategy: '複雜邏輯推理',
   },
@@ -189,8 +265,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 蜂群調度: 需要快速決策
   swarm_orchestration: {
     primary: MODELS.groq_llama8b,        // 極速決策
-    fallback1: MODELS.groq_gemma,
-    fallback2: MODELS.or_mistral24b,
+    fallback1: MODELS.cf_llama8b,
+    fallback2: MODELS.mistral_mistral_small,
     taskType: 'swarm_orchestration',
     strategy: '極速決策',
   },
@@ -198,8 +274,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // TCFD 氣候風險分析: 需要深度分析
   tcfd_analysis: {
     primary: MODELS.or_qwen80b,          // 中文氣候分析
-    fallback1: MODELS.or_hermes405b,
-    fallback2: MODELS.groq_llama70b_instruct,
+    fallback1: MODELS.or_llama90b,
+    fallback2: MODELS.tg_qwen72b,
     taskType: 'tcfd_analysis',
     strategy: '深度氣候風險分析',
   },
@@ -208,7 +284,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   sdg_mapping: {
     primary: MODELS.groq_llama70b,       // 快速知識匹配
     fallback1: MODELS.or_qwen80b,
-    fallback2: MODELS.or_mistral24b,
+    fallback2: MODELS.cf_llama70b,
     taskType: 'sdg_mapping',
     strategy: '快速知識匹配',
   },
@@ -216,8 +292,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 重大性矩陣: 需要優先級排序
   materiality_matrix: {
     primary: MODELS.or_qwen80b,          // 中文優先級分析
-    fallback1: MODELS.or_hermes405b,
-    fallback2: MODELS.groq_llama70b,
+    fallback1: MODELS.or_llama90b,
+    fallback2: MODELS.tg_qwen72b,
     taskType: 'materiality_matrix',
     strategy: '優先級排序分析',
   },
@@ -225,8 +301,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 報告組裝: 需要結構化輸出
   report_assembly: {
     primary: MODELS.or_qwen80b,          // 結構化報告
-    fallback1: MODELS.or_hermes405b,
-    fallback2: MODELS.groq_llama70b,
+    fallback1: MODELS.or_llama90b,
+    fallback2: MODELS.tg_llama70b,
     taskType: 'report_assembly',
     strategy: '結構化報告組裝',
   },
@@ -234,8 +310,8 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // 通用任務: 均衡配置
   general: {
     primary: MODELS.groq_llama70b,       // 速度 + 品質均衡
-    fallback1: MODELS.or_llama70b,
-    fallback2: MODELS.or_mistral24b,
+    fallback1: MODELS.cf_llama70b,        // Cloudflare 全球邊緣
+    fallback2: MODELS.mistral_mistral,    // Mistral 高品質
     taskType: 'general',
     strategy: '速度與品質均衡',
   },
@@ -370,6 +446,86 @@ export function generatePrompts(taskType: string, ctx: SkillContext) {
     user: skill.userPrompt(ctx),
     skillId: skill.id,
   };
+}
+
+// ── Cloudflare AI Workers API ─────────────────────────────────
+
+export interface CloudflareAIResponse {
+  result: {
+    response: string;
+  };
+  success: boolean;
+  errors: string[];
+}
+
+/**
+ * 呼叫 Cloudflare AI Workers API
+ */
+export async function callCloudflareAI(
+  model: string,
+  messages: Array<{ role: string; content: string }>,
+  options: {
+    maxTokens?: number;
+    temperature?: number;
+    stream?: boolean;
+  } = {}
+): Promise<CloudflareAIResponse> {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  if (!accountId || !apiToken) {
+    throw new Error('Cloudflare credentials not configured');
+  }
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${model}`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messages,
+        max_tokens: options.maxTokens || 256,
+        temperature: options.temperature || 0.7,
+        stream: options.stream || false,
+      }),
+    }
+  );
+
+  const data = await response.json() as CloudflareAIResponse;
+
+  if (!data.success) {
+    throw new Error(`Cloudflare AI error: ${JSON.stringify(data.errors)}`);
+  }
+
+  return data;
+}
+
+/**
+ * 驗證 Cloudflare API Token
+ */
+export async function validateCloudflareToken(): Promise<boolean> {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  if (!accountId || !apiToken) return false;
+
+  try {
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/tokens/verify`,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiToken}`,
+        },
+      }
+    );
+    const data = await response.json() as { success: boolean };
+    return data.success;
+  } catch {
+    return false;
+  }
 }
 
 /**

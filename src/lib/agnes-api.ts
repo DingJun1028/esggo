@@ -26,7 +26,7 @@ const FREE_MODELS = [
   'meta-llama/llama-3.3-70b-instruct:free',
   'mistralai/mistral-small-3.1-24b:free',
   'google/gemma-4-31b-it:free',
-  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'meta-llama/llama-3.2-90b-vision:free',
   'qwen/qwen3-next-80b-a3b-instruct:free',
   'meta-llama/llama-3.2-90b-vision:free',
   'openai/gpt-oss-120b:free',

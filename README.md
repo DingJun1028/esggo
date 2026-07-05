@@ -135,7 +135,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 | **Groq** | `llama-3.1-8b-instant` | 8B | 8K | 快速回應、分類 |
 | **Groq** | `gemma2-9b-it` | 9B | 8K | 輕量任務 |
 | **Groq** | `mixtral-8x7b-32768` | 8x7B | 32K | 長文本處理 |
-| **OpenRouter :free** | `hermes-3-llama-3.1-405b:free` | 405B | 32K | 複雜推理 |
+| **OpenRouter :free** | `llama-3.2-90b-vision:free` | 90B | 32K | 多模態 |
 | **OpenRouter :free** | `llama-3.2-90b-vision:free` | 90B | 32K | 多模態 |
 | **OpenRouter :free** | `gpt-oss-120b:free` | 120B | 32K | 程式碼生成 |
 | ... | 其他 7 個模型 | 3B-80B | 8K-32K | 專用任務 |

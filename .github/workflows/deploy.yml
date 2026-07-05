@@ -1,105 +1,145 @@
-name: Deploy to VPS
+# Smart AI Router - GitHub Actions CI/CD 工作流程
+# 位置: .github/workflows/deploy.yml
+
+name: Deploy Smart AI Router
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ main, production ]
+    paths:
+      - '.agents/skills/smart-ai-router/**'
+      - 'docker-compose.prod.yml'
+      - 'Dockerfile'
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/smart-ai-router
 
 jobs:
-  build-and-deploy:
+  # 1. 程式碼品質檢查
+  lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 11.5.2
-
-      - name: Setup Node 22
+      
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: pnpm
-
+          node-version: '20'
+          cache: 'npm'
+      
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Check encoding
-        run: node scripts/encoding-check.mjs
-
-      - name: TypeScript check
+        run: npm ci
+      
+      - name: Run ESLint
+        run: npx eslint . --ext .ts,.tsx --quiet
+      
+      - name: Run Type Check
         run: npx tsc --noEmit
 
-      - name: Next.js build
-        run: pnpm run build
+  # 2. 單元測試
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
         env:
-          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: test
 
-      - name: Backup before deploy
-        uses: appleboy/ssh-action@v1
+  # 3. 映像構建與推送
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .agents/skills/smart-ai-router/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # 4. 部署到生產環境
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/production'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "=== Backup Start ==="
-            bash /var/www/esggo/vps/backup.sh --db-only 2>&1 || echo "Backup skipped (first deploy?)"
+            cd /opt/smart-ai-router
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker-compose pull
+            docker-compose up -d
+            docker system prune -af
+            echo "Deployed successfully"
 
-      - name: Sync to VPS
-        uses: easingthemes/ssh-deploy@main
+  # 5. 通知
+  notify:
+    needs: [build-and-push, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
-          ARGS: -rlptz --delete --exclude='.env*' --exclude='node_modules' --exclude='.next' --exclude='*.db' --exclude='logs'
-          SOURCE: .
-          REMOTE_HOST: ${{ secrets.VPS_HOST }}
-          REMOTE_USER: ${{ secrets.VPS_USER }}
-          TARGET: /var/www/esggo
-
-      - name: Restart services
-        id: deploy
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -o pipefail
-            cd /var/www/esggo
-            pnpm install --frozen-lockfile 2>&1 || true
-            pnpm run build 2>&1 || true
-            pm2 reload ecosystem.config.cjs 2>&1 || pm2 start ecosystem.config.cjs 2>&1
-            pm2 save
-            echo "=== VPS Persistence ==="
-            bash scripts/vps-setup.sh 2>&1 || true
-
-      - name: Health check
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
-            echo "=== Health Check ==="
-            sleep 8
-            NEXTJS_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/health 2>/dev/null || echo '000')
-            GATEWAY_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8642/status 2>/dev/null || echo '000')
-            echo "Next.js: ${NEXTJS_STATUS}"
-            echo "Gateway: ${GATEWAY_STATUS}"
-            if [ "${NEXTJS_STATUS}" != "200" ] || [ "${GATEWAY_STATUS}" != "200" ]; then
-              echo "=== Health check FAILED! Attempting rollback... ==="
-              LATEST_BACKUP=$(ls -d /var/backups/esggo/20* 2>/dev/null | sort -r | head -1)
-              if [ -n "${LATEST_BACKUP}" ]; then
-                echo "Rolling back to: ${LATEST_BACKUP}"
-                bash /var/www/esggo/vps/backup.sh restore "$(basename "${LATEST_BACKUP}")" 2>&1
-                echo "=== Rollback complete ==="
-              else
-                echo "No backup found for rollback!"
-                exit 1
-              fi
-            else
-              echo "=== All services healthy ==="
-            fi
+          status: ${{ job.status }}
+          text: 'Smart AI Router 部署 ${{ github.ref_name }} - 狀態: ${{ job.status }}'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()

@@ -174,7 +174,7 @@ const renderText = (t:string) => {
         <div className="text-xs font-semibold text-textSecondary tracking-wider">OmniOne 覺醒對話框</div>
         {/* Model Switcher */}
         <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg p-1">
-          {['Groq Llama 3.3 70B', 'Groq Gemma 2 9B', 'OpenRouter Hermes 405B'].map(m => (
+          {['Groq Llama 3.3 70B', 'Groq Gemma 2 9B', 'OpenRouter Llama 90B'].map(m => (
             <button
               key={m}
               onClick={() => setModel(m)}
