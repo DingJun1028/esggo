@@ -1,5 +1,4 @@
 "use client";
-import xss from 'xss';
 
 /**
  * OmniAgent Console UI — /omni-agent
@@ -14,8 +13,7 @@ import xss from 'xss';
  * Architecture: Connects to /api/omni-agent/console
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { sanitizeHtml } from '@/lib/safe-api';
+import { useState, useRef, useEffect, useCallback } from "react";
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -191,6 +189,12 @@ function formatUptime(ms: number): string {
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
   return `${h}h ${m}m`;
+}
+
+import DOMPurify from "isomorphic-dompurify";
+
+function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html);
 }
 
 function renderMarkdown(text: string): string {
@@ -933,11 +937,7 @@ export default function OmniAgentConsolePage() {
             {/* Panel Tabs */}
             <div className="bg-primary border border-borderColor rounded-2xl shadow-sm flex flex-col overflow-hidden flex-1 min-h-0">
               {/* Tab Bar */}
-              <div
-                className="flex border-b border-borderColor shrink-0"
-                role="tablist"
-                aria-label="控制台面板切換"
-              >
+              <div className="flex border-b border-borderColor shrink-0">
                 {(
                   [
                     { id: "stats", label: "核心統計", icon: "◎" },
