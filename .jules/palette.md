@@ -11,3 +11,7 @@
 ## 2023-11-20 - Missing ARIA Labels on Internal Custom Controls
 **Learning:** Icon-only buttons used in custom interactive controls (like the QV +/- voting counter in `app/village/page.tsx`) frequently miss `aria-label`s. Furthermore, when these controls are placed inside containers with `overflow-hidden` (such as `rounded-lg` borders), default focus rings (like `focus-visible:ring-2`) get clipped and become invisible.
 **Action:** When adding accessible labels to custom counter controls, use context-specific descriptions like "減少票數" / "增加票數". To fix clipped focus rings within `overflow-hidden` containers, replace `ring` utilities with explicit `focus-visible:outline-none focus-visible:bg-[color] focus-visible:text-[color]` styles to safely mimic standard hover feedback during keyboard navigation.
+
+## 2025-07-05 - Global Navigation & Theme Toggles
+**Learning:** Icon-only buttons (like theme toggles) and complex interactive components (like global nav anchors) often lack keyboard accessibility (tab navigation styling) and screen reader support (`aria-label`) out of the box in this project's custom implementations.
+**Action:** Always ensure `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` is added to all interactive elements for accessible keyboard navigation, and ensure icon-only buttons include descriptive `aria-label` attributes for screen readers. Check both localized and globally used instances (e.g. `theme-toggle.tsx` and `global-nav.tsx`).
