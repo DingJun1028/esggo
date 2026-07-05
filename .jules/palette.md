@@ -7,3 +7,7 @@
 ## 2024-08-15 - Focus Visibility on Hover-Revealed Elements
 **Learning:** Elements that are revealed on hover using `opacity-0 group-hover:opacity-100` (like action buttons in grid cards) become invisible focus traps for keyboard users unless they explicitly include `focus-within:opacity-100` on their wrapper/container.
 **Action:** Always ensure that hover-revealed interactive elements apply `focus-within:opacity-100` alongside `group-hover:opacity-100` so they become visible when navigating via keyboard (Tab). Additionally, these hidden elements must have context-aware `aria-label` attributes to prevent repetitive generic readouts by screen readers when focused blindly.
+
+## 2025-07-05 - Global Navigation & Theme Toggles
+**Learning:** Icon-only buttons (like theme toggles) and complex interactive components (like global nav anchors) often lack keyboard accessibility (tab navigation styling) and screen reader support (`aria-label`) out of the box in this project's custom implementations.
+**Action:** Always ensure `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` is added to all interactive elements for accessible keyboard navigation, and ensure icon-only buttons include descriptive `aria-label` attributes for screen readers. Check both localized and globally used instances (e.g. `theme-toggle.tsx` and `global-nav.tsx`).
