@@ -83,4 +83,10 @@ export class OmniCoreEcosystem {
   }
 }
 
-export { IComponentCore as ComponentCore, IBusEvent as BusEvent, IOmniAgent as OmniAgent, IOmniAgentBus as OmniAgentBus, IOmniAgentGateway as OmniAgentGateway };
+export type {
+  IComponentCore as ComponentCore,
+  IBusEvent as BusEvent,
+  IOmniAgent as OmniAgent,
+  IOmniAgentBus as OmniAgentBus,
+  IOmniAgentGateway as OmniAgentGateway,
+};

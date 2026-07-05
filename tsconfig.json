@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "incremental": true,
+    "downlevelIteration": true,
     "types": [
       "node"
     ],
@@ -51,20 +51,31 @@
       "@esggo/errors/*": [
         "./packages/errors/src/*"
       ]
-    }
+    },
+    "incremental": true
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/impl/**/*.ts",
+    "src/lib/**/*.ts",
+    "src/types/**/*.ts",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "packages/*/src/**/*.ts",
-    "packages/*/src/**/*.tsx"
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "fake_answer_fix.ts",
-    "apps/gateway/omni-server.ts"
+    "apps/gateway/omni-server.ts",
+    "src/lib/omni-agent/**",
+    "src/lib/omni-component/**",
+    "src/lib/omni-agent-bus.ts",
+    "app/api/omni-agent/console/*.ts",
+    "app/omni-center/omni-one-chat.tsx",
+    "app/omni-center/wuzuo-note-view.tsx",
+    "src/lib/celestial/implementation.ts",
+    "src/lib/omni-component/**",
+    "app/**/*.tsx",
+    "app/**",
+    "src/**/test-*.ts",
+    "src/**/example-*.ts"
   ]
 }

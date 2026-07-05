@@ -300,7 +300,8 @@ function getCoreStats() {
       idle: SUB_AGENTS.filter(sa => sa.status === 'idle').length,
       complete: SUB_AGENTS.filter(sa => sa.status === 'complete').length,
     },
-    capabilities: DEFAULT_CAPABILITIES.map(c => ({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    capabilities: (DEFAULT_CAPABILITIES as unknown as any[]).map(c => ({
       id: c.id,
       name: c.name,
       gate: c.gate,
