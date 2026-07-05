@@ -178,7 +178,7 @@ export class CelestialController {
     
     if (data && data.evidence) {
        const sanitized = { ...data };
-       const newEvidence = { ...(sanitized.evidence as any) };
+       const newEvidence = { ...sanitized.evidence };
        newEvidence.processTrace = [...newEvidence.processTrace, `[ALIGN] Validation passed.`];
        newEvidence.finalEffect = 'Aligned';
        sanitized.evidence = newEvidence;
