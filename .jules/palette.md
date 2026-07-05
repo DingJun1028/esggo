@@ -7,3 +7,7 @@
 ## 2024-08-15 - Focus Visibility on Hover-Revealed Elements
 **Learning:** Elements that are revealed on hover using `opacity-0 group-hover:opacity-100` (like action buttons in grid cards) become invisible focus traps for keyboard users unless they explicitly include `focus-within:opacity-100` on their wrapper/container.
 **Action:** Always ensure that hover-revealed interactive elements apply `focus-within:opacity-100` alongside `group-hover:opacity-100` so they become visible when navigating via keyboard (Tab). Additionally, these hidden elements must have context-aware `aria-label` attributes to prevent repetitive generic readouts by screen readers when focused blindly.
+
+## 2023-11-20 - Missing ARIA Labels on Internal Custom Controls
+**Learning:** Icon-only buttons used in custom interactive controls (like the QV +/- voting counter in `app/village/page.tsx`) frequently miss `aria-label`s. Furthermore, when these controls are placed inside containers with `overflow-hidden` (such as `rounded-lg` borders), default focus rings (like `focus-visible:ring-2`) get clipped and become invisible.
+**Action:** When adding accessible labels to custom counter controls, use context-specific descriptions like "減少票數" / "增加票數". To fix clipped focus rings within `overflow-hidden` containers, replace `ring` utilities with explicit `focus-visible:outline-none focus-visible:bg-[color] focus-visible:text-[color]` styles to safely mimic standard hover feedback during keyboard navigation.

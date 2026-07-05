@@ -1,6 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Leaf, Heart, Users, TrendingUp, ShieldCheck, Clock, Activity, Minus, Plus } from 'lucide-react';
+import {
+  Leaf,
+  Heart,
+  Users,
+  TrendingUp,
+  ShieldCheck,
+  Clock,
+  Activity,
+  Minus,
+  Plus,
+} from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, doc, runTransaction, query, orderBy } from 'firebase/firestore';
 // seedVillageData removed — should be API route, not client import
@@ -34,9 +44,9 @@ const formatRelativeTime = (isoString: string) => {
   if (!isoString) return '';
   const diff = Date.now() - new Date(isoString).getTime();
   if (diff < 60000) return '剛剛';
-  if (diff < 3600000) return `${Math.floor(diff/60000)}分鐘前`;
-  if (diff < 86400000) return `${Math.floor(diff/3600000)}小時前`;
-  return `${Math.floor(diff/86400000)}天前`;
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}分鐘前`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)}小時前`;
+  return `${Math.floor(diff / 86400000)}天前`;
 };
 
 export default function VillagePage() {
@@ -51,7 +61,7 @@ export default function VillagePage() {
 
   // Quadratic Voting state
   const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
-  
+
   // Real-time activity logs
   const [activities, setActivities] = useState<ActivityLog[]>([]);
 
@@ -63,7 +73,7 @@ export default function VillagePage() {
         const res = await fetch('/api/village/data');
         if (!res.ok) throw new Error('無法取得資料');
         const data = await res.json();
-        
+
         if (data.success) {
           setProjects(data.projects);
           setMembers(data.members);
@@ -73,8 +83,8 @@ export default function VillagePage() {
           throw new Error(data.error);
         }
       } catch (err: any) {
-        console.error("Fetch error:", err);
-        setFetchError("無法取得即時資料");
+        console.error('Fetch error:', err);
+        setFetchError('無法取得即時資料');
         setLoading(false);
       }
     }
@@ -85,7 +95,6 @@ export default function VillagePage() {
       pollInterval = setInterval(fetchData, 5000); // Poll every 5 seconds for updates
     }
 
-
     async function fetchTrend() {
       setIsGeneratingTrend(true);
       try {
@@ -93,7 +102,7 @@ export default function VillagePage() {
         const data = await res.json();
         setOmniTrend(data.trend);
       } catch (e) {
-        console.error("Failed to fetch trend", e);
+        console.error('Failed to fetch trend', e);
       } finally {
         setIsGeneratingTrend(false);
       }
@@ -108,7 +117,7 @@ export default function VillagePage() {
   }, []);
 
   const [isVoting, setIsVoting] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     if (toast) {
@@ -119,10 +128,10 @@ export default function VillagePage() {
 
   const getVotes = (projectId: string) => voteCounts[projectId] || 1;
   const getCost = (votes: number) => votes * votes * 10; // Cost = Votes^2 * 10
-  const getPower = (votes: number) => votes * 10;        // Impact = Votes * 10
+  const getPower = (votes: number) => votes * 10; // Impact = Votes * 10
 
   const adjustVotes = (projectId: string, delta: number) => {
-    setVoteCounts(prev => {
+    setVoteCounts((prev) => {
       const current = prev[projectId] || 1;
       const next = Math.max(1, current + delta);
       return { ...prev, [projectId]: next };
@@ -132,29 +141,29 @@ export default function VillagePage() {
   const handleVote = async (projectId: string) => {
     const votes = getVotes(projectId);
     const currentUserId = 'u_01'; // Mock user
-    
+
     setIsVoting(projectId);
     try {
       const res = await fetch('/api/village/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId, userId: currentUserId, amount: votes })
+        body: JSON.stringify({ projectId, userId: currentUserId, amount: votes }),
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || '網路連線失敗');
       }
 
       // Real-time update is handled by Firebase onSnapshot for activities
-      
+
       // Show Success Toast
       setToast({ message: `「ZKP 憑證已生成，感謝您的真實貢獻！」`, type: 'success' });
-      
+
       // Reset
-      setVoteCounts(prev => ({ ...prev, [projectId]: 1 }));
-      
+      setVoteCounts((prev) => ({ ...prev, [projectId]: 1 }));
+
       // Optionally refresh the trend prediction after a short delay so new data is picked up
       setTimeout(async () => {
         setIsGeneratingTrend(true);
@@ -162,9 +171,11 @@ export default function VillagePage() {
           const trendRes = await fetch('/api/village/trends');
           const trendData = await trendRes.json();
           setOmniTrend(trendData.trend);
-        } catch (e) {} finally { setIsGeneratingTrend(false); }
+        } catch (e) {
+        } finally {
+          setIsGeneratingTrend(false);
+        }
       }, 2000);
-
     } catch (err) {
       const message = err instanceof Error ? err.message : '網路連線失敗';
       setToast({ message: `投票失敗: ${message}`, type: 'error' });
@@ -187,7 +198,9 @@ export default function VillagePage() {
         </div>
         <div>
           <h1 className="m-0 text-2xl font-bold text-accentTeal">善向永續村 (Village)</h1>
-          <div className="text-xs text-textSecondary mt-1">基於 5T 協議的去中心化永續社群與平方投票 (Quadratic Voting) 募資平台</div>
+          <div className="text-xs text-textSecondary mt-1">
+            基於 5T 協議的去中心化永續社群與平方投票 (Quadratic Voting) 募資平台
+          </div>
         </div>
       </div>
 
@@ -200,7 +213,9 @@ export default function VillagePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
         {/* Toast Notification */}
         {toast && (
-          <div className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-lg border transition-all duration-300 transform flex items-center gap-3 ${toast.type === 'success' ? 'bg-secondary border-accentGreen/30 text-accentGreen' : 'bg-red-50 border-red-200 text-red-600'}`}>
+          <div
+            className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-lg border transition-all duration-300 transform flex items-center gap-3 ${toast.type === 'success' ? 'bg-secondary border-accentGreen/30 text-accentGreen' : 'bg-red-50 border-red-200 text-red-600'}`}
+          >
             {toast.type === 'success' ? <ShieldCheck size={20} /> : <Leaf size={20} />}
             <span className="font-bold text-sm">{toast.message}</span>
           </div>
@@ -211,31 +226,49 @@ export default function VillagePage() {
           <h2 className="text-lg text-accentTeal flex items-center gap-2 mb-4 font-bold">
             <TrendingUp size={20} /> 影響力專案募資
           </h2>
-          
+
           {loading ? (
             <div className="text-textSecondary">載入中...</div>
           ) : projects.length === 0 ? (
             <div className="text-textSecondary text-center p-10">尚無專案</div>
           ) : (
             <div className="flex flex-col gap-5">
-              {projects.map(proj => {
+              {projects.map((proj) => {
                 const progress = safeProgress(proj.current_points, proj.goal_points);
                 const votes = getVotes(proj.id);
                 const cost = getCost(votes);
                 const isLoading = isVoting === proj.id;
-                
+
                 return (
-                  <OmniBaseCard key={proj.id} variant="liquid-glass" statusIndicator="trustworthy" hashLock={proj.id} className={`transition-all duration-500 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:-translate-y-1'}`}>
-                    <div className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-[#63a6b0] to-[#ffd700] transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+                  <OmniBaseCard
+                    key={proj.id}
+                    variant="liquid-glass"
+                    statusIndicator="trustworthy"
+                    hashLock={proj.id}
+                    className={`transition-all duration-500 ${isLoading ? 'opacity-80 scale-[0.99]' : 'hover:-translate-y-1'}`}
+                  >
+                    <div
+                      className="absolute top-0 left-0 h-1.5 bg-gradient-to-r from-[#63a6b0] to-[#ffd700] transition-all duration-500 ease-out"
+                      style={{ width: `${progress}%` }}
+                    />
 
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="m-0 mb-2 text-xl text-textPrimary font-bold">{proj.title}</h3>
-                        <p className="m-0 text-sm text-textSecondary leading-relaxed">{proj.description}</p>
+                        <h3 className="m-0 mb-2 text-xl text-textPrimary font-bold">
+                          {proj.title}
+                        </h3>
+                        <p className="m-0 text-sm text-textSecondary leading-relaxed">
+                          {proj.description}
+                        </p>
                       </div>
                       <div className="flex gap-2">
-                        {proj.tags.map(tag => (
-                          <span key={tag} className="text-xs bg-accentTeal/10 text-accentTeal px-3 py-1 rounded-full font-medium">#{tag}</span>
+                        {proj.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs bg-accentTeal/10 text-accentTeal px-3 py-1 rounded-full font-medium"
+                          >
+                            #{tag}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -243,7 +276,10 @@ export default function VillagePage() {
                     <div className="flex flex-col sm:flex-row justify-between items-end mt-6 gap-4">
                       <div>
                         <div className="text-3xl font-bold text-accentGold font-mono">
-                          {proj.current_points.toLocaleString()} <span className="text-sm text-textSecondary font-sans">/ {proj.goal_points.toLocaleString()} PTS</span>
+                          {proj.current_points.toLocaleString()}{' '}
+                          <span className="text-sm text-textSecondary font-sans">
+                            / {proj.goal_points.toLocaleString()} PTS
+                          </span>
                         </div>
                         <div className="flex items-center gap-4 mt-2">
                           <div className="text-xs text-accentGreen flex items-center gap-1.5 font-medium">
@@ -258,17 +294,31 @@ export default function VillagePage() {
                       <div className="flex flex-col items-end gap-2">
                         {/* QV Control */}
                         <div className="flex items-center bg-primary border border-borderColor rounded-lg overflow-hidden h-9">
-                          <button onClick={() => adjustVotes(proj.id, -1)} className="w-9 h-full flex items-center justify-center text-textSecondary hover:bg-borderColor hover:text-textPrimary transition-colors disabled:opacity-50" disabled={votes <= 1 || isLoading}>
+                          <button
+                            aria-label="減少票數"
+                            onClick={() => adjustVotes(proj.id, -1)}
+                            className="w-9 h-full flex items-center justify-center text-textSecondary hover:bg-borderColor hover:text-textPrimary focus-visible:outline-none focus-visible:bg-borderColor focus-visible:text-textPrimary transition-colors disabled:opacity-50"
+                            disabled={votes <= 1 || isLoading}
+                          >
                             <Minus size={14} />
                           </button>
                           <div className="w-14 text-center text-sm font-bold text-textPrimary border-x border-borderColor">
                             {votes} 票
                           </div>
-                          <button onClick={() => adjustVotes(proj.id, 1)} className="w-9 h-full flex items-center justify-center text-textSecondary hover:bg-borderColor hover:text-textPrimary transition-colors disabled:opacity-50" disabled={isLoading}>
+                          <button
+                            aria-label="增加票數"
+                            onClick={() => adjustVotes(proj.id, 1)}
+                            className="w-9 h-full flex items-center justify-center text-textSecondary hover:bg-borderColor hover:text-textPrimary focus-visible:outline-none focus-visible:bg-borderColor focus-visible:text-textPrimary transition-colors disabled:opacity-50"
+                            disabled={isLoading}
+                          >
                             <Plus size={14} />
                           </button>
                         </div>
-                        <button disabled={isLoading} onClick={() => handleVote(proj.id)} className={`bg-accentTeal text-white border-none px-5 py-2.5 rounded-lg font-bold cursor-pointer flex items-center gap-2 hover:bg-opacity-90 active:scale-95 transition-all w-full justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                        <button
+                          disabled={isLoading}
+                          onClick={() => handleVote(proj.id)}
+                          className={`bg-accentTeal text-white border-none px-5 py-2.5 rounded-lg font-bold cursor-pointer flex items-center gap-2 hover:bg-opacity-90 active:scale-95 transition-all w-full justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        >
                           {isLoading ? (
                             <span className="flex items-center gap-2">
                               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
@@ -291,7 +341,6 @@ export default function VillagePage() {
 
         {/* Right Column: Leaderboard & Activity */}
         <div className="flex flex-col gap-8">
-          
           {/* OmniOne Trend Prediction */}
           <div>
             <h2 className="text-lg text-accentTeal flex items-center gap-2 mb-4 font-bold">
@@ -301,7 +350,7 @@ export default function VillagePage() {
               {/* Liquid Glass Glare */}
               <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-2xl" />
               <div className="absolute -inset-x-20 top-0 h-px bg-gradient-to-r from-transparent via-accentTeal/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-              
+
               {isGeneratingTrend ? (
                 <div className="flex items-center gap-3 text-accentTeal font-medium py-2">
                   <div className="w-4 h-4 border-2 border-accentTeal/30 border-t-accentTeal rounded-full animate-spin"></div>
@@ -329,14 +378,23 @@ export default function VillagePage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   {members.map((mem, i) => (
-                    <div key={mem.user_id} className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${i === 0 ? 'bg-accentGold/10 border border-accentGold/30' : 'bg-primary border border-transparent'}`}>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-black ${i === 0 ? 'bg-accentGold' : 'bg-accentTeal'}`}>
+                    <div
+                      key={mem.user_id}
+                      className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${i === 0 ? 'bg-accentGold/10 border border-accentGold/30' : 'bg-primary border border-transparent'}`}
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-black ${i === 0 ? 'bg-accentGold' : 'bg-accentTeal'}`}
+                      >
                         {mem.avatar}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div className="text-sm font-bold text-textPrimary">{mem.name}</div>
-                          {i === 0 && <span className="text-[10px] bg-accentGold text-black px-1.5 py-0.5 rounded font-black tracking-wide">TOP 1</span>}
+                          {i === 0 && (
+                            <span className="text-[10px] bg-accentGold text-black px-1.5 py-0.5 rounded font-black tracking-wide">
+                              TOP 1
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-textSecondary mt-0.5">{mem.title}</div>
                       </div>
