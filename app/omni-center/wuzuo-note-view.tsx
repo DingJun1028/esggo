@@ -351,12 +351,7 @@ export function WuzuoNoteView() {
                       ? `標記為未完成: ${task.title}`
                       : `標記為已完成: ${task.title}`
                   }
-                  aria-label={
-                    isCompleted
-                      ? `標記為未完成: ${task.title}`
-                      : `標記為已完成: ${task.title}`
-                  }
-                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary
+                  className={`relative w-6 h-6 shrink-0 rounded-full border-2 transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accentTeal focus-visible:ring-offset-1 focus-visible:ring-offset-primary
                     ${
                       isCompleted
                         ? "border-accentGreen bg-accentGreen"
