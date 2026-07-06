@@ -15,3 +15,7 @@
 ## 2025-07-05 - Global Navigation & Theme Toggles
 **Learning:** Icon-only buttons (like theme toggles) and complex interactive components (like global nav anchors) often lack keyboard accessibility (tab navigation styling) and screen reader support (`aria-label`) out of the box in this project's custom implementations.
 **Action:** Always ensure `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` is added to all interactive elements for accessible keyboard navigation, and ensure icon-only buttons include descriptive `aria-label` attributes for screen readers. Check both localized and globally used instances (e.g. `theme-toggle.tsx` and `global-nav.tsx`).
+
+## 2024-05-18 - Component-Specific Focus Rings and ARIA Roles
+**Learning:** Found missing `role="tab"` and `role="tablist"` attributes on custom tab navigation, missing `aria-label`s on icon buttons, and missing `focus-visible` styles in `app/omni-center/page.tsx`, rendering these elements inaccessible via keyboard and screen readers.
+**Action:** Applied `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to custom buttons. Implemented proper `role="tablist"`, `role="tab"`, and `aria-selected` for custom tabs. Added `aria-label` descriptions for icon-only components while hiding decorative inner elements with `aria-hidden="true"`.
