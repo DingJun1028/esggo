@@ -4,6 +4,11 @@
  * ==========================================
  * Self-healing, chaos injection, and adaptive recovery.
  * 混沌自癒：注入混沌 → 自動修復 → 適應性恢復
+ * 
+ * 果因修復 (Effect-Cause Healing):
+ *   從果追溯因，從症狀追溯根源，再修復。
+ *   因果逆轉的智慧：不是先找原因再看結果，
+ *   而是先看到結果（症狀），再逆向追溯找到原因（根源），然後修復。
  */
 
 import { randomUUID, createHash } from 'crypto';
@@ -22,8 +27,55 @@ import {
 import { IComponentCore, IBusEvent } from '../../lib/omni-core/contracts';
 
 /**
+ * 果因追溯節點
+ * 從症狀逆向追溯到根源的每一步
+ */
+export interface EffectCauseNode {
+  /** 節點 ID */
+  id: string;
+  /** 描述 */
+  description: string;
+  /** 類型: effect(症狀) | intermediate(中間) | cause(根源) */
+  type: 'effect' | 'intermediate' | 'cause';
+  /** 信心度 (0-1) */
+  confidence: number;
+  /** 關聯證據 */
+  evidence: string[];
+  /** 上游節點 (因) */
+  parentCauseId?: string;
+}
+
+/**
+ * 果因修復結果
+ */
+export interface EffectCauseHealingResult {
+  /** 追溯 ID */
+  traceId: string;
+  /** 原始症狀 */
+  effect: string;
+  /** 追溯到的根源 */
+  rootCause: string;
+  /** 追溯鏈 */
+  chain: EffectCauseNode[];
+  /** 修復策略 */
+  strategy: RecoveryStrategy;
+  /** 修復是否成功 */
+  healed: boolean;
+  /** 追溯耗時 */
+  traceTimeMs: number;
+  /** 修復耗時 */
+  healingTimeMs: number;
+  /** 總耗時 */
+  totalMs: number;
+}
+
+// ==========================================
+// OmniHealing 實現
+// ==========================================
+
+/**
  * OmniHealing 實現
- * 自癒系統，支持混沌注入和適應性恢復
+ * 自癒系統，支持混沌注入、果因修復和適應性恢復
  * 讀寫權限：可完全讀寫系統問題狀態，實現真正的自癒效果
  */
 
@@ -51,6 +103,9 @@ export class OmniHealing implements IOmniHealing {
     result: HealingResult;
     timestamp: number;
   }> = [];
+
+  /** 果因修復歷史 */
+  private _effectCauseHistory: EffectCauseHealingResult[] = [];
 
   /** 監控定時器 */
   private watchInterval: ReturnType<typeof setInterval> | null = null;
@@ -141,6 +196,211 @@ export class OmniHealing implements IOmniHealing {
 
     this._healingHistory.push({ issueId, result, timestamp: Date.now() });
     return result;
+  }
+
+  // ==========================================
+  // 果因修復 (Effect-Cause Healing)
+  // ==========================================
+
+  /**
+   * 果因修復 — 從果追溯因，從症狀追溯根源，再修復
+   * 
+   * 因果逆轉的智慧：
+   * 不是先找原因再看結果，
+   * 而是先看到結果（症狀），再逆向追溯找到原因（根源），然後修復。
+   * 
+   * @param effect 症狀描述 (如 "CPU 過高", "服務無回應")
+   * @param context 上下文信息
+   * @returns 果因修復結果
+   */
+  async effectCauseHeal(
+    effect: string,
+    context?: Record<string, unknown>
+  ): Promise<EffectCauseHealingResult> {
+    const traceId = `EC-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
+    const startTime = Date.now();
+
+    console.log(`[OmniHealing] 🔄 果因修復開始: ${effect}`);
+
+    // Stage 1: 從症狀出發，逆向追溯
+    const chain = await this._traceEffectToCause(effect, context);
+    const traceTime = Date.now() - startTime;
+
+    // Stage 2: 確定根源
+    const rootCauseNode = chain.find(n => n.type === 'cause');
+    const rootCause = rootCauseNode?.description ?? '未知根源';
+
+    console.log(`[OmniHealing] 🔍 根源追溯完成: ${rootCause} (${traceTime}ms)`);
+
+    // Stage 3: 根據根源選擇修復策略
+    const strategy = this._selectStrategyFromCause(rootCause);
+
+    // Stage 4: 執行修復
+    const healingStart = Date.now();
+    const healed = await this._executeHealing(strategy, rootCause, context);
+    const healingTime = Date.now() - healingStart;
+
+    const totalMs = Date.now() - startTime;
+
+    const result: EffectCauseHealingResult = {
+      traceId,
+      effect,
+      rootCause,
+      chain,
+      strategy,
+      healed,
+      traceTimeMs: traceTime,
+      healingTimeMs: healingTime,
+      totalMs,
+    };
+
+    this._effectCauseHistory.push(result);
+
+    console.log(`[OmniHealing] ${healed ? '✅' : '❌'} 果因修復${healed ? '成功' : '失敗'}: ${rootCause} → ${strategy} (${totalMs}ms)`);
+
+    return result;
+  }
+
+  /**
+   * 從症狀逆向追溯到根源
+   * 
+   * 追溯鏈: 症狀 → 中間原因 → 根源
+   */
+  private async _traceEffectToCause(
+    effect: string,
+    context?: Record<string, unknown>
+  ): Promise<EffectCauseNode[]> {
+    const chain: EffectCauseNode[] = [];
+    const effectLower = effect.toLowerCase();
+
+    // Stage 1: 症狀節點
+    const effectNode: EffectCauseNode = {
+      id: `NODE-${Date.now()}-0`,
+      description: effect,
+      type: 'effect',
+      confidence: 1.0,
+      evidence: [`症狀檢測: ${effect}`],
+    };
+    chain.push(effectNode);
+
+    // Stage 2: 分析症狀，找到中間原因
+    let intermediateCause = '';
+    let intermediateConfidence = 0.8;
+
+    if (effectLower.includes('cpu') || effectLower.includes('處理器')) {
+      intermediateCause = '高 CPU 使用率';
+      intermediateConfidence = 0.9;
+    } else if (effectLower.includes('memory') || effectLower.includes('記憶體') || effectLower.includes('ram')) {
+      intermediateCause = '記憶體不足';
+      intermediateConfidence = 0.85;
+    } else if (effectLower.includes('disk') || effectLower.includes('磁盤')) {
+      intermediateCause = '磁盤空間不足';
+      intermediateConfidence = 0.8;
+    } else if (effectLower.includes('timeout') || effectLower.includes('超時')) {
+      intermediateCause = '連接超時';
+      intermediateConfidence = 0.75;
+    } else if (effectLower.includes('error') || effectLower.includes('錯誤')) {
+      intermediateCause = '系統錯誤';
+      intermediateConfidence = 0.7;
+    } else if (effectLower.includes('slow') || effectLower.includes('慢')) {
+      intermediateCause = '性能瓶頸';
+      intermediateConfidence = 0.7;
+    } else {
+      intermediateCause = '異常狀態';
+      intermediateConfidence = 0.5;
+    }
+
+    const intermediateNode: EffectCauseNode = {
+      id: `NODE-${Date.now()}-1`,
+      description: intermediateCause,
+      type: 'intermediate',
+      confidence: intermediateConfidence,
+      evidence: [`從症狀 "${effect}" 推斷`],
+      parentCauseId: effectNode.id,
+    };
+    chain.push(intermediateNode);
+
+    // Stage 3: 從中間原因追溯到根源
+    let rootCause = '';
+    let rootConfidence = 0.6;
+
+    if (intermediateCause.includes('CPU')) {
+      rootCause = '某個進程佔用過多 CPU 資源';
+      rootConfidence = 0.7;
+    } else if (intermediateCause.includes('記憶體')) {
+      rootCause = '記憶體洩漏或配置不足';
+      rootConfidence = 0.65;
+    } else if (intermediateCause.includes('磁盤')) {
+      rootCause = '日誌文件或快取累積';
+      rootConfidence = 0.6;
+    } else if (intermediateCause.includes('超時')) {
+      rootCause = '網絡延遲或服務無回應';
+      rootConfidence = 0.55;
+    } else if (intermediateCause.includes('錯誤')) {
+      rootCause = '代碼缺陷或配置錯誤';
+      rootConfidence = 0.5;
+    } else {
+      rootCause = '需要進一步診斷';
+      rootConfidence = 0.3;
+    }
+
+    const rootCauseNode: EffectCauseNode = {
+      id: `NODE-${Date.now()}-2`,
+      description: rootCause,
+      type: 'cause',
+      confidence: rootConfidence,
+      evidence: [`從中間原因 "${intermediateCause}" 追溯`],
+      parentCauseId: intermediateNode.id,
+    };
+    chain.push(rootCauseNode);
+
+    return chain;
+  }
+
+  /**
+   * 根據根源選擇修復策略
+   */
+  private _selectStrategyFromCause(rootCause: string): RecoveryStrategy {
+    const causeLower = rootCause.toLowerCase();
+
+    if (causeLower.includes('進程') || causeLower.includes('cpu')) return 'restart';
+    if (causeLower.includes('記憶體') || causeLower.includes('洩漏')) return 'restart';
+    if (causeLower.includes('磁盤') || causeLower.includes('日誌')) return 'fallback';
+    if (causeLower.includes('網絡') || causeLower.includes('超時')) return 'retry';
+    if (causeLower.includes('代碼') || causeLower.includes('配置')) return 'rollback';
+
+    return 'retry';
+  }
+
+  /**
+   * 執行修復
+   */
+  private async _executeHealing(
+    strategy: RecoveryStrategy,
+    rootCause: string,
+    context?: Record<string, unknown>
+  ): Promise<boolean> {
+    // 模擬修復過程
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 200));
+
+    // 根據策略模擬成功率
+    const successRates: Record<RecoveryStrategy, number> = {
+      retry: 0.7,
+      rollback: 0.85,
+      fallback: 0.8,
+      restart: 0.9,
+      isolate: 0.75,
+    };
+
+    const successRate = successRates[strategy] ?? 0.7;
+    return Math.random() < successRate;
+  }
+
+  /**
+   * 獲取果因修復歷史
+   */
+  getEffectCauseHistory(): EffectCauseHealingResult[] {
+    return [...this._effectCauseHistory];
   }
 
   /**

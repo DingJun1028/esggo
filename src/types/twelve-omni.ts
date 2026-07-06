@@ -601,12 +601,19 @@ export interface SecurityPolicy {
 /**
  * OmniHealing — 萬能癒合
  * Self-healing, chaos injection, and adaptive recovery.
+ * 
+ * 果因修復 (Effect-Cause Healing):
+ *   從果追溯因，從症狀追溯根源，再修復。
+ *   因果逆轉的智慧：不是先找原因再看結果，
+ *   而是先看到結果（症狀），再逆向追溯找到原因（根源），然後修復。
  */
 export interface IOmniHealing extends IComponentCore {
   /** 注入混沌 */
   injectChaos(event: IBusEvent): ChaosInjectionResult;
   /** 自動修復 */
   selfHeal(issueId: string, context?: Record<string, unknown>): Promise<HealingResult>;
+  /** 果因修復 — 從症狀追溯根源再修復 */
+  effectCauseHeal(effect: string, context?: Record<string, unknown>): Promise<EffectCauseHealingResult>;
   /** 系統健康度 */
   systemHealth(): Promise<SystemHealth>;
   /** 適應性恢復 */
@@ -668,6 +675,34 @@ export interface RecoveryResult {
   readonly strategy: RecoveryStrategy;
   readonly recoveryTimeMs: number;
   readonly message: string;
+}
+
+/**
+ * 果因追溯節點
+ * 從症狀逆向追溯到根源的每一步
+ */
+export interface EffectCauseNode {
+  readonly id: string;
+  readonly description: string;
+  readonly type: 'effect' | 'intermediate' | 'cause';
+  readonly confidence: number;
+  readonly evidence: string[];
+  readonly parentCauseId?: string;
+}
+
+/**
+ * 果因修復結果
+ */
+export interface EffectCauseHealingResult {
+  readonly traceId: string;
+  readonly effect: string;
+  readonly rootCause: string;
+  readonly chain: EffectCauseNode[];
+  readonly strategy: RecoveryStrategy;
+  readonly healed: boolean;
+  readonly traceTimeMs: number;
+  readonly healingTimeMs: number;
+  readonly totalMs: number;
 }
 
 /**
