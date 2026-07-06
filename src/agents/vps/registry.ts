@@ -10,6 +10,7 @@
 import { IOmniAgent, IComponentCore, ITaskSpec, ITaskResult, LifecycleStage } from "../../types/omni-agent";
 import { IOmniAgentBus } from "../../types/omni-agent-bus";
 import { VPSAgent, createVPSAgent, getVPSAgent } from "./index";
+import { IBusEvent } from "../../types/bus-event";
 
 // ==========================================
 // VPS Agent 生態系統適配器

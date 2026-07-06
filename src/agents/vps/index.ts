@@ -247,12 +247,16 @@ export class VPSAgent {
 
       // 發送結果回 OmniAgent（通過量子糾纏通道）
       if (this._entangledBus) {
-        await this._entangledBus.publish({
-          ...this.signature,
+        const resultEvent = {
+          uuid: uuidv4(),
+          version: "1.0.0",
+          timestamp: Date.now(),
+          evidence: {},
+          hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
           eventName: "vps.result",
           source_origin: `vps-agent:${this._globalState.vpsId}`,
           topic: "vps.result",
-          stage: "FROZEN",
+          stage: "FROZEN" as LifecycleStage,
           lifecycle_path: "EMERGED > FROZEN",
           payload: {
             taskId: event.uuid,
@@ -260,7 +264,8 @@ export class VPSAgent {
             result,
             status: result.status,
           },
-        } as IBusEvent);
+        };
+        await this._entangledBus.publish(resultEvent as any);
       }
 
       // 恢復到糾纏態
@@ -281,15 +286,20 @@ export class VPSAgent {
    */
   private async _respondToQuery(event: IBusEvent): Promise<void> {
     if (this._entangledBus) {
-      await this._entangledBus.publish({
-        ...this.signature,
+      const stateEvent = {
+        uuid: uuidv4(),
+        version: "1.0.0",
+        timestamp: Date.now(),
+        evidence: {},
+        hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
         eventName: "vps.state",
         source_origin: `vps-agent:${this._globalState.vpsId}`,
         topic: "vps.state",
-        stage: "FROZEN",
+        stage: "FROZEN" as LifecycleStage,
         lifecycle_path: "EMERGED > FROZEN",
         payload: this._globalState,
-      } as IBusEvent);
+      };
+      await this._entangledBus.publish(stateEvent as any);
     }
   }
 
@@ -476,18 +486,23 @@ export class VPSAgent {
 
     // 通知 OmniAgent（如果仍然連接）
     if (this._entangledBus) {
-      await this._entangledBus.publish({
-        ...this.signature,
+      const decohereEvent = {
+        uuid: uuidv4(),
+        version: "1.0.0",
+        timestamp: Date.now(),
+        evidence: {},
+        hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
         eventName: "vps.decohered",
         source_origin: `vps-agent:${this._globalState.vpsId}`,
         topic: "vps.lifecycle",
-        stage: "FROZEN",
+        stage: "FROZEN" as LifecycleStage,
         lifecycle_path: "FROZEN",
         payload: {
           entanglementId: this._entanglementId,
           reason: "agent_destroyed",
         },
-      } as IBusEvent);
+      };
+      await this._entangledBus.publish(decohereEvent as any);
     }
 
     console.log(`[VPSAgent] ❌ 量子糾纏已斷開`);
