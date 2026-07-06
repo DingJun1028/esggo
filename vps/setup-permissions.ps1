@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # ESGGO VPS Connection & SSH Key Permissions Automated Setup Script
 # Formatted for Windows PowerShell (win32)
 # Usage: .\vps\setup-permissions.ps1

@@ -1,0 +1,100 @@
+/**
+ * ==========================================
+ * 🌌 OmniBase — 萬能基礎實現
+ * ==========================================
+ * Foundation layer providing type-safe primitives and shared utilities.
+ */
+
+import { createHash, randomUUID } from 'crypto';
+import {
+  IOmniBase,
+  OmniConstants,
+  OmniBaseUtils,
+} from '../../types/twelve-omni';
+import { IComponentCore, LifecycleStage } from '../../lib/omni-core/contracts';
+
+/**
+ * OmniBase 實現
+ * 提供基礎常數、型別守衛和共享工具
+ */
+export class OmniBase implements IOmniBase {
+  readonly uuid: string;
+  readonly version: string = '1.0.0';
+  readonly timestamp: number;
+  evidence: Record<string, any> = {};
+
+  readonly constants: OmniConstants = {
+    MAX_EVENT_PAYLOAD: 1024 * 1024, // 1MB
+    HASH_ALGORITHM: 'sha256',
+    FIVE_T_DIMENSIONS: ['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable'],
+    LIFECYCLE_STAGES: ['EMERGED', 'ROUTING', 'MUTATED', 'VERIFIED', 'REPLAYED', 'FROZEN'],
+    ENTROPY_THRESHOLD: 0.85,
+  };
+
+  readonly utils: OmniBaseUtils = {
+    generateUUID: () => randomUUID(),
+    generateHash: (data: string) => createHash('sha256').update(data).digest('hex'),
+    deepClone: <T>(obj: T): T => JSON.parse(JSON.stringify(obj)),
+    mergeDeep: <T extends object>(target: T, source: Partial<T>): T => {
+      const result = { ...target };
+      for (const key of Object.keys(source) as Array<keyof T>) {
+        if (source[key] !== undefined) {
+          (result as any)[key] = source[key];
+        }
+      }
+      return result;
+    },
+  };
+
+  constructor() {
+    this.uuid = randomUUID();
+    this.timestamp = Date.now();
+  }
+
+  /**
+   * 型別守衛 — 驗證值是否符合指定的 schema
+   */
+  guard<T>(value: unknown, schema: string): value is T {
+    if (!value || typeof value !== 'object') return false;
+
+    switch (schema) {
+      case 'IComponentCore':
+        return (
+          'uuid' in value &&
+          'version' in value &&
+          'timestamp' in value &&
+          'evidence' in value
+        );
+      case 'IBusEvent':
+        return (
+          'source_origin' in value &&
+          'topic' in value &&
+          'lifecycle_path' in value &&
+          'payload' in value
+        );
+      case 'IOmniAgent':
+        return 'signature' in value && 'execute' in value;
+      default:
+        return true;
+    }
+  }
+
+  /**
+   * 凍結 — 時間在那一刻凍結，態昇華了時間，讓那一刻永恆不變
+   */
+  freeze<T extends object>(obj: T): Readonly<T> {
+    return Object.freeze(obj);
+  }
+}
+
+/**
+ * OmniBase 單例工廠
+ */
+let _instance: OmniBase | null = null;
+
+export function getOmniBase(): OmniBase {
+  if (!_instance) {
+    _instance = new OmniBase();
+  }
+  return _instance;
+}

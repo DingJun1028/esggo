@@ -10,7 +10,7 @@ CONFIG_FILE="${1:-/var/www/esggo/vps/health-monitor.conf}"
 source "$CONFIG_FILE" 2>/dev/null || {
     # 預設配置
     PM2_APPS=("esggo-core" "omniagent-gateway")
-    CHECK_URLS=("http://127.0.0.1:3000/api/health" "http://127.0.0.1:3003/status")
+    CHECK_URLS=("http://127.0.0.1:3000/api/health" "http://127.0.0.1:8642/status")
     CPU_THRESHOLD=90
     MEM_THRESHOLD=85
     DISK_THRESHOLD=90

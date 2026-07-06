@@ -2,53 +2,46 @@ module.exports = {
   apps: [
     {
       name: 'esggo-core',
-      script: 'npm',
-      args: 'start',
+      script: 'pnpm',
+      args: 'run start',
       cwd: '/var/www/esggo',
-      instances: 'max',  // Use all CPU cores
-      exec_mode: 'cluster',
+      instances: 1,
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: 3000
+        PORT: 3000,
+        NEXT_TELEMETRY_DISABLED: '1'
       },
       max_memory_restart: '1G',
       error_file: '/var/log/pm2/esggo-error.log',
       out_file: '/var/log/pm2/esggo-out.log',
-      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      // High availability settings
-      watch: false,
-      ignore_watch: ['node_modules', 'logs', '.next'],
-      kill_timeout: 10000,
-      wait_ready: true,
-      listen_timeout: 10000,
-      // Graceful reload
-      reload_signal: 'SIGUSR2',
-      // Cluster worker settings
-      instance_var: 'INSTANCE_ID',
-      // Health check
-      health_check_url: 'http://localhost:3000/api/health',
-      health_check_grace_period: 3000,
-      health_check_interval: 10000,
-      health_check_retries: 3
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      autorestart: true,
+      restart_delay: 3000,
+      max_restarts: 10,
+      merge_logs: true
     },
     {
-      name: 'omni-gateway',
-      script: '/var/www/esggo/omni-server-secure.mjs',
-      cwd: '/var/www/esggo',
-      instances: 2,
-      exec_mode: 'cluster',
+      name: 'omniagent-gateway',
+      script: 'node',
+      args: 'omni-server.mjs',
+      cwd: '/var/www/esggo/vps',
+      instances: 1,
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: 8642
+        PORT: 8642,
+        GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
+        GATEWAY_API_KEY: process.env.GATEWAY_API_KEY || ''
       },
       max_memory_restart: '512M',
       error_file: '/var/log/pm2/omni-error.log',
       out_file: '/var/log/pm2/omni-out.log',
-      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      // High availability
-      wait_ready: true,
-      listen_timeout: 10000,
-      kill_timeout: 5000
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      autorestart: true,
+      restart_delay: 5000,
+      max_restarts: 5,
+      merge_logs: true
     }
   ]
 }
