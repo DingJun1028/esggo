@@ -13,7 +13,7 @@ apt-get update && apt-get install -y curl wget git python3 python3-pip nodejs np
 # 2. Install Node.js dependencies for gateway
 echo "Installing Node.js gateway dependencies..."
 cd apps/gateway
-npm install --production
+pnpm install --prod
 
 # 3. Create environment directory
 HERMES_HOME="$HOME/.hermes"

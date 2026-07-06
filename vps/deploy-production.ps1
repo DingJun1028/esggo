@@ -26,18 +26,7 @@ Write-Host "Project: $ProjectPath"
 
 # 1. 備份
 Write-Host "`n[1/6] Backup..." -ForegroundColor Yellow
-ssh $Server @"
-mkdir -p $BackupDir
-if (Test-Path '$ProjectPath/.next') {
-    Copy-Item '$ProjectPath/.next' "$BackupPath/.next" -Recurse
-    Copy-Item '$ProjectPath/package.json' "$BackupPath/package.json"
-    Copy-Item '$ProjectPath/pnpm-lock.yaml' "$BackupPath/pnpm-lock.yaml"
-    Get-ChildItem '$BackupDir' -Directory | Sort-Object LastWriteTime -Descending | Select-Object -Skip $MaxBackups | Remove-Item -Recurse -Force
-    Write-Host "Backup: $BackupPath"
-} else {
-    Write-Host "No .next, skipping backup"
-}
-"@
+ssh $Server "mkdir -p $BackupDir; if (Test-Path '$ProjectPath/.next') { Copy-Item '$ProjectPath/.next' '$BackupPath/.next' -Recurse; Copy-Item '$ProjectPath/package.json' '$BackupPath/package.json'; Copy-Item '$ProjectPath/pnpm-lock.yaml' '$BackupPath/pnpm-lock.yaml'; Get-ChildItem '$BackupDir' -Directory | Sort-Object LastWriteTime -Descending | Select-Object -Skip $MaxBackups | Remove-Item -Recurse -Force; Write-Host 'Backup: $BackupPath' } else { Write-Host 'No .next, skipping backup' }"
 
 # 2. 同步程式碼（monorepo 感知）
 Write-Host "`n[2/6] Rsync..." -ForegroundColor Yellow
@@ -49,7 +38,7 @@ $excludes = @(
 )
 $excludeStr = $excludes -join ' '
 $syncCmd = "rsync -avz --delete $excludeStr ./ ${Server}:${ProjectPath}/"
-Invoke-Expression $syncCommand
+Invoke-Expression $syncCmd
 
 # 3. 安裝依賴
 Write-Host "`n[3/6] Install deps..." -ForegroundColor Yellow

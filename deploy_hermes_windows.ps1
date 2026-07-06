@@ -16,7 +16,7 @@ if (!(Get-Command node -ErrorAction SilentlyContinue)) {
 
 # 2. Install Node.js dependencies
 Write-Host "Installing Node.js gateway dependencies..." -ForegroundColor Yellow
-npm install express cors helmet express-rate-limit ws @google/generative-ai --prefix $PWD
+pnpm install express cors helmet express-rate-limit ws @google/generative-ai --prefix $PWD
 
 # 3. Configure environment
 $env:PORT = $Port

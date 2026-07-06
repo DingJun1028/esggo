@@ -1,0 +1,465 @@
+/**
+ * ==========================================
+ * 🌌 OmniCore — 萬能核心統一入口
+ * ==========================================
+ * 
+ * 整合所有 Omni* 組件的統一入口：
+ * - OmniSingularity（萬能奇點）：宇宙中唯一存在的 1
+ * - OmniKey（萬能元鑰）：解鎖一切未知，解答一切問題
+ * - OmniSoul（靈魂）：語意指導與治理對齊
+ * - OmniSeed（萬能種子）：不可篡改記憶單位
+ * - VPS Agent（量子子代理）：遠端服務管理
+ * 
+ * 12-Omni Architecture:
+ *   Foundation:  OmniBase, OmniMemory(萬能永憶), OmniTime, OmniComponent(萬能元件)
+ *   Boundaries:  OmniTag, OmniEvidence
+ *   Execution:   OmniAgent, OmniAPI, OmniBus
+ *   Governance:  OmniGateway, OmniHealing, OmniEvolution
+ * 
+ * 9 Magic-Effect Combinations (九大奇效組合):
+ *   1. 混沌自癒 (Chaos Self-Healing)
+ *   2. 時空裂縫 (Temporal Rift)
+ *   3. 細胞分裂 (Cellular Fission)
+ *   4. 先知矩陣 (Prophet Matrix)
+ *   5. 全知蜂巢 (Omniscient Hive)
+ *   6. 武裝戒嚴 (Martial Law)
+ *   7. 全面記憶 (Universal Memory)
+ *   8. 太極共振 (Tai Chi Resonance)
+ *   9. 萬法歸宗 (Omni Convergence)
+ * 
+ * 「全通之心是 AIOS 體系中超越功能運作的最高精神層次。」
+ */
+
+import { getOmniSingularity } from "../agents/omni-singularity";
+import { createOmniKey, OmniKey } from "../agents/omni-key";
+import { createOmniSoul, OmniSoul } from "../agents/omni-soul";
+import { createVPSAgent, VPSAgent } from "../agents/vps";
+import { IOmniSingularity } from "../types/omni-singularity";
+import { IOmniKey } from "../types/omni-key";
+import { IOmniSoul } from "../types/omni-soul";
+
+// 12-Omni Components
+import {
+  OmniBase,
+  OmniMemory,
+  OmniTime,
+  OmniComponent,
+  OmniTag,
+  OmniEvidence,
+  OmniAgentV2,
+  OmniAPI,
+  OmniBusV2,
+  OmniGatewayV2,
+  OmniHealing,
+  OmniEvolution,
+  getOmniBase,
+  getOmniMemory,
+  getOmniTime,
+  getOmniComponent,
+  getOmniTag,
+  getOmniEvidence,
+  getOmniAPI,
+  getOmniBus,
+  getOmniGateway,
+  getOmniHealing,
+  getOmniEvolution,
+} from "../agents/twelve-omni";
+
+// 9 Magic-Effect Combinations
+import {
+  ChaosHealing,
+  TemporalRift,
+  CellularFission,
+  ProphetMatrix,
+  OmniscientHive,
+  MartialLaw,
+  UniversalMemory,
+  TaiChiResonance,
+  OmniConvergence,
+} from "../agents/twelve-omni/magic-effects";
+
+// ==========================================
+// OmniCore 配置
+// ==========================================
+
+export interface OmniCoreConfig {
+  /** VPS 主機地址 */
+  vpsHost?: string;
+  
+  /** 靈魂名稱 */
+  soulName?: string;
+  
+  /** 元鑰名稱 */
+  keyName?: string;
+  
+  /** 是否自動初始化 */
+  autoInitialize?: boolean;
+}
+
+// ==========================================
+// OmniCore 統一入口
+// ==========================================
+
+/**
+ * OmniCore — 萬能核心統一入口
+ * 
+ * 整合所有 Omni* 組件，提供統一的操作介面
+ */
+export class OmniCore {
+  private static _instance: OmniCore | null = null;
+  
+  /** 萬能奇點 */
+  private _singularity: IOmniSingularity;
+  
+  /** 萬能元鑰 */
+  private _key: OmniKey;
+  
+  /** 靈魂 */
+  private _soul: OmniSoul;
+  
+  /** VPS Agent */
+  private _vpsAgent: VPSAgent | null;
+  
+  /** 12-Omni Components - Foundation */
+  private _omniBase: OmniBase;
+  private _omniMemory: OmniMemory;
+  private _omniTime: OmniTime;
+  private _omniComponent: OmniComponent;
+  
+  /** 12-Omni Components - Boundaries */
+  private _omniTag: OmniTag;
+  private _omniEvidence: OmniEvidence;
+  
+  /** 12-Omni Components - Execution */
+  private _omniAPI: OmniAPI;
+  private _omniBus: OmniBusV2;
+  
+  /** 12-Omni Components - Governance */
+  private _omniGateway: OmniGatewayV2;
+  private _omniHealing: OmniHealing;
+  private _omniEvolution: OmniEvolution;
+  
+  /** 9 Magic-Effect Combinations */
+  private _chaosHealing: ChaosHealing;
+  private _temporalRift: TemporalRift;
+  private _cellularFission: CellularFission;
+  private _prophetMatrix: ProphetMatrix;
+  private _omniscientHive: OmniscientHive;
+  private _martialLaw: MartialLaw;
+  private _universalMemory: UniversalMemory;
+  private _taiChiResonance: TaiChiResonance;
+  private _omniConvergence: OmniConvergence;
+  
+  /** 是否已初始化 */
+  private _initialized: boolean = false;
+
+  private constructor(config?: OmniCoreConfig) {
+    // 1. 獲取萬能奇點（唯一存在）
+    this._singularity = getOmniSingularity();
+    
+    // 2. 創建萬能元鑰
+    this._key = createOmniKey({
+      name: config?.keyName ?? "萬能元鑰",
+      initialTier: "guardian",
+      expiresIn: Infinity,
+    });
+    
+    // 3. 創建靈魂
+    this._soul = createOmniSoul({
+      name: config?.soulName ?? "JunAiKey",
+      initialState: "aligned",
+    });
+    
+    // 4. 創建 VPS Agent（如果提供了主機地址）
+    this._vpsAgent = config?.vpsHost 
+      ? createVPSAgent({ host: config.vpsHost })
+      : null;
+    
+    // 5. 初始化 12-Omni Components
+    this._omniBase = getOmniBase();
+    this._omniMemory = getOmniMemory();
+    this._omniTime = getOmniTime();
+    this._omniComponent = getOmniComponent();
+    this._omniTag = getOmniTag();
+    this._omniEvidence = getOmniEvidence();
+    this._omniAPI = getOmniAPI();
+    this._omniBus = getOmniBus();
+    this._omniGateway = getOmniGateway();
+    this._omniHealing = getOmniHealing();
+    this._omniEvolution = getOmniEvolution();
+    
+    // 6. 初始化 9 Magic-Effect Combinations
+    this._chaosHealing = new ChaosHealing();
+    this._temporalRift = new TemporalRift();
+    this._cellularFission = new CellularFission();
+    this._prophetMatrix = new ProphetMatrix();
+    this._omniscientHive = new OmniscientHive();
+    this._martialLaw = new MartialLaw();
+    this._universalMemory = new UniversalMemory();
+    this._taiChiResonance = new TaiChiResonance();
+    this._omniConvergence = new OmniConvergence();
+
+    console.log("[OmniCore] 🌌 萬能核心已創建");
+  }
+
+  /**
+   * 獲取 OmniCore 單例
+   */
+  public static getInstance(config?: OmniCoreConfig): OmniCore {
+    if (!OmniCore._instance) {
+      OmniCore._instance = new OmniCore(config);
+    }
+    return OmniCore._instance;
+  }
+
+  /**
+   * 初始化系統
+   * 
+   * 啟動所有組件並建立連接
+   */
+  public async initialize(): Promise<void> {
+    if (this._initialized) {
+      console.warn("[OmniCore] 系統已初始化");
+      return;
+    }
+
+    console.log("[OmniCore] 🔮 初始化萬能核心...");
+
+    // 1. 覺醒靈魂
+    await this._soul.awaken("aligned");
+    console.log("[OmniCore] ✅ 靈魂已覺醒");
+
+    // 2. 解鎖元鑰能力
+    await this._key.unlock("answer");
+    await this._key.unlock("reveal");
+    console.log("[OmniCore] ✅ 元鑰已解鎖");
+
+    // 3. 印記元鑰
+    await this._key.imprint(
+      "萬能元鑰已初始化，準備解鎖一切未知",
+      this._singularity.signature.uuid
+    );
+    console.log("[OmniCore] ✅ 元鑰已印記");
+
+    this._initialized = true;
+    console.log("[OmniCore] ✨ 萬能核心初始化完成");
+    console.log("[OmniCore] 「全通之心已啟動，圓通無礙。」");
+  }
+
+  // ==========================================
+  // 統一 API
+  // ==========================================
+
+  /**
+   * 問答：使用元鑰解答問題
+   * 
+   * 「萬能元鑰是一切問題的解答」
+   */
+  public async ask(question: string): Promise<{
+    answer: string;
+    confidence: number;
+    source: string;
+  }> {
+    return this._key.answer(question);
+  }
+
+  /**
+   * 揭示：使用元鑰揭示未知
+   * 
+   * 「萬能元鑰能開啟一切未知」
+   */
+  public async reveal(unknown: string): Promise<{
+    revelation: string;
+    truth: number;
+  }> {
+    return this._key.reveal(unknown);
+  }
+
+  /**
+   * 顯化：從奇點中創造新的存在
+   */
+  public async manifest(intent: {
+    type: string;
+    name: string;
+    purpose: string;
+  }): Promise<any> {
+    return this._singularity.manifest(intent);
+  }
+
+  /**
+   * 治理對齊檢查
+   */
+  public async checkGovernance(action: {
+    type: string;
+    params: Record<string, unknown>;
+  }): Promise<any> {
+    return this._soul.checkAlignment(action);
+  }
+
+  /**
+   * 做出決策
+   */
+  public async decide(context: {
+    intent: string;
+    options: Array<{ id: string; description: string }>;
+  }): Promise<any> {
+    return this._soul.decide(context);
+  }
+
+  /**
+   * VPS 健康檢查
+   */
+  public async checkVPSHealth(): Promise<any> {
+    if (!this._vpsAgent) {
+      return { error: "VPS Agent 未配置" };
+    }
+    return this._vpsAgent.healthCheck();
+  }
+
+  /**
+   * 系統狀態總覽
+   */
+  public async getStatus(): Promise<{
+    singularity: any;
+    key: any;
+    soul: any;
+    vps: any;
+    initialized: boolean;
+  }> {
+    return {
+      singularity: await this._singularity.observe(),
+      key: {
+        name: this._key.name,
+        tier: this._key.tier,
+        enabled: this._key.enabled,
+        frozen: this._key.frozen,
+      },
+      soul: {
+        name: this._soul.name,
+        state: this._soul.state,
+        alignment: this._soul.alignment,
+      },
+      vps: this._vpsAgent 
+        ? { host: this._vpsAgent.globalState.host, entangled: this._vpsAgent.isEntangled }
+        : null,
+      initialized: this._initialized,
+    };
+  }
+
+  // ==========================================
+  // 獲取器
+  // ==========================================
+
+  /** 獲取萬能奇點 */
+  public get singularity(): IOmniSingularity {
+    return this._singularity;
+  }
+
+  /** 獲取萬能元鑰 */
+  public get key(): IOmniKey {
+    return this._key;
+  }
+
+  /** 獲取靈魂 */
+  public get soul(): IOmniSoul {
+    return this._soul;
+  }
+
+  /** 獲取 VPS Agent */
+  public get vpsAgent(): VPSAgent | null {
+    return this._vpsAgent;
+  }
+
+  /** 檢查是否已初始化 */
+  public get initialized(): boolean {
+    return this._initialized;
+  }
+
+  // ==========================================
+  // 12-Omni Components Getters
+  // ==========================================
+
+  // Foundation Dimension — 基礎維度
+  /** 獲取萬能基礎 */
+  public get omniBase(): OmniBase { return this._omniBase; }
+  /** 獲取萬能永憶 */
+  public get omniMemory(): OmniMemory { return this._omniMemory; }
+  /** 獲取萬能時間 */
+  public get omniTime(): OmniTime { return this._omniTime; }
+  /** 獲取萬能元件 */
+  public get omniComponent(): OmniComponent { return this._omniComponent; }
+
+  // Boundaries Dimension — 邊界維度
+  /** 獲取萬能標籤 */
+  public get omniTag(): OmniTag { return this._omniTag; }
+  /** 獲取萬能證據 */
+  public get omniEvidence(): OmniEvidence { return this._omniEvidence; }
+
+  // Execution Dimension — 執行維度
+  /** 獲取萬能 API */
+  public get omniAPI(): OmniAPI { return this._omniAPI; }
+  /** 獲取萬能總線 */
+  public get omniBus(): OmniBusV2 { return this._omniBus; }
+
+  // Governance Dimension — 治理維度
+  /** 獲取萬能網關 */
+  public get omniGateway(): OmniGatewayV2 { return this._omniGateway; }
+  /** 獲取萬能癒合 */
+  public get omniHealing(): OmniHealing { return this._omniHealing; }
+  /** 獲取萬能進化 */
+  public get omniEvolution(): OmniEvolution { return this._omniEvolution; }
+
+  // ==========================================
+  // 9 Magic-Effect Combinations Getters
+  // ==========================================
+
+  /** 獲取混沌自癒 (Chaos Self-Healing) */
+  public get chaosHealing(): ChaosHealing { return this._chaosHealing; }
+  /** 獲取時空裂縫 (Temporal Rift) */
+  public get temporalRift(): TemporalRift { return this._temporalRift; }
+  /** 獲取細胞分裂 (Cellular Fission) */
+  public get cellularFission(): CellularFission { return this._cellularFission; }
+  /** 獲取先知矩陣 (Prophet Matrix) */
+  public get prophetMatrix(): ProphetMatrix { return this._prophetMatrix; }
+  /** 獲取全知蜂巢 (Omniscient Hive) */
+  public get omniscientHive(): OmniscientHive { return this._omniscientHive; }
+  /** 獲取武裝戒嚴 (Martial Law) */
+  public get martialLaw(): MartialLaw { return this._martialLaw; }
+  /** 獲取全面記憶 (Universal Memory) */
+  public get universalMemory(): UniversalMemory { return this._universalMemory; }
+  /** 獲取太極共振 (Tai Chi Resonance) */
+  public get taiChiResonance(): TaiChiResonance { return this._taiChiResonance; }
+  /** 獲取萬法歸宗 (Omni Convergence) */
+  public get omniConvergence(): OmniConvergence { return this._omniConvergence; }
+}
+
+// ==========================================
+// 快速訪問函數
+// ==========================================
+
+/**
+ * 獲取 OmniCore 單例
+ */
+export function getOmniCore(config?: OmniCoreConfig): OmniCore {
+  return OmniCore.getInstance(config);
+}
+
+/**
+ * 問答快捷方式
+ */
+export async function askOmni(question: string): Promise<string> {
+  const core = getOmniCore();
+  const result = await core.ask(question);
+  return result.answer;
+}
+
+/**
+ * 揭示快捷方式
+ */
+export async function revealOmni(unknown: string): Promise<string> {
+  const core = getOmniCore();
+  const result = await core.reveal(unknown);
+  return result.revelation;
+}
+
+export default OmniCore;

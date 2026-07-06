@@ -81,8 +81,10 @@ services:
     container_name: omniagent-gateway
     environment:
       - NODE_ENV=production
-      - PORT=3003
+      - PORT=8642
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
@@ -92,7 +94,7 @@ services:
     networks:
       - esggo-net
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3003/status"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8642/status"]
       interval: 30s
       timeout: 10s
       retries: 3
