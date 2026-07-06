@@ -33,10 +33,11 @@
 import { getOmniSingularity } from "../agents/omni-singularity";
 import { createOmniKey, OmniKey } from "../agents/omni-key";
 import { createOmniSoul, OmniSoul } from "../agents/omni-soul";
-import { createVPSAgent, VPSAgent } from "../agents/vps";
+import { createVPSAgent, VPSAgent, VPSAgentAdapter, VPSAgentFactory } from "../agents/vps";
 import { IOmniSingularity } from "../types/omni-singularity";
 import { IOmniKey } from "../types/omni-key";
 import { IOmniSoul } from "../types/omni-soul";
+import { IBusEvent as LegacyIBusEvent } from "../types/bus-event";
 
 // 12-Omni Components
 import {
@@ -86,6 +87,9 @@ export interface OmniCoreConfig {
   /** VPS 主機地址 */
   vpsHost?: string;
   
+  /** VPS SSH 端口 */
+  vpsPort?: number;
+  
   /** 靈魂名稱 */
   soulName?: string;
   
@@ -120,6 +124,9 @@ export class OmniCore {
   /** VPS Agent */
   private _vpsAgent: VPSAgent | null;
   
+  /** VPS Agent 適配器（用於生態系統註冊） */
+  private _vpsAdapter: VPSAgentAdapter | null;
+  
   /** 12-Omni Components - Foundation */
   private _omniBase: OmniBase;
   private _omniMemory: OmniMemory;
@@ -150,6 +157,9 @@ export class OmniCore {
   private _taiChiResonance: TaiChiResonance;
   private _omniConvergence: OmniConvergence;
   
+  /** VPS 連接配置 */
+  private _vpsConfig?: { host: string; port: number };
+  
   /** 是否已初始化 */
   private _initialized: boolean = false;
 
@@ -171,9 +181,17 @@ export class OmniCore {
     });
     
     // 4. 創建 VPS Agent（如果提供了主機地址）
-    this._vpsAgent = config?.vpsHost 
-      ? createVPSAgent({ host: config.vpsHost })
-      : null;
+    if (config?.vpsHost) {
+      this._vpsConfig = {
+        host: config.vpsHost,
+        port: config.vpsPort ?? 8042,
+      };
+      this._vpsAgent = createVPSAgent({ host: config.vpsHost });
+      this._vpsAdapter = new VPSAgentAdapter(this._vpsAgent);
+    } else {
+      this._vpsAgent = null;
+      this._vpsAdapter = null;
+    }
     
     // 5. 初始化 12-Omni Components
     this._omniBase = getOmniBase();
@@ -241,9 +259,69 @@ export class OmniCore {
     );
     console.log("[OmniCore] ✅ 元鑰已印記");
 
+    // 4. 初始化 VPS Agent 生態系統註冊
+    if (this._vpsAgent && this._vpsAdapter) {
+      await this._registerVPSToEcosystem();
+    }
+
     this._initialized = true;
     console.log("[OmniCore] ✨ 萬能核心初始化完成");
     console.log("[OmniCore] 「全通之心已啟動，圓通無礙。」");
+  }
+
+  /**
+   * 將 VPS Agent 註冊到 OmniAgent 生態系統
+   * 
+   * 量子糾纏效果：
+   * - VPS Agent 與 OmniBus 建立連接
+   * - 所有 VPS 事件通過量子糾纏通道同步
+   * - 自動修復退相干（重新建立連接）
+   */
+  private async _registerVPSToEcosystem(): Promise<void> {
+    if (!this._vpsAgent || !this._vpsAdapter) return;
+
+    console.log("[OmniCore] 🌐 註冊 VPS Agent 到生態系統...");
+
+    // 1. 初始化 VPS Agent 工廠
+    VPSAgentFactory.initialize(this._omniBus as any);
+
+    // 2. 創建並註冊 VPS Agent
+    const vpsId = `vps-${this._vpsConfig?.host.replace(/\./g, '-') ?? "unknown"}`;
+    VPSAgentFactory.createAndRegister({
+      host: this._vpsConfig?.host ?? "unknown",
+      vpsId,
+    });
+
+    // 3. 建立量子糾纏：訂閱 VPS 事件
+    this._omniBus.subscribe("vps.command", async (event: any) => {
+      console.log(`[OmniCore] 🔮 VPS 指令: ${event.payload?.action}`);
+    });
+
+    this._omniBus.subscribe("vps.result", async (event: any) => {
+      console.log(`[OmniCore] 📊 VPS 結果: ${event.payload?.status}`);
+    });
+
+    this._omniBus.subscribe("vps.state", async (event: any) => {
+      console.log(`[OmniCore] 📡 VPS 狀態更新`);
+    });
+
+    // 4. 執行初始健康檢查
+    console.log("[OmniCore] 🔍 執行 VPS 初始健康檢查...");
+    try {
+      const healthState = await this._vpsAgent.healthCheck();
+      console.log(`[OmniCore] ✅ VPS 健康檢查完成`);
+      console.log(`[OmniCore] 📊 系統: CPU=${healthState.system.cpuPercent.toFixed(1)}%, RAM=${healthState.system.memoryPercent.toFixed(1)}%`);
+      
+      // 記錄服務狀態
+      for (const [name, svc] of Array.from(healthState.services.entries())) {
+        console.log(`[OmniCore] 🔎 ${name}: ${svc.status} (${svc.health})`);
+      }
+    } catch (error) {
+      console.warn(`[OmniCore] ⚠️ VPS 初始健康檢查失敗: ${error}`);
+      console.log("[OmniCore] 將在下次同步時重試");
+    }
+
+    console.log(`[OmniCore] ✨ VPS Agent 已註冊到生態系統: ${vpsId}`);
   }
 
   // ==========================================
@@ -317,6 +395,26 @@ export class OmniCore {
   }
 
   /**
+   * VPS 部署
+   */
+  public async deployToVPS(params?: Record<string, unknown>): Promise<any> {
+    if (!this._vpsAgent) {
+      return { error: "VPS Agent 未配置" };
+    }
+    return this._vpsAgent.execute("deploy", params);
+  }
+
+  /**
+   * VPS 備份
+   */
+  public async backupVPS(params?: Record<string, unknown>): Promise<any> {
+    if (!this._vpsAgent) {
+      return { error: "VPS Agent 未配置" };
+    }
+    return this._vpsAgent.backup(params);
+  }
+
+  /**
    * 系統狀態總覽
    */
   public async getStatus(): Promise<{
@@ -324,6 +422,7 @@ export class OmniCore {
     key: any;
     soul: any;
     vps: any;
+    ecosystem: any;
     initialized: boolean;
   }> {
     return {
@@ -340,8 +439,17 @@ export class OmniCore {
         alignment: this._soul.alignment,
       },
       vps: this._vpsAgent 
-        ? { host: this._vpsAgent.globalState.host, entangled: this._vpsAgent.isEntangled }
+        ? { 
+            host: this._vpsAgent.globalState.host, 
+            entangled: this._vpsAgent.isEntangled,
+            quantum: this._vpsAgent.quantumState,
+            services: Object.fromEntries(Array.from(this._vpsAgent.globalState.services.entries())),
+          }
         : null,
+      ecosystem: {
+        registeredAgents: VPSAgentFactory.getAllAgents().size,
+        busStats: await this._omniBus.statistics(),
+      },
       initialized: this._initialized,
     };
   }
@@ -368,6 +476,16 @@ export class OmniCore {
   /** 獲取 VPS Agent */
   public get vpsAgent(): VPSAgent | null {
     return this._vpsAgent;
+  }
+
+  /** 獲取 VPS Agent 適配器 */
+  public get vpsAdapter(): VPSAgentAdapter | null {
+    return this._vpsAdapter;
+  }
+
+  /** 獲取 VPS 連接配置 */
+  public get vpsConfig(): { host: string; port: number } | undefined {
+    return this._vpsConfig;
   }
 
   /** 檢查是否已初始化 */
@@ -460,6 +578,22 @@ export async function revealOmni(unknown: string): Promise<string> {
   const core = getOmniCore();
   const result = await core.reveal(unknown);
   return result.revelation;
+}
+
+/**
+ * VPS 健康檢查快捷方式
+ */
+export async function checkVPS(): Promise<any> {
+  const core = getOmniCore();
+  return core.checkVPSHealth();
+}
+
+/**
+ * VPS 部署快捷方式
+ */
+export async function deployVPS(params?: Record<string, unknown>): Promise<any> {
+  const core = getOmniCore();
+  return core.deployToVPS(params);
 }
 
 export default OmniCore;

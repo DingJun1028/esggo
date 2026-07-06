@@ -15,7 +15,7 @@ import {
   BusStatistics,
   TopicStats,
 } from '../../types/twelve-omni';
-import { IComponentCore, IBusEvent, LifecycleStage } from '../../lib/omni-core/contracts';
+import { IComponentCore, LifecycleStage, IBusEvent } from '../../lib/omni-core/contracts';
 
 /**
  * OmniBusV2 實現
@@ -114,8 +114,39 @@ export class OmniBusV2 implements IOmniBusV2 {
   }
 
   /**
-   * 歷史重放
+   * 歷史事件重放
    * 時空裂縫：回放指定時間範圍內的事件
+   */
+  async replayEvents(
+    startTime: number,
+    endTime: number,
+    topic?: string
+  ): Promise<void> {
+    let filtered = this.events.filter(
+      (e) => e.timestamp >= startTime && e.timestamp <= endTime
+    );
+
+    if (topic) {
+      filtered = filtered.filter((e) => e.topic === topic);
+    }
+
+    // 投遞重放事件
+    for (const event of filtered) {
+      const subs = Array.from(this.subscriptions.values());
+      for (const sub of subs) {
+        if (sub.topic === event.topic || sub.topic === '*') {
+          try {
+            await sub.handler(event);
+          } catch (error) {
+            console.error(`Replay delivery failed for topic ${event.topic}:`, error);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * 歷史重放（舊版兼容）
    */
   async replay(
     startTime: number,
