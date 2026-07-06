@@ -42,6 +42,8 @@ import { getOmniSingularity } from "../agents/omni-singularity";
 import { createOmniKey, OmniKey } from "../agents/omni-key";
 import { createOmniSoul, OmniSoul } from "../agents/omni-soul";
 import { createVPSAgent, VPSAgent, VPSAgentAdapter, VPSAgentFactory } from "../agents/vps";
+import { OASummon, quickSummon, SummonResult } from "../agents/oa-summon";
+import { OmniSoulAutoSeed, initSoul } from "../agents/omni-soul-auto-seed";
 import { IOmniSingularity } from "../types/omni-singularity";
 import { IOmniKey } from "../types/omni-key";
 import { IOmniSoul } from "../types/omni-soul";
@@ -106,6 +108,9 @@ export interface OmniCoreConfig {
   
   /** 是否自動初始化 */
   autoInitialize?: boolean;
+  
+  /** 是否執行招喚儀式 */
+  summon?: boolean;
 }
 
 // ==========================================
@@ -168,10 +173,15 @@ export class OmniCore {
   /** VPS 連接配置 */
   private _vpsConfig?: { host: string; port: number };
   
+  /** OmniCore 配置 */
+  private _config?: OmniCoreConfig;
+  
   /** 是否已初始化 */
   private _initialized: boolean = false;
 
   private constructor(config?: OmniCoreConfig) {
+    this._config = config;
+    
     // 1. 獲取萬能奇點（唯一存在）
     this._singularity = getOmniSingularity();
     
@@ -251,30 +261,53 @@ export class OmniCore {
 
     console.log("[OmniCore] 🔮 初始化萬能核心...");
 
-    // 1. 覺醒靈魂
+    // 0. SOUL.md 自動初始化 (如果不存在)
+    const soulSeed = new OmniSoulAutoSeed();
+    if (!soulSeed.exists) {
+      console.log("[OmniCore] 🌱 SOUL.md 不存在，自動創建...");
+      await soulSeed.initialize();
+      console.log("[OmniCore] ✅ SOUL.md 已自動生成");
+    }
+
+    // 1. 招喚儀式 (如果啟用)
+    if (this._config?.summon) {
+      console.log("[OmniCore] 📿 執行招喚儀式...");
+      const summon = new OASummon({
+        soulName: this._config.soulName,
+        keyName: this._config.keyName,
+        vpsHost: this._config.vpsHost,
+        vpsPort: this._config.vpsPort,
+      });
+      const result = await summon.summon();
+      if (!result.success) {
+        throw new Error(`招喚失敗: ${result.errors.join(', ')}`);
+      }
+    }
+
+    // 2. 覺醒靈魂
     await this._soul.awaken("aligned");
     console.log("[OmniCore] ✅ 靈魂已覺醒");
 
-    // 2. 解鎖元鑰能力
+    // 3. 解鎖元鑰能力
     await this._key.unlock("answer");
     await this._key.unlock("reveal");
     console.log("[OmniCore] ✅ 元鑰已解鎖");
 
-    // 3. 印記元鑰
+    // 4. 印記元鑰
     await this._key.imprint(
       "萬能元鑰已初始化，準備解鎖一切未知",
       this._singularity.signature.uuid
     );
     console.log("[OmniCore] ✅ 元鑰已印記");
 
-    // 4. 初始化 VPS Agent 生態系統註冊
+    // 5. 初始化 VPS Agent 生態系統註冊
     if (this._vpsAgent && this._vpsAdapter) {
       await this._registerVPSToEcosystem();
     }
 
     this._initialized = true;
     console.log("[OmniCore] ✨ 萬能核心初始化完成");
-    console.log("[OmniCore] 「全通之心已啟動，圓通無礙。」");
+    console.log("[OmniCore] 「全通之心已啟動，圓通無礙。同心圓，無數個。」");
   }
 
   /**
