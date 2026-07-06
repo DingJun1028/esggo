@@ -3,6 +3,16 @@
  * 🌌 OmniBase — 萬能基礎實現
  * ==========================================
  * Foundation layer providing type-safe primitives and shared utilities.
+ * 
+ * 同心圓設計原則 (Concentric Circle Design):
+ *   以用戶需求為中心，系統滿足成果，故同心圓——看似一個，事實上是無數個。
+ *   每一層都是一個完整的同心圓，同時也是下一層的「用戶」。
+ *   需求 → 服務 → 成果 → 新需求（無限循環）
+ *   同一個模式，無數個尺度。
+ * 
+ * 萬能元件 (OmniComponent):
+ *   最小分子單位，可無限小亦可無限大，數量可增多或減少。
+ *   因為它們都是同一個同心圓的不同尺度投影。
  */
 
 import { createHash, randomUUID } from 'crypto';
