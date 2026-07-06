@@ -456,6 +456,13 @@ export class OmniCore {
   }
 
   /**
+   * 果因修復 — 從症狀追溯根源再修復
+   */
+  public async effectCauseHeal(effect: string): Promise<any> {
+    return this._omniHealing.effectCauseHeal(effect);
+  }
+
+  /**
    * 系統狀態總覽
    */
   public async getStatus(): Promise<{
