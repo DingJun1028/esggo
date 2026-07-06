@@ -15,6 +15,23 @@ interface ESGSkillsPanelProps {
   onSelectSkill?: (taskType: string) => void;
 }
 
+const getPillarColor = (taskType: string) => {
+  if (taskType.includes('carbon') || taskType.includes('tcfd') || taskType.includes('sdg')) {
+    return 'var(--accent-teal)'; // E
+  }
+  if (taskType.includes('compliance') || taskType.includes('stakeholder')) {
+    return 'var(--accent-gold)'; // S
+  }
+  return 'var(--accent-blue)'; // G
+};
+
+const getPillarLabel = (taskType: string) => {
+  if (taskType.includes('carbon') || taskType.includes('tcfd') || taskType.includes('sdg'))
+    return 'E';
+  if (taskType.includes('compliance') || taskType.includes('stakeholder')) return 'S';
+  return 'G';
+};
+
 export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
   const [skills, setSkills] = useState<ESGSkill[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,25 +55,13 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
     fetchSkills();
   }, []);
 
-  const getPillarColor = (taskType: string) => {
-    if (taskType.includes('carbon') || taskType.includes('tcfd') || taskType.includes('sdg')) {
-      return 'var(--accent-teal)'; // E
-    }
-    if (taskType.includes('compliance') || taskType.includes('stakeholder')) {
-      return 'var(--accent-gold)'; // S
-    }
-    return 'var(--accent-blue)'; // G
-  };
-
-  const getPillarLabel = (taskType: string) => {
-    if (taskType.includes('carbon') || taskType.includes('tcfd') || taskType.includes('sdg')) return 'E';
-    if (taskType.includes('compliance') || taskType.includes('stakeholder')) return 'S';
-    return 'G';
-  };
-
-  const filteredSkills = selectedPillar === 'all'
-    ? skills
-    : skills.filter(s => getPillarLabel(s.taskType) === selectedPillar);
+  // ⚡ Bolt Optimization: Memoized the skills filter to avoid O(n) recalculations
+  // on every render, ensuring filtering only occurs when the pillar selection changes.
+  const filteredSkills = useMemo(() => {
+    return selectedPillar === 'all'
+      ? skills
+      : skills.filter((s) => getPillarLabel(s.taskType) === selectedPillar);
+  }, [skills, selectedPillar]);
 
   return (
     <div className="space-y-4">
@@ -64,7 +69,7 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-textPrimary">ESG 技能面板</h3>
         <div className="flex gap-2">
-          {(['all', 'E', 'S', 'G'] as const).map(pillar => (
+          {(['all', 'E', 'S', 'G'] as const).map((pillar) => (
             <button
               key={pillar}
               onClick={() => setSelectedPillar(pillar)}
@@ -85,7 +90,7 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
         <div className="text-center py-8 text-textSecondary">載入中...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSkills.map(skill => (
+          {filteredSkills.map((skill) => (
             <OmniBaseCard
               key={skill.id}
               variant="liquid-glass"
@@ -95,7 +100,10 @@ export function ESGSkillsPanel({ onSelectSkill }: ESGSkillsPanelProps) {
               <div className="flex items-start justify-between mb-2">
                 <span
                   className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                  style={{ backgroundColor: `${getPillarColor(skill.taskType)}20`, color: getPillarColor(skill.taskType) }}
+                  style={{
+                    backgroundColor: `${getPillarColor(skill.taskType)}20`,
+                    color: getPillarColor(skill.taskType),
+                  }}
                 >
                   {getPillarLabel(skill.taskType)}
                 </span>
