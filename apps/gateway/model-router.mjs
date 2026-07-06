@@ -23,6 +23,12 @@ export function inferTaskType(message) {
 }
 
 // ── 模型配置 ─────────────────────────────────────────────────
+const MODELS = {
+  // Groq (快速推論, 30 req/min)
+  groq_llama70b:  { provider: 'groq', model: 'llama-3.3-70b-versatile',      maxTokens: 32768, temperature: 0.7 },
+  groq_llama8b:   { provider: 'groq', model: 'llama-3.1-8b-instant',         maxTokens: 8192,  temperature: 0.7 },
+  groq_gemma:     { provider: 'groq', model: 'gemma2-9b-it',                maxTokens: 8192,  temperature: 0.7 },
+  groq_mixtral:   { provider: 'groq', model: 'mixtral-8x7b-32768',          maxTokens: 32768, temperature: 0.7 },
   // OpenRouter :free (品質王, 200 req/day)
   or_qwen80b:    { provider: 'openrouter', model: 'qwen/qwen3-next-80b-a3b-instruct:free',    maxTokens: 512, temperature: 0.7 },
   or_llama90b:   { provider: 'openrouter', model: 'meta-llama/llama-3.2-90b-vision:free',     maxTokens: 512, temperature: 0.7 },
@@ -34,6 +40,7 @@ export function inferTaskType(message) {
   or_gemini20_flash: { provider: 'openrouter', model: 'google/gemini-2.0-flash-exp:free',    maxTokens: 512, temperature: 0.7 },
   or_gemma212b:     { provider: 'openrouter', model: 'google/gemma-2-12b-it:free',           maxTokens: 256, temperature: 0.6 },
   or_commandr_plus: { provider: 'openrouter', model: 'cohere/command-r-plus-08-2024:free',   maxTokens: 512, temperature: 0.7 },
+};
 
 // ── 路由表 ───────────────────────────────────────────────────
 const ROUTING_TABLE = {
