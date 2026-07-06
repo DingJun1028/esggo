@@ -49,7 +49,10 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const GROQ_API_KEY   = process.env.GROQ_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY;
+if (!GATEWAY_KEY) {
+  console.warn('[OmniGateway] WARNING: GATEWAY_API_KEY is not set. Gateway requests may be unauthorized or fail.');
+}
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -364,7 +367,7 @@ const aiLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'AI r
 // ── Auth Middleware ───────────────────────────────────────────
 function requireAuth(req, res, next) {
   const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || req.headers['authorization'] || '').replace('Bearer ', '');
-  if (!token || token !== GATEWAY_KEY) {
+  if (!GATEWAY_KEY || !token || token !== GATEWAY_KEY) {
     return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
   }
   next();
