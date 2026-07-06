@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
 interface BestPractice {
@@ -36,7 +36,9 @@ export function MECEBestPracticesView() {
   const [validation, setValidation] = useState<MECEValidation | null>(null);
   const [loading, setLoading] = useState(true);
   const [filterPillar, setFilterPillar] = useState<'all' | 'E' | 'S' | 'G'>('all');
-  const [filterLevel, setFilterLevel] = useState<'all' | 'basic' | 'intermediate' | 'advanced'>('all');
+  const [filterLevel, setFilterLevel] = useState<'all' | 'basic' | 'intermediate' | 'advanced'>(
+    'all',
+  );
 
   const loadData = async () => {
     try {
@@ -69,27 +71,39 @@ export function MECEBestPracticesView() {
     loadData();
   }, []);
 
-  const filtered = practices.filter(p => {
-    if (filterPillar !== 'all' && p.pillar !== filterPillar) return false;
-    if (filterLevel !== 'all' && p.level !== filterLevel) return false;
-    return true;
-  });
+  // ⚡ Bolt Optimization: Memoized the practices filter to prevent expensive
+  // O(n) recalculations during component re-renders unless filter criteria change.
+  const filtered = useMemo(() => {
+    return practices.filter((p) => {
+      if (filterPillar !== 'all' && p.pillar !== filterPillar) return false;
+      if (filterLevel !== 'all' && p.level !== filterLevel) return false;
+      return true;
+    });
+  }, [practices, filterPillar, filterLevel]);
 
   const getPillarColor = (pillar: string) => {
     switch (pillar) {
-      case 'E': return 'var(--accent-teal)';
-      case 'S': return 'var(--accent-gold)';
-      case 'G': return 'var(--accent-blue)';
-      default: return 'var(--text-secondary)';
+      case 'E':
+        return 'var(--accent-teal)';
+      case 'S':
+        return 'var(--accent-gold)';
+      case 'G':
+        return 'var(--accent-blue)';
+      default:
+        return 'var(--text-secondary)';
     }
   };
 
   const getLevelBadge = (level: string) => {
     switch (level) {
-      case 'basic': return { label: '基礎', color: 'var(--accent-teal)' };
-      case 'intermediate': return { label: '進階', color: 'var(--accent-gold)' };
-      case 'advanced': return { label: '卓越', color: 'var(--accent-purple)' };
-      default: return { label: level, color: 'var(--text-secondary)' };
+      case 'basic':
+        return { label: '基礎', color: 'var(--accent-teal)' };
+      case 'intermediate':
+        return { label: '進階', color: 'var(--accent-gold)' };
+      case 'advanced':
+        return { label: '卓越', color: 'var(--accent-purple)' };
+      default:
+        return { label: level, color: 'var(--text-secondary)' };
     }
   };
 
@@ -103,15 +117,17 @@ export function MECEBestPracticesView() {
       {validation && (
         <OmniBaseCard variant="liquid-glass">
           <div className="flex items-center gap-4">
-            <div className={`w-3 h-3 rounded-full ${validation.isValid ? 'bg-green-500' : 'bg-red-500'}`} />
+            <div
+              className={`w-3 h-3 rounded-full ${validation.isValid ? 'bg-green-500' : 'bg-red-500'}`}
+            />
             <div>
               <h3 className="text-sm font-bold text-textPrimary">
                 MECE 驗證：{validation.isValid ? '通過' : '未通過'}
               </h3>
               <p className="text-xs text-textSecondary">
-                完備性：{validation.completeness.isComplete ? '✓' : '✗'} |
-                互斥性：{validation.exclusivity.isExclusive ? '✓' : '✗'} |
-                共 {validation.exclusivity.totalPractices} 個實踐
+                完備性：{validation.completeness.isComplete ? '✓' : '✗'} | 互斥性：
+                {validation.exclusivity.isExclusive ? '✓' : '✗'} | 共{' '}
+                {validation.exclusivity.totalPractices} 個實踐
               </p>
             </div>
           </div>
@@ -121,7 +137,7 @@ export function MECEBestPracticesView() {
       {/* 篩選器 */}
       <div className="flex gap-4">
         <div className="flex gap-2">
-          {(['all', 'E', 'S', 'G'] as const).map(pillar => (
+          {(['all', 'E', 'S', 'G'] as const).map((pillar) => (
             <button
               key={pillar}
               onClick={() => setFilterPillar(pillar)}
@@ -136,14 +152,12 @@ export function MECEBestPracticesView() {
           ))}
         </div>
         <div className="flex gap-2">
-          {(['all', 'basic', 'intermediate', 'advanced'] as const).map(level => (
+          {(['all', 'basic', 'intermediate', 'advanced'] as const).map((level) => (
             <button
               key={level}
               onClick={() => setFilterLevel(level)}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                filterLevel === level
-                  ? 'bg-accentGold text-white'
-                  : 'bg-surface text-textSecondary'
+                filterLevel === level ? 'bg-accentGold text-white' : 'bg-surface text-textSecondary'
               }`}
             >
               {level === 'all' ? '全部' : getLevelBadge(level).label}
@@ -154,7 +168,7 @@ export function MECEBestPracticesView() {
 
       {/* 實踐列表 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map(practice => {
+        {filtered.map((practice) => {
           const levelBadge = getLevelBadge(practice.level);
           return (
             <OmniBaseCard key={practice.id} variant="liquid-glass">
@@ -162,7 +176,10 @@ export function MECEBestPracticesView() {
                 <div className="flex items-center gap-2">
                   <span
                     className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: `${getPillarColor(practice.pillar)}20`, color: getPillarColor(practice.pillar) }}
+                    style={{
+                      backgroundColor: `${getPillarColor(practice.pillar)}20`,
+                      color: getPillarColor(practice.pillar),
+                    }}
                   >
                     {practice.pillar}
                   </span>
@@ -178,8 +195,11 @@ export function MECEBestPracticesView() {
               <h4 className="text-sm font-bold text-textPrimary mb-1">{practice.name}</h4>
               <p className="text-xs text-textSecondary mb-2">{practice.description}</p>
               <div className="flex flex-wrap gap-1">
-                {practice.kpis.slice(0, 3).map(kpi => (
-                  <span key={kpi} className="text-[9px] bg-surface px-2 py-0.5 rounded text-textSecondary">
+                {practice.kpis.slice(0, 3).map((kpi) => (
+                  <span
+                    key={kpi}
+                    className="text-[9px] bg-surface px-2 py-0.5 rounded text-textSecondary"
+                  >
                     {kpi}
                   </span>
                 ))}

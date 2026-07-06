@@ -3,7 +3,7 @@
  * 負責測試 /healthz 與 /ai/route 端點
  */
 
-import { expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Smart AI Router E2E', () => {
   const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
