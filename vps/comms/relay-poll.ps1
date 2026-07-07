@@ -1,21 +1,18 @@
-$auth = 'esggo-relay-20260706'
-$relay = 'http://localhost:9999'
-while ($true) {
-  try {
-    $status = Invoke-RestMethod -Uri "$relay/status" -Headers @{'X-Auth-Token'=$auth} -TimeoutSec 3
-    Write-Output ("[STATUS] uptime=" + $status.uptime + " queued=" + $status.commandsQueued + " total=" + $status.commandsTotal + " results=" + $status.resultsCount)
-    $results = Invoke-RestMethod -Uri "$relay/result" -Headers @{'X-Auth-Token'=$auth} -TimeoutSec 3
-    if ($results) {
-      foreach ($r in $results) {
-        if ($r.exitCode -ne -1) {
-          Write-Output ('[RESULT] id=' + $r.commandId + ' exit=' + $r.exitCode)
-          Write-Output $r.stdout
-          if ($r.stderr) { Write-Output ('[STDERR]' + $r.stderr) }
-        }
-      }
-    }
-  } catch {
-    Write-Output '[WARN] relay poll error'
-  }
-  Start-Sleep -Seconds 3
+# ESGGO relay token TARGET = esggo-relay-20260707
+$ErrorActionPreference='SilentlyContinue'
+$ProgressPreference='SilentlyContinue'
+$relayPort=9999
+$token='esggo-relay-20260707'
+
+function Status(){
+  try{ (Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$relayPort/status" -Headers @{ 'X-Auth-Token'=$token} -TimeoutSec 3).Content } catch { 'UNREACHABLE' }
 }
+function Cmd([string]$command){
+  $id='cmd_'+[guid]::NewGuid().ToString('N').Substring(0,12)
+  $body=@{ id=$id; command=$command; desc='local-ps1-cmd' } | ConvertTo-Json -Compress
+  try{ 
+    (Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$relayPort/cmd" -Method POST -ContentType 'application/json' -Headers @{ 'X-Auth-Token'=$token} -Body $body -TimeoutSec 3).Content
+  } catch { '{"error":"send_failed"}'}
+}
+'status=' + (Status)
+'ping=' + (Cmd 'echo hello-from-ps1')

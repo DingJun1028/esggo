@@ -17,6 +17,12 @@ import {
   ITimeTravelRegistry,
   IMartialLawEvent,
 } from "../types/core-contract";
+import { OmniSeed } from "../lib/omni-seed";
+import { OmniTag } from "../lib/omni-tag";
+import { OmniEvidence } from "./omni-evidence";
+import { OmniTime } from "./omni-time";
+import { OmniMemory } from "./omni-memory";
+import { OmniAPI, OmniBlackboard, OmniHealing, OmniEvolution } from "./omni-helper-modules";
 
 // ---------- 1️⃣ Helper ----------
 const now = () => Date.now();
@@ -316,13 +322,39 @@ export class OmniCoreEcosystem {
   public readonly registry = new TimeTravelRegistry();
   public readonly bus: OmniAgentBus;
   public readonly gateway: OmniAgentGateway;
+  public readonly time = new OmniTime();
+  public readonly evidence = new OmniEvidence('[ISO-14064-1]');
+  public readonly memory = new OmniMemory();
+  public readonly api = new OmniAPI();
+  public readonly blackboard = new OmniBlackboard();
+  public readonly healing = new OmniHealing();
+  public readonly evolution = new OmniEvolution();
+  public readonly seed = new OmniSeed();
 
   // Map of all agents (including clones) – key is uuid
   private agents = new Map<string, IOmniAgent>();
   // Track clones per topic for cleanup
   private clonesPerTopic = new Map<string, Set<string>>();
 
-  constructor() {
+  constructor(opts?: {
+    time?: OmniTime;
+    evidence?: OmniEvidence;
+    memory?: OmniMemory;
+    api?: OmniAPI;
+    blackboard?: OmniBlackboard;
+    healing?: OmniHealing;
+    evolution?: OmniEvolution;
+    seed?: OmniSeed;
+  }) {
+    this.time = opts?.time ?? this.time;
+    this.evidence = opts?.evidence ?? this.evidence;
+    this.memory = opts?.memory ?? this.memory;
+    this.api = opts?.api ?? this.api;
+    this.blackboard = opts?.blackboard ?? this.blackboard;
+    this.healing = opts?.healing ?? this.healing;
+    this.evolution = opts?.evolution ?? this.evolution;
+    this.seed = opts?.seed ?? this.seed;
+
     this.bus = new OmniAgentBus(this.registry, this);
     this.gateway = new OmniAgentGateway(this.bus);
   }
@@ -330,6 +362,15 @@ export class OmniCoreEcosystem {
   /** Register a base agent (usually the first OA) */
   registerAgent(agent: IOmniAgent) {
     this.agents.set(agent.uuid, agent);
+  }
+
+  /** Static helper used by OAB to apply Hash Lock & freeze */
+  public static lockAndFreeze<T extends object>(obj: T): T {
+    (obj as any).evidence = (obj as any).evidence || {};
+    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 9)}`;
+    return Object.freeze(obj);
   }
 
   /** Clone an existing agent for a given topic */
@@ -345,7 +386,7 @@ export class OmniCoreEcosystem {
     if (!this.clonesPerTopic.has(topic)) this.clonesPerTopic.set(topic, new Set());
     this.clonesPerTopic.get(topic)!.add(clone.uuid);
 
-    console.info(`[Ecosystem] Cloned OA ${base.uuid} → ${clone.uuid} for topic "${topic}"`);
+    console.info(`[Ecosystem] Cloned OA ${base.uuid} -> ${clone.uuid} for topic "${topic}"`);
     // Register lifecycle hook to clean up when clone reaches FROZEN stage
     clone.registerHook("FROZEN", async () => {
       await this.cleanupClonesForTopic(topic);
@@ -359,22 +400,13 @@ export class OmniCoreEcosystem {
     cloneIds.forEach(uid => {
       const agent = this.agents.get(uid);
       if (agent) {
-        // Freeze to lock state before removal – mimics hot‑plug removal
+        // Freeze to lock state before removal – mimics hot-plug removal
         Object.freeze(agent);
         this.agents.delete(uid);
         console.info(`[Ecosystem] Removed cloned OA ${uid} for topic "${topic}"`);
       }
     });
     this.clonesPerTopic.delete(topic);
-  }
-
-  /** Static helper used by OAB to apply Hash Lock & freeze */
-  public static lockAndFreeze<T extends object>(obj: T): T {
-    (obj as any).evidence = (obj as any).evidence || {};
-    (obj as any).evidence["hash_lock"] = `0xCELESTIAL_${Date.now()}_${Math.random()
-      .toString(36)
-      .substring(2, 9)}`;
-    return Object.freeze(obj);
   }
 }
 
