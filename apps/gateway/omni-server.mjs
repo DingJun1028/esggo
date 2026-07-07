@@ -368,7 +368,7 @@ const aiLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'AI r
 // ── Auth Middleware ───────────────────────────────────────────
 function requireAuth(req, res, next) {
   const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || req.headers['authorization'] || '').replace('Bearer ', '');
-  if (!token || token !== GATEWAY_KEY) {
+  if (!GATEWAY_KEY || !token || token !== GATEWAY_KEY) {
     return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
   }
   next();
