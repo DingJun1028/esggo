@@ -480,8 +480,10 @@ export function OmniTodoPanel() {
               </div>
               <button
                 onClick={() => setSelectedTodo(null)}
-                className="text-sm"
+                className="text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded"
                 style={{ color: 'var(--text-secondary)' }}
+                aria-label="關閉詳情"
+                title="關閉詳情"
               >
                 ✕
               </button>
@@ -583,8 +585,17 @@ function TodoItemRow({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={`選擇待辦事項: ${todo.title}`}
       onClick={onSelect}
-      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
+      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
       style={{
         background: isSelected ? 'var(--accent-teal)10' : 'transparent',
         border: isSelected ? '1px solid var(--accent-teal)' : '1px solid transparent',
