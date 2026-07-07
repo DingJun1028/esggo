@@ -27,6 +27,8 @@ export interface OmniTask {
   tags: string[];
 }
 
+const PRIORITY_MAP: Record<Priority, number> = { High: 0, Medium: 1, Low: 2 };
+
 // Some dummy data for initialization
 const INITIAL_TASKS: OmniTask[] = [
   {
@@ -202,8 +204,7 @@ export function WuzuoNoteView() {
       if (sortBy === "DueDate") {
         return a.dueDate - b.dueDate;
       } else if (sortBy === "Priority") {
-        const pMap = { High: 0, Medium: 1, Low: 2 };
-        return pMap[a.priority] - pMap[b.priority];
+        return PRIORITY_MAP[a.priority] - PRIORITY_MAP[b.priority];
       } else if (sortBy === "Status") {
         return a.status.localeCompare(b.status);
       }
