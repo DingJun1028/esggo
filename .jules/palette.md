@@ -15,3 +15,6 @@
 ## 2025-07-05 - Global Navigation & Theme Toggles
 **Learning:** Icon-only buttons (like theme toggles) and complex interactive components (like global nav anchors) often lack keyboard accessibility (tab navigation styling) and screen reader support (`aria-label`) out of the box in this project's custom implementations.
 **Action:** Always ensure `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` is added to all interactive elements for accessible keyboard navigation, and ensure icon-only buttons include descriptive `aria-label` attributes for screen readers. Check both localized and globally used instances (e.g. `theme-toggle.tsx` and `global-nav.tsx`).
+## 2026-07-07 - Interactive Div Accessibility in OmniTodoPanel
+**Learning:** List item components in this application (like `TodoItemRow` in `omni-todo-panel.tsx`) often utilize standard `div` wrappers with an `onClick` handler. This completely hides the interactive element from keyboard navigation (Tab) and screen readers, making the list inaccessible.
+**Action:** When implementing or fixing interactive list rows or cards, explicitly add `role="button"`, `tabIndex={0}`, an accessible `aria-label` (using dynamic content like the title), an `onKeyDown` handler for 'Enter' and 'Space', and `focus-visible` styles to ensure full keyboard operability and visible focus states.
