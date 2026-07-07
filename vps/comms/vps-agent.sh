@@ -1,143 +1,60 @@
 #!/usr/bin/env bash
-# ============================================================
-# ESGGO VPS Agent — Bidirectional Communication with Local
-# Runs on VPS, polls local relay server for commands
-# ============================================================
-# Usage: bash vps-agent.sh [RELAY_IP] [RELAY_PORT]
-# ============================================================
 set -euo pipefail
-
-# ── Config ──────────────────────────────────────────────────
-RELAY_IP="${1:-100.108.241.29}"     # Local machine IP (Tailscale or public)
+RELAY_IP="${1:-127.0.0.1}"
 RELAY_PORT="${2:-9999}"
-AUTH_TOKEN="${3:-esggo-relay-$(date +%Y%m%d)}"
-POLL_INTERVAL=3                      # seconds between polls
-RETRY_INTERVAL=10                    # seconds on connection error
-VPS_IP=$(curl -s --max-time 5 http://checkip.amazonaws.com 2>/dev/null || echo "unknown")
+AUTH_TOKEN="${3:-esggo-relay-20260707}"
+POLL_INTERVAL=${POLL_INTERVAL:-3}
+RETRY_INTERVAL=${RETRY_INTERVAL:-10}
+AUTH_HEADER="X-Auth-Token: ${AUTH_TOKEN}"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-
-log()  { echo -e "${GREEN}[AGENT]${NC} $1"; }
-warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-err()  { echo -e "${RED}[ERR]${NC} $1"; }
-info() { echo -e "${CYAN}[INFO]${NC} $1"; }
-
-# ── Cleanup ─────────────────────────────────────────────────
-cleanup() {
-  log "Shutting down agent..."
-  exit 0
-}
-trap cleanup SIGTERM SIGINT
-
-# ── Execute command locally ─────────────────────────────────
-exec_command() {
-  local cmd_id="$1"
-  local command="$2"
-  local start_time=$(date +%s)
-
-  log "Executing: $command"
-
-  # Execute and capture output
-  local stdout="" stderr="" exit_code=0
-  stdout=$(eval "$command" 2> >(stderr=$(cat); echo "$stderr" >&2)) || exit_code=$?
-  local end_time=$(date +%s)
-  local duration=$((end_time - start_time))
-
-  # Send result back
-  local result=$(cat <<EOF
-{
-  "commandId": "$cmd_id",
-  "vpsIp": "$VPS_IP",
-  "stdout": $(echo "$stdout" | head -c 50000 | python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))" 2>/dev/null || echo '""'),
-  "stderr": $(echo "$stderr" | head -c 10000 | python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))" 2>/dev/null || echo '""'),
-  "exitCode": $exit_code,
-  "duration": $duration,
-  "hostname": "$(hostname)",
-  "ts": "$(date -Iseconds)"
-}
+send_result(){
+  local cmd_id="$1" command="$2" stdout="$3" stderr="$4" exit_code="$5" start="$6"
+  local end duration vps_ip result http_code
+  end=$(date +%s); duration=$((end-start)); vps_ip=$(curl -s --max-time 5 http://checkip.amazonaws.com 2>/dev/null || echo unknown)
+  result=$(cat <<EOF
+{"commandId":"$cmd_id","vpsIp":"$vps_ip","stdout":$(printf '%s' "$stdout" | json_escape),"stderr":$(printf '%s' "$stderr" | json_escape),"exitCode":$exit_code,"duration":$duration,"hostname":"$(hostname)","ts":"$(date -Iseconds)"}
 EOF
 )
-
-  local http_code
-  http_code=$(curl -s -o /dev/null -w '%{http_code}' \
-    -X POST "http://${RELAY_IP}:${RELAY_PORT}/result" \
-    -H "Content-Type: application/json" \
-    -H "X-Auth-Token: ${AUTH_TOKEN}" \
-    -d "$result" \
-    --max-time 10 2>/dev/null || echo "000")
-
-  if [ "$http_code" = "200" ]; then
-    log "Result sent (exit=$exit_code, ${duration}s)"
-  else
-    warn "Failed to send result (HTTP $http_code)"
-  fi
+  http_code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://${RELAY_IP}:${RELAY_PORT}/result" \
+    -H "Content-Type: application/json" -H "${AUTH_HEADER}" -d "$result" --max-time 10 2>/dev/null || echo 000)
+  if [ "$http_code" = "200" ]; then echo "[OK] result sent"; else echo "[WARN] result failed: $http_code"; fi
 }
 
-# ── Poll loop ────────────────────────────────────────────────
-poll_loop() {
-  info "Polling ${RELAY_IP}:${RELAY_PORT} every ${POLL_INTERVAL}s"
-  info "VPS IP: ${VPS_IP}"
-  info "Auth: ${AUTH_TOKEN}"
-  echo ""
-
-  while true; do
-    local response
-    response=$(curl -s --max-time 5 \
-      "http://${RELAY_IP}:${RELAY_PORT}/cmd" \
-      -H "X-Auth-Token: ${AUTH_TOKEN}" 2>/dev/null || echo '{"error":"connection_failed"}')
-
-    # Check if we got a command
-    if echo "$response" | grep -q '"idle":true'; then
-      sleep "$POLL_INTERVAL"
-      continue
-    fi
-
-    if echo "$response" | grep -q '"error"'; then
-      warn "Connection error, retrying in ${RETRY_INTERVAL}s..."
-      sleep "$RETRY_INTERVAL"
-      continue
-    fi
-
-    # Parse command
-    local cmd_id=$(echo "$response" | python3 -c "import sys,json; print(json.loads(sys.stdin.read()).get('id',''))" 2>/dev/null || echo "")
-    local command=$(echo "$response" | python3 -c "import sys,json; print(json.loads(sys.stdin.read()).get('command',''))" 2>/dev/null || echo "")
-
-    if [ -n "$cmd_id" ] && [ -n "$command" ]; then
-      exec_command "$cmd_id" "$command"
-    fi
-
-    sleep "$POLL_INTERVAL"
-  done
+json_escape(){
+  local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"
+  s="$(printf '%s' "$s" | awk '{gsub(/\t/,"\\t"); gsub(/\n/,"\\n"); gsub(/\r/,"\\r"); print}' )"
+  printf '"%s"' "$s"
 }
 
-# ── Startup ─────────────────────────────────────────────────
-echo ""
-log "=========================================="
-log "  ESGGO VPS Agent Starting"
-log "  Relay: ${RELAY_IP}:${RELAY_PORT}"
-log "  VPS:   ${VPS_IP}"
-log "=========================================="
-echo ""
+wait_for_relay(){
+  curl -s --max-time 5 "http://${RELAY_IP}:${RELAY_PORT}/status" -H "${AUTH_HEADER}" > /dev/null 2>&1
+}
 
-# Test connectivity first
-info "Testing relay connection..."
-if curl -s --max-time 5 "http://${RELAY_IP}:${RELAY_PORT}/status" -H "X-Auth-Token: ${AUTH_TOKEN}" > /dev/null 2>&1; then
-  log "Relay connection OK"
-else
-  warn "Cannot reach relay at ${RELAY_IP}:${RELAY_PORT}"
-  warn "Agent will keep trying..."
+echo "[AGENT] ESGGO VPS Agent v2"
+echo "[AGENT] relay=${RELAY_IP}:${RELAY_PORT} token=${AUTH_TOKEN}"
+
+if ! wait_for_relay; then
+  echo "[WARN] relay unreachable at startup, retrying..."
 fi
 
-# Register with relay (send VPS info)
-curl -s --max-time 5 \
-  -X POST "http://${RELAY_IP}:${RELAY_PORT}/cmd" \
-  -H "Content-Type: application/json" \
-  -H "X-Auth-Token: ${AUTH_TOKEN}" \
-  -d "{\"command\":\"echo 'VPS Agent Connected','desc\":\"Agent registration\"}" \
-  > /dev/null 2>&1 || true
+echo "[AGENT] registering..."
+curl -s --max-time 5 -X POST "http://${RELAY_IP}:${RELAY_PORT}/cmd" \
+  -H "Content-Type: application/json" -H "${AUTH_HEADER}" \
+  -d "{\"command\":\"echo VPS-Agent-Connected\",\"description\":\"Agent registration\"}" > /dev/null 2>&1 || true
 
-poll_loop
+echo "[AGENT] polling..."
+while true; do
+  resp="$(curl -s --max-time 5 "http://${RELAY_IP}:${RELAY_PORT}/cmd" -H "${AUTH_HEADER}" 2>/dev/null || echo '{"error":"connection_failed"}')"
+  cmd_id="$(printf '%s' "$resp" | sed -n 's#.*"id":"\\([^"]*\\)".*#\\1#p')"
+  command="$(printf '%s' "$resp" | sed -n 's#.*"command":"\\([^"]*\\)".*#\\1#p')"
+  if [ -n "$cmd_id" ] && [ -n "$command" ]; then
+    echo "[AGENT] cmd=$cmd_id command=$command"
+    start=$(date +%s)
+    tmpout="$(mktemp)"; tmperr="$(mktemp)"; exit_code=0
+    eval "$command" >"$tmpout" 2>"$tmperr" || exit_code=$?
+    stdout="$(cat "$tmpout")"; stderr="$(cat "$tmperr")"
+    rm -f "$tmpout" "$tmperr"
+    send_result "$cmd_id" "$command" "$stdout" "$stderr" "$exit_code" "$start"
+  fi
+  sleep "$POLL_INTERVAL"
+done
