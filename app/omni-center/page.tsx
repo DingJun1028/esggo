@@ -109,6 +109,26 @@ function polarPoint(a: number, r: number, cx: number, cy: number) {
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
+const SCORES = { traceable:0.91, transparent:0.88, tangible:0.90, trustworthy:0.94, trackable:0.87 };
+const overall = Object.values(SCORES).reduce((s,v)=>s+v,0)/5;
+const CX=100, CY=100, MR=75;
+
+const radarPath = Object.values(SCORES).map((v,i)=>{
+  const a=(i/5)*Math.PI*2; const p=polarPoint(a,v*MR,CX,CY);
+  return `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+}).join(' ')+' Z';
+
+const tabs: {id:Tab; label:string; icon:string}[] = [
+  {id:'dashboard',label:'萬能總攬',icon:'◎'},
+  {id:'notes',    label:'萬能筆記',icon:'📝'},
+  {id:'tasks',    label:'萬能任務',icon:'✅'},
+  {id:'calendar', label:'萬能日曆',icon:'📅'},
+  {id:'chat',     label:'萬能對話',icon:'🤖'},
+  {id:'fiveT',    label:'萬能雷達',icon:'📡'},
+  {id:'rag',      label:'萬能智庫',icon:'📚'},
+  {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
+];
+
 export default function OmniCenterPage() {
   const [tab, setTab] = useState<Tab>('dashboard');
   const [notes, setNotes] = useState<NoteData[]>(DEMO_NOTES);
@@ -156,38 +176,6 @@ export default function OmniCenterPage() {
       unsubZkp();
     };
   }, []);
-
-  const SCORES = {
-    traceable: 0.91,
-    transparent: 0.88,
-    tangible: 0.9,
-    trustworthy: 0.94,
-    trackable: 0.87,
-  };
-  const overall = Object.values(SCORES).reduce((s, v) => s + v, 0) / 5;
-  const CX = 100,
-    CY = 100,
-    MR = 75;
-
-  const radarPath =
-    Object.values(SCORES)
-      .map((v, i) => {
-        const a = (i / 5) * Math.PI * 2;
-        const p = polarPoint(a, v * MR, CX, CY);
-        return `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`;
-      })
-      .join(' ') + ' Z';
-
-  const tabs: { id: Tab; label: string; icon: string }[] = [
-    { id: 'dashboard', label: '萬能總攬', icon: '◎' },
-    { id: 'notes', label: '萬能筆記', icon: '📝' },
-    { id: 'tasks', label: '萬能任務', icon: '✅' },
-    { id: 'calendar', label: '萬能日曆', icon: '📅' },
-    { id: 'chat', label: '萬能對話', icon: '🤖' },
-    { id: 'fiveT', label: '萬能雷達', icon: '📡' },
-    { id: 'rag', label: '萬能智庫', icon: '📚' },
-    { id: 'zkp', label: '萬能憑證', icon: '🛡️' },
-  ];
 
   return (
     <div className="min-h-[calc(100vh-52px)] p-5">
