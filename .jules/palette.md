@@ -18,3 +18,7 @@
 ## 2026-07-07 - Interactive Div Accessibility in OmniTodoPanel
 **Learning:** List item components in this application (like `TodoItemRow` in `omni-todo-panel.tsx`) often utilize standard `div` wrappers with an `onClick` handler. This completely hides the interactive element from keyboard navigation (Tab) and screen readers, making the list inaccessible.
 **Action:** When implementing or fixing interactive list rows or cards, explicitly add `role="button"`, `tabIndex={0}`, an accessible `aria-label` (using dynamic content like the title), an `onKeyDown` handler for 'Enter' and 'Space', and `focus-visible` styles to ensure full keyboard operability and visible focus states.
+
+## 2024-05-18 - Component-Specific Focus Rings and ARIA Roles
+**Learning:** Found missing `role="tab"` and `role="tablist"` attributes on custom tab navigation, missing `aria-label`s on icon buttons, and missing `focus-visible` styles in `app/omni-center/page.tsx`, rendering these elements inaccessible via keyboard and screen readers.
+**Action:** Applied `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to custom buttons. Implemented proper `role="tablist"`, `role="tab"`, and `aria-selected` for custom tabs. Added `aria-label` descriptions for icon-only components while hiding decorative inner elements with `aria-hidden="true"`.
