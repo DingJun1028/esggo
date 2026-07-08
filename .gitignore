@@ -97,6 +97,7 @@ render-build.sh
 # Test / CI artifacts
 playwright-report/
 test-results/
+vitest_output/
 
 # Logs
 logs/
@@ -119,6 +120,7 @@ config/
 dashboard/
 /data/
 dataconnect/
+esggo/
 esggo-dashboard/
 esggo-funtions/
 esggo-omnimcp/
