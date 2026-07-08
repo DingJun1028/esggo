@@ -245,6 +245,7 @@ export function OmniTodoPanel() {
         <div className="p-4 flex flex-wrap gap-3 items-center">
           <input
             type="text"
+            aria-label="搜尋待辦事項"
             placeholder="搜尋待辦..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
@@ -257,6 +258,7 @@ export function OmniTodoPanel() {
           />
 
           <select
+            aria-label="依狀態過濾"
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
@@ -273,6 +275,7 @@ export function OmniTodoPanel() {
           </select>
 
           <select
+            aria-label="依優先級過濾"
             value={filterPriority}
             onChange={e => setFilterPriority(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
@@ -289,6 +292,7 @@ export function OmniTodoPanel() {
           </select>
 
           <select
+            aria-label="依類別過濾"
             value={filterCategory}
             onChange={e => setFilterCategory(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
@@ -325,6 +329,7 @@ export function OmniTodoPanel() {
 
             <input
               type="text"
+              aria-label="待辦事項標題"
               placeholder="標題 *"
               value={newTitle}
               onChange={e => setNewTitle(e.target.value)}
@@ -337,6 +342,7 @@ export function OmniTodoPanel() {
             />
 
             <textarea
+              aria-label="待辦事項描述"
               placeholder="描述（選填）"
               value={newDescription}
               onChange={e => setNewDescription(e.target.value)}
@@ -351,6 +357,7 @@ export function OmniTodoPanel() {
 
             <div className="flex gap-3 flex-wrap">
               <select
+                aria-label="待辦事項優先級"
                 value={newPriority}
                 onChange={e => setNewPriority(e.target.value as TodoPriority)}
                 className="px-3 py-2 rounded-lg text-sm"
@@ -366,6 +373,7 @@ export function OmniTodoPanel() {
               </select>
 
               <select
+                aria-label="待辦事項類別"
                 value={newCategory}
                 onChange={e => setNewCategory(e.target.value as TodoCategory)}
                 className="px-3 py-2 rounded-lg text-sm"
@@ -382,6 +390,7 @@ export function OmniTodoPanel() {
 
               <input
                 type="date"
+                aria-label="待辦事項到期日"
                 value={newDueDate}
                 onChange={e => setNewDueDate(e.target.value)}
                 className="px-3 py-2 rounded-lg text-sm"
