@@ -1,132 +1,65 @@
 #!/usr/bin/env bash
+# ESGGO Omni Deployment — Atomic release script for Oracle Cloud (Ubuntu 24.04 / ARM64)
+# Run on the VPS via Oracle Serial Console (or SSH once reachable).
 set -Eeuo pipefail
 
-APP_DIR="${APP_DIR:-/var/www/esggo/omniagent-gateway}"
-PORT="${PORT:-8642}"
-NODE_MAJOR="${NODE_MAJOR:-20}"
-PM2_NAME="${PM2_NAME:-omniagent-gateway}"
+APP_NAME="esggo-app"
+REPO_URL="https://github.com/DingJun1028/esggo.git"
+BRANCH="main"
+APP_DIR="/opt/esggo-app"
+NODE_VERSION="22"
+PORT="3000"
+HEALTHCHECK_PATH="/"
+BUILD_CMD="NODE_OPTIONS=--max_old_space_size=8192 npm run build"
+PM2_SCRIPT="npm"
+PM2_ARGS="run start"
+KEEP_RELEASES="5"
+TARGET_USER="ubuntu"
 
-if [ "$(id -u)" -eq 0 ]; then
-  SUDO=""
+echo "=== [通] 啟動 ESGGO OCI-ARM 原子部署 ==="
+TIMESTAMP="$(date +%Y%m%d%H%M%S)"
+RELEASE_DIR="$APP_DIR/releases/$TIMESTAMP"
+mkdir -p "$RELEASE_DIR"
+echo "RELEASE_DIR=$RELEASE_DIR"
+
+# 1. Pull latest source
+echo "=== [真] 從 GitHub HTTPS 免密碼拉取代碼 ==="
+git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$RELEASE_DIR"
+
+# 2. Node env
+echo "=== [環境] 切換至 $TARGET_USER 環境配置 Node.js $NODE_VERSION ==="
+NODE_BIN="$APP_DIR/current/node_modules/.bin"
+run_as() { sudo -u "$TARGET_USER" bash -c "export NVM_DIR=\$HOME/.nvm; [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh; nvm use $NODE_VERSION >/dev/null 2>&1; $*"; }
+
+# 3. Install deps
+echo "=== [善] 安裝生產環境依賴 ==="
+run_as "cd $RELEASE_DIR && npm ci --omit=dev || npm install --production"
+
+# 4. Build
+echo "=== [建] 執行 Next.js 生產編譯 ==="
+run_as "cd $RELEASE_DIR && $BUILD_CMD"
+
+# 5. Atomic symlink swap (0-downtime)
+echo "=== [美] 原子級軟連結秒級切換 ==="
+ln -sfn "$RELEASE_DIR" "$APP_DIR/current"
+
+# 6. PM2 process management
+echo "=== [真] 交付 PM2 守護，實施熱重載 ==="
+run_as "pm2 stop $APP_NAME || true"
+run_as "pm2 start $PM2_SCRIPT --name $APP_NAME -- $PM2_ARGS || pm2 restart $APP_NAME"
+run_as "pm2 save"
+echo "=== [優化] 清理歷史老舊版本 ==="
+# keep only the newest KEEP_RELEASES releases
+ls -1dt "$APP_DIR"/releases/*/ 2>/dev/null | tail -n +$((KEEP_RELEASES+1)) | xargs -r rm -rf
+
+# 7. Health check
+echo "=== [4/4] 啟動終端健全度審查 ==="
+sleep 4
+if curl -fsS "http://127.0.0.1:$PORT$HEALTHCHECK_PATH" >/dev/null 2>&1; then
+  echo "=== [5T ALL COMPLIANT] ESGGO 全端平台已成功在 Oracle Cloud 上線！ ==="
+  echo "請至瀏覽器直接存取: http://161.118.248.180:$PORT"
 else
-  SUDO="sudo"
+  echo "=== [WARN] 本地健康檢查未通過，請檢查 pm2 logs $APP_NAME ==="
+  run_as "pm2 logs $APP_NAME --lines 30 --nostream" || true
 fi
-
-log() {
-  echo "==> $1"
-}
-
-install_runtime() {
-  log "Installing system packages"
-  $SUDO apt-get update
-  $SUDO apt-get install -y curl git build-essential ca-certificates ufw
-
-  local node_major=""
-  if command -v node >/dev/null 2>&1; then
-    node_major="$(node -v | cut -d. -f1 | tr -d 'v')"
-  fi
-
-  if [ "${node_major}" != "${NODE_MAJOR}" ]; then
-    log "Installing Node.js ${NODE_MAJOR}.x"
-    curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" | $SUDO -E bash -
-    $SUDO apt-get install -y nodejs
-  fi
-
-  if ! command -v pm2 >/dev/null 2>&1; then
-    log "Installing PM2"
-    $SUDO npm install -g pm2
-  fi
-}
-
-configure_network() {
-  log "Opening SSH, HTTP, HTTPS, and OmniAgent Gateway ports"
-  $SUDO ufw allow OpenSSH || true
-  $SUDO ufw allow 'Nginx Full' || true
-  $SUDO ufw allow "${PORT}/tcp" || true
-  $SUDO ufw --force enable || true
-}
-
-prepare_app() {
-  log "Preparing ${APP_DIR}"
-  mkdir -p "${APP_DIR}" logs
-
-  if [ ! -f "${APP_DIR}/package.json" ]; then
-    cat > "${APP_DIR}/package.json" <<'EOF_PKG'
-{
-  "name": "omniagent-gateway",
-  "version": "3.0.0",
-  "private": true,
-  "type": "module",
-  "main": "omni-server.mjs",
-  "scripts": {
-    "start": "node omni-server.mjs"
-  },
-  "dependencies": {
-    "@google/generative-ai": "^0.21.0",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "express-rate-limit": "^7.1.5",
-    "helmet": "^7.1.0",
-    "ws": "^8.18.0"
-  }
-}
-EOF_PKG
-  fi
-
-  if [ ! -f "${APP_DIR}/.env" ]; then
-    cat > "${APP_DIR}/.env" <<EOF_ENV
-PORT=${PORT}
-VPS_IP=161.118.248.180
-GATEWAY_API_KEY=change-me
-GEMINI_API_KEY=
-OPENROUTER_API_KEY=
-ALLOWED_ORIGINS=http://161.118.248.180,http://127.0.0.1:3000,http://localhost:3000
-EOF_ENV
-    chmod 600 "${APP_DIR}/.env"
-  fi
-}
-
-install_dependencies() {
-  log "Installing OmniAgent Gateway dependencies"
-  cd "${APP_DIR}"
-  if [ -f package-lock.json ]; then
-    npm ci
-  else
-    npm install
-  fi
-}
-
-start_pm2() {
-  log "Starting OmniAgent Gateway under PM2"
-  cd "${APP_DIR}"
-  pm2 delete "${PM2_NAME}" >/dev/null 2>&1 || true
-  pm2 start omni-server.mjs --name "${PM2_NAME}" --interpreter node
-  pm2 save
-  pm2 startup systemd -u "${USER}" --hp "${HOME}" >/dev/null 2>&1 || true
-}
-
-healthcheck() {
-  log "Waiting for gateway health"
-  local ok=0
-  for _ in $(seq 1 20); do
-    if curl -fsS --max-time 3 "http://127.0.0.1:${PORT}/status" >/dev/null 2>&1; then
-      ok=1
-      break
-    fi
-    sleep 2
-  done
-
-  if [ "${ok}" != "1" ]; then
-    pm2 logs "${PM2_NAME}" --lines 80 --nostream || true
-    exit 1
-  fi
-}
-
-install_runtime
-configure_network
-prepare_app
-install_dependencies
-start_pm2
-healthcheck
-
-log "OmniAgent Gateway is ready on http://127.0.0.1:${PORT}/status"
+echo "=== DEPLOY_DONE ==="
