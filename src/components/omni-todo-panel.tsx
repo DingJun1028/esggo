@@ -11,7 +11,14 @@ import { OmniBaseCard } from '@/components/omni-base-card';
 
 type TodoPriority = 'urgent' | 'high' | 'medium' | 'low';
 type TodoStatus = 'pending' | 'in_progress' | 'done' | 'archived';
-type TodoCategory = 'esg_carbon' | 'esg_compliance' | 'esg_report' | 'esg_stakeholder' | 'general' | 'personal' | 'work';
+type TodoCategory =
+  | 'esg_carbon'
+  | 'esg_compliance'
+  | 'esg_report'
+  | 'esg_stakeholder'
+  | 'general'
+  | 'personal'
+  | 'work';
 
 interface TodoItem {
   id: string;
@@ -156,7 +163,10 @@ export function OmniTodoPanel() {
     }
   };
 
-  const handleStatusChange = async (id: string, action: 'start' | 'complete' | 'archive' | 'reopen') => {
+  const handleStatusChange = async (
+    id: string,
+    action: 'start' | 'complete' | 'archive' | 'reopen',
+  ) => {
     try {
       await fetch('/api/omni-todo', {
         method: 'POST',
@@ -165,7 +175,7 @@ export function OmniTodoPanel() {
       });
       await Promise.all([loadTodos(), loadStats()]);
       if (selectedTodo?.id === id) {
-        const updated = todos.find(t => t.id === id);
+        const updated = todos.find((t) => t.id === id);
         if (updated) setSelectedTodo(updated);
       }
     } catch (err) {
@@ -210,7 +220,9 @@ export function OmniTodoPanel() {
               <div className="text-2xl font-bold" style={{ color: 'var(--accent-teal)' }}>
                 {stats.total}
               </div>
-              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>全部</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                全部
+              </div>
             </div>
           </OmniBaseCard>
           <OmniBaseCard>
@@ -218,7 +230,9 @@ export function OmniTodoPanel() {
               <div className="text-2xl font-bold" style={{ color: 'var(--accent-gold)' }}>
                 {stats.byStatus.pending + stats.byStatus.in_progress}
               </div>
-              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>進行中</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                進行中
+              </div>
             </div>
           </OmniBaseCard>
           <OmniBaseCard>
@@ -226,7 +240,9 @@ export function OmniTodoPanel() {
               <div className="text-2xl font-bold" style={{ color: 'var(--accent-purple)' }}>
                 {stats.overdue}
               </div>
-              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>逾期</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                逾期
+              </div>
             </div>
           </OmniBaseCard>
           <OmniBaseCard>
@@ -234,7 +250,9 @@ export function OmniTodoPanel() {
               <div className="text-2xl font-bold" style={{ color: 'var(--accent-teal)' }}>
                 {stats.dueThisWeek}
               </div>
-              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>本週到期</div>
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                本週到期
+              </div>
             </div>
           </OmniBaseCard>
         </div>
@@ -245,9 +263,10 @@ export function OmniTodoPanel() {
         <div className="p-4 flex flex-wrap gap-3 items-center">
           <input
             type="text"
+            aria-label="搜尋待辦事項"
             placeholder="搜尋待辦..."
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 min-w-[200px] px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -257,8 +276,9 @@ export function OmniTodoPanel() {
           />
 
           <select
+            aria-label="依狀態過濾"
             value={filterStatus}
-            onChange={e => setFilterStatus(e.target.value as any)}
+            onChange={(e) => setFilterStatus(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -268,13 +288,16 @@ export function OmniTodoPanel() {
           >
             <option value="all">全部狀態</option>
             {Object.entries(STATUS_CONFIG).map(([k, v]) => (
-              <option key={k} value={k}>{v.label}</option>
+              <option key={k} value={k}>
+                {v.label}
+              </option>
             ))}
           </select>
 
           <select
+            aria-label="依優先級過濾"
             value={filterPriority}
-            onChange={e => setFilterPriority(e.target.value as any)}
+            onChange={(e) => setFilterPriority(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -284,13 +307,16 @@ export function OmniTodoPanel() {
           >
             <option value="all">全部優先級</option>
             {Object.entries(PRIORITY_CONFIG).map(([k, v]) => (
-              <option key={k} value={k}>{v.label}</option>
+              <option key={k} value={k}>
+                {v.label}
+              </option>
             ))}
           </select>
 
           <select
+            aria-label="依類別過濾"
             value={filterCategory}
-            onChange={e => setFilterCategory(e.target.value as any)}
+            onChange={(e) => setFilterCategory(e.target.value as any)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -300,7 +326,9 @@ export function OmniTodoPanel() {
           >
             <option value="all">全部類別</option>
             {Object.entries(CATEGORY_CONFIG).map(([k, v]) => (
-              <option key={k} value={k}>{v.label}</option>
+              <option key={k} value={k}>
+                {v.label}
+              </option>
             ))}
           </select>
 
@@ -321,13 +349,16 @@ export function OmniTodoPanel() {
       {showCreateForm && (
         <OmniBaseCard>
           <div className="p-4 space-y-3">
-            <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>新增待辦事項</h3>
+            <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              新增待辦事項
+            </h3>
 
             <input
               type="text"
+              aria-label="待辦事項標題"
               placeholder="標題 *"
               value={newTitle}
-              onChange={e => setNewTitle(e.target.value)}
+              onChange={(e) => setNewTitle(e.target.value)}
               className="w-full px-3 py-2 rounded-lg text-sm"
               style={{
                 background: 'var(--bg-secondary)',
@@ -337,9 +368,10 @@ export function OmniTodoPanel() {
             />
 
             <textarea
+              aria-label="待辦事項描述"
               placeholder="描述（選填）"
               value={newDescription}
-              onChange={e => setNewDescription(e.target.value)}
+              onChange={(e) => setNewDescription(e.target.value)}
               rows={2}
               className="w-full px-3 py-2 rounded-lg text-sm"
               style={{
@@ -351,8 +383,9 @@ export function OmniTodoPanel() {
 
             <div className="flex gap-3 flex-wrap">
               <select
+                aria-label="待辦事項優先級"
                 value={newPriority}
-                onChange={e => setNewPriority(e.target.value as TodoPriority)}
+                onChange={(e) => setNewPriority(e.target.value as TodoPriority)}
                 className="px-3 py-2 rounded-lg text-sm"
                 style={{
                   background: 'var(--bg-secondary)',
@@ -361,13 +394,16 @@ export function OmniTodoPanel() {
                 }}
               >
                 {Object.entries(PRIORITY_CONFIG).map(([k, v]) => (
-                  <option key={k} value={k}>{v.icon} {v.label}</option>
+                  <option key={k} value={k}>
+                    {v.icon} {v.label}
+                  </option>
                 ))}
               </select>
 
               <select
+                aria-label="待辦事項類別"
                 value={newCategory}
-                onChange={e => setNewCategory(e.target.value as TodoCategory)}
+                onChange={(e) => setNewCategory(e.target.value as TodoCategory)}
                 className="px-3 py-2 rounded-lg text-sm"
                 style={{
                   background: 'var(--bg-secondary)',
@@ -376,14 +412,17 @@ export function OmniTodoPanel() {
                 }}
               >
                 {Object.entries(CATEGORY_CONFIG).map(([k, v]) => (
-                  <option key={k} value={k}>{v.label}</option>
+                  <option key={k} value={k}>
+                    {v.label}
+                  </option>
                 ))}
               </select>
 
               <input
                 type="date"
+                aria-label="待辦事項到期日"
                 value={newDueDate}
-                onChange={e => setNewDueDate(e.target.value)}
+                onChange={(e) => setNewDueDate(e.target.value)}
                 className="px-3 py-2 rounded-lg text-sm"
                 style={{
                   background: 'var(--bg-secondary)',
@@ -430,7 +469,7 @@ export function OmniTodoPanel() {
             </div>
           ) : (
             <div className="space-y-2">
-              {todos.map(todo => (
+              {todos.map((todo) => (
                 <TodoItemRow
                   key={todo.id}
                   todo={todo}
@@ -460,19 +499,29 @@ export function OmniTodoPanel() {
                 <div className="flex gap-2 mt-1">
                   <span
                     className="px-2 py-0.5 rounded text-xs"
-                    style={{ background: PRIORITY_CONFIG[selectedTodo.priority].color + '20', color: PRIORITY_CONFIG[selectedTodo.priority].color }}
+                    style={{
+                      background: PRIORITY_CONFIG[selectedTodo.priority].color + '20',
+                      color: PRIORITY_CONFIG[selectedTodo.priority].color,
+                    }}
                   >
-                    {PRIORITY_CONFIG[selectedTodo.priority].icon} {PRIORITY_CONFIG[selectedTodo.priority].label}
+                    {PRIORITY_CONFIG[selectedTodo.priority].icon}{' '}
+                    {PRIORITY_CONFIG[selectedTodo.priority].label}
                   </span>
                   <span
                     className="px-2 py-0.5 rounded text-xs"
-                    style={{ background: STATUS_CONFIG[selectedTodo.status].color + '20', color: STATUS_CONFIG[selectedTodo.status].color }}
+                    style={{
+                      background: STATUS_CONFIG[selectedTodo.status].color + '20',
+                      color: STATUS_CONFIG[selectedTodo.status].color,
+                    }}
                   >
                     {STATUS_CONFIG[selectedTodo.status].label}
                   </span>
                   <span
                     className="px-2 py-0.5 rounded text-xs"
-                    style={{ background: CATEGORY_CONFIG[selectedTodo.category].color + '20', color: CATEGORY_CONFIG[selectedTodo.category].color }}
+                    style={{
+                      background: CATEGORY_CONFIG[selectedTodo.category].color + '20',
+                      color: CATEGORY_CONFIG[selectedTodo.category].color,
+                    }}
                   >
                     {CATEGORY_CONFIG[selectedTodo.category].label}
                   </span>
@@ -508,7 +557,10 @@ export function OmniTodoPanel() {
               )}
             </div>
 
-            <div className="flex gap-2 flex-wrap pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+            <div
+              className="flex gap-2 flex-wrap pt-2 border-t"
+              style={{ borderColor: 'var(--border)' }}
+            >
               {selectedTodo.status === 'pending' && (
                 <button
                   onClick={() => handleStatusChange(selectedTodo.id, 'start')}
@@ -540,7 +592,11 @@ export function OmniTodoPanel() {
                 <button
                   onClick={() => handleStatusChange(selectedTodo.id, 'reopen')}
                   className="px-3 py-1.5 rounded text-xs font-medium"
-                  style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}
+                  style={{
+                    background: 'var(--bg-secondary)',
+                    color: 'var(--text-primary)',
+                    border: '1px solid var(--border)',
+                  }}
                 >
                   🔄 重新開啟
                 </button>
@@ -581,7 +637,11 @@ function TodoItemRow({
   onReopen: () => void;
   onDelete: () => void;
 }) {
-  const isOverdue = todo.dueDate && new Date(todo.dueDate) < new Date() && todo.status !== 'done' && todo.status !== 'archived';
+  const isOverdue =
+    todo.dueDate &&
+    new Date(todo.dueDate) < new Date() &&
+    todo.status !== 'done' &&
+    todo.status !== 'archived';
 
   return (
     <div
@@ -620,7 +680,10 @@ function TodoItemRow({
             {todo.title}
           </span>
           {isOverdue && (
-            <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'var(--accent-purple)20', color: 'var(--accent-purple)' }}>
+            <span
+              className="text-xs px-1.5 py-0.5 rounded"
+              style={{ background: 'var(--accent-purple)20', color: 'var(--accent-purple)' }}
+            >
               逾期
             </span>
           )}
