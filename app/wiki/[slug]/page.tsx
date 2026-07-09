@@ -17,16 +17,24 @@ interface WikiPageProps {
 export default function WikiPage({ params }: WikiPageProps) {
   const { slug } = params;
   const decodedSlug = decodeURIComponent(slug);
-  const filePath = path.join(process.cwd(), 'wiki', 'wiki', `${decodedSlug}.md`);
+
+  const basePath = path.join(process.cwd(), 'wiki', 'wiki');
+  const filePath = path.resolve(basePath, `${decodedSlug}.md`);
   
   let content = '';
   let error = '';
 
-  try {
-    content = fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    error = '查無此 WIKI 文件。請確認檔名是否正確。';
-    console.error("Error reading wiki file:", err);
+  // Prevent path traversal vulnerability by ensuring the resolved path starts with the base path
+  if (!filePath.startsWith(basePath + path.sep)) {
+    error = '無效的路徑請求。';
+    console.error(`[Security] Path traversal attempt detected: ${decodedSlug}`);
+  } else {
+    try {
+      content = fs.readFileSync(filePath, 'utf-8');
+    } catch (err) {
+      error = '查無此 WIKI 文件。請確認檔名是否正確。';
+      console.error("Error reading wiki file:", err);
+    }
   }
 
   const title = decodedSlug.replace(/-/g, ' ');

@@ -13,3 +13,7 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+## 2026-07-09 - [Fix Path Traversal in Wiki Dynamic Route]
+**Vulnerability:** The dynamic route `app/wiki/[slug]/page.tsx` was vulnerable to path traversal attacks because it blindly appended user-provided `slug` parameters to a file read operation without validating that the final path stayed within the intended directory.
+**Learning:** Never trust user input, especially for file system operations. `decodeURIComponent(slug)` combined with `path.join` can be exploited with sequences like `../../` to escape the intended directory and read arbitrary files (like `.env`).
+**Prevention:** To prevent path traversal vulnerabilities in Node.js/Next.js, use `path.resolve` to construct the absolute file path and verify that it strictly starts with the intended base directory (including `path.sep` to avoid partial directory name matches).
