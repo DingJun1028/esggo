@@ -252,3 +252,7 @@ UNIVERSAL_COMPONENT_MATRIX.md
 .vercel
 .env*.local
 .venv/
+
+# OmniDB schema build scripts (intentional, not dumps)
+!vps/omni/sql/
+!vps/omni/sql/*.sql
