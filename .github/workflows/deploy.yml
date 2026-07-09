@@ -308,8 +308,23 @@ jobs:
       - name: Secret scan on vps scripts
         run: |
           set -e
-          echo "Scanning vps/** for accidentally committed secrets..."
+          echo "Scanning vps/** for accidentally committed secrets or bad patterns..."
+          # 1) Real credential shapes (HARD FAIL)
           if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN .*PRIVATE KEY-----)" vps/ ; then
             echo "::error::Possible secret found in vps/ — aborting."; exit 1
           fi
-          echo "No secrets detected."
+          # 2) Hardcoded default secrets in long-running SERVER code (.mjs only).
+          #    One-shot console/bootstrap scripts (vps/comms/*, recovery/*) are
+          #    allowed a bootstrap token fallback, so we only fail on .mjs and
+          #    downgrade to a warning elsewhere.
+          if grep -rInE '\$\{[A-Za-z_]+:-[A-Za-z0-9_'"'"'-]{8,}\}' vps/*.mjs vps/**/*.mjs 2>/dev/null | grep -iE "token|secret|key|pass|auth" ; then
+            echo "::error::Hardcoded default secret in server .mjs (use env + fail-fast) — aborting."; exit 1
+          fi
+          if grep -rInE '(AUTH_TOKEN|TOKEN|API_KEY)="?[A-Za-z0-9_'"'"'-]{8,}"?' vps/ | grep -vE '\$\{|\$\(|process\.env|os\.environ|getenv' | grep -iE "token|secret|key|pass|auth" ; then
+            echo "::warning::Hardcoded token fallback found in a console/bootstrap script — ensure .env.secrets provides the real value (ESGGO_RELAY_TOKEN)."
+          fi
+          # 3) Server binding to all interfaces (should be 127.0.0.1 behind nginx) (HARD FAIL)
+          if grep -rInE "listen\([^,)]*['\"]0\.0\.0\.0" vps/*.mjs vps/**/*.mjs 2>/dev/null ; then
+            echo "::error::Server binds 0.0.0.0 (exposes directly) — bind 127.0.0.1 instead — aborting."; exit 1
+          fi
+          echo "No secrets or unsafe patterns detected."

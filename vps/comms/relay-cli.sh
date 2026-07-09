@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 RELAY_URL="${RELAY_URL:-http://127.0.0.1:9999}"
-AUTH_TOKEN="${AUTH_TOKEN:-esggo-relay-20260707}"
+# Token must come from environment (.env.secrets); never hardcode a default.
+: "${AUTH_TOKEN:?AUTH_TOKEN not set — export it from .env.secrets (source vps/.env.secrets)}"
 
 cmd_help() {
   echo "Usage: relay-cli.sh <status|cmd|results|ping>"

@@ -3,7 +3,8 @@ set -euo pipefail
 # ESGGO VPS Agent — Bidirectional Communication with Local Relay
 RELAY_IP="${1:-100.108.241.29}"
 RELAY_PORT="${2:-9999}"
-AUTH_TOKEN="${3:-esggo-relay-20260707}"
+# AUTH_TOKEN must come from environment (.env.secrets); no hardcoded default.
+: "${AUTH_TOKEN:?AUTH_TOKEN not set — export it from .env.secrets (source vps/.env.secrets)}"
 POLL_INTERVAL="${POLL_INTERVAL:-3}"
 RETRY_INTERVAL="${RETRY_INTERVAL:-10}"
 GATEWAY_URL="${GATEWAY_URL:-http://127.0.0.1:8642}"

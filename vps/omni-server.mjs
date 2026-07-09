@@ -91,7 +91,11 @@ function reportAgentResult(agentId, resultId, result) {
 }
 
 app.get('/status', (req, res) => {
-  res.json({
+  // Base health is public (monitoring). Agent topology is sensitive:
+  // only return it when a valid gateway token is presented.
+  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || '').replace('Bearer ', '');
+  const authed = !!GATEWAY_KEY && token === GATEWAY_KEY;
+  const body = {
     status: 'online',
     version: '0.14.1',
     platform: 'Ubuntu 24.04 (VPS)',
@@ -99,14 +103,17 @@ app.get('/status', (req, res) => {
     uptime: process.uptime(),
     active_workers: 8,
     memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
-    agents: Array.from(agents.values()).map((a) => ({
+  };
+  if (authed) {
+    body.agents = Array.from(agents.values()).map((a) => ({
       agentId: a.agentId,
       name: a.name,
       status: a.status,
       channel: a.channel,
       lastHeartbeat: a.lastHeartbeat,
-    })),
-  });
+    }));
+  }
+  res.json(body);
 });
 
 // ==========================================
@@ -223,6 +230,9 @@ app.post('/execute', requireAuth, async (req, res) => {
   res.json({ execution, artifact });
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`🚀 OmniAgent Gateway Server running on port ${port} (0.0.0.0)`);
+// Bind to loopback only: all external traffic must go through nginx
+// (which terminates TLS and can add auth), preventing direct 0.0.0.0 exposure.
+const BIND_ADDR = process.env.GATEWAY_BIND_ADDR || '127.0.0.1';
+app.listen(port, BIND_ADDR, () => {
+  console.log(`OmniAgent Gateway Server running on port ${port} (${BIND_ADDR})`);
 });
