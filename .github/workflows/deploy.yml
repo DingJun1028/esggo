@@ -12,6 +12,7 @@ on:
       - 'Dockerfile'
       - 'pyproject.toml'
       - 'tests/**'
+      - 'vps/**'
   pull_request:
     branches: [ main ]
 
@@ -293,6 +294,12 @@ jobs:
           shopt -s globstar nullglob
           fail=0
           for f in vps/**/*.sh vps/*.sh; do
+            # Skip console-/recovery-/bundle heredoc wrappers: they are meant to
+            # be pasted into the OCI Serial Console (nested heredocs), so they
+            # are not standalone-parseable by bash -n.
+            case "$f" in
+              */console-*|*/recovery/*|*-bundle*|*oneshot*) echo "SKIP $f (console/recovery heredoc wrapper)"; continue ;;
+            esac
             if bash -n "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
           done
           echo "== node syntax =="
