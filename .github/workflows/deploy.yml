@@ -21,6 +21,25 @@ env:
   IMAGE_NAME: ${{ github.repository_owner }}/smart-ai-router
 
 jobs:
+  # 0. 路徑過濾：偵測非 vps 檔案變更
+  changes:
+    name: Detect Changed Paths
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            app:
+              - '.agents/skills/smart-ai-router/**'
+              - 'docker-compose.prod.yml'
+              - 'Dockerfile'
+              - 'pyproject.toml'
+              - 'tests/**'
+
   # 1. 程式碼品質檢查
   lint:
     name: Lint & Type Check
@@ -138,9 +157,9 @@ jobs:
   # 3. 映像構建與推送
   build-and-push:
     name: Build & Push Docker Image
-    needs: test
+    needs: [test, changes]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production') && needs.changes.outputs.app == 'true'
     permissions:
       contents: read
       packages: write
@@ -203,9 +222,9 @@ jobs:
   # 4. 部署到生產環境
   deploy:
     name: Deploy to Production
-    needs: build-and-push
+    needs: [build-and-push, changes]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/production' && needs.changes.outputs.app == 'true'
     environment: production
     continue-on-error: true
     steps:
