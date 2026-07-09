@@ -17,9 +17,9 @@ export class SecureUtils {
     const json = JSON.stringify(obj);
     const hash = createHash("sha256").update(json).digest("hex");
     // Ensure evidence object exists
-    (obj as any).evidence = (obj as any).evidence || {};
-    // Record a unique hash lock identifier for traceability
-    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    const rec = obj as Record<string, unknown>;
+    if (!rec.evidence) rec.evidence = {};
+    (rec.evidence as Record<string, unknown>)['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     // Execute native JavaScript Object.freeze() to prevent further tampering
     Object.freeze(obj);
     return Object.freeze(obj);
@@ -35,6 +35,6 @@ export class SecureUtils {
    */
   public static applyHashLock(event: IBusEvent): IBusEvent {
     // Re‑use the generic lockAndFreeze implementation.
-    return SecureUtils.lockAndFreeze(event as any) as IBusEvent;
+    return SecureUtils.lockAndFreeze(event as unknown as object) as IBusEvent;
   }
 }

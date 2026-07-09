@@ -31,7 +31,7 @@ export function setupCollectiveImmunity(agent: IOmniAgent, blackboard: IBlackboa
               source_origin: maybeEvent.source_origin ?? "OA",
               stage: maybeEvent.stage ?? "EMERGED",
               note: "\u5168\u57df\u6212\u56b4\u5df2\u555f\u52d5",
-            } as any);
+            } as Record<string, unknown>);
 
       console.debug(`[CollectiveImmunity] Received global lockdown event – written to blackboard`);
     }

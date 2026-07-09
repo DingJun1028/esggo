@@ -22,7 +22,7 @@ export class OmniMemory implements IOmniMemory {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 記憶體存儲 (mutable, renamed to avoid conflict with store() method) */
   private _entries: Map<MemoryId, MemoryEntry> = new Map();

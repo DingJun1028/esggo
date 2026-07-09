@@ -50,7 +50,19 @@ const DEFAULT_CONFIG: RedisConfig = {
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
-type RedisClientType = any; // ioredis compatible
+interface RedisClientType {
+  connect(): Promise<void>;
+  quit(): Promise<string>;
+  disconnect(): void;
+  ping(): Promise<string>;
+  get(key: string): Promise<string | null>;
+  setex(key: string, ttl: number, value: string): Promise<'OK'>;
+  del(...keys: string[]): Promise<number>;
+  info(section?: string): Promise<string>;
+  dbsize(): Promise<number>;
+  keys(pattern: string): Promise<string[]>;
+  on(event: string, listener: (...args: unknown[]) => void): void;
+}
 
 let redisClient: RedisClientType | null = null;
 let connectionPromise: Promise<RedisClientType | null> | null = null;
@@ -60,7 +72,7 @@ let isShuttingDown = false;
 // ─── In-Memory Fallback ──────────────────────────────────────────────────────
 
 interface MemoryEntry {
-  value: any;
+  value: unknown;
   expiry: number | null; // epoch ms, null = no expiry
 }
 
@@ -78,7 +90,7 @@ function cleanMemoryStore(): void {
 }
 
 export const memoryFallback = {
-  get(key: string): any {
+  get(key: string): unknown {
     cleanMemoryStore();
     const entry = memoryStore.get(key);
     if (!entry) return null;
@@ -89,7 +101,7 @@ export const memoryFallback = {
     return entry.value;
   },
 
-  set(key: string, value: any, ttlSeconds?: number): void {
+  set(key: string, value: unknown, ttlSeconds?: number): void {
     const expiry = ttlSeconds ? Date.now() + ttlSeconds * 1000 : null;
     memoryStore.set(key, { value, expiry });
   },
@@ -156,7 +168,7 @@ async function _connect(): Promise<RedisClientType | null> {
     }
 
     const config = { ...DEFAULT_CONFIG };
-    const options: Record<string, any> = {
+    const options: Record<string, unknown> = {
       maxRetriesPerRequest: config.maxRetriesPerRequest,
       retryStrategy: config.retryStrategy,
       connectTimeout: config.connectTimeout,
@@ -176,9 +188,9 @@ async function _connect(): Promise<RedisClientType | null> {
     const client = new Redis(options);
 
     // Wire event handlers before connecting
-    client.on('error', (err: Error) => {
+    client.on('error', (err: unknown) => {
       // Don't log ECONNREFUSED repeatedly — retry strategy handles it
-      if (!err.message.includes('ECONNREFUSED')) {
+      if (err instanceof Error && !err.message.includes('ECONNREFUSED')) {
         console.warn('[Redis] Error:', err.message);
       }
       isConnected = false;
@@ -220,8 +232,8 @@ async function _connect(): Promise<RedisClientType | null> {
     isConnected = true;
     console.log('[Redis] Client ready.');
     return client;
-  } catch (err: any) {
-    console.warn(`[Redis] Connection failed: ${err?.message ?? err}. Using in-memory fallback.`);
+  } catch (err: unknown) {
+    console.warn(`[Redis] Connection failed: ${err instanceof Error ? err.message : err}. Using in-memory fallback.`);
     isConnected = false;
     redisClient = null;
     return null;
@@ -231,10 +243,12 @@ async function _connect(): Promise<RedisClientType | null> {
 /**
  * Dynamically import ioredis so the app doesn't crash if it's not installed.
  */
-async function _loadRedisModule(): Promise<any | null> {
+type RedisModule = { new(opts: Record<string, unknown>): RedisClientType };
+
+async function _loadRedisModule(): Promise<RedisModule | null> {
   try {
     const mod = await import('ioredis');
-    return mod.default || mod;
+    return (mod.default || mod) as unknown as RedisModule;
   } catch {
     return null;
   }
@@ -312,6 +326,6 @@ export function safeParse<T>(data: string | null | undefined): T | null {
   }
 }
 
-export function safeStringify(value: any): string {
+export function safeStringify(value: unknown): string {
   return JSON.stringify(value);
 }

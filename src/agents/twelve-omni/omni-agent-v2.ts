@@ -27,7 +27,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   readonly signature: IComponentCore;
   readonly config: AgentConfig;
@@ -100,14 +100,14 @@ export class OmniAgentV2 implements IOmniAgentV2 {
       };
 
       // 更新指標 (使用 mutable 版本)
-      const m = this.metrics as any;
+      const m = this.metrics as AgentMetrics & Record<string, unknown>;
       m.tasksExecuted++;
       m.tasksSucceeded++;
       m.avgExecutionTime =
         (m.avgExecutionTime * (m.tasksExecuted - 1) +
           result.executionTimeMs) /
         m.tasksExecuted;
-      m.lastExecutedAt = Date.now();
+      m['lastExecutedAt'] = Date.now();
       m.uptime = Date.now() - this.timestamp;
 
       // 記錄歷史
@@ -125,7 +125,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
         executionTimeMs: Date.now() - startTime,
       };
 
-      const m = this.metrics as any;
+      const m = this.metrics as AgentMetrics & Record<string, unknown>;
       m.tasksExecuted++;
       m.tasksFailed++;
 

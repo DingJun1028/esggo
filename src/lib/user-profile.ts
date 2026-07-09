@@ -58,7 +58,7 @@ export async function getOrCreateUserProfile(firebaseUser: User): Promise<UserPr
   await ncbQuery({
     table: 'user_profiles',
     method: 'POST',
-    body: newProfile,
+    body: newProfile as unknown as Record<string, unknown>,
   });
 
   return newProfile;

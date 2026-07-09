@@ -40,7 +40,27 @@ function zkp(data: string): string {
   return Math.abs(hash).toString(16).padStart(16, '0');
 }
 
-function buildChapterContent(chNum: number, answers: any[], profile: any): string {
+interface AnswerRecord {
+  chapter: string;
+  answer: string;
+  gri?: string;
+  direction?: string;
+}
+
+interface CompanyProfile {
+  companyName: string;
+  shortName: string;
+  employees: number;
+  annualRevenue: string;
+  operatingLocations: string;
+  mainBusiness: string;
+  electricityKwh: number;
+  waterTons: number;
+  industryType: string;
+  instanceId: string;
+}
+
+function buildChapterContent(chNum: number, answers: AnswerRecord[], profile: CompanyProfile): string {
   const ch = V5_CHAPTERS.find(c => c.num === chNum)!;
   const company = profile.companyName;
   const short = profile.shortName;
@@ -92,7 +112,7 @@ function buildChapterContent(chNum: number, answers: any[], profile: any): strin
 }
 
 export function generateV5Report(companyId: string): V5GeneratedReport | null {
-  const profile = COMPANIES.find((c: any) => c.instanceId === companyId);
+  const profile = COMPANIES.find((c) => c.instanceId === companyId);
   if (!profile) return null;
   const allAnswers = getAnswersByCompany(companyId);
   if (!allAnswers.length) return null;
@@ -101,7 +121,7 @@ export function generateV5Report(companyId: string): V5GeneratedReport | null {
   let totalWords = 0;
 
   for (const ch of V5_CHAPTERS) {
-    const chAnswers = allAnswers.filter((a: any) => {
+    const chAnswers = allAnswers.filter((a: AnswerRecord) => {
       const prefix = a.chapter.split(' ')[0];
       return (C_TO_V5[prefix] || []).includes(ch.num);
     });

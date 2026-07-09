@@ -46,7 +46,7 @@ export async function monitorAndScale(): Promise<void> {
     try {
       // 查看已經啟動的 PM2 實例數量
       const list = execSync("pm2 jlist", { encoding: "utf-8" });
-      const processes = JSON.parse(list) as any[];
+      const processes = JSON.parse(list) as Array<{ pm2_env?: { status?: string } }>;
       const running = processes.filter((p) => p.pm2_env?.status === "online");
       const count = running.length;
 

@@ -54,10 +54,10 @@ export class OmniCoreEcosystem {
    * Core security method: lock and freeze an object to prevent tampering.
    * Mimics the Hash Lock + Object.freeze() behaviour.
    */
-  public static lockAndFreeze<T extends object>(obj: T): T {
+  public static lockAndFreeze<T extends object & { evidence?: Record<string, unknown> }>(obj: T): T {
     // Attach a hash lock (simulated) to the object's evidence field
-    (obj as any).evidence = (obj as any).evidence || {};
-    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+    obj.evidence = obj.evidence || {};
+    obj.evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
       .toString(36)
       .substring(2, 9)}`;
 

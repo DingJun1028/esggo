@@ -51,7 +51,7 @@ export class OmniAgent implements IOmniAgent {
 
   // ---------- 可變內部狀態 ----------
   private _state: LifecycleStage = "EMERGED";
-  private _hooks: Map<LifecycleStage, Array<(args: any) => Promise<void> | void>> = new Map();
+  private _hooks: Map<LifecycleStage, Array<(args: { spec?: ITaskSpec; result?: ITaskResult; error?: Error }) => Promise<void> | void>> = new Map();
   private _recentFlow: IFlowSnapshot[] = [];
 
   // 用於統計與併發控制的內部計數器
@@ -80,8 +80,8 @@ export class OmniAgent implements IOmniAgent {
 
     // 初始化 metrics 為可變物件，外部以 readonly 代理
     this.metrics = new Proxy(this._metricsMutable, {
-      get: (target, prop) => (prop in target ? (target as any)[prop] : undefined),
-    }) as any;
+      get: (target, prop) => (prop in target ? (target as Record<string, unknown>)[prop as string] : undefined),
+    }) as unknown as Readonly<typeof this._metricsMutable>;
 
     // 預設 signature 為空的 IComponentCore（可在外部覆寫）
     this.signature = {
@@ -112,7 +112,7 @@ export class OmniAgent implements IOmniAgent {
     if (bucket) bucket.push(hook);
   }
 
-  private async _runHooks(stage: LifecycleStage, args: any): Promise<void> {
+  private async _runHooks(stage: LifecycleStage, args: { spec?: ITaskSpec; result?: ITaskResult; error?: Error }): Promise<void> {
     const bucket = this._hooks.get(stage) ?? [];
     for (const h of bucket) {
       try {
@@ -134,7 +134,7 @@ export class OmniAgent implements IOmniAgent {
     partialConfig: Partial<Omit<IOmniAgent["config"], "uuid" | "version">>
   ): void {
     // 注意：此實作僅在記憶體層面更新，沒有持久化。
-    const mutable = this.config as any;
+    const mutable = this.config as unknown as Record<string, unknown>;
     if (partialConfig.environmentTag !== undefined) mutable.environmentTag = partialConfig.environmentTag;
     if (partialConfig.maxConcurrency !== undefined) mutable.maxConcurrency = partialConfig.maxConcurrency;
     if (partialConfig.taskTimeout !== undefined) mutable.taskTimeout = partialConfig.taskTimeout;

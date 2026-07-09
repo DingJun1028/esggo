@@ -9,12 +9,15 @@
  */
 
 import * as firebaseAdmin from 'firebase-admin';
-const admin = firebaseAdmin as any;
+import type { App } from 'firebase-admin/app';
 
-let _app: any = null;
-let _db: any = null;
+// Firebase Admin namespace export can be awkwardly typed; use a narrower cast
+const admin: typeof firebaseAdmin & Record<string, unknown> = firebaseAdmin as typeof firebaseAdmin & Record<string, unknown>;
 
-function initAdminApp(): any {
+let _app: App | null = null;
+let _db: ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null = null;
+
+function initAdminApp(): App {
   if (typeof admin.getApps === 'function' && admin.getApps().length > 0) {
     return admin.getApps()[0];
   }
@@ -40,13 +43,13 @@ function initAdminApp(): any {
   return admin.initializeApp({ credential: appCred, projectId });
 }
 
-export function getAdminApp(): any {
+export function getAdminApp(): App {
   if (_app) return _app;
   _app = initAdminApp();
   return _app;
 }
 
-function getDb(): any {
+function getDb(): ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null {
   if (_db) return _db;
   try {
     const firestoreNS = require('firebase-admin/firestore');
@@ -55,7 +58,7 @@ function getDb(): any {
       : firestoreNS.firestore?.(getAdminApp());
   } catch {
     try {
-      _db = (admin as any).firestore?.(getAdminApp());
+      _db = (admin as Record<string, unknown>)['firestore']?.(getAdminApp());
     } catch {
       console.warn('[FirebaseAdmin] Firestore unavailable');
     }
@@ -66,13 +69,14 @@ function getDb(): any {
 export const adminDb = {
   collection: (path: string) => getDb()?.collection(path),
   doc: (path: string) => getDb()?.doc(path),
-  runTransaction: (fn: any) => getDb()?.runTransaction(fn),
+  runTransaction: <T>(fn: (transaction: import('firebase-admin/firestore').Transaction) => Promise<T>) =>
+    getDb()?.runTransaction(fn) as Promise<T> | undefined,
   batch: () => getDb()?.batch(),
 };
 
 const asyncTasksCol = {
-  doc: (id: string) => adminDb.collection('async_tasks').doc(id),
-  get: (id: string) => adminDb.collection('async_tasks').doc(id).get(),
-  set: (id: string, data: any) => adminDb.collection('async_tasks').doc(id).set(data),
-  add: (data: any) => adminDb.collection('async_tasks').add(data),
+  doc: (id: string) => adminDb.collection('async_tasks')?.doc(id),
+  get: (id: string) => adminDb.collection('async_tasks')?.doc(id)?.get(),
+  set: (id: string, data: Record<string, unknown>) => adminDb.collection('async_tasks')?.doc(id)?.set(data as never),
+  add: (data: Record<string, unknown>) => adminDb.collection('async_tasks')?.add(data as never),
 };

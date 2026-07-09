@@ -105,9 +105,10 @@ async function generateDailyReportJob(): Promise<{ success: boolean; message: st
     const duration = Date.now() - startTime;
     console.log(`[Cron] Daily report generated in ${duration}ms — ${todayStr}`);
     return { success: true, message: `Report generated (${duration}ms)`, reportDate: todayStr };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Cron] Daily report generation failed:', error);
-    return { success: false, message: error.message, reportDate: '' };
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, message, reportDate: '' };
   }
 }
 
@@ -171,7 +172,7 @@ async function triggerCrawler(): Promise<{ success: boolean; items: number }> {
 interface CronJob {
   name: string;
   schedule: number; // ms interval
-  task: () => Promise<any>;
+  task: () => Promise<unknown>;
   lastRun: number;
   isRunning: boolean;
 }

@@ -144,7 +144,7 @@ export function createLineChartConfig(
     tension?: number;
     fill?: boolean;
   } = {}
-): any {
+): Record<string, unknown> {
   const {
     title = '',
     subtitle = '',
@@ -267,7 +267,7 @@ export function createBarChartConfig(
     stacked?: boolean;
     horizontal?: boolean;
   } = {}
-): any {
+): Record<string, unknown> {
   const {
     title = '',
     subtitle = '',
@@ -358,7 +358,7 @@ export function createRadialChartConfig(
     subtitle?: string;
     type?: 'pie' | 'doughnut';
   } = {}
-): any {
+): Record<string, unknown> {
   const {
     title = '',
     subtitle = '',
@@ -421,7 +421,7 @@ export function createRadialChartConfig(
         },
         tooltip: {
           callbacks: {
-            label: (context: any) => {
+            label: (context: { label: string; parsed: number; dataset: { data: number[] } }) => {
               const label = context.label || '';
               const value = context.parsed || 0;
               const sum = context.dataset.data.reduce((a: number, b: number) => a + b, 0);

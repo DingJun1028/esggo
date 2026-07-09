@@ -6,7 +6,6 @@
 export {
   ERROR_CODES,
   HTTP_STATUS,
-  createError,
   createSuccessBody,
   createErrorBody,
   getError,

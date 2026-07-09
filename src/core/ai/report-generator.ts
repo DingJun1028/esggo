@@ -29,11 +29,17 @@ export type ReportSection =
   | 'stakeholder_engagement'
   | 'supply_chain';
 
+export interface ReportMetric {
+  name: string;
+  value: string | number;
+  unit: string;
+}
+
 export interface ReportDataSource {
-  regulations?: any[];
-  metrics?: any[];
-  benchmarks?: any[];
-  pdfExtract?: any;
+  regulations?: Record<string, unknown>[];
+  metrics?: ReportMetric[];
+  benchmarks?: Record<string, unknown>[];
+  pdfExtract?: unknown;
 }
 
 export interface ReportResult {
@@ -209,6 +215,15 @@ const SECTION_PROMPTS: Record<ReportSection, { title: string; titleEn: string; p
 
 // --- OpenRouter API Client ----------------------------------------
 
+interface OpenRouterChoice {
+  message: { content: string };
+}
+
+interface OpenRouterResponse {
+  choices?: OpenRouterChoice[];
+  usage?: { total_tokens: number };
+}
+
 async function callOpenRouter(
   prompt: string,
   model: string,
@@ -254,7 +269,7 @@ async function callOpenRouter(
     throw new Error(`OpenRouter API error ${response.status}: ${errorText.slice(0, 200)}`);
   }
 
-  const data = await response.json();
+  const data: OpenRouterResponse = await response.json();
   const content = data.choices?.[0]?.message?.content || '';
   const tokens = data.usage?.total_tokens || 0;
 
@@ -324,13 +339,14 @@ export class AIReportGenerator {
         results.push(section);
         modelsUsed.add(section.model);
         totalTokens += section.tokensUsed;
-      } catch (err: any) {
-        console.error(`[AI Report] Section ${sectionId} failed:`, err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error(`[AI Report] Section ${sectionId} failed:`, message);
         // Add error section
         results.push({
           id: sectionId,
           title: SECTION_PROMPTS[sectionId]?.title || sectionId,
-          content: `[生成失敗: ${err.message}]`,
+          content: `[生成失敗: ${message}]`,
           wordCount: 0,
           model: 'error',
           tokensUsed: 0,
@@ -397,7 +413,7 @@ export class AIReportGenerator {
     if (data.metrics && data.metrics.length > 0) {
       const metricSummary = data.metrics
         .slice(0, 5)
-        .map((m: any) => `${m.name}: ${m.value} ${m.unit}`)
+        .map((m: ReportMetric) => `${m.name}: ${m.value} ${m.unit}`)
         .join(', ');
       parts.push(`關鍵指標：${metricSummary}`);
     }

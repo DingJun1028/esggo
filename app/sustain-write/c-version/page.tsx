@@ -77,8 +77,8 @@ export default function CVersionReportPage() {
       } else {
         setError(data.error || '報告生成失敗');
       }
-    } catch (e: any) {
-      setError(e.message || '網路錯誤');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : '網路錯誤');
     } finally {
       setLoading(false);
     }

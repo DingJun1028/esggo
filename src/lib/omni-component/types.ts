@@ -52,7 +52,7 @@ export interface ChartDataPoint {
   value: number | null;
   timestamp?: string;
   color?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TimeSeriesData {
@@ -115,19 +115,19 @@ export interface FormFieldConfig {
 }
 
 // Table types
-export interface TableColumn<T = any> {
+export interface TableColumn<T = Record<string, unknown>> {
   key: string;
   header: string;
   width?: string;
   sortable?: boolean;
   filterable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
   align?: 'left' | 'center' | 'right';
 }
 
 export interface TableConfig {
   columns: TableColumn[];
-  data: any[];
+  data: Record<string, unknown>[];
   sortable?: boolean;
   filterable?: boolean;
   pagination?: {
@@ -136,7 +136,7 @@ export interface TableConfig {
   };
   selection?: {
     enabled: boolean;
-    onSelect?: (rows: any[]) => void;
+    onSelect?: (rows: Record<string, unknown>[]) => void;
   };
 }
 
@@ -173,7 +173,7 @@ export interface ChartConfig {
   title?: string;
   subtitle?: string;
   data: ChartDataPoint[];
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
   theme?: 'light' | 'dark' | 'auto';
 }
 
