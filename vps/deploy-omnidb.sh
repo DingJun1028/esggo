@@ -19,8 +19,8 @@ err() { echo -e "${RED}[✗]${NC} $1"; }
 info() { echo -e "${CYAN}[i]${NC} $1"; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCHEMA_DIR="${SCRIPT_DIR}/../omni-schemas"
-MYSQL_SCHEMA_DIR="${SCRIPT_DIR}/../mysql-schema"
+SCHEMA_DIR="${SCRIPT_DIR}/omni-schemas"
+MYSQL_SCHEMA_DIR="${SCRIPT_DIR}/mysql-schema"
 
 echo "============================================"
 echo "  ESGGO OmniDB Schema Deployment"

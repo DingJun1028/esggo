@@ -271,3 +271,45 @@ jobs:
           text: 'Smart AI Router 部署 ${{ github.ref_name }} - 狀態: ${{ job.status }}'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # 6. 驗證 VPS 部署腳本語法 (ESGGO Node/PM2 stack)
+  validate-vps-scripts:
+    name: Validate VPS Scripts
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Lint vps shell / node / python scripts
+        run: |
+          set -e
+          echo "== bash syntax =="
+          shopt -s globstar nullglob
+          fail=0
+          for f in vps/**/*.sh vps/*.sh; do
+            if bash -n "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
+          done
+          echo "== node syntax =="
+          for f in vps/**/*.mjs vps/**/*.cjs vps/*.mjs vps/*.cjs; do
+            if node --check "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
+          done
+          echo "== python syntax =="
+          for f in vps/**/*.py vps/*.py; do
+            if python3 -m py_compile "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
+          done
+          exit $fail
+
+      - name: Secret scan on vps scripts
+        run: |
+          set -e
+          echo "Scanning vps/** for accidentally committed secrets..."
+          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN .*PRIVATE KEY-----)" vps/ ; then
+            echo "::error::Possible secret found in vps/ — aborting."; exit 1
+          fi
+          echo "No secrets detected."
