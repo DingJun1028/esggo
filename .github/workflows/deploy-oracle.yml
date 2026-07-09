@@ -139,7 +139,7 @@ jobs:
               "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}" \
               "GATEWAY_API_KEY=${{ secrets.GATEWAY_API_KEY }}" \
               > ${{ env.APP_DIR }}/vps/.env
-            echo "✅ .env written to ${{ env.APP_DIR }}/vps/.env"
+            echo "[OK] .env written to ${{ env.APP_DIR }}/vps/.env"
 
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -170,13 +170,13 @@ jobs:
             for i in $(seq 1 10); do
               STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
               if [ "$STATUS" = "200" ]; then
-                echo "✅ Health check passed (attempt $i)"
+                echo "[OK] Health check passed (attempt $i)"
                 exit 0
               fi
-              echo "⏳ Waiting... (attempt $i, status=$STATUS)"
+              echo "[WAIT] Waiting... (attempt $i, status=$STATUS)"
               sleep 5
             done
-            echo "❌ Health check failed"
+            echo "[FAIL] Health check failed"
             docker compose -f docker-compose.prod.yml logs --tail=50 esggo
             exit 1
 
@@ -194,11 +194,11 @@ jobs:
       - name: Notify on success
         if: needs.deploy.result == 'success'
         run: |
-          echo "✅ ESG GO deployed successfully to Oracle VPS"
-          echo "🔗 ${{ vars.VPS_URL || format('https://{0}', secrets.VPS_HOST) }}"
+          echo "[OK] ESG GO deployed successfully to Oracle VPS"
+          echo "[URL] ${{ vars.VPS_URL || format('https://{0}', secrets.VPS_HOST) }}"
 
       - name: Notify on failure
         if: needs.deploy.result == 'failure'
         run: |
-          echo "❌ ESG GO deployment failed"
+          echo "[FAIL] ESG GO deployment failed"
           echo "Please check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
