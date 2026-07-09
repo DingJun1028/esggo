@@ -31,6 +31,8 @@ export async function GET() {
         }
       })();
 
+      let mockInterval: ReturnType<typeof setInterval> | null = null;
+
       function sendMock() {
         if (closed) return;
         const mock = {
@@ -55,14 +57,15 @@ export async function GET() {
         } catch {
           // fall through
         }
-        // If external stream ends, send mock
+        // If external stream ends, send mock at interval
         if (!closed) {
-          setInterval(sendMock, 2000);
+          mockInterval = setInterval(sendMock, 2000);
         }
       }
 
       cleanup = () => {
         closed = true;
+        if (mockInterval) clearInterval(mockInterval);
         externalStream?.cancel();
       };
     },

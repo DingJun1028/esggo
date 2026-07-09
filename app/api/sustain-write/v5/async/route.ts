@@ -10,7 +10,7 @@ import { jsonError } from '@/lib/api-utils';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
-  const { companyId } = await req.json();
+  const { companyId, templateId } = await req.json();
 
   if (!companyId) {
     return jsonError('INVALID_PARAMS', 'companyId is required', 400);
@@ -18,11 +18,11 @@ export async function POST(req: NextRequest) {
 
   const celestial = new CelestialController();
   await celestial.executeCelestialFlow({
-    payload: { companyId, action: 'START_ESG_REPORT' },
+    payload: { companyId, templateId, action: 'START_ESG_REPORT' },
     origin: 'ESG_REPORT_AGENT'
   });
 
-  const taskId = createTask(companyId);
+  const taskId = createTask(companyId, templateId);
   startAsyncTask(taskId, companyId);
 
   return NextResponse.json({
