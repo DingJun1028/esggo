@@ -20,6 +20,11 @@ interface ProjectData {
   [key: string]: unknown;
 }
 
+// Firestore DocumentSnapshot type
+interface FirestoreDoc {
+  data(): Record<string, unknown>;
+}
+
 export async function GET() {
   try {
     if (!HAS_API_KEY) {
@@ -41,10 +46,10 @@ export async function GET() {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.AGNES_API || '' });
 
     const actSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(15).get();
-    const recentActivities = actSnap.docs.map((doc: any) => doc.data() as ActivityData);
+    const recentActivities = actSnap.docs.map((doc: FirestoreDoc) => doc.data() as ActivityData);
 
     const projSnap = await adminDb.collection('village_projects').orderBy('current_points', 'desc').limit(5).get();
-    const topProjects = projSnap.docs.map((doc: any) => {
+    const topProjects = projSnap.docs.map((doc: FirestoreDoc) => {
       const data = doc.data() as ProjectData;
       return `${data.title}: 目前 ${data.current_points} / 目標 ${data.goal_points}`;
     });

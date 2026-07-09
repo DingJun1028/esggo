@@ -7,6 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 import { OmniAgent, DEFAULT_CAPABILITIES, OMNI_AGENT_META } from '@/lib/omni-agent';
 import { omniKernel, OMNI_TOPICS } from '@/lib/omni-core/omni-kernel';
 import { ESGGO_PALETTE } from '@/lib/omni-theme';
@@ -331,7 +332,7 @@ export async function POST(req: NextRequest) {
       case 'chat': {
         const input = payload?.input || '';
         if (!input.trim()) {
-          return NextResponse.json({ error: 'Empty input' }, { status: 400 });
+          return jsonError('INVALID_PARAMS', 'Empty input', 400);
         }
         const result = processChatMessage(input);
         return NextResponse.json({
@@ -349,7 +350,7 @@ export async function POST(req: NextRequest) {
         const commandId = payload?.commandId || '';
         const cmd = QUICK_COMMANDS.find(c => c.id === commandId);
         if (!cmd) {
-          return NextResponse.json({ error: 'Unknown command' }, { status: 400 });
+          return jsonError('INVALID_PARAMS', 'Unknown command', 400);
         }
         const result = processChatMessage(cmd.action);
         return NextResponse.json({
@@ -369,7 +370,7 @@ export async function POST(req: NextRequest) {
         const task = payload?.task || '未指定任務';
         const agent = SUB_AGENTS.find(sa => sa.id === agentId);
         if (!agent) {
-          return NextResponse.json({ error: 'Unknown sub-agent' }, { status: 400 });
+          return jsonError('INVALID_PARAMS', 'Unknown sub-agent', 400);
         }
         agent.status = 'running';
         agent.progress = 0;
@@ -421,7 +422,7 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }
 

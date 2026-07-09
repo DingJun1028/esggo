@@ -45,8 +45,8 @@ async function callGroq(
     }
     const data = await res.json();
     return data.choices?.[0]?.message?.content || null;
-  } catch (err: any) {
-    console.warn(`[OmniOne] Groq ${model} error: ${err.message}`);
+  } catch (err) {
+    console.warn(`[OmniOne] Groq ${model} error: ${(err as Error).message}`);
     return null;
   }
 }
@@ -82,8 +82,8 @@ async function callOpenRouter(
     }
     const data = await res.json();
     return data.choices?.[0]?.message?.content || null;
-  } catch (err: any) {
-    console.warn(`[OmniOne] OpenRouter ${model} error: ${err.message}`);
+  } catch (err) {
+    console.warn(`[OmniOne] OpenRouter ${model} error: ${(err as Error).message}`);
     return null;
   }
 }
@@ -110,9 +110,9 @@ async function callGemini(
         setTimeout(() => reject(new Error('Gemini timeout')), REQUEST_TIMEOUT)
       ),
     ]);
-    return (result as any).text || null;
-  } catch (err: any) {
-    console.warn(`[OmniOne] Gemini error: ${err.message}`);
+    return (result as { text?: string }).text || null;
+  } catch (err) {
+    console.warn(`[OmniOne] Gemini error: ${(err as Error).message}`);
     return null;
   }
 }
@@ -242,12 +242,12 @@ ${input}
       timestamp: new Date().toISOString(),
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('[OmniOne] Critical error:', error);
     return NextResponse.json(
       {
         output: '[OmniOne] 系統故障。請稍後重試或聯繫支援團隊。',
-        error: error.message,
+        error: (error as Error).message,
         provider: 'error',
         timestamp: new Date().toISOString(),
       },

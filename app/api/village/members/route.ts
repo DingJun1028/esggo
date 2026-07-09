@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function GET() {
   try {
@@ -15,9 +14,9 @@ export async function GET() {
       { user_id: 'u_05', name: 'Eve S.', title: '減碳達人', points: 9800, avatar: 'ES' },
     ];
 
-    return NextResponse.json({ success: true, members: fallbackMembers });
-  } catch (error: any) {
+    return jsonResponse(fallbackMembers);
+  } catch (error) {
     console.error('Village Members GET Error:', error);
-    return jsonError('INTERNAL_ERROR', error.message);
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }

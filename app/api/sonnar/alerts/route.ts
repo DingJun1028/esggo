@@ -3,8 +3,8 @@
 // app/api/sonnar/alerts/route.ts
 // ============================================================
 
-import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { NextRequest } from 'next/server';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 interface AlertItem {
   id: string;
@@ -80,17 +80,14 @@ export async function GET(req: NextRequest) {
   }
   if (sourceId) filtered = filtered.filter(a => a.sourceId === sourceId);
 
-  return NextResponse.json({
-    success: true,
-    data: {
-      total: filtered.length,
-      alerts: filtered.slice(0, limit),
-      stats: {
-        critical: alertStore.filter(a => a.severity === 'critical' && !a.acknowledged).length,
-        high: alertStore.filter(a => a.severity === 'high' && !a.acknowledged).length,
-        medium: alertStore.filter(a => a.severity === 'medium' && !a.acknowledged).length,
-        low: alertStore.filter(a => a.severity === 'low' && !a.acknowledged).length,
-      },
+  return jsonResponse({
+    total: filtered.length,
+    alerts: filtered.slice(0, limit),
+    stats: {
+      critical: alertStore.filter(a => a.severity === 'critical' && !a.acknowledged).length,
+      high: alertStore.filter(a => a.severity === 'high' && !a.acknowledged).length,
+      medium: alertStore.filter(a => a.severity === 'medium' && !a.acknowledged).length,
+      low: alertStore.filter(a => a.severity === 'low' && !a.acknowledged).length,
     },
   });
 }
@@ -107,7 +104,7 @@ export async function POST(req: NextRequest) {
         return jsonError('ALERT_NOT_FOUND');
       }
       alert.acknowledged = true;
-      return NextResponse.json({ success: true, data: { alertId, acknowledged: true } });
+      return jsonResponse({ alertId, acknowledged: true });
     }
 
     return jsonError('INVALID_ACTION', 'Invalid action');

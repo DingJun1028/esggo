@@ -2,10 +2,13 @@
 // AI Report Generation API
 // POST /api/ai/generate
 // GET  /api/ai/generate (usage info)
+//
+// 最佳實踐: 使用 @esggo/errors 統一錯誤回應
 // ============================================================
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { generateAIReport, ReportRequest, ReportSection } from '../../../../src/core/ai/report-generator';
+import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,18 +26,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { companyName, industry, year, sections, language, data } = body as ReportRequest;
 
-    // Validate required fields
-    if (!companyName) {
-      return NextResponse.json(
-        { success: false, error: 'companyName is required' },
-        { status: 400 }
-      );
-    }
-    if (!industry) {
-      return NextResponse.json(
-        { success: false, error: 'industry is required' },
-        { status: 400 }
-      );
+    // Validate required fields using unified validator
+    const paramValidation = validateParams({ companyName, industry });
+    if (!paramValidation.valid) {
+      return jsonError('INVALID_PARAMS', `缺少必要參數: ${paramValidation.missing}`);
     }
 
     // Validate sections
@@ -45,10 +40,7 @@ export async function POST(request: NextRequest) {
 
     for (const s of requestedSections) {
       if (!VALID_SECTIONS.includes(s)) {
-        return NextResponse.json(
-          { success: false, error: `Invalid section: ${s}. Valid: ${VALID_SECTIONS.join(', ')}` },
-          { status: 400 }
-        );
+        return jsonError('INVALID_PARAMS', `無效的章節: ${s}。有效值: ${VALID_SECTIONS.join(', ')}`);
       }
     }
 
@@ -63,46 +55,34 @@ export async function POST(request: NextRequest) {
     });
 
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: result.error || 'Generation failed' },
-        { status: 500 }
-      );
+      return jsonError('INTERNAL_ERROR', result.error || '報告生成失敗');
     }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        reportId: null,
-        companyName,
-        sections: result.sections.map(s => ({
-          id: s.id,
-          title: s.title,
-          content: s.content,
-          wordCount: s.wordCount,
-          model: s.model,
-          duration: s.duration,
-        })),
-        metadata: result.metadata,
-      },
+    return jsonResponse({
+      reportId: null,
+      companyName,
+      sections: result.sections.map(s => ({
+        id: s.id,
+        title: s.title,
+        content: s.content,
+        wordCount: s.wordCount,
+        model: s.model,
+        duration: s.duration,
+      })),
+      metadata: result.metadata,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('[AI Report API] Error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }
 
 export async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: {
-      usage: 'POST JSON with { companyName, industry, year?, sections?, language?, data? }',
-      sections: VALID_SECTIONS,
-      models: 'OpenRouter :free tier (round-robin: Gemma, Llama, Qwen)',
-      rateLimit: '200 req/day (OpenRouter free tier)',
-      content: 'Report data is generated progressively. Returns when all sections complete.',
-    },
+  return jsonResponse({
+    usage: 'POST JSON with { companyName, industry, year?, sections?, language?, data? }',
+    sections: VALID_SECTIONS,
+    models: 'OpenRouter :free tier (round-robin: Gemma, Llama, Qwen)',
+    rateLimit: '200 req/day (OpenRouter free tier)',
+    content: 'Report data is generated progressively. Returns when all sections complete.',
   });
 }

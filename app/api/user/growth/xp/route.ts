@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserGrowthService, XP_REWARDS } from '@/core/services/user-growth-service';
 import { PrismaClient } from '@prisma/client';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const { userId, action, amount, metadata } = await req.json();
     if (!userId || !action) {
-      return NextResponse.json({ error: 'userId and action required' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', 'userId and action required', 400);
     }
 
     const service = getUserGrowthService();
@@ -51,6 +52,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message, 500);
   }
 }
