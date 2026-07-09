@@ -42,6 +42,29 @@ module.exports = {
       autorestart: true,
       restart_delay: 5000,
       max_restarts: 5
+    },
+    {
+      name: "vps-agent",
+      script: "node",
+      args: "agent-bootstrap.mjs",
+      cwd: "/var/www/esggo/vps",
+      env: {
+        NODE_ENV: "production",
+        GATEWAY_URL: process.env.GATEWAY_URL || "http://localhost:8642",
+        GATEWAY_TOKEN: process.env.GATEWAY_API_KEY || "",
+        GATEWAY_API_KEY: process.env.GATEWAY_API_KEY || "",
+        HEALTH_INTERVAL: process.env.HEALTH_INTERVAL || "30000",
+        POLL_INTERVAL: process.env.POLL_INTERVAL || "5000"
+      },
+      instances: 1,
+      exec_mode: "fork",
+      max_memory_restart: "256M",
+      error_file: "/var/log/pm2/vps-agent-error.log",
+      out_file: "/var/log/pm2/vps-agent-out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss",
+      autorestart: true,
+      restart_delay: 5000,
+      max_restarts: 10
     }
   ]
 };
