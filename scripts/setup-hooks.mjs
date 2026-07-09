@@ -15,6 +15,12 @@ try {
   console.log(`[setup-hooks] OK - core.hooksPath = ${current}`);
   console.log('[setup-hooks] encoding-check pre-commit is now active.');
 } catch (e) {
-  console.error('[setup-hooks] FAILED to set core.hooksPath:', e.message);
-  process.exit(1);
+  // In Docker builds, git may not be available — skip gracefully
+  const msg = e.message || String(e);
+  if (msg.includes('not found') || msg.includes('ENOENT') || msg.includes('git')) {
+    console.warn('[setup-hooks] git not available, skipping (Docker build?)');
+  } else {
+    console.error('[setup-hooks] FAILED to set core.hooksPath:', msg);
+    process.exit(1);
+  }
 }
