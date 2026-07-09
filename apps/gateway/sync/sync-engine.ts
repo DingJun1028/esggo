@@ -131,17 +131,24 @@ export class SyncEngine {
     if (!this.health.connectedNodes.includes(k)) this.health.connectedNodes.push(k);
   }
 
-  /** last-write-wins 合併：以 lastHeartbeat / lastSyncAt 較新者為準 */
+  /** last-write-wins 合併：以 lastHeartbeat / lastSyncAt 較新者為準（逐 agent） */
   private mergeState<T extends { lastSyncAt?: number; agents?: AgentState[] }>(prev: T | null, next: T): T {
     if (!prev) return next;
+    const prevAgents = prev.agents ?? [];
+    const nextAgents = next.agents ?? [];
     // 衝突：若雙方同時改同一 agent -> 以 lastHeartbeat 較新取勝
-    const prevMap = new Map((prev.agents ?? []).map((a) => [a.agentId, a]));
-    for (const a of next.agents ?? []) {
-      const old = prevMap.get(a.agentId);
-      if (old && old.lastHeartbeat > a.lastHeartbeat) {
+    const mergedAgents = [...prevAgents];
+    for (const a of nextAgents) {
+      const idx = mergedAgents.findIndex((x) => x.agentId === a.agentId);
+      if (idx === -1) {
+        mergedAgents.push(a);
+      } else if (a.lastHeartbeat > mergedAgents[idx].lastHeartbeat) {
+        mergedAgents[idx] = a; // 較新者取勝
         this.health.conflictsResolved++;
+      } else {
+        this.health.conflictsResolved++; // 較舊者被拒也算已處理衝突
       }
     }
-    return { ...prev, ...next, lastSyncAt: Date.now() };
+    return { ...prev, ...next, agents: mergedAgents, lastSyncAt: Date.now() } as T;
   }
 }
