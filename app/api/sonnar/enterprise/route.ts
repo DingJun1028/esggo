@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const companyId = req.nextUrl.searchParams.get('companyId') || 'unknown';
@@ -34,5 +35,5 @@ export async function GET(req: NextRequest) {
     ],
   };
 
-  return NextResponse.json({ success: true, data: profile });
+  return jsonResponse(profile);
 }

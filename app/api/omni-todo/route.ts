@@ -2,9 +2,10 @@
 // POST /api/omni-todo — 萬能待辦 API
 // ═══════════════════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 import { OmniTodoEngine } from '@/core/omni-todo';
-import type { TodoFilter, TodoSort, TodoPriority, TodoStatus, TodoCategory } from '@/core/omni-todo';
+import type { TodoSort } from '@/core/omni-todo';
 
 // Singleton engine (in-memory, resets on server restart)
 let engine: OmniTodoEngine | null = null;
@@ -16,7 +17,7 @@ function getEngine(): OmniTodoEngine {
 
 /**
  * POST /api/omni-todo
- * 
+ *
  * Actions:
  * - action: "list"     → 查詢待辦清單
  * - action: "create"   → 建立新待辦
@@ -46,60 +47,45 @@ export async function POST(request: NextRequest) {
           page || 1,
           pageSize || 20
         );
-        return NextResponse.json({ success: true, data: result });
+        return jsonResponse(result);
       }
 
       // ── 建立 ────────────────────────────────────────────
       case 'create': {
         const { title, description, priority, category, tags, dueDate, reminderAt, esgTaskType, companyId, recurrence, parentId, createdBy } = body;
         if (!title) {
-          return NextResponse.json(
-            { success: false, error: 'title is required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'title is required', 400);
         }
         const item = eng.createTodo({
           title, description, priority, category, tags, dueDate, reminderAt, esgTaskType, companyId, recurrence, parentId, createdBy,
         });
-        return NextResponse.json({ success: true, data: item }, { status: 201 });
+        return jsonResponse(item, 201);
       }
 
       // ── 更新 ────────────────────────────────────────────
       case 'update': {
         const { id, ...patch } = body;
         if (!id) {
-          return NextResponse.json(
-            { success: false, error: 'id is required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'id is required', 400);
         }
         const item = eng.updateTodo(id, patch);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       // ── 刪除 ────────────────────────────────────────────
       case 'delete': {
         const { id } = body;
         if (!id) {
-          return NextResponse.json(
-            { success: false, error: 'id is required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'id is required', 400);
         }
         const deleted = eng.deleteTodo(id);
         if (!deleted) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found', 404);
         }
-        return NextResponse.json({ success: true, data: { deleted: true } });
+        return jsonResponse({ deleted: true });
       }
 
       // ── 狀態變更 ────────────────────────────────────────
@@ -107,65 +93,53 @@ export async function POST(request: NextRequest) {
         const { id } = body;
         const item = eng.startTodo(id);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found or invalid status' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found or invalid status', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       case 'complete': {
         const { id } = body;
         const item = eng.completeTodo(id);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found or invalid status' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found or invalid status', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       case 'archive': {
         const { id } = body;
         const item = eng.archiveTodo(id);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found or invalid status' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found or invalid status', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       case 'reopen': {
         const { id } = body;
         const item = eng.reopenTodo(id);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found or invalid status' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found or invalid status', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       // ── 統計 ────────────────────────────────────────────
       case 'stats': {
         const stats = eng.getStats();
-        return NextResponse.json({ success: true, data: stats });
+        return jsonResponse(stats);
       }
 
       case 'overdue': {
         const items = eng.getOverdue();
-        return NextResponse.json({ success: true, data: { items, total: items.length } });
+        return jsonResponse({ items, total: items.length });
       }
 
       case 'esg': {
         const { companyId } = body;
         const items = eng.getESGTodos(companyId);
-        return NextResponse.json({ success: true, data: { items, total: items.length } });
+        return jsonResponse({ items, total: items.length });
       }
 
       // ── 匯出 ────────────────────────────────────────────
@@ -173,80 +147,59 @@ export async function POST(request: NextRequest) {
         const { format, filter } = body;
         if (format === 'markdown') {
           const md = eng.exportMarkdown(filter);
-          return NextResponse.json({ success: true, data: { markdown: md } });
+          return jsonResponse({ markdown: md });
         }
         const json = eng.exportJSON(filter);
-        return NextResponse.json({ success: true, data: { json } });
+        return jsonResponse({ json });
       }
 
       // ── 新增附註 ────────────────────────────────────────
       case 'addNote': {
         const { id, note } = body;
         if (!id || !note) {
-          return NextResponse.json(
-            { success: false, error: 'id and note are required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'id and note are required', 400);
         }
         const item = eng.addNote(id, note);
         if (!item) {
-          return NextResponse.json(
-            { success: false, error: 'Todo not found' },
-            { status: 404 }
-          );
+          return jsonError('TASK_NOT_FOUND', 'Todo not found', 404);
         }
-        return NextResponse.json({ success: true, data: item });
+        return jsonResponse(item);
       }
 
       // ── 新增子任務 ──────────────────────────────────────
       case 'addSubtask': {
         const { parentId, title, description, priority, dueDate } = body;
         if (!parentId || !title) {
-          return NextResponse.json(
-            { success: false, error: 'parentId and title are required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'parentId and title are required', 400);
         }
         const subtask = eng.addSubtask(parentId, { title, description, priority, dueDate });
-        return NextResponse.json({ success: true, data: subtask }, { status: 201 });
+        return jsonResponse(subtask, 201);
       }
 
       // ── 批次操作 ────────────────────────────────────────
       case 'batchUpdate': {
         const { ids, status } = body;
         if (!ids?.length || !status) {
-          return NextResponse.json(
-            { success: false, error: 'ids and status are required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'ids and status are required', 400);
         }
         const items = eng.batchUpdateStatus(ids, status);
-        return NextResponse.json({ success: true, data: { updated: items.length, items } });
+        return jsonResponse({ updated: items.length, items });
       }
 
       case 'batchDelete': {
         const { ids } = body;
         if (!ids?.length) {
-          return NextResponse.json(
-            { success: false, error: 'ids is required' },
-            { status: 400 }
-          );
+          return jsonError('INVALID_PARAMS', 'ids is required', 400);
         }
         const count = eng.batchDelete(ids);
-        return NextResponse.json({ success: true, data: { deleted: count } });
+        return jsonResponse({ deleted: count });
       }
 
       default:
-        return NextResponse.json(
-          { success: false, error: `Unknown action: ${action}` },
-          { status: 400 }
-        );
+        return jsonError('INVALID_ACTION', `Unknown action: ${action}`, 400);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('[OmniTodo API] Error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', (error as Error).message || 'Internal server error');
   }
 }

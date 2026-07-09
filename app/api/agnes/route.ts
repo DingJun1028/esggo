@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { agnesApi } from '@/lib/agnes-api';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function POST(req: Request) {
   try {
@@ -7,29 +7,23 @@ export async function POST(req: Request) {
     const { input, context } = body;
 
     if (!input) {
-      return NextResponse.json({ success: false, error: 'Input is required' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', '缺少必要參數: input');
     }
 
     const result = await agnesApi.processRequest(input, context);
 
-    return NextResponse.json(result);
-  } catch (error: any) {
+    return jsonResponse(result);
+  } catch (error) {
     console.error('[AGNES_API] Error processing request:', error);
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal Server Error' },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }
 
 export async function GET() {
   try {
     const metrics = await agnesApi.getMetrics();
-    return NextResponse.json(metrics);
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal Server Error' },
-      { status: 500 }
-    );
+    return jsonResponse(metrics);
+  } catch (error) {
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }

@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { processDocumentWithOcr } from '@/core/services/document-processor';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,18 +9,15 @@ export async function POST(req: NextRequest) {
     const fileName = formData.get('fileName') as string;
 
     if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', 'No file provided', 400);
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const processedDoc = await processDocumentWithOcr(buffer, fileName || 'unknown.pdf');
 
-    return NextResponse.json({
-      success: true,
-      data: processedDoc
-    });
+    return jsonResponse(processedDoc);
   } catch (error) {
     console.error('Error processing document:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', 'Internal Server Error', 500);
   }
 }

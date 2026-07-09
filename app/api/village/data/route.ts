@@ -24,17 +24,23 @@ interface VillageActivity {
   [key: string]: unknown;
 }
 
+// Firestore DocumentSnapshot type
+interface FirestoreDoc {
+  id: string;
+  data(): Record<string, unknown>;
+}
+
 export async function GET() {
   try {
     const { adminDb } = await import('@/lib/firebase-admin');
     await seedVillageData();
 
     const projectsSnap = await adminDb.collection('village_projects').get();
-    const projects = projectsSnap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() })) as VillageProject[];
+    const projects = projectsSnap.docs.map((doc: FirestoreDoc) => ({ id: doc.id, ...doc.data() })) as VillageProject[];
     projects.sort((a: VillageProject, b: VillageProject) => b.current_points - a.current_points);
 
     const membersSnap = await adminDb.collection('village_members').orderBy('points', 'desc').get();
-    const members = membersSnap.docs.map((doc: any) => ({ user_id: doc.id, ...doc.data() })) as VillageMember[];
+    const members = membersSnap.docs.map((doc: FirestoreDoc) => ({ user_id: doc.id, ...doc.data() })) as VillageMember[];
 
     const activitiesSnap = await adminDb.collection('village_activities').orderBy('created_at', 'desc').limit(10).get();
     
@@ -47,7 +53,7 @@ export async function GET() {
       return `${Math.floor(diff/86400000)}天前`;
     };
 
-    const activities = activitiesSnap.docs.map((doc: any) => {
+    const activities = activitiesSnap.docs.map((doc: FirestoreDoc) => {
       const data = doc.data() as VillageActivity;
       return {
         id: doc.id,

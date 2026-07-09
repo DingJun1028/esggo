@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 
 /**
  * 安全柵欄：預設 FREE_TIER_ONLY 為 true
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     const { text, tone = 'professional' } = await req.json() as { text?: string; tone?: Tone };
 
     if (!text) {
-      return NextResponse.json({ error: 'No text provided' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', 'No text provided', 400);
     }
 
     if (!USE_REAL_AI) {
@@ -62,6 +63,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error processing grammar:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', 'Internal Server Error', 500);
   }
 }

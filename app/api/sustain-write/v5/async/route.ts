@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
 import { CelestialController } from '../../../../../src/lib/celestial/implementation';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
   const { companyId } = await req.json();
 
   if (!companyId) {
-    return NextResponse.json({ error: 'companyId is required' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', 'companyId is required', 400);
   }
 
   const celestial = new CelestialController();

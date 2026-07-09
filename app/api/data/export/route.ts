@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { jsonError } from '@/lib/api-utils';
 
 const prisma = new PrismaClient();
 
@@ -164,7 +165,7 @@ export async function GET(request: NextRequest) {
         filters: { sources, category, region, from, to, fields },
       },
     });
-  } catch (error: unknown) {
+  } catch {
     // If query fails, return mock data for demo
     const mockData = generateMockExportData(limit);
     if (format === 'csv') {
@@ -200,10 +201,7 @@ export async function POST(request: NextRequest) {
     const { format = 'json', filters = {}, webhookUrl } = body;
 
     if (!['json', 'csv'].includes(format)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid format. Use "json" or "csv".' },
-        { status: 400 }
-      );
+      return jsonError('INVALID_PARAMS', 'Invalid format. Use "json" or "csv".', 400);
     }
 
     // Create export job ID (stateless — no DB persistence needed)
@@ -219,10 +217,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Export failed';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', message, 500);
   }
 }
 

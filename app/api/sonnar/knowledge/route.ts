@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { NextRequest } from 'next/server';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 function analyzeContext(context: string): { why: string; what: string; how: string; tags: string[] } {
   const lower = context.toLowerCase();
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
     const result = analyzeContext(context);
 
-    return NextResponse.json({ success: true, data: result });
+    return jsonResponse(result);
   } catch (err) {
     console.error('[Sonar Knowledge] Error:', err);
     return jsonError('INTERNAL_ERROR', 'Invalid request');

@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 export async function GET() {
   return NextResponse.json({
@@ -35,12 +35,12 @@ export async function POST(req: Request) {
       }
       case 'achievement-check': {
         const result = await checkUserAchievements();
-        return NextResponse.json({ success: true, data: result });
+        return jsonResponse(result);
       }
       default:
         return jsonError('INVALID_ACTION', `Unknown job: ${job}`);
     }
-  } catch (error: any) {
-    return jsonError('INTERNAL_ERROR', error.message);
+  } catch (error) {
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }

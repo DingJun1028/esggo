@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 
 interface AIStatus {
   timestamp: string;
@@ -54,5 +54,5 @@ export async function GET() {
     totalFreeModels: 15,
   };
 
-  return NextResponse.json(status);
+  return jsonResponse(status);
 }

@@ -2,16 +2,15 @@
 // POST /api/esg/best-practices - 查詢 MECE 最佳實踐
 // ═══════════════════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import {
   getAllPractices,
   getPracticesByPillar,
-  getPracticesByCategory,
-  getPracticesByLevel,
   validateMECECompleteness,
   validateMECEExclusivity,
 } from '@/core/ai/skills/registry';
 import type { ESGPillar, PracticeLevel } from '@/core/ai/skills/registry';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,24 +20,21 @@ export async function POST(request: NextRequest) {
     // MECE 驗證模式
     if (validate === 'completeness') {
       const result = validateMECECompleteness();
-      return NextResponse.json({ success: true, data: result });
+      return jsonResponse(result);
     }
 
     if (validate === 'exclusivity') {
       const result = validateMECEExclusivity();
-      return NextResponse.json({ success: true, data: result });
+      return jsonResponse(result);
     }
 
     if (validate === 'full') {
       const completeness = validateMECECompleteness();
       const exclusivity = validateMECEExclusivity();
-      return NextResponse.json({
-        success: true,
-        data: {
-          completeness,
-          exclusivity,
-          isValid: completeness.isComplete && exclusivity.isExclusive,
-        },
+      return jsonResponse({
+        completeness,
+        exclusivity,
+        isValid: completeness.isComplete && exclusivity.isExclusive,
       });
     }
 
@@ -72,14 +68,8 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    return NextResponse.json({
-      success: true,
-      data: { practices, stats },
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to query best practices' },
-      { status: 500 }
-    );
+    return jsonResponse({ practices, stats });
+  } catch {
+    return jsonError('INTERNAL_ERROR', 'Failed to query best practices');
   }
 }

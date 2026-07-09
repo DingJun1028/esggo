@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { EntropyForge } from '@/lib/omni-core/entropy-forge';
 
 // ----------------------------------------------------------------------------
@@ -14,9 +13,8 @@ const projects = [
 ];
 
 export async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: projects,
+  return jsonResponse({
+    projects,
     timestamp: Date.now()
   });
 }
@@ -38,7 +36,7 @@ export async function POST(req: Request) {
         cost: 0
       };
       projects.push(newProject);
-      return NextResponse.json({ success: true, data: newProject });
+      return jsonResponse(newProject);
     }
 
     // ------------------------------------------------------------------------
@@ -64,15 +62,14 @@ export async function POST(req: Request) {
       projects[projectIndex].votes += v;
       projects[projectIndex].cost += cost;
 
-      return NextResponse.json({ 
-        success: true, 
+      return jsonResponse({
         message: `成功投出 ${v} 票。消耗了 ${cost} 點 Voice Credits。 (Cost = Votes^2)`,
-        data: projects[projectIndex]
+        project: projects[projectIndex]
       });
     }
 
     return jsonError('INVALID_ACTION', 'Invalid action');
-  } catch (error: any) {
-    return jsonError('INTERNAL_ERROR', error.message);
+  } catch (error) {
+    return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
 }
