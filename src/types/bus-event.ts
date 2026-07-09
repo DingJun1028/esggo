@@ -9,7 +9,7 @@ import { LifecycleStage } from "./omni-agent";
  *  * uuid、version、timestamp、evidence、hash 等核心屬性來自 IComponentCore。
  *  * 額外欄位說明事件本身的語意與路徑資訊，支援全鏈路可追溯。
  */
-export interface IBusEvent<T = any> extends IComponentCore {
+export interface IBusEvent<T = unknown> extends IComponentCore {
   /** 事件名稱 (如 "user.signup", "data.update") */
   readonly eventName: string;
   /** 事件負載資料 */

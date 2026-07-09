@@ -20,7 +20,7 @@ describe('OmniSeed Core Contract & Hook', () => {
     
     expect(awakened.status).toBe('infinite_evolving');
     expect(awakened.evidence.activation_log).toBeDefined();
-    expect(awakened.evidence.iso_verification).toBe('[ISO-14064-1] 零幻覺驗算通過');
+    expect(awakened.evidence.iso_verification).toBe('[ISO-14064-1] 零幻覺驗證通過');
     
     // Verify the object is fully frozen (immutability rule)
     expect(Object.isFrozen(awakened)).toBe(true);
@@ -36,7 +36,7 @@ describe('OmniSeed Core Contract & Hook', () => {
   it('should throw an error with 混沌警告 when placed in an incorrect coordinate', () => {
     expect(() => {
       plantOmniSeed(mockSeed, '#混沌邊界');
-    }).toThrow('[混沌警告] 萬能種子未放置於正確坐標，拒絕覺醒。');
+    }).toThrow('[混沌警告] 萬能種子未放置於正確坐標');
   });
 
   it('should prevent modifications to any fields after hyper-eternal awakening', () => {

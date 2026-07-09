@@ -142,7 +142,7 @@ export interface ShadowTestResult {
 export interface ScheduledTask {
   readonly name: string;
   readonly executeAt: number;
-  readonly payload: any;
+  readonly payload: unknown;
   readonly repeat?: { interval: number; count?: number };
 }
 
@@ -573,7 +573,7 @@ export interface IOmniGatewayV2 extends IComponentCore {
   /** 入口驗證 */
   ingress(event: IBusEvent): Promise<IBusEvent>;
   /** 安全轉發 */
-  secureForward(event: IBusEvent): Promise<any>;
+  secureForward(event: IBusEvent): Promise<IBusEvent>;
   /** Hash Lock 鎖定 */
   hashLock(event: IBusEvent): Promise<LockedEvent>;
   /** 戒嚴控制 */

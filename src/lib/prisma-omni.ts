@@ -6,11 +6,11 @@ import { PrismaClient } from '@prisma/client';
 let initialized = false;
 
 function createOmniClient() {
-  // Create a separate PrismaClient bound to the `omni` datasource in schema.prisma.
+  // Create a separate PrismaClient bound to the `db` datasource in schema.prisma.
   // Use OMNI_DATABASE_URL if provided.
   return new PrismaClient({
     datasources: {
-      omni: {
+      db: {
         url: process.env.OMNI_DATABASE_URL || process.env.DATABASE_URL || '',
       },
     },

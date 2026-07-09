@@ -31,11 +31,12 @@ export class OmniOrchestrator {
       console.log(`[OmniOrchestrator] Starting dual-track execution: ${operationName} (Trace: ${traceId})`);
       const result = await operation();
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error));
       console.error(`[OmniOrchestrator] Anomaly detected in ${operationName}:`, error);
       
       // Trigger Entropy Reduction (Self-healing & Sealing)
-      await this.triggerEntropyReduction(context, error.message || String(error));
+      await this.triggerEntropyReduction(context, err.message || String(error));
       
       // Return safe fallback to guarantee TRANSCENDED system stability (WuZuoMiaoDe)
       return fallbackResult;

@@ -31,7 +31,7 @@ export class OmniBase implements IOmniBase {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   readonly constants: OmniConstants = {
     MAX_EVENT_PAYLOAD: 1024 * 1024, // 1MB
@@ -46,13 +46,14 @@ export class OmniBase implements IOmniBase {
     generateHash: (data: string) => createHash('sha256').update(data).digest('hex'),
     deepClone: <T>(obj: T): T => JSON.parse(JSON.stringify(obj)),
     mergeDeep: <T extends object>(target: T, source: Partial<T>): T => {
-      const result = { ...target };
-      for (const key of Object.keys(source) as Array<keyof T>) {
-        if (source[key] !== undefined) {
-          (result as any)[key] = source[key];
+      const result = { ...target } as Record<string, unknown>;
+      const src = source as Record<string, unknown>;
+      for (const key of Object.keys(src)) {
+        if (src[key] !== undefined) {
+          result[key] = src[key];
         }
       }
-      return result;
+      return result as T;
     },
   };
 

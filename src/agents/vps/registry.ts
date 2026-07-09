@@ -7,10 +7,18 @@
  * 使其可被發現、使用和管理
  */
 
-import { IOmniAgent, IComponentCore, ITaskSpec, ITaskResult, LifecycleStage } from "../../types/omni-agent";
+import { IOmniAgent, IComponentCore, ITaskSpec, ITaskResult, IFlowSnapshot, LifecycleStage } from "../../types/omni-agent";
 import { IOmniAgentBus } from "../../types/omni-agent-bus";
-import { VPSAgent, createVPSAgent, getVPSAgent } from "./index";
+import { VPSAgent, createVPSAgent, getVPSAgent, TaskType } from "./index";
 import { IBusEvent } from "../../types/bus-event";
+
+/**
+ * 最小生態系統介面（供 registerVPSAgentToEcosystem 使用）
+ */
+interface IEcosystem {
+  getBus(): IOmniAgentBus;
+  registerAgent(id: string, agent: IOmniAgent): void;
+}
 
 // ==========================================
 // VPS Agent 生態系統適配器
@@ -79,7 +87,7 @@ export class VPSAgentAdapter implements IOmniAgent {
     
     try {
       const result = await this._vpsAgent.execute(
-        action as any,
+        action as TaskType,
         params as Record<string, unknown>
       );
       
@@ -149,7 +157,7 @@ export class VPSAgentAdapter implements IOmniAgent {
   /**
    * 獲取最近執行流
    */
-  async getRecentFlow(): Promise<any[]> {
+  async getRecentFlow(): Promise<IFlowSnapshot[]> {
     return [];
   }
 
@@ -276,8 +284,8 @@ export class VPSAgentFactory {
    * 
    * @returns 健康狀態映射
    */
-  static async getAllHealthStatus(): Promise<Map<string, any>> {
-    const statusMap = new Map<string, any>();
+  static async getAllHealthStatus(): Promise<Map<string, Record<string, unknown>>> {
+    const statusMap = new Map<string, Record<string, unknown>>();
 
     for (const [vpsId, agent] of Array.from(VPSAgentFactory._agents.entries())) {
       try {
@@ -310,7 +318,7 @@ export class VPSAgentFactory {
   static async broadcastCommand(action: string, params?: Record<string, unknown>): Promise<void> {
     for (const [vpsId, agent] of Array.from(VPSAgentFactory._agents.entries())) {
       try {
-        await agent.vpsAgent.execute(action as any, params);
+        await agent.vpsAgent.execute(action as TaskType, params);
         console.log(`[VPSAgentFactory] ✅ 命令已執行: ${vpsId} -> ${action}`);
       } catch (error) {
         console.error(`[VPSAgentFactory] ❌ 命令執行失敗: ${vpsId} -> ${action}`, error);
@@ -330,7 +338,7 @@ export class VPSAgentFactory {
  * @param config VPS 配置
  */
 export function registerVPSAgentToEcosystem(
-  ecosystem: any,
+  ecosystem: IEcosystem,
   config: { host: string; vpsId?: string }
 ): VPSAgentAdapter {
   // 初始化工廠（如果尚未初始化）

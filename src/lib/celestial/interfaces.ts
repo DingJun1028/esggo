@@ -24,6 +24,6 @@ export interface IWuZuoMiaoDe extends IComponentCore {
 }
 
 export interface InputData {
-  payload: any;
+  payload: unknown;
   origin: string;
 }

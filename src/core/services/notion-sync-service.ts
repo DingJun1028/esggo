@@ -91,7 +91,7 @@ export class NotionSyncService {
             status: { name: 'Trustworthy' }, // 符合 5T 協議
           },
         },
-        children: contentBlocks as any,
+        children: contentBlocks as Parameters<typeof this.client.pages.create>[0]['children'],
       });
 
       this.celestial.recordMetric('NotionSync.Success', 1, { pageId: response.id });

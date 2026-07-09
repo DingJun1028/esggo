@@ -10,7 +10,7 @@ import { OmniDataAnalyticsConfig } from '@/types/esg-charts';
 
 interface DashboardData {
   charts: OmniDataAnalyticsConfig[];
-  recentLedgers: any[];
+  recentLedgers: Record<string, unknown>[];
   summaryMetrics: {
     totalEmissions: string;
     emissionUnit: string;

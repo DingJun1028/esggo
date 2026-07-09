@@ -27,7 +27,7 @@ export class OmniTime implements IOmniTime {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 事件存儲 */
   private _events: IBusEvent[] = [];

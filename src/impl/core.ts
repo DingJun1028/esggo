@@ -195,7 +195,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as any);
+      } as IBusEvent);
       return Object.freeze(event);
     }
     const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
@@ -227,15 +227,15 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as any);
+      } as IBusEvent);
       return Object.freeze(event);
     }
     return Object.freeze({ ...event, hashLock: crypto.randomUUID() }) as IBusEvent;
   }
 
-  async secureForward(event: IBusEvent) {
+  async secureForward(event: IBusEvent): Promise<IBusEvent> {
     const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
-    return { status: "forwarded", hash: locked.hashLock };
+    return locked as IBusEvent;
   }
 
   async predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>> {
@@ -259,7 +259,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       console.error('[OAG] NVIDIA API call failed', e);
       return [];
     }
-    let resultArray: any[] = [];
+    let resultArray: unknown[] = [];
     try {
       const parsed = JSON.parse(output);
       // Assume API returns an array of predicted events under `predictions`.
@@ -297,7 +297,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   }
 
   injectChaos(event: IBusEvent): IBusEvent {
-    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as any;
+    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as IBusEvent;
     console.warn(`[OAG] Chaos injected into event ${event.uuid}`);
     return mutated as IBusEvent;
   }
@@ -365,9 +365,9 @@ export class OmniCoreEcosystem {
   }
 
   /** Static helper used by OAB to apply Hash Lock & freeze */
-  public static lockAndFreeze<T extends object>(obj: T): T {
-    (obj as any).evidence = (obj as any).evidence || {};
-    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+  public static lockAndFreeze<T extends IComponentCore>(obj: T): T {
+    obj.evidence = obj.evidence || {};
+    obj.evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
       .toString(36)
       .substring(2, 9)}`;
     return Object.freeze(obj);

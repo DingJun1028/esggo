@@ -167,9 +167,11 @@ export class CelestialController {
       }
 
       if (sanitized.evidence) {
-        const newEvidence = { ...sanitized.evidence };
-        newEvidence.processTrace = [...newEvidence.processTrace, `[PURIFY] Entropy reduction applied.`];
-        newEvidence.finalEffect = 'Purified';
+        const oldEvidence = sanitized.evidence as { processTrace?: string[]; finalEffect?: string };
+        const newEvidence = {
+          processTrace: [...(oldEvidence.processTrace ?? []), `[PURIFY] Entropy reduction applied.`],
+          finalEffect: 'Purified',
+        };
         sanitized.evidence = newEvidence;
       }
 
@@ -178,9 +180,11 @@ export class CelestialController {
     
     if (data && data.evidence) {
        const sanitized = { ...data };
-       const newEvidence = { ...sanitized.evidence };
-       newEvidence.processTrace = [...newEvidence.processTrace, `[ALIGN] Validation passed.`];
-       newEvidence.finalEffect = 'Aligned';
+       const oldEvidence = sanitized.evidence as { processTrace?: string[]; finalEffect?: string };
+       const newEvidence = {
+         processTrace: [...(oldEvidence.processTrace ?? []), `[ALIGN] Validation passed.`],
+         finalEffect: 'Aligned',
+       };
        sanitized.evidence = newEvidence;
        return Object.freeze(sanitized);
     }

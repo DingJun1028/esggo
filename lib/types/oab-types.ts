@@ -18,7 +18,7 @@ export interface IComponentCore {
   /** Creation timestamp in milliseconds since epoch */
   readonly timestamp: number;
   /** Arbitrary evidence payload that can be enriched during the lifecycle */
-  evidence: Record<string, any>;
+  evidence: Record<string, unknown>;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface IBlackboardEntry extends IComponentCore {
   /** Tag list for quick filtering – e.g. ['task','request','error','heal'] */
   tags: string[];
   /** Payload specific to the concrete entry (task spec, error details…) */
-  payload: any;
+  payload: unknown;
 }
 
 /**
@@ -91,7 +91,7 @@ export interface ITaskSpec extends IComponentCore {
   /** Human‑readable name of the task (e.g. 'carbon-report') */
   readonly name: string;
   /** Arbitrary parameters for the task */
-  readonly params: Record<string, any>;
+  readonly params: Record<string, unknown>;
 }
 
 export interface IMutationSpec extends IComponentCore {
@@ -101,7 +101,7 @@ export interface IMutationSpec extends IComponentCore {
   readonly action: string;
   /** Probability (0‑1) that the mutation will be applied */
   readonly probability: number;
-  readonly params?: Record<string, any>;
+  readonly params?: Record<string, unknown>;
 }
 
 export interface IHealingAction extends IComponentCore {
@@ -110,7 +110,7 @@ export interface IHealingAction extends IComponentCore {
   /** Target of the healing (service name, file path, agent id, …) */
   readonly target: string;
   /** Optional additional details */
-  readonly detail?: Record<string, any>;
+  readonly detail?: Record<string, unknown>;
 }
 
 /**

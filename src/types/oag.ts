@@ -29,7 +29,7 @@ export interface IOmniAgentGateway extends IComponentCore {
    * @param event 要分析的 IBusEvent（或其子類型）
    * @returns 預測結果，結構自行定義（可為 { riskScore: number, actions: string[] }）
    */
-  predict(event: IBusEvent): Promise<any>;
+  predict(event: IBusEvent): Promise<Record<string, unknown>>;
 
   /**
    * 先知預測與預先擷取 – 根據使用者意圖存根，預測相關事件並提前抓取相關 IBusEvent 集合。
@@ -52,7 +52,7 @@ export interface IOmniAgentGateway extends IComponentCore {
    */
   registerSecurityHook(
     stage: LifecycleStage,
-    hook: (args: { event?: IBusEvent; prediction?: any; error?: Error }) => Promise<void> | void
+    hook: (args: { event?: IBusEvent; prediction?: Record<string, unknown>; error?: Error }) => Promise<void> | void
   ): void;
   /**
    * 觸發 Hash Lock 與 Object.freeze()，將事件鎖定為不可變的安全物件。
@@ -64,7 +64,7 @@ export interface IOmniAgentGateway extends IComponentCore {
   * @param event 要處理的 IBusEvent
   * @returns 任意回傳值，允許後續流程使用（如傳遞至其他模組）
   */
-  egress(event: IBusEvent): Promise<any>;
+  egress(event: IBusEvent): Promise<IBusEvent>;
 
   /**
    * 故意注入微小錯誤以測試自癒能力。

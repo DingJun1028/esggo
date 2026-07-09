@@ -5,7 +5,7 @@ import React from 'react';
 
 interface DataTableProps {
   columns: string[];
-  rows: Record<string, any>[];
+  rows: Record<string, unknown>[];
   sortable?: boolean;
 }
 

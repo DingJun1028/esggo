@@ -335,7 +335,7 @@ export class OmniKernel {
   readonly sync: OmniSyncGateway;
   readonly eventBus: typeof OmniEventBus;
   private _initialized = false;
-  private _agnesMetrics: any = null;
+  private _agnesMetrics: Record<string, unknown> | null = null;
 
   constructor() {
     this.registry = new OmniRegistry();
@@ -367,7 +367,7 @@ export class OmniKernel {
     cacheMetrics: { size: number; hitRate: number };
     syncLogCount: number;
     initialized: boolean;
-    agnesStatus: any;
+    agnesStatus: Record<string, unknown>;
   } {
     return {
       registryCount: this.registry.count(),

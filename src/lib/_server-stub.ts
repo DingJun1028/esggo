@@ -6,8 +6,8 @@
  */
 
 // Lazy proxy that deferres actual loading to first use
-function createLazyProxy(importPath: string): any {
-  let cached: any = null;
+function createLazyProxy(importPath: string): unknown {
+  let cached: unknown = null;
   const loader = () => {
     if (!cached) {
       try {
@@ -22,7 +22,7 @@ function createLazyProxy(importPath: string): any {
   return new Proxy({}, {
     get(_t, prop) {
       const mod = loader();
-      return (mod as any)[prop];
+      return (mod as Record<string, unknown>)[prop as string];
     },
     apply(_t, _this, args) {
       const mod = loader();
@@ -36,8 +36,8 @@ const AdminModule = createLazyProxy('firebase-admin');
 const UpstashModule = createLazyProxy('@upstash/redis');
 
 export default AdminModule;
-export const apps = (AdminModule as any).apps ?? [];
-export const initializeApp = (AdminModule as any).initializeApp ?? (() => ({}));
-export const credential = (AdminModule as any).credential ?? {};
-export const firestore = (AdminModule as any).firestore ?? (() => ({}));
-export const Redis = (UpstashModule as any).Redis ?? class StubRedis { constructor() { /* stub */ } };
+export const apps = (AdminModule as Record<string, unknown>).apps ?? [];
+export const initializeApp = (AdminModule as Record<string, unknown>).initializeApp ?? (() => ({}));
+export const credential = (AdminModule as Record<string, unknown>).credential ?? {};
+export const firestore = (AdminModule as Record<string, unknown>).firestore ?? (() => ({}));
+export const Redis = (UpstashModule as Record<string, unknown>).Redis ?? class StubRedis { constructor() { /* stub */ } };

@@ -9,7 +9,7 @@ export interface ChartDataPoint {
   value: number | null;
   timestamp?: string;
   color?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ChartDataset {
@@ -50,7 +50,6 @@ export interface LineChartProps {
   /** Cap style for border */
   borderCapStyle?: 'butt' | 'round' | 'square';
 
-  borderDashOffset?: number;
   borderJoinStyle?: 'miter' | 'round' | 'bevel';
 
   /** @deprecated since v0.5 */

@@ -15,7 +15,7 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
   const key = `ratelimit:${identifier}`;
 
   // Lazy import Redis to avoid build-time connection issues
-  let redis: any = null;
+  let redis: { pipeline(): { incr(key: string): void; pttl(key: string): void; exec(): Promise<[null, number][]> }; expire(key: string, seconds: number): Promise<unknown> } | null = null;
   try {
     const { getRedis } = await import('@lib/redis/client');
     redis = await getRedis();

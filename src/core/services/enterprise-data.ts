@@ -25,8 +25,8 @@ export interface EnterpriseContext {
 
 export async function fetchEnterpriseData(companyId: string): Promise<EnterpriseContext> {
   try {
-    const docRef = await adminDb.collection('enterprises').doc(companyId).get();
-    if (docRef.exists) {
+    const docRef = await adminDb.collection('enterprises')?.doc(companyId)?.get();
+    if (docRef?.exists) {
       const data = docRef.data();
       return {
         companyName: data?.companyName || '未知企業',

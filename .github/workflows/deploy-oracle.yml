@@ -1,0 +1,181 @@
+# =============================================================================
+# ESG GO — Oracle VPS Deploy Pipeline
+# =============================================================================
+# 觸發條件: push to main (paths: vps/**, app/**, src/**, packages/**)
+# 部署目標: Oracle Cloud Always Free ARM Ampere A1
+# 部署方式: SSH + Docker Compose (VPS 上直接構建)
+# =============================================================================
+
+name: Deploy to Oracle VPS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "vps/**"
+      - "app/**"
+      - "src/**"
+      - "packages/**"
+      - "public/**"
+      - "prisma/**"
+      - "next.config.js"
+      - "package.json"
+      - "pnpm-lock.yaml"
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Skip tests before deploy"
+        required: false
+        default: "false"
+        type: boolean
+
+concurrency:
+  group: deploy-oracle-vps
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  VPS_HOST: ${{ secrets.VPS_HOST }}
+  VPS_USER: ${{ secrets.VPS_USER }}
+  APP_DIR: /opt/esggo
+
+jobs:
+  # ─── 前置檢查 ─────────────────────────────────────────────────
+  pre-check:
+    name: Pre-deploy Check
+    runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.check.outputs.should_deploy }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check VPS secrets
+        id: check
+        run: |
+          if [ -z "${{ secrets.VPS_HOST }}" ]; then
+            echo "::warning::VPS_HOST not set, skipping deploy"
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          elif [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "::warning::VPS_SSH_KEY not set, skipping deploy"
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          fi
+
+  # ─── CI 驗證（快速） ──────────────────────────────────────────
+  ci-fast:
+    name: Fast CI Gate
+    runs-on: ubuntu-latest
+    if: needs.pre-check.outputs.should_deploy == 'true' && inputs.skip_tests != 'true'
+    needs: [pre-check]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "11.5.2"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: TypeScript check
+        run: pnpm typecheck
+      - name: Run tests
+        run: pnpm vitest run --reporter=verbose
+
+  # ─── 部署到 Oracle VPS ───────────────────────────────────────
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: [pre-check, ci-fast]
+    if: always() && needs.pre-check.outputs.should_deploy == 'true' && (needs.ci-fast.result == 'success' || needs.ci-fast.result == 'skipped')
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ env.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sync code to VPS
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.next' \
+            --exclude='*.db' \
+            --exclude='.env' \
+            --exclude='.env.local' \
+            --exclude='.env.production' \
+            --exclude='packages/*/node_modules' \
+            --exclude='apps/*/node_modules' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ ${{ env.VPS_USER }}@${{ env.VPS_HOST }}:${{ env.APP_DIR }}/
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.VPS_HOST }}
+          username: ${{ env.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd ${{ env.APP_DIR }}/vps
+
+            echo "=== [1/5] Pull latest code ==="
+            cd ${{ env.APP_DIR }}
+            git pull origin main --quiet || true
+
+            echo "=== [2/5] Build Docker images on VPS ==="
+            cd ${{ env.APP_DIR }}/vps
+            docker compose -f docker-compose.prod.yml build --no-cache
+
+            echo "=== [3/5] Stop old containers ==="
+            docker compose -f docker-compose.prod.yml down
+
+            echo "=== [4/5] Start services ==="
+            docker compose -f docker-compose.prod.yml up -d
+
+            echo "=== [5/5] Health check ==="
+            sleep 15
+            for i in $(seq 1 10); do
+              STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
+              if [ "$STATUS" = "200" ]; then
+                echo "✅ Health check passed (attempt $i)"
+                exit 0
+              fi
+              echo "⏳ Waiting... (attempt $i, status=$STATUS)"
+              sleep 5
+            done
+            echo "❌ Health check failed"
+            docker compose -f docker-compose.prod.yml logs --tail=50 esggo
+            exit 1
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
+
+  # ─── 通知 ─────────────────────────────────────────────────────
+  notify:
+    name: Deploy Notification
+    needs: [pre-check, deploy]
+    runs-on: ubuntu-latest
+    if: always() && needs.pre-check.outputs.should_deploy == 'true'
+    steps:
+      - name: Notify on success
+        if: needs.deploy.result == 'success'
+        run: |
+          echo "✅ ESG GO deployed successfully to Oracle VPS"
+          echo "🔗 ${{ vars.VPS_URL || format('https://{0}', secrets.VPS_HOST) }}"
+
+      - name: Notify on failure
+        if: needs.deploy.result == 'failure'
+        run: |
+          echo "❌ ESG GO deployment failed"
+          echo "Please check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

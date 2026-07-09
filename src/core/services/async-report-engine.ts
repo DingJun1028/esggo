@@ -11,6 +11,7 @@
  */
 
 import { createHash } from 'crypto';
+import type { ChapterTemplate } from '../../../chapter-templates/index';
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -56,15 +57,21 @@ export interface TaskProgress {
 // Redis Client (lazy initialization)
 // ═══════════════════════════════════════════════════════════════
 
-let redisClient: any = null;
+interface RedisClient {
+  connect(): Promise<void>;
+  setex(key: string, ttl: number, value: string): Promise<unknown>;
+  get(key: string): Promise<string | null>;
+}
+
+let redisClient: RedisClient | null = null;
 const CACHE_PREFIX = 'esggo:async:';
 const TASK_TTL = 7 * 24 * 60 * 60; // 7 days
 const PROGRESS_TTL = 60 * 60 * 2; // 2 hours
 
 // In-memory fallback
-const memoryStore = new Map<string, { value: any; expiry: number }>();
+const memoryStore = new Map<string, { value: unknown; expiry: number }>();
 
-function getMemoryStore(key: string): any {
+function getMemoryStore(key: string): unknown {
   const entry = memoryStore.get(key);
   if (!entry) return null;
   if (Date.now() > entry.expiry) {
@@ -74,11 +81,11 @@ function getMemoryStore(key: string): any {
   return entry.value;
 }
 
-function setMemoryStore(key: string, value: any, ttl: number): void {
+function setMemoryStore(key: string, value: unknown, ttl: number): void {
   memoryStore.set(key, { value, expiry: Date.now() + ttl * 1000 });
 }
 
-async function getRedis(): Promise<any> {
+async function getRedis(): Promise<RedisClient | null> {
   if (redisClient) return redisClient;
   try {
     const { default: Redis } = await import('ioredis');
@@ -140,7 +147,7 @@ async function getTaskState(taskId: string): Promise<TaskProgress | null> {
       // fallback to memory
     }
   }
-  return getMemoryStore(key);
+  return getMemoryStore(key) as TaskProgress | null;
 }
 
 async function storeChapterState(taskId: string, chapter: ChapterState): Promise<void> {
@@ -234,8 +241,8 @@ interface ChapterGenInput {
     wordCount: number;
     griCodes: string[];
   };
-  answers: any[];
-  profile: any;
+  answers: unknown[];
+  profile: Record<string, unknown>;
 }
 
 function generateChapterContent(input: ChapterGenInput): { content: string; wordCount: number } {
@@ -361,8 +368,8 @@ export function startReportGeneration(
   taskId: string,
   companyId: string,
   companyName: string,
-  profile: any,
-  answers: any[]
+  profile: Record<string, unknown>,
+  answers: unknown[]
 ): void {
   const task = tasks.get(taskId);
   if (!task) return;
@@ -396,7 +403,7 @@ export function startReportGeneration(
           companyId,
           companyName,
           profile,
-          typedAnswers as any[],
+          typedAnswers,
           getChapterTemplate(chNum),
           startTime
         ).then(result => {
@@ -463,9 +470,9 @@ async function processChapterWithConcurrency(
   chNum: number,
   companyId: string,
   companyName: string,
-  profile: any,
-  answers: any[],
-  template: any,
+  profile: Record<string, unknown>,
+  answers: unknown[],
+  template: ChapterTemplate | undefined,
   startTime: number
 ): Promise<{ success: boolean; wordCount: number; title: string; fiveTGate: string }> {
   if (cancelledTasks.has(taskId)) {
