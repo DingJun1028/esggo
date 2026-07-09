@@ -3,33 +3,30 @@
 // app/api/sonnar/crawl/route.ts
 // ============================================================
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { crawlerScheduler } from '@/services/scheduler/crawler-scheduler';
-import { jsonError } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 // GET /api/sonnar/crawl — Get scheduler status & job list
 export async function GET() {
   const status = crawlerScheduler.getStatus();
   const jobs = crawlerScheduler.getJobs();
   
-  return NextResponse.json({
-    success: true,
-    data: {
-      status,
-      jobs: jobs.map(j => ({
-        id: j.id,
-        sourceId: j.sourceId,
-        sourceName: j.sourceName,
-        cronExpression: j.cronExpression,
-        intervalMs: j.intervalMs,
-        lastRun: j.lastRun,
-        totalRuns: j.totalRuns,
-        successfulRuns: j.successfulRuns,
-        failedRuns: j.failedRuns,
-        enabled: j.enabled,
-        lastItemsFound: j.lastResult?.itemsFound,
-      })),
-    },
+  return jsonResponse({
+    status,
+    jobs: jobs.map(j => ({
+      id: j.id,
+      sourceId: j.sourceId,
+      sourceName: j.sourceName,
+      cronExpression: j.cronExpression,
+      intervalMs: j.intervalMs,
+      lastRun: j.lastRun,
+      totalRuns: j.totalRuns,
+      successfulRuns: j.successfulRuns,
+      failedRuns: j.failedRuns,
+      enabled: j.enabled,
+      lastItemsFound: j.lastResult?.itemsFound,
+    })),
   });
 }
 
@@ -43,12 +40,9 @@ export async function POST(req: NextRequest) {
     if (all) {
       // Crawl all enabled sources
       const results = await crawlerScheduler.crawlAll();
-      return NextResponse.json({
-        success: true,
-        data: {
-          message: `Crawl triggered for ${results.length} sources`,
-          results,
-        },
+      return jsonResponse({
+        message: `Crawl triggered for ${results.length} sources`,
+        results,
       });
     }
 
@@ -67,26 +61,23 @@ export async function POST(req: NextRequest) {
         errors: [],
       };
       
-      return NextResponse.json({
-        success: true,
-        data: {
-          message: `Crawl completed for ${sourceId}`,
-          result: {
-            sourceId: result.sourceId,
-            url: result.url,
-            itemsFound: result.itemsFound,
-            duration: result.duration,
-            timestamp: result.timestamp,
-          },
-          bridge: {
-            eventsGenerated: bridge.eventsGenerated,
-            subscriptionMatches: bridge.matches.length,
-            topMatches: bridge.matches.slice(0, 5).map((m: any) => ({
-              subscriber: m.subscriberName,
-              target: m.subscriptionTarget,
-              score: m.relevanceScore,
-            })),
-          },
+      return jsonResponse({
+        message: `Crawl completed for ${sourceId}`,
+        result: {
+          sourceId: result.sourceId,
+          url: result.url,
+          itemsFound: result.itemsFound,
+          duration: result.duration,
+          timestamp: result.timestamp,
+        },
+        bridge: {
+          eventsGenerated: bridge.eventsGenerated,
+          subscriptionMatches: bridge.matches.length,
+          topMatches: bridge.matches.slice(0, 5).map((m: any) => ({
+            subscriber: m.subscriberName,
+            target: m.subscriptionTarget,
+            score: m.relevanceScore,
+          })),
         },
       });
     }

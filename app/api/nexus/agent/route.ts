@@ -38,8 +38,8 @@ export async function POST(req: Request) {
     }
 
     return jsonError('SKILL_NOT_FOUND', 'Tool not found');
-  } catch (err: any) {
-    return jsonError('INTERNAL_ERROR', err.message);
+  } catch (err) {
+    return jsonError('INTERNAL_ERROR', (err as Error).message);
   }
 }
 

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { NextRequest } from 'next/server';
+import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,15 +16,12 @@ export async function POST(req: NextRequest) {
       + '水資源使用: ZZZ m3\n'
       + '--- 結束 ---\n';
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        text,
-        confidence: Math.round(confidence * 100) / 100,
-        dataAtoms: ['ENERGY_KWH', 'EMISSION_FACTOR', 'WATER_USAGE'],
-        fileName,
-        processedAt: new Date().toISOString(),
-      },
+    return jsonResponse({
+      text,
+      confidence: Math.round(confidence * 100) / 100,
+      dataAtoms: ['ENERGY_KWH', 'EMISSION_FACTOR', 'WATER_USAGE'],
+      fileName,
+      processedAt: new Date().toISOString(),
     });
   } catch (err) {
     console.error('[Sonar OCR] Error:', err);

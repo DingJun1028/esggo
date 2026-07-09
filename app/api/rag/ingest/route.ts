@@ -97,8 +97,8 @@ export async function POST(req: Request) {
       provider: USE_REAL_AI ? 'gemini' : 'mock'
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('PDF Ingestion Error:', error);
-    return jsonError('INTERNAL_ERROR', `解析失敗: ${error.message}`);
+    return jsonError('INTERNAL_ERROR', `解析失敗: ${(error as Error).message}`);
   }
 }

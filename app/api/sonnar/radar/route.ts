@@ -3,10 +3,9 @@
 // app/api/sonnar/radar/route.ts
 // ============================================================
 
-import { NextRequest, NextResponse } from 'next/server';
-import type { DiffResult } from '@/core/sonnar/diff-engine';
+import { NextRequest } from 'next/server';
 import { getRegisteredSources } from '@/crawlers/crawler-factory';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse } from '@/lib/api-utils';
 
 /**
  * Signal Radar — aggregates all detected ESG signals across sources
@@ -78,5 +77,5 @@ export async function GET(req: NextRequest) {
     },
   };
 
-  return NextResponse.json({ success: true, data: radar });
+  return jsonResponse(radar);
 }

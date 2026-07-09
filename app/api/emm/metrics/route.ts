@@ -17,6 +17,12 @@ interface SonnarAggregate {
   newItems: number;
 }
 
+interface CrawlJob {
+  successfulRuns: number;
+  lastRun: string | null;
+  enabled: boolean;
+}
+
 // GET /api/emm/metrics — Full snapshot
 export async function GET() {
   let gatewayData: Record<string, unknown> | null = null;
@@ -51,11 +57,11 @@ export async function GET() {
     if (crawlRes.status === 'fulfilled' && crawlRes.value.ok) {
       const crawl = await crawlRes.value.json();
       if (crawl.success && crawl.data) {
-        sonnar.crawlCount = crawl.data.jobs?.filter((j: any) => j.successfulRuns > 0).length || 0;
-        sonnar.lastCrawl = crawl.data.jobs?.reduce((latest: string | null, j: any) => {
+        sonnar.crawlCount = crawl.data.jobs?.filter((j: CrawlJob) => j.successfulRuns > 0).length || 0;
+        sonnar.lastCrawl = crawl.data.jobs?.reduce((latest: string | null, j: CrawlJob) => {
           return j.lastRun && (!latest || j.lastRun > latest) ? j.lastRun : latest;
         }, null) || null;
-        sonnar.jobsActive = crawl.data.jobs?.filter((j: any) => j.enabled).length || 0;
+        sonnar.jobsActive = crawl.data.jobs?.filter((j: CrawlJob) => j.enabled).length || 0;
       }
     }
     if (radarRes.status === 'fulfilled' && radarRes.value.ok) {

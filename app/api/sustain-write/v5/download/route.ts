@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown } from '@/core/services/report-generator-v5';
+import { jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,13 +10,13 @@ export async function GET(req: NextRequest) {
   const format = searchParams.get('format') || 'html';
 
   if (!companyId) {
-    return NextResponse.json({ error: 'companyId is required' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', 'companyId is required', 400);
   }
 
   try {
     const report = generateV5Report(companyId);
     if (!report) {
-      return NextResponse.json({ error: 'Report could not be generated' }, { status: 404 });
+      return jsonError('NOT_FOUND', 'Report could not be generated', 404);
     }
 
     if (format === 'md' || format === 'markdown') {
@@ -38,6 +39,6 @@ export async function GET(req: NextRequest) {
     });
 
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Server Error' }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', error.message || 'Server Error', 500);
   }
 }
