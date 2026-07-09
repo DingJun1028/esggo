@@ -7,8 +7,8 @@ export async function GET(req: NextRequest) {
   let firebaseMetrics: Record<string, unknown> | null = null;
   try {
     const { adminDb } = await import('@/lib/firebase-admin');
-    const doc = await adminDb.collection('enterprises').doc(companyId).get();
-    if (doc.exists) {
+    const doc = await adminDb.collection('enterprises')?.doc(companyId)?.get();
+    if (doc?.exists) {
       const data = doc.data() as Record<string, unknown>;
       firebaseMetrics = data.sustainabilityMetrics as Record<string, unknown> || null;
     }

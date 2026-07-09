@@ -82,7 +82,7 @@ export default function VillagePage() {
         } else {
           throw new Error(data.error);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Fetch error:', err);
         setFetchError('無法取得即時資料');
         setLoading(false);

@@ -20,7 +20,7 @@ export type { GeneratedReport, ReportChapter };
  * 主要 API：組裝完整專業報告
  */
 export function assembleCVersionReport(companyId: string): GeneratedReport | null {
-  let profile: any = null;
+  let profile: (typeof COMPANIES)[number] | null = null;
   for (const c of COMPANIES) {
     if (c.instanceId === companyId) { profile = c; break; }
   }

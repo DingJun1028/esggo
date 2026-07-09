@@ -439,7 +439,7 @@ body {
 /**
  * 生成報告 HTML 使用 ESGGO v3.7 設計系統
  */
-export function generateReportHTML(report: any): string {
+export function generateReportHTML(report: { companyName: string; chapters: Array<{ fiveTGate: string; title: string; content: string }>; generatedAt: string; totalWords: number }): string {
   const parts: string[] = [];
 
   parts.push('<!DOCTYPE html>');

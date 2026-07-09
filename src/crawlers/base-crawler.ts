@@ -109,7 +109,7 @@ export abstract class BaseCrawler {
           'Accept': 'text/html',
           'Accept-Language': 'zh-TW,zh;q=0.9',
         },
-      }, (res: any) => {
+      }, (res: import('http').IncomingMessage) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           return resolve(this.httpsFetch(res.headers.location));
         }
@@ -136,12 +136,12 @@ export abstract class BaseCrawler {
 
   /** Retry wrapper with exponential backoff */
   protected async withRetry<T>(fn: () => Promise<T>): Promise<T> {
-    let lastError: any;
+    let lastError: unknown;
     for (let i = 0; i < this.retryCount; i++) {
       try {
         return await fn();
       } catch (err) {
-        lastError = err;
+        lastError = err as Error;
         const wait = this.retryDelay * Math.pow(2, i);
         await this.delay(wait);
       }

@@ -11,7 +11,7 @@ interface State {
   hasError: boolean;
   error: Error | null;
   healingStatus: 'idle' | 'healing' | 'healed' | 'failed';
-  healingData: any | null;
+  healingData: Record<string, unknown> | null;
 }
 
 export class OmniErrorBoundary extends Component<Props, State> {

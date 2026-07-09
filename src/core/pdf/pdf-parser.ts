@@ -7,8 +7,15 @@
 // Free-tier compatible
 // ============================================================
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pdfParse: (dataBuffer: Buffer) => Promise<any> = require('pdf-parse');
+interface PDFParseOutput {
+  text: string;
+  numpages: number;
+  numrender: number;
+  info: Record<string, unknown>;
+  metadata: unknown;
+  version: string;
+}
+const pdfParse: (dataBuffer: Buffer) => Promise<PDFParseOutput> = require('pdf-parse');
 
 export type ESGCategory = 'environmental' | 'social' | 'governance' | 'general';
 
@@ -116,8 +123,9 @@ export class PDFReportParser {
         esg,
         stats,
       };
-    } catch (err: any) {
-      return this.emptyResult(err.message || 'parse failed');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return this.emptyResult(msg || 'parse failed');
     }
   }
 

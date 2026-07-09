@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         bridge: {
           eventsGenerated: bridge.eventsGenerated,
           subscriptionMatches: bridge.matches.length,
-          topMatches: bridge.matches.slice(0, 5).map((m: any) => ({
+          topMatches: bridge.matches.slice(0, 5).map((m: Record<string, unknown>) => ({
             subscriber: m.subscriberName,
             target: m.subscriptionTarget,
             score: m.relevanceScore,

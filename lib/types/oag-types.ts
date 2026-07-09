@@ -88,7 +88,7 @@ export async function computeHash(
 export function deepFreeze<T extends object>(obj: T): T {
   Object.freeze(obj);
   Object.getOwnPropertyNames(obj).forEach(name => {
-    const prop = (obj as any)[name];
+    const prop = (obj as Record<string, unknown>)[name];
     if (prop && typeof prop === 'object' && !Object.isFrozen(prop)) {
       deepFreeze(prop);
     }

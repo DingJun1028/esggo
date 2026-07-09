@@ -43,8 +43,8 @@ class SimpleOmniBus {
         version: '1.0',
         timestamp: Date.now(),
         evidence: {},
-      } as any;
-      this.entropyProcessor.monitorBackpressure(component, topic);
+      };
+      this.entropyProcessor.monitorBackpressure(component as Record<string, unknown>, topic);
       console.warn(`[Backpressure] ${topic} size ${size} > ${threshold}, cloned OA.`);
     }
   }
@@ -65,7 +65,7 @@ export const enhancedOmniBus = new SimpleOmniBus();
 const entropyProcessor = new CelestialCoreProcessor();
 
 /** Monitor back‑pressure (wrapper) */
-export const monitorBackpressure = (component: any, sourceOrigin: string) =>
+export const monitorBackpressure = (component: Record<string, unknown>, sourceOrigin: string) =>
   entropyProcessor.monitorBackpressure(component, sourceOrigin);
 
 /** Shadow test ingress */

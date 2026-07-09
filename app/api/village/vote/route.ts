@@ -29,12 +29,13 @@ export async function POST(req: Request) {
     const power = amount * 10;
 
     const { adminDb } = await import('@/lib/firebase-admin');
-    const projectRef = adminDb.collection('village_projects').doc(projectId);
-    const memberRef = adminDb.collection('village_members').doc(userId);
-    const activityRef = adminDb.collection('village_activities').doc();
+    const projectRef = adminDb.collection('village_projects')?.doc(projectId);
+    const memberRef = adminDb.collection('village_members')?.doc(userId);
+    const activityRef = adminDb.collection('village_activities')?.doc();
 
     try {
-      await adminDb.runTransaction(async (t: { get: (ref: any) => Promise<any>; update: (ref: any, data: any) => void; set: (ref: any, data: any) => void }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firebase Transaction type not directly importable
+      await adminDb.runTransaction(async (t: any) => {
         const projectDoc = await t.get(projectRef);
         const memberDoc = await t.get(memberRef);
 

@@ -111,7 +111,7 @@ export class OmniUserRegistry {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 用戶偏好表 (userId → preferences) */
   private _preferences: Map<string, UserPreference[]> = new Map();

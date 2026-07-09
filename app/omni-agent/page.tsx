@@ -1,5 +1,7 @@
 "use client";
 
+import React from 'react';
+
 /**
  * OmniAgent Console UI — /omni-agent
  *
@@ -219,7 +221,7 @@ function renderMarkdown(text: string): string {
     .replace(/\n/g, '<br/>');
 }
 
-async function apiCall(type: string, payload?: any): Promise<any> {
+async function apiCall(type: string, payload?: Record<string, unknown>): Promise<Record<string, unknown>> {
   const res = await fetch('/api/omni-agent/console', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

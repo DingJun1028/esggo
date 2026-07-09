@@ -276,8 +276,7 @@ export function WuzuoNoteView() {
             <span className="text-textSecondary font-semibold">優先級:</span>
             <select
               value={filterPriority}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onChange={(e) => setFilterPriority(e.target.value as any)}
+              onChange={(e) => setFilterPriority(e.target.value as Priority | "All")}
               className="bg-primary border border-borderColor rounded-lg px-2 py-1 outline-none focus:border-accentTeal cursor-pointer"
             >
               <option value="All">全部</option>
@@ -291,8 +290,7 @@ export function WuzuoNoteView() {
             <span className="text-textSecondary font-semibold">到期日:</span>
             <select
               value={filterDueDate}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onChange={(e) => setFilterDueDate(e.target.value as any)}
+              onChange={(e) => setFilterDueDate(e.target.value as "All" | "Upcoming" | "Overdue")}
               className="bg-primary border border-borderColor rounded-lg px-2 py-1 outline-none focus:border-accentTeal cursor-pointer"
             >
               <option value="All">全部</option>
@@ -307,8 +305,7 @@ export function WuzuoNoteView() {
             <span className="text-textSecondary font-semibold">排序依據:</span>
             <select
               value={sortBy}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as "DueDate" | "Priority" | "Status")}
               className="bg-primary border border-borderColor rounded-lg px-2 py-1 outline-none focus:border-accentTeal cursor-pointer font-medium text-accentTeal"
             >
               <option value="DueDate">到期日優先</option>

@@ -92,7 +92,7 @@ export class OmniHealing implements IOmniHealing {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 問題追蹤 (mutable for read/write access) */
   private _issues: Map<string, MutableSystemIssue> = new Map();

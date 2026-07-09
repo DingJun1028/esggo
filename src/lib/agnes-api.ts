@@ -10,7 +10,7 @@
 
 export interface AgnesResponse {
   success: boolean;
-  data: any;
+  data: Record<string, unknown>;
   error?: string;
   metadata: {
     timestamp: number;
@@ -65,7 +65,7 @@ export class AgnesClient {
   /**
    * Call Groq API (fastest free inference)
    */
-  private async callGroq(prompt: string, systemPrompt: string): Promise<{ output: string; model: string; usage?: any } | null> {
+  private async callGroq(prompt: string, systemPrompt: string): Promise<{ output: string; model: string; usage?: { prompt_tokens: number; completion_tokens: number; total_tokens: number } } | null> {
     if (!this.groqKey) return null;
     const model = GROQ_MODELS[this.groqModelIndex % GROQ_MODELS.length];
     this.groqModelIndex++;

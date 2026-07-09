@@ -278,7 +278,7 @@ export function OmniTodoPanel() {
           <select
             aria-label="依狀態過濾"
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) => setFilterStatus(e.target.value as 'all' | TodoStatus)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -297,7 +297,7 @@ export function OmniTodoPanel() {
           <select
             aria-label="依優先級過濾"
             value={filterPriority}
-            onChange={(e) => setFilterPriority(e.target.value as any)}
+            onChange={(e) => setFilterPriority(e.target.value as 'all' | TodoPriority)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',
@@ -316,7 +316,7 @@ export function OmniTodoPanel() {
           <select
             aria-label="依類別過濾"
             value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value as any)}
+            onChange={(e) => setFilterCategory(e.target.value as 'all' | TodoCategory)}
             className="px-3 py-2 rounded-lg text-sm"
             style={{
               background: 'var(--bg-secondary)',

@@ -247,7 +247,7 @@ export class VPSAgent {
 
       // 發送結果回 OmniAgent（通過量子糾纏通道）
       if (this._entangledBus) {
-        const resultEvent = {
+        const resultEvent: IBusEvent = {
           uuid: uuidv4(),
           version: "1.0.0",
           timestamp: Date.now(),
@@ -265,7 +265,7 @@ export class VPSAgent {
             status: result.status,
           },
         };
-        await this._entangledBus.publish(resultEvent as any);
+        await this._entangledBus.publish(resultEvent);
       }
 
       // 恢復到糾纏態
@@ -286,7 +286,7 @@ export class VPSAgent {
    */
   private async _respondToQuery(event: IBusEvent): Promise<void> {
     if (this._entangledBus) {
-      const stateEvent = {
+      const stateEvent: IBusEvent = {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
@@ -299,7 +299,7 @@ export class VPSAgent {
         lifecycle_path: "EMERGED > FROZEN",
         payload: this._globalState,
       };
-      await this._entangledBus.publish(stateEvent as any);
+      await this._entangledBus.publish(stateEvent);
     }
   }
 
@@ -344,7 +344,7 @@ export class VPSAgent {
     const result = await executeTask("health_check");
     
     if (result.status === "success" && result.evidence) {
-      const { system, services } = result.evidence as any;
+      const { system, services } = result.evidence as Record<string, unknown>;
       
       this._globalState.system = system;
       
@@ -486,15 +486,15 @@ export class VPSAgent {
 
     // 通知 OmniAgent（如果仍然連接）
     if (this._entangledBus) {
-      const decohereEvent = {
+      const decohereEvent: IBusEvent = {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
         evidence: {},
         hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
-        eventName: "vps.decohered",
+        eventName: "vps.decohere",
         source_origin: `vps-agent:${this._globalState.vpsId}`,
-        topic: "vps.lifecycle",
+        topic: "vps.decohere",
         stage: "FROZEN" as LifecycleStage,
         lifecycle_path: "FROZEN",
         payload: {
@@ -502,7 +502,7 @@ export class VPSAgent {
           reason: "agent_destroyed",
         },
       };
-      await this._entangledBus.publish(decohereEvent as any);
+      await this._entangledBus.publish(decohereEvent);
     }
 
     console.log(`[VPSAgent] ❌ 量子糾纏已斷開`);

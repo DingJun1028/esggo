@@ -31,7 +31,7 @@ export class OmniAgent implements IOmniAgent {
   readonly uuid: string = uuidv4();
   readonly version: string = "1.0.0";
   readonly timestamp: number = Date.now();
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
   readonly hash: string = "<placeholder-hash>";
   readonly salt?: string = undefined;
   readonly signature?: string = undefined;
@@ -157,12 +157,12 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   readonly uuid: string = uuidv4();
   readonly version: string = "1.0.0";
   readonly timestamp: number = Date.now();
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
   readonly hash: string = "<gateway-hash>";
   readonly salt?: string = undefined;
   readonly signature?: string = undefined;
 
-  private securityHooks: Record<LifecycleStage, ((args: { event?: IBusEvent; prediction?: any; error?: Error }) => Promise<void> | void)[]> = {
+  private securityHooks: Record<LifecycleStage, ((args: { event?: IBusEvent; prediction?: Record<string, unknown>; error?: Error }) => Promise<void> | void)[]> = {
     EMERGED: [],
     ROUTING: [],
     MUTATED: [],
@@ -171,7 +171,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     FROZEN: [],
   };
 
-  async predict(event: IBusEvent): Promise<any> {
+  async predict(event: IBusEvent): Promise<Record<string, unknown>> {
     console.debug(`[OmniAgentGateway] predict – analyzing ${event.eventName}`);
     // Placeholder prediction – always returns a neutral risk score.
     return { riskScore: 0, actions: [] };
@@ -182,23 +182,23 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     // In a production system this would trigger remediation scripts, scaling actions, etc.
   }
 
-  registerSecurityHook(stage: LifecycleStage, hook: (args: { event?: IBusEvent; prediction?: any; error?: Error }) => Promise<void> | void): void {
+  registerSecurityHook(stage: LifecycleStage, hook: (args: { event?: IBusEvent; prediction?: Record<string, unknown>; error?: Error }) => Promise<void> | void): void {
     console.debug(`[OmniAgentGateway] registerSecurityHook – stage=${stage}`);
     this.securityHooks[stage].push(hook);
   }
 
-  async egress(event: IBusEvent): Promise<any> {
+  async egress(event: IBusEvent): Promise<IBusEvent> {
     console.debug(`[OmniAgentGateway] egress – locking event ${event.eventName}`);
     // Apply a simple hash lock (placeholder) and freeze the object.
-    (event as any).hashLock = "locked";
+    (event as IBusEvent & { hashLock?: string }).hashLock = "locked";
     Object.freeze(event);
     return Promise.resolve(event);
   }
 
-  injectChaos(event: IBusEvent): IBusEvent {
+  injectChaos(event: IBusEvent): IBusEvent & { corrupted?: boolean } {
     console.warn(`[OmniAgentGateway] injectChaos – deliberately corrupting event ${event.eventName}`);
     // Introduce a tiny, deterministic error for testing self‑heal.
-    (event as any).corrupted = true;
+    (event as IBusEvent & { corrupted?: boolean }).corrupted = true;
     return event;
   }
 }

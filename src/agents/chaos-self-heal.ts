@@ -36,10 +36,11 @@ export async function runMutationTesting(): Promise<boolean> {
     }
     // 假設測試成功時 exit code = 0，exec throws on non‑zero, so reaching here means success
     return true;
-  } catch (e:any) {
-    console.error(`[ChaosSelfHeal] Mutation testing failed: ${e.message}`);
-    if (e.stdout) console.debug(e.stdout);
-    if (e.stderr) console.warn(e.stderr);
+  } catch (e: unknown) {
+    const err = e instanceof Error ? e : new Error(String(e));
+    console.error(`[ChaosSelfHeal] Mutation testing failed: ${err.message}`);
+    if (e && typeof e === 'object' && 'stdout' in e) console.debug((e as { stdout: string }).stdout);
+    if (e && typeof e === 'object' && 'stderr' in e) console.warn((e as { stderr: string }).stderr);
     return false;
   }
 }

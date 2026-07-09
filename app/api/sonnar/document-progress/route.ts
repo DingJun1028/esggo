@@ -7,8 +7,8 @@ export async function GET(req: NextRequest) {
   let firebaseProgress: Record<string, unknown> | null = null;
   try {
     const { adminDb } = await import('@/lib/firebase-admin');
-    const doc = await adminDb.collection('enterprises').doc(companyId).get();
-    if (doc.exists) {
+    const doc = await adminDb.collection('enterprises')?.doc(companyId)?.get();
+    if (doc?.exists) {
       const data = doc.data() as Record<string, unknown>;
       firebaseProgress = data.documentProgress as Record<string, unknown> || null;
     }

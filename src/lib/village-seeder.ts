@@ -16,19 +16,19 @@ const defaultMembers = [
 
 export async function seedVillageData() {
   try {
-    const projectsSnapshot = await adminDb.collection('village_projects').get();
-    if (projectsSnapshot.empty) {
+    const projectsSnapshot = await adminDb.collection('village_projects')?.get();
+    if (projectsSnapshot?.empty) {
       console.log('Seeding village projects...');
       for (const proj of defaultProjects) {
-        await adminDb.collection('village_projects').doc(proj.id).set(proj);
+        await adminDb.collection('village_projects')?.doc(proj.id)?.set(proj as never);
       }
     }
 
-    const membersSnapshot = await adminDb.collection('village_members').get();
-    if (membersSnapshot.empty) {
+    const membersSnapshot = await adminDb.collection('village_members')?.get();
+    if (membersSnapshot?.empty) {
       console.log('Seeding village members...');
       for (const member of defaultMembers) {
-        await adminDb.collection('village_members').doc(member.user_id).set(member);
+        await adminDb.collection('village_members')?.doc(member.user_id)?.set(member as never);
       }
     }
   } catch (error) {
