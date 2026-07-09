@@ -39,6 +39,9 @@ omniagent-gateway/node_modules/
 omniagent-gateway/logs/
 omniagent-gateway/package-lock.json
 
+# VPS gateway (esggo-vps-gateway) — installed deps only
+vps/node_modules/
+
 # Local AI tool configs
 .gemini/
 .jules/
