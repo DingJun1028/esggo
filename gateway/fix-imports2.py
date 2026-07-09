@@ -1,3 +1,5 @@
+import re
+
 with open('/var/www/esggo/apps/gateway/omni-server.mjs', 'r') as f:
     content = f.read()
 
