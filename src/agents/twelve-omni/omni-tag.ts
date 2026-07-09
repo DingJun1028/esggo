@@ -23,7 +23,7 @@ export class OmniTag implements IOmniTag {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 標籤存儲 */
   private tags: Map<TagId, TagDefinition> = new Map();

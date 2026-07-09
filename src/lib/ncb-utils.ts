@@ -14,7 +14,7 @@ const NCB_API_KEY = process.env.NCB_API_KEY || '';
 export interface NCBQueryOptions {
   table: string;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  body?: any;
+  body?: Record<string, unknown>;
   params?: Record<string, string>;
 }
 
@@ -44,7 +44,7 @@ export async function ncbQuery<T>(options: NCBQueryOptions): Promise<T> {
       // 若是模擬環境未設定 API Key，回傳空資料或模擬資料以防崩潰
       if (!NCB_API_KEY) {
         console.warn(`[NCBDB Proxy] API Key 尚未設定，模擬返回空陣列。目標資料表: ${table}`);
-        return [] as any;
+        return [] as unknown as T;
       }
       throw new Error(`NCBDB Query Failed: ${res.status} ${res.statusText}`);
     }
@@ -54,14 +54,14 @@ export async function ncbQuery<T>(options: NCBQueryOptions): Promise<T> {
   } catch (error) {
     console.error(`[NCBDB Proxy Error] Table: ${table}`, error);
     // 預設返回模擬或空資料，避免阻斷開發流程
-    return [] as any;
+    return [] as unknown as T;
   }
 }
 
 // ── RAG 模組專用封裝 ──────────────────────────────────────────────────────
 
 export const ncbRagService = {
-  async getKnowledgeChunks(queryText: string): Promise<any[]> {
+  async getKnowledgeChunks(queryText: string): Promise<unknown[]> {
     // 模擬呼叫 RAG Vector Search
     return ncbQuery({
       table: 'knowledge_chunks',
@@ -70,7 +70,7 @@ export const ncbRagService = {
     });
   },
 
-  async saveKnowledgeChunks(chunkData: any): Promise<any> {
+  async saveKnowledgeChunks(chunkData: Record<string, unknown>): Promise<unknown> {
     return ncbQuery({
       table: 'knowledge_chunks',
       method: 'POST',
@@ -78,7 +78,7 @@ export const ncbRagService = {
     });
   },
 
-  async getDigitalTwin(userId: string): Promise<any> {
+  async getDigitalTwin(userId: string): Promise<unknown> {
     return ncbQuery({
       table: 'digital_twins',
       method: 'GET',
@@ -86,7 +86,7 @@ export const ncbRagService = {
     });
   },
   
-  async saveValidationLog(log: any): Promise<any> {
+  async saveValidationLog(log: Record<string, unknown>): Promise<unknown> {
     return ncbQuery({
       table: 'validation_logs',
       method: 'POST',
@@ -100,7 +100,7 @@ export const ncbRagService = {
 // ── User Profile 專用封裝 ──────────────────────────────────────────────
 
 export const ncbUserService = {
-  async getProfile(userId: string): Promise<any> {
+  async getProfile(userId: string): Promise<unknown> {
     return ncbQuery({
       table: 'user_profiles',
       method: 'GET',
@@ -108,7 +108,7 @@ export const ncbUserService = {
     });
   },
 
-  async upsertProfile(profile: Record<string, any>): Promise<any> {
+  async upsertProfile(profile: Record<string, unknown>): Promise<unknown> {
     return ncbQuery({
       table: 'user_profiles',
       method: 'POST',
@@ -116,7 +116,7 @@ export const ncbUserService = {
     });
   },
 
-  async updatePoints(userId: string, delta: number): Promise<any> {
+  async updatePoints(userId: string, delta: number): Promise<unknown> {
     return ncbQuery({
       table: 'user_profiles',
       method: 'PUT',

@@ -54,7 +54,7 @@ describe('OmniSeed Integration Matrix', () => {
 
       // Verify that console log indicates planting genesis seed
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[UserGrowth] Planted Genesis OmniSeed'));
-      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[OmniSeed] 萬能種子於 #同心圓中心 觸發超永恆覺醒'));
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('萬能種子於 #同心圓中心 觸發超永恆覺醒'));
 
       consoleSpy.mockRestore();
     });
@@ -81,7 +81,7 @@ describe('OmniSeed Integration Matrix', () => {
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[OmniOrchestrator] Initiating Entropy Reduction'));
 
       // Verify that it planted the OmniSeed audit seal in #記憶聖所
-      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[OmniSeed] 萬能種子於 #記憶聖所 觸發超永恆覺醒'));
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('萬能種子於 #記憶聖所 觸發超永恆覺醒'));
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[OmniOrchestrator] Immutable OmniSeed Audit Seal generated'));
 
       consoleSpy.mockRestore();

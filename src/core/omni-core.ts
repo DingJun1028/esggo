@@ -46,8 +46,11 @@ import { OASummon, quickSummon, SummonResult } from "../agents/oa-summon";
 import { OmniSoulAutoSeed, initSoul } from "../agents/omni-soul-auto-seed";
 import { IOmniSingularity } from "../types/omni-singularity";
 import { IOmniKey } from "../types/omni-key";
-import { IOmniSoul } from "../types/omni-soul";
+import { IOmniSoul, GovernanceAlignment, SoulDecision } from "../types/omni-soul";
+import { EffectCauseHealingResult } from "../types/twelve-omni";
+import { IComponentCore, IOmniAgentBus } from "../types/core-contract";
 import { IBusEvent as LegacyIBusEvent } from "../types/bus-event";
+import { VPSGlobalState, TaskResultBase } from "../agents/vps";
 
 // 12-Omni Components
 import {
@@ -324,7 +327,7 @@ export class OmniCore {
     console.log("[OmniCore] 🌐 註冊 VPS Agent 到生態系統...");
 
     // 1. 初始化 VPS Agent 工廠
-    VPSAgentFactory.initialize(this._omniBus as any);
+    VPSAgentFactory.initialize(this._omniBus as unknown as IOmniAgentBus);
 
     // 2. 創建並註冊 VPS Agent
     const vpsId = `vps-${this._vpsConfig?.host.replace(/\./g, '-') ?? "unknown"}`;
@@ -334,15 +337,15 @@ export class OmniCore {
     });
 
     // 3. 建立量子糾纏：訂閱 VPS 事件
-    this._omniBus.subscribe("vps.command", async (event: any) => {
+    this._omniBus.subscribe("vps.command", async (event: LegacyIBusEvent) => {
       console.log(`[OmniCore] 🔮 VPS 指令: ${event.payload?.action}`);
     });
 
-    this._omniBus.subscribe("vps.result", async (event: any) => {
+    this._omniBus.subscribe("vps.result", async (event: LegacyIBusEvent) => {
       console.log(`[OmniCore] 📊 VPS 結果: ${event.payload?.status}`);
     });
 
-    this._omniBus.subscribe("vps.state", async (event: any) => {
+    this._omniBus.subscribe("vps.state", async (event: LegacyIBusEvent) => {
       console.log(`[OmniCore] 📡 VPS 狀態更新`);
     });
 
@@ -401,8 +404,7 @@ export class OmniCore {
     type: string;
     name: string;
     purpose: string;
-  }): Promise<any> {
-    return this._singularity.manifest(intent);
+  }): Promise<IComponentCore> {
   }
 
   /**
@@ -411,8 +413,7 @@ export class OmniCore {
   public async checkGovernance(action: {
     type: string;
     params: Record<string, unknown>;
-  }): Promise<any> {
-    return this._soul.checkAlignment(action);
+  }): Promise<GovernanceAlignment> {
   }
 
   /**
@@ -421,14 +422,13 @@ export class OmniCore {
   public async decide(context: {
     intent: string;
     options: Array<{ id: string; description: string }>;
-  }): Promise<any> {
-    return this._soul.decide(context);
+  }): Promise<SoulDecision> {
   }
 
   /**
    * VPS 健康檢查
    */
-  public async checkVPSHealth(): Promise<any> {
+  public async checkVPSHealth(): Promise<VPSGlobalState | { error: string }> {
     if (!this._vpsAgent) {
       return { error: "VPS Agent 未配置" };
     }
@@ -438,7 +438,7 @@ export class OmniCore {
   /**
    * VPS 部署
    */
-  public async deployToVPS(params?: Record<string, unknown>): Promise<any> {
+  public async deployToVPS(params?: Record<string, unknown>): Promise<TaskResultBase | { error: string }> {
     if (!this._vpsAgent) {
       return { error: "VPS Agent 未配置" };
     }
@@ -448,7 +448,7 @@ export class OmniCore {
   /**
    * VPS 備份
    */
-  public async backupVPS(params?: Record<string, unknown>): Promise<any> {
+  public async backupVPS(params?: Record<string, unknown>): Promise<TaskResultBase | { error: string }> {
     if (!this._vpsAgent) {
       return { error: "VPS Agent 未配置" };
     }
@@ -458,7 +458,7 @@ export class OmniCore {
   /**
    * 果因修復 — 從症狀追溯根源再修復
    */
-  public async effectCauseHeal(effect: string): Promise<any> {
+  public async effectCauseHeal(effect: string): Promise<EffectCauseHealingResult> {
     return this._omniHealing.effectCauseHeal(effect);
   }
 
@@ -466,11 +466,11 @@ export class OmniCore {
    * 系統狀態總覽
    */
   public async getStatus(): Promise<{
-    singularity: any;
-    key: any;
-    soul: any;
-    vps: any;
-    ecosystem: any;
+    singularity: Awaited<ReturnType<IOmniSingularity['observe']>>;
+    key: { name: string; tier: string; enabled: boolean; frozen: boolean };
+    soul: { name: string; state: string; alignment: GovernanceAlignment };
+    vps: { host: string; entangled: boolean; quantum: string; services: Record<string, unknown> } | null;
+    ecosystem: { registeredAgents: number; busStats: Record<string, unknown> };
     initialized: boolean;
   }> {
     return {
@@ -631,7 +631,7 @@ export async function revealOmni(unknown: string): Promise<string> {
 /**
  * VPS 健康檢查快捷方式
  */
-export async function checkVPS(): Promise<any> {
+export async function checkVPS(): Promise<VPSGlobalState | { error: string }> {
   const core = getOmniCore();
   return core.checkVPSHealth();
 }
@@ -639,7 +639,7 @@ export async function checkVPS(): Promise<any> {
 /**
  * VPS 部署快捷方式
  */
-export async function deployVPS(params?: Record<string, unknown>): Promise<any> {
+export async function deployVPS(params?: Record<string, unknown>): Promise<TaskResultBase | { error: string }> {
   const core = getOmniCore();
   return core.deployToVPS(params);
 }

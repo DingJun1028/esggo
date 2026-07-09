@@ -64,11 +64,12 @@ async function sshExec(
       stderr: result.stderr ?? "",
       exitCode: 0,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Record<string, unknown>;
     return {
-      stdout: error.stdout ?? "",
-      stderr: error.stderr ?? error.message ?? String(error),
-      exitCode: error.code ?? 1,
+      stdout: (err.stdout as string) ?? "",
+      stderr: (err.stderr as string) ?? (err.message as string) ?? String(error),
+      exitCode: (err.code as number) ?? 1,
     };
   }
 }
@@ -326,7 +327,7 @@ export async function handleHealthCheck(): Promise<HealthCheckResult> {
 
     // 2. 檢查服務狀態
     logs.push("[HealthCheck] 🔎 檢查服務狀態...");
-    const services: Record<string, any> = {};
+    const services: Record<string, { status: "running" | "stopped" | "error"; health: "healthy" | "unhealthy" | "degraded"; port: number }> = {};
 
     // ESGGO Core (port 3000)
     const esggoResult = await sshExec(
@@ -654,7 +655,7 @@ export async function executeTask(
     return (handler as () => Promise<TaskResultBase>)();
   }
   
-  return (handler as (params: any) => Promise<TaskResultBase>)(params);
+  return (handler as (params: Record<string, unknown>) => Promise<TaskResultBase>)(params);
 }
 
 export default taskHandlers;

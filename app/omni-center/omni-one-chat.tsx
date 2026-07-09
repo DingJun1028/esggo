@@ -93,7 +93,7 @@ function sanitizeTextHtml(html: string): string {
 }
 
 export function OmniOneChat() {
-  const { isReady, processMessage } = useAgnesApi();
+  const { isReady, processMessage, provider: agnesProvider, modelName: agnesModel, usage: agnesUsage } = useAgnesApi();
   const [model, setModel] = useState<string>("Qwen");
   const [msgs, setMsgs] = useState<Message[]>([
     {
@@ -142,7 +142,7 @@ export function OmniOneChat() {
           const snapshot = await getDocs(
             query(collection(db, "rag_knowledge")),
           );
-          const chunks = snapshot.docs.map((d) => d.data() as any);
+          const chunks = snapshot.docs.map((d) => d.data() as Record<string, unknown>);
 
           if (chunks.length > 0) {
             // Simple keyword overlap scoring

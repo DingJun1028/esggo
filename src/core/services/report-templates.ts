@@ -216,7 +216,7 @@ export const REPORT_SECTION_TEMPLATES: ReportSectionTemplate[] = [
  * @returns 組合後的報告物件
  */
 export function assembleReport(companyName: string): AssembledReport {
-  const company: any = COMPANIES.find(c => c.companyName === companyName);
+  const company: (typeof COMPANIES)[number] | undefined = COMPANIES.find(c => c.companyName === companyName);
   if (!company) return { companyName, companyType: '', title: companyName, generatedAt: new Date().toISOString(), sections: [], dataMaturitySummary: {}, dataGaps: ['Company not found'] };
   const answers = getAnswersByCompany(company.instanceId);
   const answersByChapter: Record<string, V5Answer[]> = {};

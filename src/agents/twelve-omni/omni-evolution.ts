@@ -27,7 +27,7 @@ export class OmniEvolution implements IOmniEvolution {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 演化歷史 */
   private evolutionHistory: EvolutionEvent[] = [];

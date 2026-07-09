@@ -10,7 +10,7 @@
  */
 
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
-import { agnesApi } from '@/lib/agnes-api';
+import { agnesApi, type AgnesResponse } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
 import {
   getRedis,
@@ -130,8 +130,8 @@ export function createTask(companyId: string): string {
   tasks.set(taskId, task);
 
   // Persist to Redis (non-blocking)
-  createTaskState(taskId, companyId, '', 28, 'json').catch(err => {
-    console.warn('[AsyncTask] Redis createTaskState failed:', err?.message);
+  createTaskState(taskId, companyId, '', 28, 'json').catch((err: unknown) => {
+    console.warn('[AsyncTask] Redis createTaskState failed:', err instanceof Error ? err.message : String(err));
   });
 
   return taskId;
@@ -146,8 +146,8 @@ export async function getTask(taskId: string): Promise<TaskProgress | null> {
   try {
     const state = await getTaskState(taskId);
     if (state) return stateToProgress(state);
-  } catch (err: any) {
-    console.warn('[AsyncTask] Redis getTaskState failed:', err?.message);
+  } catch (err: unknown) {
+    console.warn('[AsyncTask] Redis getTaskState failed:', err instanceof Error ? err.message : String(err));
   }
 
   return null;
@@ -215,6 +215,17 @@ export function cleanupOldTasks(): number {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export type ProgressCallback = (progress: TaskProgress) => void;
+
+interface RagChunk {
+  content: string;
+  source: string;
+  chunk_index: number;
+  [key: string]: unknown;
+}
+
+interface ScoredChunk extends RagChunk {
+  score: number;
+}
 
 export function startAsyncTask(
   taskId: string,
@@ -307,7 +318,7 @@ export function startAsyncTask(
       const { adminDb } = require('@/lib/firebase-admin');
       if (adminDb) {
         const snapshot = await adminDb.collection('rag_knowledge').get();
-        const chunks = snapshot.docs.map((d: any) => d.data());
+        const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];
         
         if (chunks.length > 0) {
           // Break currentTitle into keywords (at least 2 chars)
@@ -315,7 +326,7 @@ export function startAsyncTask(
           // Always add generic keywords that might be in reports
           if (userKeywords.length === 0) userKeywords.push(currentTitle);
 
-          const scored = chunks.map((chunk: any) => {
+          const scored = chunks.map((chunk: RagChunk) => {
             const content = String(chunk.content || '').toLowerCase();
             let score = 0;
             for (const kw of userKeywords) {
@@ -324,11 +335,11 @@ export function startAsyncTask(
             return { ...chunk, score };
           });
           
-          scored.sort((a: any, b: any) => b.score - a.score);
-          const topChunks = scored.slice(0, 3).filter((c: any) => c.score > 0 || scored.length <= 3);
+          scored.sort((a: ScoredChunk, b: ScoredChunk) => b.score - a.score);
+          const topChunks = scored.slice(0, 3).filter((c: ScoredChunk) => c.score > 0 || scored.length <= 3);
           
           if (topChunks.length > 0) {
-            ragContext = topChunks.map((c: any) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+            ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
           }
         }
       }
@@ -360,7 +371,7 @@ export function startAsyncTask(
       }
     }
 
-    agnesApi.processRequest(finalPrompt).then(res => {
+    agnesApi.processRequest(finalPrompt).then((res: AgnesResponse) => {
       const generatedText = res.success ? res.data.output : `[Fallback] ${currentTitle} 內容生成中...`;
       const chapterWords = generatedText.length;
       wordsSoFar += chapterWords;
@@ -405,7 +416,7 @@ export function startAsyncTask(
       const delay = 50 + Math.random() * 50;
       const timeout = setTimeout(processNextChapter, delay);
       taskTimeouts.set(taskId, timeout);
-    }).catch(err => {
+    }).catch((err: unknown) => {
       console.warn('[V5 Task] AGNES API Failed, using fallback.', err);
       const chapterWords = 500 + Math.floor(Math.random() * 200);
       wordsSoFar += chapterWords;
@@ -450,7 +461,7 @@ export function startAsyncTask(
 async function updateTaskStateRedis(taskId: string, status: string): Promise<void> {
   const state = await getTaskState(taskId);
   if (state) {
-    await setTaskState({ ...state, status: status as any, updatedAt: new Date().toISOString() });
+    await setTaskState({ ...state, status: status as TaskStatus, updatedAt: new Date().toISOString() });
   }
 }
 

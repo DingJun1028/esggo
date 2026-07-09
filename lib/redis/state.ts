@@ -324,7 +324,7 @@ export async function getProgress(taskId: string): Promise<ProgressInfo> {
   if (!state) {
     return {
       taskId,
-      status: 'not_found' as any,
+      status: 'not_found' as unknown as TaskStatus,
       completed: 0,
       total: 28,
       percentage: 0,
@@ -396,7 +396,7 @@ export async function getProgressInfo(taskId: string): Promise<ProgressInfo | nu
 export async function setReportCache(
   companyId: string,
   format: string,
-  content: any,
+  content: unknown,
 ): Promise<void> {
   const key = reportKey(companyId, format);
   const json = safeStringify(content);
@@ -414,7 +414,7 @@ export async function setReportCache(
 export async function getReportCache(
   companyId: string,
   format: string,
-): Promise<any | null> {
+): Promise<unknown> {
   const key = reportKey(companyId, format);
   const redis = await getRedis();
 
@@ -492,8 +492,8 @@ export async function cleanupStaleTasks(maxAgeSeconds: number = TTL.TASK_STATE):
           }
         }
       }
-    } catch (err: any) {
-      console.warn('[Redis State] Cleanup error:', err?.message);
+    } catch (err: unknown) {
+      console.warn('[Redis State] Cleanup error:', err instanceof Error ? err.message : err);
     }
   }
 

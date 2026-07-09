@@ -7,8 +7,8 @@
 export interface ValidationRule {
   name: string;
   description: string;
-  validate: (value: any) => boolean;
-  message?: (value: any) => string;
+  validate: (value: unknown) => boolean;
+  message?: (value: unknown) => string;
 }
 
 export interface ValidationResult {
@@ -54,7 +54,7 @@ export const ESG_VALIDATION_RULES: Record<string, ValidationRule> = {
   required: {
     name: 'required',
     description: 'Value cannot be null or undefined',
-    validate: (value: any) => value !== null && value !== undefined && value !== '',
+    validate: (value: unknown) => value !== null && value !== undefined && value !== '',
     message: () => 'This field is required',
   },
   email: {
@@ -85,7 +85,7 @@ export const ESG_VALIDATION_RULES: Record<string, ValidationRule> = {
  * @returns Validation result
  */
 export function validate(
-  value: any,
+  value: unknown,
   rules: string[] | ValidationRule[]
 ): ValidationResult {
   const errors: string[] = [];
@@ -219,9 +219,9 @@ export function validateIndicator(data: {
  * @returns Composite validator function
  */
 export function createCompositeValidator(
-  validators: Array<(value: any) => ValidationResult>
-): (value: any) => ValidationResult {
-  return (value: any): ValidationResult => {
+  validators: Array<(value: unknown) => ValidationResult>
+): (value: unknown) => ValidationResult {
+  return (value: unknown): ValidationResult => {
     const allErrors: string[] = [];
     const allWarnings: string[] = [];
 

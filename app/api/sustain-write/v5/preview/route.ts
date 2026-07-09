@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-  } catch (error: any) {
-    return jsonError('INTERNAL_ERROR', error.message || 'Server Error', 500);
+  } catch (error: unknown) {
+    return jsonError('INTERNAL_ERROR', error instanceof Error ? error.message : 'Server Error', 500);
   }
 }

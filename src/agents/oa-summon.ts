@@ -355,7 +355,7 @@ export async function quickSummon(config?: SummonConfig): Promise<SummonResult> 
  */
 export async function summonAndInitialize(config?: SummonConfig): Promise<{
   summon: SummonResult;
-  core: any;
+  core: { initialize(): Promise<void> };
 }> {
   const { getOmniCore } = await import('../core/omni-core');
   const core = getOmniCore({

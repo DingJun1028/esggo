@@ -62,13 +62,13 @@ export interface V5GeneratedReport {
 }
 
 export function getV5Companies() {
-  return COMPANIES.map((c: any) => ({
+  return COMPANIES.map((c: { instanceId: string; companyName: string; shortName: string; industryType: string }) => ({
     id: c.instanceId, name: c.companyName, shortName: c.shortName, industry: c.industryType,
   }));
 }
 
 export function assembleV5Report(companyId: string): V5GeneratedReport | null {
-  const profile = COMPANIES.find((c: any) => c.instanceId === companyId);
+  const profile = COMPANIES.find((c: { instanceId: string; companyName: string; industryType: string }) => c.instanceId === companyId);
   if (!profile) return null;
   const answers = getAnswersByCompany(companyId);
   if (!answers.length) return null;

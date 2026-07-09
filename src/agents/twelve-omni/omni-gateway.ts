@@ -22,7 +22,7 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 戒嚴狀態 */
   private martialLawActive: boolean = false;
@@ -98,7 +98,7 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
    * 安全轉發
    * Hash Lock + Object.freeze()
    */
-  async secureForward(event: IBusEvent): Promise<any> {
+  async secureForward(event: IBusEvent): Promise<LockedEvent> {
     const locked = await this.hashLock(event);
 
     // 凍結事件

@@ -44,7 +44,7 @@ export function OmniGrammarEditor({ initialText, onSave }: { initialText: string
         </h3>
         <select 
           value={tone}
-          onChange={(e) => setTone(e.target.value as any)}
+          onChange={(e) => setTone(e.target.value as 'professional' | 'approachable' | 'academic')}
           className="bg-primary text-textPrimary text-sm rounded-md px-3 py-1.5 border border-borderColor/50 focus:outline-none focus:border-accentTeal"
         >
           <option value="professional">專業嚴謹 (Professional)</option>

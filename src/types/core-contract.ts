@@ -11,7 +11,7 @@ export interface IComponentCore {
   /** 時間戳（毫秒） */
   readonly timestamp: number;
   /** 證據庫，存放驗算、簽章等額外資訊 */
-  evidence: Record<string, any>;
+  evidence: Record<string, unknown>;
 }
 
 /** 系統生命週期階段 */
@@ -25,7 +25,7 @@ export type LifecycleStage =
 /**
  * 事件模型 – OAB 內部傳遞的最小單位
  */
-export interface IBusEvent<T = any> extends IComponentCore {
+export interface IBusEvent<T = unknown> extends IComponentCore {
   /** 事件名稱（例：user.signup） */
   readonly eventName: string;
   /** 每筆資料的原始起點 */
@@ -51,13 +51,13 @@ export interface ITaskSpec {
   name: string;
   uuid: string;
   version: string;
-  payload?: any;
+  payload?: unknown;
 }
 
 /** 任務結果 */
 export interface ITaskResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 
@@ -113,7 +113,7 @@ export interface IOmniAgentGateway extends IComponentCore {
   ingress(event: IBusEvent): Promise<IBusEvent>;
 
   /** 安全轉發 – Hash Lock、Object.freeze 後對外發送 */
-  secureForward(event: IBusEvent): Promise<any>;
+  secureForward(event: IBusEvent): Promise<IBusEvent>;
 
   /** 全域戒嚴控制 */
   onMartialLaw(reason: string): void;

@@ -26,7 +26,7 @@ export class OmniComponent implements IOmniComponent {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, any> = {};
+  evidence: Record<string, unknown> = {};
 
   /** 組件存儲 */
   private components: Map<ComponentId, ComponentInfo> = new Map();

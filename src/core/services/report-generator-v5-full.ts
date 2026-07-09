@@ -49,7 +49,7 @@ export interface ExtendedV5Report extends V5GeneratedReport {
     upgradeAdvice: string;
   } | null;
   brandTone?: string;
-  chartConfigs?: any[]; // Rich chart configuration payload
+  chartConfigs?: Array<Record<string, unknown>>; // Rich chart configuration payload
   swarmTrace?: string[];
 }
 

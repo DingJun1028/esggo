@@ -36,8 +36,9 @@ export class OmniSwarmService {
         return data.data;
       }
       throw new Error('Swarm delegation failed');
-    } catch (e: any) {
-      console.warn(`[OmniSwarmService] Swarm fallback triggered: ${e.message}`);
+    } catch (e: unknown) {
+      const err = e instanceof Error ? e : new Error(String(e));
+      console.warn(`[OmniSwarmService] Swarm fallback triggered: ${err.message}`);
       return `[L-Hub 降級回覆] 暫時無法連線，已改由本地模型接管處理。`;
     }
   }

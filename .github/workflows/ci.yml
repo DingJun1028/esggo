@@ -1,8 +1,15 @@
+# =============================================================================
+# ESG GO — CI Pipeline (Quality Gate)
+# =============================================================================
+# 觸發條件: push/PR to main
+# 檢查項目: TypeScript、ESLint、Vitest 單元測試
+# =============================================================================
+
 name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
 
@@ -13,53 +20,134 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "11.5.2"
+
 jobs:
-  ruff:
-    name: Ruff (Python linter)
+  # ─── TypeScript 型別檢查 ──────────────────────────────────────
+  typecheck:
+    name: TypeScript Check
     runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install Ruff
-        run: pip install ruff || echo "Failed to install Ruff, continuing..."
-      - name: Run Ruff check
-        run: ruff check . || echo "Ruff check completed with issues"
-
-  pytest:
-    name: Pytest
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install Python dependencies
-        run: |
-          pip install openpyxl pytest || echo "Failed to install basic deps, continuing..."
-          if [ -f setup.py ] || [ -f pyproject.toml ]; then
-              pip install -e . || echo "Failed to install package in editable mode, continuing..."
-          fi
-      - name: Run tests
-        run: python -m pytest tests/ -v || echo "Tests completed with failures"
-
-  eslint:
-    name: ESLint (TypeScript)
-    runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          version: 11.5.2
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile || echo "Failed to install dependencies, continuing..."
+        run: pnpm install --frozen-lockfile
+      - name: Run tsc --noEmit
+        run: pnpm typecheck
+
+  # ─── ESLint 程式碼品質 ────────────────────────────────────────
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Run ESLint
-        run: pnpm lint --if-present || echo "ESLint check completed"
+        run: pnpm lint --if-present || echo "ESLint not configured, skipping"
+
+  # ─── Vitest 單元測試 ──────────────────────────────────────────
+  test:
+    name: Vitest Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run Vitest
+        run: pnpm vitest run --reporter=verbose
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test-results/
+            coverage/
+          retention-days: 7
+
+  # ─── 建置檢查 ─────────────────────────────────────────────────
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+    needs: [typecheck, eslint, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  # ─── Docker 映像構建測試 ──────────────────────────────────────
+  docker:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image (x64)
+        run: |
+          docker build -t esggo:test --target runner .
+          echo "Docker image built successfully"
+
+  # ─── VPS 腳本語法檢查 ─────────────────────────────────────────
+  validate-vps:
+    name: Validate VPS Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bash syntax check
+        run: |
+          set -e
+          shopt -s globstar nullglob
+          fail=0
+          for f in vps/**/*.sh vps/*.sh; do
+            case "$f" in */console-*|*/recovery/*|*-bundle*|*oneshot*) echo "SKIP $f"; continue ;; esac
+            if bash -n "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
+          done
+          exit $fail
+      - name: Node syntax check
+        run: |
+          set -e
+          for f in vps/**/*.mjs vps/**/*.cjs vps/*.mjs vps/*.cjs; do
+            if node --check "$f"; then echo "OK  $f"; else echo "FAIL $f"; exit 1; fi
+          done
+      - name: Secret scan
+        run: |
+          set -e
+          echo "Scanning for committed secrets..."
+          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|-----BEGIN .*PRIVATE KEY-----)" vps/ ; then
+            echo "::error::Possible secret found in vps/"; exit 1
+          fi
+          echo "No secrets detected"
