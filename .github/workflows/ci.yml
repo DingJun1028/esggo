@@ -132,7 +132,7 @@ jobs:
           set -e
           shopt -s globstar nullglob
           fail=0
-          for f in vps/**/*.sh vps/*.sh; do
+          for f in $(find vps -name '*.sh'); do
             case "$f" in */console-*|*/recovery/*|*-bundle*|*oneshot*) echo "SKIP $f"; continue ;; esac
             if bash -n "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
           done
@@ -140,7 +140,7 @@ jobs:
       - name: Node syntax check
         run: |
           set -e
-          for f in vps/**/*.mjs vps/**/*.cjs vps/*.mjs vps/*.cjs; do
+          find vps -name '*.mjs' -o -name '*.cjs' | while read -r f; do
             if node --check "$f"; then echo "OK  $f"; else echo "FAIL $f"; exit 1; fi
           done
       - name: Secret scan
