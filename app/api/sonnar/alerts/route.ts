@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
     }
 
     return jsonError('INVALID_ACTION', 'Invalid action');
-  } catch (err) {
+  } catch {
     return jsonError('INTERNAL_ERROR', 'Server error');
   }
 }

@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
         filters: { sources, category, region, from, to, fields },
       },
     });
-  } catch (error: unknown) {
+  } catch {
     // If query fails, return mock data for demo
     const mockData = generateMockExportData(limit);
     if (format === 'csv') {

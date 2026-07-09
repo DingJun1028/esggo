@@ -2,7 +2,7 @@
 // app/api/memory/route.ts
 // Both Next.js (internal) and Gateway (via HTTP) can use this
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import type { MemoryEntry, MemoryQuery } from '@esggo/shared';
 import { jsonResponse, jsonError } from '@/lib/api-utils';

@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       totalPractices: allPractices.length,
       assessedPractices: assessmentList.length,
     });
-  } catch (error) {
+  } catch {
     return jsonError('INTERNAL_ERROR', 'ESG 評估失敗');
   }
 }

@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     };
 
     return jsonResponse({ practices, stats });
-  } catch (error) {
+  } catch {
     return jsonError('INTERNAL_ERROR', 'Failed to query best practices');
   }
 }
