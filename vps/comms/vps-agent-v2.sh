@@ -6,6 +6,9 @@ RELAY_PORT="${2:-9999}"
 AUTH_TOKEN="${3:-esggo-relay-20260707}"
 POLL_INTERVAL="${POLL_INTERVAL:-3}"
 RETRY_INTERVAL="${RETRY_INTERVAL:-10}"
+GATEWAY_URL="${GATEWAY_URL:-http://127.0.0.1:8642}"
+GATEWAY_TOKEN="${GATEWAY_TOKEN:-$AUTH_TOKEN}"
+AGENT_ID="${AGENT_ID:-vps-relay-$(hostname)}"
 VPS_IP=$(curl -s --max-time 5 http://checkip.amazonaws.com 2>/dev/null || echo "unknown")
 
 GREEN='\033[0;32m'; RED='\033[0;31m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
@@ -21,9 +24,38 @@ json_escape() {
   python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))" 2>/dev/null || echo '""'
 }
 
+omni_register() {
+  curl -s --max-time 5 -X POST "${GATEWAY_URL}/agent/register" \
+    -H "Content-Type: application/json" \
+    ${GATEWAY_TOKEN:+-H "X-Omni-Token: $GATEWAY_TOKEN"} \
+    -d "{\"agentId\":\"$AGENT_ID\",\"name\":\"VPS Relay Agent\",\"host\":\"$(hostname)\",\"channel\":\"relay\",\"capabilities\":[\"shell\",\"relay\"]}" \
+    > /dev/null 2>&1 || true
+}
+
+omni_enqueue() {
+  local command="$1"; local gw_id=""
+  gw_id=$(curl -s --max-time 5 -X POST "${GATEWAY_URL}/agent/command" \
+    -H "Content-Type: application/json" \
+    ${GATEWAY_TOKEN:+-H "X-Omni-Token: $GATEWAY_TOKEN"} \
+    -d "{\"agentId\":\"$AGENT_ID\",\"command\":{\"command\":$(printf '%s' "$command" | json_escape),\"description\":\"relay cmd\"}}" \
+    2>/dev/null | python3 -c "import sys,json; print(json.loads(sys.stdin.read()).get('command',{}).get('id',''))" 2>/dev/null || echo "")
+  printf '%s' "$gw_id"
+}
+
+omni_report() {
+  local gw_id="$1"; local result_json="$2"
+  [ -z "$gw_id" ] && return 0
+  curl -s --max-time 5 -X POST "${GATEWAY_URL}/agent/result" \
+    -H "Content-Type: application/json" \
+    ${GATEWAY_TOKEN:+-H "X-Omni-Token: $GATEWAY_TOKEN"} \
+    -d "{\"agentId\":\"$AGENT_ID\",\"commandId\":\"$gw_id\",\"result\":$(printf '%s' "$result_json")}" \
+    > /dev/null 2>&1 || true
+}
+
 exec_command() {
   local cmd_id="$1"; local command="$2"; local start_time=$(date +%s)
   log "Executing: $command"
+  local gw_id; gw_id=$(omni_enqueue "$command")
   local stdout=""; local stderr=""; local exit_code=0
   stdout=$(eval "$command" 2> >(stderr=$(cat); echo "$stderr" >&2)) || exit_code=$?
   local end_time=$(date +%s); local duration=$((end_time - start_time))
@@ -56,6 +88,8 @@ EOF
   else
     warn "Failed to send result (HTTP $http_code)"
   fi
+
+  omni_report "$gw_id" "$result"
 }
 
 poll_loop() {
@@ -116,5 +150,8 @@ curl -s --max-time 5 \
   -H "X-Auth-Token: $AUTH_TOKEN" \
   -d '{"command":"echo '\''VPS Agent Connected'\''","description":"Agent registration"}' \
   > /dev/null 2>&1 || true
+
+info "Cooperating with Omni system at ${GATEWAY_URL}..."
+omni_register
 
 poll_loop

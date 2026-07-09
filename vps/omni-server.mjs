@@ -19,6 +19,67 @@ app.use(express.json());
 
 const genId = (prefix) => `${prefix}_vps_${Date.now()}`;
 
+// ==========================================
+// VPS Agent Cooperation Hub
+// ==========================================
+const agents = new Map();
+
+function registerAgent({ agentId, name, host, channel, capabilities }) {
+  const now = Date.now();
+  const existing = agents.get(agentId);
+  const agent = {
+    agentId,
+    name: name || agentId,
+    host: host || 'unknown',
+    channel: channel || 'direct',
+    capabilities: capabilities || [],
+    status: 'online',
+    registeredAt: existing?.registeredAt || now,
+    lastHeartbeat: now,
+    commands: existing?.commands || [],
+  };
+  agents.set(agentId, agent);
+  return agent;
+}
+
+function heartbeatAgent(agentId, payload = {}) {
+  const agent = agents.get(agentId);
+  if (!agent) return null;
+  agent.status = 'online';
+  agent.lastHeartbeat = Date.now();
+  if (payload.host) agent.host = payload.host;
+  if (payload.channel) agent.channel = payload.channel;
+  if (Array.isArray(payload.capabilities)) agent.capabilities = payload.capabilities;
+  if (payload.system) agent.system = payload.system;
+  return agent;
+}
+
+function queueAgentCommand(agentId, command) {
+  const agent = agents.get(agentId);
+  if (!agent) return null;
+  const cmd = {
+    id: genId('cmd'),
+    command: command.command || '',
+    description: command.description || '',
+    status: 'queued',
+    createdAt: new Date().toISOString(),
+  };
+  agent.commands.push(cmd);
+  if (agent.commands.length > 50) agent.commands = agent.commands.slice(-50);
+  return cmd;
+}
+
+function reportAgentResult(agentId, resultId, result) {
+  const agent = agents.get(agentId);
+  if (!agent) return null;
+  const cmd = agent.commands.find((c) => c.id === resultId);
+  if (!cmd) return null;
+  cmd.status = 'done';
+  cmd.result = result;
+  cmd.finishedAt = new Date().toISOString();
+  return cmd;
+}
+
 app.get('/status', (req, res) => {
   res.json({
     status: 'online',
@@ -28,7 +89,55 @@ app.get('/status', (req, res) => {
     uptime: process.uptime(),
     active_workers: 8,
     memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+    agents: Array.from(agents.values()).map((a) => ({
+      agentId: a.agentId,
+      name: a.name,
+      status: a.status,
+      channel: a.channel,
+      lastHeartbeat: a.lastHeartbeat,
+    })),
   });
+});
+
+// ==========================================
+// VPS Agent Cooperation API
+// ==========================================
+app.post('/agent/register', requireAuth, (req, res) => {
+  const { agentId } = req.body || {};
+  if (!agentId) return res.status(400).json({ error: 'agentId required' });
+  const agent = registerAgent(req.body);
+  console.log(`[OmniGateway] 🔗 Agent registered: ${agentId} (${agent.channel})`);
+  res.json({ status: 'registered', agent });
+});
+
+app.post('/agent/heartbeat', requireAuth, (req, res) => {
+  const { agentId } = req.body || {};
+  if (!agentId) return res.status(400).json({ error: 'agentId required' });
+  const agent = heartbeatAgent(agentId, req.body);
+  if (!agent) return res.status(404).json({ error: 'agent not registered' });
+  const pending = agent.commands.filter((c) => c.status === 'queued');
+  res.json({ status: 'ok', pending });
+});
+
+app.post('/agent/command', requireAuth, (req, res) => {
+  const { agentId, command } = req.body || {};
+  if (!agentId) return res.status(400).json({ error: 'agentId required' });
+  const cmd = queueAgentCommand(agentId, command || {});
+  if (!cmd) return res.status(404).json({ error: 'agent not registered' });
+  console.log(`[OmniGateway] 📨 Command queued for ${agentId}: ${cmd.command}`);
+  res.json({ status: 'queued', command: cmd });
+});
+
+app.post('/agent/result', requireAuth, (req, res) => {
+  const { agentId, commandId, result } = req.body || {};
+  if (!agentId || !commandId) return res.status(400).json({ error: 'agentId and commandId required' });
+  const cmd = reportAgentResult(agentId, commandId, result);
+  if (!cmd) return res.status(404).json({ error: 'command not found' });
+  res.json({ status: 'ok', command: cmd });
+});
+
+app.get('/agents', requireAuth, (req, res) => {
+  res.json({ agents: Array.from(agents.values()) });
 });
 
 function requireAuth(req, res, next) {
