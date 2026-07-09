@@ -118,6 +118,29 @@ jobs:
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             ./ ${{ env.VPS_USER }}@${{ env.VPS_HOST }}:${{ env.APP_DIR }}/
 
+      - name: Deploy secrets to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.VPS_HOST }}
+          username: ${{ env.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            printf '%s\n' \
+              "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" \
+              "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" \
+              "OPENROUTER_MODEL=${{ secrets.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free' }}" \
+              "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" \
+              "AGNES_API=${{ secrets.AGNES_API }}" \
+              "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" \
+              "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+              "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+              "FIREBASE_SERVICE_ACCOUNT_JSON=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" \
+              "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}" \
+              "GATEWAY_API_KEY=${{ secrets.GATEWAY_API_KEY }}" \
+              > ${{ env.APP_DIR }}/vps/.env
+            echo "✅ .env written to ${{ env.APP_DIR }}/vps/.env"
+
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
