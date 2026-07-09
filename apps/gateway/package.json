@@ -24,6 +24,7 @@
     "@types/node": "^20.19.43",
     "@types/node-telegram-bot-api": "^0.64.15",
     "@types/ws": "^8.18.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.4.3"
   }
 }
