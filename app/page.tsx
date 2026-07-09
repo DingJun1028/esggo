@@ -66,6 +66,16 @@ const NAV_MODULES = [
     accent: '#f87171',
     badge: 'GNOSIS',
   },
+  {
+    href: '/resources',
+    icon: '📦',
+    title: '系統資源總覽',
+    subtitle: 'Platform Resources',
+    desc: '功能模組 · AI 模型 · 基礎設施 · 資源 inventory',
+    color: 'from-amber-500/20 to-yellow-500/10',
+    accent: '#D4AF37',
+    badge: 'SYS',
+  },
 ];
 
 const FIVE_T = [
