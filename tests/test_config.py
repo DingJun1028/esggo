@@ -9,14 +9,12 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from esggo.config import (  # noqa: E402
     LIB_DIR,
+    PROJECT_ROOT as CFG_ROOT,
     REPORTS_DIR,
     SUSTAIN_WRITE_DIR,
     ensure_dirs,
     get_answer_database_ts,
     get_tmp_excel,
-)
-from esggo.config import (
-    PROJECT_ROOT as CFG_ROOT,
 )
 
 
