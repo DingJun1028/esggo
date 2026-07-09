@@ -17,8 +17,11 @@ RUN corepack enable pnpm
 
 # 複製所有原始碼
 COPY . .
-# 從 deps 階段複製 node_modules
+# 從 deps 階段複製 node_modules（--ignore-scripts 跳過了 prisma generate）
 COPY --from=deps /app/node_modules ./node_modules
+
+# 手動執行 prisma generate（因為 --ignore-scripts 跳過了 postinstall）
+RUN npx prisma generate
 
 # 執行建置
 RUN pnpm run build

@@ -43,6 +43,9 @@ COPY --from=deps /app/packages/ui/node_modules ./packages/ui/node_modules 2>/dev
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# 手動執行 prisma generate（--ignore-scripts 跳過了 postinstall）
+RUN npx prisma generate
+
 # 執行建置（ARM64 原生構建）
 RUN pnpm run build
 
