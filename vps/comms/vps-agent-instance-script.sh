@@ -8,7 +8,8 @@ set -euo pipefail
 # ---- 參數（可被 env 或傳參覆寫） ----
 RELAY_IP="${RELAY_IP:-100.108.241.29}"
 RELAY_PORT="${RELAY_PORT:-9999}"
-AUTH_TOKEN="${AUTH_TOKEN:-esggo-relay-20260707}"
+# AUTH_TOKEN must come from environment (.env.secrets); no hardcoded default.
+: "${AUTH_TOKEN:?AUTH_TOKEN not set — export it from .env.secrets (source vps/.env.secrets)}"
 POLL_INTERVAL="${POLL_INTERVAL:-3}"
 RETRY_INTERVAL="${RETRY_INTERVAL:-10}"
 

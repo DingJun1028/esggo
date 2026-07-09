@@ -11,7 +11,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 const GATEWAY_KEY = gatewayKey();
 if (!GATEWAY_KEY) {
   console.warn(
-    '[OmniGateway] WARNING: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) 尚未設定，閘道請求可能未授權或失敗。',
+    '[OmniGateway] WARNING: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) is not set; gateway requests may be unauthorized or fail.',
   );
 }
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
@@ -19,9 +19,9 @@ const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 // OmniMasterKey 金鑰庫稽核：啟動時列出缺少的必要密鑰（僅輸出名稱，不輸出密鑰值本身）
 const vaultAudit = audit();
 if (!vaultAudit.ok) {
-  console.warn(`[OmniMasterKey] ⚠️ 缺少必要密鑰: ${vaultAudit.missing.join(', ')}`);
+  console.warn(`[OmniMasterKey] Missing required secrets: ${vaultAudit.missing.join(', ')}`);
 } else {
-  console.log('[OmniMasterKey] ✅ 必要密鑰齊全，金鑰庫稽核通過。');
+  console.log('[OmniMasterKey] All required secrets present; vault audit passed.');
 }
 
 app.use(cors());
@@ -91,7 +91,11 @@ function reportAgentResult(agentId, resultId, result) {
 }
 
 app.get('/status', (req, res) => {
-  res.json({
+  // Base health is public (monitoring). Agent topology is sensitive:
+  // only return it when a valid gateway token is presented.
+  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || '').replace('Bearer ', '');
+  const authed = !!GATEWAY_KEY && token === GATEWAY_KEY;
+  const body = {
     status: 'online',
     version: '0.14.1',
     platform: 'Ubuntu 24.04 (VPS)',
@@ -99,14 +103,17 @@ app.get('/status', (req, res) => {
     uptime: process.uptime(),
     active_workers: 8,
     memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
-    agents: Array.from(agents.values()).map((a) => ({
+  };
+  if (authed) {
+    body.agents = Array.from(agents.values()).map((a) => ({
       agentId: a.agentId,
       name: a.name,
       status: a.status,
       channel: a.channel,
       lastHeartbeat: a.lastHeartbeat,
-    })),
-  });
+    }));
+  }
+  res.json(body);
 });
 
 // ==========================================
@@ -223,6 +230,9 @@ app.post('/execute', requireAuth, async (req, res) => {
   res.json({ execution, artifact });
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`🚀 OmniAgent Gateway Server running on port ${port} (0.0.0.0)`);
+// Bind to loopback only: all external traffic must go through nginx
+// (which terminates TLS and can add auth), preventing direct 0.0.0.0 exposure.
+const BIND_ADDR = process.env.GATEWAY_BIND_ADDR || '127.0.0.1';
+app.listen(port, BIND_ADDR, () => {
+  console.log(`OmniAgent Gateway Server running on port ${port} (${BIND_ADDR})`);
 });
