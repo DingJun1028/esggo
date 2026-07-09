@@ -1,7 +1,6 @@
-import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { jsonError, validateParams } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -34,8 +33,7 @@ export async function POST(req: Request) {
     }
 
     if (!HAS_API_KEY) {
-      return NextResponse.json({ 
-        success: true, 
+      return jsonResponse({
         answer: '[OmniRAG 模擬回覆] 尚未配置 GEMINI_API_KEY，請設定後獲得真實 AI 回應。',
         references: [],
         provider: 'mock'
@@ -43,8 +41,7 @@ export async function POST(req: Request) {
     }
 
     if (!USE_REAL_AI) {
-      return NextResponse.json({ 
-        success: true, 
+      return jsonResponse({
         answer: '[OmniRAG 免費層] 根據檢索到的內容，本主題暫無深入分析數據。',
         references: [],
         provider: 'mock'
@@ -64,7 +61,7 @@ export async function POST(req: Request) {
       promptEmbedding = embedRes.embeddings?.[0]?.values || [];
     } catch (e) {
       console.warn('Embedding generation failed:', e);
-      return NextResponse.json({ error: '無法生成查詢向量' }, { status: 500 });
+      return jsonError('EMBEDDING_FAILED', '無法生成查詢向量');
     }
 
     // 2. Fetch documents (in a real production vector DB this would be a nearest neighbor search)
@@ -107,14 +104,13 @@ ${prompt}`;
       contents: finalPrompt,
     });
 
-    return NextResponse.json({ 
-      success: true, 
+    return jsonResponse({
       answer: response.text,
       references: topK.map(d => d.source),
       provider: 'gemini'
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('RAG Query Error:', error);
-    return jsonError('RAG_QUERY_FAILED', error.message);
+    return jsonError('RAG_QUERY_FAILED', (error as Error).message);
   }
 }

@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAnswersByCompany, QUESTIONS } from '@/core/repositories/sustain-write-answer-database';
 import { createHash } from 'crypto';
+import { jsonError } from '@/lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const companyId = searchParams.get('companyId');
   if (!companyId) {
-    return NextResponse.json({ error: 'Missing companyId' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', 'Missing companyId', 400);
   }
 
   const answers = getAnswersByCompany(companyId);

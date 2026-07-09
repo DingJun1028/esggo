@@ -1,24 +1,26 @@
 // ═══════════════════════════════════════════════════════════════
 // POST /api/esg/assess - ESG 評估並計算分數
+//
+// 最佳實踐: 使用 @esggo/errors 統一錯誤回應
 // ═══════════════════════════════════════════════════════════════
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import {
   getAllPractices,
   calculateOverallScore,
 } from '@/core/ai/skills/registry';
 import type { PracticeAssessment } from '@/core/ai/skills/registry';
+import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { company, assessments } = body;
 
-    if (!company) {
-      return NextResponse.json(
-        { success: false, error: 'company is required' },
-        { status: 400 }
-      );
+    // Validate required fields using unified validator
+    const paramValidation = validateParams({ company });
+    if (!paramValidation.valid) {
+      return jsonError('INVALID_PARAMS', `缺少必要參數: ${paramValidation.missing}`);
     }
 
     // 如果沒有提供評估，使用預設模板
@@ -50,23 +52,17 @@ export async function POST(request: NextRequest) {
         priority: practice.level === 'basic' ? 'high' : practice.level === 'intermediate' ? 'medium' : 'low',
       }));
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        company,
-        overallScore: result.totalScore,
-        pillarScores: result.pillarScores,
-        levelBreakdown: result.levelBreakdown,
-        recommendations: result.recommendations,
-        actionPlan,
-        totalPractices: allPractices.length,
-        assessedPractices: assessmentList.length,
-      },
+    return jsonResponse({
+      company,
+      overallScore: result.totalScore,
+      pillarScores: result.pillarScores,
+      levelBreakdown: result.levelBreakdown,
+      recommendations: result.recommendations,
+      actionPlan,
+      totalPractices: allPractices.length,
+      assessedPractices: assessmentList.length,
     });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: 'Failed to assess ESG' },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', 'ESG 評估失敗');
   }
 }

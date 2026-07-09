@@ -5,15 +5,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import type { MemoryEntry, MemoryQuery } from '@esggo/shared';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
+
+// Redis client type definition
+interface RedisClient {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, ...args: unknown[]): Promise<void>;
+  del(key: string): Promise<void>;
+  keys(pattern: string): Promise<string[]>;
+}
+
 // Import Redis client lazily for graceful fallback
-let redisClient: any = null;
+let redisClient: RedisClient | null = null;
 let memoryFallback: Map<string, { entry: MemoryEntry; expiry: number }> | null = null;
 
-async function getStore() {
+async function getStore(): Promise<RedisClient | Map<string, { entry: MemoryEntry; expiry: number }>> {
   if (!redisClient) {
     try {
       const { getRedis } = await import('@lib/redis');
-      redisClient = await getRedis();
+      redisClient = await getRedis() as RedisClient;
     } catch { /* no redis */ }
     if (!redisClient) {
       memoryFallback = new Map();
@@ -31,15 +41,12 @@ export async function GET(req: NextRequest) {
   if (sp.get('stats') === 'true') {
     const { getRedisHealth } = await import('@lib/redis');
     const health = await getRedisHealth();
-    return NextResponse.json({
-      success: true,
-      data: {
-        totalEntries: health?.keys || 0,
-        totalKeys: health?.keys || 0,
-        redisConnected: health?.connected || false,
-        provider: health?.connected ? 'redis' : 'memory',
-        uptimeSeconds: process.uptime(),
-      },
+    return jsonResponse({
+      totalEntries: health?.keys || 0,
+      totalKeys: health?.keys || 0,
+      redisConnected: health?.connected || false,
+      provider: health?.connected ? 'redis' : 'memory',
+      uptimeSeconds: process.uptime(),
     });
   }
 
@@ -56,15 +63,15 @@ export async function GET(req: NextRequest) {
   if (query.key) {
     if (redisClient) {
       const raw = await redisClient.get(`mem:${query.key}`);
-      if (!raw) return NextResponse.json({ success: true, data: [] });
-      return NextResponse.json({ success: true, data: [JSON.parse(raw)] });
+      if (!raw) return jsonResponse([]);
+      return jsonResponse([JSON.parse(raw)]);
     }
     const found = memoryFallback!.get(query.key);
     if (!found || found.expiry < Date.now()) {
       memoryFallback!.delete(query.key);
-      return NextResponse.json({ success: true, data: [] });
+      return jsonResponse([]);
     }
-    return NextResponse.json({ success: true, data: [found.entry] });
+    return jsonResponse([found.entry]);
   }
 
   // List all matching entries
@@ -75,7 +82,7 @@ export async function GET(req: NextRequest) {
       const raw = await redisClient.get(k);
       if (raw) entries.push(JSON.parse(raw));
     }
-    return NextResponse.json({ success: true, data: entries });
+    return jsonResponse(entries);
   }
 
   // In-memory fallback: filter by prefix/tags
@@ -85,17 +92,23 @@ export async function GET(req: NextRequest) {
   if (query.prefix) entries = entries.filter(e => e.key.startsWith(query.prefix!));
   if (query.tags?.length) entries = entries.filter(e => query.tags!.some(t => e.tags?.includes(t)));
   entries = entries.slice(query.offset, query.offset! + query.limit!);
-  return NextResponse.json({ success: true, data: entries });
+  return jsonResponse(entries);
 }
 
 // POST /api/memory — Create/Update entry
 export async function POST(req: NextRequest) {
   const body = await req.json();
   if (!body.key || body.value === undefined) {
-    return NextResponse.json({ success: false, error: 'key and value required' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', '缺少必要參數: key, value');
   }
 
   const existing = redisClient ? await redisClient.get(`mem:${body.key}`) : memoryFallback?.get(body.key);
+  
+  // Parse existing data - Redis returns string, memory fallback returns object
+  const existingEntry = existing 
+    ? (typeof existing === 'string' ? JSON.parse(existing) : existing.entry)
+    : null;
+
   const entry: MemoryEntry = {
     id: body.id || uuidv4(),
     key: body.key,
@@ -103,7 +116,7 @@ export async function POST(req: NextRequest) {
     tags: body.tags || [],
     source: body.source || 'web',
     ttlSeconds: body.ttlSeconds || 3600,
-    createdAt: existing ? (JSON.parse(existing).createdAt || now()) : now(),
+    createdAt: existingEntry?.createdAt || now(),
     updatedAt: now(),
   };
 
@@ -113,14 +126,14 @@ export async function POST(req: NextRequest) {
     memoryFallback!.set(entry.key, { entry, expiry: Date.now() + entry.ttlSeconds! * 1000 });
   }
 
-  return NextResponse.json({ success: true, data: entry });
+  return jsonResponse(entry);
 }
 
 // DELETE /api/memory?key=xxx
 export async function DELETE(req: NextRequest) {
   const key = req.nextUrl.searchParams.get('key');
   if (!key) {
-    return NextResponse.json({ success: false, error: 'key required' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', '缺少必要參數: key');
   }
 
   if (redisClient) {
@@ -128,5 +141,5 @@ export async function DELETE(req: NextRequest) {
   } else {
     memoryFallback!.delete(key);
   }
-  return NextResponse.json({ success: true, data: { deleted: true } });
+  return jsonResponse({ deleted: true });
 }

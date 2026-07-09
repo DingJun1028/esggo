@@ -4,6 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@/lib/sustain-write';
+import { jsonError } from '@/lib/api-utils';
+import type { ReportChapter } from '@/lib/sustain-write/omni-tag';
 
 
 export const dynamic = 'force-dynamic';
@@ -24,10 +26,7 @@ export async function POST(request: NextRequest) {
     const { companyId, format = 'html' } = body;
 
     if (!companyId) {
-      return NextResponse.json(
-        { success: false, error: '缺少 companyId 參數' },
-        { status: 400 }
-      );
+      return jsonError('INVALID_PARAMS', '缺少 companyId 參數', 400);
     }
 
     const report = assembleCVersionReport(companyId);
@@ -47,7 +46,7 @@ export async function POST(request: NextRequest) {
           companyName: report.companyName,
           totalWords: report.totalWords,
           fiveTStatus: report.fiveTStatus,
-          chapters: report.chapters.map((ch: any) => ({
+          chapters: report.chapters.map((ch: ReportChapter) => ({
             id: ch.id,
             title: ch.title,
             fiveTGate: ch.fiveTGate,
@@ -67,7 +66,7 @@ export async function POST(request: NextRequest) {
         companyName: report.companyName,
         totalWords: report.totalWords,
         fiveTStatus: report.fiveTStatus,
-        chapters: report.chapters.map((ch: any) => ({
+        chapters: report.chapters.map((ch: ReportChapter) => ({
           id: ch.id,
           title: ch.title,
           fiveTGate: ch.fiveTGate,
@@ -78,10 +77,7 @@ export async function POST(request: NextRequest) {
       },
       html: reportToHtml(report),
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message || '報告生成失敗' },
-      { status: 500 }
-    );
+  } catch (error) {
+    return jsonError('INTERNAL_ERROR', (error as Error).message || '報告生成失敗', 500);
   }
 }

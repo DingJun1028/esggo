@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { jsonError } from '@/lib/api-utils';
 import { getPluginRegistry } from '@/lib/omni-base/plugin-registry';
 
 export const dynamic = 'force-dynamic';
@@ -24,7 +25,7 @@ export async function GET() {
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }
 
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
   try {
     const { action, pluginId } = await req.json();
     if (!action || !pluginId) {
-      return NextResponse.json({ error: 'action and pluginId required' }, { status: 400 });
+      return jsonError('INVALID_PARAMS', 'action and pluginId required', 400);
     }
 
     const registry = getPluginRegistry();
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
         await registry.reload(pluginId);
         break;
       default:
-        return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+        return jsonError('INVALID_ACTION', `Unknown action: ${action}`, 400);
     }
 
     return NextResponse.json({
@@ -59,6 +60,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return jsonError('INTERNAL_ERROR', message);
   }
 }
