@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jsonError } from '@/lib/api-utils';
 import { OmniAgent, DEFAULT_CAPABILITIES, OMNI_AGENT_META } from '@/lib/omni-agent';
-import { omniKernel, OMNI_TOPICS } from '@/lib/omni-core/omni-kernel';
+import { omniKernel } from '@/lib/omni-core/omni-kernel';
 import { ESGGO_PALETTE } from '@/lib/omni-theme';
 
 export const dynamic = 'force-dynamic';

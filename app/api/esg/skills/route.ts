@@ -18,7 +18,7 @@ export async function POST() {
         G: skills.filter(s => s.taskType.includes('gri') || s.taskType.includes('materiality')).length,
       },
     });
-  } catch (error) {
+  } catch {
     return jsonError('INTERNAL_ERROR', 'Failed to list skills');
   }
 }

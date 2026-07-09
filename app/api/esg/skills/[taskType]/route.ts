@@ -58,7 +58,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
       },
       context: ctx,
     });
-  } catch (error) {
+  } catch {
     return jsonError('INTERNAL_ERROR', 'Failed to execute skill');
   }
 }

@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { jsonError, jsonResponse } from '@/lib/api-utils';
 import { OmniTodoEngine } from '@/core/omni-todo';
-import type { TodoFilter, TodoSort, TodoPriority, TodoStatus, TodoCategory } from '@/core/omni-todo';
+import type { TodoSort } from '@/core/omni-todo';
 
 // Singleton engine (in-memory, resets on server restart)
 let engine: OmniTodoEngine | null = null;
