@@ -21,7 +21,7 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/ui/package.json packages/ui/
 
 # 安裝所有依賴（monorepo 套件需要 workspace 連結）
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # ─── Stage 2: 建置 ──────────────────────────────────────────────
 FROM --platform=linux/arm64 node:22-alpine AS builder
@@ -63,7 +63,7 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/ui/package.json packages/ui/
 
 # 安裝僅生產依賴
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 
 # 複製構建產物
 COPY --from=builder /app/public ./public
