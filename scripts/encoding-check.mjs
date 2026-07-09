@@ -23,7 +23,13 @@ const shouldFix = args.includes('--fix');
 
 const ROOT = resolve(import.meta.dirname, '..');
 const RECOVERY_LOG = resolve(ROOT, '.encoding-recovery.log');
-const VALID_EXTS = new Set(['ts', 'tsx', 'js', 'mjs', 'cjs', 'json', 'md', 'html', 'css', 'yaml', 'yml', 'sh', 'ps1', 'mjs']);
+const VALID_EXTS = new Set([
+  'ts', 'tsx', 'jsx', 'js', 'mjs', 'cjs',
+  'json', 'md', 'mdx', 'html', 'css',
+  'yaml', 'yml', 'sh', 'ps1', 'bash',
+  'env', 'prisma', 'toml', 'xml', 'svg',
+  'vue', 'svelte', 'astro', 'graphql', 'sql',
+]);
 
 function getStagedFiles() {
   const out = execSync('git diff --cached --name-only --diff-filter=ACMR', { encoding: 'utf-8' });
@@ -120,8 +126,8 @@ if (shouldFix) {
       pos++;
     }
 
-    // Replace with marked placeholder
-    const newContent = content.replace(/\uFFFD/g, '\uFFFD');
+    // Replace with marked placeholder (actual fix)
+    const newContent = content.replace(/\uFFFD/g, '[U+FFFD_REMOVED]');
     writeFileSync(m.file, newContent, 'utf-8');
     console.log(`  Logged: ${m.file}`);
   }

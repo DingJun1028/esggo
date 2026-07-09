@@ -11,6 +11,7 @@
     "apps/*"
   ],
   "scripts": {
+    "prepare": "node scripts/setup-hooks.mjs",
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "next start",

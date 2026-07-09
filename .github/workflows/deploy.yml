@@ -1,5 +1,5 @@
-# Smart AI Router - GitHub Actions CI/CD 工作流程
-# 位置: .github/workflows/deploy.yml
+# Smart AI Router - GitHub Actions CI/CD Workflow
+# Location: .github/workflows/deploy.yml
 
 name: Deploy Smart AI Router
 
@@ -21,7 +21,7 @@ env:
   IMAGE_NAME: ${{ github.repository_owner }}/smart-ai-router
 
 jobs:
-  # 0. 路徑過濾：偵測非 vps 檔案變更
+  # 0. Path filter: detect non-vps file changes
   changes:
     name: Detect Changed Paths
     runs-on: ubuntu-latest
@@ -40,11 +40,10 @@ jobs:
               - 'pyproject.toml'
               - 'tests/**'
 
-  # 1. 程式碼品質檢查
+  # 1. Code quality checks
   lint:
     name: Lint & Type Check
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       
@@ -57,52 +56,50 @@ jobs:
       - name: Install dependencies
         id: install
         run: |
-          # Try different package managers
+          set -e
           if [ -f pnpm-lock.yaml ]; then
             echo "Using pnpm"
             corepack enable
-            pnpm install --frozen-lockfile || echo "pnpm install failed, continuing..."
+            pnpm install --frozen-lockfile
           elif [ -f yarn.lock ]; then
             echo "Using yarn"
-            yarn install --frozen-lockfile || echo "yarn install failed, continuing..."
+            yarn install --frozen-lockfile
           elif [ -f package-lock.json ]; then
             echo "Using npm"
-            npm ci || echo "npm ci failed, trying npm install..."
-            npm install || echo "npm install failed, continuing..."
+            npm ci
           else
             echo "No lockfile found, installing dependencies"
-            npm install || echo "npm install failed, continuing..."
+            npm install
           fi
       
       - name: Run ESLint (if configured)
         if: ${{ always() }}
-        continue-on-error: true
         run: |
+          set -e
           echo "Checking for ESLint configuration..."
           if [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] || [ -f "eslint.config.js" ] || [ -f ".eslintrc" ] || { [ -f "package.json" ] && grep -q "eslint" package.json; }; then
             echo "ESLint configuration found, running lint..."
-            npx eslint . --ext .ts,.tsx --quiet || echo "ESLint check completed with warnings/errors"
+            npx eslint . --ext .ts,.tsx --quiet
           else
             echo "ESLint not configured, skipping..."
           fi
       
       - name: Run Type Check (if configured)
         if: ${{ always() }}
-        continue-on-error: true
         run: |
+          set -e
           echo "Checking for TypeScript configuration..."
           if [ -f "tsconfig.json" ] || [ -f "tsconfig.build.json" ]; then
             echo "TypeScript configuration found, running type check..."
-            npx tsc --noEmit || echo "TypeScript check completed with warnings/errors"
+            npx tsc --noEmit
           else
             echo "TypeScript not configured, skipping..."
           fi
 
-  # 2. Python 單元測試
+  # 2. Python unit tests
   test:
     name: Python Unit Tests
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       
@@ -113,48 +110,43 @@ jobs:
       
       - name: Install build tools
         run: |
-          python -m pip install --upgrade pip || echo "Failed to upgrade pip, continuing..."
-          pip install setuptools wheel || echo "Failed to install setuptools/wheel, continuing..."
+          set -e
+          python -m pip install --upgrade pip
+          pip install setuptools wheel
       
       - name: Install dependencies
         id: install-deps
         run: |
-          # Install package in editable mode if setup.py or pyproject.toml exists
+          set -e
           if [ -f setup.py ] || [ -f pyproject.toml ]; then
             echo "Installing package in editable mode..."
-            pip install -e . || echo "Failed to install package in editable mode, continuing..."
-          else
-            echo "No setup.py or pyproject.toml found, skipping editable install..."
+            pip install -e .
           fi
           
-          # Install requirements if they exist
           if [ -f requirements.txt ]; then
             echo "Installing requirements..."
-            pip install -r requirements.txt || echo "Failed to install requirements, continuing..."
-          else
-            echo "No requirements.txt found, skipping..."
+            pip install -r requirements.txt
           fi
           
-          # Install test dependencies
           echo "Installing test dependencies..."
-          pip install pytest pytest-cov ruff mypy || echo "Failed to install test dependencies, continuing..."
+          pip install pytest pytest-cov ruff mypy
       
       - name: Run tests
-        continue-on-error: true
         run: |
+          set -e
           echo "Running code quality checks..."
-          ruff check . || echo "Ruff check completed with issues"
+          ruff check .
           
           echo "Running tests..."
           if [ -d "tests" ]; then
-            python -m pytest tests/ -v || echo "Tests completed with failures"
+            python -m pytest tests/ -v
           else
             echo "No tests directory found, skipping tests..."
           fi
         env:
           NODE_ENV: test
 
-  # 3. 映像構建與推送
+  # 3. Build and push Docker image
   build-and-push:
     name: Build & Push Docker Image
     needs: [test, changes]
@@ -163,13 +155,13 @@ jobs:
     permissions:
       contents: read
       packages: write
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       
       - name: Check if Dockerfile exists
         id: dockerfile_check
         run: |
+          set -e
           if [ -f ".agents/skills/smart-ai-router/Dockerfile" ]; then
             echo "Found Dockerfile at .agents/skills/smart-ai-router/Dockerfile"
             echo "dockerfile_path=.agents/skills/smart-ai-router/Dockerfile" >> $GITHUB_OUTPUT
@@ -183,17 +175,14 @@ jobs:
       
       - name: Login to Container Registry
         if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
-        continue-on-error: true
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        # Continue even if login fails
       
       - name: Extract metadata
         if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
-        continue-on-error: true
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -208,7 +197,6 @@ jobs:
       
       - name: Build and push Docker image
         if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
-        continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -219,27 +207,25 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # 4. 部署到生產環境
+  # 4. Deploy to production
   deploy:
     name: Deploy to Production
     needs: [build-and-push, changes]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/production' && needs.changes.outputs.app == 'true'
     environment: production
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       
       - name: Deploy to VPS
-        continue-on-error: true
-        if: ${{ always() && secrets.VPS_HOST != '' && secrets.VPS_USER != '' && secrets.VPS_SSH_KEY != '' }}
+        if: ${{ always() }}
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set +e  # Continue on error
+            set -e
             
             # Try common deployment directories
             DEPLOY_DIRS=("/opt/smart-ai-router" "$HOME/smart-ai-router" "$HOME/app" "/app" "$(pwd)")
@@ -259,22 +245,23 @@ jobs:
               exit 0
             fi
             
-            # Pull latest image
-            echo "Pulling Docker image..."
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || echo "Failed to pull Docker image"
+            # Pull image using SHA-based tag (not latest)
+            IMAGE_TAG="${GITHUB_SHA:-latest}"
+            echo "Pulling Docker image with tag: $IMAGE_TAG"
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG} || \
+              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             
             # Use docker-compose if available
             if [ -f "docker-compose.yml" ] || [ -f "docker-compose.prod.yml" ]; then
               echo "Found docker-compose file, attempting to deploy..."
-              docker-compose pull || echo "Failed to pull docker-compose images"
-              docker-compose up -d || echo "Failed to start services with docker-compose"
-              docker system prune -af || echo "Failed to prune docker system"
+              docker-compose pull
+              docker-compose up -d
               echo "Deployment attempt completed"
             else
               echo "No docker-compose file found, skipping docker-compose commands"
             fi
 
-  # 5. 通知
+  # 5. Notifications
   notify:
     name: Send Notifications
     needs: [build-and-push, deploy]
@@ -283,16 +270,16 @@ jobs:
     continue-on-error: true
     steps:
       - name: Notify Slack (if webhook configured)
-        if: ${{ always() && secrets.SLACK_WEBHOOK_URL != '' }}
+        if: ${{ always() }}
         continue-on-error: true
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: 'Smart AI Router 部署 ${{ github.ref_name }} - 狀態: ${{ job.status }}'
+          text: 'Smart AI Router deploy ${{ github.ref_name }} - status: ${{ job.status }}'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  # 6. 驗證 VPS 部署腳本語法 (ESGGO Node/PM2 stack)
+  # 6. Validate VPS deployment scripts (ESGGO Node/PM2 stack)
   validate-vps-scripts:
     name: Validate VPS Scripts
     runs-on: ubuntu-latest
@@ -313,9 +300,7 @@ jobs:
           shopt -s globstar nullglob
           fail=0
           for f in vps/**/*.sh vps/*.sh; do
-            # Skip console-/recovery-/bundle heredoc wrappers: they are meant to
-            # be pasted into the OCI Serial Console (nested heredocs), so they
-            # are not standalone-parseable by bash -n.
+            # Skip console-/recovery-/bundle heredoc wrappers
             case "$f" in
               */console-*|*/recovery/*|*-bundle*|*oneshot*) echo "SKIP $f (console/recovery heredoc wrapper)"; continue ;;
             esac
@@ -329,6 +314,10 @@ jobs:
           for f in vps/**/*.py vps/*.py; do
             if python3 -m py_compile "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
           done
+          echo "== yaml syntax =="
+          for f in vps/**/*.yml vps/**/*.yaml vps/*.yml vps/*.yaml; do
+            if python3 -c "import yaml; yaml.safe_load(open('$f'))"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
+          done
           exit $fail
 
       - name: Secret scan on vps scripts
@@ -336,21 +325,22 @@ jobs:
           set -e
           echo "Scanning vps/** for accidentally committed secrets or bad patterns..."
           # 1) Real credential shapes (HARD FAIL)
-          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN .*PRIVATE KEY-----)" vps/ ; then
+          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN .*PRIVATE KEY-----|npm_[A-Za-z0-9]{36}|SG\.[A-Za-z0-9_-]{22,}\.[A-Za-z0-9_-]{43,}|sk_live_[A-Za-z0-9]+|rk_live_[A-Za-z0-9]+|AC[a-f0-9]{32})" vps/ ; then
             echo "::error::Possible secret found in vps/ — aborting."; exit 1
           fi
           # 2) Hardcoded default secrets in long-running SERVER code (.mjs only).
-          #    One-shot console/bootstrap scripts (vps/comms/*, recovery/*) are
-          #    allowed a bootstrap token fallback, so we only fail on .mjs and
-          #    downgrade to a warning elsewhere.
           if grep -rInE '\$\{[A-Za-z_]+:-[A-Za-z0-9_'"'"'-]{8,}\}' vps/*.mjs vps/**/*.mjs 2>/dev/null | grep -iE "token|secret|key|pass|auth" ; then
             echo "::error::Hardcoded default secret in server .mjs (use env + fail-fast) — aborting."; exit 1
           fi
-          if grep -rInE '(AUTH_TOKEN|TOKEN|API_KEY)="?[A-Za-z0-9_'"'"'-]{8,}"?' vps/ | grep -vE '\$\{|\$\(|process\.env|os\.environ|getenv' | grep -iE "token|secret|key|pass|auth" ; then
-            echo "::warning::Hardcoded token fallback found in a console/bootstrap script — ensure .env.secrets provides the real value (ESGGO_RELAY_TOKEN)."
+          if grep -rInE '(AUTH_TOKEN|TOKEN|API_KEY|API_SERVER_KEY)="?[A-Za-z0-9_'"'"'-]{8,}"?' vps/ | grep -vE '\$\{|\$\(|process\.env|os\.environ|getenv' | grep -iE "token|secret|key|pass|auth" ; then
+            echo "::warning::Hardcoded token fallback found in a console/bootstrap script — ensure .env.secrets provides the real value."
           fi
           # 3) Server binding to all interfaces (should be 127.0.0.1 behind nginx) (HARD FAIL)
-          if grep -rInE "listen\([^,)]*['\"]0\.0\.0\.0" vps/*.mjs vps/**/*.mjs 2>/dev/null ; then
+          if grep -rInE "listen\([^,)]*['\"]0\.0\.0\.0|HOST\s*=\s*['\"]0\.0\.0\.0['\"]" vps/*.mjs vps/**/*.mjs vps/*.py vps/**/*.py 2>/dev/null ; then
             echo "::error::Server binds 0.0.0.0 (exposes directly) — bind 127.0.0.1 instead — aborting."; exit 1
+          fi
+          # 4) Connection strings with embedded passwords (HARD FAIL)
+          if grep -rInE "(mysql|postgres|mongodb)://[^:]+:[^@]+@" vps/ 2>/dev/null ; then
+            echo "::error::Connection string with embedded password found — use env vars instead — aborting."; exit 1
           fi
           echo "No secrets or unsafe patterns detected."
