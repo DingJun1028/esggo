@@ -14,8 +14,10 @@ export interface ModuleResource {
   description: string;
   category: 'core' | 'report' | 'governance' | 'intelligence' | 'system';
   status: 'active' | 'beta' | 'planned';
+  completeness: number;
   apiEndpoints: string[];
   dependencies: string[];
+  whw: { why: string; how: string; what: string };
 }
 
 export interface AIModelResource {
@@ -57,8 +59,10 @@ export async function GET() {
       description: '8 分頁儀表板：Dashboard、Notes、Tasks、Calendar、Chat、5T Radar、RAG、ZKP Vault',
       category: 'core',
       status: 'active',
+      completeness: 62,
       apiEndpoints: ['/api/omni/plugins', '/api/rag/query', '/api/memory'],
       dependencies: ['Firebase', 'Upstash Redis'],
+      whw: { why: '統一控管所有 ESG 資料與 AI 功能的中央操控台', how: '8 個分頁模組透過 Firebase 即時同步 + EventBus 事件驅動', what: '儀表板、筆記、任務、日曆、AI 對話、5T 雷達、RAG 知識庫、ZKP 密庫' },
     },
     {
       id: 'sustain-write',
@@ -69,8 +73,10 @@ export async function GET() {
       description: 'GRI 28 章、TCFD 12 章、投資者 5 章，AI 自動合規生成報告',
       category: 'report',
       status: 'active',
+      completeness: 82,
       apiEndpoints: ['/api/sustain-write/v5', '/api/sustain-write/v5/async', '/api/sustain-write/v5/progress/[taskId]', '/api/sustain-write/v5/download', '/api/sustain-write/v5/evidence'],
       dependencies: ['Gemini', 'Groq', 'OpenRouter'],
+      whw: { why: '企業需要符合國際標準的 ESG 報告，手動撰寫耗時且易出錯', how: 'AI 模型鏈自動生成 + 非同步任務引擎 + 5T 封印驗證', what: '選擇公司/範本 → 一鍵生成 → 即時進度 → 預覽/下載 → 證據卡片' },
     },
     {
       id: 'sustain-center',
@@ -81,8 +87,10 @@ export async function GET() {
       description: 'ESG 儀表板、碳排驗算、趨勢分析、信任帳本',
       category: 'core',
       status: 'active',
+      completeness: 70,
       apiEndpoints: ['/api/esg/assess', '/api/esg/skills'],
       dependencies: ['Firebase'],
+      whw: { why: '企業需要即時掌握 ESG 整體表現與碳排放數據', how: '互動式圖表 + AI 洞察引擎 + 信任帳本審計軌跡', what: '總覽儀表板、圖表分析、洞察網格、信任帳本、WebSocket 心跳' },
     },
     {
       id: 'village',
@@ -93,8 +101,10 @@ export async function GET() {
       description: '二次方投票（cost = votes² × 10）、影響力專案、OmniOne 趨勢預測',
       category: 'governance',
       status: 'active',
+      completeness: 72,
       apiEndpoints: ['/api/village/data', '/api/village/vote', '/api/village/trends'],
       dependencies: ['Firebase', 'ZKP Seal'],
+      whw: { why: 'ESG 決策需要公平民主的參與機制，避免財富集中影響', how: '二次方投票公式 + Firebase 交易 + ZKP 不可竄改封印', what: '專案看板、二次方投票、貢獻排行榜、活動動態、AI 趨勢預測' },
     },
     {
       id: 'wiki',
@@ -102,11 +112,13 @@ export async function GET() {
       nameEn: 'OmniWiki',
       icon: '📚',
       route: '/wiki',
-      description: 'ESG 法規查詢：GRI、TCFD、CSRD、SDG 標準解析',
+      description: 'ESG 法規查詢：GRI、TCFD、CSRD、SDG 標準解析（52+ 篇文章，支援搜尋與分類）',
       category: 'intelligence',
       status: 'active',
+      completeness: 65,
       apiEndpoints: [],
       dependencies: ['Markdown files'],
+      whw: { why: 'ESG 從業人員需要快速查閱各國法規與標準', how: 'Markdown 檔案系統 + Server/Client 分離架構 + 即時搜尋', what: '文章列表、全文搜尋、分類篩選、Markdown 渲染、5T 封印' },
     },
     {
       id: 'omni-agent',
@@ -117,8 +129,10 @@ export async function GET() {
       description: 'AI 聊天、5T 子代理派遣、6 個快速命令',
       category: 'core',
       status: 'active',
+      completeness: 55,
       apiEndpoints: ['/api/omni-agent', '/api/omni-agent/console', '/api/ai/generate'],
       dependencies: ['Gemini', 'Groq', 'OpenRouter'],
+      whw: { why: '使用者需要自然語言介面來執行 ESG 任務', how: '意圖分類器 + 子代理派遣 + EventBus 事件流', what: 'AI 聊天、快速命令、5T 子代理面板、即時狀態監控' },
     },
     {
       id: 'daily',
@@ -126,11 +140,13 @@ export async function GET() {
       nameEn: 'Daily Observer',
       icon: '📅',
       route: '/daily',
-      description: 'ESG 每日摘要、法規變更、嚴重度分類、歷史封存',
+      description: 'ESG 每日摘要、法規變更、嚴重度分類、歷史封存（30 天）',
       category: 'intelligence',
       status: 'active',
+      completeness: 60,
       apiEndpoints: ['/api/daily-report', '/api/daily-report/generate'],
-      dependencies: ['Sonnar'],
+      dependencies: ['Sonnar', 'Prisma'],
+      whw: { why: 'ESG 團隊需要每日掌握法規變更與市場動態', how: '爬蟲引擎自動蒐集 + AI 摘要生成 + 嚴重度分級', what: '每日摘要、嚴重度篩選、日期選擇器、歷史封存、一鍵生成' },
     },
     {
       id: 'sonnar',
@@ -141,8 +157,10 @@ export async function GET() {
       description: '資料爬取、雷達訊號、主題分析、即時警報、OCR',
       category: 'intelligence',
       status: 'active',
+      completeness: 58,
       apiEndpoints: ['/api/sonnar/crawl', '/api/sonnar/radar', '/api/sonnar/alerts', '/api/sonnar/ocr'],
-      dependencies: ['WebSocket'],
+      dependencies: ['WebSocket', 'Gateway'],
+      whw: { why: 'ESG 資料分散在多個來源，需要自動化蒐集與監控', how: '爬蟲排程器 + 雷達訊號聚合 + WebSocket 即時推送', what: '資料來源管理、雷達訊號、主題分析、嚴重度篩選、即時警報' },
     },
     {
       id: 'emm',
@@ -153,8 +171,10 @@ export async function GET() {
       description: '系統指標、AI 閘道狀態、模型供應商監控、SSE 即時串流',
       category: 'system',
       status: 'active',
+      completeness: 68,
       apiEndpoints: ['/api/emm/metrics', '/api/emm/metrics/stream'],
       dependencies: ['Gateway'],
+      whw: { why: '平台穩定性需要即時監控系統資源與 AI 模型狀態', how: 'SSE 串流 + 外部閘道代理 + 6 卡片儀表板', what: 'CPU/記憶體監控、閘道狀態、AI 模型狀態、Telegram、Sonnar、Sparkline 圖表' },
     },
     {
       id: 'profile',
@@ -165,8 +185,10 @@ export async function GET() {
       description: '5 級成長（Seed→Guardian）、XP、成就、排行榜',
       category: 'governance',
       status: 'active',
+      completeness: 72,
       apiEndpoints: ['/api/user/growth', '/api/user/leaderboard', '/api/user/tasks'],
-      dependencies: ['Firebase Auth'],
+      dependencies: ['Firebase Auth', 'Prisma'],
+      whw: { why: '遊戲化機制提升使用者參與度與 ESG 學習動機', how: 'XP 經驗值系統 + 等級門檻 + 成就解鎖 + 排行榜', what: '5 級成長路徑、每日任務、成就徽章、排行榜、快速 XP 面板' },
     },
     {
       id: 'omni-todo',
@@ -174,11 +196,13 @@ export async function GET() {
       nameEn: 'Task Manager',
       icon: '✅',
       route: '/omni-todo',
-      description: '統一 ESG 任務管理面板',
+      description: '統一 ESG 任務管理面板（CRUD、分類、優先級、匯出）',
       category: 'core',
       status: 'active',
+      completeness: 78,
       apiEndpoints: ['/api/omni-todo'],
-      dependencies: ['Firebase'],
+      dependencies: ['In-memory store'],
+      whw: { why: 'ESG 團隊需要統一管理合規檢查、資料蒐集、報告撰寫等任務', how: 'Action-based API + 狀態機轉換 + 7 種 ESG 分類', what: '建立/編輯/刪除、優先級、截止日、分類篩選、批次操作、JSON/MD 匯出' },
     },
     {
       id: 'omni-base',
@@ -189,8 +213,10 @@ export async function GET() {
       description: '外掛註冊、啟用/停用、熱重載、EventBus 架構',
       category: 'system',
       status: 'active',
+      completeness: 68,
       apiEndpoints: ['/api/omni/plugins'],
       dependencies: ['EventBus'],
+      whw: { why: '平台需要可擴展的模組化架構，支援功能熱插拔', how: 'EventBus 事件總線 + 生命週期管理 + 4 個內建外掛', what: '外掛註冊、啟用/停用、熱重載、健康監控、EventBus 訂閱' },
     },
   ];
 
