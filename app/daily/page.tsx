@@ -1,10 +1,13 @@
 /**
  * Daily Observer Report — 永續觀察者日報專區
- * Page /daily — Today's ESG digest with archive
+ * Page /daily — Today's ESG digest with archive & severity filter
+ * WHW: Why — Users need to browse historical reports and filter by severity
+ *      How — Date selector + severity toggles + archive API
+ *      What — Full archive browsing with real-time filtering
  */
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 // Solid Card Tokens
 const SC = {
@@ -128,49 +131,105 @@ export default function DailyReportPage() {
   const [report, setReport] = useState<DailyReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [severityFilter, setSeverityFilter] = useState<string>('all');
+  const [archiveDates, setArchiveDates] = useState<string[]>([]);
 
-  const fetchToday = useCallback(async () => {
+  const fetchReport = useCallback(async (date: string) => {
     try {
       setLoading(true);
-      const res = await fetch('/api/daily-report?today=true');
+      setError(null);
+      const res = await fetch(`/api/daily-report?date=${date}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.success && data.report) {
         setReport(data.report);
+      } else {
+        setReport(null);
       }
-    } catch (e) {
-      console.error('Failed:', e);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Failed to load');
+      setReport(null);
     } finally {
       setLoading(false);
     }
   }, []);
 
+  const fetchArchiveDates = useCallback(async () => {
+    try {
+      const res = await fetch('/api/daily-report?limit=30');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.reports) {
+          const dates = [...new Set(data.reports.map((r: DailyReportData) => r.reportDate))] as string[];
+          setArchiveDates(dates.sort().reverse());
+        }
+      }
+    } catch {
+      // Silent fail — archive is optional
+    }
+  }, []);
+
   useEffect(() => {
-    fetchToday();
-  }, [fetchToday]);
+    fetchReport(selectedDate);
+    fetchArchiveDates();
+  }, [selectedDate, fetchReport, fetchArchiveDates]);
 
   const handleGenerate = async () => {
     try {
       setGenerating(true);
+      setError(null);
       const res = await fetch('/api/daily-report/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date: new Date().toISOString().split('T')[0] }),
+        body: JSON.stringify({ date: selectedDate }),
       });
       const data = await res.json();
       if (data.success && data.report) {
         setReport(data.report);
+        fetchArchiveDates();
       }
-    } catch (e) {
-      console.error('Failed to generate report:', e);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Failed to generate');
     } finally {
       setGenerating(false);
     }
   };
 
-  if (loading) {
+  // Severity-filtered items
+  const filteredItems = useMemo(() => {
+    if (!report) return [];
+    if (severityFilter === 'all') return report.items;
+    return report.items.filter(item => item.severity === severityFilter);
+  }, [report, severityFilter]);
+
+  // Severity counts
+  const severityCounts = useMemo(() => {
+    if (!report) return {};
+    const counts: Record<string, number> = { all: report.items.length };
+    for (const item of report.items) {
+      counts[item.severity] = (counts[item.severity] || 0) + 1;
+    }
+    return counts;
+  }, [report]);
+
+  // Generate date options (last 30 days)
+  const dateOptions = useMemo(() => {
+    const dates: string[] = [];
+    for (let i = 0; i < 30; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      dates.push(d.toISOString().split('T')[0]);
+    }
+    return dates;
+  }, []);
+
+  if (loading && !report) {
     return (
-      <div style={{ background: SC.bg, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: SC.teal, fontSize: 18 }}>載入今日永續動態...</div>
+      <div style={{ background: SC.bg, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+        <div style={{ width: 32, height: 32, border: `3px solid ${SC.teal}`, borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <div style={{ color: SC.teal, fontSize: 14 }}>載入永續動態...</div>
       </div>
     );
   }
@@ -186,33 +245,98 @@ export default function DailyReportPage() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 12,
         }}>
           <div>
             <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
               📰 永續觀察者日報
             </h1>
             <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-              {report?.reportDate || new Date().toLocaleDateString('zh-TW')} · ESG 動態觀測
+              {report?.reportDate || selectedDate} · ESG 動態觀測
             </p>
           </div>
-          <button
-            onClick={handleGenerate}
-            disabled={generating}
-            style={{
-              padding: '8px 16px',
-              background: generating ? SC.surfaceHover : SC.teal,
-              color: SC.bg,
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: generating ? 'not-allowed' : 'pointer',
-              opacity: generating ? 0.6 : 1,
-            }}
-          >
-            {generating ? '生成中...' : '🔄 重新生成'}
-          </button>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+              style={{
+                padding: '6px 12px',
+                background: SC.surface,
+                border: `1px solid ${SC.border}`,
+                borderRadius: 8,
+                color: SC.text,
+                fontSize: 13,
+              }}
+            />
+            <button
+              onClick={handleGenerate}
+              disabled={generating}
+              style={{
+                padding: '8px 16px',
+                background: generating ? SC.surfaceHover : SC.teal,
+                color: SC.bg,
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: generating ? 'not-allowed' : 'pointer',
+                opacity: generating ? 0.6 : 1,
+              }}
+            >
+              {generating ? '生成中...' : '🔄 重新生成'}
+            </button>
+          </div>
         </header>
+
+        {/* Error Banner */}
+        {error && (
+          <div style={{
+            background: `${SC.error}15`,
+            border: `1px solid ${SC.error}40`,
+            borderRadius: 8,
+            padding: '12px 16px',
+            marginBottom: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            <span style={{ color: SC.error, fontSize: 13 }}>✕ {error}</span>
+            <button
+              onClick={() => { setError(null); fetchReport(selectedDate); }}
+              style={{ color: SC.error, fontSize: 12, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              重試
+            </button>
+          </div>
+        )}
+
+        {/* Archive Dates (if available) */}
+        {archiveDates.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <p style={{ fontSize: 12, color: SC.textMuted, marginBottom: 6 }}>📅 歷史封存</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {archiveDates.slice(0, 10).map(date => (
+                <button
+                  key={date}
+                  onClick={() => setSelectedDate(date)}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: 11,
+                    background: date === selectedDate ? SC.teal : SC.surface,
+                    color: date === selectedDate ? SC.bg : SC.textSecondary,
+                    border: `1px solid ${date === selectedDate ? SC.teal : SC.border}`,
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {date}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {report ? (
           <>
@@ -242,11 +366,38 @@ export default function DailyReportPage() {
               </div>
             </div>
 
+            {/* Severity Filter */}
+            {report.items.length > 0 && (
+              <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+                {['all', 'critical', 'high', 'medium', 'low'].map(sev => (
+                  <button
+                    key={sev}
+                    onClick={() => setSeverityFilter(sev)}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      background: sev === severityFilter
+                        ? (sev === 'all' ? SC.teal : SEV_COLORS[sev] || SC.teal)
+                        : SC.surface,
+                      color: sev === severityFilter ? SC.bg : SC.textSecondary,
+                      border: `1px solid ${sev === severityFilter ? 'transparent' : SC.border}`,
+                      borderRadius: 6,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {sev === 'all' ? '全部' : sev === 'critical' ? '急' : sev === 'high' ? '高' : sev === 'medium' ? '中' : '低'}
+                    {' '}({severityCounts[sev] || 0})
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Highlights */}
             {report.highlights.length > 0 && (
               <div style={{ marginBottom: 20 }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: SC.gold, marginBottom: 12 }}>
-                  ? 今日焦點
+                  ⭐ 今日焦點
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {report.highlights.map((h, i) => (
@@ -259,7 +410,7 @@ export default function DailyReportPage() {
                       alignItems: 'center',
                       gap: 12,
                     }}>
-                      <span style={{ fontSize: 18 }}>{['?', '?', '🟡', '🟢', '🔵'][i] || '⚪'}</span>
+                      <span style={{ fontSize: 18 }}>{['🔴', '🟠', '🟡', '🟢', '🔵'][i] || '⚪'}</span>
                       <span style={{ fontSize: 14, color: SC.text }}>{h}</span>
                     </div>
                   ))}
@@ -270,11 +421,11 @@ export default function DailyReportPage() {
             {/* News Items */}
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: SC.teal, marginBottom: 12 }}>
-                📋 詳細動態 ({report.items.length})
+                📋 詳細動態 ({filteredItems.length})
               </h2>
-              {report.items.length > 0 ? (
+              {filteredItems.length > 0 ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {report.items.map(item => (
+                  {filteredItems.map(item => (
                     <ReportItemCard key={item.id} item={item} />
                   ))}
                 </div>
@@ -286,7 +437,9 @@ export default function DailyReportPage() {
                   padding: 32,
                   textAlign: 'center' as const,
                 }}>
-                  <p style={{ color: SC.textMuted }}>今日尚無新動態。點擊「重新生成」按鈕重新整理資料。</p>
+                  <p style={{ color: SC.textMuted }}>
+                    {severityFilter === 'all' ? '今日尚無新動態。點擊「重新生成」按鈕重新整理資料。' : '此嚴重度下暫無項目'}
+                  </p>
                 </div>
               )}
             </div>
@@ -326,22 +479,23 @@ export default function DailyReportPage() {
             textAlign: 'center' as const,
           }}>
             <p style={{ color: SC.textSecondary, fontSize: 16, marginBottom: 16 }}>
-              今日尚無永續觀察日報
+              此日期尚無永續觀察日報
             </p>
             <button
               onClick={handleGenerate}
+              disabled={generating}
               style={{
                 padding: '10px 24px',
-                background: SC.teal,
+                background: generating ? SC.surfaceHover : SC.teal,
                 color: SC.bg,
                 border: 'none',
                 borderRadius: 8,
                 fontSize: 14,
                 fontWeight: 600,
-                cursor: 'pointer',
+                cursor: generating ? 'not-allowed' : 'pointer',
               }}
             >
-              ⚡ 立即生成
+              {generating ? '生成中...' : '⚡ 立即生成'}
             </button>
           </div>
         )}
@@ -349,6 +503,3 @@ export default function DailyReportPage() {
     </div>
   );
 }
-
-// Force TS to recognize CSS property
-const _cssProp: React.CSSProperties = { textAlign: 'center' };

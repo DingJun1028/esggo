@@ -38,6 +38,7 @@ export interface TaskProgress {
   readonly taskId: string;
   readonly status: TaskStatus;
   readonly taskType?: 'report_generation' | 'grammar_rewrite' | 'ocr_processing';
+  readonly templateId?: string;
   readonly currentChapter: number;
   readonly totalChapters: number;
   readonly chapterTitle: string;
@@ -116,21 +117,26 @@ function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskP
 // Task Lifecycle
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function createTask(companyId: string): string {
+export function createTask(companyId: string, templateId?: string): string {
   const taskId = `tsk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const now = new Date().toISOString();
 
+  // Template determines chapter count: GRI=28, TCFD=12, Investor=5
+  const chapterMap: Record<string, number> = { gri: 28, tcfd: 12, investor: 5 };
+  const totalChapters = chapterMap[templateId?.toLowerCase() || 'gri'] || 28;
+
   // In-memory overlay (for immediate reads)
   const task: TaskProgress = {
-    taskId, status: 'pending', taskType: 'report_generation', currentChapter: 0, totalChapters: 28,
+    taskId, status: 'pending', taskType: 'report_generation', currentChapter: 0, totalChapters,
     chapterTitle: '', wordsSoFar: 0, fiveTGate: '', tagsCreated: 0,
     decisionsCount: 0,
     percent: 0, startedAt: now, updatedAt: now,
+    templateId: templateId || 'gri',
   };
   tasks.set(taskId, task);
 
   // Persist to Redis (non-blocking)
-  createTaskState(taskId, companyId, '', 28, 'json').catch((err: unknown) => {
+  createTaskState(taskId, companyId, templateId || '', totalChapters, 'json').catch((err: unknown) => {
     console.warn('[AsyncTask] Redis createTaskState failed:', err instanceof Error ? err.message : String(err));
   });
 

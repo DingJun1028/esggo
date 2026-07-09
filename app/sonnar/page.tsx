@@ -137,6 +137,7 @@ export default function SonnarDashboard() {
   const [crawling, setCrawling] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'crawl' | 'alerts'>('overview');
   const [regionFilter, setRegionFilter] = useState<string>('all');
+  const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [wsConnected, setWsConnected] = useState(false);
   const [wsEvents, setWsEvents] = useState<WSEvent[]>([]);
 
@@ -827,11 +828,9 @@ export default function SonnarDashboard() {
               {['all', 'critical', 'high', 'medium', 'low'].map((sev) => (
                 <Button
                   key={sev}
-                  variant={sev === 'all' ? 'primary' : 'ghost'}
+                  variant={sev === severityFilter ? 'primary' : 'ghost'}
                   size="sm"
-                  onClick={() => {
-                    /* severity filter */
-                  }}
+                  onClick={() => setSeverityFilter(sev)}
                 >
                   {sev === 'all' ? '全部' : sev.toUpperCase()}
                   {sev !== 'all' && ` (${alerts.filter((a) => a.severity === sev).length})`}
@@ -840,7 +839,9 @@ export default function SonnarDashboard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {alerts.map((alert) => (
+              {alerts
+                .filter((a) => severityFilter === 'all' || a.severity === severityFilter)
+                .map((alert) => (
                 <SolidCard key={alert.id} variant={alert.acknowledged ? 'default' : 'highlight'}>
                   <div
                     style={{
