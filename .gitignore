@@ -23,6 +23,10 @@ yarn-error.log*
 !vps/.env.example
 .env.local.sample
 
+# real secret files (keep out of git; local-only)
+.env.secrets
+.env.secrets.*
+
 # vercel
 .vercel
 
