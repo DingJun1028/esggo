@@ -45,6 +45,12 @@ const NAV = [
     color: 'hover:text-accentPurple hover:bg-accentPurple/10',
   },
   {
+    href: '/resources',
+    label: '資源總覽',
+    icon: '📦',
+    color: 'hover:text-accentGold hover:bg-accentGold/10',
+  },
+  {
     href: '/profile',
     label: '個人檔案',
     icon: '👤',
