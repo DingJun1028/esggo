@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { gatewayKey, audit, summary } from './omni-master-key.mjs';
+import { gatewayKey, audit, summary, isSummoned, summonRitual } from './omni-master-key.mjs';
 
 const app = express();
 const port = 8642;
@@ -228,6 +228,24 @@ app.post('/execute', requireAuth, async (req, res) => {
   execution.outputRefIds = [artifact.id];
 
   res.json({ execution, artifact });
+});
+
+// ──────────────────────────────────────────────────────────────
+// oa-summon ritual — text trigger endpoint
+// Any authorized caller posts { text }; if the text contains the awakened
+// name "OmniAgent 萬能代理", the summon ritual runs (wakes all online agents).
+// ──────────────────────────────────────────────────────────────
+app.post('/invoke', requireAuth, (req, res) => {
+  const { text } = req.body || {};
+  if (typeof text !== 'string' || text.length === 0) {
+    return res.status(400).json({ error: 'text required' });
+  }
+  if (!isSummoned(text)) {
+    return res.json({ summoned: false, ritual: null });
+  }
+  const rite = summonRitual(agents);
+  console.log(`[OmniAgent] 🔮 oa-summon ritual triggered — awakened ${rite.awakenedAgents.length} agent(s)`);
+  res.json({ summoned: true, ritual: rite });
 });
 
 // Bind to loopback only: all external traffic must go through nginx
