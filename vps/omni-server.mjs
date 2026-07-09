@@ -11,7 +11,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 const GATEWAY_KEY = gatewayKey();
 if (!GATEWAY_KEY) {
   console.warn(
-    '[OmniGateway] WARNING: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) 尚未設定，閘道請求可能未授權或失敗。',
+    '[OmniGateway] WARNING: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) is not set; gateway requests may be unauthorized or fail.',
   );
 }
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
@@ -19,9 +19,9 @@ const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 // OmniMasterKey 金鑰庫稽核：啟動時列出缺少的必要密鑰（僅輸出名稱，不輸出密鑰值本身）
 const vaultAudit = audit();
 if (!vaultAudit.ok) {
-  console.warn(`[OmniMasterKey] ⚠️ 缺少必要密鑰: ${vaultAudit.missing.join(', ')}`);
+  console.warn(`[OmniMasterKey] Missing required secrets: ${vaultAudit.missing.join(', ')}`);
 } else {
-  console.log('[OmniMasterKey] ✅ 必要密鑰齊全，金鑰庫稽核通過。');
+  console.log('[OmniMasterKey] All required secrets present; vault audit passed.');
 }
 
 app.use(cors());
