@@ -6,8 +6,10 @@ import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timezone
 
-TOKEN = os.environ.get("ESGGO_RELAY_TOKEN", "esggo-relay-20260707")
-HOST = os.environ.get("ESGGO_RELAY_HOST", "0.0.0.0")
+TOKEN = os.environ.get("ESGGO_RELAY_TOKEN")
+if not TOKEN:
+    raise SystemExit("ESGGO_RELAY_TOKEN environment variable is required")
+HOST = os.environ.get("ESGGO_RELAY_HOST", "127.0.0.1")
 PORT = int(os.environ.get("ESGGO_RELAY_PORT", "9999"))
 
 cmds = {}
