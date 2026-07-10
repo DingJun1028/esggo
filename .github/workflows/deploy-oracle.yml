@@ -7,7 +7,7 @@
 # 網路: 公網 22/8042 關，僅 80/443 開；部署走 OCI Bastion 跳板 (推薦) 或直連 (需開 NSG)
 #
 # 三種模式 (pre-check 依據 repo Secrets 自動選擇):
-#   bastion : 設好 OCI_* secrets → 在 Actions 內重建 bastion session 跳板部署 (安全, 不需開公網端口)
+#   bastion : 設好 OCI_* secrets → 在 Actions 內用 oci Python SDK 重建 bastion session 跳板部署 (安全, 不需開公網端口)
 #   direct  : 設好 VPS_SSH_KEY + VPS_HOST，且 OCI NSG 已放行 GitHub Actions IP → 直連部署
 #   skip    : 兩者皆未設 → 跳過部署 (不再讓 push 變紅)
 #
@@ -106,70 +106,74 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ---- 選項 3: bastion 跳板 ----
-      - name: Install OCI CLI (bastion mode)
-        if: needs.pre-check.outputs.mode == 'bastion'
-        run: pip install --quiet oci-cli
-
+      # ---- 選項 3: bastion 跳板 (oci Python SDK) ----
       - name: Configure OCI + create bastion session
         if: needs.pre-check.outputs.mode == 'bastion'
         id: bastion
+        env:
+          OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+          OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+          OCI_REGION: ${{ secrets.OCI_REGION }}
+          OCI_API_FINGERPRINT: ${{ secrets.OCI_API_FINGERPRINT }}
+          OCI_API_KEY: ${{ secrets.OCI_API_KEY }}
+          OCI_BASTION_ID: ${{ secrets.OCI_BASTION_ID }}
+          OCI_TARGET_RESOURCE_ID: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
         run: |
           set -e
+          pip install --quiet oci
           mkdir -p ~/.oci ~/.ssh
-          cat > ~/.oci/config <<'EOF'
-          [DEFAULT]
-          user=${{ secrets.OCI_USER_OCID }}
-          tenancy=${{ secrets.OCI_TENANCY_OCID }}
-          region=${{ secrets.OCI_REGION }}
-          fingerprint=${{ secrets.OCI_API_FINGERPRINT }}
-          key_file=~/.oci/key.pem
-          EOF
-          printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key_raw.pem
-          python3 -c "import re,pathlib; raw=pathlib.Path('~/.oci/key_raw.pem').expanduser().read_text(errors='replace'); m=re.search(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', raw, re.S); clean=(m.group(0) if m else raw).replace(chr(13),'').strip()+chr(10); pathlib.Path('~/.oci/key.pem').expanduser().write_text(clean); print('key.pem bytes:', len(clean.encode()))"
-          chmod 600 ~/.oci/key.pem
-          ssh-keygen -t ed25519 -N "" -f ~/.ssh/bastion_key
-          SESSION=$(oci bastion session create-managed-ssh \
-            --bastion-id ${{ secrets.OCI_BASTION_ID }} \
-            --region ${{ secrets.OCI_REGION }} \
-            --target-resource-id ${{ secrets.OCI_TARGET_RESOURCE_ID }} \
-            --target-os-username root \
-            --ssh-public-key-file ~/.ssh/bastion_key.pub \
-            --session-ttl 3600 \
-            --wait-for-state ACTIVE \
-            --raw-output --query 'data.id' 2>/tmp/oci_err) || {
-            echo "OCI_VERSION:"; oci --version 2>&1 | head -1
-            echo "OCI_ERR_RAW:"; cat /tmp/oci_err
-            echo "OCI_ERR_SANITIZED:"; sed -E 's/[0-9a-f]{40,}/<HASH>/g; s/ocid1\.[a-z]+[.][a-z]+[.][a-zA-Z0-9]+/<OCID>/g' /tmp/oci_err | grep -ivE "key|fingerprint|pem|-----" | head -20
-            exit 1
+          python3 << 'PY'
+          import os, re, pathlib, time, subprocess
+          raw = os.environ["OCI_API_KEY"]
+          m = re.search(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', raw, re.S)
+          clean = (m.group(0) if m else raw).replace("\r", "").strip() + "\n"
+          kp = pathlib.Path("~/.oci/key.pem").expanduser()
+          kp.write_text(clean)
+          os.chmod(kp, 0o600)
+          bk = os.path.expanduser("~/.ssh/bastion_key")
+          subprocess.run(["ssh-keygen", "-t", "ed25519", "-N", "", "-f", bk], check=True)
+          pub = pathlib.Path(bk + ".pub").read_text().strip()
+          import oci
+          cfg = {
+            "user": os.environ["OCI_USER_OCID"],
+            "tenancy": os.environ["OCI_TENANCY_OCID"],
+            "region": os.environ["OCI_REGION"],
+            "fingerprint": os.environ["OCI_API_FINGERPRINT"],
+            "key_file": str(kp),
           }
-          echo "session=$SESSION" >> $GITHUB_OUTPUT
-          echo "proxy=ssh -W %h:%p -p 22 $SESSION@host.bastion.${{ secrets.OCI_REGION }}.oci.oraclecloud.com" >> $GITHUB_OUTPUT
-          echo "[OK] bastion session $SESSION"
+          ocfg = oci.config.from_dict(cfg)
+          client = oci.bastion.BastionClient(ocfg)
+          details = oci.bastion.models.CreateSessionDetails(
+            bastion_id=os.environ["OCI_BASTION_ID"],
+            display_name="gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
+            session_ttl_in_seconds=3600,
+            target_resource_details=oci.bastion.models.CreateSessionTargetResourceDetails(
+              session_type="MANAGED_SSH",
+              target_resource_id=os.environ["OCI_TARGET_RESOURCE_ID"],
+              target_resource_operating_system_user_name="root",
+            ),
+            key_details=oci.bastion.models.PublicKeyDetails(public_key_content=pub),
+          )
+          try:
+            resp = client.create_session(create_session_details=details, wait_for_states=["ACTIVE"])
+            sid = resp.data.id
+            with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("session=" + sid + "\n")
+              f.write("proxy=ssh -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
+            print("[OK] bastion session " + sid)
+          except Exception as e:
+            print("OCI_SDK_ERROR:")
+            print(str(e)[:1500])
+            raise SystemExit(1)
+          PY
 
-      # ---- 選項 2: 直連 ----
-      - name: Setup direct SSH key
-        if: needs.pre-check.outputs.mode == 'direct'
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H -T 10 ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
-
-      # ---- 共用：同步程式碼 + 建置 + PM2 重啟 ----
       - name: Deploy via bastion
         if: needs.pre-check.outputs.mode == 'bastion'
         env:
           PROXY: ${{ steps.bastion.outputs.proxy }}
+          SESSION: ${{ steps.bastion.outputs.session }}
         run: |
           set -e
-          SSH="ssh -o ProxyCommand=\"$PROXY\" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key"
-          rsync -az --delete \
-            --exclude='.git' --exclude='node_modules' --exclude='.next' \
-            --exclude='*.db' --exclude='.env' --exclude='.env.*' \
-            --exclude='packages/*/node_modules' --exclude='apps/*/node_modules' \
-            -e "ssh -o ProxyCommand=\"$PROXY\" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key" \
-            ./ root@10.0.0.119:${{ env.APP_DIR }}/
           ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
             cd /var/www/esggo
@@ -180,16 +184,19 @@ jobs:
             echo "[OK] deployed via bastion"
           VPS
 
+      # ---- 選項 2: 直連 ----
+      - name: Setup direct SSH key
+        if: needs.pre-check.outputs.mode == 'direct'
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H -T 10 ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
       - name: Deploy direct
         if: needs.pre-check.outputs.mode == 'direct'
         run: |
           set -e
-          rsync -az --delete \
-            --exclude='.git' --exclude='node_modules' --exclude='.next' \
-            --exclude='*.db' --exclude='.env' --exclude='.env.*' \
-            --exclude='packages/*/node_modules' --exclude='apps/*/node_modules' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./ ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.APP_DIR }}/
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
             cd /var/www/esggo
