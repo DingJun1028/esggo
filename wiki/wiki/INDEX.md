@@ -114,7 +114,8 @@ OA（OmniAgent）技能組位於 `skills/oa/` 目錄。
 
 ### CLI 指令
 ```bash
-pnpm run oa:summon        # 召喚 OmniAgent
+npm run oa:summon          # 召喚 OmniAgent（輕量，真實探活 gateway）
+npm run oa:summon:core     # 同上 + 實際初始化 OmniCore（--core，約 90s）
 pnpm run oa:status        # 查看閘道狀態
 pnpm run oa:heal          # 執行痊癒閃現
 ```
