@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from "vitest";
 /**
  * src/__tests__/zkp-service.test.ts — ZKP Service 單元測試
  */

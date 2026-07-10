@@ -15,7 +15,7 @@ from esggo.config import (  # noqa: E402
     get_answer_database_ts,
     get_tmp_excel,
 )
-from esggo.config import (
+from esggo.config import (  # noqa: E402
     PROJECT_ROOT as CFG_ROOT,
 )
 
