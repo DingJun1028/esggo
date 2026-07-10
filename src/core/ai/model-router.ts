@@ -742,6 +742,15 @@ export interface FreeProviderOptions {
   timeoutMs?: number;
   /** 敏感任務是否排除公開免費端點（預設 false，保持原有行為） */
   excludePublicFree?: boolean;
+  /**
+   * 可注入的發送器（預設 callChatProvider）。用於測試與未來接線，
+   * 注入後不會觸發真實網路請求，層邏輯（轉移 / 降級 / 治理守門）完全不變。
+   */
+  send?: (
+    cfg: FreeProviderConfig,
+    messages: ChatMessage[],
+    options: FreeProviderOptions,
+  ) => Promise<string>;
 }
 
 /**
@@ -770,13 +779,14 @@ export async function callFreeProvider(
 
   let lastError: unknown;
   let skippedUnconfigured = 0;
+  const send = options.send ?? callChatProvider;
   for (const cfg of ordered) {
     if (!isModelUp(cfg.model)) continue;                                    // 該模型已降級，跳過
     if (!process.env[cfg.apiKeyEnv]) { skippedUnconfigured += 1; continue; } // 未配置 Key，跳過
     if (sensitive && options.excludePublicFree && PUBLIC_FREE_PROVIDERS.has(cfg.provider)) continue; // 治理守門
 
     try {
-      const content = await callChatProvider(cfg, messages, options);
+      const content = await send(cfg, messages, options);
       return { content, used: cfg };
     } catch (e) {
       markModelDown(cfg.model);
