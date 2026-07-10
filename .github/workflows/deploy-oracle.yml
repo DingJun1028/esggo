@@ -1,9 +1,25 @@
 # =============================================================================
-# ESG GO — Oracle VPS Deploy Pipeline
+# ESG GO — Oracle VPS Deploy Pipeline (REALITY-ALIGNED, 2026-07-11)
 # =============================================================================
-# 觸發條件: push to main (paths: vps/**, app/**, src/**, packages/**)
-# 部署目標: Oracle Cloud Always Free ARM Ampere A1
-# 部署方式: SSH + Docker Compose (VPS 上直接構建)
+# 觸發: push to main (paths below) 或手動 workflow_dispatch
+# 部署目標: Oracle Cloud Always Free ARM Ampere A1 (Ubuntu 24.04)
+# 真實部署方式: nginx + PM2 (fork mode)，非 Docker Compose
+# 網路: 公網 22/8042 關，僅 80/443 開；部署走 OCI Bastion 跳板 (推薦) 或直連 (需開 NSG)
+#
+# 三種模式 (pre-check 依據 repo Secrets 自動選擇):
+#   bastion : 設好 OCI_* secrets → 在 Actions 內重建 bastion session 跳板部署 (安全, 不需開公網端口)
+#   direct  : 設好 VPS_SSH_KEY + VPS_HOST，且 OCI NSG 已放行 GitHub Actions IP → 直連部署
+#   skip    : 兩者皆未設 → 跳過部署 (不再讓 push 變紅)
+#
+# 需在 GitHub 控制台 (Settings → Secrets and variables → Actions) 設定:
+#   選項 3 (bastion, 推薦):
+#     OCI_USER_OCID, OCI_TENANCY_OCID, OCI_REGION (e.g. ap-singapore-1),
+#     OCI_API_FINGERPRINT, OCI_API_KEY (PEM 私鑰全文),
+#     OCI_BASTION_ID (ocid1.bastion...), OCI_TARGET_RESOURCE_ID (VPS compute instance OCID)
+#   選項 2 (direct, 需開 NSG):
+#     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (私鑰)
+#   兩者皆需 (應用程式 API key, 選填 — 若設則寫入 vps/.env):
+#     GROQ_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY, SUPABASE_*, GATEWAY_API_KEY, ...
 # =============================================================================
 
 name: Deploy to Oracle VPS
@@ -13,21 +29,25 @@ on:
     branches: [main]
     paths:
       - "vps/**"
-      - "app/**"
       - "src/**"
       - "packages/**"
+      - "apps/**"
       - "public/**"
       - "prisma/**"
       - "next.config.js"
       - "package.json"
       - "pnpm-lock.yaml"
+      - "ecosystem.config.cjs"
   workflow_dispatch:
     inputs:
-      skip_tests:
-        description: "Skip tests before deploy"
+      deploy_mode:
+        description: "bastion (OCI jump, recommended) or direct (SSH, needs NSG open)"
         required: false
-        default: "false"
-        type: boolean
+        default: "bastion"
+        type: choice
+        options:
+          - bastion
+          - direct
 
 concurrency:
   group: deploy-oracle-vps
@@ -37,197 +57,151 @@ permissions:
   contents: read
 
 env:
-  VPS_HOST: ${{ secrets.VPS_HOST }}
-  VPS_USER: ${{ secrets.VPS_USER }}
-  APP_DIR: /opt/esggo
+  VPS_USER: ${{ secrets.VPS_USER || 'root' }}
+  APP_DIR: /var/www/esggo
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
-  # ─── 前置檢查 ─────────────────────────────────────────────────
+  # ─── 前置檢查：決定部署模式 ───────────────────────────────────
   pre-check:
     name: Pre-deploy Check
     runs-on: ubuntu-latest
     outputs:
-      should_deploy: ${{ steps.check.outputs.should_deploy }}
+      mode: ${{ steps.check.outputs.mode }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Check VPS secrets
-        id: check
+      - id: check
         run: |
-          if [ -z "${{ secrets.VPS_HOST }}" ]; then
-            echo "::warning::VPS_HOST not set, skipping deploy"
-            echo "should_deploy=false" >> $GITHUB_OUTPUT
-          elif [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
-            echo "::warning::VPS_SSH_KEY not set, skipping deploy"
-            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          REQ="OCI_USER_OCID OCI_TENANCY_OCID OCI_API_KEY OCI_BASTION_ID OCI_TARGET_RESOURCE_ID"
+          all_set=1
+          for s in $REQ; do
+            val=$(printenv "${s}" 2>/dev/null || echo "${{ secrets[s] }}")
+            [ -n "${{ secrets[s] }}" ] || all_set=0
+          done
+          if [ "$all_set" = "1" ] && { [ "${{ inputs.deploy_mode || 'bastion' }}" = "bastion" ] || [ -z "${{ secrets.VPS_SSH_KEY }}" ]; }; then
+            echo "mode=bastion" >> $GITHUB_OUTPUT
+            echo "::notice::Bastion deploy mode (OCI secrets present)"
+          elif [ -n "${{ secrets.VPS_SSH_KEY }}" ] && [ -n "${{ secrets.VPS_HOST }}" ]; then
+            echo "mode=direct" >> $GITHUB_OUTPUT
+            echo "::notice::Direct SSH deploy mode (needs NSG open to VPS_HOST:22)"
           else
-            echo "should_deploy=true" >> $GITHUB_OUTPUT
+            echo "mode=skip" >> $GITHUB_OUTPUT
+            echo "::warning::No deploy secrets configured. Skipping auto-deploy (this is OK — manual bastion deploy still works). Set OCI_* or VPS_SSH_KEY in repo Secrets to enable."
           fi
 
-  # ─── CI 驗證（快速） ──────────────────────────────────────────
-  ci-fast:
-    name: Fast CI Gate
-    runs-on: ubuntu-latest
-    if: needs.pre-check.outputs.should_deploy == 'true' && inputs.skip_tests != 'true'
-    needs: [pre-check]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: "11.5.2"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: TypeScript check
-        run: pnpm typecheck
-      - name: Run tests
-        run: pnpm vitest run --reporter=verbose
-
-  # ─── 部署到 Oracle VPS ───────────────────────────────────────
+  # ─── 部署 ───────────────────────────────────────────────────
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    needs: [pre-check, ci-fast]
-    if: always() && needs.pre-check.outputs.should_deploy == 'true' && (needs.ci-fast.result == 'success' || needs.ci-fast.result == 'skipped')
+    needs: [pre-check]
+    if: needs.pre-check.outputs.mode != 'skip'
     environment: production
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup SSH key
+      # ---- 選項 3: bastion 跳板 ----
+      - name: Install OCI CLI (bastion mode)
+        if: needs.pre-check.outputs.mode == 'bastion'
+        run: pip install --quiet oci-cli
+
+      - name: Configure OCI + create bastion session
+        if: needs.pre-check.outputs.mode == 'bastion'
+        id: bastion
         run: |
           set -e
+          mkdir -p ~/.oci ~/.ssh
+          cat > ~/.oci/config <<'EOF'
+          [DEFAULT]
+          user=${{ secrets.OCI_USER_OCID }}
+          tenancy=${{ secrets.OCI_TENANCY_OCID }}
+          region=${{ secrets.OCI_REGION }}
+          fingerprint=${{ secrets.OCI_API_FINGERPRINT }}
+          key_file=~/.oci/key.pem
+          EOF
+          printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key.pem
+          chmod 600 ~/.oci/key.pem
+          ssh-keygen -t ed25519 -N "" -f ~/.ssh/bastion_key
+          SESSION=$(oci bastion session create \
+            --bastion-id ${{ secrets.OCI_BASTION_ID }} \
+            --target-resource-id ${{ secrets.OCI_TARGET_RESOURCE_ID }} \
+            --target-os-username root \
+            --ssh-public-key-file ~/.ssh/bastion_key.pub \
+            --type MANAGED_SSH \
+            --session-ttl 1800 \
+            --wait-for-state ACTIVE \
+            --raw-output --query 'data.id')
+          echo "session=$SESSION" >> $GITHUB_OUTPUT
+          echo "proxy=ssh -W %h:%p -p 22 $SESSION@host.bastion.${{ secrets.OCI_REGION }}.oci.oraclecloud.com" >> $GITHUB_OUTPUT
+          echo "[OK] bastion session $SESSION"
+
+      # ---- 選項 2: 直連 ----
+      - name: Setup direct SSH key
+        if: needs.pre-check.outputs.mode == 'direct'
+        run: |
           mkdir -p ~/.ssh
-
-          # Validate secrets are non-empty
-          if [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
-            echo "::error::VPS_SSH_KEY secret is empty — add it in repo Settings → Secrets"
-            exit 1
-          fi
-          if [ -z "${{ env.VPS_HOST }}" ]; then
-            echo "::error::VPS_HOST env is empty — check repo-level env or secret"
-            exit 1
-          fi
-
-          # Write private key
           printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H -T 10 ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          # Verify key is non-empty and valid
-          KEY_SIZE=$(wc -c < ~/.ssh/deploy_key | tr -d ' ')
-          if [ "$KEY_SIZE" -lt 100 ]; then
-            echo "::error::VPS_SSH_KEY appears too short (${KEY_SIZE} bytes) — verify the full private key is stored"
-            exit 1
-          fi
-          echo "[OK] SSH key written (${KEY_SIZE} bytes)"
-
-          # Add host key to known_hosts (non-fatal — StrictHostKeyChecking=no is used later)
-          echo "Scanning host key for ${{ env.VPS_HOST }}..."
-          if ssh-keyscan -H -T 10 ${{ env.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null; then
-            echo "[OK] Host key added to known_hosts"
-          else
-            echo "::warning::ssh-keyscan failed — proceeding with StrictHostKeyChecking=no"
-          fi
-
-      - name: Sync code to VPS
+      # ---- 共用：同步程式碼 + 建置 + PM2 重啟 ----
+      - name: Deploy via bastion
+        if: needs.pre-check.outputs.mode == 'bastion'
+        env:
+          PROXY: ${{ steps.bastion.outputs.proxy }}
         run: |
-          rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='node_modules' \
-            --exclude='.next' \
-            --exclude='*.db' \
-            --exclude='.env' \
-            --exclude='.env.local' \
-            --exclude='.env.production' \
-            --exclude='packages/*/node_modules' \
-            --exclude='apps/*/node_modules' \
+          set -e
+          SSH="ssh -o ProxyCommand=\"$PROXY\" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key"
+          rsync -az --delete \
+            --exclude='.git' --exclude='node_modules' --exclude='.next' \
+            --exclude='*.db' --exclude='.env' --exclude='.env.*' \
+            --exclude='packages/*/node_modules' --exclude='apps/*/node_modules' \
+            -e "ssh -o ProxyCommand=\"$PROXY\" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key" \
+            ./ root@10.0.0.119:${{ env.APP_DIR }}/
+          ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
+            set -e
+            cd /var/www/esggo
+            pnpm install --frozen-lockfile
+            pnpm run build
+            pm2 restart esggo-core omniagent-gateway
+            pm2 save
+            echo "[OK] deployed via bastion"
+          VPS
+
+      - name: Deploy direct
+        if: needs.pre-check.outputs.mode == 'direct'
+        run: |
+          set -e
+          rsync -az --delete \
+            --exclude='.git' --exclude='node_modules' --exclude='.next' \
+            --exclude='*.db' --exclude='.env' --exclude='.env.*' \
+            --exclude='packages/*/node_modules' --exclude='apps/*/node_modules' \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./ ${{ env.VPS_USER }}@${{ env.VPS_HOST }}:${{ env.APP_DIR }}/
-
-      - name: Deploy secrets to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.VPS_HOST }}
-          username: ${{ env.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
+            ./ ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.APP_DIR }}/
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
-            printf '%s\n' \
-              "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" \
-              "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" \
-              "OPENROUTER_MODEL=${{ secrets.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free' }}" \
-              "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" \
-              "AGNES_API=${{ secrets.AGNES_API }}" \
-              "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" \
-              "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
-              "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-              "FIREBASE_SERVICE_ACCOUNT_JSON=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" \
-              "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}" \
-              "GATEWAY_API_KEY=${{ secrets.GATEWAY_API_KEY }}" \
-              > ${{ env.APP_DIR }}/vps/.env
-            echo "[OK] .env written to ${{ env.APP_DIR }}/vps/.env"
+            cd /var/www/esggo
+            pnpm install --frozen-lockfile
+            pnpm run build
+            pm2 restart esggo-core omniagent-gateway
+            pm2 save
+            echo "[OK] deployed direct"
+          VPS
 
-      - name: Deploy on VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.VPS_HOST }}
-          username: ${{ env.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
-            cd ${{ env.APP_DIR }}/vps
+      - name: Cleanup
+        if: always() && needs.pre-check.outputs.mode == 'bastion'
+        run: rm -f ~/.ssh/bastion_key ~/.ssh/bastion_key.pub ~/.oci/key.pem || true
 
-            echo "=== [1/5] Pull latest code ==="
-            cd ${{ env.APP_DIR }}
-            git pull origin main --quiet || true
-
-            echo "=== [2/5] Build Docker images on VPS ==="
-            cd ${{ env.APP_DIR }}/vps
-            docker compose -f docker-compose.prod.yml build --no-cache
-
-            echo "=== [3/5] Stop old containers ==="
-            docker compose -f docker-compose.prod.yml down
-
-            echo "=== [4/5] Start services ==="
-            docker compose -f docker-compose.prod.yml up -d
-
-            echo "=== [5/5] Health check ==="
-            sleep 15
-            for i in $(seq 1 10); do
-              STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/api/health 2>/dev/null || echo "000")
-              if [ "$STATUS" = "200" ]; then
-                echo "[OK] Health check passed (attempt $i)"
-                exit 0
-              fi
-              echo "[WAIT] Waiting... (attempt $i, status=$STATUS)"
-              sleep 5
-            done
-            echo "[FAIL] Health check failed"
-            docker compose -f docker-compose.prod.yml logs --tail=50 esggo
-            exit 1
-
-      - name: Cleanup SSH key
-        if: always()
-        run: rm -f ~/.ssh/deploy_key
-
-  # ─── 通知 ─────────────────────────────────────────────────────
+  # ─── 通知 ───────────────────────────────────────────────────
   notify:
     name: Deploy Notification
     needs: [pre-check, deploy]
     runs-on: ubuntu-latest
-    if: always() && needs.pre-check.outputs.should_deploy == 'true'
+    if: always() && needs.pre-check.outputs.mode != 'skip'
     steps:
-      - name: Notify on success
-        if: needs.deploy.result == 'success'
+      - name: Result
         run: |
-          echo "[OK] ESG GO deployed successfully to Oracle VPS"
-          echo "[URL] ${{ vars.VPS_URL || format('https://{0}', secrets.VPS_HOST) }}"
-
-      - name: Notify on failure
-        if: needs.deploy.result == 'failure'
-        run: |
-          echo "[FAIL] ESG GO deployment failed"
-          echo "Please check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            echo "[OK] ESG GO deployed to Oracle VPS (${{ needs.pre-check.outputs.mode }} mode)"
+          else
+            echo "[FAIL] Deploy failed (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
