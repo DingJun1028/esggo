@@ -116,8 +116,8 @@ OA（OmniAgent）技能組位於 `skills/oa/` 目錄。
 ```bash
 npm run oa:summon          # 召喚 OmniAgent（輕量，真實探活 gateway）
 npm run oa:summon:core     # 同上 + 實際初始化 OmniCore（--core，約 90s）
-pnpm run oa:status        # 查看閘道狀態
-pnpm run oa:heal          # 執行痊癒閃現
+esggo status               # 查看系統/閘道健康（CLI 子命令，打 /api/health）
+# 註：oa:heal 尚無對外指令；核心具 OmniHealing（seed-vault 修復）但未暴露 CLI/npm 入口
 ```
 
 ---
