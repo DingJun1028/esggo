@@ -134,7 +134,7 @@ jobs:
             --target-resource-id ${{ secrets.OCI_TARGET_RESOURCE_ID }} \
             --target-os-username root \
             --ssh-public-key-file ~/.ssh/bastion_key.pub \
-            --session-ttl 1800 \
+            --session-ttl 3600 \
             --wait-for-state ACTIVE \
             --raw-output --query 'data.id')
           echo "session=$SESSION" >> $GITHUB_OUTPUT
