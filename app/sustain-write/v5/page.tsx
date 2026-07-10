@@ -1,13 +1,17 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, ChevronDown, ChevronUp, Plus, X } from 'lucide-react';
 
 /**
- * ESGGO v5.1 — OmniBase Style Frontend
+ * ESGGO v5.2 — OmniBase Style Frontend
  * Design: White background, no glass, left Gold border accent
  * Grid stats, chapter navigation, 5T badges, ZKP seal row
- * Integrates with async task API + OmniAgent
+ * Integrates with async task API + OmniAgent + OmniNote + Custom Company
+ *
+ * New in v5.2:
+ * - OmniNote integration: reference notes in report generation
+ * - Custom company: users can create and save their own company profiles
  */
 
 // ─── Types ───────────────────────────────────────────────────────────
@@ -22,6 +26,24 @@ interface Company {
   industry: string;
 }
 
+interface NoteData {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  fiveTGate?: string;
+  createdAt: number;
+}
+
+interface CustomCompanyForm {
+  name: string;
+  industry: string;
+  employees: number;
+  annualRevenue: string;
+  scope1Tco2e: number;
+  scope2Tco2e: number;
+}
+
 interface TaskProgress {
   taskId: string;
   status: TaskStatus;
@@ -33,6 +55,8 @@ interface TaskProgress {
   tagsCreated: number;
   decisionsCount: number;
   percent: number;
+  noteIds?: string[];
+  customCompany?: CustomCompanyForm;
   result?: {
     totalWords: number;
     totalTags: number;
@@ -78,6 +102,36 @@ const GATE_BG: Record<FiveTGate, string> = {
   trackable: 'bg-accentTeal/10 border-accentTeal/30',
 };
 
+const CUSTOM_COMPANY_ID = '__custom__';
+
+const EMPTY_CUSTOM_COMPANY: CustomCompanyForm = {
+  name: '',
+  industry: '',
+  employees: 0,
+  annualRevenue: '',
+  scope1Tco2e: 0,
+  scope2Tco2e: 0,
+};
+
+// ─── localStorage Helpers ────────────────────────────────────────────
+const CUSTOM_COMPANIES_KEY = 'esggo_custom_companies';
+
+function loadCustomCompanies(): CustomCompanyForm[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(CUSTOM_COMPANIES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomCompanies(companies: CustomCompanyForm[]) {
+  try {
+    localStorage.setItem(CUSTOM_COMPANIES_KEY, JSON.stringify(companies));
+  } catch { /* ignore */ }
+}
+
 // ─── API Helpers ─────────────────────────────────────────────────────
 async function fetchCompanies(): Promise<Company[]> {
   try {
@@ -94,11 +148,32 @@ async function fetchCompanies(): Promise<Company[]> {
   }
 }
 
-async function startAsyncReport(companyId: string, templateId: string): Promise<{ taskId: string }> {
+async function fetchNotes(): Promise<NoteData[]> {
+  try {
+    const res = await fetch('/api/notes');
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.data?.notes || [];
+  } catch {
+    return [];
+  }
+}
+
+async function startAsyncReport(
+  companyId: string,
+  templateId: string,
+  noteIds?: string[],
+  customCompany?: CustomCompanyForm
+): Promise<{ taskId: string }> {
   const res = await fetch('/api/sustain-write/v5/async', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ companyId, templateId }),
+    body: JSON.stringify({
+      companyId,
+      templateId,
+      ...(noteIds && noteIds.length > 0 ? { noteIds } : {}),
+      ...(companyId === CUSTOM_COMPANY_ID && customCompany ? { customCompany } : {}),
+    }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
@@ -173,6 +248,7 @@ function ProgressBar({ progress }: { progress: TaskProgress }) {
 
 export default function SustainWriteV5Page() {
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [customCompanies, setCustomCompanies] = useState<CustomCompanyForm[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<string>('');
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -187,11 +263,23 @@ export default function SustainWriteV5Page() {
   const [loadingEvidence, setLoadingEvidence] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
+  // Notes state
+  const [notes, setNotes] = useState<NoteData[]>([]);
+  const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
+  const [loadingNotes, setLoadingNotes] = useState(false);
+  const [notesExpanded, setNotesExpanded] = useState(false);
+  const [noteSearchQuery, setNoteSearchQuery] = useState('');
+
+  // Custom company state
+  const [showCustomForm, setShowCustomForm] = useState(false);
+  const [customCompany, setCustomCompany] = useState<CustomCompanyForm>(EMPTY_CUSTOM_COMPANY);
+
   // Initialize theme from system or saved preference
   useEffect(() => {
     if (document.documentElement.classList.contains('dark')) {
       setIsDarkMode(true);
     }
+    setCustomCompanies(loadCustomCompanies());
   }, []);
 
   const toggleTheme = () => {
@@ -212,6 +300,17 @@ export default function SustainWriteV5Page() {
       .then(setCompanies)
       .catch(() => setError('無法載入公司列表'));
   }, []);
+
+  // Load notes when expanded
+  useEffect(() => {
+    if (notesExpanded && notes.length === 0) {
+      setLoadingNotes(true);
+      fetchNotes()
+        .then(setNotes)
+        .catch(() => { /* silent */ })
+        .finally(() => setLoadingNotes(false));
+    }
+  }, [notesExpanded, notes.length]);
 
   // Poll task progress
   const startPolling = useCallback((taskId: string) => {
@@ -234,9 +333,9 @@ export default function SustainWriteV5Page() {
     }, 500);
   }, []);
 
-  // Start report generation
+  // Load evidence when company selected
   useEffect(() => {
-    if (!selectedCompany) {
+    if (!selectedCompany || selectedCompany === CUSTOM_COMPANY_ID) {
       setEvidenceCards([]);
       return;
     }
@@ -252,12 +351,24 @@ export default function SustainWriteV5Page() {
 
   const handleGenerate = async () => {
     if (!selectedCompany || !selectedTemplate) return;
+    if (selectedCompany === CUSTOM_COMPANY_ID && !customCompany.name) {
+      setError('請填寫自訂公司名稱');
+      return;
+    }
     setLoading(true);
     setError(null);
     setTaskProgress(null);
 
     try {
-      const { taskId } = await startAsyncReport(selectedCompany, selectedTemplate);
+      const effectiveCompanyId = selectedCompany === CUSTOM_COMPANY_ID
+        ? `custom-${Date.now()}`
+        : selectedCompany;
+      const { taskId } = await startAsyncReport(
+        effectiveCompanyId,
+        selectedTemplate,
+        selectedNoteIds.length > 0 ? selectedNoteIds : undefined,
+        selectedCompany === CUSTOM_COMPANY_ID ? customCompany : undefined
+      );
       startPolling(taskId);
     } catch {
       setLoading(false);
@@ -274,7 +385,6 @@ export default function SustainWriteV5Page() {
     if (!taskProgress?.result?.companyId) return;
     
     if (previewFormat === format && previewContent) {
-      // Toggle off if already viewing this format
       setPreviewContent(null);
       setPreviewFormat(null);
       return;
@@ -295,12 +405,52 @@ export default function SustainWriteV5Page() {
     }
   };
 
+  const toggleNoteSelection = (noteId: string) => {
+    setSelectedNoteIds(prev =>
+      prev.includes(noteId) ? prev.filter(id => id !== noteId) : [...prev, noteId]
+    );
+  };
+
+  const saveCustomCompany = () => {
+    if (!customCompany.name) return;
+    const updated = [...customCompanies, customCompany];
+    setCustomCompanies(updated);
+    saveCustomCompanies(updated);
+    setShowCustomForm(false);
+    setCustomCompany(EMPTY_CUSTOM_COMPANY);
+  };
+
+  const removeCustomCompany = (index: number) => {
+    const updated = customCompanies.filter((_, i) => i !== index);
+    setCustomCompanies(updated);
+    saveCustomCompanies(updated);
+  };
+
+  const filteredNotes = notes.filter(n => {
+    if (!noteSearchQuery) return true;
+    const q = noteSearchQuery.toLowerCase();
+    return n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q) || n.tags.some(t => t.toLowerCase().includes(q));
+  });
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     };
   }, []);
+
+  // All companies including custom ones and the "Custom" option
+  const allCompanies: (Company & { isCustom?: boolean })[] = [
+    ...companies,
+    ...customCompanies.map((c, i) => ({
+      id: `custom-saved-${i}`,
+      name: c.name,
+      shortName: c.name,
+      industry: c.industry,
+      isCustom: true as const,
+    })),
+    { id: CUSTOM_COMPANY_ID, name: '+ 新增自訂公司', shortName: '自訂', industry: '' },
+  ];
 
   return (
     <div className="min-h-screen bg-primary transition-colors duration-300">
@@ -311,7 +461,7 @@ export default function SustainWriteV5Page() {
             <div className="w-8 h-8 bg-accentTeal rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>
-            <h1 className="text-lg font-semibold text-textPrimary">ESGGO v5.1</h1>
+            <h1 className="text-lg font-semibold text-textPrimary">ESGGO v5.2</h1>
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -349,15 +499,32 @@ export default function SustainWriteV5Page() {
               <label className="block text-xs font-medium text-textSecondary mb-1">企業實體</label>
               <select
                 value={selectedCompany}
-                onChange={(e) => setSelectedCompany(e.target.value)}
+                onChange={(e) => {
+                  setSelectedCompany(e.target.value);
+                  if (e.target.value === CUSTOM_COMPANY_ID) {
+                    setShowCustomForm(true);
+                  }
+                }}
                 className="w-full border border-borderColor rounded-lg px-4 py-2.5 text-sm bg-primary text-textPrimary focus:ring-2 focus:ring-accentTeal focus:border-accentTeal outline-none transition-colors"
               >
                 <option value="">選擇公司...</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}（{c.industry}）
-                  </option>
-                ))}
+                <optgroup label="Demo 公司">
+                  {companies.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}（{c.industry}）
+                    </option>
+                  ))}
+                </optgroup>
+                {customCompanies.length > 0 && (
+                  <optgroup label="自訂公司">
+                    {customCompanies.map((c, i) => (
+                      <option key={`custom-saved-${i}`} value={`custom-saved-${i}`}>
+                        {c.name}（{c.industry}）
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                <option value={CUSTOM_COMPANY_ID}>+ 新增自訂公司</option>
               </select>
             </div>
             <div className="flex-1">
@@ -374,6 +541,124 @@ export default function SustainWriteV5Page() {
               </select>
             </div>
           </div>
+
+          {/* Custom Company Form */}
+          {showCustomForm && selectedCompany === CUSTOM_COMPANY_ID && (
+            <div className="mt-4 p-4 bg-primary rounded-lg border border-accentTeal/30">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-textPrimary">新增自訂公司</h3>
+                <button
+                  onClick={() => { setShowCustomForm(false); setSelectedCompany(''); }}
+                  className="text-textSecondary hover:text-textPrimary"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">公司名稱 *</label>
+                  <input
+                    type="text"
+                    value={customCompany.name}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, name: e.target.value }))}
+                    placeholder="例：我的公司股份有限公司"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">產業類型</label>
+                  <input
+                    type="text"
+                    value={customCompany.industry}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, industry: e.target.value }))}
+                    placeholder="例：科技製造"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">員工人數</label>
+                  <input
+                    type="number"
+                    value={customCompany.employees || ''}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, employees: Number(e.target.value) }))}
+                    placeholder="例：100"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">年度營收</label>
+                  <input
+                    type="text"
+                    value={customCompany.annualRevenue}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, annualRevenue: e.target.value }))}
+                    placeholder="例：新台幣5億元"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">Scope 1 碳排 (tCO2e)</label>
+                  <input
+                    type="number"
+                    value={customCompany.scope1Tco2e || ''}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, scope1Tco2e: Number(e.target.value) }))}
+                    placeholder="例：500"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-textSecondary mb-1">Scope 2 碳排 (tCO2e)</label>
+                  <input
+                    type="number"
+                    value={customCompany.scope2Tco2e || ''}
+                    onChange={(e) => setCustomCompany(c => ({ ...c, scope2Tco2e: Number(e.target.value) }))}
+                    placeholder="例：1200"
+                    className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
+                <button
+                  onClick={() => { setShowCustomForm(false); setSelectedCompany(''); }}
+                  className="px-4 py-2 text-sm rounded-lg border border-borderColor text-textSecondary hover:bg-secondary transition-colors"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={saveCustomCompany}
+                  disabled={!customCompany.name}
+                  className="px-4 py-2 text-sm rounded-lg bg-accentTeal text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  儲存公司
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Selected custom company info */}
+          {selectedCompany && selectedCompany !== CUSTOM_COMPANY_ID && selectedCompany.startsWith('custom-saved-') && (
+            <div className="mt-3 p-3 bg-accentTeal/5 border border-accentTeal/20 rounded-lg text-xs text-textSecondary">
+              {(() => {
+                const idx = parseInt(selectedCompany.replace('custom-saved-', ''), 10);
+                const c = customCompanies[idx];
+                if (!c) return null;
+                return (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div><span className="text-textSecondary">產業：</span><span className="font-medium text-textPrimary">{c.industry || '-'}</span></div>
+                    <div><span className="text-textSecondary">員工人數：</span><span className="font-medium text-textPrimary">{c.employees || '-'}</span></div>
+                    <div><span className="text-textSecondary">營收：</span><span className="font-medium text-textPrimary">{c.annualRevenue || '-'}</span></div>
+                    <div>
+                      <button
+                        onClick={() => removeCustomCompany(idx)}
+                        className="text-red-500 hover:text-red-600 text-xs"
+                      >
+                        刪除
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
 
           <div className="flex justify-end mt-6 pt-4 border-t border-borderColor">
             <button
@@ -396,6 +681,120 @@ export default function SustainWriteV5Page() {
           )}
         </div>
 
+        {/* OmniNote Reference Panel */}
+        <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
+          <div
+            className="border-l-4 border-accentPurple pl-4 mb-4 cursor-pointer flex items-center justify-between"
+            onClick={() => setNotesExpanded(!notesExpanded)}
+          >
+            <div>
+              <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
+                <FileText size={18} className="text-accentPurple" />
+                萬能筆記參考 (OmniNote Reference)
+              </h2>
+              <p className="text-sm text-textSecondary mt-1">
+                選擇萬能筆記作為報告生成的參考資料，AI 將融合筆記內容於 ESG 報告中
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {selectedNoteIds.length > 0 && (
+                <span className="text-xs bg-accentPurple/20 text-accentPurple px-2 py-1 rounded-full font-medium">
+                  已選 {selectedNoteIds.length} 則
+                </span>
+              )}
+              {notesExpanded ? <ChevronUp size={18} className="text-textSecondary" /> : <ChevronDown size={18} className="text-textSecondary" />}
+            </div>
+          </div>
+
+          {notesExpanded && (
+            <div>
+              {/* Search */}
+              <div className="mb-3">
+                <input
+                  type="text"
+                  value={noteSearchQuery}
+                  onChange={(e) => setNoteSearchQuery(e.target.value)}
+                  placeholder="搜尋筆記（標題、內容、標籤）..."
+                  className="w-full border border-borderColor rounded-lg px-4 py-2 text-sm bg-primary text-textPrimary focus:ring-2 focus:ring-accentPurple focus:border-accentPurple outline-none transition-colors"
+                />
+              </div>
+
+              {/* Selected notes summary */}
+              {selectedNoteIds.length > 0 && (
+                <div className="mb-3 p-3 bg-accentPurple/5 border border-accentPurple/20 rounded-lg">
+                  <div className="text-xs font-medium text-accentPurple mb-2">已選取的參考筆記：</div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedNoteIds.map(id => {
+                      const note = notes.find(n => n.id === id);
+                      return note ? (
+                        <span key={id} className="inline-flex items-center gap-1 text-xs bg-accentPurple/10 text-accentPurple px-2 py-1 rounded-full">
+                          {note.title}
+                          <button onClick={(e) => { e.stopPropagation(); toggleNoteSelection(id); }} className="hover:text-red-500">
+                            <X size={12} />
+                          </button>
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes list */}
+              {loadingNotes ? (
+                <div className="text-sm text-textSecondary text-center py-6">載入萬能筆記中...</div>
+              ) : filteredNotes.length === 0 ? (
+                <div className="text-sm text-textSecondary text-center py-6">
+                  {notes.length === 0 ? '尚無筆記，請先至萬能中心建立筆記' : '無符合搜尋條件的筆記'}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                  {filteredNotes.map((note) => {
+                    const isSelected = selectedNoteIds.includes(note.id);
+                    return (
+                      <div
+                        key={note.id}
+                        onClick={() => toggleNoteSelection(note.id)}
+                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          isSelected
+                            ? 'bg-accentPurple/10 border-accentPurple/40 shadow-sm'
+                            : 'bg-primary border-borderColor hover:border-accentPurple/30'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleNoteSelection(note.id)}
+                            className="mt-1 accent-accentPurple"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-semibold text-textPrimary">{note.title}</span>
+                              {note.fiveTGate && (
+                                <span className="text-[10px] bg-accentBlue/10 text-accentBlue px-1.5 py-0.5 rounded font-medium">
+                                  {note.fiveTGate}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-xs text-textSecondary line-clamp-2 mb-1.5">{note.content}</div>
+                            <div className="flex gap-1 flex-wrap">
+                              {note.tags.map(tag => (
+                                <span key={tag} className="text-[10px] bg-accentGold/20 text-accentGold px-1.5 py-0.5 rounded-full">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* Progress Panel */}
         {taskProgress && (
           <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
@@ -412,6 +811,13 @@ export default function SustainWriteV5Page() {
             </div>
 
             <ProgressBar progress={taskProgress} />
+
+            {/* Show reference notes info */}
+            {taskProgress.noteIds && taskProgress.noteIds.length > 0 && (
+              <div className="mt-3 text-xs text-accentPurple">
+                參考筆記：{taskProgress.noteIds.length} 則已融合
+              </div>
+            )}
 
             {taskProgress.result && (
               <div className="mt-4 p-4 bg-primary rounded-lg border border-borderColor">
@@ -481,7 +887,7 @@ export default function SustainWriteV5Page() {
         )}
 
         {/* Evidence & Knowledge Panel */}
-        {selectedCompany && evidenceCards.length > 0 && (
+        {selectedCompany && selectedCompany !== CUSTOM_COMPANY_ID && !selectedCompany.startsWith('custom-saved-') && evidenceCards.length > 0 && (
           <div className="bg-secondary rounded-lg border border-borderColor p-6 mb-8 shadow-sm">
             <div className="border-l-4 border-accentGold pl-4 mb-4">
               <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
@@ -608,7 +1014,7 @@ export default function SustainWriteV5Page() {
       {/* Footer */}
       <footer className="border-t border-borderColor bg-secondary mt-12 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-textSecondary">
-          ESGGO v5.1 · OmniBase 萬能系統 · 深色模式 / 淺色模式無縫支援
+          ESGGO v5.2 · OmniBase 萬能系統 · 深色模式 / 淺色模式無縫支援
         </div>
       </footer>
     </div>
