@@ -39,6 +39,15 @@ export interface TaskProgress {
   readonly status: TaskStatus;
   readonly taskType?: 'report_generation' | 'grammar_rewrite' | 'ocr_processing';
   readonly templateId?: string;
+  readonly noteIds?: readonly string[];
+  readonly customCompany?: {
+    readonly name: string;
+    readonly industry: string;
+    readonly employees: number;
+    readonly annualRevenue: string;
+    readonly scope1Tco2e: number;
+    readonly scope2Tco2e: number;
+  };
   readonly currentChapter: number;
   readonly totalChapters: number;
   readonly chapterTitle: string;
@@ -117,7 +126,12 @@ function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskP
 // Task Lifecycle
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function createTask(companyId: string, templateId?: string): string {
+export function createTask(
+  companyId: string,
+  templateId?: string,
+  noteIds?: string[],
+  customCompany?: { name: string; industry: string; employees: number; annualRevenue: string; scope1Tco2e: number; scope2Tco2e: number }
+): string {
   const taskId = `tsk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const now = new Date().toISOString();
 
@@ -132,6 +146,8 @@ export function createTask(companyId: string, templateId?: string): string {
     decisionsCount: 0,
     percent: 0, startedAt: now, updatedAt: now,
     templateId: templateId || 'gri',
+    ...(noteIds && noteIds.length > 0 ? { noteIds } : {}),
+    ...(customCompany ? { customCompany } : {}),
   };
   tasks.set(taskId, task);
 
