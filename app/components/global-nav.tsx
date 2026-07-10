@@ -51,6 +51,12 @@ const NAV = [
     color: 'hover:text-accentGold hover:bg-accentGold/10',
   },
   {
+    href: '/export',
+    label: '資料匯出',
+    icon: '📥',
+    color: 'hover:text-accentTeal hover:bg-accentTeal/10',
+  },
+  {
     href: '/profile',
     label: '個人檔案',
     icon: '👤',
