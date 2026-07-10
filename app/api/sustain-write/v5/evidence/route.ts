@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAnswersByCompany, QUESTIONS } from '@/core/repositories/sustain-write-answer-database';
 import { createHash } from 'crypto';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
   const answers = getAnswersByCompany(companyId);
   if (!answers || answers.length === 0) {
-    return NextResponse.json({ evidence: [] });
+    return jsonResponse({ evidence: [] });
   }
 
   const evidenceList = answers.map((ans, index) => {
@@ -38,5 +38,5 @@ export async function GET(req: NextRequest) {
     };
   });
 
-  return NextResponse.json({ evidence: evidenceList });
+  return jsonResponse({ evidence: evidenceList });
 }

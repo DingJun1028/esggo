@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { seedVillageData } from '@/lib/village-seeder';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -62,7 +62,7 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       projects,
       members,

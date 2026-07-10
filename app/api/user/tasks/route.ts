@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
     const tasks = await service.getDailyTasks(userId);
 
-    return NextResponse.json({ success: true, tasks });
+    return jsonResponse({ success: true, tasks });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message);
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     const service = getUserGrowthService();
     const result = await service.claimTaskReward(userId, taskId);
 
-    return NextResponse.json({ ...result });
+    return jsonResponse({ ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message);

@@ -3,7 +3,7 @@ import pdfParse from 'pdf-parse';
 import { agnesApi } from '@/lib/agnes-api';
 import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
     
     await Promise.all(promises);
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       message: 'PDF 解析與 Chunking 寫入成功',
       totalChunks: chunks.length,

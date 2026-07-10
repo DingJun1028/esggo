@@ -4,14 +4,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@/lib/sustain-write';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 import type { ReportChapter } from '@/lib/sustain-write/omni-tag';
 
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  return NextResponse.json({
+  return jsonResponse({
     success: true,
     companies: getAvailableCompanies(),
     version: 'C版 v3.7',
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (format === 'markdown') {
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         report: {
           companyId: report.companyId,
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       report: {
         companyId: report.companyId,

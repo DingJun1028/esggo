@@ -3,7 +3,7 @@
  * OmniAgent 統一執行入口
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   switch (action) {
     case 'status':
-      return NextResponse.json({
+      return jsonResponse({
         name: 'ESGGO OmniAgent',
         version: '2.1.0',
         status: 'idle',
@@ -24,14 +24,14 @@ export async function POST(req: NextRequest) {
       });
 
     case 'evolve':
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         message: 'Agent evolution triggered',
         ts: Date.now(),
       });
 
     case 'assemble':
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         message: 'Report assembly queued',
         companyId,
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({
+  return jsonResponse({
     name: 'ESGGO OmniAgent API',
     version: '2.1.0',
     endpoints: {

@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { getPluginRegistry } from '@/lib/omni-base/plugin-registry';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +17,7 @@ export async function GET() {
     const plugins = registry.list();
     const health = registry.getHealth();
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       plugins,
       health,
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
         return jsonError('INVALID_ACTION', `Unknown action: ${action}`, 400);
     }
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       plugin: registry.get(pluginId)?.manifest,
       lifecycle: registry.get(pluginId)?.lifecycle,

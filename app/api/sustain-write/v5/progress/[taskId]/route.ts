@@ -4,7 +4,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { getTask, cancelTask } from '@/core/services/async-task-manager';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +23,7 @@ export async function GET(
     return jsonError('TASK_NOT_FOUND', 'Task not found', 404);
   }
 
-  return NextResponse.json(task);
+  return jsonResponse(task);
 }
 
 export async function DELETE(
@@ -37,5 +37,5 @@ export async function DELETE(
     return jsonError('TASK_NOT_FOUND', 'Task not found or already completed', 404);
   }
 
-  return NextResponse.json({ taskId, status: 'cancelled' });
+  return jsonResponse({ taskId, status: 'cancelled' });
 }

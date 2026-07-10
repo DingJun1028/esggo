@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { CelestialController } from '@/lib/celestial/implementation';
-import { jsonError, validateParams, validatePositiveNumber } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams, validatePositiveNumber } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
       throw txError;
     }
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       message: '投票成功，ZKP 憑證已更新',
       cost,

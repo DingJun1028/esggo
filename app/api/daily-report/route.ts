@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     if (todayParam === 'true') {
       const report = await service.getTodayReport();
-      return NextResponse.json({ success: true, report });
+      return jsonResponse({ success: true, report });
     }
 
     if (dateParam) {
@@ -27,11 +27,11 @@ export async function GET(req: NextRequest) {
       // Find by date string match
       // Quick approach: generate if not exists
       const report = await service.generateReport(date);
-      return NextResponse.json({ success: true, report });
+      return jsonResponse({ success: true, report });
     }
 
     const reports = await service.listReports(limit, 'published');
-    return NextResponse.json({ success: true, reports, count: reports.length });
+    return jsonResponse({ success: true, reports, count: reports.length });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message, 500);
