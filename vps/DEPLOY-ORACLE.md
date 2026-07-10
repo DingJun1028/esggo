@@ -1,5 +1,8 @@
 # ESG GO — Oracle Cloud VPS 部署指南
 
+> ⚠️ 本文件為 **Docker Compose 藍圖**（esggo.ai / Redis 容器），與 VPS 實際運行狀態不符。
+> 實際生產狀態請見 **[DEPLOY-REALITY.md](./DEPLOY-REALITY.md)**（nginx + PM2、esggo.co、Cloudflare DNS）。
+
 ## 概覽
 
 本文件說明如何將 ESG GO 平台部署到 Oracle Cloud Always Free ARM Ampere A1 VPS。
