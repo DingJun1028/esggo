@@ -198,7 +198,15 @@ export class FiveTHashLock {
    */
   static trinityHash(...elements: string[]): string {
     const combined = elements.join('||');
-    return `0x${createHash('sha256').update(combined).digest('hex').substring(0, 32)}`;
+    const hash = createHash('sha256').update(combined).digest('hex');
+    return '0x' + hash.substring(0, 32);
+  }
+
+  // Verifies that `hashLock` matches the deterministic trinity hash of
+  // (data, salt). Pairs with `trinityHash` so a client that produced the
+  // lock via `trinityHash(data, salt)` can validate it.
+  static verifyTrinity(data: string, salt: string, hashLock: string): boolean {
+    return this.trinityHash(data, salt) === hashLock;
   }
 }
 

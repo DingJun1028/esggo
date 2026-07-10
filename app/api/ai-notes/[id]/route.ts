@@ -10,7 +10,7 @@ import type { UpdateNoteInput } from '@/types/notes';
 // GET /api/ai-notes/[id] - 取得單一筆記
 export async function GET(
   request: NextRequest,
-  params: Promise<{ id: string }>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -32,7 +32,7 @@ export async function GET(
 // PUT /api/ai-notes/[id] - 更新筆記
 export async function PUT(
   request: NextRequest,
-  params: Promise<{ id: string }>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -108,7 +108,7 @@ export async function PUT(
 // DELETE /api/ai-notes/[id] - 刪除筆記（軟刪除）
 export async function DELETE(
   request: NextRequest,
-  params: Promise<{ id: string }>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;

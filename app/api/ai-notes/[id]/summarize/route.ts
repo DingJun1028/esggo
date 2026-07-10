@@ -10,7 +10,7 @@ import type { SummaryOptions } from '@/types/notes';
 // POST /api/ai-notes/[id]/summarize - 生成摘要
 export async function POST(
   request: NextRequest,
-  params: Promise<{ id: string }>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
