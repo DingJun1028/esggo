@@ -140,9 +140,8 @@ jobs:
             "region": os.environ["OCI_REGION"],
             "fingerprint": os.environ["OCI_API_FINGERPRINT"],
             "key_file": str(kp),
-          }
-          ocfg = oci.config.from_dict(cfg)
-          client = oci.bastion.BastionClient(ocfg)
+          import oci
+          client = oci.bastion.BastionClient(cfg)
           details = oci.bastion.models.CreateSessionDetails(
             bastion_id=os.environ["OCI_BASTION_ID"],
             display_name="gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
