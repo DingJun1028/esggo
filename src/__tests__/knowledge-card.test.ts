@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from "vitest";
 /**
  * src/__tests__/knowledge-card.test.ts — Knowledge Card Service 單元測試
  */
@@ -68,7 +69,7 @@ describe('KnowledgeCardService', () => {
         fields: { vendor: '台灣電力公司', category: '電費', amount: '125,000' },
       });
 
-      expect(content.why).toContain('能源');
+      expect(content.what).toContain('能源');
       expect(content.what).toContain('電費');
       expect(content.how).toBeDefined();
     });

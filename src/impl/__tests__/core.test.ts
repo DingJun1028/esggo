@@ -14,7 +14,7 @@ describe('OmniAgent core', () => {
 
   it('clones an OA when backpressure threshold is exceeded for data.clean', async () => {
     const root = new OmniAgent(
-      makeCore({ uuid: 'root-1', version: '1.0.0', evidence: {} })
+      makeCore({ uuid: 'root-1', version: '1.0.0', evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' } })
     );
     ecosystem.registerAgent(root);
 
@@ -28,7 +28,7 @@ describe('OmniAgent core', () => {
           stage: 'EMERGED',
           source_origin: 'demo',
           topic: 'data.clean',
-          evidence: {},
+          evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' },
           lifecycle_path: [],
         })
       );
@@ -41,7 +41,7 @@ describe('OmniAgent core', () => {
 
   it('does not clone on a non-backpressure topic', async () => {
     const root = new OmniAgent(
-      makeCore({ uuid: 'root-2', version: '1.0.0', evidence: {} })
+      makeCore({ uuid: 'root-2', version: '1.0.0', evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' } })
     );
     ecosystem.registerAgent(root);
 
@@ -54,7 +54,7 @@ describe('OmniAgent core', () => {
         stage: 'EMERGED',
         source_origin: 'demo',
         topic: 'other.topic',
-        evidence: {},
+        evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' },
         lifecycle_path: [],
       })
     );
@@ -77,7 +77,7 @@ describe('OmniAgent core', () => {
       stage: 'EMERGED',
       source_origin: 'demo',
       topic: 'audit',
-      evidence: {},
+      evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' },
       lifecycle_path: [],
     });
 
@@ -113,7 +113,7 @@ describe('OmniAgentGateway ingress/egress', () => {
       stage: 'EMERGED',
       source_origin: 'tester',
       topic: 'ingress',
-      evidence: {},
+      evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' },
       lifecycle_path: [],
     });
 
@@ -165,7 +165,7 @@ describe('OmniAgentGateway ingress/egress', () => {
       stage: 'EMERGED',
       source_origin: 'tester',
       topic: 'egress',
-      evidence: {},
+      evidence: { originCause: 'test', processTrace: [], finalEffect: 'test' },
       lifecycle_path: [],
     });
 
