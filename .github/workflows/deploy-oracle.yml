@@ -125,15 +125,10 @@ jobs:
           fingerprint=${{ secrets.OCI_API_FINGERPRINT }}
           key_file=~/.oci/key.pem
           EOF
-          printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key.pem
+          printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key_raw.pem
+          python3 -c "import re,pathlib; raw=pathlib.Path('~/.oci/key_raw.pem').expanduser().read_text(errors='replace'); m=re.search(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', raw, re.S); clean=(m.group(0) if m else raw).replace(chr(13),'').strip()+chr(10); pathlib.Path('~/.oci/key.pem').expanduser().write_text(clean); print('key.pem bytes:', len(clean.encode()))"
           chmod 600 ~/.oci/key.pem
-          echo "key.pem bytes: $(wc -c < ~/.oci/key.pem)"
-          echo "key.pem head:"; head -1 ~/.oci/key.pem
-          echo "key.pem tail:"; tail -1 ~/.oci/key.pem
-          echo "=== auth test (diag, base64 to avoid mask) ==="
-          oci iam user get --user-id ${{ secrets.OCI_USER_OCID }} 2>&1 | base64 | head -c 400 || true
           ssh-keygen -t ed25519 -N "" -f ~/.ssh/bastion_key
-          echo "=== bastion create (diag) ==="
           SESSION=$(oci bastion session create-managed-ssh \
             --bastion-id ${{ secrets.OCI_BASTION_ID }} \
             --region ${{ secrets.OCI_REGION }} \
@@ -143,7 +138,7 @@ jobs:
             --session-ttl 3600 \
             --wait-for-state ACTIVE \
             --raw-output --query 'data.id' 2>/tmp/oci_err) || {
-            echo "OCI_ERR_B64:"; base64 /tmp/oci_err | head -c 600
+            echo "OCI_ERR:"; cat /tmp/oci_err | base64 | head -c 600
             exit 1
           }
           echo "session=$SESSION" >> $GITHUB_OUTPUT
