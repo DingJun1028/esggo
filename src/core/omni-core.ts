@@ -44,6 +44,7 @@ import { createOmniSoul, OmniSoul } from "../agents/omni-soul";
 import { createVPSAgent, VPSAgent, VPSAgentAdapter, VPSAgentFactory } from "../agents/vps";
 import { OASummon, quickSummon, SummonResult } from "../agents/oa-summon";
 import { OmniSoulAutoSeed, initSoul } from "../agents/omni-soul-auto-seed";
+import { OmniUserRegistry, getOmniUserRegistry } from "../agents/omni-user-registry";
 import { IOmniSingularity } from "../types/omni-singularity";
 import { IOmniKey } from "../types/omni-key";
 import { IOmniSoul, GovernanceAlignment, SoulDecision } from "../types/omni-soul";
@@ -173,6 +174,9 @@ export class OmniCore {
   private _taiChiResonance: TaiChiResonance;
   private _omniConvergence: OmniConvergence;
   
+  /** 用戶成長資料庫 */
+  private _userRegistry: OmniUserRegistry;
+  
   /** VPS 連接配置 */
   private _vpsConfig?: { host: string; port: number };
   
@@ -237,6 +241,9 @@ export class OmniCore {
     this._universalMemory = new UniversalMemory();
     this._taiChiResonance = new TaiChiResonance();
     this._omniConvergence = new OmniConvergence();
+    
+    // 7. 初始化用戶成長資料庫
+    this._userRegistry = getOmniUserRegistry();
 
     console.log("[OmniCore] 🌌 萬能核心已創建");
   }
@@ -574,6 +581,10 @@ export class OmniCore {
   public get omniHealing(): OmniHealing { return this._omniHealing; }
   /** 獲取萬能進化 */
   public get omniEvolution(): OmniEvolution { return this._omniEvolution; }
+
+  // Growth Dimension — 成長維度
+  /** 獲取用戶成長資料庫 */
+  public get userRegistry(): OmniUserRegistry { return this._userRegistry; }
 
   // ==========================================
   // 9 Magic-Effect Combinations Getters
