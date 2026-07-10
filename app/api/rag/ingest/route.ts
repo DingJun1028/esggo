@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import pdfParse from 'pdf-parse';
 import { agnesApi } from '@/lib/agnes-api';
 import { db } from '@/lib/firebase';

@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const store = await getStore();
+  await getStore();
   const query: MemoryQuery = {
     key: sp.get('key') || undefined,
     prefix: sp.get('prefix') || undefined,

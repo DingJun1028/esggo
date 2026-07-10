@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
 import { jsonResponse } from '@/lib/api-utils';
 import { CelestialController } from '@/lib/celestial/implementation';
 
 export async function GET() {
   const celestial = CelestialController.getInstance();
-  const traceId = celestial.initiateFlow('HealthCheck');
+  celestial.initiateFlow('HealthCheck');
 
   // ESGSonar gateway status
   let sonnarStatus = 'unavailable';

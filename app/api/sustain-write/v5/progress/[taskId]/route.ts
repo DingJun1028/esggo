@@ -2,7 +2,7 @@
  * GET /api/sustain-write/v5/progress/[taskId]
  * 查詢任務進度
  */
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getTask, cancelTask } from '@/core/services/async-task-manager';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 

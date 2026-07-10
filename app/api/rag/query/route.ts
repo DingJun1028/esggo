@@ -25,7 +25,7 @@ function cosineSimilarity(vecA: number[], vecB: number[]) {
 
 export async function POST(req: Request) {
   try {
-    const { prompt, tenantId = 'default_tenant', userId = 'default_user' } = await req.json();
+    const { prompt, userId = 'default_user' } = await req.json();
 
     const paramValidation = validateParams({ prompt });
     if (!paramValidation.valid) {

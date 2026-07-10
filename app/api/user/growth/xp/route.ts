@@ -4,18 +4,15 @@
  * Awards XP, updates tier/level, returns new state
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getUserGrowthService, XP_REWARDS } from '@/core/services/user-growth-service';
-import { PrismaClient } from '@prisma/client';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
-const prisma = new PrismaClient();
-
 export async function POST(req: NextRequest) {
   try {
-    const { userId, action, amount, metadata } = await req.json();
+    const { userId, action, amount } = await req.json();
     if (!userId || !action) {
       return jsonError('INVALID_PARAMS', 'userId and action required', 400);
     }

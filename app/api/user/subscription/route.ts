@@ -4,7 +4,7 @@
  * Toggles user subscription to a data source, company, or keyword
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, subType, targetId, action = 'toggle' } = await req.json();
+    const { userId, subType, targetId } = await req.json();
     if (!userId || !subType || !targetId) {
       return jsonError('INVALID_PARAMS', 'userId, subType, targetId required');
     }

@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { routeModel, inferTaskType, formatRoutingResult } from '@/core/ai/model-router';
 

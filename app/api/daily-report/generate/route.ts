@@ -4,7 +4,7 @@
  * Generates/regenerates a daily report
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 

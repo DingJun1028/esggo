@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { seedVillageData } from '@/lib/village-seeder';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 

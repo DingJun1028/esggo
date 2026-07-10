@@ -3,7 +3,7 @@
  * Returns top users by total points
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getUserGrowthService, TIER_ICONS, TIER_LABELS } from '@/core/services/user-growth-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 

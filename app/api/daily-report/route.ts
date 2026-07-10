@@ -3,7 +3,7 @@
  * GET /api/daily-report?date=YYYY-MM-DD — get specific date
  * GET /api/daily-report — get today's ( */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
@@ -23,7 +23,6 @@ export async function GET(req: NextRequest) {
 
     if (dateParam) {
       const date = new Date(dateParam);
-      const reports = await service.listReports(1, 'published');
       // Find by date string match
       // Quick approach: generate if not exists
       const report = await service.generateReport(date);
