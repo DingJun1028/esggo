@@ -66,6 +66,14 @@ jobs:
   pre-check:
     name: Pre-deploy Check
     runs-on: ubuntu-latest
+    env:
+      OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+      OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+      OCI_API_KEY: ${{ secrets.OCI_API_KEY }}
+      OCI_BASTION_ID: ${{ secrets.OCI_BASTION_ID }}
+      OCI_TARGET_RESOURCE_ID: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
     outputs:
       mode: ${{ steps.check.outputs.mode }}
     steps:
@@ -74,13 +82,12 @@ jobs:
           REQ="OCI_USER_OCID OCI_TENANCY_OCID OCI_API_KEY OCI_BASTION_ID OCI_TARGET_RESOURCE_ID"
           all_set=1
           for s in $REQ; do
-            val=$(printenv "${s}" 2>/dev/null || echo "${{ secrets[s] }}")
-            [ -n "${{ secrets[s] }}" ] || all_set=0
+            [ -n "${!s}" ] || all_set=0
           done
-          if [ "$all_set" = "1" ] && { [ "${{ inputs.deploy_mode || 'bastion' }}" = "bastion" ] || [ -z "${{ secrets.VPS_SSH_KEY }}" ]; }; then
+          if [ "$all_set" = "1" ] && { [ "${{ inputs.deploy_mode || 'bastion' }}" = "bastion" ] || [ -z "$VPS_SSH_KEY" ]; }; then
             echo "mode=bastion" >> $GITHUB_OUTPUT
             echo "::notice::Bastion deploy mode (OCI secrets present)"
-          elif [ -n "${{ secrets.VPS_SSH_KEY }}" ] && [ -n "${{ secrets.VPS_HOST }}" ]; then
+          elif [ -n "$VPS_SSH_KEY" ] && [ -n "$VPS_HOST" ]; then
             echo "mode=direct" >> $GITHUB_OUTPUT
             echo "::notice::Direct SSH deploy mode (needs NSG open to VPS_HOST:22)"
           else
