@@ -20,8 +20,8 @@ module.exports = {
     {
       name: 'omniagent-gateway',
       cwd: '/var/www/esggo/apps/gateway',
-      script: 'omni-server.ts',
-      interpreter: '/usr/bin/tsx',
+      script: 'omni-server.mjs',
+      interpreter: 'node',
       env: { NODE_ENV: 'production', PORT: '8642' },
       instances: 1,
       exec_mode: 'fork',
