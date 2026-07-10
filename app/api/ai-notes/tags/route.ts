@@ -16,7 +16,7 @@ export async function GET() {
     return jsonResponse(tags);
   } catch (error) {
     console.error('Error fetching tags:', error);
-    return jsonError('Failed to fetch tags', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to fetch tags', 500);
   }
 }
 
@@ -27,15 +27,10 @@ export async function POST(request: NextRequest) {
     const { name, color } = body;
 
     // 驗證必要欄位
-    const validation = validateParams(
-      { name },
-      {
-        name: { required: true, type: 'string', minLength: 1, maxLength: 100 },
-      }
-    );
+    const validation = validateParams({ name });
 
     if (!validation.valid) {
-      return jsonError(validation.errors!.join(', '), 400);
+      return jsonError('INVALID_PARAMS', validation.missing ? `Missing required field: ${validation.missing}` : 'Invalid params', 400);
     }
 
     const ncb = getNCBClient();
@@ -45,7 +40,7 @@ export async function POST(request: NextRequest) {
     const existingTag = existingTags.find(t => t.name === name);
 
     if (existingTag) {
-      return jsonError('Tag already exists', 409);
+      return jsonError('INVALID_PARAMS', 'Tag already exists', 409);
     }
 
     // 建立新標籤
@@ -57,6 +52,6 @@ export async function POST(request: NextRequest) {
     return jsonResponse(tag, 201);
   } catch (error) {
     console.error('Error creating tag:', error);
-    return jsonError('Failed to create tag', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to create tag', 500);
   }
 }

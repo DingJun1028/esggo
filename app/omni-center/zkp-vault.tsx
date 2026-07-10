@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { ShieldCheck, Hash, Clock, Heart, ChevronDown, ChevronUp } from 'lucide-react';
+import { UniversalOmniConsole } from './universal-omni-console';
 
 interface ZkpRecord {
   id: string;
@@ -149,6 +150,11 @@ export function ZkpVault() {
           })}
         </div>
       )}
+      {/* 萬能函數控制台 — 直接呼叫 omni() 與 omniFn，並可一鍵建立 5T 組件寫入 Vault */}
+      <div className="rounded-2xl border border-accentPurple/30 bg-secondary/40 p-4">
+        <UniversalOmniConsole />
+      </div>
+
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }

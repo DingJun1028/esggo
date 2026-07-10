@@ -29,6 +29,7 @@ model Regulation {
   updatedAt   DateTime @default(now())
   version     Int      @default(1)
   crawlHistory CrawlHistory[]
+  tags        RegulationTag[]
   
   @@index([sourceId])
   @@index([crawledAt])
@@ -51,6 +52,7 @@ model CompanyReport {
   crawledAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
   crawlHistory  CrawlHistory[]
+  tags          ReportTag[]
   
   @@index([companyId])
   @@index([reportType])
@@ -63,6 +65,52 @@ model ESGTag {
   pillar      String   // Environmental / Social / Governance
   category    String   // e.g. "碳排", "勞動", "董事會"
   description String   @default("")
+
+  regulations RegulationTag[]
+  reports     ReportTag[]
+  alerts      AlertTag[]
+}
+
+// Junction table: Regulation <-> ESGTag
+model RegulationTag {
+  id            String   @id @default(cuid())
+  regulationId  String
+  tagId         String
+
+  regulation    Regulation @relation(fields: [regulationId], references: [id], onDelete: Cascade)
+  tag           ESGTag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([regulationId, tagId])
+  @@index([regulationId])
+  @@index([tagId])
+}
+
+// Junction table: CompanyReport <-> ESGTag
+model ReportTag {
+  id            String   @id @default(cuid())
+  reportId      String
+  tagId         String
+
+  report        CompanyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  tag           ESGTag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([reportId, tagId])
+  @@index([reportId])
+  @@index([tagId])
+}
+
+// Junction table: Alert <-> ESGTag
+model AlertTag {
+  id            String   @id @default(cuid())
+  alertId       String
+  tagId         String
+
+  alert         Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  tag           ESGTag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([alertId, tagId])
+  @@index([alertId])
+  @@index([tagId])
 }
 
 // Crawl history log
@@ -100,7 +148,11 @@ model Alert {
   esgPillar   String   @default("") // environmental / social / governance
   acknowledged Boolean @default(false)
   createdAt   DateTime @default(now())
-  
+
+  dailyReportItems DailyReportItem[]
+  notifications    NotificationLog[]
+  tags             AlertTag[]
+
   @@index([sourceId])
   @@index([severity])
   @@index([acknowledged])
@@ -138,6 +190,10 @@ model NotificationLog {
   sentAt      DateTime?
   error       String?
   createdAt   DateTime @default(now())
+
+  alert       Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  @@index([alertId])
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -163,6 +219,7 @@ model UserGrowth {
   achievements  UserAchievement[]
   tasks         UserTask[]
   subscriptions Subscription[]
+  dailyReports  DailyReport[]
 
   @@index([tier])
   @@index([totalPoints])
@@ -271,9 +328,14 @@ model DailyReport {
   editorNote    String?  // 主編的話
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
+  createdById   String?  // 建立者 UserGrowth ID
+
+  items         DailyReportItem[]
+  createdBy     UserGrowth? @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([reportDate])
   @@index([status])
+  @@index([createdById])
 }
 
 /// 日報內的單條快訊（關聯 Alert）
@@ -291,6 +353,10 @@ model DailyReportItem {
   orderIndex    Int      @default(0)  // 排序
   createdAt     DateTime @default(now())
 
+  report        DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  alert         Alert?      @relation(fields: [alertId], references: [id], onDelete: SetNull)
+
   @@index([reportId])
   @@index([itemType])
+  @@index([alertId])
 }

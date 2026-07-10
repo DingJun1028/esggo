@@ -5,13 +5,20 @@
 import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 import { getNCBClient } from '@/lib/ncb-client';
-import { Pool } from 'pg';
 import type { SearchQuery, SearchResult } from '@/types/notes';
 
-// PostgreSQL 連接池（pgvector）
-const pgPool = new Pool({
-  connectionString: process.env.PGVECTOR_URL,
-});
+// PostgreSQL 連接池（pgvector）— lazy dynamic import 避免 build 期依賴 @types/pg
+// TODO: 待 PGVECTOR_URL 與 pgvector 函數 search_notes_semantic 就緒後啟用
+let pgPool: any = null;
+async function getPool(): Promise<any> {
+  if (!pgPool) {
+    if (!process.env.PGVECTOR_URL) throw new Error('PGVECTOR_URL not configured');
+    // @ts-ignore - pg optional dependency (installed at runtime when PGVECTOR_URL set)
+    const pg = await import('pg');
+    pgPool = new pg.Pool({ connectionString: process.env.PGVECTOR_URL });
+  }
+  return pgPool;
+}
 
 // POST /api/ai-notes/search - 語意搜尋
 export async function POST(request: NextRequest) {
@@ -20,22 +27,17 @@ export async function POST(request: NextRequest) {
     const { text, filters, limit, threshold } = body;
 
     // 驗證必要欄位
-    const validation = validateParams(
-      { text },
-      {
-        text: { required: true, type: 'string', minLength: 1 },
-      }
-    );
+    const validation = validateParams({ text });
 
     if (!validation.valid) {
-      return jsonError(validation.errors!.join(', '), 400);
+      return jsonError('INVALID_PARAMS', validation.missing ? `Missing required field: ${validation.missing}` : 'Invalid params', 400);
     }
 
     // 生成查詢向量
     const queryEmbedding = await generateEmbedding(text);
 
     // 執行向量搜尋
-    const vectorResults = await pgPool.query(
+    const vectorResults = await (await getPool()).query(
       `SELECT * FROM search_notes_semantic($1, $2, $3)`,
       [
         JSON.stringify(queryEmbedding),
@@ -49,11 +51,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 從 NoCodeBackend 取得完整筆記資料
-    const noteIds = vectorResults.rows.map(r => r.note_id);
+    const noteIds = vectorResults.rows.map((r: any) => r.note_id);
     const ncb = getNCBClient();
 
     const notes = await Promise.all(
-      noteIds.map(async (noteId: string) => {
+      noteIds.map(async (noteId: string): Promise<any> => {
         try {
           return await ncb.getNoteWithTags(noteId);
         } catch {
@@ -64,11 +66,11 @@ export async function POST(request: NextRequest) {
 
     // 合併結果
     const results: SearchResult[] = vectorResults.rows
-      .map((row, index) => ({
+      .map((row: any, index: number) => ({
         note: notes[index],
         similarity: row.similarity,
       }))
-      .filter((r): r is SearchResult => r.note !== null);
+      .filter((r: any): r is SearchResult => r.note !== null);
 
     return jsonResponse({
       data: results,
@@ -76,7 +78,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error performing semantic search:', error);
-    return jsonError('Failed to perform semantic search', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to perform semantic search', 500);
   }
 }
 

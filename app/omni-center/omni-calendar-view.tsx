@@ -146,7 +146,7 @@ export function OmniCalendarView() {
         {renderCells()}
       </div>
 
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
         }
@@ -160,7 +160,7 @@ export function OmniCalendarView() {
         .dark .custom-scrollbar::-webkit-scrollbar-thumb {
           background: rgba(255,255,255,0.2);
         }
-      `}</style>
+      `}} />
     </div>
   );
 }

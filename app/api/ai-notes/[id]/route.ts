@@ -10,13 +10,13 @@ import type { UpdateNoteInput } from '@/types/notes';
 // GET /api/ai-notes/[id] - 取得單一筆記
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  params: Promise<{ id: string }>
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
-      return jsonError('Note ID is required', 400);
+      return jsonError('INVALID_PARAMS', 'Note ID is required', 400);
     }
 
     const ncb = getNCBClient();
@@ -25,35 +25,29 @@ export async function GET(
     return jsonResponse(note);
   } catch (error) {
     console.error('Error fetching AI note:', error);
-    return jsonError('Failed to fetch AI note', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to fetch AI note', 500);
   }
 }
 
 // PUT /api/ai-notes/[id] - 更新筆記
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  params: Promise<{ id: string }>
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { title, content, type, category, summary, tags } = body;
 
     if (!id) {
-      return jsonError('Note ID is required', 400);
+      return jsonError('INVALID_PARAMS', 'Note ID is required', 400);
     }
 
     // 驗證更新資料
-    const validation = validateParams(
-      { title, content },
-      {
-        title: { type: 'string', minLength: 1, maxLength: 255 },
-        content: { type: 'string', minLength: 1 },
-      }
-    );
+    const validation = validateParams({ title, content });
 
     if (!validation.valid) {
-      return jsonError(validation.errors!.join(', '), 400);
+      return jsonError('INVALID_PARAMS', validation.missing ? `Missing required field: ${validation.missing}` : 'Invalid params', 400);
     }
 
     const ncb = getNCBClient();
@@ -107,20 +101,20 @@ export async function PUT(
     return jsonResponse(noteWithTags);
   } catch (error) {
     console.error('Error updating AI note:', error);
-    return jsonError('Failed to update AI note', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to update AI note', 500);
   }
 }
 
 // DELETE /api/ai-notes/[id] - 刪除筆記（軟刪除）
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  params: Promise<{ id: string }>
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
-      return jsonError('Note ID is required', 400);
+      return jsonError('INVALID_PARAMS', 'Note ID is required', 400);
     }
 
     const ncb = getNCBClient();
@@ -129,6 +123,6 @@ export async function DELETE(
     return jsonResponse({ message: 'AI note deleted successfully' });
   } catch (error) {
     console.error('Error deleting AI note:', error);
-    return jsonError('Failed to delete AI note', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to delete AI note', 500);
   }
 }
