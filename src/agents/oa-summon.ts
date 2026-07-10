@@ -369,7 +369,7 @@ export class OASummon {
   /** 探活結果健康度檢查，回傳警告文字（無問題回傳空字串） */
   private _checkGatewayHealth(body: unknown): string {
     if (body && typeof body === 'object' && 'status' in body) {
-      const b = body as Record<string, any>;
+      const b = body as Record<string, unknown>;
       if (b.status !== 'online') return `閘道狀態異常: ${b.status}`;
       if (b.version) this._gatewayVersion = String(b.version);
       if (b.errors && typeof b.errors === 'object' && (b.errors.totalErrors ?? 0) > 0) {

@@ -221,7 +221,17 @@ function renderMarkdown(text: string): string {
     .replace(/\n/g, '<br/>');
 }
 
-async function apiCall(type: string, payload?: Record<string, unknown>): Promise<Record<string, any>> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ApiResponse {
+  success: boolean;
+  data?: any;
+  reply?: string;
+  actions?: string[];
+  agent?: SubAgent;
+  error?: string;
+}
+
+async function apiCall(type: string, payload?: Record<string, unknown>): Promise<ApiResponse> {
   const res = await fetch('/api/omni-agent/console', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -230,6 +240,7 @@ async function apiCall(type: string, payload?: Record<string, unknown>): Promise
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // ═══════════════════════════════════════════════════════════════
 // Sub-Agent Panel Component
