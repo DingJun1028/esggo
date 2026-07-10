@@ -179,6 +179,7 @@ python vps-bastion.py
 ## 9. 待辦 / 已知事項
 
 - [ ] Cloudflare API token 已用於對話，建議到 Cloudflare 控制台 rotate（作廢舊 token）
+- [ ] Notion API token (ntn_5498...095T) 已用於對話寫入「資料蒐集庫」，建議到 Notion my-integrations revoke/rotate
 - [ ] 若改 Cloudflare SSL 為 Full(strict)，需為 omniagent.esggo.co 簽 VPS 證書
 - [ ] VPS `git stash` 尚有 `pre-deploy-1783698234`（部署前備份），評估後未併回（會回退新功能）
 - [ ] esggo.app 域名未註冊，勿建 `*.esggo.app` 子域
