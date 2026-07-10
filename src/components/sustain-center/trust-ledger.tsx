@@ -3,7 +3,7 @@
 import React from 'react';
 import { ShieldCheck, Clock } from 'lucide-react';
 
-interface LedgerItem {
+export interface LedgerItem {
   id: string;
   title: string;
   hashLock: string;

@@ -88,9 +88,9 @@ export class OmniErrorBoundary extends Component<Props, State> {
                   <span className="font-bold">修復草案已生成 (Hash Lock 鎖定)</span>
                 </div>
                 <div className="text-xs text-textSecondary grid gap-1">
-                  <p><strong>階段:</strong> {this.state.healingData.phase}</p>
-                  <p><strong>分析:</strong> {this.state.healingData.analysis}</p>
-                  <p><strong>憑證:</strong> <span className="font-mono bg-bgBase px-1 rounded">{this.state.healingData.hashLock}</span></p>
+                  <p><strong>階段:</strong> {String(this.state.healingData.phase)}</p>
+                  <p><strong>分析:</strong> {String(this.state.healingData.analysis)}</p>
+                  <p><strong>憑證:</strong> <span className="font-mono bg-bgBase px-1 rounded">{String(this.state.healingData.hashLock)}</span></p>
                 </div>
                 <button 
                   onClick={() => window.location.reload()}

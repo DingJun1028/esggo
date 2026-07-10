@@ -4,6 +4,7 @@
 
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { createOmniSoul, getOmniSoul } from '@/agents/omni-soul';
+import type { SoulAwakeningState } from '@/types/omni-soul';
 import { initSoul } from '@/agents/omni-soul-auto-seed';
 
 export const dynamic = 'force-dynamic';
@@ -52,14 +53,14 @@ export async function GET() {
       soul = createOmniSoul();
     }
 
-    const state = soul.getState();
+    const state = {
+      name: soul.name,
+      state: soul.state,
+      alignment: soul.alignment,
+      recentDecisions: soul.recentDecisions.length,
+    };
 
-    return jsonResponse({
-      name: state.name,
-      state: state.state,
-      alignment: state.alignment,
-      recentDecisions: state.recentDecisions?.length ?? 0,
-    });
+    return jsonResponse(state);
   } catch (error) {
     return jsonError('INTERNAL_ERROR', (error as Error).message);
   }
@@ -86,8 +87,8 @@ export async function POST(request: Request) {
         if (!targetState) {
           return jsonError('INVALID_PARAMS', 'Missing required param: targetState', 400);
         }
-        await soul.awaken(targetState);
-        return jsonResponse({ status: 'awakened', state: soul.getState() });
+        await soul.awaken(targetState as SoulAwakeningState);
+        return jsonResponse({ status: 'awakened', state: { name: soul.name, state: soul.state, alignment: soul.alignment } });
       }
 
       case 'decide': {
@@ -97,12 +98,12 @@ export async function POST(request: Request) {
         }
         const context: SoulDecideContext = { intent, options };
         const decision = await soul.decide(context);
-        return jsonResponse({ decision, state: soul.getState() });
+        return jsonResponse({ decision, state: { name: soul.name, state: soul.state, alignment: soul.alignment } });
       }
 
       case 'reflect': {
         const reflection = await soul.reflect();
-        return jsonResponse({ reflection, state: soul.getState() });
+        return jsonResponse({ reflection, state: { name: soul.name, state: soul.state, alignment: soul.alignment } });
       }
 
       case 'parseIntent': {

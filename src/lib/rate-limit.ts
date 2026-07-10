@@ -15,7 +15,7 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
   const key = `ratelimit:${identifier}`;
 
   // Lazy import Redis to avoid build-time connection issues
-  let redis: { pipeline(): { incr(key: string): void; pttl(key: string): void; exec(): Promise<[null, number][]> }; expire(key: string, seconds: number): Promise<unknown> } | null = null;
+  let redis: Awaited<ReturnType<typeof import('@lib/redis/client').getRedis>> = null;
   try {
     const { getRedis } = await import('@lib/redis/client');
     redis = await getRedis();
@@ -25,24 +25,20 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
 
   if (redis) {
     try {
-      const pipeline = redis.pipeline();
-      pipeline.incr(key);
-      pipeline.pttl(key);
-      const results = await pipeline.exec();
-
-      const count = results[0][1] as number;
-      const ttl = results[1][1] as number;
-
-      if (count === 1 || ttl < 0) {
-        // First request in the window, set expire
-        await redis.expire(key, windowSeconds);
-      }
+      // Use individual commands since RedisClientType may not have pipeline()
+      const countStr = await redis.get(key);
+      let count = countStr ? parseInt(countStr, 10) : 0;
+      
+      count += 1;
+      await redis.setex(key, windowSeconds, String(count));
+      
+      const ttlMs = windowSeconds * 1000; // Approximate since we just set it
 
       return {
         success: count <= limit,
         limit,
         remaining: Math.max(0, limit - count),
-        reset: now + (ttl > 0 ? ttl : windowSeconds * 1000)
+        reset: now + ttlMs
       };
     } catch (error) {
       console.warn('[RateLimit] Redis error, falling back to memory', error);
@@ -56,7 +52,7 @@ export async function rateLimit(identifier: string, limit: number, windowSeconds
 
 async function memoryRateLimit(key: string, limit: number, windowSeconds: number, now: number, reset: number): Promise<RateLimitResult> {
   const { memoryFallback } = await import('@lib/redis/client');
-  const record = memoryFallback.get(key) || { count: 0, reset: 0 };
+  const record = (memoryFallback.get(key) as { count: number; reset: number }) || { count: 0, reset: 0 };
   
   if (now > record.reset) {
     // Window expired, reset

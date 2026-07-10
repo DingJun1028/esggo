@@ -92,8 +92,15 @@ function sanitizeTextHtml(html: string): string {
   return DOMPurify.sanitize(html);
 }
 
+interface RagChunk {
+  content: string;
+  source: string;
+  chunk_index: number;
+  [key: string]: unknown;
+}
+
 export function OmniOneChat() {
-  const { isReady, processMessage, provider: agnesProvider, modelName: agnesModel, usage: agnesUsage } = useAgnesApi();
+  const { isReady, processMessage } = useAgnesApi();
   const [model, setModel] = useState<string>("Qwen");
   const [msgs, setMsgs] = useState<Message[]>([
     {
@@ -130,9 +137,6 @@ export function OmniOneChat() {
 
     let reply = "";
     let citations: string[] = [];
-    let providerName = '';
-    let actualModel = model;
-    let tokenCount = 0;
     try {
       // 1. Lightweight Retrieval from Firebase
       let ragContext = "";
@@ -142,7 +146,7 @@ export function OmniOneChat() {
           const snapshot = await getDocs(
             query(collection(db, "rag_knowledge")),
           );
-          const chunks = snapshot.docs.map((d) => d.data() as Record<string, unknown>);
+          const chunks = snapshot.docs.map((d) => d.data() as RagChunk);
 
           if (chunks.length > 0) {
             // Simple keyword overlap scoring
@@ -191,10 +195,6 @@ export function OmniOneChat() {
         const agnesReply = await processMessage(prompt);
         if (agnesReply) {
           reply = agnesReply;
-          // 從 AgnesProvider 取得實際使用的 Provider/Model
-          providerName = agnesProvider || 'unknown';
-          actualModel = agnesModel || model;
-          tokenCount = agnesUsage?.total_tokens || 0;
         } else {
           throw new Error("AGNES API returned empty response");
         }

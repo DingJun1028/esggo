@@ -13,19 +13,13 @@ import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generato
 import { agnesApi, type AgnesResponse } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
 import {
-  getRedis,
-  isRedisReady,
   createTaskState,
   getTaskState,
   setTaskState,
   updateChapterProgress,
-  getProgress,
   setProgressInfo,
-  clearTaskCache,
   cleanupStaleTasks,
   type TaskState,
-  type ChapterState,
-  type ProgressInfo,
 } from '@lib/redis';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -388,13 +382,13 @@ export function startAsyncTask(
         if (lhubRes.success) {
           finalPrompt = `根據 L-Hub 蜂群摘要：\n${lhubRes.data}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要。`;
         }
-      } catch (e) {
+      } catch {
         // Fallback to original prompt
       }
     }
 
     agnesApi.processRequest(finalPrompt).then((res: AgnesResponse) => {
-      const generatedText = res.success ? res.data.output : `[Fallback] ${currentTitle} 內容生成中...`;
+      const generatedText = res.success ? String(res.data.output ?? '') : `[Fallback] ${currentTitle} 內容生成中...`;
       const chapterWords = generatedText.length;
       wordsSoFar += chapterWords;
       chapterIndex++;
