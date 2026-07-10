@@ -47,6 +47,7 @@ interface CustomCompanyForm {
 interface TaskProgress {
   taskId: string;
   status: TaskStatus;
+  templateId?: string;
   currentChapter: number;
   totalChapters: number;
   chapterTitle: string;
@@ -877,6 +878,62 @@ export default function SustainWriteV5Page() {
                         className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-textPrimary hover:border-accentTeal transition-colors"
                       >
                         ⬇️ 下載 Markdown
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (!taskProgress?.result?.companyId) return;
+                          const data = {
+                            taskId: taskProgress.taskId,
+                            companyId: taskProgress.result.companyId,
+                            templateId: taskProgress.templateId,
+                            status: taskProgress.status,
+                            totalWords: taskProgress.result.totalWords,
+                            totalTags: taskProgress.result.totalTags,
+                            trinityHash: taskProgress.result.trinityHash,
+                            durationMs: taskProgress.result.durationMs,
+                            noteIds: taskProgress.noteIds,
+                            customCompany: taskProgress.customCompany,
+                            exportedAt: new Date().toISOString(),
+                          };
+                          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `sustain-report-${taskProgress.result.companyId}.json`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                        }}
+                        className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-accentBlue hover:border-accentBlue transition-colors"
+                      >
+                        JSON
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (!taskProgress?.result?.companyId) return;
+                          const headers = ['task_id', 'company_id', 'template', 'status', 'total_words', 'total_tags', 'trinity_hash', 'duration_ms', 'exported_at'];
+                          const row = [
+                            taskProgress.taskId,
+                            taskProgress.result.companyId,
+                            taskProgress.templateId || 'gri',
+                            taskProgress.status,
+                            taskProgress.result.totalWords.toString(),
+                            taskProgress.result.totalTags.toString(),
+                            taskProgress.result.trinityHash,
+                            taskProgress.result.durationMs.toString(),
+                            new Date().toISOString(),
+                          ];
+                          const csv = [headers.join(','), row.join(',')].join('\n');
+                          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `sustain-report-${taskProgress.result.companyId}.csv`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                        }}
+                        className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-accentGold hover:border-accentGold transition-colors"
+                      >
+                        CSV
                       </button>
                     </div>
                   </div>
