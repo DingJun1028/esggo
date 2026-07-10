@@ -256,3 +256,4 @@ UNIVERSAL_COMPONENT_MATRIX.md
 # OmniDB schema build scripts (intentional, not dumps)
 !vps/omni/sql/
 !vps/omni/sql/*.sql
+esggo-deploy.bundle
