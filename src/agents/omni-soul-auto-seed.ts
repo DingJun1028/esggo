@@ -294,7 +294,7 @@ export class OmniSoulAutoSeed {
       const content = readFileSync(this._soulPath, 'utf-8');
 
       // 從內容中提取名稱
-      const nameMatch = content.match(/\*\*名稱\*\*\s*\|\s*(.+)/);
+      const nameMatch = content.match(/\*\*名稱\*\*\s*\|\s*(.+?)\s*\|/);
       if (nameMatch) {
         defaultConfig.name = nameMatch[1].trim();
       }
