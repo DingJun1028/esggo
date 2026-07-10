@@ -127,7 +127,13 @@ jobs:
           EOF
           printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key.pem
           chmod 600 ~/.oci/key.pem
+          echo "key.pem bytes: $(wc -c < ~/.oci/key.pem)"
+          echo "key.pem head:"; head -1 ~/.oci/key.pem
+          echo "key.pem tail:"; tail -1 ~/.oci/key.pem
+          echo "=== auth test (diag, base64 to avoid mask) ==="
+          oci iam user get --user-id ${{ secrets.OCI_USER_OCID }} 2>&1 | base64 | head -c 400 || true
           ssh-keygen -t ed25519 -N "" -f ~/.ssh/bastion_key
+          echo "=== bastion create (diag) ==="
           SESSION=$(oci bastion session create-managed-ssh \
             --bastion-id ${{ secrets.OCI_BASTION_ID }} \
             --region ${{ secrets.OCI_REGION }} \
@@ -136,7 +142,10 @@ jobs:
             --ssh-public-key-file ~/.ssh/bastion_key.pub \
             --session-ttl 3600 \
             --wait-for-state ACTIVE \
-            --raw-output --query 'data.id')
+            --raw-output --query 'data.id' 2>/tmp/oci_err) || {
+            echo "OCI_ERR_B64:"; base64 /tmp/oci_err | head -c 600
+            exit 1
+          }
           echo "session=$SESSION" >> $GITHUB_OUTPUT
           echo "proxy=ssh -W %h:%p -p 22 $SESSION@host.bastion.${{ secrets.OCI_REGION }}.oci.oraclecloud.com" >> $GITHUB_OUTPUT
           echo "[OK] bastion session $SESSION"
