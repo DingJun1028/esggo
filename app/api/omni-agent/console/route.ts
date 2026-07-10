@@ -6,8 +6,8 @@
  * to the existing OmniAgent architecture (OmniKernel, OmniAgent, OmniEventBus).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { NextRequest } from 'next/server';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { OmniAgent, DEFAULT_CAPABILITIES, OMNI_AGENT_META } from '@/lib/omni-agent';
 import { omniKernel } from '@/lib/omni-core/omni-kernel';
 import { ESGGO_PALETTE } from '@/lib/omni-theme';
@@ -301,7 +301,7 @@ function getCoreStats() {
       idle: SUB_AGENTS.filter(sa => sa.status === 'idle').length,
       complete: SUB_AGENTS.filter(sa => sa.status === 'complete').length,
     },
-    capabilities: (DEFAULT_CAPABILITIES as Array<{ id: string; name: string; gate: string; enabled: boolean; confidence: number }>).map(c => ({
+    capabilities: (DEFAULT_CAPABILITIES as unknown as Array<{ id: string; name: string; gate: string; enabled: boolean; confidence: number }>).map(c => ({
       id: c.id,
       name: c.name,
       gate: c.gate,
@@ -334,14 +334,11 @@ export async function POST(req: NextRequest) {
           return jsonError('INVALID_PARAMS', 'Empty input', 400);
         }
         const result = processChatMessage(input);
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'chat',
-          data: {
-            reply: result.reply,
-            actions: result.actions,
-            timestamp: Date.now(),
-          },
+          reply: result.reply,
+          actions: result.actions,
+          timestamp: Date.now(),
         });
       }
 
@@ -352,15 +349,12 @@ export async function POST(req: NextRequest) {
           return jsonError('INVALID_PARAMS', 'Unknown command', 400);
         }
         const result = processChatMessage(cmd.action);
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'quick_command',
-          data: {
-            command: cmd,
-            reply: result.reply,
-            actions: result.actions,
-            timestamp: Date.now(),
-          },
+          command: cmd,
+          reply: result.reply,
+          actions: result.actions,
+          timestamp: Date.now(),
         });
       }
 
@@ -382,42 +376,36 @@ export async function POST(req: NextRequest) {
         setTimeout(() => { agent.progress = 60; }, 1500);
         setTimeout(() => { agent.progress = 100; agent.status = 'complete'; agent.completedAt = Date.now(); agent.output = `任務完成：${task}`; }, 3000);
 
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'dispatch_sub_agent',
-          data: { agent, timestamp: Date.now() },
+          agent,
+          timestamp: Date.now(),
         });
       }
 
       case 'get_stats': {
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'stats',
-          data: getCoreStats(),
+          ...getCoreStats(),
         });
       }
 
       case 'get_sub_agents': {
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'sub_agents',
-          data: SUB_AGENTS,
+          agents: SUB_AGENTS,
         });
       }
 
       case 'get_chat_history': {
-        return NextResponse.json({
-          success: true,
+        return jsonResponse({
           type: 'chat_history',
-          data: chatHistory.slice(-20),
+          history: chatHistory.slice(-20),
         });
       }
 
       default:
-        return NextResponse.json({
-          error: 'Unknown request type',
-          availableTypes: ['chat', 'quick_command', 'dispatch_sub_agent', 'get_stats', 'get_sub_agents', 'get_chat_history'],
-        }, { status: 400 });
+        return jsonError('INVALID_PARAMS', 'Unknown request type', 400);
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal error';
@@ -426,7 +414,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({
+  return jsonResponse({
     name: 'OmniAgent Console API',
     version: '1.0.0',
     endpoints: {

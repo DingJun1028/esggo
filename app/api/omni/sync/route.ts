@@ -5,7 +5,8 @@
 //   認證：X-Omni-Token（與 v3 網關一致，requireAuth）。
 //   僅接受 POST /api/omni/sync（ESGGO 自身狀態），不暴露拓撲給匿名者。
 // ============================================================================
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 const SYNC_URL = process.env.OMNI_SYNC_URL || 'http://127.0.0.1:8650';
 const TOKEN = process.env.OMNI_KEY || process.env.GATEWAY_API_KEY || '';
@@ -62,18 +63,18 @@ export async function POST(req: NextRequest) {
   // 來源驗證：僅允許來自同步引擎或內部服務
   const t = (req.headers.get('x-omni-token') || '').replace('Bearer ', '');
   if (!TOKEN || !t || t !== TOKEN) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return jsonError('UNAUTHORIZED', 'Unauthorized', 401);
   }
 
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'invalid json' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', 'invalid json', 400);
   }
 
   if (!isESGGOState(body)) {
-    return NextResponse.json({ error: 'invalid esggo state envelope' }, { status: 400 });
+    return jsonError('INVALID_PARAMS', 'invalid esggo state envelope', 400);
   }
 
   // 轉發給同步引擎（loopback :8650）
@@ -92,14 +93,14 @@ export async function POST(req: NextRequest) {
         originId: `esggo-next-${process.env.VPS_IP || 'local'}`,
       }),
     });
-    if (!r.ok) return NextResponse.json({ error: 'sync engine rejected' }, { status: 502 });
-    return NextResponse.json({ status: 'synced' });
+    if (!r.ok) return jsonError('INTERNAL_ERROR', 'sync engine rejected', 502);
+    return jsonResponse({ status: 'synced' });
   } catch {
-    return NextResponse.json({ error: 'sync engine unreachable' }, { status: 503 });
+    return jsonError('INTERNAL_ERROR', 'sync engine unreachable', 503);
   }
 }
 
 // 公開健康（不含拓撲）
 export async function GET() {
-  return NextResponse.json({ status: 'online', bridge: 'esggo<->omni', endpoint: '/api/omni/sync' });
+  return jsonResponse({ status: 'online', bridge: 'esggo<->omni', endpoint: '/api/omni/sync' });
 }

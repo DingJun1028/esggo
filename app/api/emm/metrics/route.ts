@@ -4,6 +4,7 @@
 // ============================================================
 
 import { NextResponse } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 
 const GATEWAY_URL = process.env.EMM_GATEWAY_URL || 'http://161.118.248.180:8642';
 
@@ -78,7 +79,7 @@ export async function GET() {
   }
 
   // 3) Compose response
-  return NextResponse.json({
+  return jsonResponse({
     timestamp: Date.now(),
     gateway: gatewayData || null,
     gatewayError,
