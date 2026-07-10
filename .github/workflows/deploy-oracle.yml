@@ -128,12 +128,12 @@ jobs:
           printf '%s' "${{ secrets.OCI_API_KEY }}" > ~/.oci/key.pem
           chmod 600 ~/.oci/key.pem
           ssh-keygen -t ed25519 -N "" -f ~/.ssh/bastion_key
-          SESSION=$(oci bastion session create \
+          SESSION=$(oci bastion session create-managed-ssh \
             --bastion-id ${{ secrets.OCI_BASTION_ID }} \
+            --region ${{ secrets.OCI_REGION }} \
             --target-resource-id ${{ secrets.OCI_TARGET_RESOURCE_ID }} \
             --target-os-username root \
             --ssh-public-key-file ~/.ssh/bastion_key.pub \
-            --type MANAGED_SSH \
             --session-ttl 1800 \
             --wait-for-state ACTIVE \
             --raw-output --query 'data.id')
