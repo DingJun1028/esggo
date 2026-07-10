@@ -32,9 +32,12 @@ export async function POST(req: Request) {
     const memberRef = adminDb.collection('village_members')?.doc(userId);
     const activityRef = adminDb.collection('village_activities')?.doc();
 
+    if (!projectRef || !memberRef) {
+      return jsonError('INTERNAL_ERROR', 'Firestore collections unavailable', 503);
+    }
+
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firebase Transaction type not directly importable
-      await adminDb.runTransaction(async (t: any) => {
+      await adminDb.runTransaction(async (t) => {
         const projectDoc = await t.get(projectRef);
         const memberDoc = await t.get(memberRef);
 
@@ -80,7 +83,9 @@ export async function POST(req: Request) {
         });
 
         // Write the purified and sealed data to Firestore
-        t.set(activityRef, { ...activityData, uuid: purifiedData?.uuid, sealTimestamp: purifiedData?.sealTimestamp });
+        if (activityRef) {
+          t.set(activityRef, { ...activityData, uuid: purifiedData?.uuid, sealTimestamp: purifiedData?.sealTimestamp });
+        }
       });
     } catch (txError) {
       const errorCode = (txError as Error).message;
