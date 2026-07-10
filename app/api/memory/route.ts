@@ -23,7 +23,7 @@ async function getStore(): Promise<RedisClient | Map<string, { entry: MemoryEntr
   if (!redisClient) {
     try {
       const { getRedis } = await import('@lib/redis');
-      redisClient = await getRedis() as RedisClient;
+      redisClient = await getRedis() as unknown as RedisClient;
     } catch { /* no redis */ }
     if (!redisClient) {
       memoryFallback = new Map();

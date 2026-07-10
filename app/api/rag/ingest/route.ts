@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       const sampleText = rawText.substring(0, 2000);
       const agnesRes = await agnesApi.processRequest(`請分析以下文本並提取摘要：\n${sampleText}`);
       if (agnesRes.success) {
-        summaryContext = agnesRes.data.output;
+        summaryContext = agnesRes.data.output as string;
       }
     } catch (e) {
       console.warn('[AGNES_API] 預處理失敗，繼續執行標準流程', e);
