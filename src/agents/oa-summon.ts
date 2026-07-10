@@ -372,8 +372,9 @@ export class OASummon {
       const b = body as Record<string, unknown>;
       if (b.status !== 'online') return `閘道狀態異常: ${b.status}`;
       if (b.version) this._gatewayVersion = String(b.version);
-      if (b.errors && typeof b.errors === 'object' && (b.errors.totalErrors ?? 0) > 0) {
-        return `閘道累積錯誤: ${b.errors.totalErrors}`;
+      const gatewayErrors = b.errors as { totalErrors?: number } | undefined;
+      if (b.errors && typeof b.errors === 'object' && (gatewayErrors?.totalErrors ?? 0) > 0) {
+        return `閘道累積錯誤: ${gatewayErrors?.totalErrors}`;
       }
     }
     return '';

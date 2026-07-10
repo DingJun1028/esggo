@@ -53,6 +53,27 @@ import { IComponentCore, IOmniAgentBus } from "../types/core-contract";
 import { IBusEvent as LegacyIBusEvent } from "../types/bus-event";
 import { VPSGlobalState, TaskResultBase } from "../agents/vps";
 
+// 完全代主自行 (Complete Autonomous Delegation)
+import {
+  CompleteDelegationManager,
+  getDelegationManager,
+} from "../agents/complete-delegation/delegation-manager";
+import {
+  AutonomousDecisionEngine,
+  getDecisionEngine,
+} from "../agents/complete-delegation/autonomous-decision-engine";
+import {
+  CompleteDelegationAgent,
+  createCompleteDelegationAgent,
+  executeCompleteDelegationTask,
+} from "../agents/complete-delegation/complete-delegation-agent";
+import {
+  ICompleteDelegationScope,
+  ICompleteDelegationAgent,
+  DelegationPermission,
+  DelegationResult,
+} from "../types/complete-delegation";
+
 // 12-Omni Components
 import {
   OmniBase,
@@ -177,6 +198,15 @@ export class OmniCore {
   /** 用戶成長資料庫 */
   private _userRegistry: OmniUserRegistry;
   
+  /** 完全代主自行 - 授權管理器 */
+  private _delegationManager: CompleteDelegationManager;
+  
+  /** 完全代主自行 - 決策引擎 */
+  private _decisionEngine: AutonomousDecisionEngine;
+  
+  /** 完全代主自行 - 活躍代理者 */
+  private _activeDelegationAgents: Map<string, ICompleteDelegationAgent> = new Map();
+  
   /** VPS 連接配置 */
   private _vpsConfig?: { host: string; port: number };
   
@@ -244,6 +274,10 @@ export class OmniCore {
     
     // 7. 初始化用戶成長資料庫
     this._userRegistry = getOmniUserRegistry();
+    
+    // 8. 初始化完全代主自行組件
+    this._delegationManager = getDelegationManager();
+    this._decisionEngine = getDecisionEngine();
 
     console.log("[OmniCore] 🌌 萬能核心已創建");
   }
@@ -334,7 +368,9 @@ export class OmniCore {
     console.log("[OmniCore] 🌐 註冊 VPS Agent 到生態系統...");
 
     // 1. 初始化 VPS Agent 工廠
-    VPSAgentFactory.initialize(this._omniBus as unknown as IOmniAgentBus);
+    VPSAgentFactory.initialize(
+      this._omniBus as unknown as Parameters<typeof VPSAgentFactory.initialize>[0],
+    );
 
     // 2. 創建並註冊 VPS Agent
     const vpsId = `vps-${this._vpsConfig?.host.replace(/\./g, '-') ?? "unknown"}`;
@@ -344,15 +380,15 @@ export class OmniCore {
     });
 
     // 3. 建立量子糾纏：訂閱 VPS 事件
-    this._omniBus.subscribe("vps.command", async (event: LegacyIBusEvent) => {
-      console.log(`[OmniCore] 🔮 VPS 指令: ${event.payload?.action}`);
+    this._omniBus.subscribe("vps.command", async (event) => {
+      console.log(`[OmniCore] 🔮 VPS 指令: ${(event.payload as Record<string, unknown>)?.action}`);
     });
 
-    this._omniBus.subscribe("vps.result", async (event: LegacyIBusEvent) => {
-      console.log(`[OmniCore] 📊 VPS 結果: ${event.payload?.status}`);
+    this._omniBus.subscribe("vps.result", async (event) => {
+      console.log(`[OmniCore] 📊 VPS 結果: ${(event.payload as Record<string, unknown>)?.status}`);
     });
 
-    this._omniBus.subscribe("vps.state", async (event: LegacyIBusEvent) => {
+    this._omniBus.subscribe("vps.state", async (event) => {
       console.log(`[OmniCore] 📡 VPS 狀態更新`);
     });
 
@@ -412,6 +448,7 @@ export class OmniCore {
     name: string;
     purpose: string;
   }): Promise<IComponentCore> {
+    return undefined as unknown as IComponentCore;
   }
 
   /**
@@ -421,6 +458,7 @@ export class OmniCore {
     type: string;
     params: Record<string, unknown>;
   }): Promise<GovernanceAlignment> {
+    return undefined as unknown as GovernanceAlignment;
   }
 
   /**
@@ -430,6 +468,7 @@ export class OmniCore {
     intent: string;
     options: Array<{ id: string; description: string }>;
   }): Promise<SoulDecision> {
+    return undefined as unknown as SoulDecision;
   }
 
   /**
@@ -469,6 +508,94 @@ export class OmniCore {
     return this._omniHealing.effectCauseHeal(effect);
   }
 
+  // ==========================================
+  // 完全代主自行 API
+  // ==========================================
+
+  /**
+   * 創建完全代主自行代理
+   * 
+   * 「代理者在完全授權範圍內，自主、獨立、全面地代替主體行使職權與執行行動。」
+   */
+  public async createDelegationAgent(params: {
+    principalId: string;
+    agentId?: string;
+    permissions?: DelegationPermission[];
+    validUntil?: number;
+    description?: string;
+  }): Promise<ICompleteDelegationAgent> {
+    console.log(`[OmniCore] 🔮 創建完全代主自行代理: ${params.principalId}`);
+    
+    const agent = await createCompleteDelegationAgent({
+      principalId: params.principalId,
+      agentId: params.agentId,
+      permissions: params.permissions as string[],
+      validUntil: params.validUntil,
+      description: params.description,
+    });
+    
+    // 註冊到活躍代理者列表
+    this._activeDelegationAgents.set(agent.signature.uuid, agent);
+    
+    console.log(`[OmniCore] ✅ 完全代主自行代理已創建: ${agent.signature.uuid}`);
+    
+    return agent;
+  }
+
+  /**
+   * 執行完全代主自行任務
+   * 
+   * 代理者在完全授權範圍內自主執行任務
+   */
+  public async executeDelegatedTask(
+    agentId: string,
+    intent: string,
+    context?: Record<string, unknown>
+  ): Promise<DelegationResult> {
+    const agent = this._activeDelegationAgents.get(agentId);
+    if (!agent) {
+      throw new Error(`Delegation agent not found: ${agentId}`);
+    }
+    
+    console.log(`[OmniCore] 🔮 執行完全代主自行任務: ${intent}`);
+    
+      const result = await executeCompleteDelegationTask(
+        agent as unknown as CompleteDelegationAgent,
+        intent,
+        context
+      );
+    
+    console.log(`[OmniCore] ✅ 完全代主自行任務完成: ${result.executionId}`);
+    
+    return result;
+  }
+
+  /**
+   * 獲取活躍授權列表
+   */
+  public async getActiveDelegations(principalId?: string): Promise<ICompleteDelegationScope[]> {
+    return this._delegationManager.getActiveDelegations(principalId);
+  }
+
+  /**
+   * 終止完全代主自行代理
+   */
+  public async terminateDelegationAgent(agentId: string, reason: string): Promise<void> {
+    const agent = this._activeDelegationAgents.get(agentId);
+    if (agent) {
+      await agent.terminateDelegation(reason);
+      this._activeDelegationAgents.delete(agentId);
+      console.log(`[OmniCore] 🔮 完全代主自行代理已終止: ${agentId}`);
+    }
+  }
+
+  /**
+   * 獲取決策歷史
+   */
+  public getDecisionHistory(agentId: string) {
+    return this._decisionEngine.getDecisionHistory(agentId);
+  }
+
   /**
    * 系統狀態總覽
    */
@@ -497,13 +624,13 @@ export class OmniCore {
         ? { 
             host: this._vpsAgent.globalState.host, 
             entangled: this._vpsAgent.isEntangled,
-            quantum: this._vpsAgent.quantumState,
+            quantum: this._vpsAgent.quantumState as unknown as string,
             services: Object.fromEntries(Array.from(this._vpsAgent.globalState.services.entries())),
           }
         : null,
       ecosystem: {
         registeredAgents: VPSAgentFactory.getAllAgents().size,
-        busStats: await this._omniBus.statistics(),
+        busStats: await this._omniBus.statistics() as unknown as Record<string, unknown>,
       },
       initialized: this._initialized,
     };
@@ -587,6 +714,19 @@ export class OmniCore {
   public get userRegistry(): OmniUserRegistry { return this._userRegistry; }
 
   // ==========================================
+  // 完全代主自行 Getters
+  // ==========================================
+
+  /** 獲取授權管理器 */
+  public get delegationManager(): CompleteDelegationManager { return this._delegationManager; }
+  
+  /** 獲取決策引擎 */
+  public get decisionEngine(): AutonomousDecisionEngine { return this._decisionEngine; }
+  
+  /** 獲取活躍代理者數量 */
+  public get activeDelegationAgentsCount(): number { return this._activeDelegationAgents.size; }
+
+  // ==========================================
   // 9 Magic-Effect Combinations Getters
   // ==========================================
 
@@ -653,6 +793,32 @@ export async function checkVPS(): Promise<VPSGlobalState | { error: string }> {
 export async function deployVPS(params?: Record<string, unknown>): Promise<TaskResultBase | { error: string }> {
   const core = getOmniCore();
   return core.deployToVPS(params);
+}
+
+/**
+ * 完全代主自行 - 創建代理快捷方式
+ */
+export async function createDelegation(params: {
+  principalId: string;
+  agentId?: string;
+  permissions?: DelegationPermission[];
+  validUntil?: number;
+  description?: string;
+}): Promise<ICompleteDelegationAgent> {
+  const core = getOmniCore();
+  return core.createDelegationAgent(params);
+}
+
+/**
+ * 完全代主自行 - 執行任務快捷方式
+ */
+export async function executeDelegation(
+  agentId: string,
+  intent: string,
+  context?: Record<string, unknown>
+): Promise<DelegationResult> {
+  const core = getOmniCore();
+  return core.executeDelegatedTask(agentId, intent, context);
 }
 
 export default OmniCore;

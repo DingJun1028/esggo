@@ -162,8 +162,8 @@ export interface TimeTravelConfig {
 export interface TimeTravelSession {
   readonly sessionId: string;
   readonly startTime: number;
-  readonly status: 'active' | 'paused' | 'completed';
-  readonly eventsObserved: number;
+  status: 'active' | 'paused' | 'completed';
+  eventsObserved: number;
   pause(): Promise<void>;
   resume(): Promise<void>;
   step(): Promise<IBusEvent>;
@@ -398,12 +398,12 @@ export interface RetryPolicy {
 }
 
 export interface AgentMetrics {
-  readonly tasksExecuted: number;
-  readonly tasksSucceeded: number;
-  readonly tasksFailed: number;
-  readonly avgExecutionTime: number;
-  readonly lastExecutedAt?: number;
-  readonly uptime: number;
+  tasksExecuted: number;
+  tasksSucceeded: number;
+  tasksFailed: number;
+  avgExecutionTime: number;
+  lastExecutedAt?: number;
+  uptime: number;
 }
 
 export interface AgentTask {
@@ -819,8 +819,8 @@ export interface ITemporalRift extends IComponentCore {
 
 export interface TemporalRiftSession {
   readonly sessionId: string;
-  readonly status: 'open' | 'closed' | 'observing';
-  readonly eventsObserved: number;
+  status: 'open' | 'closed' | 'observing';
+  eventsObserved: number;
   close(): Promise<TimelineSnapshot>;
 }
 
