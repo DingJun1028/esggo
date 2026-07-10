@@ -1,11 +1,43 @@
 import { jsonResponse } from '@/lib/api-utils';
 import { CelestialController } from '@/lib/celestial/implementation';
+import { getRedisHealth } from '@lib/redis/client';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const celestial = CelestialController.getInstance();
   celestial.initiateFlow('HealthCheck');
+  const startTime = Date.now();
 
-  // ESGSonar gateway status
+  // ── Redis Check ──
+  let redisStatus: { connected: boolean; provider: string; keys: number; info?: string } = { connected: false, provider: 'unknown', keys: 0 };
+  try {
+    redisStatus = await getRedisHealth();
+  } catch (e) {
+    redisStatus = { connected: false, provider: 'error', keys: 0, info: (e as Error).message };
+  }
+
+  // ── AGNES API Check ──
+  let agnesStatus = 'unavailable';
+  try {
+    const hasOpenRouter = !!process.env.OPENROUTER_API_KEY;
+    const hasGroq = !!process.env.GROQ_API_KEY;
+    agnesStatus = (hasOpenRouter || hasGroq) ? 'configured' : 'missing_keys';
+  } catch {
+    agnesStatus = 'error';
+  }
+
+  // ── Firebase Admin Check ──
+  let firebaseStatus = 'unavailable';
+  try {
+    const hasServiceAccount = !!process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    const hasProjectId = !!(process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID);
+    firebaseStatus = (hasServiceAccount || hasProjectId) ? 'configured' : 'missing_config';
+  } catch {
+    firebaseStatus = 'error';
+  }
+
+  // ── ESGSonar Gateway Check ──
   let sonnarStatus = 'unavailable';
   try {
     const gatewayRes = await fetch('http://localhost:8642/health', {
@@ -14,23 +46,27 @@ export async function GET() {
     if (gatewayRes.ok) sonnarStatus = 'healthy';
   } catch {}
 
-  const status = {
-    app: 'esggo-v5',
-    version: '5.0.0',
-    status: 'Trustworthy',
-    timestamp: Date.now(),
-    governance: 'OmniCore Trinity Awakened',
-    components: {
-      celestial_flow: 'Active',
-      l_hub_swarm: 'Active',
-      notion_sync: process.env.NOTION_API_KEY ? 'Active' : 'Standby (Missing Keys)',
-      esgsonar_crawler: sonnarStatus,
-      esgsonar_gateway: sonnarStatus === 'healthy' ? ':8642 running' : ':8642 not reachable',
-      prisma_db: 'SQLite (dev.db)',
-    }
+  // ── Compute overall status ──
+  const elapsed = Date.now() - startTime;
+  const allComponents = {
+    redis: redisStatus.connected ? 'healthy' : `fallback (${redisStatus.provider})`,
+    agnes_api: agnesStatus,
+    firebase_admin: firebaseStatus,
+    celestial_flow: 'active',
+    esgsonar_gateway: sonnarStatus === 'healthy' ? 'healthy' : 'unavailable',
   };
 
-  celestial.recordMetric('HealthCheck.Success', 1, { components: status.components });
+  const isHealthy = redisStatus.connected && agnesStatus === 'configured' && firebaseStatus === 'configured';
 
-  return jsonResponse(status, 200);
+  celestial.recordMetric('HealthCheck.Success', 1, { components: allComponents });
+
+  return jsonResponse({
+    app: 'esggo-v5',
+    version: '5.1.0',
+    status: isHealthy ? 'healthy' : 'degraded',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    responseMs: elapsed,
+    components: allComponents,
+  }, 200);
 }
