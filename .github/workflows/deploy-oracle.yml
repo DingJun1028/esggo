@@ -140,7 +140,7 @@ jobs:
             "region": os.environ["OCI_REGION"],
             "fingerprint": os.environ["OCI_API_FINGERPRINT"],
             "key_file": str(kp),
-          import oci
+          }
           client = oci.bastion.BastionClient(cfg)
           details = oci.bastion.models.CreateSessionDetails(
             bastion_id=os.environ["OCI_BASTION_ID"],
