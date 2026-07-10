@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from esggo.config import (  # noqa: E402
+from esggo.config import (  # noqa: E402  # noqa: E402
     LIB_DIR,
     REPORTS_DIR,
     SUSTAIN_WRITE_DIR,
@@ -15,7 +15,7 @@ from esggo.config import (  # noqa: E402
     get_answer_database_ts,
     get_tmp_excel,
 )
-from esggo.config import (
+from esggo.config import (  # noqa: E402
     PROJECT_ROOT as CFG_ROOT,
 )
 
