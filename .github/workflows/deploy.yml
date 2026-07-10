@@ -19,6 +19,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/smart-ai-router
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
   # 0. Path filter: detect non-vps file changes
@@ -269,8 +270,19 @@ jobs:
     if: always()
     continue-on-error: true
     steps:
-      - name: Notify Slack (if webhook configured)
+      - name: Check Slack webhook
+        id: slack-check
         if: ${{ always() }}
+        run: |
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "has_webhook=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_webhook=false" >> $GITHUB_OUTPUT
+            echo "[SKIP] SLACK_WEBHOOK_URL not configured — skipping Slack notification"
+          fi
+
+      - name: Notify Slack (if webhook configured)
+        if: ${{ always() && steps.slack-check.outputs.has_webhook == 'true' }}
         continue-on-error: true
         uses: 8398a7/action-slack@v3
         with:

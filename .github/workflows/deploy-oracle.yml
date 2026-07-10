@@ -40,6 +40,7 @@ env:
   VPS_HOST: ${{ secrets.VPS_HOST }}
   VPS_USER: ${{ secrets.VPS_USER }}
   APP_DIR: /opt/esggo
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
   # ─── 前置檢查 ─────────────────────────────────────────────────
@@ -98,10 +99,38 @@ jobs:
 
       - name: Setup SSH key
         run: |
+          set -e
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+
+          # Validate secrets are non-empty
+          if [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "::error::VPS_SSH_KEY secret is empty — add it in repo Settings → Secrets"
+            exit 1
+          fi
+          if [ -z "${{ env.VPS_HOST }}" ]; then
+            echo "::error::VPS_HOST env is empty — check repo-level env or secret"
+            exit 1
+          fi
+
+          # Write private key
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ env.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Verify key is non-empty and valid
+          KEY_SIZE=$(wc -c < ~/.ssh/deploy_key | tr -d ' ')
+          if [ "$KEY_SIZE" -lt 100 ]; then
+            echo "::error::VPS_SSH_KEY appears too short (${KEY_SIZE} bytes) — verify the full private key is stored"
+            exit 1
+          fi
+          echo "[OK] SSH key written (${KEY_SIZE} bytes)"
+
+          # Add host key to known_hosts (non-fatal — StrictHostKeyChecking=no is used later)
+          echo "Scanning host key for ${{ env.VPS_HOST }}..."
+          if ssh-keyscan -H -T 10 ${{ env.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null; then
+            echo "[OK] Host key added to known_hosts"
+          else
+            echo "::warning::ssh-keyscan failed — proceeding with StrictHostKeyChecking=no"
+          fi
 
       - name: Sync code to VPS
         run: |
