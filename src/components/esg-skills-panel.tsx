@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
 interface ESGSkill {

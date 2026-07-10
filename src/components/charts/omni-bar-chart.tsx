@@ -1,8 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { OmniBarChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
+
+// Static configuration hoisted outside the component to avoid memory reallocation
+const DEFAULT_COLOR = 'var(--accent-teal)';
+const PADDING = { top: 40, right: 20, bottom: 40, left: 50 };
+const VIEWBOX_WIDTH = 600;
+const GRAPH_WIDTH = VIEWBOX_WIDTH - PADDING.left - PADDING.right;
 
 export function OmniBarChart({
   title,
@@ -17,20 +23,24 @@ export function OmniBarChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const graphHeight = Number(height) - PADDING.top - PADDING.bottom;
+
+  // Memoize dynamic layout calculations to prevent O(N) operations on every mouse movement
+  const { maxValue, barWidth, barSpacing } = useMemo(() => {
+    if (!data || data.length === 0) return { maxValue: 1, barWidth: 0, barSpacing: 0 };
+
+    const maxVal = Math.max(...data.map((d) => d.value), 1); // Avoid division by zero
+    const calculatedBarWidth = Math.min((GRAPH_WIDTH / data.length) * 0.6, 40);
+    const calculatedBarSpacing = (GRAPH_WIDTH - calculatedBarWidth * data.length) / (data.length + 1);
+
+    return {
+      maxValue: maxVal,
+      barWidth: calculatedBarWidth,
+      barSpacing: calculatedBarSpacing,
+    };
+  }, [data]);
+
   if (!data || data.length === 0) return <div>No data available</div>;
-
-  const maxValue = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
-  const padding = { top: 40, right: 20, bottom: 40, left: 50 };
-  const graphHeight = Number(height) - padding.top - padding.bottom;
-  
-  // Hardcode viewBox width for relative coordinate calculation
-  const viewBoxWidth = 600;
-  const graphWidth = viewBoxWidth - padding.left - padding.right;
-  
-  const barWidth = Math.min((graphWidth / data.length) * 0.6, 40);
-  const barSpacing = (graphWidth - (barWidth * data.length)) / (data.length + 1);
-
-  const defaultColor = 'var(--accent-teal)';
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
@@ -48,7 +58,7 @@ export function OmniBarChart({
 
       <div className="relative w-full overflow-visible bg-surface rounded-lg border border-borderColor p-4 shadow-sm">
         <svg 
-          viewBox={`0 0 ${viewBoxWidth} ${height}`} 
+          viewBox={`0 0 ${VIEWBOX_WIDTH} ${height}`}
           className="w-full h-full overflow-visible"
           onMouseLeave={() => setHoveredPoint(null)}
           onMouseMove={(e) => {
@@ -61,21 +71,21 @@ export function OmniBarChart({
         >
           {/* Grid Lines & Y-Axis Labels */}
           {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = padding.top + graphHeight * (1 - ratio);
+            const y = PADDING.top + graphHeight * (1 - ratio);
             const val = (maxValue * ratio).toFixed(1);
             return (
               <g key={`grid-${ratio}`}>
                 <line 
-                  x1={padding.left} 
+                  x1={PADDING.left}
                   y1={y} 
-                  x2={viewBoxWidth - padding.right} 
+                  x2={VIEWBOX_WIDTH - PADDING.right}
                   y2={y} 
                   stroke="currentColor" 
                   className="text-borderColor/30" 
                   strokeDasharray="4,4" 
                 />
                 <text 
-                  x={padding.left - 10} 
+                  x={PADDING.left - 10}
                   y={y + 4} 
                   textAnchor="end" 
                   fontSize="10" 
@@ -90,7 +100,7 @@ export function OmniBarChart({
           {yAxisLabel && (
             <text 
               x={10} 
-              y={padding.top - 15} 
+              y={PADDING.top - 15}
               fontSize="10" 
               className="fill-textSecondary font-bold"
             >
@@ -100,9 +110,9 @@ export function OmniBarChart({
 
           {/* Bars */}
           {data.map((point, index) => {
-            const x = padding.left + barSpacing + (index * (barWidth + barSpacing));
+            const x = PADDING.left + barSpacing + (index * (barWidth + barSpacing));
             const barHeight = (point.value / maxValue) * graphHeight;
-            const y = padding.top + graphHeight - barHeight;
+            const y = PADDING.top + graphHeight - barHeight;
             
             const isHovered = hoveredPoint?.label === point.label;
             
@@ -113,14 +123,14 @@ export function OmniBarChart({
                   y={y}
                   width={barWidth}
                   height={barHeight}
-                  fill={point.color || defaultColor}
+                  fill={point.color || DEFAULT_COLOR}
                   className={`transition-all duration-300 ease-in-out cursor-pointer ${isHovered ? 'opacity-80' : 'opacity-100'}`}
                   rx={4} // Rounded corners
                   onMouseEnter={() => setHoveredPoint(point)}
                 />
                 <text
                   x={x + barWidth / 2}
-                  y={padding.top + graphHeight + 15}
+                  y={PADDING.top + graphHeight + 15}
                   textAnchor="middle"
                   fontSize="10"
                   className={`transition-colors ${isHovered ? 'fill-textPrimary font-bold' : 'fill-textSecondary'}`}
@@ -133,7 +143,7 @@ export function OmniBarChart({
 
           {xAxisLabel && (
             <text 
-              x={viewBoxWidth / 2} 
+              x={VIEWBOX_WIDTH / 2}
               y={height - 5} 
               textAnchor="middle" 
               fontSize="10" 
