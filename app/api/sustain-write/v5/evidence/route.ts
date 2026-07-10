@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getAnswersByCompany, QUESTIONS } from '@/core/repositories/sustain-write-answer-database';
 import { createHash } from 'crypto';
 import { jsonResponse, jsonError } from '@/lib/api-utils';

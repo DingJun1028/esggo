@@ -7,7 +7,7 @@
  * Claims task reward
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 

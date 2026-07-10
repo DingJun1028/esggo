@@ -2,17 +2,13 @@
  * GET /api/omni-agent/execute
  * OmniAgent 統一執行入口
  */
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   const { action, companyId } = await req.json();
-
-  // Force dynamic evaluation (prevent Next.js from optimizing this away)
-  const _ts = Date.now();
-  const _env = process.env.NODE_ENV;
 
   switch (action) {
     case 'status':

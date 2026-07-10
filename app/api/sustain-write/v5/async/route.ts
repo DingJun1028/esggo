@@ -2,7 +2,7 @@
  * POST /api/sustain-write/v5/async
  * 啟動非同步報告生成任務
  */
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
 import { CelestialController } from '../../../../../src/lib/celestial/implementation';
 import { jsonResponse, jsonError } from '@/lib/api-utils';

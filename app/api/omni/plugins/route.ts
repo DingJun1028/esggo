@@ -4,7 +4,7 @@
  * POST /api/omni/plugins/:id/disable — disable a plugin
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { getPluginRegistry } from '@/lib/omni-base/plugin-registry';
 

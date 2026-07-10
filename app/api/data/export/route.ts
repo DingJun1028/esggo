@@ -198,7 +198,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { format = 'json', filters = {}, webhookUrl } = body;
+    const { format = 'json' } = body;
 
     if (!['json', 'csv'].includes(format)) {
       return jsonError('INVALID_PARAMS', 'Invalid format. Use "json" or "csv".', 400);

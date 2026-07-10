@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
@@ -106,7 +105,7 @@ ${JSON.stringify(tasks)}
     }
     
     if (tool === 'google_jules:karma_protocol') {
-      const { failureReason, context } = args || {};
+      const { failureReason } = args || {};
       
       const healingResponse = {
         action: 'OmniJules 果因協議啟動中',

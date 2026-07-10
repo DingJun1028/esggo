@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { CelestialController } from '@/lib/celestial/implementation';
 import { jsonResponse, jsonError, validateParams, validatePositiveNumber } from '@/lib/api-utils';

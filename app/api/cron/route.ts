@@ -3,7 +3,6 @@
  * POST /api/cron/run — manually trigger a job {job: 'daily-report' | 'achievement-check' | 'crawler-trigger'}
  */
 
-import { NextResponse } from 'next/server';
 import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 export async function GET() {

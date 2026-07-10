@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { omniOrchestrator } from '@/core/services/omni-orchestrator';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
@@ -43,7 +42,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function simulateLHubDelegation(task: string, context: string, subTasks?: string[]) {
+async function simulateLHubDelegation(task: string, context: string, _subTasks?: string[]) {
   // Simulate an AI response for lightweight tasks
   await new Promise(resolve => setTimeout(resolve, 800)); // slightly longer wait for complex tasks
   

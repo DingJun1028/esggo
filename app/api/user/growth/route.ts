@@ -3,7 +3,7 @@
  * Returns full user growth profile: tier, xp, achievements, tasks, subscriptions
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     if (!profile) {
       // Auto-create on first visit
-      const user = await service.getOrCreateUser(userId);
+      await service.getOrCreateUser(userId);
       const newProfile = await service.getFullProfile(userId);
       return jsonResponse({ success: true, profile: newProfile, created: true });
     }
