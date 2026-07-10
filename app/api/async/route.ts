@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,5 +21,5 @@ export async function POST(req: NextRequest) {
     await redis.expire('chapter:' + chapterId, 3600);
   }
 
-  return NextResponse.json({ taskId, status: 'created' });
+  return jsonResponse({ taskId, status: 'created' });
 }

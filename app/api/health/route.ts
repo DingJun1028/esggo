@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 import { CelestialController } from '@/lib/celestial/implementation';
 
 export async function GET() {
@@ -32,10 +33,5 @@ export async function GET() {
 
   celestial.recordMetric('HealthCheck.Success', 1, { components: status.components });
 
-  return NextResponse.json(status, {
-    status: 200,
-    headers: {
-      'Cache-Control': 'no-store'
-    }
-  });
+  return jsonResponse(status, 200);
 }

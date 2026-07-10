@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 import { routeModel, inferTaskType, formatRoutingResult } from '@/core/ai/model-router';
 
 export const dynamic = 'force-dynamic';
@@ -143,10 +144,7 @@ export async function POST(req: Request) {
     const { input, caseType, ragContext: clientRagContext } = await req.json();
 
     if (!input || !caseType) {
-      return NextResponse.json(
-        { output: '[OmniOne] 錯誤：缺少必要參數 (input/caseType)', provider: 'error' },
-        { status: 400 }
-      );
+      return jsonError('INVALID_PARAMS', '缺少必要參數 (input/caseType)', 400);
     }
 
     // 檢查是否有任何 API Key
@@ -154,10 +152,10 @@ export async function POST(req: Request) {
     const HAS_OPENROUTER = !!process.env.OPENROUTER_API_KEY;
     const HAS_GEMINI = !!process.env.GEMINI_API_KEY;
     if (!HAS_GROQ && !HAS_OPENROUTER && !HAS_GEMINI) {
-      return NextResponse.json(
-        { output: `[OmniOne 模擬] 收到任務「${input}」，分類為 ${caseType}。`, provider: 'mock' },
-        { status: 200 }
-      );
+      return jsonResponse({
+        output: `[OmniOne 模擬] 收到任務「${input}」，分類為 ${caseType}。`,
+        provider: 'mock',
+      });
     }
 
     // ══ 智慧模型路由 ══════════════════════════════════════════
@@ -232,7 +230,7 @@ ${input}
 
     console.log(`[OmniOne] ✓ Success: provider=${provider}, model=${modelUsed}`);
 
-    return NextResponse.json({
+    return jsonResponse({
       output: response,
       provider,
       model: modelUsed,
@@ -244,14 +242,6 @@ ${input}
 
   } catch (error) {
     console.error('[OmniOne] Critical error:', error);
-    return NextResponse.json(
-      {
-        output: '[OmniOne] 系統故障。請稍後重試或聯繫支援團隊。',
-        error: (error as Error).message,
-        provider: 'error',
-        timestamp: new Date().toISOString(),
-      },
-      { status: 500 }
-    );
+    return jsonError('INTERNAL_ERROR', (error as Error).message, 500);
   }
 }

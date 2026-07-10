@@ -3,7 +3,7 @@
 // app/api/resources/route.ts
 // ============================================================
 
-import { NextResponse } from 'next/server';
+import { jsonResponse } from '@/lib/api-utils';
 
 export interface ModuleResource {
   id: string;
@@ -382,7 +382,7 @@ export async function GET() {
     },
   ];
 
-  return NextResponse.json({
+  return jsonResponse({
     timestamp: Date.now(),
     platform: 'ESG GO',
     version: 'v5.0',
