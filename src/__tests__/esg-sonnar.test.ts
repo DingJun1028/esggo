@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from "vitest";
 /**
  * src/__tests__/esg-sonnar.test.ts — ESGSonnar Service 單元測試
  */
