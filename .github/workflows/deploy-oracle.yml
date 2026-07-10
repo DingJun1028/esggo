@@ -138,9 +138,9 @@ jobs:
             --session-ttl 3600 \
             --wait-for-state ACTIVE \
             --raw-output --query 'data.id' 2>/tmp/oci_err) || {
-            echo "OCI_ERR_B64_START"
-            base64 /tmp/oci_err
-            echo "OCI_ERR_B64_END"
+            echo "OCI_VERSION:"; oci --version 2>&1 | head -1
+            echo "OCI_ERR_RAW:"; cat /tmp/oci_err
+            echo "OCI_ERR_SANITIZED:"; sed -E 's/[0-9a-f]{40,}/<HASH>/g; s/ocid1\.[a-z]+[.][a-z]+[.][a-zA-Z0-9]+/<OCID>/g' /tmp/oci_err | grep -ivE "key|fingerprint|pem|-----" | head -20
             exit 1
           }
           echo "session=$SESSION" >> $GITHUB_OUTPUT
