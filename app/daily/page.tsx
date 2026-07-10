@@ -69,6 +69,26 @@ const TYPE_ICONS: Record<string, string> = {
   opinion: '💬',
 };
 
+function csvEscape(value: string): string {
+  if (!value) return '';
+  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
+}
+
+function downloadFile(content: string, filename: string, mimeType: string) {
+  const blob = new Blob([content], { type: `${mimeType};charset=utf-8` });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function SeverityBadge({ severity }: { severity: string }) {
   return (
     <span style={{
@@ -136,6 +156,47 @@ export default function DailyReportPage() {
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [archiveDates, setArchiveDates] = useState<string[]>([]);
 
+  // Severity-filtered items
+  const filteredItems = useMemo(() => {
+    if (!report) return [];
+    if (severityFilter === 'all') return report.items;
+    return report.items.filter(item => item.severity === severityFilter);
+  }, [report, severityFilter]);
+
+  // Export helpers
+  const exportCSV = useCallback(() => {
+    if (!report) return;
+    const headers = ['id', 'type', 'title', 'summary', 'source', 'source_url', 'severity', 'esg_pillar'];
+    const rows = filteredItems.map(item => [
+      item.id,
+      item.itemType,
+      csvEscape(item.title),
+      csvEscape(item.summary),
+      csvEscape(item.sourceName || ''),
+      item.sourceUrl || '',
+      item.severity,
+      item.esgPillar,
+    ]);
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadFile(csv, `daily-report-${selectedDate}.csv`, 'text/csv');
+  }, [report, filteredItems, selectedDate]);
+
+  const exportJSON = useCallback(() => {
+    if (!report) return;
+    const data = {
+      reportDate: report.reportDate,
+      title: report.title,
+      summary: report.summary,
+      highlights: report.highlights,
+      topSources: report.topSources,
+      sourceCount: report.sourceCount,
+      alertCount: report.alertCount,
+      items: filteredItems,
+      exportedAt: new Date().toISOString(),
+    };
+    downloadFile(JSON.stringify(data, null, 2), `daily-report-${selectedDate}.json`, 'application/json');
+  }, [report, filteredItems, selectedDate]);
+
   const fetchReport = useCallback(async (date: string) => {
     try {
       setLoading(true);
@@ -196,13 +257,6 @@ export default function DailyReportPage() {
       setGenerating(false);
     }
   };
-
-  // Severity-filtered items
-  const filteredItems = useMemo(() => {
-    if (!report) return [];
-    if (severityFilter === 'all') return report.items;
-    return report.items.filter(item => item.severity === severityFilter);
-  }, [report, severityFilter]);
 
   // Severity counts
   const severityCounts = useMemo(() => {
@@ -287,6 +341,42 @@ export default function DailyReportPage() {
             >
               {generating ? '生成中...' : '🔄 重新生成'}
             </button>
+            {report && (
+              <>
+                <button
+                  onClick={exportCSV}
+                  style={{
+                    padding: '8px 12px',
+                    background: SC.surface,
+                    color: SC.gold,
+                    border: `1px solid ${SC.gold}40`,
+                    borderRadius: 8,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                  title="匯出 CSV"
+                >
+                  CSV
+                </button>
+                <button
+                  onClick={exportJSON}
+                  style={{
+                    padding: '8px 12px',
+                    background: SC.surface,
+                    color: SC.zkp,
+                    border: `1px solid ${SC.zkp}40`,
+                    borderRadius: 8,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                  title="匯出 JSON"
+                >
+                  JSON
+                </button>
+              </>
+            )}
           </div>
         </header>
 
