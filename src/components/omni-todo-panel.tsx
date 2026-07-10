@@ -342,6 +342,62 @@ export function OmniTodoPanel() {
           >
             + 新增待辦
           </button>
+
+          <button
+            onClick={() => {
+              const csvEscape = (v: string) => v.includes(',') || v.includes('"') ? `"${v.replace(/"/g, '""')}"` : v;
+              const headers = ['id', 'title', 'description', 'priority', 'status', 'category', 'dueDate', 'createdAt'];
+              const rows = todos.map(t => [
+                t.id,
+                csvEscape(t.title),
+                csvEscape(t.description),
+                t.priority,
+                t.status,
+                t.category,
+                t.dueDate || '',
+                t.createdAt,
+              ]);
+              const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+              const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `omni-todo-${new Date().toISOString().split('T')[0]}.csv`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="px-3 py-2 rounded-lg text-sm font-medium"
+            style={{
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border)',
+              color: 'var(--accent-gold)',
+            }}
+            title="匯出 CSV"
+          >
+            CSV
+          </button>
+
+          <button
+            onClick={() => {
+              const data = { todos, stats, exportedAt: new Date().toISOString() };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `omni-todo-${new Date().toISOString().split('T')[0]}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="px-3 py-2 rounded-lg text-sm font-medium"
+            style={{
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border)',
+              color: 'var(--accent-blue)',
+            }}
+            title="匯出 JSON"
+          >
+            JSON
+          </button>
         </div>
       </OmniBaseCard>
 
