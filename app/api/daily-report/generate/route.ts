@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const targetDate = date ? new Date(date) : new Date();
     const report = await service.generateReport(targetDate);
 
-    return NextResponse.json({ success: true, report });
+    return jsonResponse({ success: true, report });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message);

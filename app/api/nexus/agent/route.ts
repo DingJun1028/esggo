@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { omniOrchestrator } from '@/core/services/omni-orchestrator';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function POST(req: Request) {
   try {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         fallbackMsg
       );
 
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         data: result,
         metadata: {
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     }
 
     if (tool === 'ask_jules') {
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         data: "Jules: " + args.prompt,
         metadata: { timestamp: Date.now(), trustScore: 100 }

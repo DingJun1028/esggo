@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       const mode = args?.mode || 'STANDARD';
       
       if (!HAS_API_KEY) {
-        return NextResponse.json({
+        return jsonResponse({
           success: true,
           data: {
             prediction: '[OmniCore 模擬] 尚未配置 GEMINI_API_KEY，無法執行全知未來視角分析。',
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       }
 
       if (!USE_REAL_AI) {
-        return NextResponse.json({
+        return jsonResponse({
           success: true,
           data: {
             prediction: '[OmniCore 免費層] 全知分析就緒，待切換至付費層模式獲得完整視角。',
@@ -88,7 +88,7 @@ ${JSON.stringify(tasks)}
         contents: prompt,
       });
 
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         data: {
           prediction: response.text,
@@ -116,7 +116,7 @@ ${JSON.stringify(tasks)}
         status: 'Trustworthy'
       };
 
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         data: healingResponse,
         metadata: {

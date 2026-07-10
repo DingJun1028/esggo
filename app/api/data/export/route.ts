@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 const prisma = new PrismaClient();
 
@@ -154,7 +154,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       data: filtered,
       meta: {
@@ -177,7 +177,7 @@ export async function GET(request: NextRequest) {
         },
       });
     }
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       data: mockData.slice(0, limit),
       meta: {
@@ -209,7 +209,7 @@ export async function POST(request: NextRequest) {
 
     // In production, this would queue a background job
     // For now, return job ID for client to poll
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       jobId,
       statusUrl: `/api/data/export/status/${jobId}`,

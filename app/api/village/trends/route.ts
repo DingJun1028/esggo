@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -28,16 +28,14 @@ interface FirestoreDoc {
 export async function GET() {
   try {
     if (!HAS_API_KEY) {
-      return NextResponse.json(
+      return jsonResponse(
         { trend: `[OmniOne 系統提示] 尚未配置 GEMINI_API_KEY 或 AGNES_API。此為模擬趨勢：近期的 Quadratic Voting 顯示出村民對「綠能先行者」專案有高度興趣，預期該指標將於兩週內達標。`, provider: 'mock' },
-        { status: 200 }
       );
     }
 
     if (!USE_REAL_AI) {
-      return NextResponse.json(
+      return jsonResponse(
         { trend: '[OmniOne 模擬趨勢] 目前正處於免費層模式，根據歷史數據顯示，永續能源指標最有潛力於 14 天內達成目標。', provider: 'mock' },
-        { status: 200 }
       );
     }
 
@@ -77,7 +75,7 @@ ${topProjects.join('\n')}
       }
     });
 
-    return NextResponse.json({ trend: response.text, provider: 'gemini' });
+    return jsonResponse({ trend: response.text, provider: 'gemini' });
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';

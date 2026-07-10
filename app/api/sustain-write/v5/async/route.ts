@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
 import { CelestialController } from '../../../../../src/lib/celestial/implementation';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   const taskId = createTask(companyId, templateId, noteIds, customCompany);
   startAsyncTask(taskId, companyId);
 
-  return NextResponse.json({
+  return jsonResponse({
     taskId,
     status: 'pending',
     message: '報告生成任務已啟動',
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({
+  return jsonResponse({
     version: '5.0-async',
     endpoints: {
       start: 'POST /api/sustain-write/v5/async { companyId }',

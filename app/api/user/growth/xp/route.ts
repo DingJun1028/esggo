@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserGrowthService, XP_REWARDS } from '@/core/services/user-growth-service';
 import { PrismaClient } from '@prisma/client';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true, ...result });
+    return jsonResponse({ success: true, ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message, 500);

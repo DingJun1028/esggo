@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 import { jsonError, jsonResponse } from '@/lib/api-utils';
 
 export async function GET() {
-  return NextResponse.json({
+  return jsonResponse({
     success: true,
     data: {
       jobs: [
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     switch (job) {
       case 'daily-report': {
         const result = await generateDailyReportJob();
-        return NextResponse.json({ success: result.success, data: result });
+        return jsonResponse({ success: result.success, data: result });
       }
       case 'achievement-check': {
         const result = await checkUserAchievements();

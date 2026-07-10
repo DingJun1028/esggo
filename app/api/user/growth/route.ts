@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserGrowthService } from '@/core/services/user-growth-service';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,10 +23,10 @@ export async function GET(req: NextRequest) {
       // Auto-create on first visit
       const user = await service.getOrCreateUser(userId);
       const newProfile = await service.getFullProfile(userId);
-      return NextResponse.json({ success: true, profile: newProfile, created: true });
+      return jsonResponse({ success: true, profile: newProfile, created: true });
     }
 
-    return NextResponse.json({ success: true, profile });
+    return jsonResponse({ success: true, profile });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return jsonError('INTERNAL_ERROR', message);

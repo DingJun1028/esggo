@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 /**
  * 安全柵欄：預設 FREE_TIER_ONLY 為 true
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!USE_REAL_AI) {
-      return NextResponse.json({
+      return jsonResponse({
         success: true,
         originalText: text,
         rewrittenText: mockRewrite(text, tone),
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       contents: `${tonePrompt}\n\nOriginal text:\n${text}`,
     });
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       originalText: text,
       rewrittenText: response.text || text,

@@ -2,11 +2,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown, getV5Companies } from '@/core/services/report-generator-v5';
 import { generateFullV5Report, fullReportToHtml } from '@/core/services/report-generator-v5-full';
-import { jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 export async function GET() {
   const companies = getV5Companies();
-  return NextResponse.json({ version: '5.0', companies, totalChapters: 28 });
+  return jsonResponse({ version: '5.0', companies, totalChapters: 28 });
 }
 
 export async function POST(req: NextRequest) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         headers: { 'Content-Type': 'text/html; charset=utf-8' }
       });
     }
-    return NextResponse.json(report);
+    return jsonResponse(report);
   }
 
   const report = generateV5Report(companyId);
@@ -36,5 +36,5 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     });
   }
-  return NextResponse.json(report);
+  return jsonResponse(report);
 }
