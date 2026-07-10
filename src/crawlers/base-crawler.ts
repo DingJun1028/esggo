@@ -110,10 +110,10 @@ export abstract class BaseCrawler {
           'Accept-Language': 'zh-TW,zh;q=0.9',
         },
       }, (res: import('http').IncomingMessage) => {
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           return resolve(this.httpsFetch(res.headers.location));
         }
-        if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode} for ${url}`));
+        if (!res.statusCode || res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode} for ${url}`));
         const chunks: Buffer[] = [];
         res.on('data', (c: Buffer) => chunks.push(c));
         res.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
@@ -169,7 +169,7 @@ export abstract class BaseCrawler {
   }
 
   /** Extract items from raw HTML — regex-based, zero deps */
-  protected extractItems(html: string, maxItems: number, opts?: CrawlOptions): CrawlResultItem[] {
+  protected extractItems(html: string, maxItems: number, _opts?: CrawlOptions): CrawlResultItem[] {
     const parsed = extractListItems(html, {
       baseUrl: this.config.baseUrl,
       maxItems,

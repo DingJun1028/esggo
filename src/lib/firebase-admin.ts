@@ -12,7 +12,8 @@ import * as firebaseAdmin from 'firebase-admin';
 import type { App } from 'firebase-admin/app';
 
 // Firebase Admin namespace export can be awkwardly typed; use a narrower cast
-const admin: typeof firebaseAdmin & Record<string, unknown> = firebaseAdmin as typeof firebaseAdmin & Record<string, unknown>;
+const admin = firebaseAdmin as typeof firebaseAdmin & Record<string, unknown>;
+const credential = (admin as Record<string, unknown>)['credential'] as Record<string, ((...args: unknown[]) => unknown) | undefined> | undefined;
 
 let _app: App | null = null;
 let _db: ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null = null;
@@ -28,7 +29,7 @@ function initAdminApp(): App {
     try {
       const serviceAccount = JSON.parse(serviceAccountJson);
       return admin.initializeApp({
-        credential: admin.credential?.cert?.(serviceAccount) ?? admin.applicationDefault(),
+        credential: credential?.cert?.(serviceAccount) as import('firebase-admin/app').Credential | undefined ?? admin.applicationDefault(),
         projectId: serviceAccount.project_id,
       });
     } catch (e) {
@@ -39,7 +40,7 @@ function initAdminApp(): App {
   const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID;
   const appCred = typeof admin.applicationDefault === 'function'
     ? admin.applicationDefault()
-    : admin.credential?.createApplicationDefault?.();
+    : credential?.createApplicationDefault?.() as import('firebase-admin/app').Credential | undefined;
   return admin.initializeApp({ credential: appCred, projectId });
 }
 
@@ -58,7 +59,8 @@ function getDb(): ReturnType<typeof import('firebase-admin/firestore').getFirest
       : firestoreNS.firestore?.(getAdminApp());
   } catch {
     try {
-      _db = (admin as Record<string, unknown>)['firestore']?.(getAdminApp());
+      const firestoreFn = (admin as Record<string, unknown>)['firestore'] as ((app: App) => unknown) | undefined;
+      _db = firestoreFn?.(getAdminApp()) as ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null;
     } catch {
       console.warn('[FirebaseAdmin] Firestore unavailable');
     }
@@ -72,11 +74,4 @@ export const adminDb = {
   runTransaction: <T>(fn: (transaction: import('firebase-admin/firestore').Transaction) => Promise<T>) =>
     getDb()?.runTransaction(fn) as Promise<T> | undefined,
   batch: () => getDb()?.batch(),
-};
-
-const asyncTasksCol = {
-  doc: (id: string) => adminDb.collection('async_tasks')?.doc(id),
-  get: (id: string) => adminDb.collection('async_tasks')?.doc(id)?.get(),
-  set: (id: string, data: Record<string, unknown>) => adminDb.collection('async_tasks')?.doc(id)?.set(data as never),
-  add: (data: Record<string, unknown>) => adminDb.collection('async_tasks')?.add(data as never),
 };

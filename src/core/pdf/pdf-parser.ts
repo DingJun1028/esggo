@@ -116,7 +116,7 @@ export class PDFReportParser {
 
       return {
         success: true,
-        title: pdfData.info?.Title || this.guessTitle(rawText),
+        title: String(pdfData.info?.Title || this.guessTitle(rawText)),
         pageCount: pdfData.numpages || this.pages.length,
         text: rawText.slice(0, 50000),
         sections,

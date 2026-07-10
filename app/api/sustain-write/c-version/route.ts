@@ -7,6 +7,15 @@ import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCom
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 import type { ReportChapter } from '@/lib/sustain-write/omni-tag';
 
+interface CVersionReport {
+  companyId: string;
+  companyName: string;
+  version: string;
+  totalWords: number;
+  fiveTStatus?: string;
+  chapters: ReportChapter[];
+  generatedAt: string;
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +38,7 @@ export async function POST(request: NextRequest) {
       return jsonError('INVALID_PARAMS', '缺少 companyId 參數', 400);
     }
 
-    const report = assembleCVersionReport(companyId);
+    const report = assembleCVersionReport(companyId) as CVersionReport | null;
 
     if (!report) {
       return NextResponse.json(

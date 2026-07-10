@@ -221,7 +221,7 @@ function renderMarkdown(text: string): string {
     .replace(/\n/g, '<br/>');
 }
 
-async function apiCall(type: string, payload?: Record<string, unknown>): Promise<Record<string, unknown>> {
+async function apiCall(type: string, payload?: Record<string, unknown>): Promise<Record<string, any>> {
   const res = await fetch('/api/omni-agent/console', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -513,7 +513,8 @@ function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }
 // Chat Interface Component
 // ═══════════════════════════════════════════════════════════════
 
-const RenderedMessage = React.memo(({ m }: { m: Message }) => (
+const RenderedMessage = React.memo(function RenderedMessage({ m }: { m: Message }) {
+  return (
   <div className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
     <div
       className={`max-w-[90%] border rounded-2xl px-4 py-2.5 ${
@@ -544,7 +545,8 @@ const RenderedMessage = React.memo(({ m }: { m: Message }) => (
       {m.ms && <span className="font-mono">({m.ms}ms)</span>}
     </div>
   </div>
-));
+  );
+});
 
 function ChatInterface() {
   const [msgs, setMsgs] = useState<Message[]>([
@@ -614,47 +616,6 @@ function ChatInterface() {
 
     setBusy(false);
   }, [input, busy]);
-
-  const handleQuickCommand = useCallback(
-    async (cmd: QuickCommand) => {
-      if (busy) return;
-      setBusy(true);
-
-      const userMsg: Message = {
-        id: uid(),
-        role: 'user',
-        text: `${cmd.icon} ${cmd.label}`,
-        time: now(),
-      };
-      setMsgs((m) => [...m, userMsg]);
-
-      try {
-        const res = await apiCall('quick_command', { commandId: cmd.id });
-        if (res.success) {
-          const aiMsg: Message = {
-            id: uid(),
-            role: 'assistant',
-            text: res.data.reply,
-            time: now(),
-            actions: res.data.actions,
-          };
-          setMsgs((m) => [...m, aiMsg]);
-        }
-      } catch {
-        // Fallback: show command description
-        const aiMsg: Message = {
-          id: uid(),
-          role: 'assistant',
-          text: `**${cmd.label}** 已觸發\n\n${cmd.description}`,
-          time: now(),
-        };
-        setMsgs((m) => [...m, aiMsg]);
-      }
-
-      setBusy(false);
-    },
-    [busy],
-  );
 
   return (
     <div className="flex flex-col h-full">

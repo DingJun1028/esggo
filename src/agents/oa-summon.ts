@@ -44,6 +44,12 @@ export interface SummonConfig {
   vpsPort?: number;
   /** 是否自動淨化 */
   autoPurify?: boolean;
+  /** 是否於糾纏階段實際探活閘道（預設 true） */
+  verifyConnection?: boolean;
+  /** 閘道狀態端點（預設由 vpsHost:vpsPort 推導，8443? 實際為 8642） */
+  gatewayUrl?: string;
+  /** 是否在覺醒階段實際初始化 OmniCore（預設 false，避免每次 90s+ 常駐） */
+  initCore?: boolean;
 }
 
 /** 招喚結果 */
@@ -62,6 +68,18 @@ export interface SummonResult {
   errors: string[];
   /** 量子糾纏 ID */
   entanglementId?: string;
+  /** 實際探活到的閘道端點 */
+  gatewayUrl?: string;
+  /** 閘道版本（探活成功時填入，如 3.0.0） */
+  gatewayVersion?: string;
+  /** 閘道在線狀態（探活結果） */
+  gatewayStatus?: string;
+  /** 是否實際初始化了 OmniCore */
+  coreInitialized?: boolean;
+  /** OmniCore 初始化後的狀態快照（soul/state/initialized） */
+  coreStatus?: { initialized: boolean; soul?: string; state?: string };
+  /** OmniCore 初始化失敗時的錯誤摘要 */
+  coreError?: string;
 }
 
 // ==========================================
@@ -80,6 +98,21 @@ export class OASummon {
   
   /** 招喚配置 */
   private _config: SummonConfig;
+
+  /** 實際探活到的閘道端點（糾纏階段填入） */
+  private _gatewayUrl?: string;
+
+  /** 探活到的閘道版本（糾纏階段填入） */
+  private _gatewayVersion?: string;
+
+  /** 是否實際初始化了 OmniCore（覺醒階段填入） */
+  private _coreInitialized = false;
+
+  /** OmniCore 初始化後的狀態快照 */
+  private _coreStatus?: { initialized: boolean; soul?: string; state?: string };
+
+  /** OmniCore 初始化失敗摘要 */
+  private _coreError?: string;
   
   /** 招喚開始時間 */
   private _startTime: number = 0;
@@ -111,7 +144,10 @@ export class OASummon {
       vpsHost: config?.vpsHost ?? '161.118.248.180',
       vpsPort: config?.vpsPort ?? 8042,
       autoPurify: config?.autoPurify ?? true,
-    };
+      verifyConnection: config?.verifyConnection ?? true,
+      gatewayUrl: config?.gatewayUrl,
+      initCore: config?.initCore ?? false,
+    } as SummonConfig;
   }
 
   // ==========================================
@@ -182,6 +218,12 @@ export class OASummon {
         warnings: this._warnings,
         errors: this._errors,
         entanglementId: `ENT-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`,
+        gatewayUrl: this._gatewayUrl,
+        gatewayVersion: this._gatewayVersion,
+        gatewayStatus: this._gatewayUrl ? 'online' : 'unreachable',
+        coreInitialized: this._coreInitialized,
+        coreStatus: this._coreStatus,
+        coreError: this._coreError,
       };
 
     } catch (error) {
@@ -275,26 +317,118 @@ export class OASummon {
     const start = Date.now();
     this._stage = 'ENTANGLE';
 
-    console.log(`  🔗 Stage 4: 糾纏 — 建立量子糾纏連接...`);
-    console.log(`     目標: ${this._config.vpsHost}:${this._config.vpsPort}`);
+    const candidates: string[] = this._config.gatewayUrl
+      ? [this._config.gatewayUrl]
+      : [
+          `http://${this._config.vpsHost}:${this._config.vpsPort}/status`,
+          `http://${this._config.vpsHost}:8642/status`,
+          `http://127.0.0.1:8642/status`,
+        ];
 
-    await this._delay(200);
+    if (!this._config.verifyConnection) {
+      console.log(`  🔗 Stage 4: 糾纏 — 跳過實際探活（verifyConnection=false）`);
+      console.log(`     目標清單: ${candidates.join(', ')}`);
+      console.log('     ✅ 量子糾纏通道已建立（模擬）');
+      console.log('');
+      this._stageTimings.ENTANGLE = Date.now() - start;
+      return;
+    }
 
-    console.log('     ✅ 量子糾纏通道已建立');
+    console.log(`  🔗 Stage 4: 糾纏 — 建立量子糾纏連接並實際探活...`);
+    let connected = false;
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+        if (res.ok) {
+          const body = await res.json().catch(() => ({}));
+          this._gatewayUrl = url;
+          connected = true;
+          console.log(`     ✅ 量子糾纏通道已建立 → ${url} (HTTP ${res.status})`);
+          console.log(`     📡 閘道: ${body.gateway_name ?? 'unknown'} v${body.version ?? '?'} · status=${body.status ?? '?'}`);
+          const warn = this._checkGatewayHealth(body);
+          if (warn) this._warnings.push(warn);
+          break;
+        } else {
+          console.log(`     ⚠ ${url} 回應 HTTP ${res.status}`);
+        }
+      } catch (e) {
+        console.log(`     ⚠ ${url} 連線失敗: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    }
+
+    if (!connected) {
+      const msg = '量子糾纏失敗：所有候選閘道端點皆不可達（OmniAgent 可能尚未啟動）';
+      this._warnings.push(msg);
+      console.log(`     ⚠ ${msg}`);
+    }
     console.log('');
 
     this._stageTimings.ENTANGLE = Date.now() - start;
   }
 
+  /** 探活結果健康度檢查，回傳警告文字（無問題回傳空字串） */
+  private _checkGatewayHealth(body: unknown): string {
+    if (body && typeof body === 'object' && 'status' in body) {
+      const b = body as Record<string, any>;
+      if (b.status !== 'online') return `閘道狀態異常: ${b.status}`;
+      if (b.version) this._gatewayVersion = String(b.version);
+      if (b.errors && typeof b.errors === 'object' && (b.errors.totalErrors ?? 0) > 0) {
+        return `閘道累積錯誤: ${b.errors.totalErrors}`;
+      }
+    }
+    return '';
+  }
+
   /**
    * Stage 5: 覺醒 — OmniAgent 完全覺醒
+   *
+   * 預設為模擬（啟動 12-Omni + 9 Magic Effects 的敘事層）。
+   * 當 config.initCore=true 時，實際呼叫 OmniCore.initialize()——
+   * 喚醒靈魂、解鎖/印記元鑰、註冊 VPS Agent 並做真實健康檢查。
+   *
+   * 注意：使用惰性 require 加載 omni-core，避免與其對 oa-summon 的
+   * static import 形成循環依賴。
    */
   private async _awaken(): Promise<void> {
     const start = Date.now();
     this._stage = 'AWAKEN';
 
+    if (this._config.initCore) {
+      console.log('  ✨ Stage 5: 覺醒 — 實際初始化 OmniCore（12-Omni + 9 Magic Effects）...');
+      try {
+        // 惰性 require：避免與 src/core/omni-core 的循環依賴
+        const { getOmniCore } = require('../core/omni-core');
+        const core = getOmniCore({
+          soulName: this._config.soulName,
+          keyName: this._config.keyName,
+          vpsHost: this._config.vpsHost,
+          vpsPort: this._config.vpsPort,
+          // 不遞歸觸發 OASummon（否則會再跑一遍儀式）
+          summon: false,
+        });
+        await core.initialize();
+        this._coreInitialized = true;
+        const st = await core.getStatus();
+        this._coreStatus = {
+          initialized: st.initialized,
+          soul: st.soul?.name,
+          state: st.soul?.state,
+        };
+        console.log(`     ✅ OmniCore 已實際初始化 (${Date.now() - start}ms) · soul=${st.soul?.name} state=${st.soul?.state}`);
+      } catch (e) {
+        const msg = `OmniCore 實際初始化失敗: ${e instanceof Error ? e.message : String(e)}`;
+        this._coreError = msg;
+        this._warnings.push(msg);
+        console.log(`     ⚠ ${msg}`);
+        console.log('     （儀式仍標記完成，僅核心初始化失敗）');
+      }
+      console.log('');
+      this._stageTimings.AWAKEN = Date.now() - start;
+      return;
+    }
+
     console.log('  ✨ Stage 5: 覺醒 — OmniAgent 完全覺醒...');
-    console.log('     啟動 12-Omni Components + 9 Magic Effects...');
+    console.log('     啟動 12-Omni Components + 9 Magic Effects...（模擬；加 --core 啟用真實初始化）');
 
     await this._delay(150);
 

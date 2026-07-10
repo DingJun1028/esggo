@@ -20,11 +20,15 @@ export async function GET() {
     const { adminDb } = await import('@/lib/firebase-admin');
 
     if (!adminDb) {
-      return jsonError('FIREBASE_NOT_CONFIGURED', 'Firebase Admin not configured', 503);
+      return jsonError('INTERNAL_ERROR', 'Firebase Admin not configured', 503);
     }
 
-    const snapshot = await adminDb
-      .collection('notes')
+    const notesCol = adminDb.collection('notes');
+    if (!notesCol) {
+      return jsonError('INTERNAL_ERROR', 'Firestore collection unavailable', 503);
+    }
+
+    const snapshot = await notesCol
       .orderBy('createdAt', 'desc')
       .limit(100)
       .get();

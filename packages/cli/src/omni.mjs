@@ -190,5 +190,42 @@ seedCmd
     console.log(`[v] Sacred Contract enforced (Object.isFrozen = true)`);
   });
 
+// ── summon ────────────────────────────────────────────────
+program
+  .command('summon')
+  .description('OA-Summon — 招喚 OmniAgent 神聖儀式（含真實閘道探活）')
+  .option('-s, --soul <name>', '靈魂名稱', 'JunAiKey')
+  .option('-k, --key <name>', '元鑰名稱', '萬能元鑰')
+  .option('-h, --host <host>', 'VPS 主機', '161.118.248.180')
+  .option('-p, --port <port>', 'VPS 端口', '8042')
+  .option('--gateway <url>', '直接指定閘道 /status 端點')
+  .option('--no-verify', '跳過實際探活（純模擬）')
+  .option('--core', '覺醒階段實際初始化 OmniCore（耗時較長，會註冊 VPS Agent 並健康檢查）')
+  .action(async (opts) => {
+    const { spawnSync } = await import('node:child_process');
+    const { fileURLToPath } = await import('node:url');
+    const { dirname } = await import('node:path');
+    const env = { ...process.env };
+    env.OA_SOUL = opts.soul;
+    env.OA_KEY = opts.key;
+    env.OA_HOST = opts.host;
+    env.OA_PORT = String(opts.port);
+    if (opts.gateway) env.OA_GATEWAY = opts.gateway;
+    if (!opts.verify) env.OA_NO_VERIFY = '1';
+    if (opts.core) env.OA_CORE = '1';
+
+    // 倉庫根（omni.mjs 位於 packages/cli/src/）
+    const here = dirname(fileURLToPath(import.meta.url));
+    const root = dirname(dirname(dirname(here)));
+    console.error(`[summon] cwd=${root}`);
+    const res = spawnSync(
+      process.execPath,
+      [root + '/node_modules/ts-node/dist/bin.js', '--transpile-only', 'scripts/run-summon.ts'],
+      { cwd: root, env, stdio: 'inherit' }
+    );
+    if (res.error) console.error('[summon] spawn error:', res.error.message);
+    process.exit(res.status ?? 1);
+  });
+
 // ── Parse ──────────────────────────────────────────────────
 program.parse();

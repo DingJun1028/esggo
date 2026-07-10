@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { OmniDataAnalyticsPanel } from '@/components/omni-data-analytics-panel';
 import { InsightGrid } from '@/components/sustain-center/insight-grid';
 import { TrustLedger } from '@/components/sustain-center/trust-ledger';
+import type { LedgerItem } from '@/components/sustain-center/trust-ledger';
 import { HeartbeatMonitor, HeartbeatMetrics } from '@/components/sustain-center/heartbeat-monitor';
 import { Loader2, Globe, Activity } from 'lucide-react';
 import { OmniDataAnalyticsConfig } from '@/types/esg-charts';
 
 interface DashboardData {
   charts: OmniDataAnalyticsConfig[];
-  recentLedgers: Record<string, unknown>[];
+  recentLedgers: LedgerItem[];
   summaryMetrics: {
     totalEmissions: string;
     emissionUnit: string;
@@ -55,7 +56,7 @@ export default function SustainCenterPage() {
               errorCount: data.errors ?? prev.errorCount
             }));
           }
-        } catch (e) {}
+        } catch {}
       };
     };
     
