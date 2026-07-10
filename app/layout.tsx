@@ -3,6 +3,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import { AgnesProvider } from '@/components/AgnesProvider';
 import { GlobalNav } from './components/global-nav';
 import { OmniErrorBoundary } from '@/core/services/error-boundary';
+import { KeyboardShortcutProvider } from './components/keyboard-shortcut-provider';
 import './globals.css';
 import ThemeProvider from './components/theme-client';
 
@@ -26,12 +27,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <AuthProvider>
             <AgnesProvider>
-              <GlobalNav />
-              <main>
-                <OmniErrorBoundary>
-                  {children}
-                </OmniErrorBoundary>
-              </main>
+              <KeyboardShortcutProvider>
+                <GlobalNav />
+                <main>
+                  <OmniErrorBoundary>
+                    {children}
+                  </OmniErrorBoundary>
+                </main>
+              </KeyboardShortcutProvider>
             </AgnesProvider>
           </AuthProvider>
         </ThemeProvider>

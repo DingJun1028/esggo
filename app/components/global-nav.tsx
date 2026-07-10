@@ -68,7 +68,7 @@ function toggleTheme() {
 
 export function GlobalNav() {
   return (
-    <nav className="sticky top-0 z-[200] bg-secondary/80 backdrop-blur-md border-b border-borderColor px-5 h-[52px] flex items-center justify-between gap-4">
+    <nav className="sticky top-0 z-[200] bg-secondary/80 backdrop-blur-md border-b border-borderColor px-5 h-[52px] flex items-center justify-between gap-4" aria-label="主導覽列">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-lg bg-accentTeal flex items-center justify-center font-['Montserrat'] font-bold text-[15px] text-black">
           E
@@ -79,14 +79,16 @@ export function GlobalNav() {
         </span>
       </div>
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" role="menubar" aria-label="導覽選單">
           {NAV.map((n) => (
             <a
               key={n.href}
               href={n.href}
-className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] text-textSecondary transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${n.color}`}
+              role="menuitem"
+              aria-label={n.label}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] text-textSecondary transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${n.color}`}
             >
-              <span>{n.icon}</span>
+              <span aria-hidden="true">{n.icon}</span>
               <span>{n.label}</span>
             </a>
           ))}
