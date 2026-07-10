@@ -13,3 +13,7 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+## 2026-07-10 - [Fix Command Injection in NVIDIA API call]
+**Vulnerability:** Command injection in `predictAndPreFetch` where user input was interpolated into a `curl` command executed via `execSync`.
+**Learning:** Using `child_process.execSync` to run shell commands constructed with user input is highly dangerous and allows arbitrary command execution.
+**Prevention:** Use native, language-level APIs like `fetch` for HTTP requests instead of shelling out to `curl`.
