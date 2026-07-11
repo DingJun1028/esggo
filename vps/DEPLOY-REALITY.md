@@ -184,8 +184,10 @@ ssh esggo-vps
 #       不要做 http→https 重定向。改完 `nginx -t && systemctl reload nginx`。
 # 備份檔請放 /root/nginx-backup/，勿放 /etc/nginx/sites-enabled/（會被載入造成
 # server_name 衝突、重定向復發）。
-# 修好的 :80/:443 設定已納入 repo：vps/nginx/esggo.conf
-# VPS 重建時直接 `cp vps/nginx/esggo.conf /etc/nginx/sites-enabled/esggo`
+# 修好的 :80/:443 設定已納入 repo：vps/nginx/esggo.conf 與 vps/nginx/omniagent-sub.conf
+# VPS 重建時：
+#   cp vps/nginx/esggo.conf /etc/nginx/sites-enabled/esggo
+#   cp vps/nginx/omniagent-sub.conf /etc/nginx/sites-enabled/omniagent-sub
 # 再 `nginx -t && systemctl reload nginx`（cert 路徑 /etc/letsencrypt/... 需先存在）。
 ```
 
