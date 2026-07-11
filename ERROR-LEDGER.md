@@ -54,15 +54,16 @@
 
 > 以下 5 條來自 Gemini 對草稿的 code review，**已逐條核對屬實（非誤報）**，全都在 `wip/draft-scaffolding` 分支草稿內，**main 未受影響**。
 > 2026-07-11 決定：**全部不修**，草稿維持隔離。故狀態標 `open（待修·暫不修）`；若日後要合入草稿，須先修完再提。
+> 2026-07-11 後續：**原決定已撤銷** — D1–D5 已於 `main` 修復（PR #231），D4 另行於草稿分支 `wip/draft-scaffolding` 修復（PR #236）。
 > ⚠️ `wip/draft-scaffolding` 是完整 repo 鏡像，下列 path 在 main 多半不存在（取草稿前先 `git ls-tree origin/wip/draft-scaffolding <path>` 確認）。
 
 | # | 日期 | 類別 | 草稿位置 | 問題 | 根因 | 修法（已核對） | 重複? | 狀態 | 關聯 |
 |---|------|------|----------|------|------|----------------|-------|------|------|
-| D1 | 07-11 | security-high | src/agents/complete-delegation/delegation-manager.ts:112-114 | 簽章繞過 `return true` | `verifyScope` 直接 `return true` 跳過簽章驗證，任何 scope 都過 | 改回 `this.verifySignature(scope)` | 🟢 一次性 | open（待修·暫不修） | wip/draft |
-| D2 | 07-11 | 邏輯/類型 | src/agents/complete-delegation/delegation-manager.ts:44 + 比較處 | `validUntil ?? Infinity` | `Infinity` 傳入時間比較不精確、易出 NaN | 兩處改 `Number.MAX_SAFE_INTEGER` | 🟢 一次性 | open（待修·暫不修） | wip/draft |
-| D3 | 07-11 | performance | src/agents/complete-delegation/performance-optimizer.ts:432-439 | ConnectionPool 用 `setInterval` 輪詢 | 定時輪詢空轉浪費 | 改用 waiters 佇列版（使用者認可） | 🟢 一次性 | open（待修·暫不修） | wip/draft |
-| D4 | 07-11 | react hook | apps/mobile/src/hooks/useGateway.ts | `useGatewayQuery` inline `queryFn` 無限擷取 | `queryFn` 身分每 render 變動 → `run` 重建立 → effect 重跑 → setState → re-render 迴圈 | `useRef` 存最新 `queryFn`（使用者貼的修正版） | 🟢 一次性 | open（待修·暫不修） | wip/draft |
-| D5 | 07-11 | 類型安全 | src/lib/esg-analysis/engine.ts:65-80 | esg engine 缺 `?.`/`??` | 可空欄位未 guard，執行期可能報錯 | 補 `?.`/`??`（注意非可選欄位勿濫用 `?.` 以免 lint 報錯） | 🟢 一次性 | open（待修·暫不修） | wip/draft |
+| D1 | 07-11 | security-high | src/agents/complete-delegation/delegation-manager.ts:112-114 | 簽章繞過 `return true` | `verifyScope` 直接 `return true` 跳過簽章驗證，任何 scope 都過 | 改回 `this.verifySignature(scope)` | 🟢 一次性 | fixed（main #231） | wip/draft |
+| D2 | 07-11 | 邏輯/類型 | src/agents/complete-delegation/delegation-manager.ts:44 + 比較處 | `validUntil ?? Infinity` | `Infinity` 傳入時間比較不精確、易出 NaN | 兩處改 `Number.MAX_SAFE_INTEGER` | 🟢 一次性 | fixed（main #231） | wip/draft |
+| D3 | 07-11 | performance | src/agents/complete-delegation/performance-optimizer.ts:432-439 | ConnectionPool 用 `setInterval` 輪詢 | 定時輪詢空轉浪費 | 改用 waiters 佇列版（使用者認可） | 🟢 一次性 | fixed（main #231） | wip/draft |
+| D4 | 07-11 | react hook | apps/mobile/src/hooks/useGateway.ts | `useGatewayQuery` inline `queryFn` 無限擷取 | `queryFn` 身分每 render 變動 → `run` 重建立 → effect 重跑 → setState → re-render 迴圈 | `useRef` 存最新 `queryFn`（使用者貼的修正版） | 🟢 一次性 | fixed（draft #236） | wip/draft |
+| D5 | 07-11 | 類型安全 | src/lib/esg-analysis/engine.ts:65-80 | esg engine 缺 `?.`/`??` | 可空欄位未 guard，執行期可能報錯 | 補 `?.`/`??`（注意非可選欄位勿濫用 `?.` 以免 lint 報錯） | 🟢 一次性 | fixed（main #231） | wip/draft |
 
 ---
 
