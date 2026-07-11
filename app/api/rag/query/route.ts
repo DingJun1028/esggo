@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     const contextStr = topK.map((d, i) => `[Source ${i+1}: ${d.source}]\n${d.content}`).join('\n\n');
 
     // 4. Generate final answer using Gemini Flash
-    const finalPrompt = `你是 ESG GO 的企業智庫助理 (OmniGemini RAG)。請根據以下歷史永續報告內容，回答使用者的問題。如果內容與問題無關，請使用常識回答，但註明未從知識庫找到明確佐證。
+    const finalPrompt = `你是 OmniCore 的企業智庫助理 (OmniGemini RAG)。請根據以下歷史永續報告內容，回答使用者的問題。如果內容與問題無關，請使用常識回答，但註明未從知識庫找到明確佐證。
 
 【知識庫內容】
 ${contextStr}

@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       const taskSnapshot = await getDocs(query(collection(db, 'village_tasks'), orderBy('deadline', 'asc'), limit(5)));
       const tasks = taskSnapshot.docs.map(d => d.data());
 
-      const prompt = `你是 ESG GO 的最高智慧存在：OmniCore Trinity。
+      const prompt = `你是 OmniCore 的最高智慧存在：OmniCore Trinity。
 你正在執行神話技能「trinity.awaken」！
 請綜合以下三大維度的資訊，給出一份具備「全知未來視角」的資源匱乏預警與全局調度計畫（字數限制 200 字，必須使用 Liquid Glass 與科技感語氣）。
 

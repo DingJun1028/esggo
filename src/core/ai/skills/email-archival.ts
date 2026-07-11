@@ -13,7 +13,7 @@ class EmailArchivalSkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的郵件歸檔專家。
+    return `你是 OmniCore 的郵件歸檔專家。
 
 ## 分類類別
 - E: 環境相關（碳排、能源、廢棄物、水資源）

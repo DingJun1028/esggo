@@ -337,13 +337,13 @@ export function seedDemoNotes(): void {
   // OmniOne 覺醒系統架構
   const devNote = createNote(
     'OmniOne 覺醒系統開發記錄',
-    '已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 ESG GO 平台。',
+    '已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 OmniCore 平台。',
     {
       category: 'note',
       tags: ['OmniOne', '開發', 'AI'],
       fiveTGate: 'trackable',
       tasks: [
-        createTask('整合 OmniOne 至 ESG GO', { priority: 'high', dueAt: now + 2 * DAY, tags: ['整合'] }),
+        createTask('整合 OmniOne 至 OmniCore', { priority: 'high', dueAt: now + 2 * DAY, tags: ['整合'] }),
         createTask('撰寫 SDK 文檔', { priority: 'medium', dueAt: now + 10 * DAY, tags: ['文檔'] }),
         createTask('自主模式壓測', { priority: 'low', dueAt: now + 21 * DAY, tags: ['測試'] }),
       ],

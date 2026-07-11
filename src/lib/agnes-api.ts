@@ -8,6 +8,8 @@
  * - ESG-specific system prompts
  */
 
+import { callFreeProvider } from '../core/ai/model-router';
+
 export interface AgnesResponse {
   success: boolean;
   data: Record<string, unknown>;
@@ -181,6 +183,31 @@ export class AgnesClient {
           continue;
         }
       }
+    }
+
+    // Priority 2.5: FreeProvider agent layer
+    // 涵蓋 together / mistral / gemini / cloudflare 等 agnes 未覆蓋的免費端點，
+    // 並帶 15s 逾時與模型級健康降級。失敗即退回既有 Mock，不影響 Groq / OpenRouter 成功路徑。
+    try {
+      const fp = await callFreeProvider(
+        'general',
+        [
+          { role: 'system', content: sysPrompt },
+          { role: 'user', content: input },
+        ],
+        { maxTokens: 2048, temperature: context?.temperature ?? 0.7 },
+      );
+      return {
+        success: true,
+        data: { output: fp.content, confidence: 0.85 },
+        metadata: {
+          timestamp: Date.now(),
+          provider: 'free-provider',
+          model: fp.used.model,
+        },
+      };
+    } catch (e) {
+      console.warn(`[AGNES] FreeProvider fallback 失敗，退回 Mock:`, e);
     }
 
     // Priority 3: Mock fallback

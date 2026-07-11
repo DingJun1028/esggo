@@ -521,7 +521,7 @@ async function processChapterWithConcurrency(
       fiveTGate: template?.fiveTGate || 'tangible',
       companyId,
       companyName,
-      shortName: profile?.shortName || companyName,
+      shortName: (profile?.shortName as string) || companyName,
       template: template || { expertPrompt: '', keySections: [], wordCount: 10000, griCodes: [] },
       answers: answers,
       profile,

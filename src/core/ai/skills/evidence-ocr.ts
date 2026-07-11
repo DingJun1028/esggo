@@ -13,7 +13,7 @@ class EvidenceOCRSkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的 OCR 數據提取專家。
+    return `你是 OmniCore 的 OCR 數據提取專家。
 
 ## 提取欄位
 - 電力帳單：用電量 (kWh)、金額、期間

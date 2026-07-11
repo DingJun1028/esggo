@@ -48,7 +48,7 @@ class MaterialityMatrixSkill extends ESGSkill {
       .map(([category, topics]) => `### ${category.toUpperCase()}\n${topics.map(t => `- ${t}`).join('\n')}`)
       .join('\n\n');
 
-    return `你是 ESG GO 的重大性評估專家，精通 ESG 重大性矩陣分析方法論。
+    return `你是 OmniCore 的重大性評估專家，精通 ESG 重大性矩陣分析方法論。
 
 ## 常見 ESG 重大主題
 ${topicsList}

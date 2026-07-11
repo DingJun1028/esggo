@@ -17,17 +17,10 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
 
     // 驗證參數
-    const validation = validateParams(
-      { userId, page, limit },
-      {
-        userId: { required: true, type: 'string' },
-        page: { type: 'number', min: 1 },
-        limit: { type: 'number', min: 1, max: 100 },
-      }
-    );
+    const validation = validateParams({ userId, page, limit });
 
     if (!validation.valid) {
-      return jsonError(validation.errors!.join(', '), 400);
+      return jsonError('INVALID_PARAMS', validation.missing ? `Missing required field: ${validation.missing}` : 'Invalid params', 400);
     }
 
     const ncb = getNCBClient();
@@ -41,7 +34,7 @@ export async function GET(request: NextRequest) {
     return jsonResponse(result);
   } catch (error) {
     console.error('Error fetching AI notes:', error);
-    return jsonError('Failed to fetch AI notes', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to fetch AI notes', 500);
   }
 }
 
@@ -52,17 +45,10 @@ export async function POST(request: NextRequest) {
     const { user_id, title, content, type, category, source, tags } = body;
 
     // 驗證必要欄位
-    const validation = validateParams(
-      { user_id, title, content },
-      {
-        user_id: { required: true, type: 'string' },
-        title: { required: true, type: 'string', minLength: 1, maxLength: 255 },
-        content: { required: true, type: 'string', minLength: 1 },
-      }
-    );
+    const validation = validateParams({ user_id, title, content });
 
     if (!validation.valid) {
-      return jsonError(validation.errors!.join(', '), 400);
+      return jsonError('INVALID_PARAMS', validation.missing ? `Missing required field: ${validation.missing}` : 'Invalid params', 400);
     }
 
     const ncb = getNCBClient();
@@ -103,6 +89,6 @@ export async function POST(request: NextRequest) {
     return jsonResponse(noteWithTags, 201);
   } catch (error) {
     console.error('Error creating AI note:', error);
-    return jsonError('Failed to create AI note', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to create AI note', 500);
   }
 }

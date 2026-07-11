@@ -8,11 +8,12 @@ import { ZkpVault } from './zkp-vault';
 import { RagKnowledgeManager } from './rag-knowledge-manager';
 import { WuzuoNoteView } from './wuzuo-note-view';
 import { OmniCalendarView } from './omni-calendar-view';
+import { UniversalOmniConsole } from './universal-omni-console';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
-type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar';
+type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn';
 
 const FIVE_T = [
   { key: 'traceable', zh: '真', color: 'var(--accent-blue)' },
@@ -127,6 +128,7 @@ const tabs: {id:Tab; label:string; icon:string}[] = [
   {id:'fiveT',    label:'萬能雷達',icon:'📡'},
   {id:'rag',      label:'萬能智庫',icon:'📚'},
   {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
+  {id:'omniFn',   label:'萬能函數',icon:'🪄'},
 ];
 
 export default function OmniCenterPage() {
@@ -442,6 +444,13 @@ export default function OmniCenterPage() {
         <div className="max-w-5xl mx-auto">
           <ZkpVault />
         </div>
+      )}
+
+      {/* Universal Omni Function Tab */}
+      {tab === 'omniFn' && (
+        <OmniBaseCard className="!p-4">
+          <UniversalOmniConsole />
+        </OmniBaseCard>
       )}
     </div>
   );

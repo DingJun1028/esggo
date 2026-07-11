@@ -655,7 +655,7 @@ export async function executeTask(
     return (handler as () => Promise<TaskResultBase>)();
   }
   
-  return (handler as (params: Record<string, unknown>) => Promise<TaskResultBase>)(params);
+  return (handler as (params: Record<string, unknown>) => Promise<TaskResultBase>)(params ?? {});
 }
 
 export default taskHandlers;

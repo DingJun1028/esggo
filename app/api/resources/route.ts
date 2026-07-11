@@ -384,7 +384,7 @@ export async function GET() {
 
   return jsonResponse({
     timestamp: Date.now(),
-    platform: 'ESG GO',
+    platform: 'OmniCore',
     version: 'v5.0',
     modules,
     aiModels,
