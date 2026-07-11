@@ -158,7 +158,9 @@ jobs:
             key_details=oci.bastion.models.PublicKeyDetails(public_key_content=pub),
           )
           try:
-            resp = client.create_session(create_session_details=details, wait_for_states=["ACTIVE"])
+            resp = client.create_session(create_session_details=details)
+            # oci 2.181.1 的 create_session 不接受 wait_for_states；改用 oci.wait_until 輪詢
+            resp = oci.wait_until(client, resp, "data", "lifecycle_state", "ACTIVE")
             sid = resp.data.id
             with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("session=" + sid + "\n")
