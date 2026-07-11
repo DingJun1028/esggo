@@ -174,7 +174,7 @@ jobs:
               raise SystemExit("bastion session " + sid + " timeout waiting ACTIVE")
             with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("session=" + sid + "\n")
-              f.write("proxy=ssh -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
+              f.write("proxy=ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
             print("[OK] bastion session " + sid)
           except Exception as e:
             print("OCI_SDK_ERROR:")
@@ -189,7 +189,7 @@ jobs:
           SESSION: ${{ steps.bastion.outputs.session }}
         run: |
           set -e
-          ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
+          ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
             cd /var/www/esggo
             git checkout -f main
