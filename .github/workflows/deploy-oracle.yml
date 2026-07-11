@@ -4,20 +4,21 @@
 # 觸發: push to main (paths below) 或手動 workflow_dispatch
 # 部署目標: Oracle Cloud Always Free ARM Ampere A1 (Ubuntu 24.04)
 # 真實部署方式: nginx + PM2 (fork mode)，非 Docker Compose
-# 網路: 公網 22/8042 關，僅 80/443 開；部署走 OCI Bastion 跳板 (推薦) 或直連 (需開 NSG)
+# 網路: 公網 22 已對 GitHub Actions 開 (OCI Security List 22/tcp from 0.0.0.0/0, 2026-07-11)；
+#       80/443 原即開。部署走 direct 直連 (VPS_SSH_KEY) 或 bastion 跳板 (OCI_*)。
 #
-# 三種模式 (pre-check 依據 repo Secrets 自動選擇):
-#   bastion : 設好 OCI_* secrets → 在 Actions 內用 oci Python SDK 重建 bastion session 跳板部署 (安全, 不需開公網端口)
-#   direct  : 設好 VPS_SSH_KEY + VPS_HOST，且 OCI NSG 已放行 GitHub Actions IP → 直連部署
+# 三種模式 (pre-check 依據 repo Secrets 自動選擇, direct 優先):
+#   direct  : 設好 VPS_SSH_KEY + VPS_HOST → 直連部署 (預設, 已開 22)
+#   bastion : 僅設 OCI_* secrets 且無 VPS_SSH_KEY → 在 Actions 內用 oci SDK 重建 bastion session 跳板部署
 #   skip    : 兩者皆未設 → 跳過部署 (不再讓 push 變紅)
 #
 # 需在 GitHub 控制台 (Settings → Secrets and variables → Actions) 設定:
-#   選項 3 (bastion, 推薦):
+#   選項 (direct, 預設已開 22):
+#     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (私鑰)
+#   選項 (bastion, 備用, 不需開公網端口):
 #     OCI_USER_OCID, OCI_TENANCY_OCID, OCI_REGION (e.g. ap-singapore-1),
 #     OCI_API_FINGERPRINT, OCI_API_KEY (PEM 私鑰全文),
 #     OCI_BASTION_ID (ocid1.bastion...), OCI_TARGET_RESOURCE_ID (VPS compute instance OCID)
-#   選項 2 (direct, 需開 NSG):
-#     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (私鑰)
 #   兩者皆需 (應用程式 API key, 選填 — 若設則寫入 vps/.env):
 #     GROQ_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY, SUPABASE_*, GATEWAY_API_KEY, ...
 # =============================================================================
@@ -41,9 +42,9 @@ on:
   workflow_dispatch:
     inputs:
       deploy_mode:
-        description: "bastion (OCI jump, recommended) or direct (SSH, needs NSG open)"
+        description: "bastion (OCI jump) or direct (SSH, security-list 22 open to 0.0.0.0/0)"
         required: false
-        default: "bastion"
+        default: "direct"
         type: choice
         options:
           - bastion
@@ -102,7 +103,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [pre-check]
     if: needs.pre-check.outputs.mode != 'skip'
-    environment: production
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -143,17 +143,18 @@ jobs:
             "key_file": str(kp),
           }
           client = oci.bastion.BastionClient(cfg)
-          details = oci.bastion.models.CreateSessionDetails(
-            bastion_id=os.environ["OCI_BASTION_ID"],
-            display_name="gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
-            session_ttl_in_seconds=3600,
-            target_resource_details=oci.bastion.models.CreateSessionTargetResourceDetails(
-              session_type="MANAGED_SSH",
-              target_resource_id=os.environ["OCI_TARGET_RESOURCE_ID"],
-              target_resource_operating_system_user_name="root",
-            ),
-            key_details=oci.bastion.models.PublicKeyDetails(public_key_content=pub),
-          )
+          # 用 from_dict 構建，避免 SDK 模型欄位名不匹配導致 Unrecognized keyword arguments
+          details = oci.bastion.models.CreateSessionDetails.from_dict({
+            "bastionId": os.environ["OCI_BASTION_ID"],
+            "displayName": "gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
+            "sessionTtlInSeconds": 3600,
+            "targetResourceDetails": {
+              "sessionType": "MANAGED_SSH",
+              "targetResourceId": os.environ["OCI_TARGET_RESOURCE_ID"],
+              "targetResourceOperatingSystemUserName": "root",
+            },
+            "keyDetails": {"publicKeyContent": pub},
+          })
           try:
             resp = client.create_session(create_session_details=details, wait_for_states=["ACTIVE"])
             sid = resp.data.id
@@ -226,8 +227,9 @@ jobs:
     steps:
       - name: Result
         run: |
-          if [ "${{ needs.deploy.result }}" = "success" ]; then
+          R="${{ needs.deploy.result }}"
+          if [ "$R" = "success" ] || [ "$R" = "skipped" ]; then
             echo "[OK] ESG GO deployed to Oracle VPS (${{ needs.pre-check.outputs.mode }} mode)"
           else
-            echo "[FAIL] Deploy failed (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "[FAIL] Deploy $R (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           fi
