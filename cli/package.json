@@ -1,0 +1,23 @@
+{
+  "name": "esggo-delegation-cli",
+  "version": "1.0.0",
+  "description": "完全代主自行 CLI 工具",
+  "type": "module",
+  "main": "dist/delegation.js",
+  "bin": {
+    "esggo-delegation": "./dist/delegation.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx delegation.ts",
+    "start": "node dist/delegation.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.0"
+  }
+}

@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Berkeley國際永續策略人才培訓課程</title>
+<meta name="description" content="2026 柏克萊國際永續策略人才培力一站式入口平台，整合 Berkeley Haas 永續策略創新、TSISDA 與台灣尤努斯基金會在地轉型實務模組，提供學員、TA、導師線上學習協作網絡。">
+<meta name="theme-color" content="#003262">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026 Berkeley國際永續策略人才培訓課程">
+<meta property="og:description" content="一站式入口平台｜整合 Berkeley Haas 永續策略創新、TSISDA 與台灣尤努斯基金會在地轉型實務模組。">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Favicon (inline SVG, 柏克萊藍底金色葉) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23003262'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='%23FDB515' font-family='serif' font-weight='700'%3EB%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  /* ==========================================================================
+     2026 Berkeley ESG Portal - Optimal Production Release
+     ========================================================================== */
+  * { box-sizing: border-box; }
+  :root {
+    --c-navy: #003262;
+    --c-navy-deep: #00284f;
+    --c-gold: #FDB515;
+    --c-gold-soft: #fff6e0;
+    --c-ink: #1e293b;
+    --c-slate: #475569;
+    --c-line: #e2e8f0;
+    --c-bg: #f1f5f9;
+    --c-card: #ffffff;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 24px; --space-6: 32px; --space-8: 48px;
+    --radius: 12px; --radius-sm: 8px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.04);
+    --font-sans: 'Inter','Noto Sans TC',system-ui,-apple-system,sans-serif;
+    --font-serif: 'Source Serif 4',serif;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto !important; /* 解除高度限制，讓內容自然往下撐開 */
+    overflow: visible !important; /* 移除內部滾動條，強制全部顯示 */
+  }
+
+  /* 無障礙：跳至主要內容 */
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 999;
+    background: #FDB515; color: #003262; padding: 10px 16px;
+    border-radius: 0 0 8px 0; font-weight: 700; text-decoration: none;
+  }
+  .skip-link:focus { left: 0; }
+
+  /* 鍵盤聚焦可見性 */
+  a:focus-visible, .btn:focus-visible, .mini-btn:focus-visible {
+    outline: 3px solid #FDB515; outline-offset: 2px;
+  }
+
+  .portal-wrapper {
+    font-family: 'Inter', 'Noto Sans TC', Arial, sans-serif;
+    line-height: 1.6;
+    color: #334155;
+    background: #f8fafc;
+    padding: 24px 24px 150px 24px; /* 底部加上 150px 終極防切邊緩衝區 */
+    width: 100%;
+    height: auto !important;
+  }
+
+  .berkeley-container {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /*  英雄橫幅 (Hero) */
+  .berkeley-hero {
+    background: linear-gradient(135deg, #003262 0%, #001f3f 100%);
+    color: #ffffff;
+    padding: 35px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 50, 98, 0.15);
+    margin-bottom: 24px;
+    position: relative;
+    border-bottom: 4px solid #FDB515;
+  }
+  .berkeley-hero h1 { margin: 0 0 10px 0; font-size: 30px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; font-family: 'Source Serif 4', serif; }
+  .berkeley-hero h1 span { color: #FDB515; }
+  .berkeley-hero p { margin: 0 0 24px 0; opacity: 0.9; font-size: 15px; max-width: 800px; }
+
+  /*  英雄橫幅右上角 Logo */
+  .hero-logo {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    height: 84px;
+    width: auto;
+    max-width: 30%;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+    pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .hero-logo { height: 60px; top: 16px; right: 16px; }
+    .berkeley-hero { padding-right: 96px; }
+  }
+
+  /*  按鈕系統 */
+  .button-row {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; gap: 10px;
+    padding: 12px 0; margin: 0 0 8px 0;
+    background: var(--c-navy);
+    border-bottom: 3px solid var(--c-gold);
+    backdrop-filter: saturate(140%);
+  }
+  .button-row a {
+    font-size: 13px; padding: 8px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,255,255,.18);
+    text-decoration: none; transition: all .15s; white-space: nowrap;
+  }
+  .button-row a:hover { background: var(--c-gold); color: var(--c-navy); border-color: var(--c-gold); }
+  .button-row a:focus-visible { outline: 2px solid var(--c-gold); outline-offset: 2px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s ease-in-out; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: #FDB515; color: #003262; }
+  .btn-primary:hover { background: #fec33d; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(253, 181, 21, 0.3); }
+  .btn-outline { background: rgba(255, 255, 255, 0.1); color: #ffffff; border-color: rgba(255, 255, 255, 0.3); }
+  .btn-outline:hover { background: rgba(255, 255, 255, 0.2); border-color: #FDB515; transform: translateY(-2px); }
+
+  /*  狀態標籤列 */
+  .badge-bar { margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge { display: inline-block; padding: 6px 14px; border-radius: 6px; background: rgba(0, 50, 98, 0.05); color: #003262; font-weight: 600; font-size: 13px; border: 1px solid rgba(0, 50, 98, 0.1); }
+  .badge i { margin-right: 4px; color: #FDB515; }
+
+  /*  最新公告 (Announcements) */
+  .announcement-section { background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; }
+  .announcement-section h2 { font-size: 18px; color: #003262; margin: 0 0 16px 0; display: flex; align-items: center; gap: 10px; font-family: 'Source Serif 4', serif; }
+  .announcement-item { display: flex; gap: 16px; align-items: flex-start; padding: 16px 0; border-bottom: 1px dashed #e2e8f0; }
+  .announcement-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .date-badge { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .announcement-content { flex-grow: 1; font-size: 14.5px; color: #334155; }
+  .tag-urgent { background: #fee2e2; color: #e11d48; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+  .tag-info { background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+
+  /*  完美九宮格 (Grid 3x3) */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 24px; }
+
+  .card { background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.25s ease; position: relative; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 50, 98, 0.08); border-color: rgba(0, 50, 98, 0.2); }
+  .card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #003262; border-radius: 12px 12px 0 0; transition: background 0.25s; }
+  .card:hover::before { background: #FDB515; }
+
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 18px; font-weight: 700; color: #003262; font-family: 'Source Serif 4', serif; }
+  .icon-box { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; background: rgba(0, 50, 98, 0.05); color: #003262; font-size: 16px; }
+
+  .card ul { margin: 0 0 20px 0; padding-left: 18px; list-style-type: square; }
+  .card li { margin: 8px 0; font-size: 14px; color: #475569; }
+
+  .card-links { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+  .mini-btn { display: inline-flex; align-items: center; justify-content: space-between; text-decoration: none; background: #f8fafc; color: #003262; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; transition: all 0.2s ease; }
+  .mini-btn:hover { background: rgba(0, 50, 98, 0.05); border-color: #003262; }
+  .mini-btn-primary { background: rgba(253, 181, 21, 0.1); color: #b47b00; border-color: rgba(253, 181, 21, 0.3); }
+  .mini-btn-primary:hover { background: #FDB515; color: #003262; border-color: #FDB515; }
+  /* 尚未開放的連結佔位樣式 */
+  .mini-btn.pending { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+  .mini-btn.pending .pending-tag { font-size: 10px; background: #e2e8f0; color: #64748b; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+
+  /*  雙軌並列排程 */
+  .schedule-section { background: #ffffff; border-radius: 12px; padding: 28px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; }
+  .schedule-section h2 { font-size: 20px; color: #003262; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; font-family: 'Source Serif 4', serif; }
+
+  .dual-track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .track-box { border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+  .track-header { background: rgba(0, 50, 98, 0.03); padding: 16px; border-bottom: 2px solid #003262; font-weight: 700; color: #003262; text-align: center; }
+  .track-header.deliverable { border-bottom-color: #FDB515; background: rgba(253, 181, 21, 0.05); color: #b47b00; }
+
+  .track-list { list-style: none; margin: 0; padding: 0; }
+  .track-list li { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px dashed #e2e8f0; font-size: 14px; color: #334155; }
+  .track-list li:last-child { border-bottom: none; }
+  .week-badge { background: #003262; color: #ffffff; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+  .deliverable .week-badge { background: #FDB515; color: #003262; }
+
+  /*  底部公告與版權 */
+  .notice-box { padding: 20px; border-radius: 10px; background: rgba(0, 50, 98, 0.03); border-left: 4px solid #003262; font-size: 14px; color: #334155; margin-bottom: 20px; }
+  .footer-credit { text-align: center; margin-top: 30px; font-size: 12px; color: #94a3b8; }
+
+  /* 響應式調整 */
+  @media (max-width: 900px) {
+    .dual-track-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+    .announcement-item { flex-direction: column; gap: 8px; }
+    .berkeley-hero { padding: 28px 24px; }
+    .berkeley-hero h1 { font-size: 24px; }
+  }
+
+  /*  Consulting Time 內嵌表單  */
+  .ct-form {
+    margin-top: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 460px;
+  }
+  .ct-row { display: flex; flex-direction: column; gap: 4px; }
+  .ct-row label { font-size: 13px; font-weight: 600; color: #003262; }
+  .ct-row .req { color: #e11d48; }
+  .ct-form input, .ct-form select, .ct-form textarea {
+    font-family: inherit; font-size: 14px; padding: 9px 11px;
+    border: 1px solid #cbd5e1; border-radius: 7px; background: #fff; color: #334155;
+    width: 100%; resize: vertical;
+  }
+  .ct-form input:focus, .ct-form select:focus, .ct-form textarea:focus {
+    outline: 2px solid #FDB515; outline-offset: 1px; border-color: #003262;
+  }
+  .ct-submit {
+    align-self: flex-start; margin-top: 2px;
+    background: #FDB515; color: #003262; border: none; border-radius: 8px;
+    padding: 10px 20px; font-weight: 700; font-size: 14px; cursor: pointer;
+    font-family: inherit; transition: background 0.2s;
+  }
+  .ct-submit:hover:not(:disabled) { background: #fec33d; }
+  .ct-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+  .ct-status { font-size: 13px; margin: 4px 0 0 0; min-height: 18px; }
+  .ct-status.ok { color: #15803d; font-weight: 600; }
+  .ct-status.err { color: #e11d48; font-weight: 600; }
+
+  /*  企業 ESG 線上互動健檢  */
+  .esg-check {
+    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 28px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+  .esg-check h2 { color: #003262; font-family: 'Source Serif 4', serif; font-size: 20px; margin: 0 0 8px; display: flex; align-items: center; gap: 10px; }
+  .esg-intro { font-size: 14px; color: #475569; margin: 0 0 18px; }
+  .esg-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .esg-tab {
+    border: 1px solid #003262; background: #fff; color: #003262; font-weight: 600;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px;
+    transition: all .2s;
+  }
+  .esg-tab.active { background: #003262; color: #fff; }
+  .esg-q {
+    border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;
+    background: #f8fafc;
+  }
+  .esg-q .aspect { font-size: 12px; font-weight: 700; color: #b47b00; margin-bottom: 4px; }
+  .esg-q .qtext { font-size: 14.5px; color: #334155; margin-bottom: 10px; }
+  .esg-q .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .esg-q .opts label {
+    border: 1px solid #cbd5e1; border-radius: 7px; padding: 6px 10px; font-size: 13px;
+    cursor: pointer; background: #fff; user-select: none; transition: all .15s; display: inline-block;
+  }
+  .esg-q .opts input {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .esg-q .opts input:focus-visible + span { outline: 2px solid #FDB515; outline-offset: 2px; }
+  .esg-q .opts label:has(input:checked) { background: #FDB515; border-color: #003262; color: #003262; }
+  .esg-q .opts label:has(input:checked) span { font-weight: 700; }
+  .esg-progress { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
+  .esg-progress-bar { flex: 1; height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+  .esg-progress-bar span { display: block; height: 100%; width: 0; background: #FDB515; transition: width .3s; }
+  #esgProgressText { font-size: 13px; color: #475569; white-space: nowrap; }
+  .esg-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .esg-result { margin-top: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .esg-mod-result {
+    border-left: 4px solid #003262; background: #f8fafc; border-radius: 0 10px 10px 0; padding: 16px 18px;
+  }
+  .esg-mod-result h3 { margin: 0 0 6px; color: #003262; font-size: 16px; }
+  .esg-score { font-size: 28px; font-weight: 800; color: #003262; }
+  .esg-level { display: inline-block; background: #FDB515; color: #003262; font-weight: 700; padding: 3px 12px; border-radius: 20px; font-size: 14px; margin-left: 8px; }
+  .esg-level-desc { font-size: 13.5px; color: #475569; margin-top: 6px; }
+  .esg-advice { background: #fff; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 14px 16px; font-size: 14px; color: #334155; }
+  .esg-book { background: rgba(0,50,98,0.04); border: 1px solid #003262; border-radius: 10px; padding: 16px; }
+  .esg-book h4 { margin: 0 0 8px; color: #003262; }
+
+  /*  === UI/UX 最佳實踐化 (A 層輕量優化) ===  */
+  /* 全局 focus 可見性 */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+  textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--c-gold); outline-offset: 2px;
+  }
+  /* 公告收合 */
+  .ann-toggle .ann-caret { transition: transform .2s ease; display: inline-block; }
+  .ann-toggle[aria-expanded="true"] .ann-caret { transform: rotate(90deg); }
+  .ann-body { animation: annFade .2s ease; }
+  @keyframes annFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  /* 按鈕微互動 */
+  .mini-btn, .ct-submit, .esg-tab, .esg-check .esg-actions button {
+    transition: transform .12s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .mini-btn:hover, .ct-submit:hover, .esg-tab:hover { transform: translateY(-1px); }
+  .mini-btn:active, .ct-submit:active { transform: translateY(0) scale(.98); }
+  .mini-btn-primary, .ct-submit {
+    background: var(--c-gold); color: var(--c-navy); border: none; font-weight: 700;
+    box-shadow: var(--shadow-sm);
+  }
+  .mini-btn-primary:hover, .ct-submit:hover { box-shadow: var(--shadow-md); }
+  /* 卡片 hover 抬升 */
+  .grid-item { transition: transform .15s ease, box-shadow .15s ease; }
+  .grid-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  /* 區塊標題統一字號 */
+  section > h2, .announcement-section h2 { scroll-margin-top: 64px; }
+  /* 響應式：九宮格 / 表單 / 健檢 */
+  @media (max-width: 768px) {
+    .button-row { gap: 8px; padding: 10px 0; }
+    .button-row a { font-size: 12px; padding: 7px 11px; }
+    .berkeley-hero { padding: 28px 20px; }
+    .berkeley-hero h1 { font-size: 22px; }
+    .hero-logo { width: 120px; height: auto; opacity: .12; }
+    .grid { grid-template-columns: 1fr; }
+    .esg-q .opts label { font-size: 12px; padding: 5px 8px; }
+    .announcement-content { font-size: 14px; }
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* 語言切換開關 */
+  .lang-switch { display: inline-flex; gap: 4px; margin: 14px 0 4px; }
+  .lang-switch button {
+    font: 600 13px var(--font-sans); padding: 5px 12px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08);
+    color: #fff; cursor: pointer; transition: all .15s;
+  }
+  .lang-switch button:hover { background: rgba(255,255,255,.2); }
+  .lang-switch button.active { background: var(--c-gold); color: var(--c-navy); border-color: var(--c-gold); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--c-gold); outline-offset: 2px; }
+  @media (max-width: 768px) { .lang-switch button { padding: 4px 9px; font-size: 12px; } }
+
+  /* ============ 高質感升級 (B 層) ============ */
+  html { scroll-behavior: smooth; }
+  body { font-feature-settings: "cv11","ss01"; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  /* Hero 重製：海軍藍漸層 + 金色光暈 + 網點紋理 */
+  .hero {
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(253,181,21,.18), transparent 60%),
+      radial-gradient(800px 600px at 10% 120%, rgba(0,50,98,.55), transparent 55%),
+      linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-deep) 55%, #012a52 100%);
+    color: #fff;
+  }
+  .hero::before {
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.4px);
+    background-size: 18px 18px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.6), transparent 70%);
+  }
+  .hero .container, .hero-logo { position: relative; z-index: 1; }
+  .berkeley-hero h1 {
+    font-family: var(--font-serif);
+    font-weight: 600; letter-spacing: .5px; line-height: 1.18;
+    font-size: clamp(26px, 4vw, 42px);
+    margin: 0 0 var(--space-4);
+    background: linear-gradient(180deg, #ffffff 60%, #ffe9b8 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .berkeley-hero p {
+    color: rgba(255,255,255,.82); max-width: 640px; font-size: 16px; line-height: 1.7;
+  }
+  .hero-accent {
+    width: 64px; height: 4px; border-radius: 4px; margin: 0 0 var(--space-5);
+    background: linear-gradient(90deg, var(--c-gold), #ffd97a);
+    box-shadow: 0 0 18px rgba(253,181,21,.5);
+  }
+
+  /* sticky nav 半透明毛玻璃 */
+  .button-row.sticky {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border-bottom: 1px solid var(--c-line);
+    box-shadow: 0 2px 12px rgba(0,50,98,.06);
+    padding: 12px 16px;
+  }
+  .button-row.sticky a {
+    font-weight: 500; border: 1px solid var(--c-line); background:#fff; color: var(--c-ink);
+    border-radius: 999px; padding: 8px 16px; transition: all .2s ease;
+  }
+  .button-row.sticky a:hover { background: var(--c-navy); color:#fff; border-color: var(--c-navy); transform: translateY(-1px); }
+
+  /* section 錨點 offset（避免 sticky nav 遮擋） */
+  section[id], div[id="schedule"], div[id="esgCheckModal"] { scroll-margin-top: 80px; }
+
+  /* 卡片層次強化 */
+  .mini-card {
+    opacity: 0; transform: translateY(18px);
+    transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease, border-color .25s ease, opacity .6s ease;
+    border: 1px solid var(--c-line);
+  }
+  .mini-card.in { opacity: 1; transform: none; }
+  .mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -12px rgba(0,50,98,.22);
+    border-color: rgba(253,181,21,.5);
+  }
+  .icon-box {
+    background: linear-gradient(135deg, rgba(0,50,98,.08), rgba(253,181,21,.12));
+    border: 1px solid rgba(0,50,98,.08);
+    transition: transform .3s ease;
+  }
+  .mini-card:hover .icon-box { transform: scale(1.06) rotate(-2deg); }
+  .card-header { letter-spacing: .3px; }
+
+  /* 主按鈕金色漸層 */
+  .mini-btn-primary {
+    background: linear-gradient(135deg, var(--c-gold), #ffcf5e);
+    color: var(--c-navy); border-color: transparent; font-weight: 600;
+    box-shadow: 0 6px 16px -6px rgba(253,181,21,.6);
+  }
+  .mini-btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 24px -8px rgba(253,181,21,.7); transform: translateY(-1px); }
+
+  /* 公告左側金色 accent */
+  .announcement-item { position: relative; padding-left: 16px; border-left: 3px solid var(--c-gold); border-radius: 0 8px 8px 0; background: #fffdf7; }
+
+  /* 進場動畫初始態 */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* 雙軌表格細膩化 */
+  .sched-table th { background: linear-gradient(135deg, var(--c-navy), var(--c-navy-deep)); color:#fff; letter-spacing:.4px; }
+  .sched-table tr:nth-child(even) td { background: #f8fafc; }
+  .sched-table td, .sched-table th { border-color: var(--c-line); }
+
+  /* 尊重 reduce-motion 偏好（前庭症候群無障礙） */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+    .reveal, .mini-card { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<a href="#main" class="skip-link">跳至主要內容</a>
+
+<div class="portal-wrapper">
+  <div class="berkeley-container" id="main">
+
+    <!--  英雄橫幅 (Hero) -->
+    <header class="berkeley-hero">
+      <img class="hero-logo" src="https://berkeley-portal-deploy.vercel.app/logo.png" alt="課程學習中心 Logo" width="212" height="300">
+      <h1 data-i18n="2026 Berkeley國際永續策略人才培訓課程">2026 Berkeley國際永續策略人才培訓課程</h1>
+      <div class="hero-accent"></div>
+      <p>一站式入口平台｜整合 Berkeley Haas 永續策略創新、TSISDA 與台灣尤努斯基金會在地轉型實務模組，提供學員、TA、導師最完整的線上學習協作網絡。</p>
+      <div class="lang-switch" role="group" aria-label="語言切換 / Language">
+        <button type="button" data-lang="zh-Hant" class="active">繁</button>
+        <button type="button" data-lang="zh-Hans">簡</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+
+      <nav class="button-row sticky" aria-label="主要功能">
+        <a class="btn btn-primary" href="#online-course"><i class="fa-solid fa-laptop-file" aria-hidden="true"></i> <span data-i18n="進入線上課程">進入線上課程</span></a>
+        <a class="btn btn-outline" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-user-graduate" aria-hidden="true"></i> <span data-i18n="學員雲端共享">學員雲端共享</span></a>
+        <a class="btn btn-outline" href="#tools"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> <span data-i18n="支援與工具">支援與工具</span></a>
+      </nav>
+    </header>
+
+    <!--  狀態標籤列 -->
+    <div class="badge-bar">
+      <div class="badge"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> <span data-i18n="週六主課程 (08:00-12:00)">週六主課程 (08:00-12:00)</span></div>
+      <div class="badge"><i class="fa-solid fa-comments" aria-hidden="true"></i> <span data-i18n="週日 Consulting Lab">週日 Consulting Lab</span></div>
+      <div class="badge"><i class="fa-solid fa-language" aria-hidden="true"></i> <span data-i18n="AI 即時同步翻譯">AI 即時同步翻譯</span></div>
+      <div class="badge"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> <span data-i18n="課後 Replay 複習庫">課後 Replay 複習庫</span></div>
+      <div class="badge"><i class="fa-solid fa-certificate" aria-hidden="true"></i> <span data-i18n="雙證資格審查 (出席率 80%)">雙證資格審查 (出席率 80%)</span></div>
+    </div>
+
+    <!--  最新公告區 (Announcements) -->
+    <section class="announcement-section" aria-labelledby="ann-title">
+      <h2 id="ann-title" class="ann-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="annBody" style="cursor:pointer;user-select:none;">
+        <i class="fa-solid fa-bullhorn" style="color: #FDB515;" aria-hidden="true"></i>
+        <span data-i18n="最新公告 (Announcements)">最新公告 (Announcements)</span>
+        <i class="fa-solid fa-chevron-right ann-caret" aria-hidden="true" style="margin-left:8px;font-size:13px;transition:transform .2s;"></i>
+      </h2>
+
+      <div id="annBody" class="ann-body" hidden>
+        <div class="date-badge">2026/07/07</div>
+        <div class="announcement-content">
+          <span class="tag-urgent" data-i18n="重要行動">重要行動</span>
+          <strong data-i18n="[填寫預約表單]">[填寫預約表單]</strong> 請各位學員於本週五 (07/10) 中午 12:00 前，點擊下方按鈕至 Google 表單填寫您偏好的 <strong data-i18n="Consulting Time (週日顧問諮詢時段)">Consulting Time (週日顧問諮詢時段)</strong>，以便服務中心為您安排專屬產學 Mentor 導師。
+          <div style="margin-top: 12px;">
+            <button type="button" id="ctToggleBtn" class="mini-btn mini-btn-primary" style="display: inline-flex; width: fit-content; padding: 8px 16px; cursor: pointer; font-family: inherit;">
+              <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 填寫 Consulting Time 意願表單
+            </button>
+            <form id="consultingForm" class="ct-form" hidden>
+              <div class="ct-row">
+                <label for="ctName"><span data-i18n="姓名">姓名</span> <span class="req">*</span></label>
+                <input type="text" id="ctName" name="name" required maxlength="40" placeholder="您的姓名" data-i18n-ph="您的姓名">
+              </div>
+              <div class="ct-row">
+                <label for="ctEmail"><span data-i18n="Email">Email</span> <span class="req">*</span></label>
+                <input type="email" id="ctEmail" name="email" required maxlength="80" placeholder="學員註冊信箱" data-i18n-ph="學員註冊信箱">
+              </div>
+              <div class="ct-row">
+                <label for="ctSlot"><span data-i18n="偏好顧問時段">偏好顧問時段</span> <span class="req">*</span></label>
+                <select id="ctSlot" name="slot" required>
+                  <option value="" disabled selected data-i18n="請選擇週日 Consulting Lab 時段與組別">請選擇週日 Consulting Lab 時段與組別</option>
+                  <optgroup label="週日 09:00–10:00" data-i18n-group="週日 09:00–10:00">
+                    <option value="09:00-10:00｜轉型實務組(A)" data-i18n="A. 轉型實務組">A. 轉型實務組</option>
+                    <option value="09:00-10:00｜策略創新組(B)" data-i18n="B. 策略創新組">B. 策略創新組</option>
+                  </optgroup>
+                  <optgroup label="週日 10:00–11:00" data-i18n-group="週日 10:00–11:00">
+                    <option value="10:00-11:00｜轉型實務組(A)" data-i18n="A. 轉型實務組">A. 轉型實務組</option>
+                    <option value="10:00-11:00｜策略創新組(B)" data-i18n="B. 策略創新組">B. 策略創新組</option>
+                  </optgroup>
+                  <option value="彈性 / 待協調" data-i18n="彈性 / 待協調">彈性 / 待協調</option>
+                </select>
+              </div>
+              <div class="ct-row">
+                <label for="ctNote"><span data-i18n="備註 / 想討論的主題">備註 / 想討論的主題</span></label>
+                <textarea id="ctNote" name="note" rows="2" maxlength="300" placeholder="選填：您的產業、關心的 ESG 議題或希望 Mentor 協助的方向" data-i18n-ph="選填：您的產業、關心的 ESG 議題或希望 Mentor 協助的方向"></textarea>
+              </div>
+              <button type="submit" id="ctSubmit" class="ct-submit">送出意願 <i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>
+              <p id="ctStatus" class="ct-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="announcement-item">
+        <div class="date-badge">2026/07/05</div>
+        <div class="announcement-content">
+          <span class="tag-info" data-i18n="系統通知">系統通知</span>
+          <strong data-i18n="[權限開通]">[權限開通]</strong> 2026 學年度線上 Live 教室入口與學員專區 Google Drive 皆已全數部署完畢。請留意您註冊信箱是否收到權限開通邀請。
+        </div>
+      </div>
+      </div><!-- /annBody -->
+    </section>
+
+    <!--  完美九宮格 (MECE 3x3 Grid) -->
+    <div class="grid">
+
+      <!-- 1. 課程資訊大綱 -->
+      <div class="card" id="course">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div><span data-i18n="課程資訊大綱">課程資訊大綱</span></div>
+        <ul>
+          <li><strong>目標：</strong> 合規底盤與創價轉型。</li>
+          <li><strong>架構：</strong> 6 週 / 72 小時高密度設計。</li>
+          <li><strong>時程：</strong> 週六主課　週日顧問諮詢。</li>
+          <li><strong>修業：</strong> 出席率 80% 可獲官方雙證書。</li>
+          <li>包含重大性分析與數據治理。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="#schedule"><span data-i18n="查閱雙軌並列排程">查閱雙軌並列排程 </span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 2. 線上課程大廳 -->
+      <div class="card highlight-card" id="online-course">
+        <div class="card-header"><div class="icon-box" style="background:rgba(253,181,21,0.1); color:#b47b00;"><i class="fa-solid fa-laptop-file" aria-hidden="true"></i></div><span data-i18n="線上課程大廳">線上課程大廳</span></div>
+        <ul>
+          <li><strong>週六主課程：</strong> 線上 Live 學習同步口譯。</li>
+          <li><strong>週日諮詢：</strong> Mentor Office Hours 輔導。</li>
+          <li><strong>專題研討：</strong> 策略創新房 &amp; 轉型實務房。</li>
+          <li><strong>課堂常規：</strong> 線上互動、改名與驗證。</li>
+          <li>提供全線上與混合軌道交付彈性。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn mini-btn-primary" href="http://berkeley.esgsunshine.com/esg-program" target="_blank" rel="noopener"><span data-i18n="進入線上 Live 教室">進入線上 Live 教室 </span><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i></a>
+          <a class="mini-btn" href="http://berkeley.esgsunshine.com/ConsultingLab" target="_blank" rel="noopener"><span data-i18n="進入 Office-Hour 諮詢室">進入 Office-Hour 諮詢室 </span><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 3. 學員共享雲端 -->
+      <div class="card" id="student">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></div><span data-i18n="學員共享雲端">學員共享雲端</span></div>
+        <ul>
+          <li>2026 最新官方學員手冊。</li>
+          <li>Cohort Summer 通訊名單。</li>
+          <li>開課正式通知與每週提醒信。</li>
+          <li>每週課堂精華包與補充閱讀。</li>
+          <li>學員反思筆記與個人矩陣模板。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><span data-i18n="打開學員 Google Drive">打開學員 Google Drive </span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 4. 課堂教材資產 -->
+      <div class="card">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i></div><span data-i18n="課堂教材資產">課堂教材資產</span></div>
+        <ul>
+          <li>Berkeley 教授簡報原始 PDF。</li>
+          <li>在地實務模組操作手冊。</li>
+          <li>協作公版素材與簡報框架。</li>
+          <li>線上課程 / 協作中心虛擬背景。</li>
+          <li>精選隨堂問答整理與 FAQ 庫。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><span data-i18n="進入教材數據資產庫">進入教材數據資產庫 </span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 5. 作業成果提交 -->
+      <div class="card">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i></div><span data-i18n="作業成果提交">作業成果提交</span></div>
+        <ul>
+          <li><strong>每週要求：</strong> 反思筆記與階段成果。</li>
+          <li><strong>最終 Capstone：</strong> 永續執行矩陣。</li>
+          <li><strong>規格：</strong> PDF 格式與指定命名原則。</li>
+          <li><strong>反饋：</strong> 產學 Mentor 與助教回饋。</li>
+          <li>嚴格追蹤各階段截止時間點。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><span data-i18n="提交每週矩陣成果">提交每週矩陣成果 </span><i class="fa-solid fa-upload" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 6. 線上回放複習 -->
+      <div class="card">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-photo-film" aria-hidden="true"></i></div><span data-i18n="線上回放複習">線上回放複習</span></div>
+        <ul>
+          <li>週六主課程全程錄影剪輯。</li>
+          <li>週日精選諮詢與小組討論存檔。</li>
+          <li><strong>安全性：</strong> 觀看權限與加密密碼。</li>
+          <li><strong>時效：</strong> 本學年度全程保留回放。</li>
+          <li>課後精簡核心筆記與技術要點。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><span data-i18n="前往視訊重播資源庫">前往視訊重播資源庫 </span><i class="fa-solid fa-play" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 7. 技術支援與工具 -->
+      <div class="card" id="tools">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-headset" aria-hidden="true"></i></div><span data-i18n="技術支援與工具">技術支援與工具</span></div>
+        <ul>
+          <li>AI 即時同步翻譯工具設定指南。</li>
+          <li>AnyDesk 遠端桌面控制工具下載。</li>
+          <li><strong>隱私傳輸：</strong> 企業敏感數據專屬通道。</li>
+          <li>遠距連線異常快速排除手冊。</li>
+          <li>即時串流與聲音異常排除聯絡。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://www.wenshushu.cn/" target="_blank" rel="noopener"><span data-i18n="企業高隱私傳輸 (文叔叔)">企業高隱私傳輸 (文叔叔) </span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></a>
+          <a class="mini-btn" href="https://anydesk.com/zht/downloads" target="_blank" rel="noopener"><span data-i18n="下載遠端支持工具 (AnyDesk)">下載遠端支持工具 (AnyDesk) </span><i class="fa-solid fa-download" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 8. TA 助教專區 -->
+      <div class="card" id="ta">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-users-gear" aria-hidden="true"></i></div><span data-i18n="TA 助教專區">TA 助教專區</span></div>
+        <ul>
+          <li>線上課程主持口條、收場引導流程。</li>
+          <li>AI 翻譯平台與錄影權限管理。</li>
+          <li>助教每週排班、點名與催交規範。</li>
+          <li>行政庶務與突發危機呈報流程。</li>
+          <li>學員永續矩陣作業初審對照表。</li>
+        </ul>
+        <div class="card-links">
+          <a class="mini-btn" href="https://drive.google.com/drive/folders/1t6xfU6CmMXRwm8r828H2nuEsQxgWvhJv?usp=drive_link" target="_blank" rel="noopener"><span data-i18n="進入 TA 管理控制台">進入 TA 管理控制台 </span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <!-- 9. 企業健檢與影響力專案 (壓軸第九格) -->
+      <div class="card">
+        <div class="card-header"><div class="icon-box"><i class="fa-solid fa-handshake-angle" aria-hidden="true"></i></div><span data-i18n="企業健檢與影響力">企業健檢與影響力</span></div>
+        <ul>
+          <li>高階企業 ESG 健檢與診斷服務。</li>
+          <li>一對一永續轉型顧問客製化建議。</li>
+          <li>社會影響力專案 (ESG Sunshine) 對接。</li>
+          <li>協助企業梳理產學資源與政府補助。</li>
+          <li>建構企業永續策略藍圖實地延伸。</li>
+        </ul>
+        <div class="card-links">
+          <button type="button" id="esgStartBtn" class="mini-btn mini-btn-primary" style="cursor:pointer;font-family:inherit;"><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> <span data-i18n="開始線上 ESG 健檢">開始線上 ESG 健檢</span></button>
+          <a class="mini-btn" href="https://www.esgsunshine.com" target="_blank" rel="noopener"><span data-i18n="了解 ESG Sunshine 專案">了解 ESG Sunshine 專案</span> <i class="fa-solid fa-seedling" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <!--  企業 ESG 線上互動健檢  -->
+    <section id="esgCheck" class="esg-check" hidden aria-labelledby="esgCheckTitle">
+      <h2 id="esgCheckTitle"><i class="fa-solid fa-clipboard-check" style="color:#FDB515;"></i> <span data-i18n="企業 ESG 線上健檢（3 模組 / 54 題）">企業 ESG 線上健檢（3 模組 / 54 題）</span></h2>
+      <p class="esg-intro"><span data-i18n="依據「永續健檢-合規創價策略藍圖」題庫設計。每題 0–4 分，各模組滿分 72 分。填完即時判讀成熟度，並可預約顧問進一步診斷。">依據「永續健檢-合規創價策略藍圖」題庫設計。每題 0–4 分，各模組滿分 72 分。填完即時判讀成熟度，並可預約顧問進一步診斷。</span></p>
+
+      <div class="esg-tabs" role="tablist">
+        <button class="esg-tab active" data-mod="0" role="tab"><span data-i18n="① 一般組織基礎">① 一般組織基礎</span></button>
+        <button class="esg-tab" data-mod="1" role="tab"><span data-i18n="② 創價型 ESG">② 創價型 ESG</span></button>
+        <button class="esg-tab" data-mod="2" role="tab"><span data-i18n="③ 藍圖準備度">③ 藍圖準備度</span></button>
+      </div>
+
+      <div id="esgQuestions" class="esg-questions"></div>
+
+      <div class="esg-progress">
+        <div class="esg-progress-bar"><span id="esgProgressFill"></span></div>
+        <span id="esgProgressText">已答 0 / 54</span>
+      </div>
+
+      <div class="esg-actions">
+        <button type="button" id="esgSubmit" class="ct-submit" disabled><span data-i18n="查看健檢結果">查看健檢結果</span> <i class="fa-solid fa-chart-line" aria-hidden="true"></i></button>
+        <button type="button" id="esgReset" class="mini-btn" style="font-family:inherit;"><span data-i18n="清空重填">清空重填</span></button>
+      </div>
+
+      <div id="esgResult" class="esg-result" hidden></div>
+    </section>
+
+<!--  雙軌並列排程 -->
+    <section class="schedule-section" id="schedule" aria-labelledby="sched-title">
+      <h2 id="sched-title"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> <span data-i18n="6週核心培力：雙軌並列排程對照">6週核心培力：雙軌並列排程對照</span></h2>
+
+      <div class="dual-track-grid">
+
+        <!-- 左軌：Lecture Syllabus -->
+        <div class="track-box">
+          <div class="track-header">
+            <i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> <span data-i18n="6週 Lecture Syllabus 主題">6週 Lecture Syllabus 主題</span>
+          </div>
+          <ul class="track-list">
+            <li><span class="week-badge">W1</span> <div><span data-i18n="Purpose-Driven Strategy, Stakeholder &amp; Materiality">Purpose-Driven Strategy, Stakeholder &amp; Materiality</span></div></li>
+            <li><span class="week-badge">W2</span> <div><span data-i18n="Strategy Architecture &amp; KPI Alignment">Strategy Architecture &amp; KPI Alignment</span></div></li>
+            <li><span class="week-badge">W3</span> <div><span data-i18n="Innovation Matrix &amp; ESG Project Portfolio">Innovation Matrix &amp; ESG Project Portfolio</span></div></li>
+            <li><span class="week-badge">W4</span> <div><span data-i18n="Ecosystem Platform Strategy &amp; Impact Modeling">Ecosystem Platform Strategy &amp; Impact Modeling</span></div></li>
+            <li><span class="week-badge">W5</span> <div><span data-i18n="Dashboard Blueprint &amp; Data Architecture">Dashboard Blueprint &amp; Data Architecture</span></div></li>
+            <li><span class="week-badge">W6</span> <div><span data-i18n="Governance System, Budgeting &amp; Strategic Rhythm">Governance System, Budgeting &amp; Strategic Rhythm</span></div></li>
+          </ul>
+        </div>
+
+        <!-- 右軌：Consulting Time Deliverables -->
+        <div class="track-box deliverable">
+          <div class="track-header deliverable">
+            <i class="fa-solid fa-file-signature" aria-hidden="true"></i> <span data-i18n="6週 Consulting Time 交付成果">6週 Consulting Time 交付成果</span>
+          </div>
+          <ul class="track-list deliverable">
+            <li><span class="week-badge">W1</span> <div><span data-i18n="組織永續戰略挑戰陳述書草案">組織永續戰略挑戰陳述書草案</span></div></li>
+            <li><span class="week-badge">W2</span> <div><span data-i18n="重大性矩陣與治理擁有者地圖初稿">重大性矩陣與治理擁有者地圖初稿</span></div></li>
+            <li><span class="week-badge">W3</span> <div><span data-i18n="ESG 能力缺口評估與變革準備度盤點">ESG 能力缺口評估與變革準備度盤點</span></div></li>
+            <li><span class="week-badge">W4</span> <div><span data-i18n="ESG 創新原型概念與循環經濟機會掃描">ESG 創新原型概念與循環經濟機會掃描</span></div></li>
+            <li><span class="week-badge">W5</span> <div><span data-i18n="導入 Owners / Metrics / Milestones 執行矩陣 V2">導入 Owners / Metrics / Milestones 執行矩陣 V2</span></div></li>
+            <li><span class="week-badge">W6</span> <div><span data-i18n="最終永續執行矩陣 (Final Matrix) 與溝通計畫">最終永續執行矩陣 (Final Matrix) 與溝通計畫</span></div></li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!--  底部公告公約 -->
+    <div class="notice-box">
+      <strong data-i18n="一站式綜效公約：">一站式綜效公約：</strong><br>
+      <span data-i18n="本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。">本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。</span>
+    </div>
+
+    <footer class="footer-credit">
+      <span data-i18n="製作依據：(繁中)2026 BerkeleyESG課程簡報簡章.pdf 及 2026年Berkeley ESG學員手冊 | 2026 Berkeley ESG Strategy &amp; Innovation Program">製作依據：(繁中)2026 BerkeleyESG課程簡報簡章.pdf 及 2026年Berkeley ESG學員手冊 | 2026 Berkeley ESG Strategy &amp; Innovation Program</span>
+    </footer>
+
+  </div>
+</div>
+
+
+
+  <script src="i18n.js"></script>
+
+  <script>
+  (function(){
+    var bar = document.querySelector(".lang-switch");
+    if (!bar) return;
+    bar.addEventListener("click", function(e){
+      var b = e.target.closest("button[data-lang]");
+      if (!b) return;
+      window.__applyLang(b.dataset.lang);
+    });
+  })();
+  </script>
+
+
+  <script>
+  (function () {
+    var t = document.querySelector('.ann-toggle');
+    var b = document.getElementById('annBody');
+    if (t && b) {
+      function toggle() {
+        var open = !b.hidden;
+        b.hidden = open;
+        t.setAttribute('aria-expanded', String(!open));
+      }
+      t.addEventListener('click', toggle);
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    }
+  })();
+  </script>
+
+  <!--  Consulting Time 表單邏輯  -->
+  <script>
+  (function () {
+    var TOGGLE = "https://script.google.com/macros/s/AKfycbyLL7McIyODKb1TmSYau8kwX-vZsTp2eADofcKd7J2f5ri7qvyOJxY-ofcPA-pQk9kRHQ/exec"; // Consulting Time 接收端 (clasp 部署 @4)
+    var btn = document.getElementById("ctToggleBtn");
+    var form = document.getElementById("consultingForm");
+    var status = document.getElementById("ctStatus");
+    var submit = document.getElementById("ctSubmit");
+
+    btn.addEventListener("click", function () {
+      form.hidden = !form.hidden;
+      if (!form.hidden) document.getElementById("ctName").focus();
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      status.textContent = ""; status.className = "ct-status";
+      if (!TOGGLE || TOGGLE.indexOf("YOUR_APPS_SCRIPT_ID") !== -1) {
+        status.textContent = window.__i18nT("表單尚未啟用：管理員還在設定接收端，請稍後再試或直接來信。", "Form not yet active: the admin is still setting up the receiver. Please retry later or email us.");
+        status.className = "ct-status err";
+        return;
+      }
+      var data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        slot: form.slot.value,
+        note: form.note.value.trim(),
+        ts: new Date().toISOString()
+      };
+      submit.disabled = true;
+      status.textContent = window.__i18nT("送出中…", "Sending…");
+      fetch(TOGGLE, {
+        method: "POST",
+        mode: "no-cors",
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).then(function () {
+        status.textContent = window.__i18nT("✅ 已收到您的 Consulting Time 意願，服務中心將盡快為您安排 Mentor。", "✅ We received your Consulting Time preference; the center will arrange a Mentor soon.");
+        status.className = "ct-status ok";
+        form.reset();
+        setTimeout(function () { form.hidden = true; }, 4000);
+      }).catch(function () {
+        status.textContent = window.__i18nT("❌ 送出失敗，請檢查網路後重試，或直接來信報名。", "❌ Submission failed. Check your network and retry, or email us to register.");
+        status.className = "ct-status err";
+      }).finally(function () { submit.disabled = false; });
+    });
+  })();
+  </script>
+
+  <!--  企業 ESG 線上健檢邏輯  -->
+  <script>
+  (function () {
+    var CHECKLIST = {"maxPerQ": 4, "maxTotal": 72, "levels": [{"min": 0, "max": 18, "name": "起步期", "desc": "尚未建立 ESG 管理底盤", "desc_en": "No ESG management foundation established yet."}, {"min": 19, "max": 36, "name": "建置期", "desc": "已有部分作法，需制度化", "desc_en": "Some practices exist; needs institutionalization."}, {"min": 37, "max": 54, "name": "管理期", "desc": "已有管理能力，可進一步做策略整合", "desc_en": "Management capability in place; ready for strategy integration."}, {"min": 55, "max": 72, "name": "策略期", "desc": "可導入較完整的創價與藍圖流程", "desc_en": "Ready to adopt a more complete value-creation and blueprint process."}], "modules": [{"key": "basic", "title": "一般組織 ESG 基礎健檢", "goal": "判斷治理、合規、資料、制度等 ESG 基本體質", "questions": [{"n": 1, "aspect": "治理與責任", "q": "您的組織是否已有明確的 ESG 或永續負責人／負責單位？", "qe": "Does your organization have a clear ESG / sustainability owner or responsible unit?", "aspect_en": "Governance & Accountability"}, {"n": 2, "aspect": "治理與責任", "q": "高階主管是否會定期關注 ESG、永續、社會責任或相關風險議題？", "qe": "Do senior executives regularly engage with ESG, sustainability, social responsibility, or related risk topics?", "aspect_en": "Governance & Accountability"}, {"n": 3, "aspect": "治理與責任", "q": "ESG 相關工作目前是否已有跨部門協作機制，而不只是單一人員處理？", "qe": "Is there already a cross-functional collaboration mechanism for ESG work, rather than a single person handling it?", "aspect_en": "Governance & Accountability"}, {"n": 4, "aspect": "合規與外部要求", "q": "您是否清楚目前組織面對的 ESG 外部要求，例如客戶要求、供應鏈要求、揭露要求或政府政策？", "qe": "Are you clear about the external ESG requirements your organization faces (e.g., customer, supply-chain, disclosure, or government policy requirements)?", "aspect_en": "Compliance & External Requirements"}, {"n": 5, "aspect": "合規與外部要求", "q": "您的組織是否曾回覆過客戶 ESG 問卷、供應鏈稽核或永續揭露相關需求？", "qe": "Has your organization ever responded to customer ESG questionnaires, supply-chain audits, or sustainability disclosure requests?", "aspect_en": "Compliance & External Requirements"}, {"n": 6, "aspect": "合規與外部要求", "q": "您的組織是否已有基礎政策或規範，例如誠信經營、人權、職安、供應商要求等？", "qe": "Does your organization have basic policies or standards in place, such as business integrity, human rights, occupational safety, or supplier requirements?", "aspect_en": "Compliance & External Requirements"}, {"n": 7, "aspect": "環境管理基礎", "q": "您是否掌握基本環境數據，例如用電、用水、廢棄物、燃料等？", "qe": "Do you capture basic environmental data such as electricity, water, waste, and fuel consumption?", "aspect_en": "Environmental Management Basics"}, {"n": 8, "aspect": "環境管理基礎", "q": "您是否做過碳排放盤點，或至少已知道 Scope 1、2、3 的概念與邊界？", "qe": "Have you conducted a carbon inventory, or at least understand the concepts and boundaries of Scope 1, 2, and 3?", "aspect_en": "Environmental Management Basics"}, {"n": 9, "aspect": "環境管理基礎", "q": "您的組織是否曾推動過具體的節能、減碳、減廢或資源效率改善行動？", "qe": "Has your organization implemented concrete energy-saving, decarbonization, waste-reduction, or resource-efficiency initiatives?", "aspect_en": "Environmental Management Basics"}, {"n": 10, "aspect": "社會與人才面", "q": "您的組織是否已有員工安全、健康、教育訓練或福祉相關制度？", "qe": "Does your organization have systems for employee safety, health, training, or wellbeing?", "aspect_en": "Social & Talent"}, {"n": 11, "aspect": "社會與人才面", "q": "您是否追蹤人才相關指標，例如流動率、培訓時數、職災事件、滿意度等？", "qe": "Do you track talent-related metrics such as turnover, training hours, occupational incidents, or satisfaction?", "aspect_en": "Social & Talent"}, {"n": 12, "aspect": "社會與人才面", "q": "您的組織是否有處理申訴、職場平等、反歧視或 DEI 相關機制？", "qe": "Does your organization have mechanisms for grievances, workplace equality, anti-discrimination, or DEI (diversity, equity, inclusion)?", "aspect_en": "Social & Talent"}, {"n": 13, "aspect": "治理與供應鏈", "q": "您是否對供應商或合作夥伴有基本的道德、品質、法遵或 ESG 要求？", "qe": "Do you set basic ethics, quality, compliance, or ESG requirements for suppliers or partners?", "aspect_en": "Governance & Supply Chain"}, {"n": 14, "aspect": "治理與供應鏈", "q": "您是否曾辨識供應鏈風險，例如斷鏈、法規、勞動、人權或環境風險？", "qe": "Have you identified supply-chain risks such as disruption, regulatory, labor, human-rights, or environmental risks?", "aspect_en": "Governance & Supply Chain"}, {"n": 15, "aspect": "治理與供應鏈", "q": "當組織發生重大事件時，是否有通報、調查與改善機制？", "qe": "When a major incident occurs, is there a mechanism for reporting, investigation, and corrective action?", "aspect_en": "Governance & Supply Chain"}, {"n": 16, "aspect": "數據與執行能力", "q": "您是否知道主要 ESG 資料應由哪個部門蒐集、更新與保存？", "qe": "Do you know which department should collect, update, and retain the main ESG data?", "aspect_en": "Data & Execution Capability"}, {"n": 17, "aspect": "數據與執行能力", "q": "如果客戶下週要求一份 ESG 基本資料，您的組織是否能在短時間內整理出來？", "qe": "If a customer requested basic ESG information next week, could your organization compile it in a short time?", "aspect_en": "Data & Execution Capability"}, {"n": 18, "aspect": "數據與執行能力", "q": "ESG 目前是否已被納入預算、年度計畫、管理會議或主管 KPI 討論？", "qe": "Is ESG already included in budgeting, annual planning, management meetings, or executive KPI discussions?", "aspect_en": "Data & Execution Capability"}], "aspects": [{"name": "治理與責任", "questions": [{"n": 1, "q": "您的組織是否已有明確的 ESG 或永續負責人／負責單位？"}, {"n": 2, "q": "高階主管是否會定期關注 ESG、永續、社會責任或相關風險議題？"}, {"n": 3, "q": "ESG 相關工作目前是否已有跨部門協作機制，而不只是單一人員處理？"}]}, {"name": "合規與外部要求", "questions": [{"n": 4, "q": "您是否清楚目前組織面對的 ESG 外部要求，例如客戶要求、供應鏈要求、揭露要求或政府政策？"}, {"n": 5, "q": "您的組織是否曾回覆過客戶 ESG 問卷、供應鏈稽核或永續揭露相關需求？"}, {"n": 6, "q": "您的組織是否已有基礎政策或規範，例如誠信經營、人權、職安、供應商要求等？"}]}, {"name": "環境管理基礎", "questions": [{"n": 7, "q": "您是否掌握基本環境數據，例如用電、用水、廢棄物、燃料等？"}, {"n": 8, "q": "您是否做過碳排放盤點，或至少已知道 Scope 1、2、3 的概念與邊界？"}, {"n": 9, "q": "您的組織是否曾推動過具體的節能、減碳、減廢或資源效率改善行動？"}]}, {"name": "社會與人才面", "questions": [{"n": 10, "q": "您的組織是否已有員工安全、健康、教育訓練或福祉相關制度？"}, {"n": 11, "q": "您是否追蹤人才相關指標，例如流動率、培訓時數、職災事件、滿意度等？"}, {"n": 12, "q": "您的組織是否有處理申訴、職場平等、反歧視或 DEI 相關機制？"}]}, {"name": "治理與供應鏈", "questions": [{"n": 13, "q": "您是否對供應商或合作夥伴有基本的道德、品質、法遵或 ESG 要求？"}, {"n": 14, "q": "您是否曾辨識供應鏈風險，例如斷鏈、法規、勞動、人權或環境風險？"}, {"n": 15, "q": "當組織發生重大事件時，是否有通報、調查與改善機制？"}]}, {"name": "數據與執行能力", "questions": [{"n": 16, "q": "您是否知道主要 ESG 資料應由哪個部門蒐集、更新與保存？"}, {"n": 17, "q": "如果客戶下週要求一份 ESG 基本資料，您的組織是否能在短時間內整理出來？"}, {"n": 18, "q": "ESG 目前是否已被納入預算、年度計畫、管理會議或主管 KPI 討論？"}]}], "title_en": "General Org ESG Basics Checkup", "goal_en": "Assess governance, compliance, data, and institutional ESG fundamentals."}, {"key": "value", "title": "創價型 ESG 健檢", "goal": "判斷 ESG 是否已連結價值創造、商模與擴張", "questions": [{"n": 1, "aspect": "Purpose 與 North Star 對齊", "q": "您的組織是否能清楚說出：我們做 ESG，不只是為了合規，而是為了創造什麼更大的價值？", "qe": "Can your organization clearly articulate the greater value it creates through ESG beyond mere compliance?", "aspect_en": "Purpose 與 North Star 對齊"}, {"n": 2, "aspect": "Purpose 與 North Star 對齊", "q": "ESG 是否與組織的核心使命、品牌定位或未來成長方向有清楚連結？", "qe": "Is ESG clearly linked to the organization's core mission, brand positioning, or future growth direction?", "aspect_en": "Purpose 與 North Star 對齊"}, {"n": 3, "aspect": "Purpose 與 North Star 對齊", "q": "您的團隊是否能用一句話清楚說明自己的永續北極星願景？", "qe": "Can your team state its sustainability north-star vision in a single sentence?", "aspect_en": "Purpose 與 North Star 對齊"}, {"n": 4, "aspect": "問題定義與社會痛點洞察", "q": "您的組織是否明確知道：自己真正想解決的是哪一個社會、環境或產業問題？", "qe": "Does your organization clearly know which specific social, environmental, or industry problem it truly aims to solve?", "aspect_en": "問題定義與社會痛點洞察"}, {"n": 5, "aspect": "問題定義與社會痛點洞察", "q": "您是否能清楚區分目標受益者、影響對象、客戶與利害關係人？", "qe": "Can you clearly distinguish target beneficiaries, affected stakeholders, customers, and other stakeholders?", "aspect_en": "問題定義與社會痛點洞察"}, {"n": 6, "aspect": "問題定義與社會痛點洞察", "q": "您是否曾驗證過：外部利害關係人真的在乎這個問題，而不只是組織自己認為重要？", "qe": "Have you validated that external stakeholders genuinely care about this problem, not just the organization assuming it matters?", "aspect_en": "問題定義與社會痛點洞察"}, {"n": 7, "aspect": "影響力設計與副作用風險", "q": "您的組織是否曾系統性盤點方案的一階、二階、三階影響？", "qe": "Has your organization systematically mapped the first-, second-, and third-order impacts of its solution?", "aspect_en": "影響力設計與副作用風險"}, {"n": 8, "aspect": "影響力設計與副作用風險", "q": "您是否評估過方案可能帶來的反效果，例如漂綠、成本轉嫁、資訊不對稱、社會排擠等？", "qe": "Have you assessed possible side effects such as greenwashing, cost shifting, information asymmetry, or social exclusion?", "aspect_en": "影響力設計與副作用風險"}, {"n": 9, "aspect": "影響力設計與副作用風險", "q": "在設計 ESG 行動時，是否已納入降低副作用與防漂綠機制？", "qe": "When designing ESG actions, are safeguards against side effects and greenwashing already built in?", "aspect_en": "影響力設計與副作用風險"}, {"n": 10, "aspect": "商業模式與價值捕捉", "q": "您是否清楚知道：誰受益、誰使用、誰決策、誰付費？", "qe": "Do you clearly know who benefits, who uses, who decides, and who pays?", "aspect_en": "商業模式與價值捕捉"}, {"n": 11, "aspect": "商業模式與價值捕捉", "q": "您的 ESG 行動是否已能帶來收入提升、客戶黏著、成本下降、品牌溢價或風險降低？", "qe": "Do your ESG actions already drive revenue growth, customer retention, cost reduction, brand premium, or risk reduction?", "aspect_en": "商業模式與價值捕捉"}, {"n": 12, "aspect": "商業模式與價值捕捉", "q": "您是否能說明 ESG 如何真正回到商業模式，而不只是外加活動？", "qe": "Can you explain how ESG truly returns to the business model, rather than being an add-on activity?", "aspect_en": "商業模式與價值捕捉"}, {"n": 13, "aspect": "驗證機制與證據鏈", "q": "您是否已把關鍵假設寫清楚，例如市場需求、採用障礙、願付價格、合作意願？", "qe": "Have you documented key assumptions such as market demand, adoption barriers, willingness to pay, and partnership intent?", "aspect_en": "驗證機制與證據鏈"}, {"n": 14, "aspect": "驗證機制與證據鏈", "q": "您是否曾用 PoC、pilot、MVP 或小規模專案驗證 ESG 解方？", "qe": "Have you validated the ESG solution via a PoC, pilot, MVP, or small-scale project?", "aspect_en": "驗證機制與證據鏈"}, {"n": 15, "aspect": "驗證機制與證據鏈", "q": "您是否能拿出一些證據，說明 ESG 已產生具體成果，例如採用率、ROI、影響指標或客戶回饋？", "qe": "Can you present evidence that ESG has produced tangible outcomes such as adoption rate, ROI, impact metrics, or customer feedback?", "aspect_en": "驗證機制與證據鏈"}, {"n": 16, "aspect": "生態系與可擴張性", "q": "您的組織是否已建立外部共創關係，例如客戶、供應商、學研、政府、平台夥伴？", "qe": "Has your organization built external co-creation relationships with customers, suppliers, academia, government, or platform partners?", "aspect_en": "生態系與可擴張性"}, {"n": 17, "aspect": "生態系與可擴張性", "q": "您的 ESG 解方是否能被複製到其他部門、客戶、地區或產業？", "qe": "Can your ESG solution be replicated to other departments, customers, regions, or industries?", "aspect_en": "生態系與可擴張性"}, {"n": 18, "aspect": "生態系與可擴張性", "q": "您是否已形成一個可對外說清楚的成長敘事：為何這件事不只是做好事，而是值得擴張？", "qe": "Have you formed a clear growth narrative: why this is not just doing good, but worth scaling?", "aspect_en": "生態系與可擴張性"}], "aspects": [{"name": "Purpose 與 North Star 對齊", "questions": [{"n": 1, "q": "您的組織是否能清楚說出：我們做 ESG，不只是為了合規，而是為了創造什麼更大的價值？"}, {"n": 2, "q": "ESG 是否與組織的核心使命、品牌定位或未來成長方向有清楚連結？"}, {"n": 3, "q": "您的團隊是否能用一句話清楚說明自己的永續北極星願景？"}]}, {"name": "問題定義與社會痛點洞察", "questions": [{"n": 4, "q": "您的組織是否明確知道：自己真正想解決的是哪一個社會、環境或產業問題？"}, {"n": 5, "q": "您是否能清楚區分目標受益者、影響對象、客戶與利害關係人？"}, {"n": 6, "q": "您是否曾驗證過：外部利害關係人真的在乎這個問題，而不只是組織自己認為重要？"}]}, {"name": "影響力設計與副作用風險", "questions": [{"n": 7, "q": "您的組織是否曾系統性盤點方案的一階、二階、三階影響？"}, {"n": 8, "q": "您是否評估過方案可能帶來的反效果，例如漂綠、成本轉嫁、資訊不對稱、社會排擠等？"}, {"n": 9, "q": "在設計 ESG 行動時，是否已納入降低副作用與防漂綠機制？"}]}, {"name": "商業模式與價值捕捉", "questions": [{"n": 10, "q": "您是否清楚知道：誰受益、誰使用、誰決策、誰付費？"}, {"n": 11, "q": "您的 ESG 行動是否已能帶來收入提升、客戶黏著、成本下降、品牌溢價或風險降低？"}, {"n": 12, "q": "您是否能說明 ESG 如何真正回到商業模式，而不只是外加活動？"}]}, {"name": "驗證機制與證據鏈", "questions": [{"n": 13, "q": "您是否已把關鍵假設寫清楚，例如市場需求、採用障礙、願付價格、合作意願？"}, {"n": 14, "q": "您是否曾用 PoC、pilot、MVP 或小規模專案驗證 ESG 解方？"}, {"n": 15, "q": "您是否能拿出一些證據，說明 ESG 已產生具體成果，例如採用率、ROI、影響指標或客戶回饋？"}]}, {"name": "生態系與可擴張性", "questions": [{"n": 16, "q": "您的組織是否已建立外部共創關係，例如客戶、供應商、學研、政府、平台夥伴？"}, {"n": 17, "q": "您的 ESG 解方是否能被複製到其他部門、客戶、地區或產業？"}, {"n": 18, "q": "您是否已形成一個可對外說清楚的成長敘事：為何這件事不只是做好事，而是值得擴張？"}]}], "title_en": "Value-Creating ESG Checkup", "goal_en": "Evaluate value-creation logic, impact, and business-model integration of ESG."}, {"key": "blueprint", "title": "永續策略藍圖導入準備度", "goal": "判斷是否適合進入永續策略藍圖 2.0 的九張 Canvas", "questions": [{"n": 1, "aspect": "Canvas 1｜Purpose-Driven Sustainability Vision", "q": "您的組織是否對「我們為何要做永續」已有內部共識？", "qe": "Does your organization have internal consensus on why it pursues sustainability?", "aspect_en": "Canvas 1｜Purpose-Driven Sustainability Vision"}, {"n": 2, "aspect": "Canvas 1｜Purpose-Driven Sustainability Vision", "q": "高階團隊是否願意把永續聚焦成 3–5 個重大承諾，而不是什麼都做？", "qe": "Is the executive team willing to focus sustainability on 3–5 major commitments, rather than doing everything?", "aspect_en": "Canvas 1｜Purpose-Driven Sustainability Vision"}, {"n": 3, "aspect": "Canvas 2｜Materiality 2.0 System Map", "q": "您的組織是否能從眾多 ESG 議題中收斂出最重要的 6–8 個優先議題？", "qe": "Can your organization converge from many ESG topics to the 6–8 most important priority issues?", "aspect_en": "Canvas 2｜Materiality 2.0 System Map"}, {"n": 4, "aspect": "Canvas 2｜Materiality 2.0 System Map", "q": "在判斷重要議題時，是否會同時考慮風險、商機、法規、客戶要求與利害關係人？", "qe": "When judging material topics, do you consider risk, opportunity, regulation, customer requirements, and stakeholders together?", "aspect_en": "Canvas 2｜Materiality 2.0 System Map"}, {"n": 5, "aspect": "Canvas 3｜Strategy House 2.0", "q": "您的組織是否有能力把 ESG 議題整理成 3–5 個策略支柱？", "qe": "Does your organization have the capability to organize ESG topics into 3–5 strategic pillars?", "aspect_en": "Canvas 3｜Strategy House 2.0"}, {"n": 6, "aspect": "Canvas 3｜Strategy House 2.0", "q": "組織內部是否有條件進行跨部門策略共識與責任分工？", "qe": "Are there conditions for cross-departmental strategy alignment and clear accountability?", "aspect_en": "Canvas 3｜Strategy House 2.0"}, {"n": 7, "aspect": "Canvas 4｜KPI Tier 0–3 Architecture", "q": "您是否已有明確 KPI、目標值、資料來源與負責人？", "qe": "Do you already have clear KPIs, target values, data sources, and owners?", "aspect_en": "Canvas 4｜KPI Tier 0–3 Architecture"}, {"n": 8, "aspect": "Canvas 4｜KPI Tier 0–3 Architecture", "q": "您是否能區分短期 quick wins、基礎能力建設、戰略 KPI 與長期 impact KPI？", "qe": "Can you distinguish short-term quick wins, foundational capability building, strategic KPIs, and long-term impact KPIs?", "aspect_en": "Canvas 4｜KPI Tier 0–3 Architecture"}, {"n": 9, "aspect": "Canvas 5｜Innovation Matrix × ESG Project Portfolio", "q": "您目前是否已有一批可被盤點的 ESG 專案或永續行動？", "qe": "Do you already have a set of ESG projects or sustainability actions that can be inventoried?", "aspect_en": "Canvas 5｜Innovation Matrix × ESG Project Portfolio"}, {"n": 10, "aspect": "Canvas 5｜Innovation Matrix × ESG Project Portfolio", "q": "您是否會用影響力與可行性來排序專案優先順序？", "qe": "Do you prioritize projects by impact and feasibility?", "aspect_en": "Canvas 5｜Innovation Matrix × ESG Project Portfolio"}, {"n": 11, "aspect": "Canvas 6｜Ecosystem Platform Strategy", "q": "您的永續推動是否已需要外部夥伴共同完成，而不是只靠內部？", "qe": "Does your sustainability push already require external partners, not just internal effort?", "aspect_en": "Canvas 6｜Ecosystem Platform Strategy"}, {"n": 12, "aspect": "Canvas 6｜Ecosystem Platform Strategy", "q": "您是否有意識要把自己定位成某個永續生態系中的關鍵節點或協作中心？", "qe": "Are you consciously positioning yourself as a key node or collaboration hub in a sustainability ecosystem?", "aspect_en": "Canvas 6｜Ecosystem Platform Strategy"}, {"n": 13, "aspect": "Canvas 7｜Impact Logic Model", "q": "您是否能清楚說明：投入什麼、做了什麼、產出什麼、帶來什麼成果、創造什麼長期影響？", "qe": "Can you clearly state inputs, activities, outputs, outcomes, and long-term impact?", "aspect_en": "Canvas 7｜Impact Logic Model"}, {"n": 14, "aspect": "Canvas 7｜Impact Logic Model", "q": "您的組織是否需要向董事會、投資人、客戶或主管機關證明這條因果鏈？", "qe": "Does your organization need to prove this causal chain to the board, investors, customers, or regulators?", "aspect_en": "Canvas 7｜Impact Logic Model"}, {"n": 15, "aspect": "Canvas 8｜ESG Data Architecture × Dashboard", "q": "您是否已掌握主要 ESG 資料來源、資料品質、更新頻率與責任人？", "qe": "Do you already master the main ESG data sources, data quality, update frequency, and owners?", "aspect_en": "Canvas 8｜ESG Data Architecture × Dashboard"}, {"n": 16, "aspect": "Canvas 8｜ESG Data Architecture × Dashboard", "q": "您是否需要儀表板、警示機制、報告輸出或資料自動化？", "qe": "Do you need dashboards, alerting, report output, or data automation?", "aspect_en": "Canvas 8｜ESG Data Architecture × Dashboard"}, {"n": 17, "aspect": "Canvas 9｜Final Blueprint One-Page Strategy Map", "q": "您的組織是否需要一頁式永續藍圖，對內對外統一溝通？", "qe": "Does your organization need a one-page sustainability blueprint for consistent internal and external communication?", "aspect_en": "Canvas 9｜Final Blueprint One-Page Strategy Map"}, {"n": 18, "aspect": "Canvas 9｜Final Blueprint One-Page Strategy Map", "q": "高階主管是否願意在 60–90 天內投入完成一版永續策略藍圖？", "qe": "Are executives willing to invest in completing a version of the sustainability strategy blueprint within 60–90 days?", "aspect_en": "Canvas 9｜Final Blueprint One-Page Strategy Map"}], "aspects": [{"name": "Canvas 1｜Purpose-Driven Sustainability Vision", "questions": [{"n": 1, "q": "您的組織是否對「我們為何要做永續」已有內部共識？"}, {"n": 2, "q": "高階團隊是否願意把永續聚焦成 3–5 個重大承諾，而不是什麼都做？"}]}, {"name": "Canvas 2｜Materiality 2.0 System Map", "questions": [{"n": 3, "q": "您的組織是否能從眾多 ESG 議題中收斂出最重要的 6–8 個優先議題？"}, {"n": 4, "q": "在判斷重要議題時，是否會同時考慮風險、商機、法規、客戶要求與利害關係人？"}]}, {"name": "Canvas 3｜Strategy House 2.0", "questions": [{"n": 5, "q": "您的組織是否有能力把 ESG 議題整理成 3–5 個策略支柱？"}, {"n": 6, "q": "組織內部是否有條件進行跨部門策略共識與責任分工？"}]}, {"name": "Canvas 4｜KPI Tier 0–3 Architecture", "questions": [{"n": 7, "q": "您是否已有明確 KPI、目標值、資料來源與負責人？"}, {"n": 8, "q": "您是否能區分短期 quick wins、基礎能力建設、戰略 KPI 與長期 impact KPI？"}]}, {"name": "Canvas 5｜Innovation Matrix × ESG Project Portfolio", "questions": [{"n": 9, "q": "您目前是否已有一批可被盤點的 ESG 專案或永續行動？"}, {"n": 10, "q": "您是否會用影響力與可行性來排序專案優先順序？"}]}, {"name": "Canvas 6｜Ecosystem Platform Strategy", "questions": [{"n": 11, "q": "您的永續推動是否已需要外部夥伴共同完成，而不是只靠內部？"}, {"n": 12, "q": "您是否有意識要把自己定位成某個永續生態系中的關鍵節點或協作中心？"}]}, {"name": "Canvas 7｜Impact Logic Model", "questions": [{"n": 13, "q": "您是否能清楚說明：投入什麼、做了什麼、產出什麼、帶來什麼成果、創造什麼長期影響？"}, {"n": 14, "q": "您的組織是否需要向董事會、投資人、客戶或主管機關證明這條因果鏈？"}]}, {"name": "Canvas 8｜ESG Data Architecture × Dashboard", "questions": [{"n": 15, "q": "您是否已掌握主要 ESG 資料來源、資料品質、更新頻率與責任人？"}, {"n": 16, "q": "您是否需要儀表板、警示機制、報告輸出或資料自動化？"}]}, {"name": "Canvas 9｜Final Blueprint One-Page Strategy Map", "questions": [{"n": 17, "q": "您的組織是否需要一頁式永續藍圖，對內對外統一溝通？"}, {"n": 18, "q": "高階主管是否願意在 60–90 天內投入完成一版永續策略藍圖？"}]}], "title_en": "Sustainability Blueprint Adoption Readiness", "goal_en": "Gauge readiness to adopt a sustainability strategy blueprint."}]};
+    var total = 0;
+    CHECKLIST.modules.forEach(function (m) { total += m.questions.length; });
+
+    var startBtn = document.getElementById("esgStartBtn");
+    var section = document.getElementById("esgCheck");
+    var tabs = document.querySelectorAll(".esg-tab");
+    var qBox = document.getElementById("esgQuestions");
+    var submitBtn = document.getElementById("esgSubmit");
+    var resetBtn = document.getElementById("esgReset");
+    var resultBox = document.getElementById("esgResult");
+    var progressFill = document.getElementById("esgProgressFill");
+    var progressText = document.getElementById("esgProgressText");
+    var currentMod = 0;
+    var answers = {}; // "modIdx-qIdx": score
+
+    function levelOf(score) {
+      var lv = CHECKLIST.levels[0];
+      CHECKLIST.levels.forEach(function (l) { if (score >= l.min && score <= l.max) lv = l; });
+      return lv;
+    }
+
+    function renderModule(idx) {
+      var m = CHECKLIST.modules[idx];
+      var html = "";
+      m.questions.forEach(function (q, qi) {
+        var opts = "";
+        for (var s = 0; s <= CHECKLIST.maxPerQ; s++) {
+          var checked = (answers[idx + "-" + qi] === s) ? " checked" : "";
+          var lid = "q-" + idx + "-" + qi + "-" + s;
+          opts += '<label for="' + lid + '"><input id="' + lid + '" type="radio" name="q-' + idx + "-" + qi + '" value="' + s + '"' + checked + '><span>' + s + ' 分</span></label>';
+        }
+        var aspect = q.aspect ? '<div class="aspect">' + window.__i18nT(q.aspect, q.aspect_en) + '</div>' : '';
+        html += '<div class="esg-q"><div class="qnum" style="font-size:12px;color:#94a3b8;font-weight:700;">Q' + q.n + '</div>' + aspect +
+                '<div class="qtext">' + window.__i18nT(q.q, q.qe) + '</div><div class="opts">' + opts + '</div></div>';
+      });
+      qBox.innerHTML = html;
+    }
+    // event delegation for robustness
+    qBox.addEventListener("change", function (ev) {
+      var t = ev.target;
+      if (t && t.type === "radio" && t.name && t.name.indexOf("q-") === 0) {
+        var parts = t.name.split("-");
+        var mi = parseInt(parts[1], 10), qi = parseInt(parts[2], 10);
+        answers[mi + "-" + qi] = parseInt(t.value, 10);
+        updateProgress();
+      }
+    });
+
+    function updateProgress() {
+      var done = Object.keys(answers).length;
+      progressFill.style.width = (done / total * 100) + "%";
+      progressText.textContent = "已答 " + done + " / " + total;
+      submitBtn.disabled = (done < total);
+    }
+
+    startBtn.addEventListener("click", function () {
+      section.hidden = false;
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      renderModule(0);
+      updateProgress();
+    });
+
+    tabs.forEach(function (t) {
+      t.addEventListener("click", function () {
+        tabs.forEach(function (x) { x.classList.remove("active"); });
+        t.classList.add("active");
+        currentMod = parseInt(t.getAttribute("data-mod"), 10);
+        renderModule(currentMod);
+      });
+    });
+
+    function renderResult() {
+      resultBox.innerHTML = "";
+      var grand = 0;
+      CHECKLIST.modules.forEach(function (m, mi) {
+        var sum = 0;
+        m.questions.forEach(function (q, qi) { sum += answers[mi + "-" + qi] || 0; });
+        grand += sum;
+        var lv = levelOf(sum);
+        if (window.__i18nLevelEN && window.__i18nCurrent && window.__i18nCurrent() === "en") { lv = Object.assign({}, lv, { name: window.__i18nLevelEN[lv.name] || lv.name }); }
+        var advice = (mi === 0)
+          ? window.__i18nT("建議：先補強治理責任、基礎數據與跨部門協作機制，建立 ESG 管理底盤。", "Advice: strengthen governance accountability, foundational data, and cross-departmental collaboration to build the ESG management base.")
+          : (mi === 1)
+          ? window.__i18nT("建議：把 ESG 從法遵拉向價值創造，盤點商模連動點與可驗證的影響證據。", "Advice: shift ESG from compliance toward value creation; map business-model linkages and verifiable impact evidence.")
+          : window.__i18nT("建議：若達管理期以上，可直接導入永續策略藍圖 2.0 九張 Canvas。", "Advice: if at Managing level or above, directly adopt the Sustainability Blueprint 2.0 nine-canvas set.");
+        var block = '<div class="esg-mod-result"><h3>' + window.__i18nT(m.title, m.title_en) + '</h3>' +
+          '<div><span class="esg-score">' + sum + '</span> / ' + CHECKLIST.maxTotal + ' 分<span class="esg-level">' + lv.name + '</span></div>' +
+          '<div class="esg-level-desc">' + window.__i18nT(lv.desc, lv.desc_en) + '</div></div>' +
+          '<div class="esg-advice">' + advice + '</div>';
+        resultBox.insertAdjacentHTML("beforeend", block);
+      });
+      var gLv = levelOf(Math.round(grand / CHECKLIST.modules.length));
+      if (window.__i18nLevelEN && window.__i18nCurrent && window.__i18nCurrent() === "en") { gLv = Object.assign({}, gLv, { name: window.__i18nLevelEN[gLv.name] || gLv.name }); }
+      var book = '<div class="esg-book"><h4><i class="fa-solid fa-calendar-check"></i> ' + window.__i18nT("預約企業 ESG 健檢顧問", "Book Corporate ESG Checkup Advisor") + '</h4>' +
+        '<p style="font-size:14px;color:#334155;margin:0 0 10px;">' + window.__i18nT("綜合成熟度：", "Overall maturity:") + '<strong>' + gLv.name + '</strong>（' + window.__i18nT("總分", "total") + ' ' + grand + ' / ' + (CHECKLIST.maxTotal * CHECKLIST.modules.length) + '）。' +
+        window.__i18nT("可來信至服務中心信箱，或於課程中向 TA 登記，由產學 Mentor 為您安排一對一診斷。", "You may email the service center, or register with a TA during the course, and an industry-academic Mentor will arrange a 1-on-1 diagnosis for you.") + '</p>' +
+        '<a class="mini-btn mini-btn-primary" href="mailto:esgsunshine@gmail.com?subject=' + encodeURIComponent(window.__i18nT("企業ESG健檢預約", "Corporate ESG Checkup Booking")) + '&body=' + encodeURIComponent(window.__i18nT("您好，我已完成線上健檢（綜合成熟度：" + gLv.name + "），希望能預約顧問診斷。", "Hello, I have completed the online checkup (overall maturity: " + gLv.name + ") and would like to book an advisor diagnosis.")) + '"><span data-i18n="預約顧問（寄信）">預約顧問（寄信） </span><i class="fa-solid fa-envelope"></i></a></div>';
+      resultBox.insertAdjacentHTML("beforeend", book);
+      resultBox.hidden = false;
+    }
+
+    submitBtn.addEventListener("click", function () {
+      if (Object.keys(answers).length < total) {
+        alert(window.__i18nT("還有題目未作答，請完成所有 " + total + " 題。", "Some questions are unanswered. Please complete all " + total + " questions."));
+        return;
+      }
+      renderResult();
+      resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // 切語言時刷新健檢區（題目 / 進度 / 結果）
+    window.__esgRefreshLang = function () {
+      if (!section.hidden) {
+        renderModule(currentMod);
+        updateProgress();
+        if (!resultBox.hidden) renderResult();
+      }
+    };
+
+    resetBtn.addEventListener("click", function () {
+      answers = {};
+      resultBox.hidden = true; resultBox.innerHTML = "";
+      qBox.querySelectorAll('input[type=radio]').forEach(function (r) { r.checked = false; });
+      renderModule(currentMod);
+      updateProgress();
+    });
+  })();
+  </script>
+
+  <script>
+    // 高質感進場動畫
+    (function () {
+      var els = document.querySelectorAll('.mini-card, .announcement-section, .schedule-section, .esg-check-card');
+      if (!('IntersectionObserver' in window)) { els.forEach(function(e){e.classList.add('in');}); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+  </script>
+</body>
+</html>

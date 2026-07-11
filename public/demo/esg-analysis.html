@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESG 資料分析引擎 Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .gauge-ring {
+      transition: stroke-dasharray 1s ease-in-out;
+    }
+    .insight-positive { border-left: 4px solid #22c55e; }
+    .insight-negative { border-left: 4px solid #ef4444; }
+    .insight-warning { border-left: 4px solid #eab308; }
+    .insight-neutral { border-left: 4px solid #6b7280; }
+  </style>
+</head>
+<body class="text-white p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- 標題 -->
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+        ESG 資料分析引擎 Demo
+      </h1>
+      <p class="text-gray-400">互動式 ESG 資料分析與視覺化展示</p>
+    </header>
+
+    <!-- 控制面板 -->
+    <div class="glass rounded-xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4 text-emerald-400">輸入參數</h2>
+      <div class="grid grid-cols-3 gap-6">
+        <!-- 環境參數 -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-400 mb-3">環境 (Environmental)</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">碳排放 (tCO2e)</label>
+              <input type="number" id="carbonEmissions" value="1000" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">可再生能源比例 (%)</label>
+              <input type="number" id="renewableRatio" value="60" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">回收率 (%)</label>
+              <input type="number" id="recyclingRate" value="75" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">水資源效率 (%)</label>
+              <input type="number" id="waterEfficiency" value="80" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-400">
+            </div>
+          </div>
+        </div>
+
+        <!-- 社會參數 -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-400 mb-3">社會 (Social)</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">員工流動率 (%)</label>
+              <input type="number" id="turnoverRate" value="12" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">女性員工比例 (%)</label>
+              <input type="number" id="femaleRatio" value="45" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">安全事件率</label>
+              <input type="number" id="safetyIncidents" value="2.5" step="0.1" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">員工滿意度 (0-100)</label>
+              <input type="number" id="satisfaction" value="75" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-400">
+            </div>
+          </div>
+        </div>
+
+        <!-- 治理參數 -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-400 mb-3">治理 (Governance)</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">獨立董事比例 (%)</label>
+              <input type="number" id="independentDirectors" value="70" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">女性董事比例 (%)</label>
+              <input type="number" id="femaleDirectors" value="35" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">披露分數 (0-100)</label>
+              <input type="number" id="disclosureScore" value="80" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-400">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">網路安全分數 (0-100)</label>
+              <input type="number" id="cyberSecurity" value="85" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-400">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-4">
+        <button onclick="runAnalysis()" class="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition">
+          執行分析
+        </button>
+        <button onclick="resetDefaults()" class="bg-white/10 text-gray-400 font-bold py-3 px-8 rounded-lg hover:bg-white/20 transition">
+          重設預設值
+        </button>
+      </div>
+    </div>
+
+    <!-- 分數儀表板 -->
+    <div class="grid grid-cols-4 gap-6 mb-8">
+      <div class="glass rounded-xl p-6 text-center">
+        <div class="relative inline-block">
+          <svg class="w-28 h-28" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle id="gaugeOverall" cx="50" cy="50" r="40" fill="none" stroke="url(#gradientOverall)" stroke-width="8"
+              stroke-dasharray="0 251.2" stroke-linecap="round" class="gauge-ring" transform="rotate(-90 50 50)"/>
+            <defs>
+              <linearGradient id="gradientOverall" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="scoreOverall" class="text-3xl font-bold">0</span>
+          </div>
+        </div>
+        <div class="text-gray-400 mt-2">整體分數</div>
+        <div id="rankOverall" class="text-sm text-emerald-400">-</div>
+      </div>
+
+      <div class="glass rounded-xl p-6 text-center">
+        <div class="relative inline-block">
+          <svg class="w-28 h-28" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle id="gaugeE" cx="50" cy="50" r="40" fill="none" stroke="#22c55e" stroke-width="8"
+              stroke-dasharray="0 251.2" stroke-linecap="round" class="gauge-ring" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="scoreE" class="text-3xl font-bold text-green-400">0</span>
+          </div>
+        </div>
+        <div class="text-gray-400 mt-2">環境 (E)</div>
+        <div id="rankE" class="text-sm text-green-400">-</div>
+      </div>
+
+      <div class="glass rounded-xl p-6 text-center">
+        <div class="relative inline-block">
+          <svg class="w-28 h-28" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle id="gaugeS" cx="50" cy="50" r="40" fill="none" stroke="#06b6d4" stroke-width="8"
+              stroke-dasharray="0 251.2" stroke-linecap="round" class="gauge-ring" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="scoreS" class="text-3xl font-bold text-cyan-400">0</span>
+          </div>
+        </div>
+        <div class="text-gray-400 mt-2">社會 (S)</div>
+        <div id="rankS" class="text-sm text-cyan-400">-</div>
+      </div>
+
+      <div class="glass rounded-xl p-6 text-center">
+        <div class="relative inline-block">
+          <svg class="w-28 h-28" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle id="gaugeG" cx="50" cy="50" r="40" fill="none" stroke="#a855f7" stroke-width="8"
+              stroke-dasharray="0 251.2" stroke-linecap="round" class="gauge-ring" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="scoreG" class="text-3xl font-bold text-purple-400">0</span>
+          </div>
+        </div>
+        <div class="text-gray-400 mt-2">治理 (G)</div>
+        <div id="rankG" class="text-sm text-purple-400">-</div>
+      </div>
+    </div>
+
+    <!-- 圖表區域 -->
+    <div class="grid grid-cols-2 gap-8 mb-8">
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-emerald-400">ESG 雷達圖</h2>
+        <canvas id="radarChart"></canvas>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-cyan-400">基準比較</h2>
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-8 mb-8">
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-purple-400">分數占比</h2>
+        <canvas id="pieChart"></canvas>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-yellow-400">指標分析</h2>
+        <canvas id="polarChart"></canvas>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-pink-400">改善潜力</h2>
+        <canvas id="doughnutChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 洞察與建議 -->
+    <div class="grid grid-cols-2 gap-8 mb-8">
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-emerald-400">主要洞察</h2>
+        <div id="insightsList" class="space-y-3 max-h-80 overflow-y-auto">
+          <div class="text-gray-500 text-center py-8">點擊「執行分析」查看洞察</div>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4 text-cyan-400">改善建議</h2>
+        <div id="recommendationsList" class="space-y-3 max-h-80 overflow-y-auto">
+          <div class="text-gray-500 text-center py-8">點擊「執行分析」查看建議</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 基準詳細比較 -->
+    <div class="glass rounded-xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4 text-purple-400">基準詳細比較</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-white/20">
+              <th class="text-left py-3 px-4 text-gray-400">指標</th>
+              <th class="text-right py-3 px-4 text-gray-400">公司表現</th>
+              <th class="text-right py-3 px-4 text-gray-400">行業平均</th>
+              <th class="text-right py-3 px-4 text-gray-400">行業最佳</th>
+              <th class="text-center py-3 px-4 text-gray-400">狀態</th>
+            </tr>
+          </thead>
+          <tbody id="benchmarkTable">
+            <tr>
+              <td colspan="5" class="text-center py-8 text-gray-500">點擊「執行分析」查看比較</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer class="text-center text-gray-500 text-sm">
+      ESG GO Platform - 資料分析引擎 Demo
+    </footer>
+  </div>
+
+  <script>
+    // ==========================================
+    // 全域變數
+    // ==========================================
+    
+    let radarChart, barChart, pieChart, polarChart, doughnutChart;
+
+    // ==========================================
+    // 預設值
+    // ==========================================
+    
+    const defaults = {
+      carbonEmissions: 1000,
+      renewableRatio: 60,
+      recyclingRate: 75,
+      waterEfficiency: 80,
+      turnoverRate: 12,
+      femaleRatio: 45,
+      safetyIncidents: 2.5,
+      satisfaction: 75,
+      independentDirectors: 70,
+      femaleDirectors: 35,
+      disclosureScore: 80,
+      cyberSecurity: 85
+    };
+
+    // ==========================================
+    // 工具函數
+    // ==========================================
+    
+    function getScore(rank) {
+      if (rank === 'A+') return 95;
+      if (rank === 'A') return 85;
+      if (rank === 'B+') return 75;
+      if (rank === 'B') return 65;
+      if (rank === 'C+') return 55;
+      if (rank === 'C') return 45;
+      if (rank === 'D') return 35;
+      return 20;
+    }
+
+    function getRank(score) {
+      if (score >= 90) return 'A+';
+      if (score >= 80) return 'A';
+      if (score >= 70) return 'B+';
+      if (score >= 60) return 'B';
+      if (score >= 50) return 'C+';
+      if (score >= 40) return 'C';
+      if (score >= 30) return 'D';
+      return 'F';
+    }
+
+    function updateGauge(elementId, score) {
+      const gauge = document.getElementById(elementId);
+      const circumference = 251.2;
+      const fill = (score / 100) * circumference;
+      gauge.style.strokeDasharray = `${fill} ${circumference}`;
+    }
+
+    // ==========================================
+    // 分析函數
+    // ==========================================
+    
+    function calculateEnvironmentalScore() {
+      const carbon = parseInt(document.getElementById('carbonEmissions').value);
+      const renewable = parseInt(document.getElementById('renewableRatio').value);
+      const recycling = parseInt(document.getElementById('recyclingRate').value);
+      const water = parseInt(document.getElementById('waterEfficiency').value);
+
+      let score = 0;
+
+      // 碳排放 (30%)
+      if (carbon < 500) score += 30;
+      else if (carbon < 1000) score += 25;
+      else if (carbon < 2000) score += 20;
+      else if (carbon < 3000) score += 15;
+      else score += 10;
+
+      // 可再生能源 (25%)
+      score += (renewable / 100) * 25;
+
+      // 回收率 (25%)
+      score += (recycling / 100) * 25;
+
+      // 水資源 (20%)
+      score += (water / 100) * 20;
+
+      return Math.min(100, Math.round(score));
+    }
+
+    function calculateSocialScore() {
+      const turnover = parseInt(document.getElementById('turnoverRate').value);
+      const female = parseInt(document.getElementById('femaleRatio').value);
+      const safety = parseFloat(document.getElementById('safetyIncidents').value);
+      const satisfaction = parseInt(document.getElementById('satisfaction').value);
+
+      let score = 0;
+
+      // 員工滿意度 (30%)
+      score += (satisfaction / 100) * 30;
+
+      // 流動率 (25%) - 越低越好
+      if (turnover < 10) score += 25;
+      else if (turnover < 15) score += 20;
+      else if (turnover < 20) score += 15;
+      else score += 10;
+
+      // 性別多元 (25%)
+      score += (female / 100) * 25;
+
+      // 安全 (20%) - 越低越好
+      if (safety < 1) score += 20;
+      else if (safety < 2) score += 16;
+      else if (safety < 3) score += 12;
+      else if (safety < 5) score += 8;
+      else score += 4;
+
+      return Math.min(100, Math.round(score));
+    }
+
+    function calculateGovernanceScore() {
+      const independent = parseInt(document.getElementById('independentDirectors').value);
+      const femaleDirectors = parseInt(document.getElementById('femaleDirectors').value);
+      const disclosure = parseInt(document.getElementById('disclosureScore').value);
+      const cyber = parseInt(document.getElementById('cyberSecurity').value);
+
+      let score = 0;
+
+      // 獨立董事 (30%)
+      score += (independent / 100) * 30;
+
+      // 女性董事 (25%)
+      score += (femaleDirectors / 100) * 25;
+
+      // 披露 (25%)
+      score += (disclosure / 100) * 25;
+
+      // 網路安全 (20%)
+      score += (cyber / 100) * 20;
+
+      return Math.min(100, Math.round(score));
+    }
+
+    function generateInsights(eScore, sScore, gScore) {
+      const insights = [];
+
+      // 環境洞察
+      const renewable = parseInt(document.getElementById('renewableRatio').value);
+      const carbon = parseInt(document.getElementById('carbonEmissions').value);
+
+      if (renewable > 70) {
+        insights.push({ type: 'positive', title: '可再生能源表現優異', desc: `可再生能源比例達到 ${renewable}%，超過行業平均` });
+      } else if (renewable < 30) {
+        insights.push({ type: 'negative', title: '可再生能源比例偏低', desc: `可再生能源比例僅 ${renewable}%，建議提升` });
+      }
+
+      if (carbon > 2000) {
+        insights.push({ type: 'warning', title: '碳排放偏高', desc: `碳排放量 ${carbon} tCO2e，建議制定減碳計畫` });
+      }
+
+      // 社會洞察
+      const turnover = parseInt(document.getElementById('turnoverRate').value);
+      const female = parseInt(document.getElementById('femaleRatio').value);
+
+      if (turnover > 20) {
+        insights.push({ type: 'negative', title: '員工流動率過高', desc: `流動率 ${turnover}% 超過行業平均，需關注員工滿意度` });
+      } else if (turnover < 10) {
+        insights.push({ type: 'positive', title: '員工穩定性良好', desc: `流動率僅 ${turnover}%，員工忠誠度高` });
+      }
+
+      if (female > 45) {
+        insights.push({ type: 'positive', title: '性別多元性優良', desc: `女性員工比例 ${female}%，展現多元包容` });
+      }
+
+      // 治理洞察
+      const independent = parseInt(document.getElementById('independentDirectors').value);
+
+      if (independent > 70) {
+        insights.push({ type: 'positive', title: '董事會獨立性良好', desc: `獨立董事比例 ${independent}%，治理結構健全` });
+      } else if (independent < 50) {
+        insights.push({ type: 'warning', title: '獨立董事比例偏低', desc: `獨立董事比例 ${independent}%，建議提升` });
+      }
+
+      return insights;
+    }
+
+    function generateRecommendations(eScore, sScore, gScore) {
+      const recs = [];
+
+      if (eScore < 60) {
+        recs.push({ priority: 'high', title: '提升環境表現', desc: '建議制定碳中和路線圖，增加可再生能源使用', impact: '提升環境分數 15-20 分' });
+      }
+
+      if (sScore < 60) {
+        recs.push({ priority: 'high', title: '改善社會表現', desc: '加強員工培訓，改善工作環境，提升多元性政策', impact: '提升社會分數 10-15 分' });
+      }
+
+      if (gScore < 70) {
+        recs.push({ priority: 'medium', title: '強化公司治理', desc: '增加獨立董事比例，提升資訊透明度', impact: '提升治理分數 10-15 分' });
+      }
+
+      const renewable = parseInt(document.getElementById('renewableRatio').value);
+      if (renewable < 50) {
+        recs.push({ priority: 'medium', title: '增加可再生能源', desc: '投資太陽能、風能等再生能源設施', impact: '降低碳排放 20-30%' });
+      }
+
+      return recs;
+    }
+
+    // ==========================================
+    // 主分析函數
+    // ==========================================
+    
+    function runAnalysis() {
+      const eScore = calculateEnvironmentalScore();
+      const sScore = calculateSocialScore();
+      const gScore = calculateGovernanceScore();
+      const overall = Math.round((eScore + sScore + gScore) / 3);
+
+      // 更新分數
+      document.getElementById('scoreOverall').textContent = overall;
+      document.getElementById('scoreE').textContent = eScore;
+      document.getElementById('scoreS').textContent = sScore;
+      document.getElementById('scoreG').textContent = gScore;
+
+      // 更新等級
+      document.getElementById('rankOverall').textContent = getRank(overall);
+      document.getElementById('rankE').textContent = getRank(eScore);
+      document.getElementById('rankS').textContent = getRank(sScore);
+      document.getElementById('rankG').textContent = getRank(gScore);
+
+      // 更新儀表
+      updateGauge('gaugeOverall', overall);
+      updateGauge('gaugeE', eScore);
+      updateGauge('gaugeS', sScore);
+      updateGauge('gaugeG', gScore);
+
+      // 更新圖表
+      updateCharts(eScore, sScore, gScore);
+
+      // 生成洞察
+      const insights = generateInsights(eScore, sScore, gScore);
+      const insightsList = document.getElementById('insightsList');
+      insightsList.innerHTML = insights.map(i => `
+        <div class="bg-white/5 rounded-lg p-4 insight-${i.type}">
+          <div class="font-medium">${i.title}</div>
+          <div class="text-sm text-gray-400 mt-1">${i.desc}</div>
+        </div>
+      `).join('');
+
+      // 生成建議
+      const recommendations = generateRecommendations(eScore, sScore, gScore);
+      const recsList = document.getElementById('recommendationsList');
+      recsList.innerHTML = recommendations.map(r => `
+        <div class="bg-white/5 rounded-lg p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2 py-0.5 rounded text-xs bg-${r.priority === 'high' ? 'red' : 'yellow'}-500/30 text-${r.priority === 'high' ? 'red' : 'yellow'}-400">
+              ${r.priority.toUpperCase()}
+            </span>
+            <span class="font-medium">${r.title}</span>
+          </div>
+          <div class="text-sm text-gray-400">${r.desc}</div>
+          <div class="text-xs text-gray-500 mt-2">預期效果: ${r.impact}</div>
+        </div>
+      `).join('');
+
+      // 更新基準表
+      updateBenchmarkTable(eScore, sScore, gScore);
+    }
+
+    // ==========================================
+    // 圖表更新
+    // ==========================================
+    
+    function updateCharts(eScore, sScore, gScore) {
+      // 雷達圖
+      if (radarChart) radarChart.destroy();
+      radarChart = new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+          labels: ['環境 (E)', '社會 (S)', '治理 (G)'],
+          datasets: [{
+            label: '公司表現',
+            data: [eScore, sScore, gScore],
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 2
+          }, {
+            label: '行業平均',
+            data: [65, 60, 70],
+            backgroundColor: 'rgba(156, 163, 175, 0.2)',
+            borderColor: 'rgba(156, 163, 175, 1)',
+            borderWidth: 2
+          }]
+        },
+        options: { scales: { r: { beginAtZero: true, max: 100 } } }
+      });
+
+      // 長條圖
+      const benchmarks = [
+        { label: '碳排放', value: eScore, avg: 65 },
+        { label: '能源效率', value: parseInt(document.getElementById('renewableRatio').value), avg: 35 },
+        { label: '回收率', value: parseInt(document.getElementById('recyclingRate').value), avg: 45 },
+        { label: '員工滿意度', value: parseInt(document.getElementById('satisfaction').value), avg: 60 },
+        { label: '多元性', value: parseInt(document.getElementById('femaleRatio').value), avg: 40 },
+        { label: '治理分數', value: gScore, avg: 70 }
+      ];
+
+      if (barChart) barChart.destroy();
+      barChart = new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+          labels: benchmarks.map(b => b.label),
+          datasets: [{
+            label: '公司表現',
+            data: benchmarks.map(b => b.value),
+            backgroundColor: 'rgba(6, 182, 212, 0.8)'
+          }, {
+            label: '行業平均',
+            data: benchmarks.map(b => b.avg),
+            backgroundColor: 'rgba(156, 163, 175, 0.8)'
+          }]
+        },
+        options: { indexAxis: 'y', scales: { x: { beginAtZero: true, max: 100 } } }
+      });
+
+      // 圓餅圖
+      if (pieChart) pieChart.destroy();
+      pieChart = new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+          labels: ['環境 (E)', '社會 (S)', '治理 (G)'],
+          datasets: [{
+            data: [eScore, sScore, gScore],
+            backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(6, 182, 212, 0.8)', 'rgba(168, 85, 247, 0.8)']
+          }]
+        }
+      });
+
+      // 極地圖
+      if (polarChart) polarChart.destroy();
+      polarChart = new Chart(document.getElementById('polarChart'), {
+        type: 'polarArea',
+        data: {
+          labels: ['碳排放', '能源', '廢棄物', '水資源'],
+          datasets: [{
+            data: [
+              100 - parseInt(document.getElementById('carbonEmissions').value) / 50,
+              parseInt(document.getElementById('renewableRatio').value),
+              parseInt(document.getElementById('recyclingRate').value),
+              parseInt(document.getElementById('waterEfficiency').value)
+            ],
+            backgroundColor: [
+              'rgba(34, 197, 94, 0.7)',
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(168, 85, 247, 0.7)',
+              'rgba(6, 182, 212, 0.7)'
+            ]
+          }]
+        }
+      });
+
+      // 甜甜圈圖
+      const potential = Math.min(100, 100 - Math.round((eScore + sScore + gScore) / 3));
+      if (doughnutChart) doughnutChart.destroy();
+      doughnutChart = new Chart(document.getElementById('doughnutChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['已達成', '改善潛力'],
+          datasets: [{
+            data: [Math.round((eScore + sScore + gScore) / 3), potential],
+            backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(234, 179, 8, 0.8)']
+          }]
+        }
+      });
+    }
+
+    // ==========================================
+    // 基準表更新
+    // ==========================================
+    
+    function updateBenchmarkTable(eScore, sScore, gScore) {
+      const benchmarks = [
+        { metric: '碳排放強度', value: `${document.getElementById('carbonEmissions').value} tCO2e`, avg: '1500 tCO2e', best: '500 tCO2e', status: document.getElementById('carbonEmissions').value < 1500 },
+        { metric: '可再生能源比例', value: `${document.getElementById('renewableRatio').value}%`, avg: '35%', best: '100%', status: document.getElementById('renewableRatio').value > 35 },
+        { metric: '回收率', value: `${document.getElementById('recyclingRate').value}%`, avg: '45%', best: '95%', status: document.getElementById('recyclingRate').value > 45 },
+        { metric: '員工流動率', value: `${document.getElementById('turnoverRate').value}%`, avg: '15%', best: '5%', status: document.getElementById('turnoverRate').value < 15 },
+        { metric: '性別多元性', value: `${document.getElementById('femaleRatio').value}%`, avg: '40%', best: '55%', status: document.getElementById('femaleRatio').value > 40 },
+        { metric: '安全事件率', value: document.getElementById('safetyIncidents').value, avg: '3.0', best: '0.5', status: parseFloat(document.getElementById('safetyIncidents').value) < 3 },
+        { metric: '獨立董事比例', value: `${document.getElementById('independentDirectors').value}%`, avg: '60%', best: '90%', status: document.getElementById('independentDirectors').value > 60 },
+        { metric: '披露分數', value: document.getElementById('disclosureScore').value, avg: '65', best: '95', status: parseInt(document.getElementById('disclosureScore').value) > 65 }
+      ];
+
+      const tbody = document.getElementById('benchmarkTable');
+      tbody.innerHTML = benchmarks.map(b => `
+        <tr class="border-b border-white/10 hover:bg-white/5">
+          <td class="py-3 px-4">${b.metric}</td>
+          <td class="py-3 px-4 text-right font-medium">${b.value}</td>
+          <td class="py-3 px-4 text-right text-gray-400">${b.avg}</td>
+          <td class="py-3 px-4 text-right text-gray-400">${b.best}</td>
+          <td class="py-3 px-4 text-center">
+            <span class="${b.status ? 'text-green-400' : 'text-red-400'}">${b.status ? '✓ 高於平均' : '✗ 低於平均'}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ==========================================
+    // 重設預設值
+    // ==========================================
+    
+    function resetDefaults() {
+      Object.entries(defaults).forEach(([key, value]) => {
+        document.getElementById(key).value = value;
+      });
+      runAnalysis();
+    }
+
+    // ==========================================
+    // 初始化
+    // ==========================================
+    
+    runAnalysis();
+  </script>
+</body>
+</html>
