@@ -378,7 +378,7 @@ function requireAuth(req, res, next) {
 
 app.get('/health', (_req, res) => res.json({ ok: true, ts: Date.now(), ws_clients: wssClients.size, errors: errorMetrics.totalErrors }));
 
-app.get('/status', (_req, res) => {
+app.get('/status', requireAuth, (_req, res) => {
   const mem = process.memoryUsage();
   res.json({
     status: 'online', version: '3.0.0',
@@ -397,14 +397,14 @@ app.get('/status', (_req, res) => {
   });
 });
 
-app.get('/models', (_, res) => res.json({
+app.get('/models', requireAuth, (_, res) => res.json({
   openrouter: { provider: 'OpenRouter', free_models: FREE_MODELS, default: FREE_MODELS[0]?.id, count: FREE_MODELS.length },
   groq: { provider: 'Groq', models: GROQ_MODELS, default: GROQ_MODELS[0]?.id, count: GROQ_MODELS.length, note: '30 req/min, no daily cap — fastest free inference' },
   total_free: FREE_MODELS.length + GROQ_MODELS.length,
 }));
 
 // GET /skills — OmniAgent-absorbed skill registry
-app.get('/skills', (_req, res) => {
+app.get('/skills', requireAuth, (_req, res) => {
   res.json({
     total: SKILL_REGISTRY.length,
     source: 'OmniAgent Open Source + Google Jules → ESGGO OmniAgent',
@@ -416,14 +416,14 @@ app.get('/skills', (_req, res) => {
 });
 
 // GET /skills/:id — Single skill detail
-app.get('/skills/:id', (req, res) => {
+app.get('/skills/:id', requireAuth, (req, res) => {
   const skill = SKILL_REGISTRY.find(s => s.id === req.params.id);
   if (!skill) return res.status(404).json({ error: 'Skill not found' });
   res.json(skill);
 });
 
 // POST /esg/skills — ESG Skills list with routing info
-app.post('/esg/skills', (req, res) => {
+app.post('/esg/skills', requireAuth, (req, res) => {
   const esgSkills = [
     { id: 'carbon-calculation', taskType: 'carbon_calculation', name: '碳排計算 (ISO 14064)', pillar: 'E' },
     { id: 'tcfd-analysis', taskType: 'tcfd_analysis', name: 'TCFD 氣候風險分析', pillar: 'E' },
@@ -716,7 +716,7 @@ async function signalCoreCrawl(sourceId) {
 }
 
 // GET /sonnar/status — Crawler scheduler overview
-app.get('/sonnar/status', async (_req, res) => {
+app.get('/sonnar/status', requireAuth, async (_req, res) => {
   try {
     const r = await fetch('http://localhost:3000/api/sonnar/crawl', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
@@ -727,7 +727,7 @@ app.get('/sonnar/status', async (_req, res) => {
 });
 
 // POST /sonnar/crawl — Trigger crawl from gateway
-app.post('/sonnar/crawl', async (req, res) => {
+app.post('/sonnar/crawl', requireAuth, async (req, res) => {
   const { sourceId, all } = req.body || {};
   const target = all ? '__all__' : (sourceId || 'unknown');
   sonnarCrawlCount++;
@@ -737,7 +737,7 @@ app.post('/sonnar/crawl', async (req, res) => {
 });
 
 // GET /sonnar/alerts — Recent alerts
-app.get('/sonnar/alerts', async (_req, res) => {
+app.get('/sonnar/alerts', requireAuth, async (_req, res) => {
   try {
     const r = await fetch('http://localhost:3000/api/sonnar/alerts', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
@@ -748,7 +748,7 @@ app.get('/sonnar/alerts', async (_req, res) => {
 });
 
 // GET /sonnar/radar — Signal radar overview
-app.get('/sonnar/radar', async (_req, res) => {
+app.get('/sonnar/radar', requireAuth, async (_req, res) => {
   try {
     const r = await fetch('http://localhost:3000/api/sonnar/radar', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
