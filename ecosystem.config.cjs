@@ -5,7 +5,7 @@ module.exports = {
       cwd: '/var/www/esggo',
       script: 'pnpm',
       args: 'run start',
-      env: { NODE_ENV: 'production', PORT: 3000, NEXT_TELEMETRY_DISABLED: '1' },
+      env: { NODE_ENV: 'production', PORT: 3000, HOSTNAME: '127.0.0.1', NEXT_TELEMETRY_DISABLED: '1' },
       instances: 1,
       exec_mode: 'fork',
       max_memory_restart: '1G',
