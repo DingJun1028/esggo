@@ -117,3 +117,5 @@ GitHub Actions 出口 IP 範圍見官方文檔 `github/houses` 的 `actions` 清
 <!-- CI trigger 2026-07-11 (5): validate #205 lint/typecheck alignment -->
 
 <!-- CI trigger 2026-07-11 (6): validate #207 Node 22 alignment -->
+
+<!-- CI verify 2026-07-11: confirm Deploy Smart AI Router green after #210 (lint/ts fixes) -->
