@@ -25,6 +25,7 @@ export type DelegationPermission =
   | 'delegate'       // 再授權權限
   | 'govern'         // 治理權限
   | 'audit'          // 審計權限
+  | 'monitor'        // 監控/觀測權限
   | 'full';          // 完全權限
 
 /**
