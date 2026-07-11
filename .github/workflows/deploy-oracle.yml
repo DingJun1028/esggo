@@ -159,9 +159,19 @@ jobs:
           )
           try:
             resp = client.create_session(create_session_details=details)
-            # oci 2.181.1 的 create_session 不接受 wait_for_states；改用 oci.wait_until 輪詢
-            resp = oci.wait_until(client, resp, "data", "lifecycle_state", "ACTIVE")
             sid = resp.data.id
+            # oci 2.181.1 的 wait_until 不支援 create response；手寫輪詢 get_session 直到 ACTIVE
+            import time as _t
+            deadline = _t.time() + 600
+            while _t.time() < deadline:
+              st = client.get_session(sid).data.lifecycle_state
+              if st == "ACTIVE":
+                break
+              if st in ("FAILED", "CANCELED"):
+                raise SystemExit("bastion session " + sid + " -> " + st)
+              _t.sleep(10)
+            else:
+              raise SystemExit("bastion session " + sid + " timeout waiting ACTIVE")
             with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("session=" + sid + "\n")
               f.write("proxy=ssh -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
