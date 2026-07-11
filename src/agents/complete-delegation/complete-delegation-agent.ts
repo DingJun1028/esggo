@@ -205,8 +205,8 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
       });
     }
 
-    // 添加時間約束
-    if (this.delegationScope.validUntil !== Infinity) {
+    // 添加時間約束（無期限時 validUntil 為 Number.MAX_SAFE_INTEGER，不加時間約束）
+    if (this.delegationScope.validUntil !== Number.MAX_SAFE_INTEGER) {
       constraints.push({
         type: 'time',
         description: '授權有效期限',

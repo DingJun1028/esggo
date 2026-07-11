@@ -388,6 +388,7 @@ export class BatchProcessor<T, R> {
 export class ConnectionPool<T> {
   private pool: T[] = [];
   private inUse: Set<T> = new Set();
+  private waiters: Array<() => void> = [];
   private readonly maxSize: number;
   private readonly minSize: number;
 
@@ -428,16 +429,10 @@ export class ConnectionPool<T> {
       return conn;
     }
 
-    // 已達上限：等待其他連線釋放後重試
-    await new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
-        if (this.pool.length > 0 || this.inUse.size < this.maxSize) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 10);
+    // 已達上限：排入等待佇列，待連線釋放時喚醒後重試
+    return new Promise<T>((resolve) => {
+      this.waiters.push(() => resolve(this.acquire()));
     });
-    return this.acquire();
   }
 
   /**
@@ -446,6 +441,9 @@ export class ConnectionPool<T> {
   release(conn: T): void {
     this.inUse.delete(conn);
     this.pool.push(conn);
+    // 喚醒一個等待中的取得者
+    const waiter = this.waiters.shift();
+    if (waiter) waiter();
   }
 
   /**

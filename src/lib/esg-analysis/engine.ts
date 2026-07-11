@@ -52,8 +52,9 @@ function clamp(value: number, min = 0, max = 100): number {
  * 平均一組數值
  */
 function average(values: number[]): number {
-  if (values.length === 0) return 0;
-  return values.reduce((sum, v) => sum + v, 0) / values.length;
+  const finite = values.filter((v) => Number.isFinite(v));
+  if (finite.length === 0) return 0;
+  return finite.reduce((sum, v) => sum + v, 0) / finite.length;
 }
 
 // ==========================================
