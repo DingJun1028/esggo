@@ -10,6 +10,8 @@ import {
   executeCompleteDelegationTask,
   getDelegationManager,
 } from '../src/agents/complete-delegation';
+import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
+import type { NextRequest } from 'next/server';
 
 // ==========================================
 // 創建授權 API 測試
@@ -202,6 +204,37 @@ describe('POST /api/delegation/[id]/execute', () => {
 
     const history = agent.getExecutionHistory();
     expect(history.length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+// ==========================================
+// 執行任務 API - 經由實際 gateway 端對端
+// ==========================================
+
+describe('POST /api/delegation/[id]/execute (gateway e2e)', () => {
+  it('routes execution through omni-gateway.secureForward and returns hashLock', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'gw-user-001',
+      permissions: ['full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const req = {
+      json: async () => ({ intent: 'gateway-e2e-task', context: { x: 1 } }),
+    } as unknown as NextRequest;
+
+    const res = await executeDelegationPOST(req, {
+      params: { id: delegationId },
+    } as { params: { id: string } });
+
+    const body = await res.json();
+
+    expect(body.success).toBe(true);
+    expect(body.executionId).toBeDefined();
+    // 經由 omni-gateway 實際轉發，應回傳 64 字元 SHA-256 hashLock
+    expect(body.gateway).toBeDefined();
+    expect(body.gateway.startHashLock).toMatch(/^[0-9a-f]{64}$/);
+    expect(body.gateway.completeHashLock).toMatch(/^[0-9a-f]{64}$/);
   });
 });
 
