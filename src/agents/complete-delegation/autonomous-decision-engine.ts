@@ -16,6 +16,13 @@ import {
   DecisionConstraint,
   AutonomousDecision,
 } from '../../types/complete-delegation';
+import {
+  DecisionStrategy,
+  DecisionStrategyName,
+  createDecisionStrategy,
+} from './decision-strategy';
+
+type AuditEntry = { type: string; timestamp: number; [key: string]: unknown };
 
 /**
  * 完全代主自行 - 自主決策引擎
@@ -23,11 +30,19 @@ import {
 export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
   private _decisionHistory: Map<string, AutonomousDecision[]> = new Map();
   private _confidenceThreshold: number;
+  private _strategy: DecisionStrategy;
   private _auditLogger: AuditLogger;
 
-  constructor(config?: { confidenceThreshold?: number }) {
+  constructor(
+    config?: {
+      confidenceThreshold?: number;
+      strategy?: DecisionStrategyName | DecisionStrategy;
+      auditSink?: AuditSink;
+    }
+  ) {
     this._confidenceThreshold = config?.confidenceThreshold ?? 0.7;
-    this._auditLogger = new AuditLogger();
+    this._strategy = createDecisionStrategy(config?.strategy ?? 'balanced');
+    this._auditLogger = new AuditLogger(config?.auditSink);
   }
 
   /**
@@ -73,8 +88,8 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
       context.constraints
     );
 
-    // 4. 選擇最佳方案
-    const bestOption = this.selectBestOption(evaluatedOptions);
+    // 4. 選擇最佳方案（委託可插拔決策策略）
+    const bestOption = this.selectBestOption(evaluatedOptions, context);
 
     // 5. 生成決策理由
     const rationale = await this.generateRationale(bestOption, context);
@@ -321,15 +336,23 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
   /**
    * 選擇最佳方案
    */
-  private selectBestOption(options: DecisionOption[]): DecisionOption {
+  private selectBestOption(
+    options: DecisionOption[],
+    context: DecisionContext
+  ): DecisionOption {
     if (options.length === 0) {
       throw new Error('No valid options available');
     }
 
-    // 按評分排序
-    const sorted = [...options].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    // 委託給可插拔決策策略（預設 balanced，與原行為一致）
+    return this._strategy.select(options, context);
+  }
 
-    return sorted[0];
+  /**
+   * 取得完整審計軌跡
+   */
+  getAuditTrail(): AuditEntry[] {
+    return this._auditLogger.getLogs();
   }
 
   /**
@@ -391,32 +414,58 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
   }
 }
 
+/** 審計日誌 sink：可將每一筆日誌轉送至外部儲存（資料庫、Kafka 等） */
+export type AuditSink = (entry: AuditEntry) => void | Promise<void>;
+
 /**
  * 審計日誌記錄器
+ *
+ * 預設將日誌存入記憶體環形緩衝區（上限 1000 筆）並輸出至 console。
+ * 可透過 auditSink 將日誌轉送至外部儲存，實現可查詢、可持久化的審計軌跡。
  */
-class AuditLogger {
-  private _logs: Array<{
-    type: string;
-    timestamp: number;
-    [key: string]: unknown;
-  }> = [];
+export class AuditLogger {
+  private _logs: AuditEntry[] = [];
+  private _sink?: AuditSink;
+  private static readonly MAX_ENTRIES = 1000;
 
-  async log(entry: {
-    type: string;
-    timestamp: number;
-    [key: string]: unknown;
-  }): Promise<void> {
-    this._logs.push(entry);
-
-    // 控制台輸出
-    console.log(`[AuditLogger] ${entry.type}:`, JSON.stringify(entry, null, 2));
+  constructor(sink?: AuditSink) {
+    this._sink = sink;
   }
 
-  getLogs(type?: string): Array<Record<string, unknown>> {
-    if (type) {
-      return this._logs.filter((log) => log.type === type);
+  async log(entry: AuditEntry): Promise<void> {
+    this._logs.push(entry);
+
+    // 限制記憶體用量（環形緩衝區）
+    if (this._logs.length > AuditLogger.MAX_ENTRIES) {
+      this._logs.shift();
     }
-    return this._logs;
+
+    // 控制台輸出
+    console.log(`[AuditLogger] ${entry.type}:`, JSON.stringify(entry));
+
+    // 轉送至外部 sink（若有）
+    if (this._sink) {
+      try {
+        await this._sink(entry);
+      } catch (err) {
+        console.error('[AuditLogger] sink failed:', err);
+      }
+    }
+  }
+
+  getLogs(type?: string): AuditEntry[] {
+    return type
+      ? this._logs.filter((log) => log.type === type)
+      : [...this._logs];
+  }
+
+  /** 進階查詢：依謂詞過濾審計日誌 */
+  query(predicate: (entry: AuditEntry) => boolean): AuditEntry[] {
+    return this._logs.filter(predicate);
+  }
+
+  get size(): number {
+    return this._logs.length;
   }
 }
 
