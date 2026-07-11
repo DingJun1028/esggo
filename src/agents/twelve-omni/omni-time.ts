@@ -158,6 +158,7 @@ export class OmniTime implements IOmniTime {
    */
   async enterTimeTravelMode(config: TimeTravelConfig): Promise<TimeTravelSession> {
     const sessionId = `TT-${Date.now()}-${randomUUID().slice(0, 6).toUpperCase()}`;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     const session: TimeTravelSession = {

@@ -140,6 +140,7 @@ export class TemporalRift implements ITemporalRift {
    */
   async openRift(config: TimeTravelConfig): Promise<TemporalRiftSession> {
     const sessionId = `RIFT-${Date.now()}-${randomUUID().slice(0, 6).toUpperCase()}`;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     const session: TemporalRiftSession = {

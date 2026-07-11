@@ -123,7 +123,7 @@ export class OmniHealing implements IOmniHealing {
     const chaosTypes: ChaosType[] = ['mutation', 'delay', 'drop', 'duplicate', 'corrupt'];
     const chaosType = chaosTypes[Math.floor(Math.random() * chaosTypes.length)];
 
-    let modifiedEvent = { ...event };
+    const modifiedEvent = { ...event };
 
     switch (chaosType) {
       case 'mutation':
