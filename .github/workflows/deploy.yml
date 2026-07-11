@@ -59,7 +59,8 @@ jobs:
           set -e
           if [ -f pnpm-lock.yaml ]; then
             echo "Using pnpm"
-            corepack enable
+            # Install pnpm via npm (corepack enable fails on pnpm@11.5.2 signature keyid check)
+            npm install -g "pnpm@$(node -p "require('./package.json').packageManager.replace('pnpm@','').split(' ')[0]")"
             pnpm install --frozen-lockfile
           elif [ -f yarn.lock ]; then
             echo "Using yarn"
