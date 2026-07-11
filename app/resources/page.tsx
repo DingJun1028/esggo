@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 // ═══════════════════════════════════════════════════════════════
@@ -119,7 +119,15 @@ function Card({
   );
 }
 
-function MetricRow({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
+function MetricRow({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: string | number;
+  sub?: string;
+}) {
   return (
     <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
       <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
@@ -127,13 +135,21 @@ function MetricRow({ label, value, sub }: { label: string; value: string | numbe
         <span className="text-sm font-mono font-semibold text-gray-800 dark:text-gray-200">
           {value}
         </span>
-        {sub && <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-1">{sub}</span>}
+        {sub && (
+          <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-1">{sub}</span>
+        )}
       </div>
     </div>
   );
 }
 
-function Badge({ children, color = 'teal' }: { children: React.ReactNode; color?: string }) {
+function Badge({
+  children,
+  color = 'teal',
+}: {
+  children: React.ReactNode;
+  color?: string;
+}) {
   const colorMap: Record<string, string> = {
     teal: 'bg-[#009EB0]/15 text-[#009EB0]',
     gold: 'bg-[#D4AF37]/15 text-[#D4AF37]',
@@ -262,32 +278,25 @@ export default function ResourcesPage() {
 
   // ── Modules Tab ─────────────────────────────────────────
 
-  // ⚡ Bolt Optimization: Memoize derived arrays to prevent expensive map/filter on every render
-  const categories = useMemo(() => {
-    if (!data) return [];
-    return ['all', ...new Set(data.modules.map(m => m.category))];
-  }, [data]);
-
-  const filtered = useMemo(() => {
-    if (!data) return [];
-    return moduleFilter === 'all'
-      ? data.modules
-      : data.modules.filter(m => m.category === moduleFilter);
-  }, [data, moduleFilter]);
-
   const renderModules = () => {
     if (!data) return null;
+
+    const categories = ['all', ...new Set(data.modules.map(m => m.category))];
+    const filtered =
+      moduleFilter === 'all'
+        ? data.modules
+        : data.modules.filter(m => m.category === moduleFilter);
 
     return (
       <div>
         {/* Filter Bar */}
         <div className="flex flex-wrap gap-2 mb-5">
-          {categories.map((cat) => {
+          {categories.map(cat => {
             const label = cat === 'all' ? '全部' : CATEGORY_LABELS[cat]?.label || cat;
             const count =
               cat === 'all'
                 ? data.modules.length
-                : data.modules.filter((m) => m.category === cat).length;
+                : data.modules.filter(m => m.category === cat).length;
             return (
               <button
                 key={cat}
@@ -306,7 +315,7 @@ export default function ResourcesPage() {
 
         {/* Module Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((mod) => {
+          {filtered.map(mod => {
             const catInfo = CATEGORY_LABELS[mod.category];
             const statusInfo = STATUS_LABELS[mod.status];
             return (
@@ -320,7 +329,9 @@ export default function ResourcesPage() {
                         <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#009EB0] transition-colors">
                           {mod.name}
                         </h3>
-                        <p className="text-[11px] text-gray-400 dark:text-gray-500">{mod.nameEn}</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                          {mod.nameEn}
+                        </p>
                       </div>
                     </div>
                     <Badge color={statusInfo?.color}>{statusInfo?.label}</Badge>
@@ -390,7 +401,7 @@ export default function ResourcesPage() {
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {data.aiModels.map((provider) => {
+        {data.aiModels.map(provider => {
           const isConfigured = provider.status === 'configured';
           return (
             <Card
@@ -400,15 +411,15 @@ export default function ResourcesPage() {
                 provider.provider === 'Groq'
                   ? '⚡'
                   : provider.provider === 'OpenRouter'
-                    ? '🔀'
-                    : '💎'
+                  ? '🔀'
+                  : '💎'
               }
               accent={
                 provider.provider === 'Groq'
                   ? 'gold'
                   : provider.provider === 'OpenRouter'
-                    ? 'blue'
-                    : 'teal'
+                  ? 'blue'
+                  : 'teal'
               }
             >
               {/* Provider Status */}
@@ -419,7 +430,9 @@ export default function ResourcesPage() {
                     {isConfigured ? 'Configured' : 'Unconfigured'}
                   </span>
                 </div>
-                <Badge color={isConfigured ? 'green' : 'red'}>{provider.rateLimit}</Badge>
+                <Badge color={isConfigured ? 'green' : 'red'}>
+                  {provider.rateLimit}
+                </Badge>
               </div>
 
               {/* API Key Env */}
@@ -429,7 +442,7 @@ export default function ResourcesPage() {
 
               {/* Models List */}
               <div className="space-y-2">
-                {provider.models.map((model) => {
+                {provider.models.map(model => {
                   const speedInfo = SPEED_LABELS[model.speed];
                   return (
                     <div
@@ -468,10 +481,11 @@ export default function ResourcesPage() {
 
   // ── Infrastructure Tab ──────────────────────────────────
 
-  // ⚡ Bolt Optimization: Memoize grouped infrastructure to prevent O(N) reduce on every render
-  const grouped = useMemo(() => {
-    if (!data) return {};
-    return data.infrastructure.reduce(
+  const renderInfrastructure = () => {
+    if (!data) return null;
+
+    // Group by type
+    const grouped = data.infrastructure.reduce(
       (acc, item) => {
         if (!acc[item.type]) acc[item.type] = [];
         acc[item.type].push(item);
@@ -479,10 +493,6 @@ export default function ResourcesPage() {
       },
       {} as Record<string, InfraResource[]>,
     );
-  }, [data]);
-
-  const renderInfrastructure = () => {
-    if (!data) return null;
 
     return (
       <div className="space-y-6">
@@ -495,10 +505,12 @@ export default function ResourcesPage() {
                 <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100">
                   {typeInfo.label}
                 </h3>
-                <span className="text-xs text-gray-400 dark:text-gray-500">({items.length})</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">
+                  ({items.length})
+                </span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {items.map((infra) => {
+                {items.map(infra => {
                   const statusInfo = INFRA_STATUS_LABELS[infra.status];
                   return (
                     <div
@@ -555,7 +567,9 @@ export default function ResourcesPage() {
               R
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800 dark:text-white">系統平台資源項目</h1>
+              <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+                系統平台資源項目
+              </h1>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 System Platform Resources — Modules, AI Models, Infrastructure
               </p>
@@ -660,9 +674,7 @@ export default function ResourcesPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-gray-400 dark:text-gray-500">
-          System Platform Resources v1.0 | {data?.platform} {data?.version} |{' '}
-          {data?.summary.totalModules} modules, {data?.summary.totalAIModels} AI models,{' '}
-          {data?.summary.totalInfra} infra components
+          System Platform Resources v1.0 | {data?.platform} {data?.version} | {data?.summary.totalModules} modules, {data?.summary.totalAIModels} AI models, {data?.summary.totalInfra} infra components
         </div>
       </div>
     </div>
