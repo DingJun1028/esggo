@@ -144,18 +144,19 @@ jobs:
             "key_file": str(kp),
           }
           client = oci.bastion.BastionClient(cfg)
-          # 用 from_dict 構建，避免 SDK 模型欄位名不匹配導致 Unrecognized keyword arguments
-          details = oci.bastion.models.CreateSessionDetails.from_dict({
-            "bastionId": os.environ["OCI_BASTION_ID"],
-            "displayName": "gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
-            "sessionTtlInSeconds": 3600,
-            "targetResourceDetails": {
-              "sessionType": "MANAGED_SSH",
-              "targetResourceId": os.environ["OCI_TARGET_RESOURCE_ID"],
-              "targetResourceOperatingSystemUserName": "root",
-            },
-            "keyDetails": {"publicKeyContent": pub},
-          })
+          # 注意: oci 2.181.1 的 CreateSessionTargetResourceDetails 是基類(只有 session_type)，
+          # MANAGED_SSH 要用具體子類 CreateManagedSshSessionTargetResourceDetails（含 target_resource_id / target_resource_operating_system_user_name）
+          details = oci.bastion.models.CreateSessionDetails(
+            bastion_id=os.environ["OCI_BASTION_ID"],
+            display_name="gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
+            session_ttl_in_seconds=3600,
+            target_resource_details=oci.bastion.models.CreateManagedSshSessionTargetResourceDetails(
+              session_type="MANAGED_SSH",
+              target_resource_id=os.environ["OCI_TARGET_RESOURCE_ID"],
+              target_resource_operating_system_user_name="root",
+            ),
+            key_details=oci.bastion.models.PublicKeyDetails(public_key_content=pub),
+          )
           try:
             resp = client.create_session(create_session_details=details, wait_for_states=["ACTIVE"])
             sid = resp.data.id
