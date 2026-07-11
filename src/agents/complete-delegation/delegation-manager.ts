@@ -41,7 +41,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     // 2. 創建授權範圍
     const delegationId = this.generateDelegationId();
     const validFrom = Date.now();
-    const validUntil = params.validUntil ?? Infinity;
+    const validUntil = params.validUntil ?? Number.MAX_SAFE_INTEGER;
 
     const scope: ICompleteDelegationScope = {
       delegationId,
@@ -109,9 +109,8 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       }
     }
 
-    // 4. 驗證簽章（簡化版：只檢查簽章是否存在）
-    // 在生產環境中應該進行完整的簽章驗證
-    return true;
+    // 4. 驗證簽章（重新計算雜湊並比對，防止簽章被竄改）
+    return this.verifySignature(scope);
   }
 
   /**
