@@ -176,6 +176,9 @@ jobs:
           ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
             cd /var/www/esggo
+            git checkout -f main
+            git fetch origin main
+            git reset --hard origin/main
             pnpm install --frozen-lockfile
             pnpm run build
             pm2 restart esggo-core omniagent-gateway
@@ -199,6 +202,9 @@ jobs:
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
             cd /var/www/esggo
+            git checkout -f main
+            git fetch origin main
+            git reset --hard origin/main
             pnpm install --frozen-lockfile
             pnpm run build
             pm2 restart esggo-core omniagent-gateway
