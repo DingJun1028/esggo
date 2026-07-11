@@ -1,5 +1,5 @@
 name = "smart-ai-router"
-main = "src/index.ts"
+main = "my-worker/src/index.ts"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
@@ -9,7 +9,7 @@ SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
 # 靜態資源
 [assets]
-directory = "dist"
+directory = "my-worker/dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 
@@ -28,4 +28,3 @@ preview_id = "your-preview-kv-namespace-id"
 # 觀測/日誌
 [observability]
 enabled = true
-logpush = true
