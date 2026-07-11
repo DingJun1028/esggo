@@ -15,8 +15,8 @@
 
 | # | 日期 | 類別 | 錯誤現象 | 根因 | 修復 / 避雷 | 重複? | 狀態 | 關聯 |
 |---|------|------|----------|------|-------------|-------|------|------|
-| G1 | 07-09~07-11 | 合併保護 API 422 | `gh api PUT /branches/main/protection` 重建保護報 **422** `required_status_checks/restrictions weren't supplied`；或傳 `required_pull_request_reviews:null` 報 422 `null is not an object`（API 拒 null 物件，最小 review count=1 無法設 0） | GitHub API 重建保護**強制同帶 4 欄**：`required_status_checks`+`required_pull_request_reviews`+`enforce_admins`+`restrictions` 缺一不可（缺任一带來 422） | **合規流程=暫時 `DELETE` 保護 → squash 合併 → `PUT` 重建**。重建 JSON（實測可過、不 422）：`{'required_status_checks':null,'required_pull_request_reviews':{'required_approving_review_count':1,'dismiss_stale_reviews':true,'require_code_owner_reviews':false},'enforce_admins':true,'restrictions':null}` ⚠️ `required_pull_request_reviews` 必須是**物件**(count=1)，絕不能設 `null`（那會 422）；`required_status_checks`/`restrictions` 才可設 `null` | 🔴 重複 | known | #155 #185 #187 #188 #190 |
-| G2 | 07-09~07-11 | 自批准限制 | 自己不能 approve 自己的 PR；`--admin` 也繞不過 required_approving_review_count:1 | GitHub 平台規則 | 走 G1 放寬保護流程（暫時移除 review 要求再合） | 🔴 重複 | known | 多 PR |
+| G1 | 07-09~07-11 | 合併保護 API 422 | `gh api PUT /branches/main/protection` 重建保護報 **422** `required_status_checks/restrictions weren't supplied`；或傳 `required_pull_request_reviews:null` 報 422 `null is not an object`（API 拒 null 物件，最小 review count=1 無法設 0） | GitHub API 重建保護**強制同帶 4 欄**：`required_status_checks`+`required_pull_request_reviews`+`enforce_admins`+`restrictions` 缺一不可（缺任一带來 422） | **合規流程=暫時 `DELETE` 保護 → squash 合併 → `PUT` 重建**。重建 JSON（實測可過、不 422）：`{'required_status_checks':null,'required_pull_request_reviews':{'required_approving_review_count':1,'dismiss_stale_reviews':true,'require_code_owner_reviews':false},'enforce_admins':true,'restrictions':null}` ⚠️ `required_pull_request_reviews` 必須是**物件**(count=1)，絕不能設 `null`（那會 422）；`required_status_checks`/`restrictions` 才可設 `null` | 🔴 重複 | known | #155 #185 #187 #188 #190 #191(自動化 safe-merge.ps1) |
+| G2 | 07-09~07-11 | 自批准限制 | 自己不能 approve 自己的 PR；`--admin` 也繞不過 required_approving_review_count:1 | GitHub 平台規則 | 走 G1 放寬保護流程（暫時移除 review 要求再合） | 🔴 重複 | known | 多 PR；#191 自動化 |
 | G3 | 07-11 | 合併前未查衝突 | 走完放寬保護前置才發現 PR 是 CONFLICTING，白做 | 沒先 `gh pr view --json mergeable` | **合併前必做**：`gh pr view N --json mergeable`；若 CONFLICTING 先 `git merge origin/main` 解衝突或 rebase 再 push | 🟢 一次性 | fixed | #188 |
 | G4 | 07-09~07-11 / 07-11 本 session | 草稿混入 PR/branch（實際漏進 main） | #195 把 80 個 untracked 半成品（complete-delegation / esg-analysis / mobile / cli / esg-report 等）連同 deploy.yml 一併 squash 進 main（commit ff9fa4e93），gemini bot 還因此誤審了 delegation-manager.ts 的簽章繞過漏洞 | 從還帶 untracked 草稿的 working tree 開 `git checkout -b` 新分支 → 草稿被帶進新分支 → commit 時 `git add` 連草稿一起收進去 | **開新分支前先 `git status` 確認 working tree 完全乾淨（無 untracked 半成品）**；草稿隔離在 `wip/draft-scaffolding`，絕不在帶草稿的 tree 上開功能分支。漏進 main 後用 `git revert --no-edit <sha>` 生成 revert PR 移除（不動 wip 分支），再單獨重提純淨 PR | 🔴 重複 | fixed | #188→#195→#197(revert)→#198(純淨重提) |
 | G5 | 07-11 | Workers Builds 失敗誤判 | Cloudflare Worker 部署紅，以為擋合併 | 那是 Cloudflare 連 Git 自動部署，非 GitHub Actions；main protection 無 required_status_checks → 不擋 | 查 `wrangler.toml` 確認 PR 是否動到 worker entry；此 fail 通常不擋合併 | 🟢 一次性 | fixed | #188 |
@@ -67,7 +67,7 @@
 ---
 
 ## 本週 🔴 重複榜（優先做成預檢 / skill）
-1. **G1 + G2**：GitHub 合併保護（DELETE→合併→重建）— 每個要合併的 PR 都踩
+1. **G1 + G2**：GitHub 合併保護（DELETE→合併→重建）— 每個要合併的 PR 都踩；**#191 已做成 `scripts/safe-merge.ps1` 一鍵執行**（仍 🔴，平台規則不變，但人工步驟免了）
 2. **B1**：pnpm 本機壞 → 本機用 npm
 3. **C1**：OCI 公網關 → 走 Bastion 跳板
 
@@ -76,4 +76,4 @@
 - [ ] `gh pr view N --json mergeable` 非 CONFLICTING（G3）
 - [ ] 確認 PR 未動 `wrangler.toml`/worker entry（G5）
 - [ ] 本機驗證：`npm run typecheck` + `npm run lint` + `npm run build` 全過（B1/B3）
-- [ ] 合併走 G1 合規流程；合完立即重建保護
+- [ ] 合併直接跑 `scripts/safe-merge.ps1 -PrNumber N`（自動含 G1+G3+G4+G5+B1 全檢，合完自動重建保護）
