@@ -26,6 +26,26 @@ yarn-error.log*
 # real secret files (keep out of git; local-only)
 .env.secrets
 .env.secrets.*
+.env.production
+.env.staging
+
+# Private keys & certificates (NEVER commit)
+*.key
+*.pem
+*.p12
+*.pfx
+*.cert
+*.crt
+secrets/
+.secrets/
+*-secret.json
+*-credentials.json
+service-account*.json
+gcp-sa-key*.txt
+
+# Watchdog & runtime logs
+logs/watchdog.log
+logs/*.log
 
 # vercel
 .vercel

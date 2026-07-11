@@ -13,7 +13,7 @@ class StakeholderAnalysisSkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的利害關係人分析專家。
+    return `你是 OmniCore 的利害關係人分析專家。
 
 ## 利害關係人分類
 1. **內部利害關係人**：股東、董事會、管理層、員工

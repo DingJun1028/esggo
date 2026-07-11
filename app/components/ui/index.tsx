@@ -1,5 +1,5 @@
 /**
- * ESG GO Design System — Shared UI Components
+ * OmniCore Design System — Shared UI Components
  * app/components/ui/index.ts
  *
  * 10 Principles:

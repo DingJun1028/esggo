@@ -36,7 +36,7 @@ class SDGMappingSkill extends ESGSkill {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
     const goalsList = SDG_GOALS.map(g => `- SDG ${g.id}: ${g.name} (${g.nameEn})`).join('\n');
 
-    return `你是 ESG GO 的 SDG 對應專家，精通聯合國 17 項永續發展目標（SDGs）。
+    return `你是 OmniCore 的 SDG 對應專家，精通聯合國 17 項永續發展目標（SDGs）。
 
 ## 17 項 SDG 目標
 ${goalsList}

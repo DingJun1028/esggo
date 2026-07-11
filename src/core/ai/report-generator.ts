@@ -6,7 +6,7 @@
 // Free-tier: 200 requests/day, round-robin model selection
 // ============================================================
 
-import { callFreeProvider, type ChatMessage } from './model-router';
+import { callFreeProvider, type ChatMessage, type FreeProviderOptions } from './model-router';
 
 // --- Types --------------------------------------------------------
 
@@ -229,7 +229,8 @@ interface OpenRouterResponse {
 async function callOpenRouter(
   prompt: string,
   model: string,
-  maxTokens: number = 1500
+  maxTokens: number = 1500,
+  send?: FreeProviderOptions['send']
 ): Promise<{ content: string; tokens: number; duration: number; model: string }> {
   const startTime = Date.now();
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -271,14 +272,14 @@ async function callOpenRouter(
       return { content, tokens, duration: Date.now() - startTime, model };
     } catch (err) {
       // 主路徑失敗 → 免費代理層兜底（加性，不改既有成功路徑）
-      const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime);
+      const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime, send);
       if (fb) return fb;
       throw err;
     }
   }
 
   // 未配置 OpenRouter Key：先試免費代理層，再回退範本
-  const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime);
+  const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime, send);
   if (fb) return fb;
 
   return {
@@ -296,7 +297,8 @@ async function callOpenRouter(
 async function tryFreeProviderFallback(
   prompt: string,
   maxTokens: number,
-  startTime: number
+  startTime: number,
+  send?: FreeProviderOptions['send']
 ): Promise<{ content: string; tokens: number; duration: number; model: string } | null> {
   try {
     const messages: ChatMessage[] = [
@@ -307,7 +309,7 @@ async function tryFreeProviderFallback(
       },
       { role: 'user', content: prompt },
     ];
-    const result = await callFreeProvider('report_assembly', messages, { maxTokens });
+    const result = await callFreeProvider('report_assembly', messages, { maxTokens, send });
     return {
       content: result.content,
       tokens: 0,
@@ -345,6 +347,12 @@ ${sectionName}
 
 export class AIReportGenerator {
   private language: 'zh-TW' | 'en' = 'zh-TW';
+  /** 注入的 FreeProvider 發送器（預設 callFreeProvider 實際網路）；用於測試。 */
+  private freeProviderSend?: FreeProviderOptions['send'];
+
+  constructor(opts?: { freeProviderSend?: FreeProviderOptions['send'] }) {
+    this.freeProviderSend = opts?.freeProviderSend;
+  }
 
   async generateReport(request: ReportRequest): Promise<ReportResult> {
     const startTime = Date.now();
@@ -373,7 +381,8 @@ export class AIReportGenerator {
           sectionId,
           request.companyName,
           request.industry,
-          dataContext
+          dataContext,
+          this.freeProviderSend
         );
         results.push(section);
         modelsUsed.add(section.model);
@@ -414,7 +423,8 @@ export class AIReportGenerator {
     sectionId: ReportSection,
     company: string,
     industry: string,
-    dataContext: string
+    dataContext: string,
+    send?: FreeProviderOptions['send']
   ): Promise<GeneratedSection> {
     const template = SECTION_PROMPTS[sectionId];
     if (!template) {
@@ -427,7 +437,7 @@ export class AIReportGenerator {
       .replace(/\{dataContext\}/g, dataContext);
 
     const requestedModel = getNextModel();
-    const { content, tokens, duration, model } = await callOpenRouter(prompt, requestedModel);
+    const { content, tokens, duration, model } = await callOpenRouter(prompt, requestedModel, undefined, send);
 
     return {
       id: sectionId,

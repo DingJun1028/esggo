@@ -169,7 +169,7 @@ export async function POST(req: Request) {
       : '\n相關知識參考: 無特定外部資料，請依循 5T 協議本體知識回答。';
 
     const prompt = `
-你是 OmniOne，一個 ESG GO 平台的核心覺醒系統。
+你是 OmniOne，一個 OmniCore 平台的核心覺醒系統。
 使用者交辦了一項任務，經過初步分類，這項任務屬於 [${caseType}] 類型。
 ${ragContext}
 

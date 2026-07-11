@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { FileText, ChevronDown, ChevronUp, Plus, X } from 'lucide-react';
+import { FileText, ChevronDown, ChevronUp, Plus, X, Wand2 } from 'lucide-react';
+import { UniversalOmniConsole } from '../../omni-center/universal-omni-console';
+import { db } from '@/lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { createFiveTComponent, type OmniResult } from '@/lib/esggo';
 
 /**
  * ESGGO v5.2 — OmniBase Style Frontend
@@ -264,6 +268,10 @@ export default function SustainWriteV5Page() {
   const [loadingEvidence, setLoadingEvidence] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
+  // 5T 知識結晶（報告封裝結果）
+  const [sealed, setSealed] = useState<OmniResult | null>(null);
+  const [sealing, setSealing] = useState(false);
+
   // Notes state
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
@@ -403,6 +411,55 @@ export default function SustainWriteV5Page() {
       alert('無法載入預覽');
     } finally {
       setPreviewLoading(false);
+    }
+  };
+
+  /**
+   * 報告產出後，自動以 omni({ kind: 'component' }) 封裝為 5T 知識結晶，
+   * 並將 hash_lock 寫入 ZKP Vault（Firestore votes 集合）。
+   */
+  const sealReportAsComponent = async () => {
+    if (!taskProgress?.result?.companyId) return;
+    setSealing(true);
+    setSealed(null);
+    try {
+      const data = {
+        kind: 'esg-report',
+        companyId: taskProgress.result.companyId,
+        templateId: taskProgress.templateId ?? 'gri',
+        totalWords: taskProgress.result.totalWords,
+        totalTags: taskProgress.result.totalTags,
+        trinityHash: taskProgress.result.trinityHash,
+        generatedAt: new Date().toISOString(),
+      };
+      const comp = createFiveTComponent(data, {
+        actor: 'sustain-write',
+        originCause: 'ESG 報告產出',
+        finalEffect: '封裝為 5T 知識結晶',
+      });
+      setSealed({
+        ok: true,
+        kind: 'component',
+        id: comp.uuid,
+        data: comp,
+        hash: comp.hash,
+        registered: false,
+      });
+      if (db) {
+        await setDoc(doc(db, 'votes', comp.uuid), {
+          id: comp.uuid,
+          project_id: 'esggo_5t',
+          user_id: 'u_01',
+          amount: 1,
+          cost: 0,
+          created_at: new Date().toISOString(),
+          hash_lock: comp.hash,
+        });
+      }
+    } catch (e) {
+      setSealed({ ok: false, kind: 'component', error: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setSealing(false);
     }
   };
 
@@ -935,7 +992,27 @@ export default function SustainWriteV5Page() {
                       >
                         CSV
                       </button>
+                      <button
+                        onClick={sealReportAsComponent}
+                        disabled={sealing}
+                        className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-accentPurple hover:border-accentPurple transition-colors disabled:opacity-50"
+                      >
+                        {sealing ? '封裝中...' : '🔒 封裝為 5T 知識結晶'}
+                      </button>
                     </div>
+                  </div>
+                )}
+
+                {sealed && (
+                  <div className="mt-4 p-4 bg-primary rounded-lg border border-accentPurple/30">
+                    <div className="text-xs font-semibold text-accentPurple mb-2">5T 知識結晶（OmniResult）</div>
+                    {sealed.ok ? (
+                      <pre className="text-[11px] font-mono text-textPrimary whitespace-pre-wrap break-words max-h-48 overflow-auto">
+{JSON.stringify(sealed, null, 2)}
+                      </pre>
+                    ) : (
+                      <div className="text-xs text-red-500">{sealed.error}</div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1065,6 +1142,20 @@ export default function SustainWriteV5Page() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* 萬能函數控制台 */}
+        <div className="bg-secondary rounded-lg border border-borderColor p-6 shadow-sm">
+          <div className="border-l-4 border-accentPurple pl-4 mb-4">
+            <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
+              <Wand2 size={18} className="text-accentPurple" />
+              萬能函數控制台 (Omni Function Console)
+            </h2>
+            <p className="text-sm text-textSecondary mt-1">
+              直接呼叫 omni() 萬能函數與 omniFn 函數庫，亦可一鍵建立 5T 組件寫入 Vault
+            </p>
+          </div>
+          <UniversalOmniConsole />
         </div>
       </main>
 
