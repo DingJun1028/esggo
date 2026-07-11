@@ -1,6 +1,6 @@
 /**
  * C版專業永續報告範本與章節定義
- * 自動生成自 ESG GO C版 Excel 資料庫
+ * 自動生成自 OmniCore C版 Excel 資料庫
  * 包含12章節定義、GRI對應、報告段落範本與組合函式
  */
 
@@ -259,8 +259,8 @@ export function assembleReport(companyName: string): AssembledReport {
     }
 
     // Replace {{companyName}} and {{companyType}}
-    content = content.replace(/\{\{companyName\}\}/g, company.name);
-    content = content.replace(/\{\{companyType\}\}/g, company.type);
+    content = content.replace(/\{\{companyName\}\}/g, company.companyName);
+    content = content.replace(/\{\{companyType\}\}/g, company.industryType);
 
     // Replace {{answer:questionId}} with actual answer
     content = content.replace(/\{\{answer:([^}]+)\}\}/g, (_, qId: string) => {
@@ -292,9 +292,9 @@ export function assembleReport(companyName: string): AssembledReport {
   }
 
   return {
-    companyName: company.name,
-    companyType: company.type,
-    title: `${company.name} 永續報告 (C版專業揭露)`,
+    companyName: company.companyName,
+    companyType: company.industryType,
+    title: `${company.companyName} 永續報告 (C版專業揭露)`,
     generatedAt: new Date().toISOString(),
     sections,
     dataMaturitySummary: maturitySummary,

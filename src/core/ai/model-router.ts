@@ -140,6 +140,13 @@ const MODELS = {
     temperature: 0.7,
     reasoning: 'Command R Plus: 工具呼叫與搜尋',
   },
+  or_mistral24b: {
+    provider: 'openrouter' as const,
+    model: 'mistralai/mistral-small-3.1-24b:free',
+    maxTokens: 256,
+    temperature: 0.6,
+    reasoning: 'Mistral Small 3.1 24B: 輕量高效，免費層均衡選擇',
+  },
 
   // Cloudflare AI Workers (免費 10K req/day)
   cf_llama70b: {
@@ -230,7 +237,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   evidence_ocr: {
     primary: MODELS.groq_llama8b,        // 輕量快速
     fallback1: MODELS.cf_llama8b,        // Cloudflare 輕量
-    fallback2: MODELS.mistral_mistral_small, // Mistral 小模型
+    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
     taskType: 'evidence_ocr',
     strategy: '快速精確提取',
   },
@@ -239,7 +246,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   email_archival: {
     primary: MODELS.groq_llama8b,        // 極速分類
     fallback1: MODELS.cf_llama8b,        // Cloudflare 分類
-    fallback2: MODELS.mistral_mistral_small,
+    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
     taskType: 'email_archival',
     strategy: '極速分類',
   },
@@ -266,7 +273,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   swarm_orchestration: {
     primary: MODELS.groq_llama8b,        // 極速決策
     fallback1: MODELS.cf_llama8b,
-    fallback2: MODELS.mistral_mistral_small,
+    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
     taskType: 'swarm_orchestration',
     strategy: '極速決策',
   },
@@ -284,7 +291,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   sdg_mapping: {
     primary: MODELS.groq_llama70b,       // 快速知識匹配
     fallback1: MODELS.or_qwen80b,
-    fallback2: MODELS.cf_llama70b,
+    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
     taskType: 'sdg_mapping',
     strategy: '快速知識匹配',
   },
@@ -311,7 +318,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   general: {
     primary: MODELS.groq_llama70b,       // 速度 + 品質均衡
     fallback1: MODELS.cf_llama70b,        // Cloudflare 全球邊緣
-    fallback2: MODELS.mistral_mistral,    // Mistral 高品質
+    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
     taskType: 'general',
     strategy: '速度與品質均衡',
   },
@@ -435,7 +442,7 @@ export function generatePrompts(taskType: string, ctx: SkillContext) {
   const skill = getSkill(taskType);
   if (!skill) {
     return {
-      system: '你是 ESG GO 的 AI 助手，請用繁體中文回答 ESG 相關問題。',
+      system: '你是 OmniCore 的 AI 助手，請用繁體中文回答 ESG 相關問題。',
       user: ctx.data ? JSON.stringify(ctx.data) : '',
       skillId: null,
     };
@@ -468,6 +475,7 @@ export async function callCloudflareAI(
     maxTokens?: number;
     temperature?: number;
     stream?: boolean;
+    timeoutMs?: number;
   } = {}
 ): Promise<CloudflareAIResponse> {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
@@ -477,22 +485,36 @@ export async function callCloudflareAI(
     throw new Error('Cloudflare credentials not configured');
   }
 
-  const response = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${model}`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        messages,
-        max_tokens: options.maxTokens || 256,
-        temperature: options.temperature || 0.7,
-        stream: options.stream || false,
-      }),
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), options.timeoutMs || 15000);
+
+  let response: Response;
+  try {
+    response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${model}`,
+      {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Authorization': `Bearer ${apiToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages,
+          max_tokens: options.maxTokens || 256,
+          temperature: options.temperature || 0.7,
+          stream: options.stream || false,
+        }),
+      }
+    );
+  } catch (e) {
+    clearTimeout(timer);
+    if (e instanceof Error && e.name === 'AbortError') {
+      throw new Error(`Cloudflare AI 逾時 (${options.timeoutMs || 15000}ms)`);
     }
-  );
+    throw e;
+  }
+  clearTimeout(timer);
 
   const data = await response.json() as CloudflareAIResponse;
 
@@ -535,4 +557,255 @@ export function postProcessResponse(taskType: string, response: string, ctx: Ski
   const skill = getSkill(taskType);
   if (!skill) return response;
   return skill.postProcess(response, ctx);
+}
+
+// ── Free Provider 代理層（統一免費模型池 + 自動故障轉移）─────────
+// 將所有免費層（Groq / OpenRouter :free / Cloudflare / Together / Mistral free tier）
+// 聚合為統一代理，並依路由表提供 primary → fallback1 → fallback2 自動轉移。
+// 對外提供：getFreeModelPool / getFreeTierModels / callFreeProvider / selectFreeModel，
+// 供 Hermes Agent 與 OmniGateway 以 $0 成本取得 ESG 推理能力。
+
+export interface FreeProviderConfig {
+  id: string;
+  provider: ModelConfig['provider'];
+  model: string;
+  maxTokens: number;
+  temperature: number;
+  apiUrl: string;
+  apiKeyEnv: string;
+  isFreeTier: boolean; // model 以 :free 結尾者為真免費模型
+}
+
+export interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+interface ProviderEndpoint {
+  apiUrl: string;
+  apiKeyEnv: string;
+}
+
+const PROVIDER_ENDPOINTS: Record<ModelConfig['provider'], ProviderEndpoint> = {
+  groq:       { apiUrl: 'https://api.groq.com/openai/v1/chat/completions',                                  apiKeyEnv: 'GROQ_API_KEY' },
+  openrouter: { apiUrl: 'https://openrouter.ai/api/v1/chat/completions',                                    apiKeyEnv: 'OPENROUTER_API_KEY' },
+  together:   { apiUrl: 'https://api.together.xyz/v1/chat/completions',                                     apiKeyEnv: 'TOGETHER_API_KEY' },
+  mistral:    { apiUrl: 'https://api.mistral.ai/v1/chat/completions',                                        apiKeyEnv: 'MISTRAL_API_KEY' },
+  gemini:     { apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',          apiKeyEnv: 'GEMINI_API_KEY' },
+  cloudflare: { apiUrl: 'cloudflare',                                                                         apiKeyEnv: 'CLOUDFLARE_API_TOKEN' },
+};
+
+/**
+ * 所有免費層 provider 的統一池（由 MODELS 自動派生，新增模型即自動納入）。
+ */
+export const FREE_PROVIDER_POOL: FreeProviderConfig[] = (Object.values(MODELS) as ModelConfig[]).map(m => {
+  const ep = PROVIDER_ENDPOINTS[m.provider];
+  return {
+    id: m.model,
+    provider: m.provider,
+    model: m.model,
+    maxTokens: m.maxTokens,
+    temperature: m.temperature,
+    apiUrl: ep.apiUrl,
+    apiKeyEnv: ep.apiKeyEnv,
+    isFreeTier: m.model.endsWith(':free'),
+  };
+});
+
+/** 取得完整免費模型池。 */
+export function getFreeModelPool(): FreeProviderConfig[] {
+  return FREE_PROVIDER_POOL;
+}
+
+/** 僅取得真正以 :free 結尾的真免費模型。 */
+export function getFreeTierModels(): FreeProviderConfig[] {
+  return FREE_PROVIDER_POOL.filter(m => m.isFreeTier);
+}
+
+function freeProviderByModel(modelId: string): FreeProviderConfig | undefined {
+  return FREE_PROVIDER_POOL.find(p => p.model === modelId);
+}
+
+/**
+ * 呼叫單一免費 provider。
+ * - Cloudflare 走專用通道（callCloudflareAI）。
+ * - 其餘 provider 皆為 OpenAI-compatible Chat Completions 介面。
+ */
+export async function callChatProvider(
+  cfg: FreeProviderConfig,
+  messages: ChatMessage[],
+  options: { maxTokens?: number; temperature?: number; timeoutMs?: number } = {}
+): Promise<string> {
+  if (cfg.provider === 'cloudflare') {
+    const data = await callCloudflareAI(cfg.model, messages, {
+      maxTokens: options.maxTokens ?? cfg.maxTokens,
+      temperature: options.temperature ?? cfg.temperature,
+    });
+    return data.result.response;
+  }
+
+  const apiKey = process.env[cfg.apiKeyEnv];
+  if (!apiKey) throw new Error(`Missing API key env: ${cfg.apiKeyEnv}`);
+
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? 15000;
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let response: Response;
+  try {
+    response = await fetch(cfg.apiUrl, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        ...(cfg.provider === 'openrouter'
+          ? { 'HTTP-Referer': 'https://esggo.app', 'X-Title': 'OmniCore' }
+          : {}),
+      },
+      body: JSON.stringify({
+        model: cfg.model,
+        messages,
+        max_tokens: options.maxTokens ?? cfg.maxTokens,
+        temperature: options.temperature ?? cfg.temperature,
+      }),
+    });
+  } catch (e) {
+    clearTimeout(timer);
+    if (e instanceof Error && e.name === 'AbortError') {
+      throw new Error(`Provider ${cfg.provider}/${cfg.model} 逾時 (${timeoutMs}ms)`);
+    }
+    throw e;
+  }
+  clearTimeout(timer);
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Provider ${cfg.provider}/${cfg.model} HTTP ${response.status}: ${text}`);
+  }
+
+  const data = await response.json() as {
+    choices?: Array<{ message: { content: string } }>;
+    error?: { message?: string };
+  };
+
+  if (data.error) throw new Error(`Provider ${cfg.provider}/${cfg.model}: ${data.error.message}`);
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error(`Provider ${cfg.provider}/${cfg.model}: empty response`);
+  return content;
+}
+
+/**
+ * 依任務類型呼叫免費代理層，自動沿 primary → fallback1 → fallback2 故障轉移。
+ * 回傳實際採用的 provider，便於觀測與計費。
+ */
+// ── 模型健康追蹤（以「模型」為單位降級 + 自動恢復）──────────────
+// 以模型 id 為鍵：單一模型限流/失敗只會讓該模型降級，
+// 不會連累同 provider 的其他模型（例如 OpenRouter 某模型 429 不影響其他 OpenRouter 模型）。
+interface ModelHealth { down: boolean; downSince: number; failures: number; }
+const modelHealth: Record<string, ModelHealth> = {};
+const MODEL_COOLDOWN_MS = 5 * 60 * 1000;
+
+export function markModelDown(modelId: string): void {
+  const h = modelHealth[modelId] ?? (modelHealth[modelId] = { down: false, downSince: 0, failures: 0 });
+  h.down = true;
+  h.downSince = Date.now();
+  h.failures += 1;
+}
+
+export function isModelUp(modelId: string): boolean {
+  const h = modelHealth[modelId];
+  if (!h || !h.down) return true;
+  if (Date.now() - h.downSince > MODEL_COOLDOWN_MS) {
+    h.down = false;
+    return true;
+  }
+  return false;
+}
+
+export function getProviderHealth(): Record<string, ModelHealth> {
+  return { ...modelHealth };
+}
+
+// 涉及真實 ESG 資料、需審計可信的敏感任務
+const SENSITIVE_TASKS = new Set<ESGTaskType>([
+  'carbon_calculation', 'compliance_review', 'tcfd_analysis', 'materiality_matrix', 'sdg_mapping',
+]);
+// 所有外部公開免費 Provider（相對於自託管/已簽約端點）
+const PUBLIC_FREE_PROVIDERS = new Set<ModelConfig['provider']>([
+  'groq', 'openrouter', 'together', 'mistral', 'gemini', 'cloudflare',
+]);
+
+export interface FreeProviderOptions {
+  maxTokens?: number;
+  temperature?: number;
+  timeoutMs?: number;
+  /** 敏感任務是否排除公開免費端點（預設 false，保持原有行為） */
+  excludePublicFree?: boolean;
+  /**
+   * 可注入的發送器（預設 callChatProvider）。用於測試與未來接線，
+   * 注入後不會觸發真實網路請求，層邏輯（轉移 / 降級 / 治理守門）完全不變。
+   */
+  send?: (
+    cfg: FreeProviderConfig,
+    messages: ChatMessage[],
+    options: FreeProviderOptions,
+  ) => Promise<string>;
+}
+
+/**
+ * 依任務類型呼叫免費代理層：
+ * 候選順序為 路由鏈（primary → fb1 → fb2）優先，其餘免費池依序補位；
+ * 自動跳過「已降級」與「未配置 API Key」的 Provider，並於失敗時將其降級。
+ * 敏感任務可透過 excludePublicFree 拒絕送往公開免費端點（5T 治理守門）。
+ */
+export async function callFreeProvider(
+  taskType: string,
+  messages: ChatMessage[],
+  options: FreeProviderOptions = {}
+): Promise<{ content: string; used: FreeProviderConfig }> {
+  const key = (taskType || 'general').toLowerCase() as ESGTaskType;
+  const routing = routeModel(key);
+  const sensitive = SENSITIVE_TASKS.has(key);
+
+  // 候選順序：路由鏈優先，其餘免費池補位，去重
+  const chainIds = [routing.primary, routing.fallback1, routing.fallback2]
+    .map(m => m.model)
+    .filter(Boolean);
+  const ordered: FreeProviderConfig[] = [
+    ...chainIds.map(id => freeProviderByModel(id)).filter((c): c is FreeProviderConfig => !!c),
+    ...FREE_PROVIDER_POOL.filter(p => !chainIds.includes(p.model)),
+  ];
+
+  let lastError: unknown;
+  let skippedUnconfigured = 0;
+  const send = options.send ?? callChatProvider;
+  for (const cfg of ordered) {
+    if (!isModelUp(cfg.model)) continue;                                    // 該模型已降級，跳過
+    if (!process.env[cfg.apiKeyEnv]) { skippedUnconfigured += 1; continue; } // 未配置 Key，跳過
+    if (sensitive && options.excludePublicFree && PUBLIC_FREE_PROVIDERS.has(cfg.provider)) continue; // 治理守門
+
+    try {
+      const content = await send(cfg, messages, options);
+      return { content, used: cfg };
+    } catch (e) {
+      markModelDown(cfg.model);
+      lastError = e;
+    }
+  }
+
+  if (skippedUnconfigured > 0 && lastError === undefined) {
+    throw new Error(`[FreeProvider] 無已配置 API Key 的免費 Provider 可用（${skippedUnconfigured} 個被跳過）。請設定對應環境變數。`);
+  }
+  throw new Error(`[FreeProvider] 所有免費模型皆失敗：${String(lastError)}`);
+}
+
+/**
+ * 為 Hermes Agent 選擇指定任務的最佳免費模型 id，
+ * 可直接用於 `hermes model set <id>`。
+ */
+export function selectFreeModel(taskType: string): string {
+  const routing = routeModel(taskType);
+  const preferred = [routing.primary, routing.fallback1].find(m => m.model.endsWith(':free'));
+  return (preferred ?? routing.primary).model;
 }

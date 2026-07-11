@@ -10,15 +10,15 @@ import type { SummaryOptions } from '@/types/notes';
 // POST /api/ai-notes/[id]/summarize - 生成摘要
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { style, maxLength, focus } = body;
 
     if (!id) {
-      return jsonError('Note ID is required', 400);
+      return jsonError('INVALID_PARAMS', 'Note ID is required', 400);
     }
 
     const ncb = getNCBClient();
@@ -43,7 +43,7 @@ export async function POST(
     });
   } catch (error) {
     console.error('Error generating summary:', error);
-    return jsonError('Failed to generate summary', 500);
+    return jsonError('INTERNAL_ERROR', 'Failed to generate summary', 500);
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "esggo",
-  "version": "1.0.0",
+  "version": "5.1.0",
   "private": true,
   "packageManager": "pnpm@11.5.2",
   "bin": {

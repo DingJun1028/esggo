@@ -12,7 +12,7 @@
 // ── 類型定義 ─────────────────────────────────────────────────
 
 export type ESGPillar = 'E' | 'S' | 'G';
-export type PracticeLevel = 'basic' | 'intermediate' | 'advanced';
+export type PracticeLevel = 'not_started' | 'basic' | 'intermediate' | 'advanced';
 export type PracticeStatus = 'not_started' | 'in_progress' | 'achieved';
 
 export interface BestPractice {
@@ -556,7 +556,7 @@ export function calculateOverallScore(
   let totalScore = 0;
   const pillarScores: Record<ESGPillar, number> = { E: 0, S: 0, G: 0 };
   const pillarCounts: Record<ESGPillar, number> = { E: 0, S: 0, G: 0 };
-  const levelBreakdown: Record<PracticeLevel, number> = { basic: 0, intermediate: 0, advanced: 0 };
+  const levelBreakdown: Record<PracticeLevel, number> = { not_started: 0, basic: 0, intermediate: 0, advanced: 0 };
 
   allPractices.forEach(practice => {
     const assessment = assessmentMap.get(practice.id);

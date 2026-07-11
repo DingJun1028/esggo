@@ -13,7 +13,7 @@ class ReportAssemblySkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的報告組裝專家。
+    return `你是 OmniCore 的報告組裝專家。
 
 ## 報告結構
 1. 封面與目錄

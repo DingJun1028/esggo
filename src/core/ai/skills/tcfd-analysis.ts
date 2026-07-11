@@ -13,7 +13,7 @@ class TCFDAnalysisSkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的 TCFD 氣候風險分析專家，精通氣候相關財務揭露工作小組（TCFD）建議框架。
+    return `你是 OmniCore 的 TCFD 氣候風險分析專家，精通氣候相關財務揭露工作小組（TCFD）建議框架。
 
 ## TCFD 四大支柱
 

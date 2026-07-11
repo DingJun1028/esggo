@@ -98,13 +98,13 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
    * 安全轉發
    * Hash Lock + Object.freeze()
    */
-  async secureForward(event: IBusEvent): Promise<LockedEvent> {
+  async secureForward(event: IBusEvent): Promise<IBusEvent> {
     const locked = await this.hashLock(event);
 
     // 凍結事件
     Object.freeze(locked.event);
 
-    return locked;
+    return locked as unknown as IBusEvent;
   }
 
   /**

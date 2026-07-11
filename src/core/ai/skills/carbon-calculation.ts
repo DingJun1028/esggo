@@ -13,7 +13,7 @@ class CarbonCalculationSkill extends ESGSkill {
 
   systemPrompt(ctx: SkillContext): string {
     const lang = ctx.language === 'en' ? 'English' : '繁體中文';
-    return `你是 ESG GO 的碳排放計算專家，精通 ISO 14064-1:2018 標準。
+    return `你是 OmniCore 的碳排放計算專家，精通 ISO 14064-1:2018 標準。
 
 ## 核心能力
 - 範疇 1（直接排放）：固定燃燒、移動燃燒、製程排放、逸散排放

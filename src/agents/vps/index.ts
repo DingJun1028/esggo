@@ -209,7 +209,7 @@ export class VPSAgent {
 
     // 訂閱 OmniAgent 的指令事件
     bus.subscribe("vps.command", async (event: IBusEvent) => {
-      console.log(`[VPSAgent] 🔮 收到量子糾纏指令: ${event.payload?.action}`);
+      console.log(`[VPSAgent] 🔮 收到量子糾纏指令: ${(event.payload as Record<string, unknown>)?.action}`);
       await this._handleEntangledCommand(event);
     });
 
@@ -236,14 +236,14 @@ export class VPSAgent {
    * 這體現了量子糾纏的「即時性」
    */
   private async _handleEntangledCommand(event: IBusEvent): Promise<void> {
-    const { action, params } = event.payload ?? {};
+    const { action, params } = (event.payload as Record<string, unknown>) ?? {};
     
     try {
       // 波函數坍縮：從疊加態到確定態
       this._quantumState.measurement = "collapsed";
       
       // 執行對應操作
-      const result = await executeTask(action as TaskType, params);
+      const result = await executeTask(action as TaskType, params as Record<string, unknown>);
 
       // 發送結果回 OmniAgent（通過量子糾纏通道）
       if (this._entangledBus) {
@@ -346,7 +346,7 @@ export class VPSAgent {
     if (result.status === "success" && result.evidence) {
       const { system, services } = result.evidence as Record<string, unknown>;
       
-      this._globalState.system = system;
+      this._globalState.system = system as VPSGlobalState['system'];
       
       // 更新服務狀態
       for (const [name, svc] of Object.entries(services ?? {})) {
@@ -531,7 +531,8 @@ export function getVPSAgent(): VPSAgent | null {
 
 // 導出子模組
 export { QuantumStateSynchronizer } from "./quantum-sync";
-export { executeTask, taskHandlers, TaskType, TaskResultBase } from "./handlers";
+export { executeTask, taskHandlers } from "./handlers";
+export type { TaskType, TaskResultBase } from "./handlers";
 export {
   VPSAgentAdapter,
   VPSAgentFactory,

@@ -36,7 +36,7 @@ class GRIReportDraftSkill extends ESGSkill {
       .map(([code, item]) => `- ${code}: ${item.title} (${item.titleEn}) - ${item.description}`)
       .join('\n');
 
-    return `你是 ESG GO 的 GRI 報告撰寫專家，精通 GRI Standards 2021 永續報告標準。
+    return `你是 OmniCore 的 GRI 報告撰寫專家，精通 GRI Standards 2021 永續報告標準。
 
 ## GRI 報告結構
 ${structure}

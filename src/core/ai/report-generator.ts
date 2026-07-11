@@ -6,6 +6,8 @@
 // Free-tier: 200 requests/day, round-robin model selection
 // ============================================================
 
+import { callFreeProvider, type ChatMessage, type FreeProviderOptions } from './model-router';
+
 // --- Types --------------------------------------------------------
 
 export interface ReportRequest {
@@ -227,57 +229,96 @@ interface OpenRouterResponse {
 async function callOpenRouter(
   prompt: string,
   model: string,
-  maxTokens: number = 1500
-): Promise<{ content: string; tokens: number; duration: number }> {
+  maxTokens: number = 1500,
+  send?: FreeProviderOptions['send']
+): Promise<{ content: string; tokens: number; duration: number; model: string }> {
   const startTime = Date.now();
   const apiKey = process.env.OPENROUTER_API_KEY;
 
-  if (!apiKey) {
-    // Fallback: return template-based content when no API key
-    return {
-      content: generateFallbackContent(prompt),
-      tokens: 0,
-      duration: Date.now() - startTime,
-    };
-  }
-
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-      'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'https://esggo.app',
-      'X-Title': 'ESGGO Report Generator',
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: 'system',
-          content:
-            '你是一位資深 ESG 分析師，專精於企業永續報告書撰寫。使用繁體中文，數據驅動，引用 GRI/SASB/TCFD/IFRS 標準。避免漂綠語言，保持專業客觀。',
+  if (apiKey) {
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+          'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'https://esggo.app',
+          'X-Title': 'ESGGO Report Generator',
         },
-        { role: 'user', content: prompt },
-      ],
-      max_tokens: maxTokens,
-      temperature: 0.7,
-    }),
-  });
+        body: JSON.stringify({
+          model,
+          messages: [
+            {
+              role: 'system',
+              content:
+                '你是一位資深 ESG 分析師，專精於企業永續報告書撰寫。使用繁體中文，數據驅動，引用 GRI/SASB/TCFD/IFRS 標準。避免漂綠語言，保持專業客觀。',
+            },
+            { role: 'user', content: prompt },
+          ],
+          max_tokens: maxTokens,
+          temperature: 0.7,
+        }),
+      });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`OpenRouter API error ${response.status}: ${errorText.slice(0, 200)}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`OpenRouter API error ${response.status}: ${errorText.slice(0, 200)}`);
+      }
+
+      const data: OpenRouterResponse = await response.json();
+      const content = data.choices?.[0]?.message?.content || '';
+      const tokens = data.usage?.total_tokens || 0;
+
+      return { content, tokens, duration: Date.now() - startTime, model };
+    } catch (err) {
+      // 主路徑失敗 → 免費代理層兜底（加性，不改既有成功路徑）
+      const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime, send);
+      if (fb) return fb;
+      throw err;
+    }
   }
 
-  const data: OpenRouterResponse = await response.json();
-  const content = data.choices?.[0]?.message?.content || '';
-  const tokens = data.usage?.total_tokens || 0;
+  // 未配置 OpenRouter Key：先試免費代理層，再回退範本
+  const fb = await tryFreeProviderFallback(prompt, maxTokens, startTime, send);
+  if (fb) return fb;
 
   return {
-    content,
-    tokens,
+    content: generateFallbackContent(prompt),
+    tokens: 0,
     duration: Date.now() - startTime,
+    model: 'template-fallback',
   };
+}
+
+/**
+ * 免費代理層兜底：以報告組裝任務呼叫 FreeProvider，
+ * 沿用 OpenRouter 既有的 system 提示。僅在全部免費模型失敗時回傳 null。
+ */
+async function tryFreeProviderFallback(
+  prompt: string,
+  maxTokens: number,
+  startTime: number,
+  send?: FreeProviderOptions['send']
+): Promise<{ content: string; tokens: number; duration: number; model: string } | null> {
+  try {
+    const messages: ChatMessage[] = [
+      {
+        role: 'system',
+        content:
+          '你是一位資深 ESG 分析師，專精於企業永續報告書撰寫。使用繁體中文，數據驅動，引用 GRI/SASB/TCFD/IFRS 標準。避免漂綠語言，保持專業客觀。',
+      },
+      { role: 'user', content: prompt },
+    ];
+    const result = await callFreeProvider('report_assembly', messages, { maxTokens, send });
+    return {
+      content: result.content,
+      tokens: 0,
+      duration: Date.now() - startTime,
+      model: result.used.model,
+    };
+  } catch {
+    return null;
+  }
 }
 
 // --- Fallback (no API key) ----------------------------------------
@@ -306,6 +347,12 @@ ${sectionName}
 
 export class AIReportGenerator {
   private language: 'zh-TW' | 'en' = 'zh-TW';
+  /** 注入的 FreeProvider 發送器（預設 callFreeProvider 實際網路）；用於測試。 */
+  private freeProviderSend?: FreeProviderOptions['send'];
+
+  constructor(opts?: { freeProviderSend?: FreeProviderOptions['send'] }) {
+    this.freeProviderSend = opts?.freeProviderSend;
+  }
 
   async generateReport(request: ReportRequest): Promise<ReportResult> {
     const startTime = Date.now();
@@ -334,7 +381,8 @@ export class AIReportGenerator {
           sectionId,
           request.companyName,
           request.industry,
-          dataContext
+          dataContext,
+          this.freeProviderSend
         );
         results.push(section);
         modelsUsed.add(section.model);
@@ -375,7 +423,8 @@ export class AIReportGenerator {
     sectionId: ReportSection,
     company: string,
     industry: string,
-    dataContext: string
+    dataContext: string,
+    send?: FreeProviderOptions['send']
   ): Promise<GeneratedSection> {
     const template = SECTION_PROMPTS[sectionId];
     if (!template) {
@@ -387,8 +436,8 @@ export class AIReportGenerator {
       .replace(/\{industry\}/g, industry)
       .replace(/\{dataContext\}/g, dataContext);
 
-    const model = getNextModel();
-    const { content, tokens, duration } = await callOpenRouter(prompt, model);
+    const requestedModel = getNextModel();
+    const { content, tokens, duration, model } = await callOpenRouter(prompt, requestedModel, undefined, send);
 
     return {
       id: sectionId,

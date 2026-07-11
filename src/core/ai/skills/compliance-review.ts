@@ -65,7 +65,7 @@ class ComplianceReviewSkill extends ESGSkill {
       .map(([key, std]) => `### ${key} (${std.version})\n${std.description}\n要求：${std.key_requirements.join('、')}`)
       .join('\n\n');
 
-    return `你是 ESG GO 的合規審查專家，精通以下國際標準：
+    return `你是 OmniCore 的合規審查專家，精通以下國際標準：
 
 ${standards}
 

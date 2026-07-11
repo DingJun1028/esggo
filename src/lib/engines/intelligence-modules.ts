@@ -23,7 +23,7 @@ export interface WatchedEntity {
   aliases: string[];       // 別名/簡稱
   country?: string;
   industry?: string;
-  riskDept?: string;       // 對應 ESG GO Responsible Dept
+  riskDept?: string;       // 對應 OmniCore Responsible Dept
   tags: string[];
   watchSources: string[]   // 監測來源類型 IDs];
 }
@@ -43,7 +43,7 @@ export interface EntityChangeEvent {
 export interface EntityAlert {
   event: EntityChangeEvent;
   impactScore: number;            // 0-100
-  affectedDepartments: string[];  // 對應 ESG GO Responsible Dept
+  affectedDepartments: string[];  // 對應 OmniCore Responsible Dept
   recommendedAction: string;
   routingRule: AlertRouting;
 }
@@ -481,7 +481,7 @@ export interface Signal {
   title: string;
   sourceName: string;
   confidence: number;    // 可信度 0-1
-  relevance: string[];   // 受影響的 ESG GO 指標群組
+  relevance: string[];   // 受影響的 OmniCore 指標群組
   actions: string[];
   detectedAt: string;
 }

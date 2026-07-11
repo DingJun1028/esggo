@@ -192,10 +192,9 @@ export interface ReportAnswer {
   answer?: string;
 }
 
-export interface CompanyProfile {
-  companyName?: string;
-  [key: string]: unknown;
-}
+// 單一權威來源：來自 ESG Excel 的公司資料合約（src/core/repositories/company-profiles）
+import type { CompanyProfile } from "../../core/repositories/company-profiles";
+export type { CompanyProfile };
 
 export class FiveTReportEngine {
   static assemble(companyId: string, answers: ReportAnswer[], profile: CompanyProfile | null): GeneratedReport {
