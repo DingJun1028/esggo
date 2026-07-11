@@ -105,3 +105,5 @@ GitHub Actions 出口 IP 範圍見官方文檔 `github/houses` 的 `actions` 清
 <!-- CI trigger 2026-07-11 (2): validate #195 pnpm/corepack + placeholder DSN exclusion -->
 
 <!-- CI trigger 2026-07-11 (3): validate clean #198 deploy.yml fix -->
+
+<!-- CI trigger 2026-07-11 (3): validate clean #198 deploy.yml fix -->
