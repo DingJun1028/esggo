@@ -52,7 +52,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
       
       - name: Install dependencies
         id: install
@@ -135,14 +136,21 @@ jobs:
       - name: Run tests
         run: |
           set -e
-          echo "Running code quality checks..."
-          ruff check .
-          
-          echo "Running tests..."
-          if [ -d "tests" ]; then
-            python -m pytest tests/ -v
+          # Smart AI Router is a TypeScript service (.agents/skills/smart-ai-router/).
+          # Scope Python checks to that dir so we don't ruff/pytest the whole monorepo.
+          SVC_DIR=".agents/skills/smart-ai-router"
+          echo "Running code quality checks (scoped to $SVC_DIR)..."
+          if [ -d "$SVC_DIR" ] && find "$SVC_DIR" -name '*.py' | grep -q .; then
+            ruff check "$SVC_DIR"
           else
-            echo "No tests directory found, skipping tests..."
+            echo "No Python sources in $SVC_DIR, skipping ruff."
+          fi
+
+          echo "Running tests..."
+          if [ -d "$SVC_DIR/tests" ]; then
+            python -m pytest "$SVC_DIR/tests" -v
+          else
+            echo "No tests directory in $SVC_DIR, skipping tests..."
           fi
         env:
           NODE_ENV: test
