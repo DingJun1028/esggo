@@ -120,7 +120,14 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 // body
 { "intent": "產生 Q3 ESG 報告", "context": { ... } }
 // 驗證：delegation 存在(404) → validateDelegation(id,'execute')(403)
-// 200 → { success, executionId, result, error, duration }
+// 200 → { success, executionId, result, error, duration, gateway: { startHashLock, completeHashLock } }
+```
+
+### GET `/api/delegation/audit?delegationId=xxx` — 審計軌跡
+```jsonc
+// 需具備 monitor（或 full）權限；回傳該授權生命週期審計事件
+// 驗證：delegation 存在(404) → validateDelegation(id,'monitor')(403)
+// 200 → { success, delegationId, count, entries: [ DELEGATION_CREATED / DELEGATION_VALIDATED / DELEGATION_TERMINATED ... ] }
 ```
 
 ---

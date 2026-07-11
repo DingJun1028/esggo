@@ -11,6 +11,7 @@ import {
   getDelegationManager,
 } from '../src/agents/complete-delegation';
 import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
+import { GET as auditTrailGET } from '../src/app/api/delegation/audit/route';
 import type { NextRequest } from 'next/server';
 
 // ==========================================
@@ -235,6 +236,49 @@ describe('POST /api/delegation/[id]/execute (gateway e2e)', () => {
     expect(body.gateway).toBeDefined();
     expect(body.gateway.startHashLock).toMatch(/^[0-9a-f]{64}$/);
     expect(body.gateway.completeHashLock).toMatch(/^[0-9a-f]{64}$/);
+  });
+});
+
+// ==========================================
+// 審計軌跡 API（monitor 權限把關）
+// ==========================================
+
+describe('GET /api/delegation/audit', () => {
+  it('returns audit trail for delegation with monitor permission', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'audit-user-001',
+      permissions: ['monitor', 'full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const req = {
+      url: `http://localhost/api/delegation/audit?delegationId=${delegationId}`,
+    } as unknown as NextRequest;
+
+    const res = await auditTrailGET(req);
+    const body = await res.json();
+
+    expect(body.success).toBe(true);
+    expect(body.delegationId).toBe(delegationId);
+    expect(body.count).toBeGreaterThanOrEqual(1);
+    expect(
+      body.entries.some((e: { type: string }) => e.type === 'DELEGATION_CREATED')
+    ).toBe(true);
+  });
+
+  it('rejects audit trail without monitor permission (403)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'audit-user-002',
+      permissions: ['read'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const req = {
+      url: `http://localhost/api/delegation/audit?delegationId=${delegationId}`,
+    } as unknown as NextRequest;
+
+    const res = await auditTrailGET(req);
+    expect(res.status).toBe(403);
   });
 });
 
