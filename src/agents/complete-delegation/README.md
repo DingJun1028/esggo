@@ -147,7 +147,7 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 - [x] **決策策略**：可插拔策略（`decision-strategy.ts`）`conservative` / `balanced` / `aggressive`，
       經 `getDecisionEngine({ strategy })` / `new AutonomousDecisionEngine({ strategy })` 注入，
       `makeDecision` 委託 `strategy.select()` 選擇最佳方案。
-- [ ] **Gateway 端對端**：使 `executeCompleteDelegationTask` 透過 `omni-gateway.secureForward` 實際轉發執行。
+- [x] **Gateway 端對端**：`POST /api/delegation/[id]/execute` 於執行前 / 後經 `omni-gateway.secureForward` 實際轉發 `DELEGATION_EXECUTION_STARTED` / `DELEGATION_EXECUTION_COMPLETED` 至 `omni-agent-bus`（含 SHA-256 `hashLock` 溯源）；回應附 `gateway.startHashLock` / `gateway.completeHashLock`。另含 route-level e2e 測試斷言回傳 64 字元 hashLock。
 
 ---
 
