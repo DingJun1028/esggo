@@ -237,7 +237,7 @@ export class OmniAgent implements IOmniAgent {
       // 這裡把 taskId、status 等放入 evidence 供外部檢索
       // 若有 result，則把 output 也放入 evidence
       //（實務上可自行設計結構）
-      // @ts-ignore – 允許多餘欄位以符合 IComponentCore
+      // @ts-expect-error – 允許多餘欄位以符合 IComponentCore
       ...{ errorMessage, result },
       node: this.config.environmentTag ?? "unknown",
       note: errorMessage ? `Error: ${errorMessage}` : undefined,

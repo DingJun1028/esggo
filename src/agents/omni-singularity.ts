@@ -38,10 +38,10 @@ export class OmniSingularity implements IOmniSingularity {
   public readonly signature: IComponentCore;
   
   /** 奇點名稱（唯一） */
-  public readonly name: "OmniSingularity" = "OmniSingularity";
+  public readonly name = "OmniSingularity" as const;
   
   /** 奇點版本（永遠是 1.0.0） */
-  public readonly singularityVersion: "1.0.0" = "1.0.0";
+  public readonly singularityVersion = "1.0.0" as const;
   
   /** 奇點存在狀態 */
   private _state: SingularityState;
