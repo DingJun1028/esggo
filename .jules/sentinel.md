@@ -5,18 +5,11 @@
 **Learning:** When strict data traceability and immutability (like ISO-14064-1 compliance) are required, returning mutable objects from factory functions makes the state unpredictable. Also, raw string data from various sources can contain invisible characters or malformed encodings, causing hashing mismatches.
 
 **Prevention:** Use `Object.freeze()` on returned objects to enforce Hash Locks. Use `EntropyForge.purify()` on raw string data before hashing or storing to normalize encodings and remove zero-width characters, ensuring consistent hashing.
-
 ## 2026-07-01 - [Replace Naive Regex HTML Sanitization with xss Library]
 **Vulnerability:** Naive regex-based HTML sanitization functions (`sanitizeHtml`, `sanitizeTextHtml`) were discovered in `src/lib/safe-api.ts`, `app/omni-agent/page.tsx`, `app/omni-center/omni-one-chat.tsx`, and `app/omni-center/omni-note-crud.tsx`. They attempted to manually strip `<script>` tags and `on*` event handlers, leaving the application vulnerable to sophisticated Cross-Site Scripting (XSS) bypasses.
 **Learning:** Hand-rolled regex sanitization is rarely comprehensive and often misses complex XSS vectors (e.g., malformed tags, nested scripts, alternative event handlers). A dedicated security library like `xss` is required for safe `dangerouslySetInnerHTML` rendering.
 **Prevention:** Always use an established, well-maintained HTML sanitization library like `xss` or `DOMPurify` instead of custom regex when rendering untrusted HTML.
-
 ## 2026-07-02 - [Remove Hardcoded API Key from Gateway Config]
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
-
-## 2026-07-03 - [Fix Command Injection Vulnerability in predictAndPreFetch]
-**Vulnerability:** In `src/impl/core.ts`, the `predictAndPreFetch` method was using `execSync` from `node:child_process` to execute a shell `curl` command. The command string interpolated user input (`userIntentStub`), making the application highly vulnerable to command injection. If a malicious user input string was crafted with shell metacharacters, it could execute arbitrary commands on the server.
-**Learning:** Constructing shell commands via string interpolation with user input is extremely dangerous and bypassing the shell entirely is the most robust defense. In this case, `execSync` + `curl` was an anti-pattern for making HTTP requests in a Node.js environment.
-**Prevention:** Avoid using `child_process` execution methods like `execSync` or `exec` to run shell commands with user input. Always use the native `fetch` API (or a robust HTTP client library like `axios`) for making server-side HTTP requests instead.
