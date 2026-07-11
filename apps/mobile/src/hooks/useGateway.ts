@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface QueryState<T> {
   data: T | null;
@@ -20,10 +20,15 @@ export function useGatewayQuery<T>(queryFn: () => Promise<T>): QueryState<T> {
     error: null,
   });
 
+  // 用 ref 緩存最新的 queryFn：避免呼叫端傳入 inline arrow 時每次 render 都產生新參照，
+  // 導致 run / effect 反覆重跑而造成無限 re-render 與重複請求。
+  const queryFnRef = useRef(queryFn);
+  queryFnRef.current = queryFn;
+
   const run = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: null }));
     let alive = true;
-    queryFn()
+    queryFnRef.current()
       .then((data) => {
         if (alive) setState({ data, loading: false, error: null });
       })
@@ -36,7 +41,7 @@ export function useGatewayQuery<T>(queryFn: () => Promise<T>): QueryState<T> {
     return () => {
       alive = false;
     };
-  }, [queryFn]);
+  }, []);
 
   useEffect(() => {
     const cleanup = run();
