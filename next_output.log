@@ -1,0 +1,42 @@
+$ next start -p 3001
+▲ Next.js 16.2.10
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.2:3001
+✓ Ready in 184ms
+[Cron] Initialized 3 jobs
+[Instrumentation] Cron jobs initialized
+[Cron] Starting daily report generation...
+[Cron] Achievement check failed: Error [PrismaClientInitializationError]:
+Invalid `prisma.userGrowth.findMany()` invocation:
+
+
+error: Environment variable not found: DATABASE_URL.
+  -->  schema.prisma:13
+   |
+12 |   provider = "sqlite" // Change to "postgresql" for VPS
+13 |   url      = env("DATABASE_URL")
+   |
+
+Validation Error Count: 1
+    at <unknown> (-->  schema.prisma:13)
+    at async Object.task (.next/server/chunks/[root-of-the-server]__09baw8q._.js:1:2096) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+[Cron] Daily report generation failed: Error [PrismaClientInitializationError]:
+Invalid `prisma.dailyReport.findUnique()` invocation:
+
+
+error: Environment variable not found: DATABASE_URL.
+  -->  schema.prisma:13
+   |
+12 |   provider = "sqlite" // Change to "postgresql" for VPS
+13 |   url      = env("DATABASE_URL")
+   |
+
+Validation Error Count: 1
+    at <unknown> (-->  schema.prisma:13)
+    at async Object.r [as task] (.next/server/chunks/[root-of-the-server]__09baw8q._.js:1:396) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
