@@ -786,7 +786,7 @@ app.use((err, _req, res, _next) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────
-httpServer.listen(PORT, '0.0.0.0', () => {
+httpServer.listen(PORT, '127.0.0.1', () => {
   console.log('═══════════════════════════════════════════════════════');
   console.log(`🚀 OmniAgent Gateway v3.0 — LIVE`);
   console.log(`   Origin : OmniAgent (Open Source) → ESGGO OmniAgent`);
