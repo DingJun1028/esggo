@@ -27,12 +27,12 @@
 | Secret 名 | 來源 | 範例/說明 |
 |-----------|------|----------|
 | `OCI_REGION` | `vps-bastion.py` REGION | `ap-singapore-1` |
-| `OCI_TENANCY_OCID` | `~/.oci/config` 的 `tenancy=` | `ocid1.tenancy.oc1..xxxx` |
-| `OCI_USER_OCID` | `~/.oci/config` 的 `user=` | `ocid1.user.oc1..xxxx` |
+| `OCI_TENANCY_OCID` | `~/.oci/config` 的 `tenancy=` | `<TENANCY_OCID>` |
+| `OCI_USER_OCID` | `~/.oci/config` 的 `user=` | `<USER_OCID>` |
 | `OCI_API_FINGERPRINT` | `~/.oci/config` 的 `fingerprint=` | `xx:xx:...:xx` |
 | `OCI_API_KEY` | `~/.oci/key.pem` 全文（含 `-----BEGIN/END-----`） | PEM 私鑰 |
-| `OCI_BASTION_ID` | `vps-bastion.py` BASTION_ID | `ocid1.bastion.oc1..xxxx` |
-| `OCI_TARGET_RESOURCE_ID` | `vps-bastion.py` TARGET_ID（VPS instance OCID） | `ocid1.instance.oc1..xxxx` |
+| `OCI_BASTION_ID` | `vps-bastion.py` BASTION_ID | `<BASTION_OCID>` |
+| `OCI_TARGET_RESOURCE_ID` | `vps-bastion.py` TARGET_ID（VPS instance OCID） | `<INSTANCE_OCID>` |
 
 > 本機 `~/.oci/config` 已含 tenancy/user/fingerprint；`~/.oci/key.pem` 是 API 私鑰。從本機複製這些值到 GitHub Secrets（不要貼在聊天）。
 
