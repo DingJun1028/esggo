@@ -12,6 +12,13 @@
 #   bastion : 僅設 OCI_* secrets 且無 VPS_SSH_KEY → 在 Actions 內用 oci SDK 重建 bastion session 跳板部署
 #   skip    : 兩者皆未設 → 跳過部署 (不再讓 push 變紅)
 #
+# ⚠️ bastion 模式限制 (2026-07-11 實測): OCI Bastion 要求預先白名單「來源 CIDR」
+#   (client_cidr_block_allow_list)，而 GitHub Actions 出口 IP 是動態的 → session 建成功後
+#   連線立刻被 bastion 遠端關閉 (Connection closed by UNKNOWN port 65535 / Permission denied)。
+#   本地 vps-bastion.py 建 session 也同樣因 allow-list 連不上。故 bastion 模式在 GitHub Actions
+#   場景下「結構性不可行」——direct 模式才是 GitHub→VPS 自動部署的唯一可行路徑。
+#   bastion 代碼保留僅供「固定 IP 來源 (如本地/跳板機) 已加進 allow-list」時手動使用。
+#
 # 需在 GitHub 控制台 (Settings → Secrets and variables → Actions) 設定:
 #   選項 (direct, 預設已開 22):
 #     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (私鑰)
