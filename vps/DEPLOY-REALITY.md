@@ -112,12 +112,15 @@ PM2 程序:
 | 本地 esggo repo | main = `294ab437` |
 
 ### 部署流程（VPS 同步新版本）
+> 用「直連 SSH」（`esggo-vps`，公網 22 已開），不再走 bastion。
+
 ```bash
 # 1. 本機打 bundle（用 HEAD，勿用 commit hash 否則報 empty bundle）
 git bundle create /tmp/esggo.bundle HEAD
-scp /tmp/esggo.bundle esggo-bastion:/tmp/esggo.bundle
+scp /tmp/esggo.bundle esggo-vps:/tmp/esggo.bundle
 
 # 2. VPS
+ssh esggo-vps
 cd /var/www/esggo
 git fetch /tmp/esggo.bundle HEAD:<newsha>
 git checkout -f <newsha>
@@ -170,8 +173,17 @@ ss -ltnp | grep 8642
 # 重置 PM2 restart 計數（不影響運行）
 pm2 reset omniagent-gateway
 
-# bastion 過期
-python vps-bastion.py
+# bastion 已停用（C1 infeasible）：改用直連 SSH
+ssh esggo-vps
+
+# ⚠️ 站點 301 無限重定向（redirect loop）排查
+# 症狀：curl 對 https://esggo.co/* 一直 301 到同一網址
+# 根因：Cloudflare 為 flexible 模式（回源走 HTTP :80），但 nginx :80 server block
+#       有 `return 301 https://$host$request_uri;` → 回源 HTTP 被導回 https → 迴圈
+# 修法：:80 server block 的 `location /` 改為 proxy_pass 到後端（與 :443 同），
+#       不要做 http→https 重定向。改完 `nginx -t && systemctl reload nginx`。
+# 備份檔請放 /root/nginx-backup/，勿放 /etc/nginx/sites-enabled/（會被載入造成
+# server_name 衝突、重定向復發）。
 ```
 
 ---
