@@ -101,3 +101,5 @@ GitHub Actions 出口 IP 範圍見官方文檔 `github/houses` 的 `actions` 清
 - **部署後服務沒起**：看 Actions 日誌的 `pnpm build` / `pm2 restart` 輸出；VPS 仍可用 `ssh esggo-bastion` 手動排查。
 
 <!-- CI trigger 2026-07-11: validate Deploy Smart AI Router fixes (#189 ocid1 placeholder + #193 pnpm cache/scoped python) -->
+
+<!-- CI trigger 2026-07-11 (2): validate #195 pnpm/corepack + placeholder DSN exclusion -->
