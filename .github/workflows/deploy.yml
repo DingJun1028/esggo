@@ -79,8 +79,8 @@ jobs:
           set -e
           echo "Checking for ESLint configuration..."
           if [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] || [ -f "eslint.config.js" ] || [ -f ".eslintrc" ] || { [ -f "package.json" ] && grep -q "eslint" package.json; }; then
-            echo "ESLint configuration found, running lint..."
-            npx eslint . --ext .ts,.tsx --quiet
+            echo "ESLint configuration found, running project lint (pnpm lint)..."
+            pnpm lint
           else
             echo "ESLint not configured, skipping..."
           fi
@@ -90,9 +90,9 @@ jobs:
         run: |
           set -e
           echo "Checking for TypeScript configuration..."
-          if [ -f "tsconfig.json" ] || [ -f "tsconfig.build.json" ]; then
-            echo "TypeScript configuration found, running type check..."
-            npx tsc --noEmit
+          if [ -f "tsconfig.json" ] || [ -f "tsconfig.build.json" ] || [ -f "tsconfig.core.json" ]; then
+            echo "TypeScript configuration found, running project type check (pnpm typecheck)..."
+            pnpm typecheck
           else
             echo "TypeScript not configured, skipping..."
           fi
