@@ -16,9 +16,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   createCompleteDelegationAgent,
-  executeCompleteDelegationTask,
   getDelegationManager,
-  getDecisionEngine,
 } from '../../../agents/complete-delegation';
 import { DelegationPermission } from '../../../types/complete-delegation';
 
@@ -54,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // 驗證權限有效性
     const validPermissions: DelegationPermission[] = [
-      'read', 'write', 'execute', 'decide', 'delegate', 'govern', 'audit', 'full',
+      'read', 'write', 'execute', 'decide', 'delegate', 'govern', 'audit', 'monitor', 'full',
     ];
     for (const perm of permissions) {
       if (!validPermissions.includes(perm)) {

@@ -70,6 +70,7 @@ principal ──終止──> manager.terminateDelegation(id, reason)  → 移�
 | `delegate` | 再委派 |
 | `govern` | 治理操作 |
 | `audit` | 稽核 |
+| `monitor` | 監控 / 觀測（只讀觀測，不含變更） |
 | `full` | 包含以上全部（wildcard） |
 
 `validateDelegation` 中 `full` 視為涵蓋任何 required permission。
@@ -85,8 +86,10 @@ principal ──終止──> manager.terminateDelegation(id, reason)  → 移�
 | 約束 | `getConstraints()` 依 restrictions + 有效期限產生 `DecisionConstraint[]`（severity: `hard`） |
 | 最小權限 | 建立時校驗權限列舉；執行前 `validateDelegation(id, 'execute')` 把關（API 回 403） |
 
-> 已知限制（後續項目）：尚無獨立**稽核日誌** sink；決策引擎策略可擴充；
-> 與實際 gateway 的端對端串接仍在規劃。見第 7 節。
+> 已實作：決策引擎支援**可插拔策略**（`conservative` / `balanced` / `aggressive`，預設 `balanced`，
+> 行為與舊版一致）；`AuditLogger` 內建記憶體環形緩衝區 + 可掛載 `auditSink`（持久化 / 轉送外部儲存）、
+> 支援 `getLogs()` / `query()`；`CompleteDelegationManager` 於建立 / 驗證 / 終止時寫入審計日誌。
+> 唯與實際 `omni-gateway` 的端對端串接仍在進行（見第 7 節）。
 
 ---
 
@@ -101,7 +104,7 @@ principal ──終止──> manager.terminateDelegation(id, reason)  → 移�
   "permissions": ["read","write","execute"], "validUntil": 1783769300000, "description": "..." }
 // 201 → { success, delegation: { delegationId, agentId, principalId, permissions, validFrom, validUntil, description } }
 ```
-權限須為八種 + `full` 之一；`permissions` 非空。
+權限須為九種（含 `monitor`） + `full` 之一；`permissions` 非空。
 
 ### GET `/api/delegation` — 活躍授權列表
 `?principalId=` 可選；回傳 `{ success, delegations[], count }`。
@@ -134,12 +137,17 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 
 ---
 
-## 7. 後續擴充（進行中）
+## 7. 後續擴充
 
-1. **稽核日誌**：將 `recordDecision` / 執行結果寫入可查詢的 audit sink（持久化）。
-2. **權限擴充**：新增細粒度權限類型與對應 `validateDelegation` 分支。
-3. **決策策略**：可插拔策略（conservative / balanced / aggressive）影響 `makeDecision`。
-4. **Gateway 端對端**：使 `executeCompleteDelegationTask` 透過 `omni-gateway` 實際轉發執行，而非本地 stub。
+- [x] **稽核日誌**：`AuditLogger`（`autonomous-decision-engine.ts`）內建記憶體環形緩衝區（上限 1000 筆）+
+      可掛載 `auditSink`（持久化 / 轉送外部儲存），並提供 `getLogs()` / `query()`；
+      `CompleteDelegationManager` 於 `DELEGATION_CREATED` / `DELEGATION_VALIDATED` / `DELEGATION_TERMINATED`
+      寫入審計日誌，對外開放 `getAuditTrail()`。
+- [x] **權限擴充**：新增 `monitor`（監控 / 觀測）權限類型，已納入型別與 API / manager 列舉校驗。
+- [x] **決策策略**：可插拔策略（`decision-strategy.ts`）`conservative` / `balanced` / `aggressive`，
+      經 `getDecisionEngine({ strategy })` / `new AutonomousDecisionEngine({ strategy })` 注入，
+      `makeDecision` 委託 `strategy.select()` 選擇最佳方案。
+- [ ] **Gateway 端對端**：使 `executeCompleteDelegationTask` 透過 `omni-gateway.secureForward` 實際轉發執行。
 
 ---
 

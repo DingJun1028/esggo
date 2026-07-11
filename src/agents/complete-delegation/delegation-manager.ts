@@ -15,6 +15,7 @@ import {
   DelegationPermission,
   DelegationRestriction,
 } from '../../types/complete-delegation';
+import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 
 /**
  * 完全代主自行 - 授權管理器
@@ -23,6 +24,11 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   private _delegations: Map<string, ICompleteDelegationScope> = new Map();
   private _principalDelegations: Map<string, Set<string>> = new Map();
   private _agentDelegations: Map<string, Set<string>> = new Map();
+  private _auditLogger: AuditLogger;
+
+  constructor(config?: { auditSink?: AuditSink }) {
+    this._auditLogger = new AuditLogger(config?.auditSink);
+  }
 
   /**
    * 創建完全授權
@@ -73,6 +79,16 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     this.addToPrincipalIndex(params.principalId, delegationId);
     this.addToAgentIndex(params.agentId, delegationId);
 
+    // 6. 寫入審計日誌
+    await this._auditLogger.log({
+      type: 'DELEGATION_CREATED',
+      delegationId,
+      principalId: params.principalId,
+      agentId: params.agentId,
+      permissions: params.permissions,
+      timestamp: Date.now(),
+    });
+
     return signedScope;
   }
 
@@ -110,7 +126,15 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     }
 
     // 4. 驗證簽章（重新計算雜湊並比對，防止簽章被竄改）
-    return this.verifySignature(scope);
+    const valid = await this.verifySignature(scope);
+    await this._auditLogger.log({
+      type: 'DELEGATION_VALIDATED',
+      delegationId,
+      requiredPermission,
+      valid,
+      timestamp: Date.now(),
+    });
+    return valid;
   }
 
   /**
@@ -120,6 +144,13 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     delegationId: string
   ): Promise<ICompleteDelegationScope | null> {
     return this._delegations.get(delegationId) ?? null;
+  }
+
+  /**
+   * 取得授權管理器的完整審計軌跡
+   */
+  getAuditTrail() {
+    return this._auditLogger.getLogs();
   }
 
   /**
@@ -136,6 +167,12 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
 
     // 1. 記錄終止原因
     await this.recordTermination(delegationId, reason);
+    await this._auditLogger.log({
+      type: 'DELEGATION_TERMINATED',
+      delegationId,
+      reason,
+      timestamp: Date.now(),
+    });
 
     // 2. 移除索引
     this.removeFromPrincipalIndex(scope.principalId, delegationId);
@@ -235,6 +272,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       'delegate',
       'govern',
       'audit',
+      'monitor',
       'full',
     ];
 
