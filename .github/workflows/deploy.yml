@@ -52,8 +52,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
       
       - name: Install dependencies
         id: install
@@ -359,8 +357,9 @@ jobs:
           if grep -rInE "listen\([^,)]*['\"]0\.0\.0\.0|HOST\s*=\s*['\"]0\.0\.0\.0['\"]" vps/*.mjs vps/**/*.mjs vps/*.py vps/**/*.py 2>/dev/null ; then
             echo "::error::Server binds 0.0.0.0 (exposes directly) — bind 127.0.0.1 instead — aborting."; exit 1
           fi
-          # 4) Connection strings with embedded passwords (HARD FAIL)
-          if grep -rInE "(mysql|postgres|mongodb)://[^:]+:[^@]+@" vps/ 2>/dev/null ; then
+          # 4) Connection strings with embedded passwords (HARD FAIL).
+          # Exclude placeholder/redacted DSNs (contain *** or ${...} or <...>) — those are not real secrets.
+          if grep -rInE "(mysql|postgres|mongodb)://[^:]+:[^@]+@" vps/ 2>/dev/null | grep -vE '\*\*\*|\$\{|<' ; then
             echo "::error::Connection string with embedded password found — use env vars instead — aborting."; exit 1
           fi
           echo "No secrets or unsafe patterns detected."

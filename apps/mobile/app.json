@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "ESGGO Mobile",
+    "slug": "esggo-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "esggo",
+    "userInterfaceStyle": "automatic",
+    "newArchitecture": true,
+    "jsEngine": "hermes",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.esggo.mobile"
+    },
+    "android": {
+      "package": "com.esggo.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#009EB0"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "00000000-0000-0000-0000-000000000000"
+      },
+      "gatewayUrl": "http://localhost:8642"
+    }
+  }
+}

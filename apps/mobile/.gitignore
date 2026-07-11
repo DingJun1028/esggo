@@ -1,0 +1,17 @@
+# Expo
+.expo/
+dist/
+web-build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+# Native
+ios/
+android/
+# Logs
+npm-debug.*
+*.log
+# Misc
+.DS_Store

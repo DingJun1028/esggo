@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>完全自主代行 Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #1e1b4b 100%);
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .log-area {
+      background: rgba(0, 0, 0, 0.3);
+      font-family: 'Monaco', 'Menlo', monospace;
+    }
+  </style>
+</head>
+<body class="text-white p-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- 標題 -->
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        完全自主代行 Demo
+      </h1>
+      <p class="text-gray-400 text-lg">
+        互動式展示完全自主代行系統
+      </p>
+    </header>
+
+    <!-- 統計卡片 -->
+    <div class="grid grid-cols-4 gap-6 mb-8">
+      <div class="glass rounded-xl p-6">
+        <div class="text-3xl font-bold text-purple-400" id="totalDelegations">0</div>
+        <div class="text-gray-400">總授權數</div>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <div class="text-3xl font-bold text-green-400" id="activeDelegations">0</div>
+        <div class="text-gray-400">活躍授權</div>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <div class="text-3xl font-bold text-blue-400" id="totalExecutions">0</div>
+        <div class="text-gray-400">執行次數</div>
+      </div>
+      <div class="glass rounded-xl p-6">
+        <div class="text-3xl font-bold text-yellow-400" id="cacheHitRate">0%</div>
+        <div class="text-gray-400">快取命中率</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-8">
+      <!-- 左側：創建授權 -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-6 text-purple-400">創建授權</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">主體 ID</label>
+            <input
+              type="text"
+              id="principalId"
+              value="user-001"
+              class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-400"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">權限</label>
+            <div class="flex flex-wrap gap-2" id="permissions">
+              <button onclick="togglePermission('read')" class="perm-btn px-3 py-1 rounded-lg text-sm bg-purple-500 text-white" data-perm="read">read</button>
+              <button onclick="togglePermission('write')" class="perm-btn px-3 py-1 rounded-lg text-sm bg-purple-500 text-white" data-perm="write">write</button>
+              <button onclick="togglePermission('execute')" class="perm-btn px-3 py-1 rounded-lg text-sm bg-purple-500 text-white" data-perm="execute">execute</button>
+              <button onclick="togglePermission('decide')" class="perm-btn px-3 py-1 rounded-lg text-sm bg-white/10 text-gray-400" data-perm="decide">decide</button>
+              <button onclick="togglePermission('full')" class="perm-btn px-3 py-1 rounded-lg text-sm bg-white/10 text-gray-400" data-perm="full">full</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">描述 (選填)</label>
+            <input
+              type="text"
+              id="description"
+              placeholder="例如: ESG 合規代理"
+              class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-400"
+            >
+          </div>
+
+          <button
+            onclick="createDelegation()"
+            class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition"
+          >
+            創建授權
+          </button>
+        </div>
+      </div>
+
+      <!-- 中間：授權列表 -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-6 text-green-400">活躍授權</h2>
+        
+        <div class="space-y-3 max-h-96 overflow-y-auto" id="delegationList">
+          <div class="text-gray-400 text-center py-8">暫無活躍授權</div>
+        </div>
+      </div>
+
+      <!-- 右側：執行任務 -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-6 text-blue-400">執行任務</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">選擇授權</label>
+            <select
+              id="selectedDelegation"
+              class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-400"
+            >
+              <option value="">-- 選擇授權 --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">任務意圖</label>
+            <input
+              type="text"
+              id="intent"
+              value="generate-report"
+              class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-400"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">上下文 (JSON)</label>
+            <textarea
+              id="context"
+              rows="3"
+              class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-400 font-mono text-sm"
+            >{}</textarea>
+          </div>
+
+          <button
+            onclick="executeTask()"
+            class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:opacity-90 transition"
+          >
+            執行任務
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 日誌區域 -->
+    <div class="mt-8 glass rounded-xl p-6">
+      <h2 class="text-xl font-bold mb-4 text-yellow-400">執行日誌</h2>
+      <div class="log-area rounded-lg p-4 h-64 overflow-y-auto text-sm" id="logArea">
+        <div class="text-gray-500">等待操作...</div>
+      </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="mt-12 text-center text-gray-500 text-sm">
+      完全自主代行 Demo | ESG GO Platform
+    </footer>
+  </div>
+
+  <script>
+    // ==========================================
+    // 狀態管理
+    // ==========================================
+    
+    let delegations = [];
+    let selectedDelegationId = null;
+    let permissions = ['read', 'write', 'execute'];
+    let stats = {
+      totalDelegations: 0,
+      activeDelegations: 0,
+      totalExecutions: 0,
+      cacheHitRate: 0
+    };
+
+    // ==========================================
+    // 工具函數
+    // ==========================================
+    
+    function generateId() {
+      return `del-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    function addLog(message) {
+      const logArea = document.getElementById('logArea');
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.className = 'py-1 border-b border-white/5';
+      logEntry.textContent = `[${timestamp}] ${message}`;
+      
+      if (logArea.querySelector('.text-gray-500')) {
+        logArea.innerHTML = '';
+      }
+      
+      logArea.insertBefore(logEntry, logArea.firstChild);
+      
+      // 保留最新 50 條日誌
+      while (logArea.children.length > 50) {
+        logArea.removeChild(logArea.lastChild);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalDelegations').textContent = stats.totalDelegations;
+      document.getElementById('activeDelegations').textContent = stats.activeDelegations;
+      document.getElementById('totalExecutions').textContent = stats.totalExecutions;
+      document.getElementById('cacheHitRate').textContent = (stats.cacheHitRate * 100).toFixed(1) + '%';
+    }
+
+    function updateDelegationList() {
+      const list = document.getElementById('delegationList');
+      const select = document.getElementById('selectedDelegation');
+      
+      if (delegations.length === 0) {
+        list.innerHTML = '<div class="text-gray-400 text-center py-8">暫無活躍授權</div>';
+        select.innerHTML = '<option value="">-- 選擇授權 --</option>';
+        return;
+      }
+
+      list.innerHTML = delegations.map(d => `
+        <div class="bg-white/5 rounded-lg p-4 cursor-pointer transition hover:bg-white/10 ${selectedDelegationId === d.delegationId ? 'ring-2 ring-purple-400' : ''}" onclick="selectDelegation('${d.delegationId}')">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-sm font-mono text-purple-300">${d.delegationId.substring(0, 16)}...</span>
+            <button onclick="event.stopPropagation(); terminateDelegation('${d.delegationId}')" class="text-red-400 hover:text-red-300 text-sm">終止</button>
+          </div>
+          <div class="text-sm text-gray-400">主體: ${d.principalId}</div>
+          <div class="flex gap-1 mt-2">
+            ${d.permissions.map(p => `<span class="text-xs bg-purple-500/30 text-purple-300 px-2 py-0.5 rounded">${p}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      select.innerHTML = '<option value="">-- 選擇授權 --</option>' + 
+        delegations.map(d => `<option value="${d.delegationId}">${d.delegationId.substring(0, 20)}... (${d.principalId})</option>`).join('');
+    }
+
+    // ==========================================
+    // 權限管理
+    // ==========================================
+    
+    function togglePermission(perm) {
+      const btn = document.querySelector(`[data-perm="${perm}"]`);
+      if (permissions.includes(perm)) {
+        permissions = permissions.filter(p => p !== perm);
+        btn.classList.remove('bg-purple-500', 'text-white');
+        btn.classList.add('bg-white/10', 'text-gray-400');
+      } else {
+        permissions.push(perm);
+        btn.classList.remove('bg-white/10', 'text-gray-400');
+        btn.classList.add('bg-purple-500', 'text-white');
+      }
+    }
+
+    // ==========================================
+    // 授權操作
+    // ==========================================
+    
+    async function createDelegation() {
+      const principalId = document.getElementById('principalId').value;
+      const description = document.getElementById('description').value;
+
+      if (!principalId) {
+        addLog('❌ 請輸入主體 ID');
+        return;
+      }
+
+      if (permissions.length === 0) {
+        addLog('❌ 請選擇至少一個權限');
+        return;
+      }
+
+      addLog('創建授權中...');
+
+      // 模擬 API 延遲
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const newDelegation = {
+        delegationId: generateId(),
+        agentId: `agent-${Date.now()}`,
+        principalId,
+        permissions: [...permissions],
+        validUntil: Infinity,
+        description: description || undefined,
+        createdAt: new Date().toISOString()
+      };
+
+      delegations.push(newDelegation);
+      stats.totalDelegations++;
+      stats.activeDelegations++;
+
+      updateStats();
+      updateDelegationList();
+
+      addLog(`✅ 授權已創建: ${newDelegation.delegationId}`);
+      addLog(`   主體: ${newDelegation.principalId}`);
+      addLog(`   權限: ${newDelegation.permissions.join(', ')}`);
+    }
+
+    function selectDelegation(delegationId) {
+      selectedDelegationId = delegationId;
+      document.getElementById('selectedDelegation').value = delegationId;
+      updateDelegationList();
+    }
+
+    async function terminateDelegation(delegationId) {
+      addLog(`終止授權: ${delegationId}`);
+
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      delegations = delegations.filter(d => d.delegationId !== delegationId);
+      stats.activeDelegations--;
+
+      if (selectedDelegationId === delegationId) {
+        selectedDelegationId = null;
+      }
+
+      updateStats();
+      updateDelegationList();
+
+      addLog(`✅ 授權已終止: ${delegationId}`);
+    }
+
+    async function executeTask() {
+      const delegationId = document.getElementById('selectedDelegation').value;
+      const intent = document.getElementById('intent').value;
+      const contextStr = document.getElementById('context').value;
+
+      if (!delegationId) {
+        addLog('❌ 請選擇授權');
+        return;
+      }
+
+      if (!intent) {
+        addLog('❌ 請輸入任務意圖');
+        return;
+      }
+
+      let context;
+      try {
+        context = JSON.parse(contextStr);
+      } catch (e) {
+        addLog('❌ 無效的 JSON 格式');
+        return;
+      }
+
+      addLog(`執行任務: ${intent}`);
+
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      const duration = Math.floor(Math.random() * 500) + 200;
+      const executionId = `exec-${Date.now()}`;
+
+      stats.totalExecutions++;
+      stats.cacheHitRate = Math.min(0.95, stats.cacheHitRate + 0.01);
+
+      updateStats();
+
+      addLog(`✅ 任務執行成功`);
+      addLog(`   執行 ID: ${executionId}`);
+      addLog(`   耗時: ${duration}ms`);
+      addLog(`   結果: 任務 "${intent}" 已成功執行`);
+    }
+
+    // ==========================================
+    // 初始化
+    // ==========================================
+    
+    updateStats();
+    updateDelegationList();
+  </script>
+</body>
+</html>
