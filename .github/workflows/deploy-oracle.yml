@@ -85,13 +85,14 @@ jobs:
           for s in $REQ; do
             [ -n "${!s}" ] || all_set=0
           done
-          # direct 優先: 只要 VPS_SSH_KEY + VPS_HOST 設了就走直連 (push 也走直連)
-          if [ -n "$VPS_SSH_KEY" ] && [ -n "$VPS_HOST" ]; then
+          # 手動 dispatch 選 bastion 且 OCI_* 全設 → 走 bastion (即使 VPS_* 也設著)
+          # push 事件 inputs.deploy_mode 為空 → 不會選 bastion, 走下方 direct
+          if [ "${{ inputs.deploy_mode }}" = "bastion" ] && [ "$all_set" = "1" ]; then
+            echo "mode=bastion" >> $GITHUB_OUTPUT
+            echo "::notice::Bastion deploy mode (explicit deploy_mode=bastion, OCI secrets present)"
+          elif [ -n "$VPS_SSH_KEY" ] && [ -n "$VPS_HOST" ]; then
             echo "mode=direct" >> $GITHUB_OUTPUT
             echo "::notice::Direct SSH deploy mode (VPS_SSH_KEY present)"
-          elif [ "$all_set" = "1" ] && [ "${{ inputs.deploy_mode || 'direct' }}" = "bastion" ]; then
-            echo "mode=bastion" >> $GITHUB_OUTPUT
-            echo "::notice::Bastion deploy mode (OCI secrets present, deploy_mode=bastion)"
           else
             echo "mode=skip" >> $GITHUB_OUTPUT
             echo "::warning::No deploy secrets configured. Skipping auto-deploy. Set VPS_SSH_KEY+VPS_HOST for direct, or OCI_* for bastion."
