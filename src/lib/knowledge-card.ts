@@ -47,7 +47,7 @@ const CARD_TEMPLATES: Record<string, CardTemplate> = {
   },
   'C5': {
     chapter: 'C5',
-    whyPrefix: '回應氣候變遷風險，',
+    whyPrefix: '回應氣候變遷風險，強化能源韌性，',
     whatPrefix: '包含能源使用、',
     howPrefix: '依據 TCFD 建議框架',
     defaultTags: ['能源', '碳排放', 'TCFD', 'GRI 302'],
