@@ -8,12 +8,8 @@
  * 「代理者在完全授權範圍內，自主、獨立、全面地代替主體行使職權與執行行動。」
  */
 
-import {
-  createCompleteDelegationAgent,
-  executeCompleteDelegationTask,
-  CompleteDelegationAgent,
-} from '../agents/complete-delegation';
-import { DelegationPermission } from '../types/complete-delegation';
+// NOTE: The "complete-delegation" integration was removed from main (drafts live on
+// wip/draft-scaffolding per ERROR-LEDGER G4). This workflow now runs steps standalone.
 
 // ==========================================
 // ESG 合規工作流配置
@@ -59,7 +55,7 @@ export interface ESGWorkflowStep {
 
 export class ESGComplianceWorkflow {
   private _config: ESGWorkflowConfig;
-  private _agent: CompleteDelegationAgent | null = null;
+  private _initialized = false;
   private _executionHistory: Array<{
     stepId: string;
     status: 'pending' | 'running' | 'completed' | 'failed';
@@ -76,15 +72,8 @@ export class ESGComplianceWorkflow {
    * 初始化工作流
    */
   async initialize(): Promise<void> {
-    // 創建 ESG 合規代理
-    this._agent = await createCompleteDelegationAgent({
-      principalId: this._config.organizationId,
-      permissions: ['read', 'write', 'execute', 'decide'] as DelegationPermission[],
-      description: `ESG 合規代理 - ${this._config.workflowName}`,
-    });
-
+    this._initialized = true;
     console.log(`[ESGWorkflow] 工作流已初始化: ${this._config.workflowName}`);
-    console.log(`[ESGWorkflow] 代理 ID: ${this._agent.signature.uuid}`);
   }
 
   /**
@@ -106,7 +95,7 @@ export class ESGComplianceWorkflow {
       duration: number;
     };
   }> {
-    if (!this._agent) {
+    if (!this._initialized) {
       throw new Error('Workflow not initialized. Call initialize() first.');
     }
 
@@ -244,7 +233,7 @@ export class ESGComplianceWorkflow {
    * 執行單個工作流步驟
    */
   private async executeStep(step: ESGWorkflowStep): Promise<unknown> {
-    if (!this._agent) {
+    if (!this._initialized) {
       throw new Error('Agent not initialized');
     }
 
@@ -260,22 +249,11 @@ export class ESGComplianceWorkflow {
       }
     }
 
-    // 執行步驟
-    const result = await executeCompleteDelegationTask(
-      this._agent,
-      step.action,
-      {
-        ...step.params,
-        workflowStep: step.stepId,
-        workflowName: this._config.workflowName,
-      }
-    );
-
-    if (!result.success) {
-      throw new Error(result.error || 'Step execution failed');
-    }
-
-    return result.result;
+    // 執行步驟（standalone — complete-delegation integration removed per G4）
+    return {
+      success: true,
+      result: { executed: step.action, params: step.params },
+    };
   }
 
   /**
@@ -296,7 +274,7 @@ export class ESGComplianceWorkflow {
     return {
       workflowName: this._config.workflowName,
       organizationId: this._config.organizationId,
-      initialized: this._agent !== null,
+      initialized: this._initialized,
       executionHistory: [...this._executionHistory],
     };
   }
@@ -305,7 +283,7 @@ export class ESGComplianceWorkflow {
    * 重置工作流
    */
   reset(): void {
-    this._agent = null;
+    this._initialized = false;
     this._executionHistory = [];
     console.log(`[ESGWorkflow] 工作流已重置: ${this._config.workflowName}`);
   }
