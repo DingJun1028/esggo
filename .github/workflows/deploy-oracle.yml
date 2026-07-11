@@ -174,7 +174,7 @@ jobs:
               raise SystemExit("bastion session " + sid + " timeout waiting ACTIVE")
             with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("session=" + sid + "\n")
-              f.write("proxy=ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
+              f.write("proxy=ssh -i ~/.ssh/bastion_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -p 22 " + sid + "@host.bastion." + os.environ["OCI_REGION"] + ".oci.oraclecloud.com\n")
             print("[OK] bastion session " + sid)
           except Exception as e:
             print("OCI_SDK_ERROR:")
