@@ -69,7 +69,9 @@ export function StatusDot({ ok, status, size = 'md', label }: StatusDotProps) {
         role="status"
         aria-label={label || resolvedStatus}
       />
-      {label && <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>}
+      {label && (
+        <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
+      )}
     </span>
   );
 }
@@ -128,14 +130,7 @@ interface CardProps {
   className?: string;
 }
 
-export function Card({
-  title,
-  icon,
-  children,
-  accent = 'teal',
-  action,
-  className = '',
-}: CardProps) {
+export function Card({ title, icon, children, accent = 'teal', action, className = '' }: CardProps) {
   const borderMap: Record<string, string> = {
     teal: 'border-l-[#009EB0]',
     gold: 'border-l-[#D4AF37]',
@@ -183,7 +178,9 @@ export function MetricRow({ label, value, sub }: MetricRowProps) {
         <span className="text-sm font-mono font-semibold text-gray-800 dark:text-gray-200">
           {value}
         </span>
-        {sub && <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-1">{sub}</span>}
+        {sub && (
+          <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-1">{sub}</span>
+        )}
       </div>
     </div>
   );
@@ -203,12 +200,7 @@ interface ProgressBarProps {
   showLabel?: boolean;
 }
 
-export function ProgressBar({
-  percent,
-  color = 'teal',
-  height = 'h-2',
-  showLabel = false,
-}: ProgressBarProps) {
+export function ProgressBar({ percent, color = 'teal', height = 'h-2', showLabel = false }: ProgressBarProps) {
   const colorMap: Record<string, string> = {
     teal: 'bg-[#009EB0]',
     gold: 'bg-[#D4AF37]',
@@ -256,20 +248,14 @@ interface SkeletonProps {
 export function Skeleton({ lines = 3, type = 'text', className = '' }: SkeletonProps) {
   if (type === 'card') {
     return (
-      <div
-        className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 ${className}`}
-      >
+      <div className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 ${className}`}>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-8 h-8 rounded-lg bg-gray-200 dark:bg-slate-700 animate-pulse" />
           <div className="h-4 w-24 bg-gray-200 dark:bg-slate-700 rounded animate-pulse" />
         </div>
         <div className="space-y-3">
           {Array.from({ length: lines }).map((_, i) => (
-            <div
-              key={i}
-              className="h-3 bg-gray-200 dark:bg-slate-700 rounded animate-pulse"
-              style={{ width: `${85 - i * 15}%` }}
-            />
+            <div key={i} className="h-3 bg-gray-200 dark:bg-slate-700 rounded animate-pulse" style={{ width: `${85 - i * 15}%` }} />
           ))}
         </div>
       </div>
@@ -277,9 +263,7 @@ export function Skeleton({ lines = 3, type = 'text', className = '' }: SkeletonP
   }
   if (type === 'chart') {
     return (
-      <div
-        className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 ${className}`}
-      >
+      <div className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 ${className}`}>
         <div className="h-4 w-32 bg-gray-200 dark:bg-slate-700 rounded animate-pulse mb-4" />
         <div className="h-40 bg-gray-200 dark:bg-slate-700 rounded animate-pulse" />
       </div>
@@ -313,21 +297,13 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export function EmptyState({
-  icon = '📭',
-  message,
-  description,
-  actionLabel,
-  onAction,
-}: EmptyStateProps) {
+export function EmptyState({ icon = '📭', message, description, actionLabel, onAction }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <span className="text-4xl mb-3">{icon}</span>
       <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{message}</p>
       {description && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center max-w-sm">
-          {description}
-        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 text-center max-w-sm">{description}</p>
       )}
       {actionLabel && onAction && (
         <button
@@ -356,21 +332,20 @@ interface ErrorBannerProps {
 
 export function ErrorBanner({ message, onRetry, severity = 'error' }: ErrorBannerProps) {
   const styles = {
-    error:
-      'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400',
-    warning:
-      'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-600 dark:text-yellow-400',
+    error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400',
+    warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-600 dark:text-yellow-400',
   };
   return (
-    <div
-      className={`px-4 py-3 border rounded-lg text-xs flex items-center justify-between ${styles[severity]}`}
-    >
+    <div className={`px-4 py-3 border rounded-lg text-xs flex items-center justify-between ${styles[severity]}`}>
       <div className="flex items-center gap-2">
         <span>{severity === 'error' ? '✕' : '⚠'}</span>
         <span>{message}</span>
       </div>
       {onRetry && (
-        <button onClick={onRetry} className="font-semibold underline hover:no-underline">
+        <button
+          onClick={onRetry}
+          className="font-semibold underline hover:no-underline"
+        >
           重試
         </button>
       )}
@@ -428,20 +403,18 @@ interface TabBarProps {
 
 export function TabBar({ tabs, active, onChange }: TabBarProps) {
   return (
-    <div className="flex flex-wrap gap-2" role="tablist" aria-label="選單">
-      {tabs.map((tab) => (
+    <div className="flex flex-wrap gap-2">
+      {tabs.map(tab => (
         <button
           key={tab.id}
-          role="tab"
-          aria-selected={active === tab.id}
           onClick={() => onChange(tab.id)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#009EB0] focus-visible:ring-offset-1 focus-visible:ring-offset-primary ${
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
             active === tab.id
               ? 'bg-[#009EB0] text-white shadow-lg shadow-[#009EB0]/25'
               : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
           }`}
         >
-          {tab.icon && <span aria-hidden="true">{tab.icon}</span>}
+          {tab.icon && <span>{tab.icon}</span>}
           <span>{tab.label}</span>
           {tab.count !== undefined && (
             <span
@@ -473,11 +446,7 @@ interface SearchInputProps {
   debounceMs?: number;
 }
 
-export function SearchInput({
-  onSearch,
-  placeholder = 'Search...',
-  debounceMs = 300,
-}: SearchInputProps) {
+export function SearchInput({ onSearch, placeholder = 'Search...', debounceMs = 300 }: SearchInputProps) {
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -491,7 +460,7 @@ export function SearchInput({
       <input
         type="text"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={e => setValue(e.target.value)}
         placeholder={placeholder}
         className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#009EB0]/50 focus:border-[#009EB0] transition-all"
       />
@@ -521,10 +490,7 @@ interface UseFetchResult<T> {
   refetch: () => void;
 }
 
-export function useFetch<T>(
-  url: string,
-  options?: RequestInit & { interval?: number },
-): UseFetchResult<T> {
+export function useFetch<T>(url: string, options?: RequestInit & { interval?: number }): UseFetchResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

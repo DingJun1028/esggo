@@ -1,5 +1,5 @@
 name = "smart-ai-router"
-main = "my-worker/src/index.ts"
+main = "src/index.ts"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
@@ -9,7 +9,7 @@ SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
 # 靜態資源
 [assets]
-directory = "my-worker/dist"
+directory = "dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 
