@@ -31,8 +31,8 @@
 | `OCI_USER_OCID` | `~/.oci/config` 的 `user=` | `ocid1.user.oc1..xxxx` |
 | `OCI_API_FINGERPRINT` | `~/.oci/config` 的 `fingerprint=` | `xx:xx:...:xx` |
 | `OCI_API_KEY` | `~/.oci/key.pem` 全文（含 `-----BEGIN/END-----`） | PEM 私鑰 |
-| `OCI_BASTION_ID` | `vps-bastion.py` BASTION_ID | `ocid1.bastion.oc1.ap-singapore-1.amaaaaaakl3rykyap3rfv3k5jvte5mysqq2lzeboxfj3cjtsvf24afiqeiya` |
-| `OCI_TARGET_RESOURCE_ID` | `vps-bastion.py` TARGET_ID（VPS instance OCID） | `ocid1.instance.oc1.ap-singapore-1.anzwsljrkl3rykychf7ossd6gottx3znbovjkns6atqabgh5ir2wxm3ke47a` |
+| `OCI_BASTION_ID` | `vps-bastion.py` BASTION_ID | `ocid1.bastion.oc1..xxxx` |
+| `OCI_TARGET_RESOURCE_ID` | `vps-bastion.py` TARGET_ID（VPS instance OCID） | `ocid1.instance.oc1..xxxx` |
 
 > 本機 `~/.oci/config` 已含 tenancy/user/fingerprint；`~/.oci/key.pem` 是 API 私鑰。從本機複製這些值到 GitHub Secrets（不要貼在聊天）。
 
