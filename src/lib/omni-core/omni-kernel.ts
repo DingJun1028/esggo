@@ -379,5 +379,11 @@ export class OmniKernel {
   }
 }
 
-/** Singleton kernel instance */
-export const omniKernel = new OmniKernel();
+/** Singleton kernel instance.
+ *  Cached on globalThis so the instrumentation hook and API route handlers
+ *  (which Next.js may compile into separate module scopes) share ONE instance.
+ *  Without this, initializing in instrumentation doesn't affect the route's
+ *  copy, and `initialized` / registry / cache state diverges per bundle. */
+const globalForOmniKernel = globalThis as unknown as { omniKernel?: OmniKernel };
+export const omniKernel: OmniKernel =
+  globalForOmniKernel.omniKernel ?? (globalForOmniKernel.omniKernel = new OmniKernel());
