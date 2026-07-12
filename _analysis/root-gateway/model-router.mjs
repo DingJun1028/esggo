@@ -31,22 +31,24 @@ const MODELS = {
   or_qwen80b:    { provider: 'openrouter', model: 'qwen/qwen3-next-80b-a3b-instruct:free',    maxTokens: 512, temperature: 0.7 },
   or_mistral24b: { provider: 'openrouter', model: 'mistralai/mistral-small-3.1-24b:free',     maxTokens: 256, temperature: 0.6 },
   or_llama70b:   { provider: 'openrouter', model: 'meta-llama/llama-3.3-70b-instruct:free',   maxTokens: 256, temperature: 0.7 },
+  // Local VPS Hosting (Gemma 3 4B - 100% Free, Private)
+  vps_gemma:      { provider: 'local_gemma', model: 'gemma3:4b',             maxTokens: 4096,  temperature: 0.7 },
 };
 
 // ── 路由表 ───────────────────────────────────────────────────
 const ROUTING_TABLE = {
-  carbon_calculation:    { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.groq_llama8b },
-  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  sdg_mapping:           { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,   fallback2: MODELS.or_mistral24b },
-  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.groq_llama70b },
-  evidence_ocr:          { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
-  email_archival:        { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
-  stakeholder_analysis:  { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,   fallback2: MODELS.groq_llama8b },
-  omni_jules_heal:       { primary: MODELS.or_hermes405b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.or_llama70b },
-  swarm_orchestration:   { primary: MODELS.groq_llama8b,  fallback1: MODELS.groq_gemma,   fallback2: MODELS.or_mistral24b },
-  general:               { primary: MODELS.groq_llama70b, fallback1: MODELS.or_llama70b,   fallback2: MODELS.or_mistral24b },
+  carbon_calculation:    { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.vps_gemma },
+  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.vps_gemma },
+  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.vps_gemma },
+  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.vps_gemma },
+  sdg_mapping:           { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama70b, fallback2: MODELS.or_qwen80b },
+  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_hermes405b, fallback2: MODELS.vps_gemma },
+  evidence_ocr:          { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,   fallback2: MODELS.groq_gemma },
+  email_archival:        { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,   fallback2: MODELS.groq_gemma },
+  stakeholder_analysis:  { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,   fallback2: MODELS.vps_gemma },
+  omni_jules_heal:       { primary: MODELS.or_hermes405b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.vps_gemma },
+  swarm_orchestration:   { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,   fallback2: MODELS.groq_gemma },
+  general:               { primary: MODELS.groq_llama70b, fallback1: MODELS.vps_gemma,   fallback2: MODELS.or_llama70b },
 };
 
 // ── 路由函數 ─────────────────────────────────────────────────
@@ -67,6 +69,12 @@ const PROVIDER_ENDPOINTS = {
   mistral:    { apiUrl: 'https://api.mistral.ai/v1/chat/completions',      apiKeyEnv: 'MISTRAL_API_KEY' },
   gemini:     { apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', apiKeyEnv: 'GEMINI_API_KEY' },
   cloudflare: { apiUrl: 'cloudflare', apiKeyEnv: 'CLOUDFLARE_API_TOKEN' },
+  local_gemma: { 
+    apiUrl: process.env.LOCAL_GEMMA_API_URL 
+      ? `${process.env.LOCAL_GEMMA_API_URL}/chat/completions` 
+      : 'https://omniagent.esggo.co/ollama/v1/chat/completions', 
+    apiKeyEnv: 'LOCAL_GEMMA_AUTH_TOKEN' 
+  },
 };
 
 const FREE_PROVIDER_POOL = Object.values(MODELS).map(m => ({

@@ -23,7 +23,7 @@ export function inferTaskType(message) {
 }
 
 // ── 模型配置 ─────────────────────────────────────────────────
-// 共 20 個模型，分佈 6 個 Provider
+// 共 21 個模型，分佈 7 個 Provider
 const MODELS = {
   // Groq (速度王, 30 req/min)
   groq_llama70b: { provider: 'groq', model: 'llama-3.3-70b-versatile', maxTokens: 256, temperature: 0.7 },
@@ -54,24 +54,27 @@ const MODELS = {
   // Mistral AI (歐洲品質)
   mistral_large: { provider: 'mistral', model: 'mistral-large-latest', maxTokens: 512, temperature: 0.7 },
   mistral_small: { provider: 'mistral', model: 'mistral-small-latest', maxTokens: 256, temperature: 0.6 },
+
+  // Local VPS Hosting (Gemma 3 4B - 100% Free, Private)
+  vps_gemma:      { provider: 'local_gemma', model: 'gemma3:4b',             maxTokens: 4096,  temperature: 0.7 },
 };
 
 // ── 路由表 ───────────────────────────────────────────────────
 // 每個任務 3 個 fallback，跨 Provider 確保可用性
 const ROUTING_TABLE = {
-  carbon_calculation:    { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,     fallback2: MODELS.cf_llama70b },
-  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.tg_llama70b },
-  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.tg_qwen72b },
-  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.tg_qwen72b },
-  sdg_mapping:           { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.cf_llama70b },
-  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.tg_qwen72b },
-  evidence_ocr:          { primary: MODELS.groq_llama8b,  fallback1: MODELS.cf_llama8b,    fallback2: MODELS.or_mistral24b },
-  email_archival:        { primary: MODELS.groq_llama8b,  fallback1: MODELS.cf_llama8b,    fallback2: MODELS.or_mistral24b },
-  stakeholder_analysis:  { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.tg_llama70b },
-  omni_jules_heal:       { primary: MODELS.or_llama90b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.tg_llama70b },
-  swarm_orchestration:   { primary: MODELS.groq_llama8b,  fallback1: MODELS.cf_llama8b,    fallback2: MODELS.or_mistral24b },
-  report_assembly:       { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.tg_llama70b },
-  general:               { primary: MODELS.groq_llama70b, fallback1: MODELS.cf_llama70b,    fallback2: MODELS.or_mistral24b },
+  carbon_calculation:    { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,     fallback2: MODELS.vps_gemma },
+  compliance_review:     { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.vps_gemma },
+  gri_report_draft:      { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.vps_gemma },
+  tcfd_analysis:         { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.vps_gemma },
+  sdg_mapping:           { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama70b,    fallback2: MODELS.or_qwen80b },
+  materiality_matrix:    { primary: MODELS.or_qwen80b,   fallback1: MODELS.or_llama90b,  fallback2: MODELS.vps_gemma },
+  evidence_ocr:          { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,    fallback2: MODELS.cf_llama8b },
+  email_archival:        { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,    fallback2: MODELS.cf_llama8b },
+  stakeholder_analysis:  { primary: MODELS.groq_llama70b, fallback1: MODELS.or_qwen80b,    fallback2: MODELS.vps_gemma },
+  omni_jules_heal:       { primary: MODELS.or_llama90b, fallback1: MODELS.groq_llama70b, fallback2: MODELS.vps_gemma },
+  swarm_orchestration:   { primary: MODELS.vps_gemma,    fallback1: MODELS.groq_llama8b,    fallback2: MODELS.cf_llama8b },
+  report_assembly:       { primary: MODELS.or_qwen80b,   fallback1: MODELS.vps_gemma,    fallback2: MODELS.tg_llama70b },
+  general:               { primary: MODELS.groq_llama70b, fallback1: MODELS.vps_gemma,    fallback2: MODELS.or_mistral24b },
 };
 
 // ── 路由函數 ─────────────────────────────────────────────────
@@ -177,6 +180,12 @@ const PROVIDER_ENDPOINTS = {
   mistral:    { apiUrl: 'https://api.mistral.ai/v1/chat/completions',      apiKeyEnv: 'MISTRAL_API_KEY' },
   gemini:     { apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', apiKeyEnv: 'GEMINI_API_KEY' },
   cloudflare: { apiUrl: 'cloudflare', apiKeyEnv: 'CLOUDFLARE_API_TOKEN' },
+  local_gemma: { 
+    apiUrl: process.env.LOCAL_GEMMA_API_URL 
+      ? `${process.env.LOCAL_GEMMA_API_URL}/chat/completions` 
+      : 'https://omniagent.esggo.co/ollama/v1/chat/completions', 
+    apiKeyEnv: 'LOCAL_GEMMA_AUTH_TOKEN' 
+  },
 };
 
 const FREE_PROVIDER_POOL = Object.values(MODELS).map(m => ({
