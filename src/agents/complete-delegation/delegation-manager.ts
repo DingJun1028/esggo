@@ -14,8 +14,11 @@ import {
   ICompleteDelegationManager,
   DelegationPermission,
   DelegationRestriction,
+  DelegationEventNames,
+  DelegationTopics,
 } from '../../types/complete-delegation';
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
+import { publishDelegationEvent } from './events';
 
 /**
  * 完全代主自行 - 授權管理器
@@ -89,6 +92,19 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       timestamp: Date.now(),
     });
 
+    // 6a. 經由 omni-gateway 轉發至 omni-agent-bus（廣通：供監控 / 分析訂閱）
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_CREATED,
+      DelegationTopics.AUTHORIZATION,
+      {
+        delegationId,
+        principalId: params.principalId,
+        agentId: params.agentId,
+        permissions: params.permissions,
+      },
+      'CompleteDelegationManager'
+    );
+
     return signedScope;
   }
 
@@ -134,6 +150,12 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       valid,
       timestamp: Date.now(),
     });
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_VALIDATED,
+      DelegationTopics.AUTHORIZATION,
+      { delegationId, requiredPermission, valid },
+      'CompleteDelegationManager'
+    );
     return valid;
   }
 
@@ -173,6 +195,12 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       reason,
       timestamp: Date.now(),
     });
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_TERMINATED,
+      DelegationTopics.AUTHORIZATION,
+      { delegationId, reason },
+      'CompleteDelegationManager'
+    );
 
     // 2. 移除索引
     this.removeFromPrincipalIndex(scope.principalId, delegationId);

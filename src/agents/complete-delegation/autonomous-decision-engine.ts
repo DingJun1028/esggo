@@ -15,12 +15,15 @@ import {
   DecisionOption,
   DecisionConstraint,
   AutonomousDecision,
+  DelegationEventNames,
+  DelegationTopics,
 } from '../../types/complete-delegation';
 import {
   DecisionStrategy,
   DecisionStrategyName,
   createDecisionStrategy,
 } from './decision-strategy';
+import { publishDelegationEvent } from './events';
 
 type AuditEntry = { type: string; timestamp: number; [key: string]: unknown };
 
@@ -136,6 +139,18 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
       confidence: decision.confidence,
       timestamp: decision.timestamp,
     });
+
+    // 經由 omni-gateway 轉發決策事件至 omni-agent-bus（深：決策可觀測）
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_DECISION_MADE,
+      DelegationTopics.DECISION,
+      {
+        decisionId: decision.decisionId,
+        selectedOption: decision.selectedOption.id,
+        confidence: decision.confidence,
+      },
+      'AutonomousDecisionEngine'
+    );
   }
 
   /**
@@ -156,6 +171,13 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
       report,
       timestamp: Date.now(),
     });
+
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_DECISION_REPORTED,
+      DelegationTopics.REPORTING,
+      { decisionId: decision.decisionId },
+      'AutonomousDecisionEngine'
+    );
 
     // 3. 標記已回報
     decision.reportedToPrincipal = true;

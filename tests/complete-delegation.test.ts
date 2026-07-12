@@ -18,6 +18,8 @@ import {
   resetDelegationManager,
   resetDecisionEngine,
 } from '../src/agents/complete-delegation';
+import * as delegationEvents from '../src/agents/complete-delegation/events';
+import { DelegationEventNames, DelegationTopics } from '../src/types/complete-delegation';
 
 describe('完全代主自行 (Complete Autonomous Delegation)', () => {
   let manager: CompleteDelegationManager;
@@ -276,5 +278,73 @@ describe('完全代主自行 (Complete Autonomous Delegation)', () => {
       const history = agent.getExecutionHistory();
       expect(history.length).toBe(1);
     });
+  });
+});
+
+// ==========================================
+// 事件總線貫通（深貫廣通）— 經 omni-gateway 轉發至 omni-agent-bus
+// ==========================================
+
+describe('完全代主自行 事件總線貫通', () => {
+  it('manager publishes DELEGATION_CREATED on create', async () => {
+    const spy = vi.spyOn(delegationEvents, 'publishDelegationEvent');
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'bus-user-001',
+      permissions: ['full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    expect(spy).toHaveBeenCalledWith(
+      DelegationEventNames.DELEGATION_CREATED,
+      DelegationTopics.AUTHORIZATION,
+      expect.objectContaining({ delegationId }),
+      'CompleteDelegationManager'
+    );
+    spy.mockRestore();
+  });
+
+  it('engine publishes DECISION_MADE on execute', async () => {
+    const spy = vi.spyOn(delegationEvents, 'publishDelegationEvent');
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'bus-user-002',
+      permissions: ['full'],
+    });
+    const result = await executeCompleteDelegationTask(agent, 'bus-task', {});
+    const decisionId = (result.metadata as { decisionId?: string })?.decisionId;
+
+    expect(spy).toHaveBeenCalledWith(
+      DelegationEventNames.DELEGATION_DECISION_MADE,
+      DelegationTopics.DECISION,
+      expect.objectContaining({ decisionId }),
+      'AutonomousDecisionEngine'
+    );
+    spy.mockRestore();
+  });
+
+  it('agent publishes DECISION_REPORTED on report', async () => {
+    const spy = vi.spyOn(delegationEvents, 'publishDelegationEvent');
+    const manager = getDelegationManager();
+    const scope = await manager.createCompleteDelegation({
+      principalId: 'bus-user-003',
+      agentId: 'agent-bus-003',
+      permissions: ['full'],
+    });
+    const agent = new CompleteDelegationAgent('bus-user-003', scope);
+    await agent.reportToPrincipal({
+      executionId: 'exec-bus-003',
+      intent: 'report',
+      decision: null,
+      result: { ok: true },
+      status: 'completed',
+      timestamp: Date.now(),
+    });
+
+    expect(spy).toHaveBeenCalledWith(
+      DelegationEventNames.DELEGATION_DECISION_REPORTED,
+      DelegationTopics.REPORTING,
+      expect.objectContaining({ executionId: 'exec-bus-003' }),
+      'CompleteDelegationAgent'
+    );
+    spy.mockRestore();
   });
 });

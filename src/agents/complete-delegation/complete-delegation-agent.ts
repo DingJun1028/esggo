@@ -19,10 +19,13 @@ import {
   AutonomousDecision,
   DecisionContext,
   DecisionOption,
+  DelegationEventNames,
+  DelegationTopics,
 } from '../../types/complete-delegation';
 import { IComponentCore } from '../../types/core-contract';
 import { CompleteDelegationManager, getDelegationManager } from './delegation-manager';
 import { AutonomousDecisionEngine } from './autonomous-decision-engine';
+import { publishDelegationEvent } from './events';
 
 /**
  * 完全代主自行 - 代理者實現
@@ -314,10 +317,20 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
    * 發送回報事件
    */
   private async sendReportEvent(report: DelegationReport): Promise<void> {
-    // 這裡可以整合到事件總線
     console.log(
       `[CompleteDelegationAgent] 發送回報事件:`,
       report.executionId
+    );
+    // 經由 omni-gateway 轉發回報事件至 omni-agent-bus（深：補齊 stub）
+    void publishDelegationEvent(
+      DelegationEventNames.DELEGATION_DECISION_REPORTED,
+      DelegationTopics.REPORTING,
+      {
+        executionId: report.executionId,
+        status: report.status,
+        decisionId: report.decision?.decisionId ?? null,
+      },
+      'CompleteDelegationAgent'
     );
   }
 
