@@ -1,17 +1,18 @@
 /**
  * ==========================================
- * 完全代主自行 - 委派事件指標觀測器（監控/分析消費者）
+ * 完全代主自行 - 委派事件指標觀測器（監控/分析/告警消費者）
  * ==========================================
  *
  * 將統一發布的完全代主自行事件接入「實際監控/分析消費者」：
  * 訂閱 omni-agent-bus 的 'external-forward' 主題，對委派生命週期事件
- * 進行全量聚合（不抽樣、不截斷），提供全域與 per-delegation 的指標快照。
+ * 進行全量聚合（不抽樣、不截斷），並依規則產生告警（緊急停止 / 異常 / 閾值），
+ * 提供全域與 per-delegation 的指標與告警快照。
  *
  * 對齊平台不變量：
  * - 全域：與其他子系統共用同一事件總線（enhancedOmniBus），無孤島。
- * - 全量：觀測所有委派事件（無 ring-buffer 截斷、無取樣）。
+ * - 全量：觀測所有委派事件（無 ring-buffer 截斷、無取樣）；告警亦全量留存。
  * - 雙向同步：與 client 經 POST /api/delegation/events 回寫進入同一總線，
- *   觀測器一視同仁地聚合 server 推送與 client 回寫的事件。
+ *   觀測器一視同仁地聚合與告警。
  */
 
 import { enhancedOmniBus } from '../../lib/omni-agent-bus';
@@ -20,11 +21,31 @@ import { DelegationEventNames } from '../../types/complete-delegation';
 /** 委派事件類型集合（含 AUTHORIZATION / DECISION / REPORTING / EXECUTION 主題） */
 const DELEGATION_EVENT_TYPES = new Set(Object.values(DelegationEventNames));
 
+/** 告警等級 */
+export type AlertLevel = 'critical' | 'warning';
+
+/** 單筆告警 */
+export interface DelegationAlert {
+  id: string;
+  level: AlertLevel;
+  type: string;
+  delegationId: string;
+  ts: number;
+  message: string;
+}
+
+/** 告警閾值設定 */
+export interface DelegationThresholds {
+  /** 單一 delegation 事件總量達此值時發出 warning（對齊「閾值」監控） */
+  delegationEventCount: number;
+}
+
 /** 單一 delegation 的聚合指標 */
 export interface DelegationMetric {
   total: number;
   byType: Record<string, number>;
   lastSeenAt: number | null;
+  alerts: DelegationAlert[];
 }
 
 /** 全域指標快照 */
@@ -39,13 +60,15 @@ export interface DelegationMetricsSnapshot {
   byType: Record<string, number>;
   /** 曾出現過事件的 delegation 數（不含識別碼，最小暴露） */
   activeDelegations: number;
+  /** 全域告警（全量留存） */
+  alerts: DelegationAlert[];
 }
 
 /**
  * 委派事件指標觀測器（單例）。
  *
  * 於首次取得實例時訂閱總線；對非委派事件（type 不在 DelegationEventNames）
- * 一律忽略，避免污染指標。聚合結果保存在記憶體（程序級），對齊「全量」
+ * 一律忽略，避免污染指標。聚合與告警保存在記憶體（程序級），對齊「全量」
  * 不變量——不丟棄、不抽樣。跨程序持久化由 unified journal 負責（見 events.ts）。
  */
 class DelegationMetrics {
@@ -53,6 +76,9 @@ class DelegationMetrics {
   private _byDelegation: Map<string, DelegationMetric> = new Map();
   private _total = 0;
   private _lastSeenAt: number | null = null;
+  private _alerts: DelegationAlert[] = [];
+  private _alertSeq = 0;
+  private _thresholds: DelegationThresholds = { delegationEventCount: 1000 };
   private readonly _startedAt = Date.now();
   private _unsub: (() => void) | null = null;
 
@@ -66,6 +92,11 @@ class DelegationMetrics {
     this._unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
       this.ingest(ev as Record<string, unknown>);
     });
+  }
+
+  /** 調整告警閾值（供測試 / 運維覆寫） */
+  setThresholds(t: Partial<DelegationThresholds>): void {
+    this._thresholds = { ...this._thresholds, ...t };
   }
 
   /** 解析並聚合一筆總線事件 */
@@ -93,7 +124,7 @@ class DelegationMetrics {
     if (delegationId) {
       let metric = this._byDelegation.get(delegationId);
       if (!metric) {
-        metric = { total: 0, byType: {}, lastSeenAt: null };
+        metric = { total: 0, byType: {}, lastSeenAt: null, alerts: [] };
         this._byDelegation.set(delegationId, metric);
       }
       metric.total++;
@@ -111,6 +142,42 @@ class DelegationMetrics {
       const metric = this._byDelegation.get(delegationId);
       if (metric) metric.lastSeenAt = ts;
     }
+
+    // 告警評估（對齊「監控/告警」）：緊急停止 / 異常偵測 / 事件量閾值
+    this.evaluateAlerts(type, delegationId, ts);
+  }
+
+  /** 依規則產生告警（全量留存於 _alerts） */
+  private evaluateAlerts(type: string, delegationId: string, ts: number): void {
+    const push = (level: AlertLevel, message: string): void => {
+      this._alertSeq++;
+      this._alerts.push({
+        id: `al-${this._alertSeq}`,
+        level,
+        type,
+        delegationId,
+        ts,
+        message,
+      });
+      if (delegationId) {
+        const metric = this._byDelegation.get(delegationId);
+        if (metric) metric.alerts.push(this._alerts[this._alerts.length - 1]);
+      }
+    };
+
+    if (type === 'delegation.emergency.stop') {
+      push('critical', `授權 ${delegationId} 觸發緊急停止`);
+    } else if (type === 'delegation.anomaly.detected') {
+      push('warning', `授權 ${delegationId} 偵測異常`);
+    } else if (delegationId) {
+      const metric = this._byDelegation.get(delegationId);
+      if (metric && metric.total === this._thresholds.delegationEventCount) {
+        push(
+          'warning',
+          `授權 ${delegationId} 事件量達閾值 ${this._thresholds.delegationEventCount}`
+        );
+      }
+    }
   }
 
   /** 取得全域指標快照（不可變副本） */
@@ -121,6 +188,7 @@ class DelegationMetrics {
       total: this._total,
       byType: { ...this._byType },
       activeDelegations: this._byDelegation.size,
+      alerts: [...this._alerts],
     };
   }
 
@@ -128,16 +196,29 @@ class DelegationMetrics {
   getDelegationSnapshot(delegationId: string): DelegationMetric {
     const metric = this._byDelegation.get(delegationId);
     return metric
-      ? { total: metric.total, byType: { ...metric.byType }, lastSeenAt: metric.lastSeenAt }
-      : { total: 0, byType: {}, lastSeenAt: null };
+      ? {
+          total: metric.total,
+          byType: { ...metric.byType },
+          lastSeenAt: metric.lastSeenAt,
+          alerts: [...metric.alerts],
+        }
+      : { total: 0, byType: {}, lastSeenAt: null, alerts: [] };
   }
 
-  /** 清空所有聚合（用於測試或重啟觀測） */
+  /** 取得告警（可選依 delegationId 過濾） */
+  getAlerts(delegationId?: string): DelegationAlert[] {
+    const all = [...this._alerts];
+    return delegationId ? all.filter((a) => a.delegationId === delegationId) : all;
+  }
+
+  /** 清空所有聚合與告警（用於測試或重啟觀測） */
   reset(): void {
     this._byType = {};
     this._byDelegation.clear();
     this._total = 0;
     this._lastSeenAt = null;
+    this._alerts = [];
+    this._alertSeq = 0;
   }
 
   /** 解除總線訂閱（釋放資源） */

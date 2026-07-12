@@ -22,6 +22,7 @@ interface GlobalMetrics {
   total: number;
   byType: Record<string, number>;
   activeDelegations: number;
+  alerts: AlertItem[];
 }
 
 interface DelegationMetrics {
@@ -30,6 +31,17 @@ interface DelegationMetrics {
   total: number;
   byType: Record<string, number>;
   lastSeenAt: number | null;
+  alerts: AlertItem[];
+}
+
+/** 告警項目（與 metrics.ts 之 DelegationAlert 同形） */
+interface AlertItem {
+  id: string;
+  level: 'critical' | 'warning';
+  type: string;
+  delegationId: string;
+  ts: number;
+  message: string;
 }
 
 /** 將時間戳轉為相對描述（對齊 RWD UI 的簡潔呈現） */
@@ -48,6 +60,40 @@ function MetricChip({ label, value }: { label: string; value: number }) {
     <div className="flex items-center justify-between gap-3 bg-white/5 rounded-lg px-3 py-2 border border-white/10">
       <span className="text-xs text-gray-400 truncate">{label}</span>
       <span className="text-sm font-mono font-bold text-purple-300">{value}</span>
+    </div>
+  );
+}
+
+function AlertList({ alerts }: { alerts: AlertItem[] }) {
+  if (!alerts || alerts.length === 0) {
+    return (
+      <div className="text-xs text-emerald-300/80 bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-3 py-2">
+        無告警
+      </div>
+    );
+  }
+  // 最近的告警置頂（取最後 5 筆）
+  const recent = [...alerts].slice(-5).reverse();
+  return (
+    <div className="flex flex-col gap-2">
+      {recent.map((a) => (
+        <div
+          key={a.id}
+          className={`rounded-lg px-3 py-2 border text-xs ${
+            a.level === 'critical'
+              ? 'bg-red-500/15 border-red-500/40 text-red-200'
+              : 'bg-amber-500/15 border-amber-500/40 text-amber-200'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold uppercase">{a.level}</span>
+            <span className="font-mono text-[10px] opacity-70">
+              {relativeTime(a.ts)}
+            </span>
+          </div>
+          <div className="mt-0.5">{a.message}</div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -160,6 +206,12 @@ export default function DelegationMetricsOverview({
         </div>
       )}
 
+      {/* 全球告警 */}
+      <div className="mb-4">
+        <div className="text-xs text-gray-400 mb-2">告警（全量留存）</div>
+        <AlertList alerts={global?.alerts ?? []} />
+      </div>
+
       {/* 單一 delegation 指標（需 monitor / full） */}
       {delegationId && (
         <div className="border-t border-white/10 pt-4">
@@ -192,6 +244,10 @@ export default function DelegationMetricsOverview({
               ) : (
                 <div className="text-xs text-gray-500">尚無事件</div>
               )}
+              <div className="mt-3">
+                <div className="text-xs text-gray-400 mb-2">告警</div>
+                <AlertList alerts={delegation.alerts} />
+              </div>
             </div>
           ) : (
             <div className="text-xs text-gray-500">尚無資料</div>
