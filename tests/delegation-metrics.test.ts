@@ -14,6 +14,7 @@ import { enhancedOmniBus } from '../src/lib/omni-agent-bus';
 import {
   getDelegationMetrics,
   resetDelegationMetrics,
+  type DelegationAlert,
 } from '../src/agents/complete-delegation/metrics';
 import { GET as metricsGET } from '../src/app/api/delegation/metrics/route';
 import { createCompleteDelegationAgent } from '../src/agents/complete-delegation';
@@ -202,5 +203,54 @@ describe('GET /api/delegation/metrics', () => {
           a.level === 'critical' && a.type === 'delegation.emergency.stop'
       )
     ).toBe(true);
+  });
+});
+
+describe('alert dispatch (監控→告警→處置 閉環)', () => {
+  beforeEach(() => {
+    resetDelegationMetrics();
+  });
+
+  it('notifies external sink and publishes alert event on raise', () => {
+    const m = getDelegationMetrics();
+    const notified: DelegationAlert[] = [];
+    m.setNotifier({
+      enabled: true,
+      notify: async (a) => {
+        notified.push(a);
+      },
+    });
+    const published: DelegationAlert[] = [];
+    m.setAlertPublisher((a) => {
+      published.push(a);
+    });
+
+    const now = Date.now();
+    publishReal('delegation.emergency.stop', 'd1', now);
+
+    expect(notified.length).toBe(1);
+    expect(notified[0].level).toBe('critical');
+    expect(notified[0].type).toBe('delegation.emergency.stop');
+    expect(notified[0].delegationId).toBe('d1');
+    // 同一筆告警同時發布為 bus 事件（SSE 即時可見）
+    expect(published.length).toBe(1);
+    expect(published[0].id).toBe(notified[0].id);
+  });
+
+  it('does not re-ingest delegation.alert.raised (no self-loop)', () => {
+    const m = getDelegationMetrics();
+    m.setAlertPublisher(() => {}); // 避免真實發布副作用
+    const before = m.getSnapshot().total;
+
+    // 觀測器自身發布的告警事件回流至總線
+    enhancedOmniBus.publish('external-forward', {
+      event: 'external-forward',
+      payload: { type: 'delegation.alert.raised', delegationId: 'd1', level: 'critical' },
+      ts: Date.now(),
+    });
+
+    // 不回灌觀測計數、不重複產生告警
+    expect(m.getSnapshot().total).toBe(before);
+    expect(m.getSnapshot().alerts.length).toBe(0);
   });
 });
