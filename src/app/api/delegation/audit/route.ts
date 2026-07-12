@@ -50,12 +50,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const entries = manager
-      .getAuditTrail()
-      .filter(
-        (entry) =>
-          (entry as Record<string, unknown>).delegationId === delegationId
-      );
+    // 全量審計軌跡（對齊「全量」不變量：含持久層全量日誌）
+    const entries = await manager.getFullAuditTrail(delegationId);
 
     return NextResponse.json({
       success: true,

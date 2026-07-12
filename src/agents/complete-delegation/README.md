@@ -125,9 +125,11 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 
 ### GET `/api/delegation/audit?delegationId=xxx` — 審計軌跡
 ```jsonc
-// 需具備 monitor（或 full）權限；回傳該授權生命週期審計事件
+// 需具備 monitor（或 full）權限；回傳該授權生命週期審計事件（全量）
 // 驗證：delegation 存在(404) → validateDelegation(id,'monitor')(403)
 // 200 → { success, delegationId, count, entries: [ DELEGATION_CREATED / DELEGATION_VALIDATED / DELEGATION_TERMINATED ... ] }
+// 全量：經 createFileAuditSink（append-only JSONL，預設 .audit/delegation-audit.jsonl）
+//       持久化，不抽樣、不截斷；設 AUDIT_FULL_VOLUME=false 可停用（退回記憶體環形緩衝）
 ```
 
 ### GET `/api/delegation/events/stream?delegationId=xxx` — 事件總線訂閱 (SSE)
@@ -223,6 +225,7 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 - [x] **Gateway 端對端**：`POST /api/delegation/[id]/execute` 於執行前 / 後經 `omni-gateway.secureForward` 實際轉發 `DELEGATION_EXECUTION_STARTED` / `DELEGATION_EXECUTION_COMPLETED` 至 `omni-agent-bus`（含 SHA-256 `hashLock` 溯源）；回應附 `gateway.startHashLock` / `gateway.completeHashLock`。另含 route-level e2e 測試斷言回傳 64 字元 hashLock。
 - [x] **事件訂閱 SSE**：`GET /api/delegation/events/stream?delegationId=` 經 `enhancedOmniBus` 訂閱 `external-forward`，即時推送該 delegation 生命週期事件（含 `hashLock` 溯源），`monitor`（或 `full`）權限把關、斷線自動退訂。亦可直接於應用內 `enhancedOmniBus.subscribe('external-forward', ...)` 消費（見第 5 節「事件消費者範例」）。
 - [x] **事件雙向同步**：`POST /api/delegation/events` 接收 client 經同一 `omni-agent-bus`（`external-forward`）回寫的委派事件（需 `execute`/`full` 權限），與 SSE（server→client）互補構成雙向同步；回寫事件同樣附 SHA-256 `hashLock` 溯源。
+- [x] **全量審計留存**：`AuditLogger` 掛載 `createFileAuditSink`（append-only JSONL，預設 `.audit/delegation-audit.jsonl`，可經 `AUDIT_SINK_PATH` 覆寫），每筆審計除記憶體環形緩衝區（近期視圖）外另持久化，實現不抽樣、不截斷的全量留存；`getFullAuditTrail(delegationId?)` 讀回全量日誌，`/api/delegation/audit` 改經此取全量軌跡。設 `AUDIT_FULL_VOLUME=false` 停用（退回環形緩衝）。
 
 ---
 
