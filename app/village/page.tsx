@@ -12,7 +12,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, doc, runTransaction, query, orderBy } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 // seedVillageData removed — should be API route, not client import
 import { OmniBaseCard } from '@/components/omni-base-card';
 
@@ -40,7 +40,7 @@ interface ActivityLog {
   message: string;
 }
 
-const formatRelativeTime = (isoString: string) => {
+  const _formatRelativeTime = (isoString: string) => {
   if (!isoString) return '';
   const diff = Date.now() - new Date(isoString).getTime();
   if (diff < 60000) return '剛剛';
@@ -128,7 +128,7 @@ export default function VillagePage() {
 
   const getVotes = (projectId: string) => voteCounts[projectId] || 1;
   const getCost = (votes: number) => votes * votes * 10; // Cost = Votes^2 * 10
-  const getPower = (votes: number) => votes * 10; // Impact = Votes * 10
+  const _getPower = (votes: number) => votes * 10; // Impact = Votes * 10
 
   const adjustVotes = (projectId: string, delta: number) => {
     setVoteCounts((prev) => {
@@ -171,7 +171,7 @@ export default function VillagePage() {
           const trendRes = await fetch('/api/village/trends');
           const trendData = await trendRes.json();
           setOmniTrend(trendData.trend);
-        } catch (e) {
+        } catch (_e) {
         } finally {
           setIsGeneratingTrend(false);
         }

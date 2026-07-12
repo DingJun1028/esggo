@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import DelegationEventStream from '@/components/delegation/DelegationEventStream';
+import DelegationMetricsOverview from '@/components/delegation/DelegationMetricsOverview';
 
 /**
  * ==========================================
@@ -68,11 +69,17 @@ export default function DelegationEventsPage() {
         </div>
 
         {connectedId ? (
-          <DelegationEventStream delegationId={connectedId} />
+          <>
+            <DelegationMetricsOverview delegationId={connectedId} />
+            <DelegationEventStream delegationId={connectedId} />
+          </>
         ) : (
-          <div className="text-center text-gray-500 py-16 bg-white/5 rounded-2xl border border-white/10">
-            請輸入 delegationId 以開啟即時事件串流
-          </div>
+          <>
+            <DelegationMetricsOverview />
+            <div className="text-center text-gray-500 py-16 bg-white/5 rounded-2xl border border-white/10">
+              請輸入 delegationId 以開啟即時事件串流
+            </div>
+          </>
         )}
       </div>
     </div>
