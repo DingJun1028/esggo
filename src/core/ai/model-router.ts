@@ -234,7 +234,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   carbon_calculation: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 數學推理
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'carbon_calculation',
     strategy: '本地零算力 + 數學推理',
   },
@@ -243,7 +243,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   compliance_review: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 法規理解
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'compliance_review',
     strategy: '本地零算力 + 法規理解',
   },
@@ -252,7 +252,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   gri_report_draft: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告生成
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'gri_report_draft',
     strategy: '本地零算力 + 結構化輸出',
   },
@@ -261,7 +261,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   evidence_ocr: {
     primary: MODELS.local_gemma4,          // 本地 Gemma 4 提取
     fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
+    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'evidence_ocr',
     strategy: '本地零算力 + 精確提取',
   },
@@ -270,7 +270,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   email_archival: {
     primary: MODELS.local_gemma4,          // 本地 Gemma 4 分類
     fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
+    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'email_archival',
     strategy: '本地零算力 + 極速分類',
   },
@@ -279,7 +279,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   stakeholder_analysis: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 統計分析
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'stakeholder_analysis',
     strategy: '本地零算力 + 統計分析',
   },
@@ -288,7 +288,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   omni_jules_heal: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 程式碼理解
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'omni_jules_heal',
     strategy: '本地零算力 + 程式碼推理',
   },
@@ -297,7 +297,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   swarm_orchestration: {
     primary: MODELS.local_gemma4,          // 本地 Gemma 4 快速決策
     fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 極速
-    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
+    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'swarm_orchestration',
     strategy: '本地零算力 + 極速決策',
   },
@@ -306,7 +306,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   tcfd_analysis: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 深度分析
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'tcfd_analysis',
     strategy: '本地零算力 + 深度氣候分析',
   },
@@ -315,7 +315,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   sdg_mapping: {
     primary: MODELS.local_gemma4,          // 本地 Gemma 4 知識匹配
     fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
+    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'sdg_mapping',
     strategy: '本地零算力 + 知識匹配',
   },
@@ -324,7 +324,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   materiality_matrix: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 排序分析
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'materiality_matrix',
     strategy: '本地零算力 + 優先級排序',
   },
@@ -333,7 +333,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   report_assembly: {
     primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告組裝
     fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
+    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'report_assembly',
     strategy: '本地零算力 + 結構化組裝',
   },
@@ -342,7 +342,7 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   general: {
     primary: MODELS.local_gemma4,          // 本地 Gemma 4 通用
     fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
+    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
     taskType: 'general',
     strategy: '本地零算力 + 均衡配置',
   },
@@ -558,17 +558,28 @@ async function callLocalOllama(
   messages: ChatMessage[],
   options: { maxTokens?: number; temperature?: number; timeoutMs?: number; endpoint?: string } = {}
 ): Promise<string> {
-  const endpoint = options.endpoint || 'http://161.118.248.180:11434/api/chat';
+  // 預設走生產可達的 Nginx 反向代理（Basic Auth 保護），而非直接綁 localhost 的 11434 埠。
+  // 仍可經 VPS_OLLAMA_URL 環境變數覆寫（PROVIDER_ENDPOINTS 已處理預設值）。
+  const endpoint = options.endpoint || 'https://omniagent.esggo.co/ollama/api/chat';
   const controller = new AbortController();
   const timeoutMs = options.timeoutMs ?? 120000;  // 本地模型預設 2 分鐘超時
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  // 可選 Basic Auth（Nginx 代理端點需要）。僅當 VPS_OLLAMA_USER / VPS_OLLAMA_PASS 都設定時才帶。
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const vpsUser = process.env.VPS_OLLAMA_USER;
+  const vpsPass = process.env.VPS_OLLAMA_PASS;
+  if (vpsUser && vpsPass) {
+    const token = Buffer.from(`${vpsUser}:${vpsPass}`).toString('base64');
+    headers['Authorization'] = `Basic ${token}`;
+  }
 
   let response: Response;
   try {
     response = await fetch(endpoint, {
       method: 'POST',
       signal: controller.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         model,
         messages: messages.map(m => ({ role: m.role, content: m.content })),
@@ -672,7 +683,7 @@ const PROVIDER_ENDPOINTS: Record<ModelConfig['provider'], ProviderEndpoint> = {
   mistral:    { apiUrl: 'https://api.mistral.ai/v1/chat/completions',                                        apiKeyEnv: 'MISTRAL_API_KEY' },
   gemini:     { apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',          apiKeyEnv: 'GEMINI_API_KEY' },
   cloudflare: { apiUrl: 'cloudflare',                                                                         apiKeyEnv: 'CLOUDFLARE_API_TOKEN' },
-  local_gemma: { apiUrl: process.env.VPS_OLLAMA_URL || 'http://161.118.248.180:11434/api/chat',              apiKeyEnv: '' },  // VPS Ollama，無需 API Key
+  local_gemma: { apiUrl: process.env.VPS_OLLAMA_URL || 'https://omniagent.esggo.co/ollama/api/chat', apiKeyEnv: '' },  // VPS Ollama（Nginx Basic Auth 代理），無需 API Key；生產需設 VPS_OLLAMA_USER/VPS_OLLAMA_PASS
 };
 
 /**
