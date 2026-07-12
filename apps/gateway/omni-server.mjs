@@ -77,6 +77,10 @@ function replayEventsSince(lastId) {
     .map(l => { try { return JSON.parse(l); } catch { return null; } })
     .filter(r => r && r.id > lastId);
 }
+function readEvents({ after = 0, limit = 50 } = {}) {
+  const all = replayEventsSince(0);
+  return all.filter(r => r.id > after).slice(-Math.min(limit, 500));
+}
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -579,6 +583,14 @@ app.post('/execute', requireAuth, aiLimiter, async (req, res) => {
     broadcastWS({ type: 'HEAL', source: 'Gateway', payload: { taskId: task.id, error: err.message } });
     res.status(500).json({ error: err.message });
   }
+});
+
+// GET /events — 審計事件查詢 (統一 JSONL sink 可服務化, 對齊 OmniCore §10 執行後追蹤)
+app.get('/events', requireAuth, (req, res) => {
+  const after = Number(req.query.after || 0);
+  const limit = Math.min(Number(req.query.limit || 50), 500);
+  const events = readEvents({ after, limit });
+  res.json({ count: events.length, after, limit, events });
 });
 
 // POST /stream — SSE Streaming AI response
