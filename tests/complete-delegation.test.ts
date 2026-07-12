@@ -7,6 +7,9 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+import { randomUUID } from 'crypto';
+import { join, unlinkSync } from 'path';
+import { tmpdir } from 'os';
 import {
   CompleteDelegationManager,
   AutonomousDecisionEngine,
@@ -19,6 +22,10 @@ import {
   resetDecisionEngine,
 } from '../src/agents/complete-delegation';
 import * as delegationEvents from '../src/agents/complete-delegation/events';
+import {
+  createFileEventSink,
+  setDefaultEventSink,
+} from '../src/agents/complete-delegation/event-sink';
 import { DelegationEventNames, DelegationTopics } from '../src/types/complete-delegation';
 
 describe('完全代主自行 (Complete Autonomous Delegation)', () => {
@@ -367,5 +374,37 @@ describe('全量審計軌跡', () => {
     expect(
       trail.some((e) => (e as { type?: string }).type === 'DELEGATION_CREATED')
     ).toBe(true);
+  });
+});
+
+describe('全量事件軌跡', () => {
+  it('publishDelegationEvent persists full event trail (not truncated)', async () => {
+    const tmpPath = join(tmpdir(), `esggo-events-${randomUUID()}.jsonl`);
+    setDefaultEventSink(createFileEventSink(tmpPath));
+    try {
+      const manager = getDelegationManager();
+      const delegationId = 'evt-del-001';
+      const res = await delegationEvents.publishDelegationEvent(
+        DelegationEventNames.DELEGATION_CREATED,
+        DelegationTopics.AUTHORIZATION,
+        { delegationId, note: 'persist-me' },
+        'test'
+      );
+      expect(res.status).toBe('ok');
+      expect(res.hashLock).toMatch(/^[0-9a-f]{64}$/);
+
+      const trail = await manager.getFullEventTrail(delegationId);
+      expect(trail.length).toBe(1);
+      expect(trail[0].delegationId).toBe(delegationId);
+      expect(trail[0].type).toBe(DelegationEventNames.DELEGATION_CREATED);
+      expect(trail[0].hashLock).toBe(res.hashLock);
+    } finally {
+      setDefaultEventSink(null);
+      try {
+        unlinkSync(tmpPath);
+      } catch {
+        /* ignore */
+      }
+    }
   });
 });
