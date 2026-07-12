@@ -23,9 +23,9 @@ import {
 } from '../src/agents/complete-delegation';
 import * as delegationEvents from '../src/agents/complete-delegation/events';
 import {
-  createFileEventSink,
-  setDefaultEventSink,
-} from '../src/agents/complete-delegation/event-sink';
+  createDelegationJournal,
+  setDefaultJournal,
+} from '../src/agents/complete-delegation/journal';
 import { DelegationEventNames, DelegationTopics } from '../src/types/complete-delegation';
 
 describe('完全代主自行 (Complete Autonomous Delegation)', () => {
@@ -380,7 +380,7 @@ describe('全量審計軌跡', () => {
 describe('全量事件軌跡', () => {
   it('publishDelegationEvent persists full event trail (not truncated)', async () => {
     const tmpPath = join(tmpdir(), `esggo-events-${randomUUID()}.jsonl`);
-    setDefaultEventSink(createFileEventSink(tmpPath));
+    setDefaultJournal(createDelegationJournal(tmpPath));
     try {
       const manager = getDelegationManager();
       const delegationId = 'evt-del-001';
@@ -399,7 +399,44 @@ describe('全量事件軌跡', () => {
       expect(trail[0].type).toBe(DelegationEventNames.DELEGATION_CREATED);
       expect(trail[0].hashLock).toBe(res.hashLock);
     } finally {
-      setDefaultEventSink(null);
+      setDefaultJournal(null);
+      try {
+        unlinkSync(tmpPath);
+      } catch {
+        /* ignore */
+      }
+    }
+  });
+
+  it('getFullEventTrail supports sinceId resume (Last-Event-ID)', async () => {
+    const tmpPath = join(tmpdir(), `esggo-events-resume-${randomUUID()}.jsonl`);
+    setDefaultJournal(createDelegationJournal(tmpPath));
+    try {
+      const manager = getDelegationManager();
+      const delegationId = 'evt-del-002';
+      await delegationEvents.publishDelegationEvent(
+        DelegationEventNames.DELEGATION_CREATED,
+        DelegationTopics.AUTHORIZATION,
+        { delegationId, note: 'first' },
+        'test'
+      );
+      await delegationEvents.publishDelegationEvent(
+        'delegation.decision.made',
+        'delegation.decision',
+        { delegationId, note: 'second' },
+        'test'
+      );
+
+      const all = await manager.getFullEventTrail(delegationId);
+      expect(all.length).toBe(2);
+      const firstId = all[0].id;
+
+      // 僅回放 firstId 之後的事件（斷點續傳）
+      const resumed = await manager.getFullEventTrail(delegationId, firstId);
+      expect(resumed.length).toBe(1);
+      expect(resumed[0].type).toBe('delegation.decision.made');
+    } finally {
+      setDefaultJournal(null);
       try {
         unlinkSync(tmpPath);
       } catch {

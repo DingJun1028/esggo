@@ -19,8 +19,12 @@ import {
 } from '../../types/complete-delegation';
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
-import { createFileAuditSink, type FullAuditSink, type AuditEntry } from './audit-sink';
-import { getDefaultEventSink, type BusEventRecord } from './event-sink';
+import {
+  getDefaultJournal,
+  type DelegationJournal,
+  type AuditEntry,
+  type BusEventRecord,
+} from './journal';
 
 /**
  * 完全代主自行 - 授權管理器
@@ -30,16 +34,18 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   private _principalDelegations: Map<string, Set<string>> = new Map();
   private _agentDelegations: Map<string, Set<string>> = new Map();
   private _auditLogger: AuditLogger;
-  private _fullSink?: FullAuditSink;
+  private _fullVolume: boolean;
 
-  constructor(
-    config?: { auditSink?: AuditSink; fullSink?: FullAuditSink }
-  ) {
-    this._fullSink = config?.fullSink;
-    // 全量 sink 的 onLog 作為 AuditLogger 的 sink，使每筆審計同時持久化（不截斷）
+  constructor(config?: { auditSink?: AuditSink; fullVolume?: boolean }) {
+    // 全量留存預設開啟（設 AUDIT_FULL_VOLUME=false 停用，退回環形緩衝）
+    this._fullVolume =
+      config?.fullVolume ?? process.env.AUDIT_FULL_VOLUME !== 'false';
+    // 審計條目經統一日誌 sink 持久化（審計/事件同一份 JSONL、同一序號空間）
     const sink: AuditSink | undefined =
       config?.auditSink ??
-      (this._fullSink ? (e) => this._fullSink!.onLog(e) : undefined);
+      (this._fullVolume
+        ? (e) => getDefaultJournal().append({ kind: 'audit', type: e.type, ts: e.timestamp, ...e })
+        : undefined);
     this._auditLogger = new AuditLogger(sink);
   }
 
@@ -187,28 +193,49 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
 
   /**
    * 全量審計軌跡（對齊「全量」不變量）：
-   * 若已掛載全量 sink，則讀回持久層全量日誌（依 delegationId 過濾）；
+   * 若啟用全量留存，則讀回統一日誌的審計條目（依 delegationId 過濾）；
    * 否則退回記憶體環形緩衝區。
    */
   async getFullAuditTrail(delegationId?: string): Promise<AuditEntry[]> {
-    if (this._fullSink) {
-      const all = await this._fullSink.readAll();
+    if (this._fullVolume) {
+      const all = await getDefaultJournal().readAll();
+      const audit = all.filter((e) => e.kind === 'audit');
       return delegationId
-        ? all.filter(
+        ? audit.filter(
             (e) => (e as Record<string, unknown>).delegationId === delegationId
           )
-        : all;
+        : audit;
     }
     return this.getAuditTrail();
   }
 
   /**
    * 全量事件軌跡（對齊「全量」不變量）：
-   * 讀回持久層全量事件（依 delegationId 過濾），供 SSE 訂閱端點連線時回放。
+   * 讀回統一日誌的事件條目（依 delegationId 過濾，可指定 sinceId 斷點續傳），
+   * 供 SSE 訂閱端點連線時回放。
    */
-  async getFullEventTrail(delegationId?: string): Promise<BusEventRecord[]> {
-    const all = await getDefaultEventSink().readAll();
-    return delegationId ? all.filter((e) => e.delegationId === delegationId) : all;
+  async getFullEventTrail(
+    delegationId?: string,
+    sinceId?: number
+  ): Promise<BusEventRecord[]> {
+    const all = await getDefaultJournal().readAll();
+    return all
+      .filter((e) => e.kind === 'event')
+      .filter((e) => (delegationId ? e.delegationId === delegationId : true))
+      .filter((e) => (sinceId == null ? true : e.id > sinceId))
+      .map(
+        (e) =>
+          ({
+            id: e.id,
+            type: e.type,
+            delegationId: e.delegationId ?? '',
+            topic: e.topic ?? '',
+            hashLock: e.hashLock ?? '',
+            ts: e.ts,
+            source: e.source ?? '',
+            payload: e.payload ?? {},
+          }) as BusEventRecord
+      );
   }
 
   /**
@@ -487,11 +514,9 @@ let _instance: CompleteDelegationManager | null = null;
  */
 export function getDelegationManager(): CompleteDelegationManager {
   if (!_instance) {
-    // 預設掛載全量審計 sink（對齊「全量」不變量）；設 AUDIT_FULL_VOLUME=false 可停用
+    // 預設啟用全量留存（對齊「全量」不變量）；設 AUDIT_FULL_VOLUME=false 可停用
     const fullVolume = process.env.AUDIT_FULL_VOLUME !== 'false';
-    _instance = new CompleteDelegationManager(
-      fullVolume ? { fullSink: createFileAuditSink() } : undefined
-    );
+    _instance = new CompleteDelegationManager({ fullVolume });
   }
   return _instance;
 }

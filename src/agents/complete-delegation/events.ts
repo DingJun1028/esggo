@@ -17,7 +17,7 @@ import { randomUUID } from 'crypto';
 import { secureForward } from '../../core/services/omni-gateway';
 import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
 import type { IBusEvent } from '../../lib/omni-core/contracts';
-import { getDefaultEventSink } from './event-sink';
+import { getDefaultJournal } from './journal';
 
 /**
  * 發布一筆完全代主自行事件至 omni-agent-bus。
@@ -46,8 +46,10 @@ export async function publishDelegationEvent(
   try {
     const { hashLock } = await secureForward(event);
     // 全量事件持久化（對齊「全量」不變量；best-effort，失敗不影響主流程）
+    // 同一份 JSONL（與審計共用）並分配單調序號 id，供 SSE Last-Event-ID 斷點續傳
     try {
-      getDefaultEventSink().onEvent({
+      const journalId = getDefaultJournal().append({
+        kind: 'event',
         type,
         delegationId: (payload.delegationId as string) ?? '',
         topic,
@@ -56,6 +58,8 @@ export async function publishDelegationEvent(
         source,
         payload: { type, ...payload },
       });
+      // 將序號附回 bus 事件，供 SSE 即時幀帶 id（斷點續傳游標）
+      (event as Record<string, unknown>).journalId = journalId;
     } catch {
       /* best-effort */
     }
