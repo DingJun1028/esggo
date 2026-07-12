@@ -85,7 +85,7 @@ export class OmniSwarmService {
   /**
    * 多模型共識決策 (防漂綠檢查)
    */
-  async verifyAntiGreenwashing(content: string) {
+  async verifyAntiGreenwashing(_content: string) {
     const rawResult = await this.dispatchToSwarm({
       task: 'multi_consensus',
       context: '防漂綠檢查'
