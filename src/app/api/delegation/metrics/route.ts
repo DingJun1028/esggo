@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
         total: snap.total,
         byType: snap.byType,
         lastSeenAt: snap.lastSeenAt,
+        alerts: snap.alerts,
       });
     }
 
@@ -63,6 +64,7 @@ export async function GET(request: NextRequest) {
       total: snap.total,
       byType: snap.byType,
       activeDelegations: snap.activeDelegations,
+      alerts: snap.alerts,
     });
   } catch (error) {
     console.error('[Delegation Metrics API] 取得指標失敗:', error);
