@@ -78,8 +78,11 @@ function replayEventsSince(lastId) {
     .filter(r => r && r.id > lastId);
 }
 function readEvents({ after = 0, limit = 50 } = {}) {
-  const all = replayEventsSince(0);
-  return all.filter(r => r.id > after).slice(-Math.min(limit, 500));
+  if (!existsSync(EVENT_LOG)) return [];
+  const all = readFileSync(EVENT_LOG, 'utf8').trim().split('\n')
+    .map(l => { try { return JSON.parse(l); } catch { return null; } })
+    .filter(r => r && r.id > after);
+  return all.slice(-Math.min(limit, 500));
 }
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
