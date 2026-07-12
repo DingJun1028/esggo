@@ -130,6 +130,11 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 // 200 → { success, delegationId, count, entries: [ DELEGATION_CREATED / DELEGATION_VALIDATED / DELEGATION_TERMINATED ... ] }
 ```
 
+> **事件總線貫通（深貫廣通）**：授權生命週期（`DELEGATION_CREATED` / `VALIDATED` / `TERMINATED`）由 `CompleteDelegationManager`、
+> 決策（`DELEGATION_DECISION_MADE`）由 `AutonomousDecisionEngine`、回報（`DELEGATION_DECISION_REPORTED`）由 agent、
+> 執行（`DELEGATION_EXECUTION_STARTED` / `COMPLETED`）由執行路由，統一經 `omni-gateway.secureForward` 轉發至
+> `omni-agent-bus`（SHA-256 `hashLock` 溯源），供監控 / 分析元件訂閱。封裝見 `events.ts` 之 `publishDelegationEvent`（fire-and-forget，發布失敗不影響主流程）。
+
 ---
 
 ## 6. 自主決策引擎
