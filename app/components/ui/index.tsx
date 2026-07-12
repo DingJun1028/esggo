@@ -507,7 +507,7 @@ export function useFetch<T>(url: string, options?: RequestInit & { interval?: nu
     } finally {
       setLoading(false);
     }
-  }, [url]);
+  }, [url, options]);
 
   useEffect(() => {
     fetchData();

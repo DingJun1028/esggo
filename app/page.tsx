@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useAuth } from '@/components/AuthProvider';
 import LoginButton from '@/components/LoginButton';
 import { useEffect, useState } from 'react';
-import type { User } from 'firebase/auth';
 
 const NAV_MODULES = [
   {

@@ -153,7 +153,7 @@ function Card({ title, icon, children, accent = 'teal' }: { title: string; icon:
   );
 }
 
-function MetricRow({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
+function MetricRow({ label, value, sub: _sub }: { label: string; value: string | number; sub?: string }) {
   return (
     <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
       <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
@@ -186,6 +186,8 @@ export default function EMMIDEDashboard() {
     }
   }, []);
 
+  const connectSSERef = useRef<(() => void) | null>(null);
+
   const connectSSE = useCallback(() => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
@@ -197,7 +199,7 @@ export default function EMMIDEDashboard() {
     es.onerror = () => {
       setConnected(false);
       es.close();
-      setTimeout(() => connectSSE(), 10000);
+      setTimeout(() => connectSSERef.current?.(), 10000);
     };
     es.onmessage = (event) => {
       try {
@@ -207,6 +209,8 @@ export default function EMMIDEDashboard() {
       } catch {}
     };
   }, []);
+
+  connectSSERef.current = connectSSE;
 
   useEffect(() => {
     fetchMetrics();

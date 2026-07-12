@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Loader2, CheckCircle2, XCircle, Clock } from 'lucide-react';
-import type { TaskProgress, Company, NoteData, CustomCompanyForm } from './types';
+import type { TaskProgress, Company, CustomCompanyForm } from './types';
 import { GATE_COLORS, GATE_LABELS, CUSTOM_COMPANY_ID } from './types';
 import { startAsyncReport, pollTaskProgress, cancelTask } from './api';
 
