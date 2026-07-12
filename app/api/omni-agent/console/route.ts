@@ -324,6 +324,7 @@ function getCoreStats() {
 
 export async function POST(req: NextRequest) {
   try {
+    omniKernel.initialize();
     const body = await req.json();
     const { type, payload } = body;
 
@@ -414,6 +415,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  omniKernel.initialize();
   return jsonResponse({
     name: 'OmniAgent Console API',
     version: '1.0.0',
