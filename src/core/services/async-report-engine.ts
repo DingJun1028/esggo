@@ -390,7 +390,6 @@ export function startReportGeneration(
       
       const startTime = Date.now();
       let completedCount = 0;
-      let _failedCount = 0;
       let totalWords = 0;
       
       // Process chapters with concurrency control
