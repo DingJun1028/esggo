@@ -17,8 +17,9 @@ fi
 # 2. 建立 Basic Auth 密碼檔
 echo "[2/4] 設定 Nginx Basic Auth 憑證..."
 sudo apt-get install -y apache2-utils
-USERNAME="esggo-ai"
-PASSWORD="[REDACTED]"
+# 憑證從環境變數注入，避免明文寫入腳本/入庫。部署前：export OLLAMA_USER=... OLLAMA_PASS=...
+USERNAME="${OLLAMA_USER:-esggo-ai}"
+PASSWORD="${OLLAMA_PASS:?請先設定 OLLAMA_PASS 環境變數（例如 export OLLAMA_PASS='你的強密碼'）}"
 sudo htpasswd -b -c /etc/nginx/.htpasswd "$USERNAME" "$PASSWORD"
 
 # 3. 注入 Nginx Location 區塊到 omniagent-sub
