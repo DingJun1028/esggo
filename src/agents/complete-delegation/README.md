@@ -169,6 +169,8 @@ for (;;) {
 }
 ```
 
+**連線回放（對齊「全量」+ RWD）**：訂閱端點於 `CONNECTED` 後、續推即時事件前，會先以 `REPLAY` 框回放該 `delegationId` 的全量事件（`getFullEventTrail`，來源為 `publishDelegationEvent` 持久化的 JSONL sink），並以 `REPLAY_DONE` 標示歷史結束。消費者依 `type === 'REPLAY'` 區分歷史與即時。
+
 也可直接在應用內訂閱同一條 `omni-agent-bus`（與 SSE 端點同源）：
 ```ts
 import { enhancedOmniBus } from '../lib/omni-agent-bus';
@@ -232,6 +234,7 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 - [x] **事件訂閱 SSE**：`GET /api/delegation/events/stream?delegationId=` 經 `enhancedOmniBus` 訂閱 `external-forward`，即時推送該 delegation 生命週期事件（含 `hashLock` 溯源），`monitor`（或 `full`）權限把關、斷線自動退訂。亦可直接於應用內 `enhancedOmniBus.subscribe('external-forward', ...)` 消費（見第 5 節「事件消費者範例」）。
 - [x] **事件雙向同步**：`POST /api/delegation/events` 接收 client 經同一 `omni-agent-bus`（`external-forward`）回寫的委派事件（需 `execute`/`full` 權限），與 SSE（server→client）互補構成雙向同步；回寫事件同樣附 SHA-256 `hashLock` 溯源。
 - [x] **全量審計留存**：`AuditLogger` 掛載 `createFileAuditSink`（append-only JSONL，預設 `.audit/delegation-audit.jsonl`，可經 `AUDIT_SINK_PATH` 覆寫），每筆審計除記憶體環形緩衝區（近期視圖）外另持久化，實現不抽樣、不截斷的全量留存；`getFullAuditTrail(delegationId?)` 讀回全量日誌，`/api/delegation/audit` 改經此取全量軌跡。設 `AUDIT_FULL_VOLUME=false` 停用（退回環形緩衝）。
+- [x] **全量事件留存 + SSE 回放**：`publishDelegationEvent` 發布時另經 `createFileEventSink`（append-only JSONL，預設 `.audit/delegation-events.jsonl`，可經 `EVENT_SINK_PATH` 覆寫）持久化全量事件；SSE 端點連線時先以 `REPLAY` 框回放該 `delegationId` 歷史（`getFullEventTrail`），再以 `REPLAY_DONE` 收尾後續推即時事件，實現「進頁面即見完整脈絡」。
 - [x] **RWD 事件觀測 UI**：新增 `/delegation/events` 響應式頁面 + `DelegationEventStream` client 元件（EventSource → SSE 端點），手機 / 桌面自適應呈現即時事件（含 `hashLock` 溯源、連線狀態、斷線自動重連），對齊「RWD / 全端 / 雙向同步」。
 
 ---

@@ -20,6 +20,7 @@ import {
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
 import { createFileAuditSink, type FullAuditSink, type AuditEntry } from './audit-sink';
+import { getDefaultEventSink, type BusEventRecord } from './event-sink';
 
 /**
  * 完全代主自行 - 授權管理器
@@ -199,6 +200,15 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
         : all;
     }
     return this.getAuditTrail();
+  }
+
+  /**
+   * 全量事件軌跡（對齊「全量」不變量）：
+   * 讀回持久層全量事件（依 delegationId 過濾），供 SSE 訂閱端點連線時回放。
+   */
+  async getFullEventTrail(delegationId?: string): Promise<BusEventRecord[]> {
+    const all = await getDefaultEventSink().readAll();
+    return delegationId ? all.filter((e) => e.delegationId === delegationId) : all;
   }
 
   /**
