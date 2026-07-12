@@ -215,7 +215,7 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 
 ## 8. 測試
 
-覆蓋套件（位於 `tests/`，全測試 317 passed）：
+覆蓋套件（位於 `tests/`，全測試 327 passed）：
 - `complete-delegation.test.ts` — manager / agent / 決策引擎
 - `api-routes.test.ts` — 上述 5 個 REST 端點
 - `integration.test.ts` — 端到端流程
