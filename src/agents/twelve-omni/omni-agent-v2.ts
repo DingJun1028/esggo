@@ -155,7 +155,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
   /**
    * 克隆代理 (細胞分裂)
    */
-  clone(newUuid: string): IOmniAgentV2 {
+  clone(_newUuid: string): IOmniAgentV2 {
     const cloned = new OmniAgentV2({
       name: `${this.config.name}-clone`,
       maxConcurrency: this.config.maxConcurrency,

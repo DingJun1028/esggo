@@ -16,7 +16,6 @@ import {
   ITaskResult,
   IFlowSnapshot,
   LifecycleStage,
-  IBusEvent,
 } from "../types/omni-agent";
 
 /**

@@ -1194,7 +1194,7 @@ export class AIGuide {
     return 'low';
   }
 
-  private calculateComplianceScore(session: GuideSession, chapterNumber: number): ComplianceScore {
+  private calculateComplianceScore(session: GuideSession, _chapterNumber: number): ComplianceScore {
     const answerCount = session.answers.length;
     const totalQuestions = this.getTotalQuestions();
     const baseScore = Math.min(100, Math.round((answerCount / totalQuestions) * 100));
@@ -1383,7 +1383,7 @@ export class AIGuide {
     return suggestions;
   }
 
-  private getGeneralSuggestions(reportType?: ReportType): SmartSuggestion[] {
+  private getGeneralSuggestions(_reportType?: ReportType): SmartSuggestion[] {
     return [
       {
         id: 'sug-general-1',

@@ -21,7 +21,6 @@ import {
   OmniConstants,
   OmniBaseUtils,
 } from '../../types/twelve-omni';
-import { IComponentCore, LifecycleStage } from '../../lib/omni-core/contracts';
 
 /**
  * OmniBase 實現

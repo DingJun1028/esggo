@@ -1,7 +1,7 @@
 // ESG 訂閱式商情偵測系統 - 核心引擎
 // 資料位置: src/lib/engines/subscription-engine.ts
 
-import { ALL_SOURCES, Source, getSourcesByTopic } from '../../data/esg-sources';
+import { ALL_SOURCES } from '../../data/esg-sources';
 
 // ============================================================
 // 訂閱者檔案
@@ -113,7 +113,7 @@ export class SubscriptionEngine {
   }
 
   // 判斷事件是否符合訂閱條件
-  private isMatch(event: ChangeEvent, sub: Subscription, subscriber: Subscriber): boolean {
+  private isMatch(event: ChangeEvent, sub: Subscription, _subscriber: Subscriber): boolean {
     const target = sub.target.toLowerCase();
 
     switch (sub.type) {

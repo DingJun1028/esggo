@@ -21,13 +21,7 @@ import {
   createOmniTag as baseCreateTag,
   pairTags as basePairTags,
   sealTag as baseSealTag,
-  isSealed,
-  isOmniTag,
-  isTagPair,
-  isActive,
   type OmniTag,
-  type TagPair,
-  type TagLifecycleV6,
   type EntanglementType,
 } from '../omni-base/index';
 

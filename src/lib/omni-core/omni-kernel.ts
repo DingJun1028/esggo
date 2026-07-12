@@ -165,7 +165,7 @@ export class OmniRegistry {
 export class OmniLifecycleManager {
   private readonly lifecycles = new Map<string, LifecycleEvent[]>();
 
-  record(uuid: string, event: LifecycleEvent, actor?: string): void {
+  record(uuid: string, event: LifecycleEvent, _actor?: string): void {
     if (!this.lifecycles.has(uuid)) this.lifecycles.set(uuid, []);
     this.lifecycles.get(uuid)!.push(event);
   }

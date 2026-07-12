@@ -11,7 +11,7 @@
  *   而是先看到結果（症狀），再逆向追溯找到原因（根源），然後修復。
  */
 
-import { randomUUID, createHash } from 'crypto';
+import { randomUUID } from 'crypto';
 import {
   IOmniHealing,
   ChaosInjectionResult,
@@ -20,11 +20,10 @@ import {
   SystemHealth,
   HealthLevel,
   ComponentHealthV2,
-  SystemIssue,
   RecoveryStrategy,
   RecoveryResult,
 } from '../../types/twelve-omni';
-import { IComponentCore, IBusEvent } from '../../lib/omni-core/contracts';
+import { IBusEvent } from '../../lib/omni-core/contracts';
 
 /**
  * 果因追溯節點
@@ -158,7 +157,7 @@ export class OmniHealing implements IOmniHealing {
    */
   async selfHeal(
     issueId: string,
-    context?: Record<string, unknown>
+    _context?: Record<string, unknown>
   ): Promise<HealingResult> {
     const issue = this._issues.get(issueId);
     if (!issue) {
@@ -268,7 +267,7 @@ export class OmniHealing implements IOmniHealing {
    */
   private async _traceEffectToCause(
     effect: string,
-    context?: Record<string, unknown>
+    _context?: Record<string, unknown>
   ): Promise<EffectCauseNode[]> {
     const chain: EffectCauseNode[] = [];
     const effectLower = effect.toLowerCase();
@@ -377,8 +376,8 @@ export class OmniHealing implements IOmniHealing {
    */
   private async _executeHealing(
     strategy: RecoveryStrategy,
-    rootCause: string,
-    context?: Record<string, unknown>
+    _rootCause: string,
+    _context?: Record<string, unknown>
   ): Promise<boolean> {
     // 模擬修復過程
     await new Promise(resolve => setTimeout(resolve, Math.random() * 200));

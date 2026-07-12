@@ -6,23 +6,11 @@
 
 import {
   ReportConfig,
-  ReportStandard,
   GeneratedReport,
   ReportSection,
   GRIReport,
   SASBReport,
   TCFDReport,
-  GRIMetadata,
-  GRIGeneralDisclosures,
-  GRIMaterialTopic,
-  SASBMetadata,
-  SASBIndustry,
-  SASBDimension,
-  TCFDMetadata,
-  TCFDGovernance,
-  TCFDStrategy,
-  TCFDRiskManagement,
-  TCFDMetricsAndTargets,
 } from './types';
 
 // ==========================================

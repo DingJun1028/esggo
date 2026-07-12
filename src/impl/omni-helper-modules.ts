@@ -1,4 +1,4 @@
-import { OmniSeed, type SeedRecord, type SeedResult } from '../lib/omni-seed';
+import { OmniSeed, type SeedRecord } from '../lib/omni-seed';
 
 export type AgentTemplate = {
   readonly archetype: 'agent' | 'component';

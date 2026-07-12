@@ -12,7 +12,7 @@ import {
   LockedEvent,
   SecurityPolicy,
 } from '../../types/twelve-omni';
-import { IComponentCore, IBusEvent } from '../../lib/omni-core/contracts';
+import { IBusEvent } from '../../lib/omni-core/contracts';
 
 /**
  * OmniGatewayV2 實現
