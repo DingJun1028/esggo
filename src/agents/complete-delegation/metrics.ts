@@ -18,7 +18,7 @@
 import { enhancedOmniBus } from '../../lib/omni-agent-bus';
 import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
 import { publishDelegationEvent } from './events';
-import { createAlertNotifier, type AlertNotifier } from './alert-notifier';
+import { getDefaultAlertNotifier, type AlertNotifier } from './alert-notifier';
 
 /** 委派事件類型集合（含 AUTHORIZATION / DECISION / REPORTING / EXECUTION 主題） */
 const DELEGATION_EVENT_TYPES = new Set(Object.values(DelegationEventNames));
@@ -83,8 +83,8 @@ class DelegationMetrics {
   private _thresholds: DelegationThresholds = { delegationEventCount: 1000 };
   private readonly _startedAt = Date.now();
   private _unsub: (() => void) | null = null;
-  /** 外部告警通知器（預設由環境變數決定是否啟用；test 環境 no-op） */
-  private _notifier: AlertNotifier = createAlertNotifier();
+  /** 外部告警通知器（預設由環境變數組出 webhook + 郵件複合 sink；test 環境 no-op） */
+  private _notifier: AlertNotifier = getDefaultAlertNotifier();
   /** 告警事件發布器（預設發布 delegation.alert.raised 至 bus，SSE 即時可見） */
   private _alertPublisher: (alert: DelegationAlert) => void =
     process.env.NODE_ENV === 'test'
