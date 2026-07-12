@@ -25,7 +25,7 @@ export type ESGTaskType =
   | 'general';              // 通用任務
 
 export interface ModelConfig {
-  provider: 'groq' | 'openrouter' | 'gemini' | 'cloudflare' | 'together' | 'mistral';
+  provider: 'groq' | 'openrouter' | 'gemini' | 'cloudflare' | 'together' | 'mistral' | 'local_gemma';
   model: string;
   maxTokens: number;
   temperature: number;
@@ -202,125 +202,149 @@ const MODELS = {
     temperature: 0.6,
     reasoning: 'Mistral Small: 快速輕量',
   },
+  // Local VPS Ollama Hosting (100% Free, Private, Zero Compute Cost)
+  // 端點統一由 PROVIDER_ENDPOINTS.local_gemma.apiUrl 提供（尊重 VPS_OLLAMA_URL 環境變數）。
+  local_gemma4: {
+    provider: 'local_gemma' as const,
+    model: 'gemma3:4b',
+    maxTokens: 4096,
+    temperature: 0.7,
+    reasoning: 'VPS Gemma 3 4B (Ollama): 100% 免費，Oracle Cloud 免費層，通用/輕量',
+  },
+  local_gemma12b: {
+    provider: 'local_gemma' as const,
+    model: 'gemma3:12b',
+    maxTokens: 4096,
+    temperature: 0.7,
+    reasoning: 'VPS Gemma 3 12B (Ollama): 100% 免費，深度推理/法規/報告',
+  },
+  local_llama31: {
+    provider: 'local_gemma' as const,
+    model: 'llama3.1:8b',
+    maxTokens: 4096,
+    temperature: 0.7,
+    reasoning: 'VPS Llama 3.1 8B (Ollama): 100% 免費，極速分類/決策',
+  },
 } as const;
 
 // ── 任務類型 → 最佳模型路由表 ────────────────────────────────
+// 策略: 本地 Gemma 為主 (100% 免費)，雲端模型備援
 const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   // ISO 14064 碳排計算: 需要精確數字推理
   carbon_calculation: {
-    primary: MODELS.groq_llama70b_instruct, // Llama 70B 處理大量數據
-    fallback1: MODELS.or_qwen80b,        // Qwen 中文數學強
-    fallback2: MODELS.cf_llama70b,        // Cloudflare 全球邊緣
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 數學推理
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'carbon_calculation',
-    strategy: '長上下文 + 數學推理',
+    strategy: '本地零算力 + 數學推理',
   },
 
   // CSRD/GRI 合規審查: 需要深度理解法規
   compliance_review: {
-    primary: MODELS.or_qwen80b,          // 中文法規理解最強
-    fallback1: MODELS.or_llama90b,     // 90B 複雜推理
-    fallback2: MODELS.tg_llama70b,       // Together 高品質
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 法規理解
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'compliance_review',
-    strategy: '中文法規理解 + 深度推理',
+    strategy: '本地零算力 + 法規理解',
   },
 
   // GRI 報告草稿: 需要結構化輸出
   gri_report_draft: {
-    primary: MODELS.or_qwen80b,          // 中文報告生成最強
-    fallback1: MODELS.or_llama90b,
-    fallback2: MODELS.tg_qwen72b,        // Together Qwen 中文
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告生成
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'gri_report_draft',
-    strategy: '結構化中文報告生成',
+    strategy: '本地零算力 + 結構化輸出',
   },
 
   // 帳單 OCR 提取: 需要精確提取
   evidence_ocr: {
-    primary: MODELS.groq_llama8b,        // 輕量快速
-    fallback1: MODELS.cf_llama8b,        // Cloudflare 輕量
-    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
+    primary: MODELS.local_gemma4,          // 本地 Gemma 4 提取
+    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
+    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
     taskType: 'evidence_ocr',
-    strategy: '快速精確提取',
+    strategy: '本地零算力 + 精確提取',
   },
 
   // 郵件自動歸檔: 需要分類能力
   email_archival: {
-    primary: MODELS.groq_llama8b,        // 極速分類
-    fallback1: MODELS.cf_llama8b,        // Cloudflare 分類
-    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
+    primary: MODELS.local_gemma4,          // 本地 Gemma 4 分類
+    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
+    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
     taskType: 'email_archival',
-    strategy: '極速分類',
+    strategy: '本地零算力 + 極速分類',
   },
 
   // 問卷分析: 需要統計分析
   stakeholder_analysis: {
-    primary: MODELS.groq_llama70b_instruct, // Llama 70B 處理大量問卷
-    fallback1: MODELS.or_qwen80b,
-    fallback2: MODELS.tg_llama70b,
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 統計分析
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'stakeholder_analysis',
-    strategy: '長上下文統計分析',
+    strategy: '本地零算力 + 統計分析',
   },
 
   // 自動修復: 需要程式碼理解
   omni_jules_heal: {
-    primary: MODELS.or_llama90b,       // 90B 處理複雜邏輯
-    fallback1: MODELS.groq_llama70b,
-    fallback2: MODELS.tg_llama70b,
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 程式碼理解
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'omni_jules_heal',
-    strategy: '複雜邏輯推理',
+    strategy: '本地零算力 + 程式碼推理',
   },
 
   // 蜂群調度: 需要快速決策
   swarm_orchestration: {
-    primary: MODELS.groq_llama8b,        // 極速決策
-    fallback1: MODELS.cf_llama8b,
-    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
+    primary: MODELS.local_gemma4,          // 本地 Gemma 4 快速決策
+    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 極速
+    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
     taskType: 'swarm_orchestration',
-    strategy: '極速決策',
+    strategy: '本地零算力 + 極速決策',
   },
 
   // TCFD 氣候風險分析: 需要深度分析
   tcfd_analysis: {
-    primary: MODELS.or_qwen80b,          // 中文氣候分析
-    fallback1: MODELS.or_llama90b,
-    fallback2: MODELS.tg_qwen72b,
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 深度分析
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'tcfd_analysis',
-    strategy: '深度氣候風險分析',
+    strategy: '本地零算力 + 深度氣候分析',
   },
 
   // SDG 目標對應: 需要知識庫匹配
   sdg_mapping: {
-    primary: MODELS.groq_llama70b,       // 快速知識匹配
-    fallback1: MODELS.or_qwen80b,
-    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
+    primary: MODELS.local_gemma4,          // 本地 Gemma 4 知識匹配
+    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
+    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
     taskType: 'sdg_mapping',
-    strategy: '快速知識匹配',
+    strategy: '本地零算力 + 知識匹配',
   },
 
   // 重大性矩陣: 需要優先級排序
   materiality_matrix: {
-    primary: MODELS.or_qwen80b,          // 中文優先級分析
-    fallback1: MODELS.or_llama90b,
-    fallback2: MODELS.tg_qwen72b,
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 排序分析
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'materiality_matrix',
-    strategy: '優先級排序分析',
+    strategy: '本地零算力 + 優先級排序',
   },
 
   // 報告組裝: 需要結構化輸出
   report_assembly: {
-    primary: MODELS.or_qwen80b,          // 結構化報告
-    fallback1: MODELS.or_llama90b,
-    fallback2: MODELS.tg_llama70b,
+    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告組裝
+    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
+    fallback2: MODELS.local_llama31,       // 本地 Llama 3.1 備援
     taskType: 'report_assembly',
-    strategy: '結構化報告組裝',
+    strategy: '本地零算力 + 結構化組裝',
   },
 
   // 通用任務: 均衡配置
   general: {
-    primary: MODELS.groq_llama70b,       // 速度 + 品質均衡
-    fallback1: MODELS.cf_llama70b,        // Cloudflare 全球邊緣
-    fallback2: MODELS.or_mistral24b,      // 免費層均衡回落
+    primary: MODELS.local_gemma4,          // 本地 Gemma 4 通用
+    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
+    fallback2: MODELS.local_gemma12b,    // 本地 Gemma 3 12B 備援
     taskType: 'general',
-    strategy: '速度與品質均衡',
+    strategy: '本地零算力 + 均衡配置',
   },
 };
 
@@ -526,6 +550,61 @@ export async function callCloudflareAI(
 }
 
 /**
+ * 呼叫本地 Ollama API (100% 免費，零算力成本)
+ * 使用 Ollama /api/chat 端點
+ */
+async function callLocalOllama(
+  model: string,
+  messages: ChatMessage[],
+  options: { maxTokens?: number; temperature?: number; timeoutMs?: number; endpoint?: string } = {}
+): Promise<string> {
+  const endpoint = options.endpoint || 'http://161.118.248.180:11434/api/chat';
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? 120000;  // 本地模型預設 2 分鐘超時
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let response: Response;
+  try {
+    response = await fetch(endpoint, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+        stream: false,
+        options: {
+          num_predict: options.maxTokens ?? 4096,
+          temperature: options.temperature ?? 0.7,
+        },
+      }),
+    });
+  } catch (e) {
+    clearTimeout(timer);
+    if (e instanceof Error && e.name === 'AbortError') {
+      throw new Error(`Local Ollama/${model} 逾時 (${timeoutMs}ms)`);
+    }
+    throw e;
+  }
+  clearTimeout(timer);
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Local Ollama/${model} HTTP ${response.status}: ${text}`);
+  }
+
+  const data = await response.json() as {
+    message?: { content?: string };
+    error?: string;
+  };
+
+  if (data.error) throw new Error(`Local Ollama/${model}: ${data.error}`);
+  const content = data.message?.content;
+  if (!content) throw new Error(`Local Ollama/${model}: empty response`);
+  return content;
+}
+
+/**
  * 驗證 Cloudflare API Token
  */
 export async function validateCloudflareToken(): Promise<boolean> {
@@ -593,6 +672,7 @@ const PROVIDER_ENDPOINTS: Record<ModelConfig['provider'], ProviderEndpoint> = {
   mistral:    { apiUrl: 'https://api.mistral.ai/v1/chat/completions',                                        apiKeyEnv: 'MISTRAL_API_KEY' },
   gemini:     { apiUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',          apiKeyEnv: 'GEMINI_API_KEY' },
   cloudflare: { apiUrl: 'cloudflare',                                                                         apiKeyEnv: 'CLOUDFLARE_API_TOKEN' },
+  local_gemma: { apiUrl: process.env.VPS_OLLAMA_URL || 'http://161.118.248.180:11434/api/chat',              apiKeyEnv: '' },  // VPS Ollama，無需 API Key
 };
 
 /**
@@ -608,7 +688,8 @@ export const FREE_PROVIDER_POOL: FreeProviderConfig[] = (Object.values(MODELS) a
     temperature: m.temperature,
     apiUrl: ep.apiUrl,
     apiKeyEnv: ep.apiKeyEnv,
-    isFreeTier: m.model.endsWith(':free'),
+    // 本地模型永遠是免費的，雲端模型以 :free 結尾才算
+    isFreeTier: m.provider === 'local_gemma' || m.model.endsWith(':free'),
   };
 });
 
@@ -636,6 +717,7 @@ export async function callChatProvider(
   messages: ChatMessage[],
   options: { maxTokens?: number; temperature?: number; timeoutMs?: number } = {}
 ): Promise<string> {
+  // Cloudflare 走專用通道
   if (cfg.provider === 'cloudflare') {
     const data = await callCloudflareAI(cfg.model, messages, {
       maxTokens: options.maxTokens ?? cfg.maxTokens,
@@ -644,6 +726,17 @@ export async function callChatProvider(
     return data.result.response;
   }
 
+  // 本地 Ollama (local_gemma) 走 Ollama API
+  if (cfg.provider === 'local_gemma') {
+    return callLocalOllama(cfg.model, messages, {
+      endpoint: cfg.apiUrl,  // 尊重 VPS_OLLAMA_URL 環境變數（PROVIDER_ENDPOINTS 已處理預設值）
+      maxTokens: options.maxTokens ?? cfg.maxTokens,
+      temperature: options.temperature ?? cfg.temperature,
+      timeoutMs: options.timeoutMs ?? 120000,  // 本地模型可給更長超時
+    });
+  }
+
+  // 雲端 provider: OpenAI-compatible Chat Completions
   const apiKey = process.env[cfg.apiKeyEnv];
   if (!apiKey) throw new Error(`Missing API key env: ${cfg.apiKeyEnv}`);
 
@@ -727,6 +820,11 @@ export function getProviderHealth(): Record<string, ModelHealth> {
   return { ...modelHealth };
 }
 
+/** 重設所有模型健康狀態（測試隔離 / 手動恢復用）。 */
+export function resetProviderHealth(): void {
+  for (const k of Object.keys(modelHealth)) delete modelHealth[k];
+}
+
 // 涉及真實 ESG 資料、需審計可信的敏感任務
 const SENSITIVE_TASKS = new Set<ESGTaskType>([
   'carbon_calculation', 'compliance_review', 'tcfd_analysis', 'materiality_matrix', 'sdg_mapping',
@@ -782,7 +880,8 @@ export async function callFreeProvider(
   const send = options.send ?? callChatProvider;
   for (const cfg of ordered) {
     if (!isModelUp(cfg.model)) continue;                                    // 該模型已降級，跳過
-    if (!process.env[cfg.apiKeyEnv]) { skippedUnconfigured += 1; continue; } // 未配置 Key，跳過
+    // 未配置 Key 才跳過；本地模型（local_gemma）apiKeyEnv 為空，視為「免 Key」不跳過
+    if (cfg.apiKeyEnv && !process.env[cfg.apiKeyEnv]) { skippedUnconfigured += 1; continue; }
     if (sensitive && options.excludePublicFree && PUBLIC_FREE_PROVIDERS.has(cfg.provider)) continue; // 治理守門
 
     try {
