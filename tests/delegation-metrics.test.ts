@@ -75,6 +75,37 @@ describe('DelegationMetrics observer (監控/分析消費者)', () => {
     // 不存在的 delegation 回傳空指標
     expect(m.getDelegationSnapshot('nope').total).toBe(0);
   });
+
+  it('raises alerts for emergency.stop / anomaly.detected and threshold', () => {
+    const m = getDelegationMetrics();
+    m.setThresholds({ delegationEventCount: 3 });
+    const now = Date.now();
+
+    // 閾值：d1 達 3 筆觸發 warning
+    publishReal('delegation.created', 'd1', now);
+    publishReal('delegation.validated', 'd1', now + 1);
+    publishReal('delegation.execution.completed', 'd1', now + 2);
+    // 訊號事件
+    publishReal('delegation.anomaly.detected', 'd2', now + 3);
+    publishReal('delegation.emergency.stop', 'd3', now + 4);
+
+    const snap = m.getSnapshot();
+    expect(snap.alerts.length).toBe(3); // 閾值 + anomaly + emergency
+    const levels = snap.alerts.map((a) => a.level);
+    expect(levels).toContain('critical');
+    expect(levels).toContain('warning');
+    expect(
+      snap.alerts.some(
+        (a) => a.type === 'delegation.emergency.stop' && a.level === 'critical'
+      )
+    ).toBe(true);
+    // per-delegation 告警隔離
+    expect(m.getDelegationSnapshot('d1').alerts.length).toBe(1);
+    expect(
+      m.getDelegationSnapshot('d2').alerts.some((a) => a.type === 'delegation.anomaly.detected')
+    ).toBe(true);
+    expect(m.getDelegationSnapshot('d3').alerts.some((a) => a.level === 'critical')).toBe(true);
+  });
 });
 
 describe('GET /api/delegation/metrics', () => {
@@ -150,5 +181,26 @@ describe('GET /api/delegation/metrics', () => {
     // agent 建立會非同步發布事件，故以 >= 驗證「本測試發布的事件確實被觀測」
     expect(body.byType['delegation.validated']).toBeGreaterThanOrEqual(1);
     expect(body.total).toBeGreaterThanOrEqual(1);
+  });
+
+  it('includes alerts in global response', async () => {
+    getDelegationMetrics(); // 先建立訂閱
+    const now = Date.now();
+    publishReal('delegation.emergency.stop', 'd-alert', now);
+
+    const req = {
+      url: 'http://localhost/api/delegation/metrics',
+    } as unknown as NextRequest;
+
+    const res = await metricsGET(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body.alerts)).toBe(true);
+    expect(
+      body.alerts.some(
+        (a: { level: string; type: string }) =>
+          a.level === 'critical' && a.type === 'delegation.emergency.stop'
+      )
+    ).toBe(true);
   });
 });

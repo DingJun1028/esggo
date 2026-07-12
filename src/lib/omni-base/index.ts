@@ -303,7 +303,7 @@ export class IndexManager {
   }
 
   /** Find tags with similar chapterId and griCode for merge candidates */
-  findSimilar(tag: OmniTag, threshold: number = 0.8): OmniTag[] {
+  findSimilar(tag: OmniTag, _threshold: number = 0.8): OmniTag[] {
     const candidates: OmniTag[] = [];
     Array.from(this.index.values()).forEach(candidate => {
       if (candidate.uuid === tag.uuid) return;

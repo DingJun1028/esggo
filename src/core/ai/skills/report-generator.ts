@@ -285,7 +285,7 @@ ${company.name}董事會透過策略委員會監督氣候相關風險與機會�
 董事會成員具備永續發展、風險管理及產業相關專業，定期接受氣候變遷相關培訓。`;
 }
 
-function generateTCFDStrategy(company: CompanyData): string {
+function generateTCFDStrategy(_company: CompanyData): string {
   return `## 策略 (Strategy)
 
 ### 氣候風險識別
@@ -308,7 +308,7 @@ function generateTCFDStrategy(company: CompanyData): string {
 本公司採用 1.5°C 及 2°C 情境進行氣候風險評估，評估不同升温路徑對營運的潛在影響。`;
 }
 
-function generateTCFDRiskManagement(company: CompanyData): string {
+function generateTCFDRiskManagement(_company: CompanyData): string {
   return `## 風險管理 (Risk Management)
 
 ### 風險識別流程
@@ -351,7 +351,7 @@ function generateTCFDMetrics(company: CompanyData): string {
 
 function generateGenericSection(
   section: import('./report-templates').ReportSection,
-  company: CompanyData
+  _company: CompanyData
 ): string {
   return `## ${section.title}
 

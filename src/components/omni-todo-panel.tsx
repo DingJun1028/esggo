@@ -678,20 +678,20 @@ function TodoItemRow({
   todo,
   isSelected,
   onSelect,
-  onStart,
-  onComplete,
-  onArchive,
-  onReopen,
-  onDelete,
+  _onStart,
+  _onComplete,
+  _onArchive,
+  _onReopen,
+  _onDelete,
 }: {
   todo: TodoItem;
   isSelected: boolean;
   onSelect: () => void;
-  onStart: () => void;
-  onComplete: () => void;
-  onArchive: () => void;
-  onReopen: () => void;
-  onDelete: () => void;
+  _onStart: () => void;
+  _onComplete: () => void;
+  _onArchive: () => void;
+  _onReopen: () => void;
+  _onDelete: () => void;
 }) {
   const isOverdue =
     todo.dueDate &&

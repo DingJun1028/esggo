@@ -31,7 +31,7 @@ export class CelestialCoreProcessor {
   /**
    * 功能二：影子測試流量 shadowTestIngress
    */
-  public shadowTestIngress(payload: unknown): void {
+  public shadowTestIngress(_payload: unknown): void {
     // Truth – 每次入口自動觸發 lifecycle hook
     console.info('[Lifecycle Hook] shadowTestIngress invoked');
     // 可在此掛載自訂的 hook，未來會在 IOmniAgentBus 中被呼叫。

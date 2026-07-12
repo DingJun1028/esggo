@@ -284,7 +284,7 @@ export class VPSAgent {
   /**
    * 回應狀態查詢
    */
-  private async _respondToQuery(event: IBusEvent): Promise<void> {
+  private async _respondToQuery(_event: IBusEvent): Promise<void> {
     if (this._entangledBus) {
       const stateEvent: IBusEvent = {
         uuid: uuidv4(),

@@ -61,11 +61,11 @@ export async function GET(request: NextRequest) {
     };
 
     // 檢查事件存儲
-    const timeRift = healthRouter.getTimeRiftEngine();
+  const _timeRift = healthRouter.getTimeRiftEngine();
     if (timeRift) {
       try {
         await timeRift.eventStore.healthCheck();
-      } catch (e) {
+      } catch (_e) {
         checks.eventStore = 'unhealthy';
       }
     }
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         if (!testContract.verification.isValid) {
           checks.gateway = 'degraded';
         }
-      } catch (e) {
+      } catch (_e) {
         checks.gateway = 'unhealthy';
       }
     }
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       if (models.length === 0) {
         checks.modelDiscovery = 'degraded';
       }
-    } catch (e) {
+    } catch (_e) {
       checks.modelDiscovery = 'unhealthy';
     }
 

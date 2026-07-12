@@ -81,7 +81,7 @@ const MetricsPlugin: OmniPlugin = {
     hooks: ['tag:*'],
   },
   lifecycle: 'registered',
-  handleEvent(event) {
+  handleEvent(_event) {
     // In production, this would store to a metrics store
     // For now, just track in memory via EventBus
   },
@@ -122,7 +122,7 @@ const TagCachePlugin: OmniPlugin = {
     config: { ttl: 3600, maxSize: 1000 },
   },
   lifecycle: 'registered',
-  handleEvent(event) {
+  handleEvent(_event) {
     // Would invalidate cache on tag mutation
   },
   getHealth: () => ({ status: 'healthy' }),

@@ -6,16 +6,15 @@
  * OAB: 異步數據總線，支持時空裂縫和細胞分裂
  */
 
-import { randomUUID, createHash } from 'crypto';
+import { randomUUID } from 'crypto';
 import {
   IOmniBusV2,
   SubscriptionId,
   BusHandler,
   BusFilter,
   BusStatistics,
-  TopicStats,
 } from '../../types/twelve-omni';
-import { IComponentCore, LifecycleStage, IBusEvent } from '../../lib/omni-core/contracts';
+import { LifecycleStage, IBusEvent } from '../../lib/omni-core/contracts';
 
 /**
  * OmniBusV2 實現
