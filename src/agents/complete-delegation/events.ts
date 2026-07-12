@@ -17,6 +17,7 @@ import { randomUUID } from 'crypto';
 import { secureForward } from '../../core/services/omni-gateway';
 import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
 import type { IBusEvent } from '../../lib/omni-core/contracts';
+import { getDefaultEventSink } from './event-sink';
 
 /**
  * 發布一筆完全代主自行事件至 omni-agent-bus。
@@ -43,7 +44,22 @@ export async function publishDelegationEvent(
   };
 
   try {
-    return await secureForward(event);
+    const { hashLock } = await secureForward(event);
+    // 全量事件持久化（對齊「全量」不變量；best-effort，失敗不影響主流程）
+    try {
+      getDefaultEventSink().onEvent({
+        type,
+        delegationId: (payload.delegationId as string) ?? '',
+        topic,
+        hashLock,
+        ts: now,
+        source,
+        payload: { type, ...payload },
+      });
+    } catch {
+      /* best-effort */
+    }
+    return { status: 'ok', hashLock };
   } catch (err) {
     console.error('[delegation-events] publish failed:', err);
     return { status: 'error', hashLock: '' };

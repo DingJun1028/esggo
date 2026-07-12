@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
-    start(controller) {
+    async start(controller) {
       let closed = false;
       let cleanup: (() => void) | null = null;
 
@@ -71,6 +71,24 @@ export async function GET(request: NextRequest) {
       };
 
       send({ type: 'CONNECTED', delegationId, ts: Date.now() });
+
+      // 全量回放：連線先送歷史事件（catch-up），再續推即時（對齊「全量」+ RWD）
+      try {
+        const trail = await manager.getFullEventTrail(delegationId);
+        for (const rec of trail) {
+          send({
+            type: 'REPLAY',
+            delegationId: rec.delegationId,
+            hashLock: rec.hashLock,
+            ts: rec.ts,
+            source: rec.source,
+            payload: rec.payload,
+          });
+        }
+        send({ type: 'REPLAY_DONE', delegationId, ts: Date.now(), count: trail.length });
+      } catch {
+        /* best-effort */
+      }
 
       const unsub = enhancedOmniBus.subscribe(
         'external-forward',

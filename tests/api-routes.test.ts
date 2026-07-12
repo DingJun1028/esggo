@@ -5,11 +5,18 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+import { randomUUID } from 'crypto';
+import { join, unlinkSync } from 'path';
+import { tmpdir } from 'os';
 import {
   createCompleteDelegationAgent,
   executeCompleteDelegationTask,
   getDelegationManager,
 } from '../src/agents/complete-delegation';
+import {
+  createFileEventSink,
+  setDefaultEventSink,
+} from '../src/agents/complete-delegation/event-sink';
 import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
 import { GET as auditTrailGET } from '../src/app/api/delegation/audit/route';
 import { GET as eventStreamGET } from '../src/app/api/delegation/events/stream/route';
@@ -358,14 +365,76 @@ describe('GET /api/delegation/events/stream', () => {
       hashLock: 'a'.repeat(64),
     } as never);
 
-    const second = await reader.read();
-    const secondText = decoder.decode(second.value);
-    expect(secondText).toContain('delegation.created');
-    expect(secondText).toContain(delegationId);
-    expect(secondText).toContain('a'.repeat(64));
+    // 訂閱時會先回放歷史（REPLAY_DONE），再續推即時事件；讀取直到收到即時事件
+    // （以本測試即時事件的特定 hashLock 識別，避免與 REPLAY 框的 type 字串混淆）
+    const liveHash = 'a'.repeat(64);
+    let aggregate = '';
+    for (let i = 0; i < 6; i++) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      aggregate += decoder.decode(value);
+      if (aggregate.includes(liveHash)) break;
+    }
+    expect(aggregate).toContain('delegation.created');
+    expect(aggregate).toContain(delegationId);
+    expect(aggregate).toContain(liveHash);
 
     ac.abort();
     await reader.cancel().catch(() => {});
+  });
+
+  it('replays full event trail on connect (REPLAY frames)', async () => {
+    const tmpPath = join(tmpdir(), `esggo-stream-events-${randomUUID()}.jsonl`);
+    setDefaultEventSink(createFileEventSink(tmpPath));
+    try {
+      const agent = await createCompleteDelegationAgent({
+        principalId: 'replay-user-001',
+        permissions: ['monitor', 'full'],
+      });
+      const delegationId = agent.delegationScope.delegationId;
+
+      // 先經 publish 寫入全量事件 sink（供連線回放）
+      await delegationEvents.publishDelegationEvent(
+        'delegation.created',
+        'delegation.authorization',
+        { delegationId, note: 'replay' },
+        'test'
+      );
+
+      const ac = new AbortController();
+      const req = {
+        url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+        signal: ac.signal,
+      } as unknown as NextRequest;
+
+      const res = await eventStreamGET(req);
+      expect(res.status).toBe(200);
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+
+      // 讀取直到 REPLAY_DONE（建立 agent 與手動 publish 各寫一筆，故可能多個 REPLAY 框）
+      let text = '';
+      for (let i = 0; i < 8; i++) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        text += decoder.decode(value);
+        if (text.includes('REPLAY_DONE')) break;
+      }
+      expect(text).toContain('CONNECTED');
+      expect(text).toContain('REPLAY');
+      expect(text).toContain(delegationId);
+      expect(text).toContain('REPLAY_DONE');
+
+      ac.abort();
+      await reader.cancel().catch(() => {});
+    } finally {
+      setDefaultEventSink(null);
+      try {
+        unlinkSync(tmpPath);
+      } catch {
+        /* ignore */
+      }
+    }
   });
 });
 
