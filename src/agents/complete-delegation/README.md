@@ -171,6 +171,10 @@ for (;;) {
 
 **連線回放（對齊「全量」+ RWD）**：訂閱端點於 `CONNECTED` 後、續推即時事件前，會先以 `REPLAY` 框回放該 `delegationId` 的全量事件（`getFullEventTrail`，來源為 `publishDelegationEvent` 持久化的 JSONL sink），並以 `REPLAY_DONE` 標示歷史結束。消費者依 `type === 'REPLAY'` 區分歷史與即時。
 
+**心跳保活（RWD / 全端穩健）**：每 25s 發送 `: heartbeat` 註解框，避免中間代理因閒置關閉連線。
+
+**事件形狀（實際）**：經 `secureForward` 發布的真實事件封裝為 `{ event, payload: <IBusEvent>, ts }`，委派 payload 位於 `payload.payload`、`hashLock` 位於 `payload.hashLock`；SSE 端點已據此正確抽取並以 `{ type, delegationId, hashLock, ts, payload }` 推播。
+
 也可直接在應用內訂閱同一條 `omni-agent-bus`（與 SSE 端點同源）：
 ```ts
 import { enhancedOmniBus } from '../lib/omni-agent-bus';
