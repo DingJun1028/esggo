@@ -607,7 +607,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
 
   try {
     if (gemini) {
-      const m = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const m = gemini.getGenerativeModel({ model: 'gemini-2.0-flash' });
       const prompt = task.prompt || `請分析：${task.taskType} — ${task.title}`;
       const streamResult = await m.generateContentStream([ESG_SYSTEM_PROMPT, prompt]);
 
