@@ -9,8 +9,7 @@
 
 import { IOmniAgent, IComponentCore, ITaskSpec, ITaskResult, IFlowSnapshot, LifecycleStage } from "../../types/omni-agent";
 import { IOmniAgentBus } from "../../types/omni-agent-bus";
-import { VPSAgent, createVPSAgent, getVPSAgent, TaskType } from "./index";
-import { IBusEvent } from "../../types/bus-event";
+import { VPSAgent, createVPSAgent, TaskType } from "./index";
 
 /**
  * 最小生態系統介面（供 registerVPSAgentToEcosystem 使用）
@@ -124,7 +123,7 @@ export class VPSAgentAdapter implements IOmniAgent {
    */
   registerHook(
     stage: LifecycleStage,
-    hook: (args: { spec?: ITaskSpec; result?: ITaskResult; error?: Error }) => Promise<void> | void
+    _hook: (args: { spec?: ITaskSpec; result?: ITaskResult; error?: Error }) => Promise<void> | void
   ): void {
     // VPS Agent 使用自己的監聽器系統
     console.log(`[VPSAgentAdapter] Hook 註冊: ${stage}`);
@@ -164,7 +163,7 @@ export class VPSAgentAdapter implements IOmniAgent {
   /**
    * 更新配置
    */
-  updateConfig(partialConfig: Partial<Omit<IOmniAgent["config"], "uuid" | "version">>): void {
+  updateConfig(_partialConfig: Partial<Omit<IOmniAgent["config"], "uuid" | "version">>): void {
     console.log(`[VPSAgentAdapter] ⚙️ 配置已更新`);
   }
 

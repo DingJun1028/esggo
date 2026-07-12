@@ -38,7 +38,6 @@ import {
   SystemSnapshot,
   FullSystemHealth,
   SynergyResult,
-  HealthLevel,
   MemoryEntry,
   EvidenceId,
   ChaosType,
@@ -46,7 +45,7 @@ import {
   TimeTravelConfig,
   TimelineSnapshot,
 } from '../../types/twelve-omni';
-import { IComponentCore, IBusEvent } from '../../lib/omni-core/contracts';
+import { IBusEvent } from '../../lib/omni-core/contracts';
 
 // ═══════════════════════════════════════════════════════════════
 // Magic-Effect #1: 混沌自癒 (Chaos Self-Healing)
@@ -74,7 +73,7 @@ export class ChaosHealing implements IChaosHealing {
    * 觸發混沌注入
    * 故意注入錯誤以測試系統自癒能力
    */
-  async triggerChaos(event: IBusEvent): Promise<ChaosHealingResult> {
+  async triggerChaos(_event: IBusEvent): Promise<ChaosHealingResult> {
     const chaosTypes: ChaosType[] = ['mutation', 'delay', 'drop', 'duplicate', 'corrupt'];
     const chaosType = chaosTypes[Math.floor(Math.random() * chaosTypes.length)];
     const strategies: RecoveryStrategy[] = ['retry', 'fallback', 'restart', 'rollback', 'isolate'];
@@ -225,7 +224,7 @@ export class CellularFission implements ICellularFission {
   /**
    * 觸發分裂
    */
-  async triggerFission(agentId: string, reason: string): Promise<FissionResult> {
+  async triggerFission(agentId: string, _reason: string): Promise<FissionResult> {
     const childAgentId = `AGENT-${Date.now()}-${randomUUID().slice(0, 6).toUpperCase()}`;
     const fissionTypes: Array<'hot-swap' | 'cold-start' | 'warm-clone'> = [
       'hot-swap',
@@ -285,7 +284,7 @@ export class ProphetMatrix implements IProphetMatrix {
   /**
    * 預取事件
    */
-  async preFetch(intent: PredictedIntent): Promise<IBusEvent[]> {
+  async preFetch(_intent: PredictedIntent): Promise<IBusEvent[]> {
     // 模擬預取
     return [];
   }
@@ -514,7 +513,7 @@ export class UniversalMemory implements IUniversalMemory {
   /**
    * 證據鏈記憶
    */
-  async evidentialRecall(evidenceId: EvidenceId): Promise<MemoryEntry[]> {
+  async evidentialRecall(_evidenceId: EvidenceId): Promise<MemoryEntry[]> {
     // 簡化版：返回相關記憶
     return [];
   }
@@ -566,7 +565,7 @@ export class TaiChiResonance implements ITaiChiResonance {
   /**
    * 靈魂對齊檢查
    */
-  async soulAlignmentCheck(action: {
+  async soulAlignmentCheck(_action: {
     type: string;
     params: Record<string, unknown>;
   }): Promise<AlignmentResult> {

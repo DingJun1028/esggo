@@ -13,7 +13,7 @@
  */
 
 import { EventEmitter } from "events";
-import { QuantumState, QuantumMeasurement, VPSServiceState, VPSGlobalState } from "./index";
+import { QuantumState } from "./index";
 
 /** 同步事件類型 */
 export type SyncEventType =

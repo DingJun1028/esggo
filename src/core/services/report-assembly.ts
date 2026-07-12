@@ -8,7 +8,6 @@
 
 import { OmniTagFactory, FiveTReportEngine, GeneratedReport, ReportChapter } from '../../lib/sustain-write/omni-tag';
 import { COMPANIES } from '../repositories/company-profiles';
-import { QUESTIONS } from '../repositories/question-bank';
 import { getAnswersByCompany } from '../repositories/answer-database';
 import { generateReportHTML } from '../../lib/sustain-write/ui-design';
 

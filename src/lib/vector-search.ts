@@ -4,10 +4,10 @@
 
 import { getNCBClient } from './ncb-client';
 import {
-  storeEmbedding, getEmbedding, deleteEmbedding, semanticSearch,
+  getEmbedding, deleteEmbedding, semanticSearch,
   findRelatedNotes, getNoteESGEntities, storeESGEntity,
   recordSearchHistory, getEmbeddingStats,
-  type SearchResult, type NoteEmbeddingRow, type ESGEntityRow,
+  type NoteEmbeddingRow, type ESGEntityRow,
 } from './pgvector';
 import {
   getEmbeddingGenerator, extractEmbeddingText, type EmbeddingOptions,

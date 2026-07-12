@@ -133,7 +133,7 @@ export class OmniTag implements IOmniTag {
   /**
    * 反向查詢
    */
-  async reverseLookup(targetId: string, targetType: string): Promise<TagDefinition[]> {
+  async reverseLookup(targetId: string, _targetType: string): Promise<TagDefinition[]> {
     const results: TagDefinition[] = [];
 
     for (const [key, targets] of Array.from(this.associations.entries())) {

@@ -5,7 +5,7 @@
  */
 
 import { createHash } from 'crypto';
-import { FiveTHashLock, FiveTTraceable, FiveTTrackable } from './five-t-protocol';
+import { FiveTTraceable, FiveTTrackable } from './five-t-protocol';
 import { ZKPService } from './zkp-service';
 
 // ── Types ─────────────────────────────────────────────────────

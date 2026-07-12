@@ -485,7 +485,7 @@ export function generateReportHTML(report: { companyName: string; chapters: Arra
     const gateClass = 'gate-' + chapter.fiveTGate;
     const gateNameMap: Record<string, string> = { traceable: '真', transparent: '善', tangible: '美', trustworthy: '信', trackable: '通' };
     const gateIconMap: Record<string, string> = { traceable: 'fa-code-merge', transparent: 'fa-eye', tangible: 'fa-palette', trustworthy: 'fa-lock', trackable: 'fa-tower-broadcast' };
-    const gateName = gateNameMap[chapter.fiveTGate] || '';
+    const _gateName = gateNameMap[chapter.fiveTGate] || '';
     const gateIcon = gateIconMap[chapter.fiveTGate] || '';
     const _gateIcon = gateIcon; // suppress unused warning
 

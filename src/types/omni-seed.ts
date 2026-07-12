@@ -12,7 +12,7 @@
  * dormant（休眠）→ awakened（覺醒）→ infinite_evolving（無限進化）
  */
 
-import { IComponentCore, LifecycleStage } from "./omni-agent";
+import { IComponentCore } from "./omni-agent";
 
 // ==========================================
 // 種子狀態類型

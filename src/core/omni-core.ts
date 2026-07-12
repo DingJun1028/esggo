@@ -42,15 +42,14 @@ import { getOmniSingularity } from "../agents/omni-singularity";
 import { createOmniKey, OmniKey } from "../agents/omni-key";
 import { createOmniSoul, OmniSoul } from "../agents/omni-soul";
 import { createVPSAgent, VPSAgent, VPSAgentAdapter, VPSAgentFactory } from "../agents/vps";
-import { OASummon, quickSummon, SummonResult } from "../agents/oa-summon";
-import { OmniSoulAutoSeed, initSoul } from "../agents/omni-soul-auto-seed";
+import { OASummon } from "../agents/oa-summon";
+import { OmniSoulAutoSeed } from "../agents/omni-soul-auto-seed";
 import { OmniUserRegistry, getOmniUserRegistry } from "../agents/omni-user-registry";
 import { IOmniSingularity } from "../types/omni-singularity";
 import { IOmniKey } from "../types/omni-key";
 import { IOmniSoul, GovernanceAlignment, SoulDecision } from "../types/omni-soul";
 import { EffectCauseHealingResult } from "../types/twelve-omni";
-import { IComponentCore, IOmniAgentBus } from "../types/core-contract";
-import { IBusEvent as LegacyIBusEvent } from "../types/bus-event";
+import { IComponentCore } from "../types/core-contract";
 import { VPSGlobalState, TaskResultBase } from "../agents/vps";
 
 // 完全代主自行 (Complete Autonomous Delegation)
@@ -82,7 +81,6 @@ import {
   OmniComponent,
   OmniTag,
   OmniEvidence,
-  OmniAgentV2,
   OmniAPI,
   OmniBusV2,
   OmniGatewayV2,
@@ -443,7 +441,7 @@ export class OmniCore {
   /**
    * 顯化：從奇點中創造新的存在
    */
-  public async manifest(intent: {
+  public async manifest(_intent: {
     type: string;
     name: string;
     purpose: string;
@@ -454,7 +452,7 @@ export class OmniCore {
   /**
    * 治理對齊檢查
    */
-  public async checkGovernance(action: {
+  public async checkGovernance(_action: {
     type: string;
     params: Record<string, unknown>;
   }): Promise<GovernanceAlignment> {
@@ -464,7 +462,7 @@ export class OmniCore {
   /**
    * 做出決策
    */
-  public async decide(context: {
+  public async decide(_context: {
     intent: string;
     options: Array<{ id: string; description: string }>;
   }): Promise<SoulDecision> {

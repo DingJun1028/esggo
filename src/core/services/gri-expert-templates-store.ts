@@ -35,7 +35,7 @@ export interface ChapterStat {
 
 // ─── Chapter 01: 組織溯源與報告邊界 (GRI 2-1~2-8, GRI 1) ───
 
-const C01_P01: ExpertParagraph = {
+const _C01_P01: ExpertParagraph = {
   id: 'ch01-p01',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -53,7 +53,7 @@ const C01_P01: ExpertParagraph = {
   }
 };
 
-const C01_P02: ExpertParagraph = {
+const _C01_P02: ExpertParagraph = {
   id: 'ch01-p02',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -71,7 +71,7 @@ const C01_P02: ExpertParagraph = {
   }
 };
 
-const C01_P03: ExpertParagraph = {
+const _C01_P03: ExpertParagraph = {
   id: 'ch01-p03',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -89,7 +89,7 @@ const C01_P03: ExpertParagraph = {
   }
 };
 
-const C01_P04: ExpertParagraph = {
+const _C01_P04: ExpertParagraph = {
   id: 'ch01-p04',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -107,7 +107,7 @@ const C01_P04: ExpertParagraph = {
   }
 };
 
-const C01_P05: ExpertParagraph = {
+const _C01_P05: ExpertParagraph = {
   id: 'ch01-p05',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -125,7 +125,7 @@ const C01_P05: ExpertParagraph = {
   }
 };
 
-const C01_P06: ExpertParagraph = {
+const _C01_P06: ExpertParagraph = {
   id: 'ch01-p06',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -143,7 +143,7 @@ const C01_P06: ExpertParagraph = {
   }
 };
 
-const C01_P07: ExpertParagraph = {
+const _C01_P07: ExpertParagraph = {
   id: 'ch01-p07',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -161,7 +161,7 @@ const C01_P07: ExpertParagraph = {
   }
 };
 
-const C01_P08: ExpertParagraph = {
+const _C01_P08: ExpertParagraph = {
   id: 'ch01-p08',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -179,7 +179,7 @@ const C01_P08: ExpertParagraph = {
   }
 };
 
-const C01_P09: ExpertParagraph = {
+const _C01_P09: ExpertParagraph = {
   id: 'ch01-p09',
   chapter: 1,
   section: '組織溯源與報告邊界',
@@ -199,7 +199,7 @@ const C01_P09: ExpertParagraph = {
 
 // ─── Chapter 02: 永續治理架構 (GRI 2-9~2-21, 董事會) ───
 
-const C02_P01: ExpertParagraph = {
+const _C02_P01: ExpertParagraph = {
   id: 'ch02-p01',
   chapter: 2,
   section: '永續治理架構',
@@ -217,7 +217,7 @@ const C02_P01: ExpertParagraph = {
   }
 };
 
-const C02_P02: ExpertParagraph = {
+const _C02_P02: ExpertParagraph = {
   id: 'ch02-p02',
   chapter: 2,
   section: '永續治理架構',
@@ -235,7 +235,7 @@ const C02_P02: ExpertParagraph = {
   }
 };
 
-const C02_P03: ExpertParagraph = {
+const _C02_P03: ExpertParagraph = {
   id: 'ch02-p03',
   chapter: 2,
   section: '永續治理架構',
@@ -253,7 +253,7 @@ const C02_P03: ExpertParagraph = {
   }
 };
 
-const C02_P04: ExpertParagraph = {
+const _C02_P04: ExpertParagraph = {
   id: 'ch02-p04',
   chapter: 2,
   section: '永續治理架構',
@@ -271,7 +271,7 @@ const C02_P04: ExpertParagraph = {
   }
 };
 
-const C02_P05: ExpertParagraph = {
+const _C02_P05: ExpertParagraph = {
   id: 'ch02-p05',
   chapter: 2,
   section: '永續治理架構',
@@ -289,7 +289,7 @@ const C02_P05: ExpertParagraph = {
   }
 };
 
-const C02_P06: ExpertParagraph = {
+const _C02_P06: ExpertParagraph = {
   id: 'ch02-p06',
   chapter: 2,
   section: '永續治理架構',
@@ -307,7 +307,7 @@ const C02_P06: ExpertParagraph = {
   }
 };
 
-const C02_P07: ExpertParagraph = {
+const _C02_P07: ExpertParagraph = {
   id: 'ch02-p07',
   chapter: 2,
   section: '永續治理架構',
@@ -325,7 +325,7 @@ const C02_P07: ExpertParagraph = {
   }
 };
 
-const C02_P08: ExpertParagraph = {
+const _C02_P08: ExpertParagraph = {
   id: 'ch02-p08',
   chapter: 2,
   section: '永續治理架構',
@@ -343,7 +343,7 @@ const C02_P08: ExpertParagraph = {
   }
 };
 
-const C02_P09: ExpertParagraph = {
+const _C02_P09: ExpertParagraph = {
   id: 'ch02-p09',
   chapter: 2,
   section: '永續治理架構',
@@ -361,7 +361,7 @@ const C02_P09: ExpertParagraph = {
   }
 };
 
-const C02_P10: ExpertParagraph = {
+const _C02_P10: ExpertParagraph = {
   id: 'ch02-p10',
   chapter: 2,
   section: '永續治理架構',

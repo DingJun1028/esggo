@@ -13,8 +13,6 @@ import type {
 } from '../repositories/types';
 
 import {
-  companyProfiles,
-  questionBank,
   chapterDefinitions,
   getCompanyById,
   getQuestionsByChapter,

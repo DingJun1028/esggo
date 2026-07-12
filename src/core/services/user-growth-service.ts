@@ -107,7 +107,7 @@ class UserGrowthService {
   }
 
   /** Add XP and check for tier upgrade */
-  async addXP(userId: string, amount: number, reason?: string) {
+  async addXP(userId: string, amount: number, _reason?: string) {
     const user = await this.prisma.userGrowth.findUnique({ where: { userId } });
     if (!user) throw new Error('User not found');
 

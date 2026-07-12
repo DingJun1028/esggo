@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
 export interface AgnesApiContextType {
   isReady: boolean;
@@ -63,7 +63,7 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
       await new Promise(resolve => setTimeout(resolve, 500));
       setStatus('connected');
       setIsReady(true);
-    } catch (e) {
+    } catch (_e) {
       setStatus('error');
       setIsReady(false);
     }

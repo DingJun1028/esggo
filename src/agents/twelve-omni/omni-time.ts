@@ -82,7 +82,7 @@ export class OmniTime implements IOmniTime {
     this._events.push(event);
 
     // 創建影子事件
-    const shadowEvent: IBusEvent = {
+    const _shadowEvent: IBusEvent = {
       ...event,
       uuid: shadowId,
       version: 'shadow-test',

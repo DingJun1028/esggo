@@ -9,6 +9,8 @@ export interface DelegationEventView {
   ts?: number;
   payload?: Record<string, unknown>;
   raw?: string;
+  /** 事件來源：client / test / server 等（經 SSE 即時幀帶出，供區分本端/外部） */
+  source?: string;
   /** 由本端經雙向同步回寫、再經 SSE 迴路返回的事件（閉環標記） */
   self?: boolean;
 }
@@ -42,8 +44,6 @@ export const DelegationEventStream: React.FC<DelegationEventStreamProps> = ({
   const [sending, setSending] = useState(false);
   const [sendStatus, setSendStatus] = useState<string | null>(null);
   const esRef = useRef<EventSource | null>(null);
-  // 本端已回寫的 note 集合，用於在 SSE 迴路返回時標記「本端傳送」
-  const sentNotes = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (!delegationId) return;
@@ -68,8 +68,9 @@ export const DelegationEventStream: React.FC<DelegationEventStreamProps> = ({
       }
       try {
         const data = JSON.parse(e.data) as DelegationEventView;
-        const noteVal = (data.payload?.note as string) ?? undefined;
-        const isSelf = noteVal != null && sentNotes.current.has(noteVal);
+        // 雙向同步閉環標記：本端經 POST 回寫的事件，其來源為 'client'，
+        // 經 SSE 迴路返回時由 source 欄位識別（取代脆弱的 note 文字比對）
+        const isSelf = data.source === 'client';
         setEvents((prev) =>
           [{ ...data, self: isSelf }, ...prev].slice(0, maxEvents)
         );
@@ -106,7 +107,6 @@ export const DelegationEventStream: React.FC<DelegationEventStreamProps> = ({
       });
       const json = (await res.json()) as { success?: boolean; hashLock?: string; error?: string };
       if (res.ok && json.success) {
-        sentNotes.current.add(text);
         setSendStatus(`✓ 已回寫並經 SSE 迴路返回 (🔒 ${String(json.hashLock).substring(0, 10)}…)`);
         setNote('');
       } else {

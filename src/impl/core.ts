@@ -9,8 +9,6 @@ import {
   IComponentCore,
   IBusEvent,
   LifecycleStage,
-  ITaskSpec,
-  ITaskResult,
   IOmniAgent,
   IOmniAgentBus,
   IOmniAgentGateway,
