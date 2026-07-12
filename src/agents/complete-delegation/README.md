@@ -255,17 +255,21 @@ const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
 - [x] **指標 API**：`GET /api/delegation/metrics[?delegationId=]` 暴露觀測器聚合；全球聚合（`?delegationId` 省略）僅回傳計數、不含 delegation 識別碼（最小暴露）；單一 delegation 須具備 `monitor` / `full` 權限（與 audit / stream 端點一致）；回應含 `alerts` 陣列（全量告警）。
 - [x] **指標總覽卡（RWD UI）**：`/delegation/events` 頁面新增 `DelegationMetricsOverview` 元件，消費 `GET /api/delegation/metrics` 呈現即時聚合（全球總事件數 / 活躍 delegation 數 / 事件類型分佈，以及連線 delegation 的專屬指標，需 `monitor`/`full`），5s 輕量輪詢；對齊 RWD / 全端 / 全量，關閉「監控消費者 → 可視化」閉環。
 - [x] **委派事件告警/閾值（監控/告警閉環）**：觀測器依規則產生告警——`delegation.emergency.stop`（critical）、`delegation.anomaly.detected`（warning），以及單一 delegation 事件總量達可設閱值（預設 1000）時發出 warning；告警全量留存於觀測器與 API（`alerts` 欄位，per-delegation 隔離），並於 `/delegation/events` 總覽卡以紅（critical）/ 琥珀（warning）呈現，完成「觀測 → 告警」閉環。
+- [x] **告警外部通知 + SSE 即時可見（監控→告警→處置 閉環）**：觀測器產生告警時，除全量留存外，同時 (a) 經 `alert-notifier.ts` 之 `createAlertNotifier` 轉發至外部 webhook（預設停用；設定 `DELEGATION_ALERT_WEBHOOK_URL` 後啟用，`NODE_ENV==='test'` 一律停用），完成「告警 → 處置」最後一哩；(b) 發布 `delegation.alert.raised` 事件至同一 `omni-agent-bus`（topic `delegation.alert`），使 RWD SSE 端點（`GET /api/delegation/events/stream`）即時可見。觀測器於 `ingest` 對 `delegation.alert.raised` 提早 return，避免自我回灌（no self-loop）；通知失敗不影響告警留存（catch 吞掉，對齊「全量」）。
 
 ---
 
 ## 8. 測試
 
-覆蓋套件（位於 `tests/`，全測試 347 passed）：
+覆蓋套件（位於 `tests/`，本模組相關 359 passed）：
 - `complete-delegation.test.ts` — manager / agent / 決策引擎
 - `api-routes.test.ts` — 上述 REST 端點（audit / stream / events / metrics）
 - `delegation-metrics.test.ts` — 指標觀測器（監控/分析消費者）單元 + 路由
+- `alert-notifier.test.ts` — 告警外部通知 sink（webhook 酬載 / 失敗容錯 / test 環境停用）
 - `integration.test.ts` — 端到端流程
 - `performance-optimizer.test.ts` — 連線池 / 效能
 - `esg-analysis.test.ts` — 評分（D5）
 
-執行：`npx vitest run tests/complete-delegation.test.ts tests/api-routes.test.ts tests/delegation-metrics.test.ts tests/integration.test.ts tests/performance-optimizer.test.ts tests/esg-analysis.test.ts`
+> 注：`tests/audit-logger.test.ts` 為平行 session WIP（測試 `AuditLogger` 環形緩衝截斷），未納入本模組測試清單。
+
+執行：`npx vitest run tests/complete-delegation.test.ts tests/api-routes.test.ts tests/delegation-metrics.test.ts tests/alert-notifier.test.ts tests/integration.test.ts tests/performance-optimizer.test.ts tests/esg-analysis.test.ts`

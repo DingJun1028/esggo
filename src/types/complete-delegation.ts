@@ -445,6 +445,9 @@ export const DelegationEventNames = {
   
   /** 緊急停止 */
   DELEGATION_EMERGENCY_STOP: 'delegation.emergency.stop',
+
+  /** 告警觸發（監控→告警閉環；由觀測器發布，SSE 即時可見，不回灌觀測計數） */
+  DELEGATION_ALERT_RAISED: 'delegation.alert.raised',
 } as const;
 
 /**
@@ -465,4 +468,7 @@ export const DelegationTopics = {
   
   /** 回報管理 */
   REPORTING: 'delegation.reporting',
+
+  /** 告警 */
+  ALERT: 'delegation.alert',
 } as const;
