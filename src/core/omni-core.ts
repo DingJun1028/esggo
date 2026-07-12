@@ -388,7 +388,7 @@ export class OmniCore {
       console.log(`[OmniCore] 📊 VPS 結果: ${(event.payload as Record<string, unknown>)?.status}`);
     });
 
-    this._omniBus.subscribe("vps.state", async (event) => {
+    this._omniBus.subscribe("vps.state", async (_event) => {
       console.log(`[OmniCore] 📡 VPS 狀態更新`);
     });
 

@@ -269,7 +269,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       return [];
     }
     // Transform each prediction into IBusEvent objects.
-    const events: IBusEvent[] = resultArray.map((p, idx) =>
+    const events: IBusEvent[] = resultArray.map((p, _idx) =>
       makeCore<IBusEvent>({
         uuid: crypto.randomUUID(),
         version: '1.0.0',

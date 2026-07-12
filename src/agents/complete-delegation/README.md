@@ -187,6 +187,15 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 // ... 使用完畢 unsub();
 ```
 
+**指標觀測器（內建監控/分析消費者）**：直接取得單例即可獲得全量聚合快照（首次呼叫即訂閱總線）：
+```ts
+import { getDelegationMetrics } from './metrics';
+const { total, byType, activeDelegations, lastSeenAt } = getDelegationMetrics().getSnapshot();
+// per-delegation：
+const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
+```
+亦可直接 `GET /api/delegation/metrics[?delegationId=]`（全球聚合僅計數；單一 delegation 需 `monitor`/`full` 權限）。
+
 ### POST `/api/delegation/events` — 雙向回寫 (client → bus)
 ```jsonc
 // body
@@ -240,16 +249,20 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 - [x] **全量留存（審計 + 事件同一份 JSONL）**：審計條目與委派事件合併寫入統一日誌 `createDelegationJournal`（append-only JSONL，預設 `.audit/delegation-journal.jsonl`，可經 `DELEGATION_JOURNAL_PATH` 覆寫，亦相容舊 `AUDIT_SINK_PATH` / `EVENT_SINK_PATH`），以 `kind` 區分、共用單調序號 `id` 空間，實現不抽樣、不截斷的全量留存；`getFullAuditTrail(delegationId?)` / `getFullEventTrail(delegationId?, sinceId?)` 分別讀回。設 `AUDIT_FULL_VOLUME=false` 停用審計持久化（退回環形緩衝）。
 - [x] **全量事件留存 + SSE 回放 + 斷點續傳**：`publishDelegationEvent` 發布時經統一日誌持久化全量事件並分配 `id`；SSE 端點連線時先以 `REPLAY` 框（帶 `id`）回放該 `delegationId` 歷史，再以 `REPLAY_DONE` 收尾後續推即時事件（實現「進頁面即見完整脈絡」）。客戶端 `EventSource` 重連自帶 `Last-Event-ID`，服務端據 `sinceId` 僅回放其後事件（斷點續傳）。
 - [x] **RWD 事件觀測 UI**：新增 `/delegation/events` 響應式頁面 + `DelegationEventStream` client 元件（EventSource → SSE 端點），手機 / 桌面自適應呈現即時事件（含 `hashLock` 溯源、連線狀態、斷線自動重連），對齊「RWD / 全端 / 雙向同步」。
+- [x] **RWD UI 雙向同步閉環 + 斷點續傳**：`DelegationEventStream` 新增回寫輸入框，經 `POST /api/delegation/events`（型別 `delegation.client.sync`）將 client 訊號寫回同一 `omni-agent-bus`，事件經 SSE 迴路返回本面板並標記「本端傳送」，形成 client↔server 雙向閉環；另將最後收到的 SSE `id` 存於 `localStorage`，全新連線（頁面重新整理）時以 `?sinceId=` 查詢參數續傳（服務端 `GET /stream` 已支援 `?sinceId=` 作為 `Last-Event-ID` 表頭之備援），實現「全量不漏」的斷點續傳。
+- [x] **委派事件指標觀測器（監控/分析消費者）**：`metrics.ts` 的 `getDelegationMetrics()` 單例訂閱同一 `omni-agent-bus`（`external-forward`），對所有委派生命週期事件進行**全量聚合**（不抽樣、不截斷，非委派事件一律忽略），提供全域（`total` / `byType` / `activeDelegations` / `lastSeenAt`）與 per-delegation（`getDelegationSnapshot`）指標快照，落實 summary 待辦「將委派事件接入實際監控/分析消費者」。對齊平台不變量：全域（與其他子系統共用同一總線，無孤島）、全量（觀測所有事件）、雙向同步（server 推送與 client 經 `POST /api/delegation/events` 回寫進入同一總線，觀測器一視同仁聚合）。
+- [x] **指標 API**：`GET /api/delegation/metrics[?delegationId=]` 暴露觀測器聚合；全球聚合（`?delegationId` 省略）僅回傳計數、不含 delegation 識別碼（最小暴露）；單一 delegation 須具備 `monitor` / `full` 權限（與 audit / stream 端點一致）。
 
 ---
 
 ## 8. 測試
 
-覆蓋套件（位於 `tests/`，全測試 327 passed）：
+覆蓋套件（位於 `tests/`，全測試 345 passed）：
 - `complete-delegation.test.ts` — manager / agent / 決策引擎
-- `api-routes.test.ts` — 上述 5 個 REST 端點
+- `api-routes.test.ts` — 上述 REST 端點（audit / stream / events / metrics）
+- `delegation-metrics.test.ts` — 指標觀測器（監控/分析消費者）單元 + 路由
 - `integration.test.ts` — 端到端流程
 - `performance-optimizer.test.ts` — 連線池 / 效能
 - `esg-analysis.test.ts` — 評分（D5）
 
-執行：`npx vitest run tests/complete-delegation.test.ts tests/api-routes.test.ts tests/integration.test.ts tests/performance-optimizer.test.ts tests/esg-analysis.test.ts`
+執行：`npx vitest run tests/complete-delegation.test.ts tests/api-routes.test.ts tests/delegation-metrics.test.ts tests/integration.test.ts tests/performance-optimizer.test.ts tests/esg-analysis.test.ts`

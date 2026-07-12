@@ -93,7 +93,7 @@ export class SubscriptionEngine {
   matchEvent(event: ChangeEvent): MatchResult[] {
     const results: MatchResult[] = [];
 
-    this.subscribers.forEach((subscriber, subId) => {
+    this.subscribers.forEach((subscriber, _subId) => {
       subscriber.subscriptions.forEach(subscription => {
         if (!subscription.active) return;
 

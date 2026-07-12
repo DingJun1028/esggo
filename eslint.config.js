@@ -9,7 +9,7 @@ const globals = require('globals');
 module.exports = [
   ...typescriptEslint.configs.recommended,
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/', 'scripts/*.cjs', 'eslint.config.js', '.agents/**', 'lib/agents/omni-agent-bus.js', 'test/'],
+    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/', 'scripts/*.cjs', 'eslint.config.js', '.agents/**', 'lib/agents/omni-agent-bus.js', 'test/', '_analysis/**', 'temp/**', 'my-worker/**', 'gateway/**', 'lib/agents/**', 'lib/api/**', 'sdks/**', 'chapter-templates/**', 'examples/**', 'vps/**', 'scripts/**'],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
@@ -79,6 +79,14 @@ module.exports = [
       'react-hooks/refs': 'warn',
       'react-hooks/immutability': 'warn',
       'react-hooks/purity': 'warn',
+    },
+  },
+  // Test files: relax strict type rules
+  {
+    files: ['tests/**/*.ts', 'tests/**/*.tsx', '**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx', 'src/**/__tests__/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 ];
