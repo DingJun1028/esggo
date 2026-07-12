@@ -43,6 +43,18 @@ try {
   }
 } catch { console.warn('[OmniGateway] No .env file — using process env'); }
 
+// Strip Gemma 4 thinking channel (<|channel>thought ... <channel|>) so only the
+// final answer is returned to the client. Gemma 4 emits its reasoning in a
+// `<|channel>thought` block terminated by `<channel|>`; the real answer follows.
+function stripGemma4Thinking(raw) {
+  if (typeof raw !== 'string') return raw;
+  const START = '<|channel>thought';
+  const END = '<channel|>';
+  if (!raw.includes(START)) return raw;
+  const lastEnd = raw.lastIndexOf(END);
+  return lastEnd === -1 ? raw.slice(raw.indexOf(START) + START.length) : raw.slice(lastEnd + END.length);
+}
+
 // ── Config ────────────────────────────────────────────────────
 const PORT           = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -265,7 +277,8 @@ async function dispatchAI(task, skillId) {
       });
       if (response.ok) {
         const data = await response.json();
-        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision', taskType };
+        const rawLocal = data.response || data.content;
+        return { content: stripGemma4Thinking(rawLocal), provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision', taskType };
       }
     } catch (e) {
       console.warn('[OmniGateway] Local server fallback:', e.message);
