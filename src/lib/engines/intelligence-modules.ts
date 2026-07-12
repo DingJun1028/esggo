@@ -325,7 +325,7 @@ export function assessApplicability(
  * 自動產生 90 天合規待辦
  */
 export function generateComplianceTasks(milestone: PolicyMilestone, department: string): ComplianceTask[] {
-  const today = new Date();
+  const _today = new Date();
   const due = new Date(milestone.date);
 
   return [
