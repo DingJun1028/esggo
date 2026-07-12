@@ -16,7 +16,9 @@
  */
 
 import { enhancedOmniBus } from '../../lib/omni-agent-bus';
-import { DelegationEventNames } from '../../types/complete-delegation';
+import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
+import { publishDelegationEvent } from './events';
+import { createAlertNotifier, type AlertNotifier } from './alert-notifier';
 
 /** 委派事件類型集合（含 AUTHORIZATION / DECISION / REPORTING / EXECUTION 主題） */
 const DELEGATION_EVENT_TYPES = new Set(Object.values(DelegationEventNames));
@@ -81,6 +83,26 @@ class DelegationMetrics {
   private _thresholds: DelegationThresholds = { delegationEventCount: 1000 };
   private readonly _startedAt = Date.now();
   private _unsub: (() => void) | null = null;
+  /** 外部告警通知器（預設由環境變數決定是否啟用；test 環境 no-op） */
+  private _notifier: AlertNotifier = createAlertNotifier();
+  /** 告警事件發布器（預設發布 delegation.alert.raised 至 bus，SSE 即時可見） */
+  private _alertPublisher: (alert: DelegationAlert) => void =
+    process.env.NODE_ENV === 'test'
+      ? () => {}
+      : (alert) => {
+          void publishDelegationEvent(
+            DelegationEventNames.DELEGATION_ALERT_RAISED,
+            DelegationTopics.ALERT,
+            {
+              id: alert.id,
+              level: alert.level,
+              type: alert.type,
+              delegationId: alert.delegationId,
+              message: alert.message,
+            },
+            'metrics-observer'
+          ).catch(() => {});
+        };
 
   constructor() {
     this.ensureSubscribed();
@@ -99,6 +121,16 @@ class DelegationMetrics {
     this._thresholds = { ...this._thresholds, ...t };
   }
 
+  /** 覆寫外部通知器（測試 / 運維注入；預設由環境變數啟用） */
+  setNotifier(n: AlertNotifier): void {
+    this._notifier = n;
+  }
+
+  /** 覆寫告警事件發布器（測試注入，避免觸發真實 bus/journal 副作用） */
+  setAlertPublisher(fn: (alert: DelegationAlert) => void): void {
+    this._alertPublisher = fn;
+  }
+
   /** 解析並聚合一筆總線事件 */
   private ingest(ev: Record<string, unknown>): void {
     // 真實事件（secureForward）封裝為 { event, payload: IBusEvent, ts }，
@@ -112,6 +144,8 @@ class DelegationMetrics {
 
     const type = delegationPayload.type;
     if (typeof type !== 'string' || !DELEGATION_EVENT_TYPES.has(type)) return;
+    // 觀測器自身發布的告警事件不回灌計數（避免 self-loop）
+    if (type === DelegationEventNames.DELEGATION_ALERT_RAISED) return;
 
     const delegationId =
       typeof delegationPayload.delegationId === 'string'
@@ -151,18 +185,21 @@ class DelegationMetrics {
   private evaluateAlerts(type: string, delegationId: string, ts: number): void {
     const push = (level: AlertLevel, message: string): void => {
       this._alertSeq++;
-      this._alerts.push({
+      const alert: DelegationAlert = {
         id: `al-${this._alertSeq}`,
         level,
         type,
         delegationId,
         ts,
         message,
-      });
+      };
+      this._alerts.push(alert);
       if (delegationId) {
         const metric = this._byDelegation.get(delegationId);
-        if (metric) metric.alerts.push(this._alerts[this._alerts.length - 1]);
+        if (metric) metric.alerts.push(alert);
       }
+      // 監控→告警→處置 閉環：外部通知 + SSE 即時可見（fire-and-forget）
+      this.dispatchAlert(alert);
     };
 
     if (type === 'delegation.emergency.stop') {
@@ -178,6 +215,12 @@ class DelegationMetrics {
         );
       }
     }
+  }
+
+  /** 告警觸發時的閉環分發：外部通知 + 發布為 bus 事件（SSE 即時可見） */
+  private dispatchAlert(alert: DelegationAlert): void {
+    void this._notifier.notify(alert);
+    this._alertPublisher(alert);
   }
 
   /** 取得全域指標快照（不可變副本） */
