@@ -22,7 +22,7 @@ import { WebSocketServer } from 'ws';
 import { createServer } from 'http';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createHash } from 'crypto';
-import { readFileSync } from 'fs';
+import { readFileSync, appendFileSync, existsSync, statSync, renameSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { inferTaskType, routeModel, formatRoutingResult } from './model-router.mjs';
@@ -53,6 +53,29 @@ const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY;
 if (!GATEWAY_KEY) {
   console.error('[OmniGateway] CRITICAL: GATEWAY_API_KEY or GATEWAY_KEY environment variable is required. Starting without it would compromise security. Exiting.');
   process.exit(1);
+}
+
+// ── Event Sink (統一 JSONL + SSE 斷點續傳 Last-Event-ID) ──
+// 所有 SSE 事件同時寫入單一有序 JSONL, 既作審計 sink 也作重播源。
+const EVENT_LOG = process.env.EVENT_LOG_PATH || join(__dirname, 'events.jsonl');
+const EVENT_LOG_MAX = Number(process.env.EVENT_LOG_MAX_BYTES || 10 * 1024 * 1024);
+let EVENT_SEQ = 0;
+function appendEvent(type, payload) {
+  EVENT_SEQ += 1;
+  const rec = { id: EVENT_SEQ, ts: Date.now(), type, payload };
+  try {
+    if (existsSync(EVENT_LOG) && statSync(EVENT_LOG).size > EVENT_LOG_MAX) {
+      try { renameSync(EVENT_LOG, `${EVENT_LOG}.${Date.now()}.bak`); } catch {}
+    }
+    appendFileSync(EVENT_LOG, JSON.stringify(rec) + '\n');
+  } catch { /* sink 失敗不影響主流程 */ }
+  return rec.id;
+}
+function replayEventsSince(lastId) {
+  if (lastId <= 0 || !existsSync(EVENT_LOG)) return [];
+  return readFileSync(EVENT_LOG, 'utf8').trim().split('\n')
+    .map(l => { try { return JSON.parse(l); } catch { return null; } })
+    .filter(r => r && r.id > lastId);
 }
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
@@ -567,7 +590,18 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
-  const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  // 斷點續傳: 客戶端重連帶 Last-Event-ID, 從統一 JSONL sink 重播之後的事件
+  const lastId = Number(req.headers['last-event-id'] || req.query.lastEventId || 0);
+  const replay = replayEventsSince(lastId);
+  for (const r of replay) {
+    res.write(`id: ${r.id}\nevent: ${r.type}\ndata: ${JSON.stringify(r.payload)}\n\n`);
+  }
+
+  // send() 帶單調 id 且寫入統一 sink (審計 + 重播同源)
+  const send = (event, data) => {
+    const id = appendEvent(event, data);
+    res.write(`id: ${id}\nevent: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  };
 
   send('status', { stage: 'DISPATCHING', model: 'auto', ts: Date.now() });
 
