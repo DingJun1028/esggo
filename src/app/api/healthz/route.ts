@@ -99,9 +99,24 @@ export async function GET(request: NextRequest) {
       checks.modelDiscovery = 'unhealthy';
     }
 
-    // 判斷整體健康狀態
-    const allHealthy = Object.values(checks).every(c => c === 'healthy');
-    const hasUnhealthy = Object.values(checks).some(c => c === 'unhealthy');
+    // 委派系統健康檢查（全量日誌 + 監控消費者）
+    let delegationHealth: Record<string, unknown> | null = null;
+    try {
+      const { checkDelegationHealth } = await import('../../../../agents/complete-delegation/health');
+      delegationHealth = await checkDelegationHealth();
+    } catch {
+      delegationHealth = { status: 'unavailable', message: 'Delegation health check skipped' };
+    }
+
+    // 判斷整體健康狀態（含委派系統）
+    const allChecks = [...Object.values(checks)];
+    const delegationStatus = delegationHealth && typeof delegationHealth === 'object'
+      ? (delegationHealth as { status?: string }).status
+      : 'healthy';
+    allChecks.push(delegationStatus);
+
+    const allHealthy = allChecks.every(c => c === 'healthy');
+    const hasUnhealthy = allChecks.some(c => c === 'unhealthy');
 
     const overallStatus = hasUnhealthy ? 'unhealthy' : allHealthy ? 'healthy' : 'degraded';
     const statusCode = overallStatus === 'healthy' ? 200 : overallStatus === 'degraded' ? 200 : 503;
@@ -112,6 +127,7 @@ export async function GET(request: NextRequest) {
       service: 'smart-ai-router',
       version: '2.0.0',
       checks,
+      delegation: delegationHealth,
       uptime: process.uptime(),
       memory: process.memoryUsage(),
       environment: process.env.NODE_ENV || 'development'
