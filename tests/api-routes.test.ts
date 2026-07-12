@@ -625,6 +625,8 @@ describe('GET /api/delegation/events/stream', () => {
     }
     expect(live).toContain('delegation.decision.made');
     expect(live).toContain(delegationId);
+    // 即時幀應帶 source:'client'（本端回寫識別，供 RWD UI 標記「本端傳送」）
+    expect(live).toContain('"source":"client"');
 
     ac.abort();
     await reader.cancel().catch(() => {});
