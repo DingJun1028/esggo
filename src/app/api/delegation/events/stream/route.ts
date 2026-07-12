@@ -54,6 +54,11 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // 斷點續傳：客戶端（EventSource）重連時帶回 Last-Event-ID，僅回放其後的事件
+  const lastIdHeader = request.headers.get('Last-Event-ID');
+  const sinceId =
+    lastIdHeader && /^\d+$/.test(lastIdHeader) ? Number(lastIdHeader) : undefined;
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
@@ -62,10 +67,12 @@ export async function GET(request: NextRequest) {
       let cleanup: (() => void) | null = null;
       let heartbeat: ReturnType<typeof setInterval> | null = null;
 
-      const send = (data: unknown) => {
+      // send(data, id?)：可帶 SSE id 欄位，供客戶端 Last-Event-ID 斷點續傳
+      const send = (data: unknown, id?: number) => {
         if (closed) return;
+        const prefix = id != null ? `id: ${id}\n` : '';
         try {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+          controller.enqueue(encoder.encode(`${prefix}data: ${JSON.stringify(data)}\n\n`));
         } catch {
           /* controller 已關閉 */
         }
@@ -73,18 +80,21 @@ export async function GET(request: NextRequest) {
 
       send({ type: 'CONNECTED', delegationId, ts: Date.now() });
 
-      // 全量回放：連線先送歷史事件（catch-up），再續推即時（對齊「全量」+ RWD）
+      // 全量回放：連線先送歷史事件（catch-up），可指定 sinceId 續傳（對齊「全量」+ RWD）
       try {
-        const trail = await manager.getFullEventTrail(delegationId);
+        const trail = await manager.getFullEventTrail(delegationId, sinceId);
         for (const rec of trail) {
-          send({
-            type: 'REPLAY',
-            delegationId: rec.delegationId,
-            hashLock: rec.hashLock,
-            ts: rec.ts,
-            source: rec.source,
-            payload: rec.payload,
-          });
+          send(
+            {
+              type: 'REPLAY',
+              delegationId: rec.delegationId,
+              hashLock: rec.hashLock,
+              ts: rec.ts,
+              source: rec.source,
+              payload: rec.payload,
+            },
+            rec.id
+          );
         }
         send({ type: 'REPLAY_DONE', delegationId, ts: Date.now(), count: trail.length });
       } catch {
@@ -108,6 +118,9 @@ export async function GET(request: NextRequest) {
               : typeof e.hashLock === 'string'
                 ? (e.hashLock as string)
                 : undefined;
+          // 斷點續傳游標：真實事件由 publishDelegationEvent 附 journalId 於 IBusEvent 上
+          const frameId =
+            raw && typeof raw.journalId === 'number' ? (raw.journalId as number) : undefined;
           const ts =
             (typeof e.ts === 'number' ? e.ts : undefined) ??
             (raw && typeof raw.ts === 'number' ? (raw.ts as number) : undefined);
@@ -116,13 +129,16 @@ export async function GET(request: NextRequest) {
             | undefined;
           if (!payload || payload.delegationId !== delegationId) return;
           if (!payload.type || !DELEGATION_EVENT_TYPES.has(payload.type)) return;
-          send({
-            type: payload.type,
-            delegationId: payload.delegationId,
-            hashLock,
-            ts,
-            payload,
-          });
+          send(
+            {
+              type: payload.type,
+              delegationId: payload.delegationId,
+              hashLock,
+              ts,
+              payload,
+            },
+            frameId
+          );
         }
       );
 

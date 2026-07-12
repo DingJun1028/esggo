@@ -14,9 +14,9 @@ import {
   getDelegationManager,
 } from '../src/agents/complete-delegation';
 import {
-  createFileEventSink,
-  setDefaultEventSink,
-} from '../src/agents/complete-delegation/event-sink';
+  createDelegationJournal,
+  setDefaultJournal,
+} from '../src/agents/complete-delegation/journal';
 import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
 import { GET as auditTrailGET } from '../src/app/api/delegation/audit/route';
 import { GET as eventStreamGET } from '../src/app/api/delegation/events/stream/route';
@@ -341,6 +341,7 @@ describe('GET /api/delegation/events/stream', () => {
     const ac = new AbortController();
     const req = {
       url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+      headers: new Map(),
       signal: ac.signal,
     } as unknown as NextRequest;
 
@@ -383,9 +384,9 @@ describe('GET /api/delegation/events/stream', () => {
     await reader.cancel().catch(() => {});
   });
 
-  it('replays full event trail on connect (REPLAY frames)', async () => {
+  it('replays full event trail on connect (REPLAY frames with id)', async () => {
     const tmpPath = join(tmpdir(), `esggo-stream-events-${randomUUID()}.jsonl`);
-    setDefaultEventSink(createFileEventSink(tmpPath));
+    setDefaultJournal(createDelegationJournal(tmpPath));
     try {
       const agent = await createCompleteDelegationAgent({
         principalId: 'replay-user-001',
@@ -404,6 +405,7 @@ describe('GET /api/delegation/events/stream', () => {
       const ac = new AbortController();
       const req = {
         url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+        headers: new Map(),
         signal: ac.signal,
       } as unknown as NextRequest;
 
@@ -422,13 +424,84 @@ describe('GET /api/delegation/events/stream', () => {
       }
       expect(text).toContain('CONNECTED');
       expect(text).toContain('REPLAY');
+      // REPLAY 框帶 SSE id 欄位（斷點續傳游標）
+      expect(text).toMatch(/id: \d+\ndata: \{"type":"REPLAY"/);
       expect(text).toContain(delegationId);
       expect(text).toContain('REPLAY_DONE');
 
       ac.abort();
       await reader.cancel().catch(() => {});
     } finally {
-      setDefaultEventSink(null);
+      setDefaultJournal(null);
+      try {
+        unlinkSync(tmpPath);
+      } catch {
+        /* ignore */
+      }
+    }
+  });
+
+  it('resumes from Last-Event-ID (only replays newer events)', async () => {
+    const tmpPath = join(tmpdir(), `esggo-stream-resume-${randomUUID()}.jsonl`);
+    setDefaultJournal(createDelegationJournal(tmpPath));
+    try {
+      const agent = await createCompleteDelegationAgent({
+        principalId: 'resume-user-001',
+        permissions: ['monitor', 'full'],
+      });
+      const delegationId = agent.delegationScope.delegationId;
+
+      // 兩筆事件：created（較早）與 decision.made（較晚）
+      await delegationEvents.publishDelegationEvent(
+        'delegation.created',
+        'delegation.authorization',
+        { delegationId, note: 'first' },
+        'test'
+      );
+      await delegationEvents.publishDelegationEvent(
+        'delegation.decision.made',
+        'delegation.decision',
+        { delegationId, note: 'second' },
+        'test'
+      );
+
+      // 讀出日誌，取得首筆測試事件（note:'first'）的 id 作為續傳游標
+      const journal = createDelegationJournal(tmpPath);
+      const recs = journal
+        .readAll()
+        .filter((r) => r.kind === 'event' && r.delegationId === delegationId);
+      const firstId = recs.find((r) => (r.payload as { note?: string })?.note === 'first')!.id;
+
+      // 以 Last-Event-ID = firstId 重連，應僅回放其後的事件（note:'second'）
+      const ac = new AbortController();
+      const req = {
+        url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+        headers: new Map([['Last-Event-ID', String(firstId)]]),
+        signal: ac.signal,
+      } as unknown as NextRequest;
+
+      const res = await eventStreamGET(req);
+      expect(res.status).toBe(200);
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+
+      let text = '';
+      for (let i = 0; i < 8; i++) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        text += decoder.decode(value);
+        if (text.includes('REPLAY_DONE')) break;
+      }
+      expect(text).toContain('REPLAY_DONE');
+      expect(text).toContain('delegation.decision.made');
+      expect(text).toContain('"note":"second"');
+      // 首筆（note:'first'，id == firstId）應被排除
+      expect(text).not.toContain('"note":"first"');
+
+      ac.abort();
+      await reader.cancel().catch(() => {});
+    } finally {
+      setDefaultJournal(null);
       try {
         unlinkSync(tmpPath);
       } catch {
@@ -447,6 +520,7 @@ describe('GET /api/delegation/events/stream', () => {
     const ac = new AbortController();
     const req = {
       url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+      headers: new Map(),
       signal: ac.signal,
     } as unknown as NextRequest;
 
