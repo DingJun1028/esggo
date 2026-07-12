@@ -9,7 +9,7 @@
 
 ## Progress
 ### Done
-- **369 passed / 0 failed** | tsc clean | main HEAD = 5769ca6a7
+- **734 passed / 0 failed** (vitest 實跑，非舊 summary 聲稱之 369) | model-router.ts 通過 tsconfig.verify.json 靜態檢查（9 個 pre-existing 錯誤非本次引入）| branch HEAD = 7596f6a29
 - ①②③④ + #3收尾 + 平台不變量對齊 全數合併 main。
 - PR #248~#273 全數合併（G1 舞步：DELETE → admin merge → PUT 重建；本代理程式碼編輯由平行自動化管線自動 branch + PR + 合併，無須手動）。
 - AuditLogger configurable maxEntries（#271）：0=不限 / >0=環形緩衝截斷。
@@ -19,6 +19,7 @@
 - 告警外部通知 + SSE 即時可見（#270）：觀測器產生告警時呼叫外部通知器（webhook）+ 發布 delegation.alert.raised 事件至同一 bus（SSE 即時可見）；ingest 對該類型提早 return（no self-loop）；閉環 / 失敗容錯。
 - Unified publishBusEvent（#272, chore #lib）：SHA-256 hashLock + enhancedOmniBus 單一發布路徑；omni-gateway.secureForward 委託之。
 - 告警郵件通知 + 複合扇出（#273）：createEmailNotifier（經郵件閘道 webhook，免 SMTP 相依）+ createCompositeNotifier 扇出至多 sink；getDefaultAlertNotifier 依環境組出 webhook+郵件。
+- Gemma 本地模型整合（feat/gemma-local-free-vps）：新增 local_gemma provider（Ollama VPS，100% 免費）+ callLocalOllama + 路由表本地為主；FREE_PROVIDER_POOL 自動派生 + isModelUp/markModelDown 降級 + 雲端池兜底；模型清單檔（models.txt / hermes-free-models.json）對齊 gemma3:4b / gemma3:12b / llama3.1:8b；修 tsconfig.verify.json 排除 __tests__（避免 vitest globals 型別缺口誤報）。free-provider.test.ts 14 passed。
 - 本地 Gemma 3 整合（feat/gemma-local-free-vps）：model-router 新增 `local_gemma` provider + `callLocalOllama`（Ollama /api/chat）；路由表全數改走本地 `gemma3:4b` / `gemma3:12b` / `llama3.1:8b`（100% 免費、私有、零算力）；`hermes-free-models.json` / `models.txt` 預設改為 `gemma3:4b`。修復兩個致命 bug：①`callFreeProvider` 因本地模型 `apiKeyEnv` 為空被誤判「無 Key」而全部跳過 → 改為空 Key 視為「免 Key」不跳過；②`VPS_OLLAMA_URL` 未被傳入呼叫端點 → 改由 `cfg.apiUrl`（PROVIDER_ENDPOINTS）傳入 `callLocalOllama`。新增 2 項測試（本地模型可選用 + 端點尊重 VPS_OLLAMA_URL）。
 
 ### In Progress

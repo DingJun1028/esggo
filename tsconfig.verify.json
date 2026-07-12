@@ -23,6 +23,7 @@
     "app/**/*.tsx",
     "app/**",
     "src/**/test-*.ts",
-    "src/**/example-*.ts"
+    "src/**/example-*.ts",
+    "src/**/__tests__/**"
   ]
 }
