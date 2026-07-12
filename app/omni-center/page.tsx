@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { OmniNoteCRUD, type NoteData } from './omni-note-crud';
 import { OmniOneChat } from './omni-one-chat';
 import { FiveTRadar } from './five-t-radar';
@@ -138,7 +138,7 @@ export default function OmniCenterPage() {
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const { isReady, status } = useAgnesApi();
+  const { isReady, status: _status } = useAgnesApi();
 
   useEffect(() => {
     setIsDarkMode(document.documentElement.classList.contains('dark'));

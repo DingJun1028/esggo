@@ -60,7 +60,7 @@ export async function PUT(
     if (category !== undefined) updateInput.category = category;
     if (summary !== undefined) updateInput.summary = summary;
 
-    const note = await ncb.updateNote(id, updateInput);
+    const _note = await ncb.updateNote(id, updateInput);
 
     // 如果有標籤，更新關聯
     if (tags) {

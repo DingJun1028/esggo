@@ -12,7 +12,7 @@ interface DataTableProps {
 export const DataTable: React.FC<DataTableProps> = ({
   columns,
   rows,
-  sortable = true
+  sortable: _sortable = true
 }) => {
   return (
     <div className="overflow-x-auto">

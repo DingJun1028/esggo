@@ -157,7 +157,7 @@ export default function OmniBasePage() {
   const [plugins, setPlugins] = useState<PluginInfo[]>([]);
   const [health, setHealth] = useState<HealthInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actioning, setActioning] = useState<string | null>(null);
+  const [_actioning, setActioning] = useState<string | null>(null);
 
   const fetchPlugins = useCallback(async () => {
     try {

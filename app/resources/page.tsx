@@ -119,30 +119,6 @@ function Card({
   );
 }
 
-function MetricRow({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string | number;
-  sub?: string;
-}) {
-  return (
-    <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
-      <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
-      <div className="text-right">
-        <span className="text-sm font-mono font-semibold text-gray-800 dark:text-gray-200">
-          {value}
-        </span>
-        {sub && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 ml-1">{sub}</span>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function Badge({
   children,
   color = 'teal',

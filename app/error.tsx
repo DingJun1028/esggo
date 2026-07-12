@@ -4,6 +4,8 @@
  * Next.js error.tsx — catches runtime errors for the entire app.
  * Must be a Client Component.
  */
+import Link from 'next/link';
+
 export default function GlobalError({
   error,
   reset,
@@ -43,12 +45,12 @@ export default function GlobalError({
         >
           🔄 重新嘗試
         </button>
-        <a
+        <Link
           href="/"
           className="px-6 py-3 bg-secondary text-textPrimary border border-borderColor rounded-xl font-semibold text-sm no-underline hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         >
           🏠 返回首頁
-        </a>
+        </Link>
       </div>
     </div>
   );
