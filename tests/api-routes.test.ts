@@ -436,6 +436,59 @@ describe('GET /api/delegation/events/stream', () => {
       }
     }
   });
+
+  it('end-to-end: client POST event is received by SSE subscriber (雙向同步閉環)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'bi-loop-001',
+      permissions: ['monitor', 'execute', 'full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const ac = new AbortController();
+    const req = {
+      url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+      signal: ac.signal,
+    } as unknown as NextRequest;
+
+    const res = await eventStreamGET(req);
+    expect(res.status).toBe(200);
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+
+    // 先跨越連線回放階段（REPLAY_DONE）
+    let drain = '';
+    for (let i = 0; i < 8; i++) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      drain += decoder.decode(value);
+      if (drain.includes('REPLAY_DONE')) break;
+    }
+
+    // client 經 POST 回寫事件至同一 bus
+    const postRes = await delegationEventsPOST({
+      json: async () => ({
+        delegationId,
+        type: 'delegation.decision.made',
+        topic: 'delegation.decision',
+        payload: { decisionId: 'dec-loop', note: 'bidirectional' },
+      }),
+    } as unknown as NextRequest);
+    expect(postRes.status).toBe(200);
+
+    // SSE 訂閱者應即時收到該事件（證明雙向同步閉環）
+    let live = '';
+    for (let i = 0; i < 6; i++) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      live += decoder.decode(value);
+      if (live.includes('delegation.decision.made') && live.includes(delegationId)) break;
+    }
+    expect(live).toContain('delegation.decision.made');
+    expect(live).toContain(delegationId);
+
+    ac.abort();
+    await reader.cancel().catch(() => {});
+  }, 15000);
 });
 
 // ==========================================

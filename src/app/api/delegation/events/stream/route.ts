@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
     async start(controller) {
       let closed = false;
       let cleanup: (() => void) | null = null;
+      let heartbeat: ReturnType<typeof setInterval> | null = null;
 
       const send = (data: unknown) => {
         if (closed) return;
@@ -92,8 +93,25 @@ export async function GET(request: NextRequest) {
 
       const unsub = enhancedOmniBus.subscribe(
         'external-forward',
-        (ev: { payload?: unknown; hashLock?: string; ts?: number }) => {
-          const payload = ev?.payload as
+        (ev: unknown) => {
+          const e = ev as Record<string, unknown>;
+          const raw = e.payload as Record<string, unknown> | undefined;
+          // 真實事件（secureForward）封裝為 { event, payload: IBusEvent, ts }，
+          // 委派 payload 位於 raw.payload；手動發布（測試）則 raw 即委派 payload。
+          const delegationPayload =
+            raw && typeof raw === 'object' && raw.payload && typeof raw.payload === 'object'
+              ? (raw.payload as Record<string, unknown>)
+              : raw;
+          const hashLock =
+            raw && typeof raw.hashLock === 'string'
+              ? (raw.hashLock as string)
+              : typeof e.hashLock === 'string'
+                ? (e.hashLock as string)
+                : undefined;
+          const ts =
+            (typeof e.ts === 'number' ? e.ts : undefined) ??
+            (raw && typeof raw.ts === 'number' ? (raw.ts as number) : undefined);
+          const payload = delegationPayload as
             | { type?: string; delegationId?: string }
             | undefined;
           if (!payload || payload.delegationId !== delegationId) return;
@@ -101,16 +119,27 @@ export async function GET(request: NextRequest) {
           send({
             type: payload.type,
             delegationId: payload.delegationId,
-            hashLock: ev.hashLock,
-            ts: ev.ts,
+            hashLock,
+            ts,
             payload,
           });
         }
       );
 
+      // 心跳保活：定期送 SSE 註解框，避免中間代理因閒置關閉連線（RWD / 全端穩健）
+      heartbeat = setInterval(() => {
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(': heartbeat\n\n'));
+        } catch {
+          /* controller 已關閉 */
+        }
+      }, 25000);
+
       cleanup = () => {
         if (closed) return;
         closed = true;
+        if (heartbeat) clearInterval(heartbeat);
         unsub();
         try {
           controller.close();
