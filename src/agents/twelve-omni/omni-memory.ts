@@ -11,7 +11,6 @@ import {
   IOmniMemory,
   MemoryId,
   MemoryEntry,
-  MemoryMetadata,
 } from '../../types/twelve-omni';
 
 /**
@@ -119,7 +118,7 @@ export class OmniMemory implements IOmniMemory {
   /**
    * 合併記憶體
    */
-  async merge(ids: MemoryId[], label: string): Promise<MemoryId> {
+  async merge(ids: MemoryId[], _label: string): Promise<MemoryId> {
     const entries = ids
       .map((id) => this._entries.get(id))
       .filter((e): e is MemoryEntry => e !== undefined);

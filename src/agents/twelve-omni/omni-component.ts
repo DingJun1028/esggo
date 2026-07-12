@@ -11,8 +11,6 @@ import {
   IOmniComponent,
   ComponentId,
   ComponentInfo,
-  ComponentType,
-  ComponentStatus,
   DependencyGraph,
   ComponentVersion,
   ComponentHealth,

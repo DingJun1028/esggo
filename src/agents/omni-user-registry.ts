@@ -15,8 +15,8 @@
  * 5. 記憶鞏固：定期將短期記憶轉化為長期知識
  */
 
-import { randomUUID, createHash } from 'crypto';
-import { IOmniMemory, MemoryEntry, MemoryId } from '../types/twelve-omni';
+import { randomUUID } from 'crypto';
+import { IOmniMemory, MemoryEntry } from '../types/twelve-omni';
 import { getOmniMemory } from './twelve-omni/omni-memory';
 
 // ==========================================

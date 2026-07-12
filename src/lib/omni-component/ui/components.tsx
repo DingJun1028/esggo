@@ -1,4 +1,4 @@
-import type { ComponentConfig, ComponentSize, ComponentVariant } from '../index';
+import type { ComponentConfig } from '../index';
 import { cn, variantClasses, sizeClasses } from './utils';
 
 export interface ButtonProps extends ComponentConfig {

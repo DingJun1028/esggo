@@ -413,7 +413,7 @@ export class OmniSoul implements IOmniSoul {
     return action.params?.source ? 0.9 : 0.5;
   }
 
-  private _checkGoodnessAlignment(action: { type: string; params: Record<string, unknown> }): number {
+  private _checkGoodnessAlignment(_action: { type: string; params: Record<string, unknown> }): number {
     // 檢查算法是否透明
     return 0.8; // 預設通過
   }
@@ -423,17 +423,17 @@ export class OmniSoul implements IOmniSoul {
     return action.params?.hash ? 0.9 : 0.5;
   }
 
-  private _checkTrackabilityAlignment(action: { type: string; params: Record<string, unknown> }): number {
+  private _checkTrackabilityAlignment(_action: { type: string; params: Record<string, unknown> }): number {
     // 檢查是否可追蹤
     return 0.8; // 預設通過
   }
 
-  private _checkConstitutionAlignment(action: { type: string; params: Record<string, unknown> }): number {
+  private _checkConstitutionAlignment(_action: { type: string; params: Record<string, unknown> }): number {
     // 檢查是否符合憲章
     return 0.85; // 預設通過
   }
 
-  private _checkESGAlignment(action: { type: string; params: Record<string, unknown> }): number {
+  private _checkESGAlignment(_action: { type: string; params: Record<string, unknown> }): number {
     // 檢查 ESG 價值觀對齊
     return 0.8; // 預設通過
   }

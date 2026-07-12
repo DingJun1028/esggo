@@ -5,13 +5,12 @@
 
 import {
   getAnswersByCompany, getCompanyById, getReportOutline,
-  getQuestionsByChapter, getEvidenceGuide, getGRIImpact,
-  TOTAL_COMPANIES, TOTAL_QUESTIONS, TOTAL_ANSWERS,
-  type CompanyProfile, type Answer, type EvidenceGuide, type DashboardMetric, type GRIImpactMapping
+  getEvidenceGuide, getGRIImpact,
+  TOTAL_COMPANIES, TOTAL_QUESTIONS,
+  type Answer, type EvidenceGuide,
 } from '../repositories/sustain-write-answer-database';
-import { V5_CHAPTERS, COMPANIES } from './report-assembly-v5';
+import { V5_CHAPTERS } from './report-assembly-v5';
 import type { V5GeneratedReport, V5ReportChapter } from './report-assembly-v5';
-import type { GenerationProgress } from './report-generator-v5';
 import { fetchEnterpriseData } from './enterprise-data';
 import { OmniSwarmService } from './omni-swarm-service';
 

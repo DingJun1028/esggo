@@ -10,7 +10,6 @@ import { randomUUID } from 'crypto';
 import {
   IOmniEvolution,
   EvolutionEvent,
-  EvolutionType,
   EvolutionFilter,
   FitnessScore,
   FitnessDimensions,

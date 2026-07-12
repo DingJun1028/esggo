@@ -520,7 +520,7 @@ export function buildRadarSnapshot(opts: {
   opts.anomalies.forEach(a => { count('market'); if (a.severity == 'critical') bySeverity.critical++; });
   opts.policyMilestones.forEach(p => { count('policy'); countRegion(p.region); });
   opts.logisticsRisks.forEach(l => { count('supply_chain'); countRegion(l.route); });
-  opts.opportunities.forEach(o => { count('investment'); });
+  opts.opportunities.forEach(_o => { count('investment'); });
 
   const topSignals: Signal[] = [];
   return {

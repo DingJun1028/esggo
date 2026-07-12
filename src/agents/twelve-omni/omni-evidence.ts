@@ -11,7 +11,6 @@ import {
   IOmniEvidence,
   EvidenceId,
   EvidenceRecord,
-  EvidenceType,
   EvidenceVerification,
   SealResult,
   EvidenceChain,

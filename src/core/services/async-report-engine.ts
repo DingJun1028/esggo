@@ -66,7 +66,7 @@ interface RedisClient {
 let redisClient: RedisClient | null = null;
 const CACHE_PREFIX = 'esggo:async:';
 const TASK_TTL = 7 * 24 * 60 * 60; // 7 days
-const PROGRESS_TTL = 60 * 60 * 2; // 2 hours
+const _PROGRESS_TTL = 60 * 60 * 2; // 2 hours
 
 // In-memory fallback
 const memoryStore = new Map<string, { value: unknown; expiry: number }>();
@@ -118,7 +118,7 @@ function chapterKey(taskId: string, chapterNum: number): string {
   return `${CACHE_PREFIX}chapter:${taskId}:${chapterNum}`;
 }
 
-function progressKey(taskId: string): string {
+function _progressKey(taskId: string): string {
   return `${CACHE_PREFIX}progress:${taskId}`;
 }
 
@@ -136,7 +136,7 @@ async function storeTaskState(state: TaskProgress): Promise<void> {
   setMemoryStore(key, state, TASK_TTL);
 }
 
-async function getTaskState(taskId: string): Promise<TaskProgress | null> {
+async function _getTaskState(taskId: string): Promise<TaskProgress | null> {
   const key = taskKey(taskId);
   const redis = await getRedis();
   if (redis) {
@@ -315,7 +315,7 @@ function generateChapterContent(input: ChapterGenInput): { content: string; word
 const tasks = new Map<string, TaskProgress>();
 const cancelledTasks = new Set<string>();
 const concurrencyController = new ConcurrencyController(4); // 4 concurrent chapters
-const taskConcurrencyController = new ConcurrencyController(8); // 8 concurrent tasks
+const _taskConcurrencyController = new ConcurrencyController(8); // 8 concurrent tasks
 
 /**
  * Create a new async report task
@@ -390,7 +390,7 @@ export function startReportGeneration(
       
       const startTime = Date.now();
       let completedCount = 0;
-      let failedCount = 0;
+      let _failedCount = 0;
       let totalWords = 0;
       
       // Process chapters with concurrency control
@@ -473,7 +473,7 @@ async function processChapterWithConcurrency(
   profile: Record<string, unknown>,
   answers: unknown[],
   template: ChapterTemplate | undefined,
-  startTime: number
+  _startTime: number
 ): Promise<{ success: boolean; wordCount: number; title: string; fiveTGate: string }> {
   if (cancelledTasks.has(taskId)) {
     return { success: false, wordCount: 0, title: '', fiveTGate: '' };
@@ -515,7 +515,7 @@ async function processChapterWithConcurrency(
     }
     
     // Generate chapter content
-    const { content, wordCount } = generateChapterContent({
+    const { content: _content, wordCount } = generateChapterContent({
       chapterNum: chNum,
       title: template?.title || `第${chNum}章`,
       fiveTGate: template?.fiveTGate || 'tangible',

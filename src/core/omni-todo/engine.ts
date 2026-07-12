@@ -16,7 +16,7 @@ import type {
 } from './types';
 
 // ── 優先級權重 ─────────────────────────────────────────────
-const PRIORITY_WEIGHT: Record<TodoPriority, number> = {
+const _PRIORITY_WEIGHT: Record<TodoPriority, number> = {
   urgent: 100,
   high: 75,
   medium: 50,

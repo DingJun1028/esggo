@@ -129,6 +129,17 @@ export async function GET(request: NextRequest) {
           // 斷點續傳游標：真實事件由 publishDelegationEvent 附 journalId 於 IBusEvent 上
           const frameId =
             raw && typeof raw.journalId === 'number' ? (raw.journalId as number) : undefined;
+          // 來源標記：client / test / server 等，供 RWD UI 區分「本端傳送」與外部事件
+          const frameSource =
+            raw && typeof raw === 'object' && raw.evidence && typeof raw.evidence === 'object'
+              ? (raw.evidence as Record<string, unknown>).source
+              : undefined;
+          const sourceVal =
+            typeof frameSource === 'string'
+              ? frameSource
+              : raw && typeof raw.source_origin === 'string'
+                ? (raw.source_origin as string)
+                : undefined;
           const ts =
             (typeof e.ts === 'number' ? e.ts : undefined) ??
             (raw && typeof raw.ts === 'number' ? (raw.ts as number) : undefined);
@@ -144,6 +155,7 @@ export async function GET(request: NextRequest) {
               hashLock,
               ts,
               payload,
+              source: sourceVal,
             },
             frameId
           );

@@ -4,8 +4,6 @@
  * Centralized error handling, type-safe API calls, and debug logging.
  * All API calls in the app should use these utilities for consistency.
  */
-import xss from 'xss';
-
 // ─── Types ─────────────────────────────────────────────────────────
 
 export interface ApiResult<T> {

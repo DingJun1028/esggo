@@ -15,7 +15,7 @@ export class SecureUtils {
   public static lockAndFreeze<T extends object>(obj: T): T {
     // Compute a deterministic SHA‑256 hash of the object's JSON representation.
     const json = JSON.stringify(obj);
-    const hash = createHash("sha256").update(json).digest("hex");
+    const _hash = createHash("sha256").update(json).digest("hex");
     // Ensure evidence object exists
     const rec = obj as Record<string, unknown>;
     if (!rec.evidence) rec.evidence = {};

@@ -65,7 +65,6 @@ export interface IFlowSnapshot extends IComponentCore {
 }
 
 /** OA（OmniAgent）核心抽象介面 */
-import { IBusEvent } from "./bus-event";
 
 export interface IOmniAgent {
   /**
