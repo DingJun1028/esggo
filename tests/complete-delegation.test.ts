@@ -348,3 +348,24 @@ describe('完全代主自行 事件總線貫通', () => {
     spy.mockRestore();
   });
 });
+
+// ==========================================
+// 全量審計軌跡（對齊「全量」不變量）
+// ==========================================
+
+describe('全量審計軌跡', () => {
+  it('getFullAuditTrail returns the delegation audit entries (persisted, not truncated)', async () => {
+    const manager = getDelegationManager();
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'full-user-001',
+      permissions: ['full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const trail = await manager.getFullAuditTrail(delegationId);
+    expect(trail.length).toBeGreaterThanOrEqual(1);
+    expect(
+      trail.some((e) => (e as { type?: string }).type === 'DELEGATION_CREATED')
+    ).toBe(true);
+  });
+});
