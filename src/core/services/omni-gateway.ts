@@ -1,6 +1,5 @@
 import { IBusEvent } from '../../lib/omni-core/contracts';
-import { createHash } from 'crypto';
-import { enhancedOmniBus } from '../../lib/omni-agent-bus';
+import { publishBusEvent } from '../../lib/bus';
 import { monitorBackpressure, shadowTestIngress, predictAndPreFetch, injectChaos, lifecycleCleanup } from '../../lib/omni-agent-bus';
 
 /**
@@ -9,10 +8,8 @@ import { monitorBackpressure, shadowTestIngress, predictAndPreFetch, injectChaos
  * for this exercise, focusing on the four core functions.
  */
 export async function secureForward(event: IBusEvent): Promise<{ status: string; hashLock: string }> {
-  // Basic hash‑lock for immutability & traceability
-  const hashLock = createHash('sha256').update(JSON.stringify(event)).digest('hex');
-  // Publish the event (including hashLock) to the bus
-  enhancedOmniBus.publish('external-forward', { ...event, hashLock });
+  // 委託統一發布原語（含 SHA-256 hashLock 溯源 + 發布至 omni-agent-bus）
+  const { hashLock } = publishBusEvent('external-forward', event);
   return { status: 'routed', hashLock };
 }
 

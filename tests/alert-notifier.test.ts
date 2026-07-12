@@ -11,7 +11,12 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { createAlertNotifier } from '../src/agents/complete-delegation/alert-notifier';
+import {
+  createAlertNotifier,
+  createEmailNotifier,
+  createCompositeNotifier,
+  getDefaultAlertNotifier,
+} from '../src/agents/complete-delegation/alert-notifier';
 import type { DelegationAlert } from '../src/agents/complete-delegation/metrics';
 
 function makeAlert(over: Partial<DelegationAlert> = {}): DelegationAlert {
@@ -78,5 +83,81 @@ describe('createAlertNotifier (監控→告警→處置 閉環)', () => {
       fetchImpl: fetchImpl as unknown as typeof fetch,
     });
     await expect(n.notify(makeAlert())).resolves.toBeUndefined();
+  });
+});
+
+describe('createEmailNotifier (郵件通知，經閘道 webhook)', () => {
+  it('is no-op when webhookUrl unset', async () => {
+    const fetchImpl = vi.fn();
+    const n = createEmailNotifier({ webhookUrl: '', enabled: true, fetchImpl: fetchImpl as unknown as typeof fetch });
+    await n.notify(makeAlert());
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it('POSTs email-shaped payload (subject/text/to/from)', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response('ok', { status: 200 }));
+    const n = createEmailNotifier({
+      webhookUrl: 'https://mail.test/send',
+      to: 'ops@example.com',
+      from: 'alerts@example.com',
+      subjectPrefix: '[ESG告警]',
+      enabled: true,
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+      now: () => 9999,
+    });
+    expect(n.enabled).toBe(true);
+
+    await n.notify(makeAlert({ level: 'critical', type: 'delegation.emergency.stop' }));
+
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toBe('https://mail.test/send');
+    expect(init.method).toBe('POST');
+    const body = JSON.parse(init.body as string);
+    expect(body.schema).toBe('delegation-alert-email/v1');
+    expect(body.to).toBe('ops@example.com');
+    expect(body.from).toBe('alerts@example.com');
+    expect(body.subject).toBe('[ESG告警] CRITICAL · delegation.emergency.stop');
+    expect(body.text).toContain('授權 d1 觸發緊急停止');
+    expect(body.alert.id).toBe('al-1');
+  });
+
+  it('does not throw when email gateway fails', async () => {
+    const fetchImpl = vi.fn().mockRejectedValue(new Error('smtp down'));
+    const n = createEmailNotifier({
+      webhookUrl: 'https://mail.test/send',
+      enabled: true,
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+    });
+    await expect(n.notify(makeAlert())).resolves.toBeUndefined();
+  });
+});
+
+describe('createCompositeNotifier (扇出至多 sink)', () => {
+  it('calls only enabled sinks; one failure does not block others', async () => {
+    const ok = vi.fn().mockResolvedValue(new Response('ok'));
+    const bad = vi.fn().mockRejectedValue(new Error('boom'));
+    const disabled = vi.fn();
+    const composite = createCompositeNotifier([
+      { enabled: true, notify: ok },
+      { enabled: true, notify: bad },
+      { enabled: false, notify: disabled },
+    ]);
+    expect(composite.enabled).toBe(true);
+    await composite.notify(makeAlert());
+    expect(ok).toHaveBeenCalledTimes(1);
+    expect(bad).toHaveBeenCalledTimes(1);
+    expect(disabled).not.toHaveBeenCalled();
+  });
+
+  it('is disabled when no sink enabled', () => {
+    const composite = createCompositeNotifier([{ enabled: false, notify: async () => {} }]);
+    expect(composite.enabled).toBe(false);
+  });
+});
+
+describe('getDefaultAlertNotifier (環境驅動)', () => {
+  it('is disabled in test env (no webhook/email configured)', () => {
+    const n = getDefaultAlertNotifier();
+    expect(n.enabled).toBe(false);
   });
 });
