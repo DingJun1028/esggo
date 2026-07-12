@@ -13,7 +13,9 @@ import {
 import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
 import { GET as auditTrailGET } from '../src/app/api/delegation/audit/route';
 import { GET as eventStreamGET } from '../src/app/api/delegation/events/stream/route';
+import { POST as delegationEventsPOST } from '../src/app/api/delegation/events/route';
 import { enhancedOmniBus } from '../src/lib/omni-agent-bus';
+import * as delegationEvents from '../src/agents/complete-delegation/events';
 import type { NextRequest } from 'next/server';
 
 // ==========================================
@@ -364,6 +366,88 @@ describe('GET /api/delegation/events/stream', () => {
 
     ac.abort();
     await reader.cancel().catch(() => {});
+  });
+});
+
+// ==========================================
+// 事件雙向同步 API（client → bus, POST）
+// ==========================================
+
+describe('POST /api/delegation/events', () => {
+  it('rejects without delegationId (400)', async () => {
+    const req = {
+      json: async () => ({ type: 'delegation.decision.made', payload: {} }),
+    } as unknown as NextRequest;
+    const res = await delegationEventsPOST(req);
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects invalid event type (400)', async () => {
+    const req = {
+      json: async () => ({ delegationId: 'x', type: 'NOT_A_EVENT' }),
+    } as unknown as NextRequest;
+    const res = await delegationEventsPOST(req);
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects unknown delegation (404)', async () => {
+    const req = {
+      json: async () => ({
+        delegationId: 'does-not-exist',
+        type: 'delegation.decision.made',
+      }),
+    } as unknown as NextRequest;
+    const res = await delegationEventsPOST(req);
+    expect(res.status).toBe(404);
+  });
+
+  it('rejects without execute permission (403)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'bi-user-002',
+      permissions: ['read'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+    const req = {
+      json: async () => ({
+        delegationId,
+        type: 'delegation.decision.made',
+        payload: { note: 'hi' },
+      }),
+    } as unknown as NextRequest;
+    const res = await delegationEventsPOST(req);
+    expect(res.status).toBe(403);
+  });
+
+  it('forwards client event to bus with hashLock (200)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'bi-user-001',
+      permissions: ['execute', 'full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const spy = vi.spyOn(delegationEvents, 'publishDelegationEvent');
+    const req = {
+      json: async () => ({
+        delegationId,
+        type: 'delegation.decision.made',
+        topic: 'delegation.decision',
+        payload: { decisionId: 'dec-xyz', note: 'client-writeback' },
+      }),
+    } as unknown as NextRequest;
+
+    const res = await delegationEventsPOST(req);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.hashLock).toMatch(/^[0-9a-f]{64}$/);
+
+    expect(spy).toHaveBeenCalledWith(
+      'delegation.decision.made',
+      'delegation.decision',
+      expect.objectContaining({ delegationId, decisionId: 'dec-xyz' }),
+      'client'
+    );
+    spy.mockRestore();
   });
 });
 
