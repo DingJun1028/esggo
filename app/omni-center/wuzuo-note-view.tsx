@@ -162,7 +162,6 @@ export function WuzuoNoteView() {
     try {
       for (const t of INITIAL_TASKS) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, ...rest } = t;
         await addDoc(collection(db, "omni_tasks"), rest);
       }
@@ -184,7 +183,6 @@ export function WuzuoNoteView() {
 
     // Due Date Filter
     if (filterDueDate !== "All") {
-      // eslint-disable-next-line react-hooks/purity
       // eslint-disable-next-line react-hooks/purity
       const now = Date.now();
       if (filterDueDate === "Upcoming") {
@@ -325,7 +323,6 @@ export function WuzuoNoteView() {
         ) : (
           processedTasks.map((task) => {
             const isCompleted = task.status === "Completed";
-            // eslint-disable-next-line react-hooks/purity
             // eslint-disable-next-line react-hooks/purity
             const isOverdue = !isCompleted && task.dueDate < Date.now();
             const dateStr = new Date(task.dueDate).toLocaleDateString("zh-TW", {

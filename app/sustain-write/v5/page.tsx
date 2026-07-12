@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { FileText, ChevronDown, ChevronUp, Plus, X, Wand2 } from 'lucide-react';
+import { FileText, ChevronDown, ChevronUp, X, Wand2 } from 'lucide-react';
 import { UniversalOmniConsole } from '../../omni-center/universal-omni-console';
 import { db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
@@ -99,7 +99,7 @@ const GATE_LABELS: Record<FiveTGate, string> = {
   trackable: '通',
 };
 
-const GATE_BG: Record<FiveTGate, string> = {
+const _GATE_BG: Record<FiveTGate, string> = {
   traceable: 'bg-accentBlue/10 border-accentBlue/30',
   transparent: 'bg-accentGreen/10 border-accentGreen/30',
   tangible: 'bg-accentGold/10 border-accentGold/30',
@@ -498,7 +498,7 @@ export default function SustainWriteV5Page() {
   }, []);
 
   // All companies including custom ones and the "Custom" option
-  const allCompanies: (Company & { isCustom?: boolean })[] = [
+  const _allCompanies: (Company & { isCustom?: boolean })[] = [
     ...companies,
     ...customCompanies.map((c, i) => ({
       id: `custom-saved-${i}`,

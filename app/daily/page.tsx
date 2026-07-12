@@ -269,7 +269,7 @@ export default function DailyReportPage() {
   }, [report]);
 
   // Generate date options (last 30 days)
-  const dateOptions = useMemo(() => {
+  const _dateOptions = useMemo(() => {
     const dates: string[] = [];
     for (let i = 0; i < 30; i++) {
       const d = new Date();

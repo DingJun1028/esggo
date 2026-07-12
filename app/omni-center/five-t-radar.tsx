@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface FiveTData { traceable:number; transparent:number; tangible:number; trustworthy:number; trackable:number; }
 
@@ -51,8 +51,8 @@ export function FiveTRadar({ zkpCount }: Props) {
     }
   };
 
-  const COMPANIES = [myTwin, ...DEMO_COMPANIES];
-  const target = COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 };
+  const COMPANIES = useMemo(() => [myTwin, ...DEMO_COMPANIES], [myTwin]);
+  const target = useMemo(() => COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 }, [COMPANIES, selected]);
 
   useEffect(() => {
     let frame = 0;

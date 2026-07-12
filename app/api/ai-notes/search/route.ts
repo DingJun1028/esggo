@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 import { getNCBClient } from '@/lib/ncb-client';
-import type { SearchQuery, SearchResult } from '@/types/notes';
+import type { SearchResult } from '@/types/notes';
 
 // PostgreSQL 連接池（pgvector）— lazy dynamic import 避免 build 期依賴 @types/pg
 // TODO: 待 PGVECTOR_URL 與 pgvector 函數 search_notes_semantic 就緒後啟用
@@ -24,7 +24,7 @@ async function getPool(): Promise<any> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { text, filters, limit, threshold } = body;
+    const { text, filters: _filters, limit, threshold } = body;
 
     // 驗證必要欄位
     const validation = validateParams({ text });
