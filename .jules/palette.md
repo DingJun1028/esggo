@@ -22,3 +22,6 @@
 ## 2024-05-18 - Component-Specific Focus Rings and ARIA Roles
 **Learning:** Found missing `role="tab"` and `role="tablist"` attributes on custom tab navigation, missing `aria-label`s on icon buttons, and missing `focus-visible` styles in `app/omni-center/page.tsx`, rendering these elements inaccessible via keyboard and screen readers.
 **Action:** Applied `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to custom buttons. Implemented proper `role="tablist"`, `role="tab"`, and `aria-selected` for custom tabs. Added `aria-label` descriptions for icon-only components while hiding decorative inner elements with `aria-hidden="true"`.
+## 2024-07-12 - Avoid static ARIA labels on buttons with dynamic text
+**Learning:** Adding a static `aria-label` (e.g., `aria-label="匯出資料"`) to a button that contains dynamic, descriptive text (e.g., `匯出 ${format.toUpperCase()}`) degrades accessibility by overriding the specific text with generic text for screen readers.
+**Action:** When adding accessibility to buttons, ensure you only use `aria-label` when the button lacks visible descriptive text (like icon-only buttons). If the button already has good text, focus on structural a11y (like `focus-visible` or linking inputs with `htmlFor`).

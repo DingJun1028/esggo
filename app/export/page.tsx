@@ -70,7 +70,11 @@ export default function DataExportPage() {
       } else {
         const data = await res.json();
         const items = data?.data?.length || data?.meta?.total || 0;
-        downloadFile(JSON.stringify(data, null, 2), `esg-data-${new Date().toISOString().split('T')[0]}.json`, 'application/json');
+        downloadFile(
+          JSON.stringify(data, null, 2),
+          `esg-data-${new Date().toISOString().split('T')[0]}.json`,
+          'application/json',
+        );
         setResult({ count: items, format: 'json' });
       }
     } catch (e: unknown) {
@@ -84,35 +88,75 @@ export default function DataExportPage() {
     <div style={{ background: SC.bg, minHeight: '100vh', padding: '24px 16px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {/* Header */}
-        <header style={{ borderBottom: `1px solid ${SC.border}`, paddingBottom: 16, marginBottom: 24 }}>
-          <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-            📥 ESG 資料匯出
-          </h1>
+        <header
+          style={{ borderBottom: `1px solid ${SC.border}`, paddingBottom: 16, marginBottom: 24 }}
+        >
+          <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>📥 ESG 資料匯出</h1>
           <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
             匯出 ESG 爬蟲資料為 CSV 或 JSON 格式
           </p>
         </header>
 
         {/* Filter Form */}
-        <div style={{ background: SC.surface, border: `1px solid ${SC.border}`, borderRadius: 12, padding: 20, marginBottom: 20 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+        <div
+          style={{
+            background: SC.surface,
+            border: `1px solid ${SC.border}`,
+            borderRadius: 12,
+            padding: 20,
+            marginBottom: 20,
+          }}
+        >
+          <div
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}
+          >
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>匯出格式</label>
+              <label
+                htmlFor="format-select"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                匯出格式
+              </label>
               <select
+                id="format-select"
                 value={format}
-                onChange={e => setFormat(e.target.value as 'json' | 'csv')}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                onChange={(e) => setFormat(e.target.value as 'json' | 'csv')}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               >
                 <option value="csv">CSV (Excel)</option>
                 <option value="json">JSON (程式整合)</option>
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>資料類別</label>
+              <label
+                htmlFor="category-select"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                資料類別
+              </label>
               <select
+                id="category-select"
                 value={category}
-                onChange={e => setCategory(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                onChange={(e) => setCategory(e.target.value)}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               >
                 <option value="">全部類別</option>
                 <option value="environmental">環境 (Environmental)</option>
@@ -121,11 +165,26 @@ export default function DataExportPage() {
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>區域</label>
+              <label
+                htmlFor="region-select"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                區域
+              </label>
               <select
+                id="region-select"
                 value={region}
-                onChange={e => setRegion(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                onChange={(e) => setRegion(e.target.value)}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               >
                 <option value="">全部區域</option>
                 <option value="tw">台灣</option>
@@ -135,32 +194,77 @@ export default function DataExportPage() {
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>筆數上限</label>
+              <label
+                htmlFor="limit-input"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                筆數上限
+              </label>
               <input
+                id="limit-input"
                 type="number"
                 value={limit}
-                onChange={e => setLimit(Math.min(parseInt(e.target.value) || 100, 5000))}
+                onChange={(e) => setLimit(Math.min(parseInt(e.target.value) || 100, 5000))}
                 min={1}
                 max={5000}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>起始日期</label>
+              <label
+                htmlFor="from-date-input"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                起始日期
+              </label>
               <input
+                id="from-date-input"
                 type="date"
                 value={fromDate}
-                onChange={e => setFromDate(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}>結束日期</label>
+              <label
+                htmlFor="to-date-input"
+                style={{ display: 'block', fontSize: 12, color: SC.textSecondary, marginBottom: 4 }}
+              >
+                結束日期
+              </label>
               <input
+                id="to-date-input"
                 type="date"
                 value={toDate}
-                onChange={e => setToDate(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
+                onChange={(e) => setToDate(e.target.value)}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: SC.bg,
+                  border: `1px solid ${SC.border}`,
+                  borderRadius: 8,
+                  color: SC.text,
+                  fontSize: 13,
+                }}
               />
             </div>
           </div>
@@ -168,6 +272,7 @@ export default function DataExportPage() {
           <button
             onClick={handleExport}
             disabled={loading}
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current transition-opacity"
             style={{
               width: '100%',
               padding: '12px 24px',
@@ -187,29 +292,82 @@ export default function DataExportPage() {
 
         {/* Result */}
         {result && (
-          <div style={{ background: `${SC.success}15`, border: `1px solid ${SC.success}40`, borderRadius: 8, padding: '12px 16px', marginBottom: 16, color: SC.success, fontSize: 13 }}>
+          <div
+            style={{
+              background: `${SC.success}15`,
+              border: `1px solid ${SC.success}40`,
+              borderRadius: 8,
+              padding: '12px 16px',
+              marginBottom: 16,
+              color: SC.success,
+              fontSize: 13,
+            }}
+          >
             已匯出 {result.count} 筆資料（{result.format.toUpperCase()} 格式）
           </div>
         )}
 
         {error && (
-          <div style={{ background: '#EF444415', border: '1px solid #EF444440', borderRadius: 8, padding: '12px 16px', marginBottom: 16, color: '#EF4444', fontSize: 13 }}>
+          <div
+            style={{
+              background: '#EF444415',
+              border: '1px solid #EF444440',
+              borderRadius: 8,
+              padding: '12px 16px',
+              marginBottom: 16,
+              color: '#EF4444',
+              fontSize: 13,
+            }}
+          >
             {error}
           </div>
         )}
 
         {/* Info */}
-        <div style={{ background: SC.surface, border: `1px solid ${SC.border}`, borderRadius: 12, padding: 20 }}>
-          <h3 style={{ color: SC.text, fontSize: 14, fontWeight: 600, marginBottom: 8 }}>匯出欄位說明</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 12, color: SC.textSecondary }}>
-            <div><span style={{ color: SC.teal }}>source_id</span> — 資料來源識別碼</div>
-            <div><span style={{ color: SC.teal }}>source_name</span> — 資料來源名稱</div>
-            <div><span style={{ color: SC.teal }}>category</span> — ESG 類別 (E/S/G)</div>
-            <div><span style={{ color: SC.teal }}>region</span> — 區域 (tw/eu/us/ap)</div>
-            <div><span style={{ color: SC.teal }}>title</span> — 標題</div>
-            <div><span style={{ color: SC.teal }}>url</span> — 原始連結</div>
-            <div><span style={{ color: SC.teal }}>date</span> — 發布日期</div>
-            <div><span style={{ color: SC.teal }}>relevance_score</span> — 相關性分數</div>
+        <div
+          style={{
+            background: SC.surface,
+            border: `1px solid ${SC.border}`,
+            borderRadius: 12,
+            padding: 20,
+          }}
+        >
+          <h3 style={{ color: SC.text, fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            匯出欄位說明
+          </h3>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 8,
+              fontSize: 12,
+              color: SC.textSecondary,
+            }}
+          >
+            <div>
+              <span style={{ color: SC.teal }}>source_id</span> — 資料來源識別碼
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>source_name</span> — 資料來源名稱
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>category</span> — ESG 類別 (E/S/G)
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>region</span> — 區域 (tw/eu/us/ap)
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>title</span> — 標題
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>url</span> — 原始連結
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>date</span> — 發布日期
+            </div>
+            <div>
+              <span style={{ color: SC.teal }}>relevance_score</span> — 相關性分數
+            </div>
           </div>
         </div>
       </div>
