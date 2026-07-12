@@ -19,15 +19,9 @@ binding = "FREE_MODELS_KV"
 id = "your-kv-namespace-id"
 preview_id = "your-preview-kv-namespace-id"
 
-# Secret 金鑰（需在 Cloudflare Dashboard 或 wrangler secret put 設定）
-# [secrets]
-# OPENROUTER_API_KEY = ""
-# GROQ_API_KEY = ""
-# HF_TOKEN = ""
-
 # 觀測/日誌
 [observability]
 enabled = true
 
 [build]
-command = "npm --prefix . install && npm --prefix . run build"
+command = "npm --prefix my-worker install && npm --prefix my-worker run build"

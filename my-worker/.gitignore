@@ -1,6 +1,7 @@
 .env
 .env.*
 dist/
+!dist/.gitkeep
 node_modules/
 workers.*.json
 workers.json
