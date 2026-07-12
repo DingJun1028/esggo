@@ -12,6 +12,8 @@ import {
 } from '../src/agents/complete-delegation';
 import { POST as executeDelegationPOST } from '../src/app/api/delegation/[id]/execute/route';
 import { GET as auditTrailGET } from '../src/app/api/delegation/audit/route';
+import { GET as eventStreamGET } from '../src/app/api/delegation/events/stream/route';
+import { enhancedOmniBus } from '../src/lib/omni-agent-bus';
 import type { NextRequest } from 'next/server';
 
 // ==========================================
@@ -279,6 +281,89 @@ describe('GET /api/delegation/audit', () => {
 
     const res = await auditTrailGET(req);
     expect(res.status).toBe(403);
+  });
+});
+
+// ==========================================
+// 事件總線訂閱 API（SSE, monitor 權限把關）
+// ==========================================
+
+describe('GET /api/delegation/events/stream', () => {
+  it('rejects without delegationId (400)', async () => {
+    const req = {
+      url: 'http://localhost/api/delegation/events/stream',
+    } as unknown as NextRequest;
+
+    const res = await eventStreamGET(req);
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects unknown delegation (404)', async () => {
+    const req = {
+      url: 'http://localhost/api/delegation/events/stream?delegationId=does-not-exist',
+    } as unknown as NextRequest;
+
+    const res = await eventStreamGET(req);
+    expect(res.status).toBe(404);
+  });
+
+  it('rejects without monitor permission (403)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'stream-user-002',
+      permissions: ['read'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const req = {
+      url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+    } as unknown as NextRequest;
+
+    const res = await eventStreamGET(req);
+    expect(res.status).toBe(403);
+  });
+
+  it('streams delegation events with monitor permission', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'stream-user-001',
+      permissions: ['monitor', 'full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const ac = new AbortController();
+    const req = {
+      url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}`,
+      signal: ac.signal,
+    } as unknown as NextRequest;
+
+    const res = await eventStreamGET(req);
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toContain('text/event-stream');
+
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+
+    // 首幀應為 CONNECTED
+    const first = await reader.read();
+    const firstText = decoder.decode(first.value);
+    expect(firstText).toContain('CONNECTED');
+    expect(firstText).toContain(delegationId);
+
+    // 經同一 bus 實例發布一筆委派事件
+    enhancedOmniBus.publish('external-forward', {
+      event: 'delegation.created',
+      payload: { type: 'delegation.created', delegationId },
+      ts: Date.now(),
+      hashLock: 'a'.repeat(64),
+    } as never);
+
+    const second = await reader.read();
+    const secondText = decoder.decode(second.value);
+    expect(secondText).toContain('delegation.created');
+    expect(secondText).toContain(delegationId);
+    expect(secondText).toContain('a'.repeat(64));
+
+    ac.abort();
+    await reader.cancel().catch(() => {});
   });
 });
 

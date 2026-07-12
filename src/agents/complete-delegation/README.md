@@ -130,6 +130,55 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
 // 200 → { success, delegationId, count, entries: [ DELEGATION_CREATED / DELEGATION_VALIDATED / DELEGATION_TERMINATED ... ] }
 ```
 
+### GET `/api/delegation/events/stream?delegationId=xxx` — 事件總線訂閱 (SSE)
+```text
+// 即時推送該 delegation 生命週期事件（text/event-stream）
+// 需具備 monitor（或 full）權限；驗證：delegation 存在(404) → validateDelegation(id,'monitor')(403)
+// 無 delegationId → 400
+// 每幀：data: { "type": "<事件名>", "delegationId": "...", "hashLock": "<64hex>", "ts": <ms>, "payload": {...} }\n\n
+// 首幀為 { "type": "CONNECTED", "delegationId": "...", "ts": <ms> }
+// 斷線自動退訂
+```
+
+**事件消費者範例**（前端 EventSource / Node fetch 皆可）：
+```ts
+// 瀏覽器：EventSource（自動重連；不支援自訂 header，權限由 delegation 的 monitor 授權隱含）
+const es = new EventSource(
+  `/api/delegation/events/stream?delegationId=${delegationId}`
+);
+es.onmessage = (e) => {
+  const evt = JSON.parse(e.data);
+  if (evt.type === 'CONNECTED') return console.log('已訂閱', evt.delegationId);
+  console.log('委派事件', evt.type, 'hashLock', evt.hashLock, evt.payload);
+};
+es.onerror = () => es.close();
+
+// Node 端：fetch + 讀取 stream
+const res = await fetch(`/api/delegation/events/stream?delegationId=${delegationId}`);
+const reader = res.body.getReader();
+const dec = new TextDecoder();
+for (;;) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  const frame = dec.decode(value);            // 含 "data: {...}\n\n"
+  const json = frame.replace(/^data: /, '').trim();
+  const evt = JSON.parse(json);
+  console.log('委派事件', evt);
+}
+```
+
+也可直接在應用內訂閱同一條 `omni-agent-bus`（與 SSE 端點同源）：
+```ts
+import { enhancedOmniBus } from '../lib/omni-agent-bus';
+const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
+  const p = ev.payload as { type?: string; delegationId?: string };
+  if (p?.type?.startsWith('delegation.') && p.delegationId === delegationId) {
+    console.log('委派事件', p.type, (ev as any).hashLock);
+  }
+});
+// ... 使用完畢 unsub();
+```
+
 > **事件總線貫通（深貫廣通）**：授權生命週期（`DELEGATION_CREATED` / `VALIDATED` / `TERMINATED`）由 `CompleteDelegationManager`、
 > 決策（`DELEGATION_DECISION_MADE`）由 `AutonomousDecisionEngine`、回報（`DELEGATION_DECISION_REPORTED`）由 agent、
 > 執行（`DELEGATION_EXECUTION_STARTED` / `COMPLETED`）由執行路由，統一經 `omni-gateway.secureForward` 轉發至
@@ -160,6 +209,7 @@ body `{ "reason": "..." }` 可選；回傳 `{ success, delegationId, reason }`�
       經 `getDecisionEngine({ strategy })` / `new AutonomousDecisionEngine({ strategy })` 注入，
       `makeDecision` 委託 `strategy.select()` 選擇最佳方案。
 - [x] **Gateway 端對端**：`POST /api/delegation/[id]/execute` 於執行前 / 後經 `omni-gateway.secureForward` 實際轉發 `DELEGATION_EXECUTION_STARTED` / `DELEGATION_EXECUTION_COMPLETED` 至 `omni-agent-bus`（含 SHA-256 `hashLock` 溯源）；回應附 `gateway.startHashLock` / `gateway.completeHashLock`。另含 route-level e2e 測試斷言回傳 64 字元 hashLock。
+- [x] **事件訂閱 SSE**：`GET /api/delegation/events/stream?delegationId=` 經 `enhancedOmniBus` 訂閱 `external-forward`，即時推送該 delegation 生命週期事件（含 `hashLock` 溯源），`monitor`（或 `full`）權限把關、斷線自動退訂。亦可直接於應用內 `enhancedOmniBus.subscribe('external-forward', ...)` 消費（見第 5 節「事件消費者範例」）。
 
 ---
 
