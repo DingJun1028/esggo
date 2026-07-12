@@ -10,40 +10,16 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { randomUUID } from 'crypto';
 import { getDelegationManager } from '../../../../../agents/complete-delegation';
 import {
   CompleteDelegationAgent,
   executeCompleteDelegationTask,
 } from '../../../../../agents/complete-delegation/complete-delegation-agent';
-import { secureForward } from '../../../../../core/services/omni-gateway';
+import { publishDelegationEvent } from '../../../../../agents/complete-delegation/events';
 import {
   DelegationEventNames,
   DelegationTopics,
 } from '../../../../../types/complete-delegation';
-import type { IBusEvent } from '../../../../../lib/omni-core/contracts';
-
-/** 將執行事件封裝為可通過 omni-gateway 轉發的 IBusEvent（含 hashLock 溯源） */
-function toBusEvent(
-  type: string,
-  topic: string,
-  payload: unknown,
-  source: string
-): IBusEvent {
-  const now = Date.now();
-  return {
-    uuid: randomUUID(),
-    version: '1.0.0',
-    timestamp: now,
-    evidence: { gateway: 'omni-gateway', source },
-    source_origin: source,
-    topic,
-    lifecycle_path: [
-      { stage: 'EMERGED', timestamp: now, node: 'delegation-execute-route' },
-    ],
-    payload,
-  };
-}
 
 // ==========================================
 // POST /api/delegation/[id]/execute - 執行任務
@@ -101,13 +77,11 @@ export async function POST(
     );
 
     // 經由實際 gateway（omni-gateway.secureForward）轉發「執行開始」事件，取得 hashLock 溯源
-    const startForward = await secureForward(
-      toBusEvent(
-        DelegationEventNames.DELEGATION_EXECUTION_STARTED,
-        DelegationTopics.EXECUTION,
-        { delegationId: id, intent },
-        'api/delegation/[id]/execute'
-      )
+    const startForward = await publishDelegationEvent(
+      DelegationEventNames.DELEGATION_EXECUTION_STARTED,
+      DelegationTopics.EXECUTION,
+      { delegationId: id, intent },
+      'api/delegation/[id]/execute'
     );
 
     const result = await executeCompleteDelegationTask(
@@ -117,18 +91,16 @@ export async function POST(
     );
 
     // 經由實際 gateway 轉發「執行完成」事件
-    const completeForward = await secureForward(
-      toBusEvent(
-        DelegationEventNames.DELEGATION_EXECUTION_COMPLETED,
-        DelegationTopics.EXECUTION,
-        {
-          delegationId: id,
-          executionId: result.executionId,
-          success: result.success,
-          error: result.error,
-        },
-        'api/delegation/[id]/execute'
-      )
+    const completeForward = await publishDelegationEvent(
+      DelegationEventNames.DELEGATION_EXECUTION_COMPLETED,
+      DelegationTopics.EXECUTION,
+      {
+        delegationId: id,
+        executionId: result.executionId,
+        success: result.success,
+        error: result.error,
+      },
+      'api/delegation/[id]/execute'
     );
 
     return NextResponse.json({
