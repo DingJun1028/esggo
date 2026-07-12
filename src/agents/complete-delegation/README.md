@@ -212,6 +212,7 @@ const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
 - 路徑：`/delegation/events?delegationId=xxx`（對齊「RWD / 全端 / 雙向同步」）
 - `src/app/delegation/events/page.tsx`：響應式頁面，輸入 `delegationId` 即訂閱即時事件（亦可從網址帶入）。
 - `src/components/delegation/DelegationEventStream.tsx`：client 元件，經 `EventSource` 連線 SSE 端點，呈現即時事件卡片（含 `hashLock` 溯源、連線狀態、斷線自動重連）。
+- `src/components/delegation/DelegationMetricsOverview.tsx`：client 元件，消費 `GET /api/delegation/metrics` 呈現即時聚合指標總覽（全球 + 連線 delegation 專屬，5s 輪詢）。
 - 設計採 Tailwind 響應式（手機 / 桌面自適應），與現有 demo 頁面視覺一致。
 
 > **事件總線貫通（深貫廣通）**：授權生命週期（`DELEGATION_CREATED` / `VALIDATED` / `TERMINATED`）由 `CompleteDelegationManager`、
@@ -252,6 +253,7 @@ const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
 - [x] **RWD UI 雙向同步閉環 + 斷點續傳**：`DelegationEventStream` 新增回寫輸入框，經 `POST /api/delegation/events`（型別 `delegation.client.sync`）將 client 訊號寫回同一 `omni-agent-bus`，事件經 SSE 迴路返回本面板並標記「本端傳送」，形成 client↔server 雙向閉環；另將最後收到的 SSE `id` 存於 `localStorage`，全新連線（頁面重新整理）時以 `?sinceId=` 查詢參數續傳（服務端 `GET /stream` 已支援 `?sinceId=` 作為 `Last-Event-ID` 表頭之備援），實現「全量不漏」的斷點續傳。
 - [x] **委派事件指標觀測器（監控/分析消費者）**：`metrics.ts` 的 `getDelegationMetrics()` 單例訂閱同一 `omni-agent-bus`（`external-forward`），對所有委派生命週期事件進行**全量聚合**（不抽樣、不截斷，非委派事件一律忽略），提供全域（`total` / `byType` / `activeDelegations` / `lastSeenAt`）與 per-delegation（`getDelegationSnapshot`）指標快照，落實 summary 待辦「將委派事件接入實際監控/分析消費者」。對齊平台不變量：全域（與其他子系統共用同一總線，無孤島）、全量（觀測所有事件）、雙向同步（server 推送與 client 經 `POST /api/delegation/events` 回寫進入同一總線，觀測器一視同仁聚合）。
 - [x] **指標 API**：`GET /api/delegation/metrics[?delegationId=]` 暴露觀測器聚合；全球聚合（`?delegationId` 省略）僅回傳計數、不含 delegation 識別碼（最小暴露）；單一 delegation 須具備 `monitor` / `full` 權限（與 audit / stream 端點一致）。
+- [x] **指標總覽卡（RWD UI）**：`/delegation/events` 頁面新增 `DelegationMetricsOverview` 元件，消費 `GET /api/delegation/metrics` 呈現即時聚合（全球總事件數 / 活躍 delegation 數 / 事件類型分佈，以及連線 delegation 的專屬指標，需 `monitor`/`full`），5s 輕量輪詢；對齊 RWD / 全端 / 全量，關閉「監控消費者 → 可視化」閉環。
 
 ---
 
