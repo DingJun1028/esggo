@@ -418,6 +418,9 @@ export const DelegationEventNames = {
   
   /** 授權驗證 */
   DELEGATION_VALIDATED: 'delegation.validated',
+
+  /** 客戶端經雙向同步回寫的同步訊號（client → bus → SSE 閉環） */
+  DELEGATION_CLIENT_SYNC: 'delegation.client.sync',
   
   /** 授權終止 */
   DELEGATION_TERMINATED: 'delegation.terminated',

@@ -510,6 +510,72 @@ describe('GET /api/delegation/events/stream', () => {
     }
   });
 
+  it('resumes from ?sinceId= query param (page reload 續傳)', async () => {
+    const tmpPath = join(tmpdir(), `esggo-stream-sinceid-${randomUUID()}.jsonl`);
+    setDefaultJournal(createDelegationJournal(tmpPath));
+    try {
+      const agent = await createCompleteDelegationAgent({
+        principalId: 'sinceid-user-001',
+        permissions: ['monitor', 'full'],
+      });
+      const delegationId = agent.delegationScope.delegationId;
+
+      await delegationEvents.publishDelegationEvent(
+        'delegation.created',
+        'delegation.authorization',
+        { delegationId, note: 'first' },
+        'test'
+      );
+      await delegationEvents.publishDelegationEvent(
+        'delegation.decision.made',
+        'delegation.decision',
+        { delegationId, note: 'second' },
+        'test'
+      );
+
+      const journal = createDelegationJournal(tmpPath);
+      const recs = journal
+        .readAll()
+        .filter((r) => r.kind === 'event' && r.delegationId === delegationId);
+      const firstId = recs.find((r) => (r.payload as { note?: string })?.note === 'first')!.id;
+
+      // 全新連線（無 Last-Event-ID 表頭），改以 ?sinceId= 查詢參數續傳
+      const ac = new AbortController();
+      const req = {
+        url: `http://localhost/api/delegation/events/stream?delegationId=${delegationId}&sinceId=${firstId}`,
+        headers: new Map(),
+        signal: ac.signal,
+      } as unknown as NextRequest;
+
+      const res = await eventStreamGET(req);
+      expect(res.status).toBe(200);
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+
+      let text = '';
+      for (let i = 0; i < 8; i++) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        text += decoder.decode(value);
+        if (text.includes('REPLAY_DONE')) break;
+      }
+      expect(text).toContain('REPLAY_DONE');
+      expect(text).toContain('delegation.decision.made');
+      expect(text).toContain('"note":"second"');
+      expect(text).not.toContain('"note":"first"');
+
+      ac.abort();
+      await reader.cancel().catch(() => {});
+    } finally {
+      setDefaultJournal(null);
+      try {
+        unlinkSync(tmpPath);
+      } catch {
+        /* ignore */
+      }
+    }
+  });
+
   it('end-to-end: client POST event is received by SSE subscriber (雙向同步閉環)', async () => {
     const agent = await createCompleteDelegationAgent({
       principalId: 'bi-loop-001',

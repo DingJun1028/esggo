@@ -54,10 +54,18 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 斷點續傳：客戶端（EventSource）重連時帶回 Last-Event-ID，僅回放其後的事件
+  // 斷點續傳：客戶端（EventSource）重連時帶回 Last-Event-ID，僅回放其後的事件。
+  // 另支援 ?sinceId= 查詢參數：EventSource 在全新連線（如頁面重新整理）時不會自動
+  // 帶 Last-Event-ID 表頭，故由客戶端自 localStorage 讀取上次游標並以此參數續傳
+  // （表頭優先於查詢參數，相容原生 EventSource 自動重連行為）。
   const lastIdHeader = request.headers.get('Last-Event-ID');
+  const sinceParam = searchParams.get('sinceId');
   const sinceId =
-    lastIdHeader && /^\d+$/.test(lastIdHeader) ? Number(lastIdHeader) : undefined;
+    lastIdHeader && /^\d+$/.test(lastIdHeader)
+      ? Number(lastIdHeader)
+      : sinceParam && /^\d+$/.test(sinceParam)
+        ? Number(sinceParam)
+        : undefined;
 
   const encoder = new TextEncoder();
 
