@@ -247,10 +247,19 @@ jobs:
     if: always() && needs.pre-check.outputs.mode != 'skip'
     steps:
       - name: Result
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           R="${{ needs.deploy.result }}"
           if [ "$R" = "success" ] || [ "$R" = "skipped" ]; then
             echo "[OK] ESG GO deployed to Oracle VPS (${{ needs.pre-check.outputs.mode }} mode)"
           else
-            echo "[FAIL] Deploy $R (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            MSG="[FAIL] Deploy $R (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "$MSG"
+            # 主動推 Telegram (基礎設施集成閉環: 部署失敗→人收到告警)
+            curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
+              -d chat_id="${TG_CHAT}" \
+              -d text="🚨 ESGGO CD $MSG" \
+              -d parse_mode="HTML" > /dev/null || echo "[warn] telegram notify failed"
           fi
