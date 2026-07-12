@@ -256,6 +256,7 @@ async function dispatchAI(task, skillId) {
   const imageUrl = task.imageUrl || task.image_url || null;
   const skill = SKILL_REGISTRY.find(s => s.id === skillId);
   const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
+  const localVisionModel = process.env.LOCAL_GEMMA_VISION_MODEL || 'gemma3:4b';
 
   // ══ 智慧模型路由 ══════════════════════════════════════════
   const taskType = inferTaskType(prompt);
@@ -269,9 +270,31 @@ async function dispatchAI(task, skillId) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision',
+          model: localVisionModel,
           prompt: `${ESG_SYSTEM_PROMPT}\n\n${prompt}`,
           image: imageUrl.startsWith('data:') ? imageUrl : undefined,
+          stream: false
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const rawLocal = data.response || data.content;
+        return { content: stripGemma4Thinking(rawLocal), provider: 'Local', model: localVisionModel, taskType };
+      }
+    } catch (e) {
+      console.warn('[OmniGateway] Local server fallback:', e.message);
+    }
+  }
+
+  // 1b. Text tasks -> local Gemma 4 (text-only, stronger) before cloud
+  if (localServer && !imageUrl) {
+    try {
+      const response = await fetch(`${localServer}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision',
+          prompt: `${ESG_SYSTEM_PROMPT}\n\n${prompt}`,
           stream: false
         })
       });
@@ -281,7 +304,7 @@ async function dispatchAI(task, skillId) {
         return { content: stripGemma4Thinking(rawLocal), provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision', taskType };
       }
     } catch (e) {
-      console.warn('[OmniGateway] Local server fallback:', e.message);
+      console.warn('[OmniGateway] Local text fallback:', e.message);
     }
   }
 
