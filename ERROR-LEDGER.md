@@ -3,7 +3,7 @@
 > 用途：每次要「修 GitHub / 開 PR / 合併 / 部署」前，先打開這張表，
 > 對照是否踩到已知坑；修完後在「重複?」欄標註本次是否又犯同一類。
 > 規則：同一類錯誤若本週內 ≥2 次出現 → 標 `🔴 重複`，需做成 skill 或預檢清單。
-> 最後更新：2026-07-11
+> 最後更新：2026-07-12
 
 ## 欄位說明
 - **重複?** 🔴 重複（本週 ≥2 次）/ 🟡 偶發 / 🟢 一次性
@@ -49,6 +49,7 @@
 |---|------|------|----------|------|-------------|-------|------|------|
 | T1 | 07-11 | git status 在 python 空 | execute_code 內 `git status --porcelain` / `git ls-files` 回空 | MSYS python 下 git 行為異常 | 用 terminal 跑 `git ls-files --others --exclude-standard > file`，再 read_file 讀；路徑用 `/` 不用 `\` | 🟢 一次性 | fixed | 本 session |
 | T2 | 07-11 | 跨 cluster 依賴分析 | 用相對 import 判斷檔案是否依賴 branch-only 基礎，誤判為 0 | os.path.join 混用 `/`+`\` 致路徑錯 | 一律 `"/".join()` 拼接，resolve 後 `replace("\","/")` | 🟢 一次性 | fixed | 本 session |
+| T3 | 07-12 | vitest 模組實例陷阱（bus 收 0 事件） | 測試直接 `import { enhancedOmniBus }` 訂閱 `external-forward`，但生產鏈經 `omni-gateway` 轉發的事件收不到（subscribe 0 筆）；用 `console.log` 直接 publish 同實例卻收到 1 筆 | vitest 下「測試直接 import 的 bus 單例」與「經 `omni-gateway` 間接 import 的 bus 單例」解析為不同模組拷貝（相對路徑 / 掛載點差異），兩份 `new SimpleOmniBus()` 互不連通；生產（Next 單一模組圖）正常 | **事件總線收發驗證改 `vi.spyOn(delegationEvents,'publishDelegationEvent')`** 直接驗證各組件確實呼叫統一發布器（同模組實例，穩健）；或測試與受測端都用測試直接 import 的同一 `enhancedOmniBus` 實例（SSE 端點測試即如此，因其直接 import bus 而非經 omni-gateway） | 🟢 一次性 | known | PR #248 #251 |
 
 ## 五、草稿待修清單（wip/draft-scaffolding，經核對非誤報，本 session 決定不修）
 
