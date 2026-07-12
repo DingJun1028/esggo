@@ -179,6 +179,18 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
 // ... 使用完畢 unsub();
 ```
 
+### POST `/api/delegation/events` — 雙向回寫 (client → bus)
+```jsonc
+// body
+{ "delegationId": "del_xxx", "type": "delegation.decision.made",
+  "topic": "delegation.decision",            // 可省，將依 type 推導
+  "payload": { "decisionId": "dec-xyz" } }
+// 驗證：delegationId 存在(404) → validateDelegation(id,'execute')(403) → type 須為 DelegationEventNames 值(400)
+// 200 → { success, hashLock }   (hashLock 為 SHA-256，溯源回寫事件)
+// 與 GET /api/delegation/events/stream（server→client）互補，構成委派事件雙向同步
+```
+雙向同步語意：client 經 `POST` 回寫事件至同一 `omni-agent-bus`（`external-forward`），所有 `GET /stream` 訂閱者（含其他 client）即時收到 → 狀態雙向一致。
+
 > **事件總線貫通（深貫廣通）**：授權生命週期（`DELEGATION_CREATED` / `VALIDATED` / `TERMINATED`）由 `CompleteDelegationManager`、
 > 決策（`DELEGATION_DECISION_MADE`）由 `AutonomousDecisionEngine`、回報（`DELEGATION_DECISION_REPORTED`）由 agent、
 > 執行（`DELEGATION_EXECUTION_STARTED` / `COMPLETED`）由執行路由，統一經 `omni-gateway.secureForward` 轉發至
@@ -210,6 +222,7 @@ const unsub = enhancedOmniBus.subscribe('external-forward', (ev) => {
       `makeDecision` 委託 `strategy.select()` 選擇最佳方案。
 - [x] **Gateway 端對端**：`POST /api/delegation/[id]/execute` 於執行前 / 後經 `omni-gateway.secureForward` 實際轉發 `DELEGATION_EXECUTION_STARTED` / `DELEGATION_EXECUTION_COMPLETED` 至 `omni-agent-bus`（含 SHA-256 `hashLock` 溯源）；回應附 `gateway.startHashLock` / `gateway.completeHashLock`。另含 route-level e2e 測試斷言回傳 64 字元 hashLock。
 - [x] **事件訂閱 SSE**：`GET /api/delegation/events/stream?delegationId=` 經 `enhancedOmniBus` 訂閱 `external-forward`，即時推送該 delegation 生命週期事件（含 `hashLock` 溯源），`monitor`（或 `full`）權限把關、斷線自動退訂。亦可直接於應用內 `enhancedOmniBus.subscribe('external-forward', ...)` 消費（見第 5 節「事件消費者範例」）。
+- [x] **事件雙向同步**：`POST /api/delegation/events` 接收 client 經同一 `omni-agent-bus`（`external-forward`）回寫的委派事件（需 `execute`/`full` 權限），與 SSE（server→client）互補構成雙向同步；回寫事件同樣附 SHA-256 `hashLock` 溯源。
 
 ---
 
