@@ -113,6 +113,40 @@ model AlertTag {
   @@index([tagId])
 }
 
+// ══ Universal Tag — 萬能標籤配對合成層 ══════════════════════
+// 串接 ESGTag (法規分類) + OmniTag (組件信任) 為統一配對層
+model UniversalTag {
+  id        String   @id @default(cuid())
+  label     String
+  kind      String   // 'esg' | 'omni' | 'custom'
+  esgTagId  String?  // 關聯 ESGTag.id (kind='esg')
+  omniType  String?  // GRI/TCFD/TNFD/SDG/custom (kind='omni')
+  status    String   @default("active") // active/verified/archived
+  metadata  String   @default("{}")     // JSON
+  createdAt DateTime @default(now())
+  pairsAnchor TagPair[] @relation("tagPairsAnchor")
+  pairsEvidence TagPair[] @relation("tagPairsEvidence")
+
+  @@unique([label, kind])
+  @@index([kind])
+}
+
+model TagPair {
+  id            String   @id @default(cuid())
+  anchorTagId   String
+  evidenceTagId String?
+  anchor        UniversalTag @relation("tagPairsAnchor", fields: [anchorTagId], references: [id], onDelete: Cascade)
+  evidence      UniversalTag? @relation("tagPairsEvidence", fields: [evidenceTagId], references: [id], onDelete: SetNull)
+  entityType    String   // regulation/report/alert/component
+  entityId      String
+  confidence    Float    @default(1.0)
+  createdAt     DateTime @default(now())
+
+  @@unique([anchorTagId, entityType, entityId])
+  @@index([entityType, entityId])
+  @@index([anchorTagId])
+}
+
 // Crawl history log
 model CrawlHistory {
   id              String   @id @default(cuid())
