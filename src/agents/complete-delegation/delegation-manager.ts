@@ -19,6 +19,7 @@ import {
 } from '../../types/complete-delegation';
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
+import { createFileAuditSink, type FullAuditSink, type AuditEntry } from './audit-sink';
 
 /**
  * 完全代主自行 - 授權管理器
@@ -28,9 +29,17 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   private _principalDelegations: Map<string, Set<string>> = new Map();
   private _agentDelegations: Map<string, Set<string>> = new Map();
   private _auditLogger: AuditLogger;
+  private _fullSink?: FullAuditSink;
 
-  constructor(config?: { auditSink?: AuditSink }) {
-    this._auditLogger = new AuditLogger(config?.auditSink);
+  constructor(
+    config?: { auditSink?: AuditSink; fullSink?: FullAuditSink }
+  ) {
+    this._fullSink = config?.fullSink;
+    // 全量 sink 的 onLog 作為 AuditLogger 的 sink，使每筆審計同時持久化（不截斷）
+    const sink: AuditSink | undefined =
+      config?.auditSink ??
+      (this._fullSink ? (e) => this._fullSink!.onLog(e) : undefined);
+    this._auditLogger = new AuditLogger(sink);
   }
 
   /**
@@ -173,6 +182,23 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
    */
   getAuditTrail() {
     return this._auditLogger.getLogs();
+  }
+
+  /**
+   * 全量審計軌跡（對齊「全量」不變量）：
+   * 若已掛載全量 sink，則讀回持久層全量日誌（依 delegationId 過濾）；
+   * 否則退回記憶體環形緩衝區。
+   */
+  async getFullAuditTrail(delegationId?: string): Promise<AuditEntry[]> {
+    if (this._fullSink) {
+      const all = await this._fullSink.readAll();
+      return delegationId
+        ? all.filter(
+            (e) => (e as Record<string, unknown>).delegationId === delegationId
+          )
+        : all;
+    }
+    return this.getAuditTrail();
   }
 
   /**
@@ -451,7 +477,11 @@ let _instance: CompleteDelegationManager | null = null;
  */
 export function getDelegationManager(): CompleteDelegationManager {
   if (!_instance) {
-    _instance = new CompleteDelegationManager();
+    // 預設掛載全量審計 sink（對齊「全量」不變量）；設 AUDIT_FULL_VOLUME=false 可停用
+    const fullVolume = process.env.AUDIT_FULL_VOLUME !== 'false';
+    _instance = new CompleteDelegationManager(
+      fullVolume ? { fullSink: createFileAuditSink() } : undefined
+    );
   }
   return _instance;
 }
