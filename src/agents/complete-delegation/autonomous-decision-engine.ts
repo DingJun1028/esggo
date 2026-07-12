@@ -448,17 +448,18 @@ export type AuditSink = (entry: AuditEntry) => void | Promise<void>;
 export class AuditLogger {
   private _logs: AuditEntry[] = [];
   private _sink?: AuditSink;
-  private static readonly MAX_ENTRIES = 1000;
+  private _maxEntries: number;
 
-  constructor(sink?: AuditSink) {
+  constructor(sink?: AuditSink, options?: { maxEntries?: number }) {
     this._sink = sink;
+    this._maxEntries = options?.maxEntries ?? 0; // 0 = no limit (full-volume)
   }
 
   async log(entry: AuditEntry): Promise<void> {
     this._logs.push(entry);
 
-    // 限制記憶體用量（環形緩衝區）
-    if (this._logs.length > AuditLogger.MAX_ENTRIES) {
+    // Ring buffer truncation only when maxEntries > 0 is explicitly set
+    if (this._maxEntries > 0 && this._logs.length > this._maxEntries) {
       this._logs.shift();
     }
 
