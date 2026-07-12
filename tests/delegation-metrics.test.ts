@@ -1,0 +1,154 @@
+/**
+ * ==========================================
+ * 完全代主自行 - 委派事件指標觀測器測試
+ * ==========================================
+ *
+ * 驗證「監控/分析消費者」對齊平台不變量：
+ * - 全域：訂閱同一 omni-agent-bus（enhancedOmniBus）單例。
+ * - 全量：聚合所有委派事件（不抽樣、不截斷），非委派事件被忽略。
+ * - 雙向同步：server 推送與 client 回寫進入同一總線，觀測器一視同仁聚合。
+ */
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import { enhancedOmniBus } from '../src/lib/omni-agent-bus';
+import {
+  getDelegationMetrics,
+  resetDelegationMetrics,
+} from '../src/agents/complete-delegation/metrics';
+import { GET as metricsGET } from '../src/app/api/delegation/metrics/route';
+import { createCompleteDelegationAgent } from '../src/agents/complete-delegation';
+import type { NextRequest } from 'next/server';
+
+/** 模擬 secureForward 在總線上發布的真實委派事件形狀 */
+function publishReal(type: string, delegationId: string, ts: number): void {
+  enhancedOmniBus.publish('external-forward', {
+    event: 'external-forward',
+    payload: {
+      uuid: `ev-${delegationId}-${ts}`,
+      topic: 'external-forward',
+      payload: { type, delegationId },
+      hashLock: `lock-${delegationId}-${ts}`,
+    },
+    ts,
+  });
+}
+
+describe('DelegationMetrics observer (監控/分析消費者)', () => {
+  beforeEach(() => {
+    resetDelegationMetrics();
+  });
+
+  it('aggregates delegation events from the bus (full-volume, no sampling)', () => {
+    const m = getDelegationMetrics();
+    const now = Date.now();
+
+    publishReal('delegation.created', 'd1', now);
+    publishReal('delegation.created', 'd1', now + 1);
+    publishReal('delegation.terminated', 'd2', now + 2);
+    // 非委派事件應被忽略
+    enhancedOmniBus.publish('external-forward', {
+      event: 'external-forward',
+      payload: { type: 'other.event', delegationId: 'x' },
+      ts: now + 3,
+    });
+
+    const snap = m.getSnapshot();
+    expect(snap.total).toBe(3);
+    expect(snap.byType['delegation.created']).toBe(2);
+    expect(snap.byType['delegation.terminated']).toBe(1);
+    expect(snap.activeDelegations).toBe(2);
+    expect(snap.lastSeenAt).toBe(now + 2);
+  });
+
+  it('tracks per-delegation metrics separately', () => {
+    const m = getDelegationMetrics();
+    const now = Date.now();
+
+    publishReal('delegation.created', 'd1', now);
+    publishReal('delegation.validated', 'd1', now + 1);
+    publishReal('delegation.execution.completed', 'd2', now + 2);
+
+    expect(m.getDelegationSnapshot('d1').total).toBe(2);
+    expect(m.getDelegationSnapshot('d1').byType['delegation.created']).toBe(1);
+    expect(m.getDelegationSnapshot('d1').byType['delegation.validated']).toBe(1);
+    expect(m.getDelegationSnapshot('d2').total).toBe(1);
+    // 不存在的 delegation 回傳空指標
+    expect(m.getDelegationSnapshot('nope').total).toBe(0);
+  });
+});
+
+describe('GET /api/delegation/metrics', () => {
+  beforeEach(() => {
+    resetDelegationMetrics();
+  });
+
+  it('returns global aggregate without delegationId (200, no identifiers leaked)', async () => {
+    getDelegationMetrics(); // 先建立訂閱，確保後續事件被觀測
+    const now = Date.now();
+    publishReal('delegation.created', 'd1', now);
+    publishReal('delegation.terminated', 'd2', now + 1);
+
+    const req = {
+      url: 'http://localhost/api/delegation/metrics',
+    } as unknown as NextRequest;
+
+    const res = await metricsGET(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.total).toBe(2);
+    expect(body.activeDelegations).toBe(2);
+    // 全球聚合不暴露 delegation 識別碼
+    expect(body.byDelegation).toBeUndefined();
+  });
+
+  it('rejects unknown delegation (404)', async () => {
+    const req = {
+      url: 'http://localhost/api/delegation/metrics?delegationId=does-not-exist',
+    } as unknown as NextRequest;
+
+    const res = await metricsGET(req);
+    expect(res.status).toBe(404);
+  });
+
+  it('rejects without monitor permission (403)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'metrics-user-no-monitor',
+      permissions: ['read'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+
+    const req = {
+      url: `http://localhost/api/delegation/metrics?delegationId=${delegationId}`,
+    } as unknown as NextRequest;
+
+    const res = await metricsGET(req);
+    expect(res.status).toBe(403);
+  });
+
+  it('returns delegation metrics with monitor permission (200)', async () => {
+    const agent = await createCompleteDelegationAgent({
+      principalId: 'metrics-user-monitor',
+      permissions: ['monitor', 'full'],
+    });
+    const delegationId = agent.delegationScope.delegationId;
+    getDelegationMetrics(); // 先建立訂閱，確保後續事件被觀測
+    // 注意：createCompleteDelegationAgent 會非同步發布 delegation.created，
+    // 故本測試僅發布 delegation.validated（agent 不會發此類型）以做精確斷言。
+    const now = Date.now();
+    publishReal('delegation.validated', delegationId, now);
+
+    const req = {
+      url: `http://localhost/api/delegation/metrics?delegationId=${delegationId}`,
+    } as unknown as NextRequest;
+
+    const res = await metricsGET(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.delegationId).toBe(delegationId);
+    // agent 建立會非同步發布事件，故以 >= 驗證「本測試發布的事件確實被觀測」
+    expect(body.byType['delegation.validated']).toBeGreaterThanOrEqual(1);
+    expect(body.total).toBeGreaterThanOrEqual(1);
+  });
+});
