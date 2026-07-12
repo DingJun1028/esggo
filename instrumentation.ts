@@ -22,6 +22,11 @@ export async function register() {
       stopCron();
     });
     
-    console.log('[Instrumentation] Cron jobs initialized');
+    // Initialize OmniCore kernel (starts cache eviction + AGNES metrics polling).
+    // initialize() is idempotent, so calling it on every boot is safe.
+    const { omniKernel } = await import('@/lib/omni-core/omni-kernel');
+    omniKernel.initialize();
+
+    console.log('[Instrumentation] Cron jobs + OmniKernel initialized');
   }
 }
