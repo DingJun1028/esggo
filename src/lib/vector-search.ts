@@ -97,7 +97,7 @@ export class VectorSearchService {
             esgEntities: esgEntities.length > 0 ? esgEntities : undefined,
           };
         } catch {
-          return { noteId: result.note_id, similarity: result.similarity };
+          return { noteId: result.note_id, similarity: result.similarity, note: undefined };
         }
       })
     );
@@ -121,7 +121,7 @@ export class VectorSearchService {
           const note = await this.ncb.getNoteWithTags(result.note_id);
           return { noteId: result.note_id, similarity: result.similarity, note };
         } catch {
-          return { noteId: result.note_id, similarity: result.similarity };
+          return { noteId: result.note_id, similarity: result.similarity, note: undefined };
         }
       })
     );

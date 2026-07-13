@@ -44,13 +44,13 @@ export class ESGReportEngine {
 
     switch (config.standard) {
       case 'GRI':
-        content = await this.generateGRIReport(config, data as GRIReport);
+        content = await this.generateGRIReport(config, data as unknown as GRIReport);
         break;
       case 'SASB':
-        content = await this.generateSASBReport(config, data as SASBReport);
+        content = await this.generateSASBReport(config, data as unknown as SASBReport);
         break;
       case 'TCFD':
-        content = await this.generateTCFDReport(config, data as TCFDReport);
+        content = await this.generateTCFDReport(config, data as unknown as TCFDReport);
         break;
       default:
         throw new Error(`Unsupported standard: ${config.standard}`);
