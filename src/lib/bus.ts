@@ -12,7 +12,7 @@
 
 import { createHash } from 'crypto';
 import { enhancedOmniBus } from './omni-agent-bus';
-import type { IBusEvent } from './omni-core/contracts';
+import type { IBusEvent } from './omni-agent-bus';
 
 /**
  * 將事件發布至 omni-agent-bus（含 SHA-256 hashLock 溯源）。
@@ -58,5 +58,7 @@ export function publishThought(opts: ThoughtEvent): { hashLock: string } {
  * 訂閱指定 topic（如思考流頻道），回傳取消訂閱函式。
  */
 export function subscribeBusEvent(topic: string, cb: (event: IBusEvent) => void): () => void {
-  return enhancedOmniBus.subscribe(topic, cb);
+  // enhancedOmniBus.subscribe 使用 omni-agent-bus 的簡易 IBusEvent（非泛型），
+  // 與 contracts 的泛型 IBusEvent<T> 名稱相同但型別不同，故內部轉型。
+  return enhancedOmniBus.subscribe(topic, cb as (event: any) => void);
 }
