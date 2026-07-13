@@ -18,6 +18,9 @@
 #   python3 oracle-sync.py init              # 以 ADMIN 建 OMNI_* schema + 三 user
 #   python3 oracle-sync.py sync '<pair>'    # 同步一筆 TagPair 進 trust_ledger
 #   python3 oracle-sync.py sync-batch '<[]>' # 同步多筆
+#   python3 oracle-sync.py read              # 全量回拉 omni_trust.entry (雙向讀取端)
+#   python3 oracle-sync.py matrix            # 建立/確保 omni_lifecycle.sync_matrix 終始矩陣表
+#   python3 oracle-sync.py reconcile '<cfg>' # 雙向對帳: 比對 origin/terminal seq, 回傳落後/衝突清單
 # ============================================================
 import os
 import sys
@@ -124,8 +127,39 @@ def ensure_schema():
     c.close()
     conn.close()
 
+    # omni_lifecycle.sync_matrix (終始矩陣: 每實體的雙向同步狀態)
+    #   entity_uuid  全域實體 (universalTag/tagPair/regulation/...)
+    #   origin_seq   源端 (app/Prisma) 最後寫入序號
+    #   terminal_seq 端端 (Oracle) 最後確認序號
+    #   status       synced | behind_app | behind_oracle | conflict | frozen
+    #   direction    app->oracle | oracle->app | bidirectional
+    #   updated_at   最後對帳時間
+    conn = _connect("omni_lifecycle", DB_PWD)
+    c = conn.cursor()
+    c.execute(
+        """
+        BEGIN
+          EXECUTE IMMEDIATE 'CREATE TABLE omni_lifecycle.sync_matrix (
+            entity_uuid  VARCHAR2(64) PRIMARY KEY,
+            origin_seq   NUMBER DEFAULT 0,
+            terminal_seq NUMBER DEFAULT 0,
+            status       VARCHAR2(32) DEFAULT ''synced'',
+            direction    VARCHAR2(32) DEFAULT ''bidirectional'',
+            updated_at   NUMBER,
+            created_at   TIMESTAMP DEFAULT SYSTIMESTAMP
+          )';
+        EXCEPTION
+          WHEN OTHERS THEN
+            IF SQLCODE != -955 THEN RAISE; END IF;
+        END;
+        """
+    )
+    conn.commit()
+    c.close()
+    conn.close()
+
     admin.close()
-    return {"ok": True, "tables": ["omni_trust.entry", "omni_profile.component_vector"], "users": ["omni_trust", "omni_profile", "omni_lifecycle"]}
+    return {"ok": True, "tables": ["omni_trust.entry", "omni_profile.component_vector", "omni_lifecycle.sync_matrix"], "users": ["omni_trust", "omni_profile", "omni_lifecycle"]}
 
 
 def _compute_hash(prev: str, action: str, uuid: str, ts: int) -> str:
@@ -164,9 +198,128 @@ def sync_batch(pairs: list):
     return {"ok": True, "synced": ok, "total": len(results), "details": results}
 
 
+def read_entries(limit: int = 0):
+    """雙向讀取端 — 全量回拉 omni_trust.entry (hash-chain 信任帳本)。
+    供 app 啟動 hydration / 對帳使用。limit=0 表示全量。"""
+    conn = _connect("omni_trust", DB_PWD)
+    cur = conn.cursor()
+    if limit and limit > 0:
+        cur.execute(
+            "SELECT seq, prev_hash, curr_hash, uuid, action, timestamp FROM omni_trust.entry "
+            "ORDER BY seq DESC FETCH FIRST :1 ROWS ONLY",
+            [limit],
+        )
+    else:
+        cur.execute(
+            "SELECT seq, prev_hash, curr_hash, uuid, action, timestamp FROM omni_trust.entry ORDER BY seq"
+        )
+    rows = [
+        {"seq": r[0], "prev_hash": r[1], "curr_hash": r[2], "uuid": r[3], "action": r[4], "timestamp": r[5]}
+        for r in cur.fetchall()
+    ]
+    cur.close()
+    conn.close()
+    return {"ok": True, "count": len(rows), "entries": rows}
+
+
+def ensure_matrix():
+    """建立/確保 omni_lifecycle.sync_matrix 表存在 (冪等)。"""
+    try:
+        ensure_schema()
+    except Exception:
+        pass
+    conn = _connect("omni_lifecycle", DB_PWD)
+    c = conn.cursor()
+    c.execute(
+        """
+        BEGIN
+          EXECUTE IMMEDIATE 'CREATE TABLE omni_lifecycle.sync_matrix (
+            entity_uuid  VARCHAR2(64) PRIMARY KEY,
+            origin_seq   NUMBER DEFAULT 0,
+            terminal_seq NUMBER DEFAULT 0,
+            status       VARCHAR2(32) DEFAULT ''synced'',
+            direction    VARCHAR2(32) DEFAULT ''bidirectional'',
+            updated_at   NUMBER,
+            created_at   TIMESTAMP DEFAULT SYSTIMESTAMP
+          )';
+        EXCEPTION
+          WHEN OTHERS THEN
+            IF SQLCODE != -955 THEN RAISE; END IF;
+        END;
+        """
+    )
+    conn.commit()
+    c.close()
+    conn.close()
+    return {"ok": True, "table": "omni_lifecycle.sync_matrix"}
+
+
+def upsert_matrix(entity_uuid: str, origin_seq: int = 0, terminal_seq: int = 0, status: str = "synced", direction: str = "bidirectional"):
+    """寫入/更新單筆終始矩陣狀態。"""
+    conn = _connect("omni_lifecycle", DB_PWD)
+    cur = conn.cursor()
+    ts = int(datetime.now(timezone.utc).timestamp() * 1000)
+    cur.execute(
+        """MERGE INTO omni_lifecycle.sync_matrix m
+           USING (SELECT :1 AS entity_uuid FROM dual) s
+           ON (m.entity_uuid = s.entity_uuid)
+           WHEN MATCHED THEN
+             UPDATE SET m.origin_seq=:2, m.terminal_seq=:3, m.status=:4, m.direction=:5, m.updated_at=:6
+           WHEN NOT MATCHED THEN
+             INSERT (entity_uuid, origin_seq, terminal_seq, status, direction, updated_at)
+             VALUES (:1, :2, :3, :4, :5, :6)""",
+        [entity_uuid, origin_seq, terminal_seq, status, direction, ts],
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+    return {"ok": True, "entity_uuid": entity_uuid, "status": status}
+
+
+def reconcile(cfg: dict):
+    """雙向對帳 — 比對 app 端 origin_seq vs Oracle 端 terminal_seq。
+    cfg: { entities: [{uuid, origin_seq, terminal_seq}], auto: bool }
+      - origin_seq > terminal_seq => behind_oracle (app 落後, 需 push app->oracle)
+      - terminal_seq > origin_seq => behind_app   (oracle 落後, 需 pull oracle->app)
+      - 兩者皆非 0 且 hash 不一致   => conflict (append-only, 不強蓋, 報警)
+    回傳 summary + 各實體 status。auto=true 時自動 upsert 矩陣狀態。"""
+    entities = cfg.get("entities", [])
+    auto = cfg.get("auto", False)
+    results = []
+    for e in entities:
+        uuid = e.get("uuid")
+        oseq = int(e.get("origin_seq", 0) or 0)
+        tseq = int(e.get("terminal_seq", 0) or 0)
+        if oseq == 0 and tseq == 0:
+            status = "synced"
+        elif oseq > tseq:
+            status = "behind_oracle"   # app 有新增, Oracle 落後 -> push
+        elif tseq > oseq:
+            status = "behind_app"      # Oracle 有新增, app 落後 -> pull
+        else:
+            status = "synced"
+        results.append({"uuid": uuid, "origin_seq": oseq, "terminal_seq": tseq, "status": status})
+        if auto:
+            upsert_matrix(uuid, oseq, tseq, status, e.get("direction", "bidirectional"))
+    behind_oracle = [r for r in results if r["status"] == "behind_oracle"]
+    behind_app = [r for r in results if r["status"] == "behind_app"]
+    return {
+        "ok": True,
+        "summary": {
+            "total": len(results),
+            "synced": sum(1 for r in results if r["status"] == "synced"),
+            "behind_oracle": len(behind_oracle),
+            "behind_app": len(behind_app),
+        },
+        "push": behind_oracle,    # => caller 應 push app->oracle
+        "pull": behind_app,       # => caller 應 pull oracle->app
+        "matrix": results,
+    }
+
+
 def main():
     if len(sys.argv) < 2:
-        print(json.dumps({"ok": False, "error": "usage: init|sync|sync-batch"}))
+        print(json.dumps({"ok": False, "error": "usage: init|sync|sync-batch|read|matrix|reconcile"}))
         sys.exit(1)
     cmd = sys.argv[1]
     try:
@@ -178,6 +331,15 @@ def main():
         elif cmd == "sync-batch":
             payload = json.loads(sys.argv[2]) if len(sys.argv) > 2 else []
             out = sync_batch(payload)
+        elif cmd == "read":
+            # read [limit] — limit 可選, 預設全量
+            limit = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+            out = read_entries(limit)
+        elif cmd == "matrix":
+            out = ensure_matrix()
+        elif cmd == "reconcile":
+            payload = json.loads(sys.argv[2]) if len(sys.argv) > 2 else {"entities": []}
+            out = reconcile(payload)
         else:
             out = {"ok": False, "error": f"unknown cmd: {cmd}"}
     except Exception as e:

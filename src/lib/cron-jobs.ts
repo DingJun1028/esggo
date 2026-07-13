@@ -9,6 +9,9 @@
 
 import { PrismaClient } from '@prisma/client';
 
+// 雙向 Oracle 同步協調器 (全域全端全量終始矩陣)
+import { runBidirectionalSync, hydrateFromOracle } from '../core/tags/oracle-sync-matrix';
+
 const prisma = new PrismaClient();
 
 // ============================================================
@@ -199,6 +202,26 @@ const jobs: CronJob[] = [
     lastRun: 0,
     isRunning: false,
   },
+  {
+    // 全域全端全量雙向同步 — 終始矩陣對帳 (Oracle <-> app)
+    name: 'oracle-bidirectional-sync',
+    schedule: 10 * 60 * 1000, // 每 10 分鐘對帳一次
+    task: async () => {
+      const r = await runBidirectionalSync();
+      if (r.ok) {
+        console.log(
+          `[Cron] Oracle 雙向同步: 對帳 ${r.reconciled.total} (一致 ${r.reconciled.synced}, ` +
+          `app落後 ${r.reconciled.behindApp}, oracle落後 ${r.reconciled.behindOracle}) ` +
+          `推送 ${r.pushed} / 回拉 ${r.pulled}`,
+        );
+      } else {
+        console.warn(`[Cron] Oracle 雙向同步跳過: ${r.reason ?? 'unknown'}`);
+      }
+      return r;
+    },
+    lastRun: 0,
+    isRunning: false,
+  },
 ];
 
 let schedulerInterval: ReturnType<typeof setInterval> | null = null;
@@ -231,6 +254,14 @@ export function initCronJobs(): () => void {
       }
     })
     .catch(() => {});
+
+  // 啟動 hydration — 從 Oracle 全量回拉信任帳本 (oracle->app)
+  hydrateFromOracle()
+    .then((h) => {
+      if (h.ok) console.log(`[Cron] Oracle hydration: 回拉 ${h.pulled} 筆, 標記 ${h.matched} 筆`);
+      else console.warn(`[Cron] Oracle hydration 跳過: ${h.reason ?? 'unknown'}`);
+    })
+    .catch((e) => console.warn('[Cron] Oracle hydration error:', e));
 
   console.log(`[Cron] Initialized ${jobs.length} jobs`);
   return () => stopCronJobs();
