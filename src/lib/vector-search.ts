@@ -23,7 +23,7 @@ export interface VectorSearchOptions {
 export interface EnrichedSearchResult {
   noteId: string;
   similarity: number;
-  note?: any;
+  note?: Record<string, unknown>;
   esgEntities?: ESGEntityRow[];
 }
 
