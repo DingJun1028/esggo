@@ -40,13 +40,14 @@ TNS = os.environ.get("OMNI_TNS", "omniurag_high")
 def _connect(user: str, pwd: str):
     if not pwd:
         raise RuntimeError(f"password for {user} not set")
-    # thin mode: 純 python, 不需 Oracle Instant Client
-    # config_dir 指向 wallet 目錄 (含 tnsnames.ora / ewallet.p12)
+    # thin mode + mTLS: ADB 要求 mutual TLS (is-mtls-connection-required=true)
+    # wallet 目錄含 ewallet.p12 (client cert) + tnsnames.ora + sqlnet.ora
     return oracledb.connect(
         user=user,
         password=pwd,
-        dsn=f"{user}_{TNS}",
+        dsn=TNS,
         config_dir=WALLET_DIR,
+        wallet_location=WALLET_DIR,
     )
 def ensure_schema():
     """以 ADMIN 建立三個 user + 表。"""
