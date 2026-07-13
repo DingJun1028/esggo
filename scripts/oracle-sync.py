@@ -4,20 +4,20 @@
 # scripts/oracle-sync.py
 # ============================================================
 # 依賴 (oci-cli venv 內): oracledb (thin mode, 純 python, 無原生編譯)
-# 連線: ADB wallet (TNS) + OMNI_DB_PWD
-# 同步目標:
-#   - omni_trust.entry     (hash-chain 信任帳本, 防篡改)
-#   - omni_profile.component_vector (RAG 向量, embedding 暫 NULL)
+# 連線: ADB wallet (TNS) + 密碼
+#   - 建表階段: ADMIN user (OMNI_ADMIN_PWD) — 建立 omni_trust/omni_profile/omni_lifecycle
+#   - 同步階段: omni_trust user (OMNI_DB_PWD)
 #
 # 環境變數:
-#   OMNI_DB_PWD      ADB schema 密碼 (來自 OCI Vault)
-#   OMNI_WALLET_DIR  wallet 目錄 (預設 ./wallet)
-#   OMNI_TNS          TNS 名稱 (預設 omni_trust_high)
+#   OMNI_ADMIN_PWD   ADB ADMIN user 密碼 (建表用)
+#   OMNI_DB_PWD      omni_trust/omni_profile/omni_lifecycle 三 user 密碼 (同步用, 建表時設定)
+#   OMNI_WALLET_DIR  wallet 目錄 (預設 ~/.wallet)
+#   OMNI_TNS          TNS 名稱 (預設 omniurag_high)
 #
 # 用法:
-#   python3 oracle-sync.py init                     # 建表 (需 admin 或具備建表權限)
-#   python3 oracle-sync.py sync '<tagpair_json>'     # 同步一筆 TagPair
-#   python3 oracle-sync.py sync-batch '<json_array>' # 同步多筆
+#   python3 oracle-sync.py init              # 以 ADMIN 建 OMNI_* schema + 三 user
+#   python3 oracle-sync.py sync '<pair>'    # 同步一筆 TagPair 進 trust_ledger
+#   python3 oracle-sync.py sync-batch '<[]>' # 同步多筆
 # ============================================================
 import os
 import sys
@@ -31,27 +31,50 @@ except ImportError as e:
     print(json.dumps({"ok": False, "error": f"oracledb not installed: {e}"}))
     sys.exit(2)
 
-OMNI_DB_PWD = os.environ.get("OMNI_DB_PWD")
-WALLET_DIR = os.environ.get("OMNI_WALLET_DIR", "./wallet")
-TNS = os.environ.get("OMNI_TNS", "omni_trust_high")
+ADMIN_PWD = os.environ.get("OMNI_ADMIN_PWD")
+DB_PWD = os.environ.get("OMNI_DB_PWD")
+WALLET_DIR = os.environ.get("OMNI_WALLET_DIR", os.path.expanduser("~/.wallet"))
+TNS = os.environ.get("OMNI_TNS", "omniurag_high")
 
 
-def _connect(user: str):
-    if not OMNI_DB_PWD:
-        raise RuntimeError("OMNI_DB_PWD not set")
+def _connect(user: str, pwd: str):
+    if not pwd:
+        raise RuntimeError(f"password for {user} not set")
     # thin mode: 純 python, 不需 Oracle Instant Client
+    # config_dir 指向 wallet 目錄 (含 tnsnames.ora / ewallet.p12)
     return oracledb.connect(
-        user=user, password=OMNI_DB_PWD, dsn=f"{user}_{TNS}"
+        user=user,
+        password=pwd,
+        dsn=f"{user}_{TNS}",
+        config_dir=WALLET_DIR,
     )
-
-
 def ensure_schema():
-    """建 OMNI_TRUST / OMNI_PROFILE 表 (若無)。需具備建表權限。"""
-    conn = _connect("omni_trust")
-    cur = conn.cursor()
-    cur.execute(
+    """以 ADMIN 建立三個 user + 表。"""
+    if not ADMIN_PWD:
+        return {"ok": False, "error": "OMNI_ADMIN_PWD not set"}
+    if not DB_PWD:
+        return {"ok": False, "error": "OMNI_DB_PWD not set (used for omni_* users)"}
+
+    admin = _connect("ADMIN", ADMIN_PWD)
+    cur = admin.cursor()
+    # 建立三個 schema user (若無)
+    for u in ("omni_trust", "omni_profile", "omni_lifecycle"):
+        try:
+            cur.execute(f'CREATE USER {u} IDENTIFIED BY "{DB_PWD}"')
+            cur.execute(f'GRANT CONNECT, RESOURCE, CREATE TABLE, UNLIMITED TABLESPACE TO {u}')
+        except Exception as e:
+            # ORA-01920 user already exists — 可接受
+            if "01920" not in str(e):
+                raise
+    admin.commit()
+
+    # omni_trust.entry (hash-chain 信任帳本)
+    conn = _connect("omni_trust", DB_PWD)
+    c = conn.cursor()
+    c.execute(
         """
-        CREATE TABLE IF NOT EXISTS omni_trust.entry (
+        BEGIN
+          EXECUTE IMMEDIATE 'CREATE TABLE omni_trust.entry (
             seq         NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             prev_hash   VARCHAR2(128),
             curr_hash   VARCHAR2(128),
@@ -60,19 +83,24 @@ def ensure_schema():
             timestamp   NUMBER,
             frozen      NUMBER(1) DEFAULT 0,
             created_at  TIMESTAMP DEFAULT SYSTIMESTAMP
-        )
+          )';
+        EXCEPTION
+          WHEN OTHERS THEN
+            IF SQLCODE != -955 THEN RAISE; END IF;  -- ORA-00955 表已存在
+        END;
         """
     )
     conn.commit()
-    cur.close()
+    c.close()
     conn.close()
 
-    # vector 表 (embedding 暫 NULL, 未來接 embedding 服務)
-    conn = _connect("omni_profile")
-    cur = conn.cursor()
-    cur.execute(
+    # omni_profile.component_vector (RAG 向量, embedding 預設 NULL)
+    conn = _connect("omni_profile", DB_PWD)
+    c = conn.cursor()
+    c.execute(
         """
-        CREATE TABLE IF NOT EXISTS omni_profile.component_vector (
+        BEGIN
+          EXECUTE IMMEDIATE 'CREATE TABLE omni_profile.component_vector (
             uuid        VARCHAR2(64) PRIMARY KEY,
             version     VARCHAR2(32),
             timestamp   NUMBER,
@@ -81,13 +109,19 @@ def ensure_schema():
             hash        VARCHAR2(128),
             frozen      NUMBER(1) DEFAULT 0,
             created_at  TIMESTAMP DEFAULT SYSTIMESTAMP
-        )
+          )';
+        EXCEPTION
+          WHEN OTHERS THEN
+            IF SQLCODE != -955 THEN RAISE; END IF;
+        END;
         """
     )
     conn.commit()
-    cur.close()
+    c.close()
     conn.close()
-    return {"ok": True, "tables": ["omni_trust.entry", "omni_profile.component_vector"]}
+
+    admin.close()
+    return {"ok": True, "tables": ["omni_trust.entry", "omni_profile.component_vector"], "users": ["omni_trust", "omni_profile", "omni_lifecycle"]}
 
 
 def _compute_hash(prev: str, action: str, uuid: str, ts: int) -> str:
@@ -96,19 +130,15 @@ def _compute_hash(prev: str, action: str, uuid: str, ts: int) -> str:
 
 
 def sync_tagpair(pair: dict):
-    """將一筆 TagPair 同步進 omni_trust.entry (hash-chain)。"""
     uuid = pair.get("uuid") or pair.get("pairId") or pair.get("anchorId")
     if not uuid:
         return {"ok": False, "error": "no uuid in pair"}
     action = pair.get("action", "TRUST_GRANT")
     ts = int(pair.get("timestamp", datetime.now(timezone.utc).timestamp() * 1000))
 
-    conn = _connect("omni_trust")
+    conn = _connect("omni_trust", DB_PWD)
     cur = conn.cursor()
-    # 取上一筆 hash (鏈尾)
-    cur.execute(
-        "SELECT curr_hash FROM omni_trust.entry ORDER BY seq DESC FETCH FIRST 1 ROWS ONLY"
-    )
+    cur.execute("SELECT curr_hash FROM omni_trust.entry ORDER BY seq DESC FETCH FIRST 1 ROWS ONLY")
     row = cur.fetchone()
     prev_hash = row[0] if row else "0" * 64
     curr_hash = _compute_hash(prev_hash, action, uuid, ts)
@@ -125,9 +155,7 @@ def sync_tagpair(pair: dict):
 
 
 def sync_batch(pairs: list):
-    results = []
-    for p in pairs:
-        results.append(sync_tagpair(p))
+    results = [sync_tagpair(p) for p in pairs]
     ok = sum(1 for r in results if r.get("ok"))
     return {"ok": True, "synced": ok, "total": len(results), "details": results}
 
