@@ -4,7 +4,7 @@
 // (奇效七：細胞分裂 – 動態代理增殖與熱插拔)
 // ------------------------------------------------------------
 
-import * as crypto from "crypto";
+import * as crypto from 'crypto';
 import {
   IComponentCore,
   IBusEvent,
@@ -14,17 +14,17 @@ import {
   IOmniAgentGateway,
   ITimeTravelRegistry,
   IMartialLawEvent,
-} from "../types/core-contract";
-import { OmniSeed } from "../lib/omni-seed";
-import { OmniTag } from "../lib/omni-tag";
-import { OmniEvidence } from "./omni-evidence";
-import { OmniTime } from "./omni-time";
-import { OmniMemory } from "./omni-memory";
-import { OmniAPI, OmniBlackboard, OmniHealing, OmniEvolution } from "./omni-helper-modules";
+} from '../types/core-contract';
+import { OmniSeed } from '../lib/omni-seed';
+import { OmniTag } from '../lib/omni-tag';
+import { OmniEvidence } from './omni-evidence';
+import { OmniTime } from './omni-time';
+import { OmniMemory } from './omni-memory';
+import { OmniAPI, OmniBlackboard, OmniHealing, OmniEvolution } from './omni-helper-modules';
 
 // ---------- 1️⃣ Helper ----------
 const now = () => Date.now();
-function makeCore<T extends IComponentCore>(c: Omit<T, "timestamp">): T {
+function makeCore<T extends IComponentCore>(c: Omit<T, 'timestamp'>): T {
   return { ...c, timestamp: now() } as T;
 }
 
@@ -58,16 +58,22 @@ export class OmniAgent implements IOmniAgent {
   constructor(private readonly core: IComponentCore) {}
 
   // getters for core fields
-  get uuid() { return this.core.uuid; }
-  get version() { return this.core.version; }
-  get timestamp() { return this.core.timestamp; }
+  get uuid() {
+    return this.core.uuid;
+  }
+  get version() {
+    return this.core.version;
+  }
+  get timestamp() {
+    return this.core.timestamp;
+  }
   evidence = this.core.evidence;
 
   async execute(event: IBusEvent): Promise<void> {
     // Simple placeholder – real business logic goes here
     console.log(`[OA ${this.uuid}] executing event ${event.eventName}`);
     // Trigger EMERGED hook if registered
-    const hooks = this.hooks.get("EMERGED");
+    const hooks = this.hooks.get('EMERGED');
     if (hooks) {
       for (const h of hooks) await h({ event });
     }
@@ -107,12 +113,12 @@ export class OmniAgentBus implements IOmniAgentBus {
 
   constructor(
     private readonly registry: ITimeTravelRegistry,
-    private readonly ecosystem: OmniCoreEcosystem
+    private readonly ecosystem: OmniCoreEcosystem,
   ) {}
 
   async publish(event: IBusEvent) {
     await this.registry.record(event);
-    const topic = event.topic ?? "*";
+    const topic = event.topic ?? '*';
     if (!this.queues.has(topic)) this.queues.set(topic, []);
     this.queues.get(topic)!.push(event);
     const hs = this.handlers.get(topic) ?? [];
@@ -127,7 +133,7 @@ export class OmniAgentBus implements IOmniAgentBus {
 
   async monitorBackpressure(topic: string, threshold: number) {
     const q = this.queues.get(topic) ?? [];
-    if (topic === "data.clean" && q.length > threshold) {
+    if (topic === 'data.clean' && q.length > threshold) {
       await this.ecosystem.cloneAgentForTopic(topic);
     }
     if (q.length === 0) {
@@ -147,7 +153,7 @@ export class OmniAgentBus implements IOmniAgentBus {
   async shadowTestIngress(event: IBusEvent) {
     const shadow = makeCore<IBusEvent>({
       ...event,
-      version: "shadow-test",
+      version: 'shadow-test',
     });
     await this.publish(shadow);
   }
@@ -156,41 +162,57 @@ export class OmniAgentBus implements IOmniAgentBus {
 // ---------- 5️⃣ OmniAgentGateway (simplified) ----------
 export class OmniAgentGateway implements IOmniAgentGateway {
   private martial = false;
-  private reason = "";
+  private reason = '';
   private core: IComponentCore;
 
-  constructor(private readonly bus: IOmniAgentBus, core?: IComponentCore) {
-    this.core = core ?? { uuid: crypto.randomUUID(), version: "1.0.0", timestamp: Date.now(), evidence: {} };
+  constructor(
+    private readonly bus: IOmniAgentBus,
+    core?: IComponentCore,
+  ) {
+    this.core = core ?? {
+      uuid: crypto.randomUUID(),
+      version: '1.0.0',
+      timestamp: Date.now(),
+      evidence: {},
+    };
   }
 
   // IComponentCore getters
-  get uuid() { return this.core.uuid; }
-  get version() { return this.core.version; }
-  get timestamp() { return this.core.timestamp; }
-  get evidence() { return this.core.evidence; }
+  get uuid() {
+    return this.core.uuid;
+  }
+  get version() {
+    return this.core.version;
+  }
+  get timestamp() {
+    return this.core.timestamp;
+  }
+  get evidence() {
+    return this.core.evidence;
+  }
 
   async ingress(event: IBusEvent) {
     const valid = !!event.hashLock && !!event.evidence?.hash;
     if (!valid) {
-      this.onMartialLaw("evidence mismatch");
+      this.onMartialLaw('evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({
         uuid: crypto.randomUUID(),
-        version: "1.0.0",
-        reason: "evidence mismatch",
-        source: "OAG",
+        version: '1.0.0',
+        reason: 'evidence mismatch',
+        source: 'OAG',
         relatedEvent: event,
         evidence: {},
       });
       await this.bus.publish({
         uuid: ml.uuid,
         version: ml.version,
-        eventName: "sys.martial_law",
+        eventName: 'sys.martial_law',
         payload: ml,
-        stage: "EMERGED",
-        source_origin: "gateway",
+        stage: 'EMERGED',
+        source_origin: 'gateway',
         evidence: ml.evidence,
         timestamp: ml.timestamp,
-        topic: "system",
+        topic: 'system',
         lifecycle_path: [],
         hashLock: undefined,
       } as IBusEvent);
@@ -204,25 +226,25 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   async egress(event: IBusEvent) {
     const valid = !!event.hashLock && !!event.evidence?.hash;
     if (!valid) {
-      this.onMartialLaw("egress evidence mismatch");
+      this.onMartialLaw('egress evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({
         uuid: crypto.randomUUID(),
-        version: "1.0.0",
-        reason: "egress evidence mismatch",
-        source: "OAG",
+        version: '1.0.0',
+        reason: 'egress evidence mismatch',
+        source: 'OAG',
         relatedEvent: event,
         evidence: {},
       });
       await this.bus.publish({
         uuid: ml.uuid,
         version: ml.version,
-        eventName: "sys.martial_law",
+        eventName: 'sys.martial_law',
         payload: ml,
-        stage: "EMERGED",
-        source_origin: "gateway",
+        stage: 'EMERGED',
+        source_origin: 'gateway',
         evidence: ml.evidence,
         timestamp: ml.timestamp,
-        topic: "system",
+        topic: 'system',
         lifecycle_path: [],
         hashLock: undefined,
       } as IBusEvent);
@@ -244,15 +266,18 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     }
     // Build request payload – here we just forward the stub as a prompt.
     const payload = JSON.stringify({ prompt: userIntentStub });
-    // Use curl to call NVIDIA API (placeholder endpoint). Adjust URL & headers as needed.
-    const curlCmd = `curl -s -X POST https://api.nvidia.com/v1/predict \
-      -H "Authorization: Bearer ${apiKey}" \
-      -H "Content-Type: application/json" \
-      -d '${payload}'`;
-    const { execSync } = await import('node:child_process');
+    // Use fetch to call NVIDIA API (placeholder endpoint). Adjust URL & headers as needed.
     let output: string;
     try {
-      output = execSync(curlCmd, { encoding: 'utf8' });
+      const response = await fetch('https://api.nvidia.com/v1/predict', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: payload,
+      });
+      output = await response.text();
     } catch (e) {
       console.error('[OAG] NVIDIA API call failed', e);
       return [];
@@ -279,7 +304,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         evidence: {},
         lifecycle_path: [],
         hashLock: crypto.randomUUID(),
-      })
+      }),
     );
     // Write raw predictions to secret vault (JSON file).
     try {
@@ -308,11 +333,13 @@ export class OmniAgentGateway implements IOmniAgentGateway {
 
   liftMartialLaw() {
     this.martial = false;
-    this.reason = "";
-    console.info("[OAG] MARTIAL LAW LIFTED");
+    this.reason = '';
+    console.info('[OAG] MARTIAL LAW LIFTED');
   }
 
-  isUnderMartialLaw() { return this.martial; }
+  isUnderMartialLaw() {
+    return this.martial;
+  }
 }
 
 // ---------- 6️⃣ Ecosystem – wires everything together ----------
@@ -386,7 +413,7 @@ export class OmniCoreEcosystem {
 
     console.info(`[Ecosystem] Cloned OA ${base.uuid} -> ${clone.uuid} for topic "${topic}"`);
     // Register lifecycle hook to clean up when clone reaches FROZEN stage
-    clone.registerHook("FROZEN", async () => {
+    clone.registerHook('FROZEN', async () => {
       await this.cleanupClonesForTopic(topic);
     });
   }
@@ -395,7 +422,7 @@ export class OmniCoreEcosystem {
   async cleanupClonesForTopic(topic: string) {
     const cloneIds = this.clonesPerTopic.get(topic);
     if (!cloneIds) return;
-    cloneIds.forEach(uid => {
+    cloneIds.forEach((uid) => {
       const agent = this.agents.get(uid);
       if (agent) {
         // Freeze to lock state before removal – mimics hot-plug removal
@@ -411,11 +438,11 @@ export class OmniCoreEcosystem {
 // ------------------------------------------------------------
 // Example bootstrap – only runs in non‑production environments
 // ------------------------------------------------------------
-if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const ecosystem = new OmniCoreEcosystem();
   // Create an initial OA instance and register it
   const rootAgent = new OmniAgent(
-    makeCore<IComponentCore>({ uuid: crypto.randomUUID(), version: "1.0.0", evidence: {} })
+    makeCore<IComponentCore>({ uuid: crypto.randomUUID(), version: '1.0.0', evidence: {} }),
   );
   ecosystem.registerAgent(rootAgent);
 
@@ -426,18 +453,17 @@ if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
       await ecosystem.bus.publish(
         makeCore<IBusEvent>({
           uuid: crypto.randomUUID(),
-          version: "1.0.0",
-          eventName: "data.clean",
+          version: '1.0.0',
+          eventName: 'data.clean',
           payload: { index: i },
-          stage: "EMERGED",
-          source_origin: "demo",
-          topic: "data.clean",
+          stage: 'EMERGED',
+          source_origin: 'demo',
+          topic: 'data.clean',
           evidence: {},
           lifecycle_path: [],
-        })
+        }),
       );
     }
     // After processing you could clear the queue manually for demo purposes
   })();
 }
-
