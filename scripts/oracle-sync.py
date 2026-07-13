@@ -33,7 +33,9 @@ except ImportError as e:
 
 ADMIN_PWD = os.environ.get("OMNI_ADMIN_PWD")
 DB_PWD = os.environ.get("OMNI_DB_PWD")
+WALLET_DIR = os.environ.get("OMNI_WALLET_DIR", os.path.expanduser("~/.wallet"))
 WALLET_PWD = os.environ.get("OMNI_WALLET_PWD")  # wallet (ewallet.p12) 密碼
+TNS = os.environ.get("OMNI_TNS", "omniurag_high")
 
 def _connect(user: str, pwd: str):
     if not pwd:
