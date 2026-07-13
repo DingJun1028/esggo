@@ -14,7 +14,7 @@
     "prepare": "node scripts/setup-hooks.mjs",
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
-    "start": "next start -H 127.0.0.1",
+    "start": "bash -c 'set -a; source .env 2>/dev/null; set +a; next start -H 127.0.0.1'",
     "lint": "ts-node scripts/celestial-gate.ts",
     "lint:full": "eslint src/ --max-warnings 50",
     "typecheck": "tsc -p tsconfig.core.json",
@@ -52,7 +52,7 @@
     "react-markdown": "^10.1.0",
     "uuid": "^14.0.1",
     "xss": "^1.0.15",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
