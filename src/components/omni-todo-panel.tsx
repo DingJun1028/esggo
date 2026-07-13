@@ -531,11 +531,11 @@ export function OmniTodoPanel() {
                   todo={todo}
                   isSelected={selectedTodo?.id === todo.id}
                   onSelect={() => setSelectedTodo(selectedTodo?.id === todo.id ? null : todo)}
-                  onStart={() => handleStatusChange(todo.id, 'start')}
-                  onComplete={() => handleStatusChange(todo.id, 'complete')}
-                  onArchive={() => handleStatusChange(todo.id, 'archive')}
-                  onReopen={() => handleStatusChange(todo.id, 'reopen')}
-                  onDelete={() => handleDelete(todo.id)}
+                  _onStart={() => handleStatusChange(todo.id, 'start')}
+                  _onComplete={() => handleStatusChange(todo.id, 'complete')}
+                  _onArchive={() => handleStatusChange(todo.id, 'archive')}
+                  _onReopen={() => handleStatusChange(todo.id, 'reopen')}
+                  _onDelete={() => handleDelete(todo.id)}
                 />
               ))}
             </div>
