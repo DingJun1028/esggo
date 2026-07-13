@@ -28,4 +28,3 @@ preview_id = "your-preview-kv-namespace-id"
 # 觀測/日誌
 [observability]
 enabled = true
-logpush = true
