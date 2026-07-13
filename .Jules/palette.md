@@ -1,0 +1,3 @@
+## 2026-07-13 - TabBar Accessibility Pattern
+**Learning:** Custom tab navigation requires a specific set of ARIA attributes and focus styles to be fully accessible. The parent must have `role="tablist"`, and each child button must have `role="tab"`, an `aria-selected` state reflecting its active status, and explicit `focus-visible` styles.
+**Action:** When implementing custom tab navigation components, ensure the parent container includes `role="tablist"`, and each child tab button includes `role="tab"`, `aria-selected`, and explicit `focus-visible` styling for complete screen reader and keyboard accessibility.
