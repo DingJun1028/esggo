@@ -41,11 +41,11 @@ def _connect(user: str, pwd: str):
     if not pwd:
         raise RuntimeError(f"password for {user} not set")
     # thin mode: 純 python, 不需 Oracle Instant Client
-    # config_dir 指向 wallet 目錄 (含 tnsnames.ora / ewallet.p12)
+    # wallet TNS 名即 TNS (如 omniurag_high), 不含 user 前綴
     return oracledb.connect(
         user=user,
         password=pwd,
-        dsn=f"{user}_{TNS}",
+        dsn=TNS,
         config_dir=WALLET_DIR,
     )
 def ensure_schema():
