@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ShieldCheck, Activity, Brain, Server, ShieldAlert } from 'lucide-react';
+import ThoughtStreamPanel from '../../components/ThoughtStreamPanel';
 
 interface SystemLog {
   id: string;
@@ -112,6 +113,11 @@ export default function OmniAgentConsole() {
           </div>
         </div>
 
+      </div>
+
+      {/* 一代理 思考 — OmniAgentBus 同步思考流 SSE 面板 */}
+      <div className="mt-6">
+        <ThoughtStreamPanel agentId="gemma4-local" />
       </div>
     </div>
   );
