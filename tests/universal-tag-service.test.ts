@@ -12,7 +12,7 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { autoPair, syncEsgTags } from '@/core/tags/universal-tag-service';
+import { autoPair, syncEsgTags, stripGemma4Thinking, extractJsonValue } from '@/core/tags/universal-tag-service';
 import { prisma } from '@/lib/prisma';
 
 describe('universal-tag-service', () => {
@@ -68,5 +68,53 @@ describe('universal-tag-service', () => {
     const n = await syncEsgTags();
     expect(n).toBe(1);
     expect((prisma.universalTag.create as unknown as vi.Mock).mock.calls.length).toBe(1);
+  });
+
+  // ── Gemma 4 輸出解析強化 ──────────────────────────────────
+  it('stripGemma4Thinking removes thinking channel and keeps JSON', () => {
+    const out = stripGemma4Thinking('<|channel>thought\nthink...\n<channel|>\n[{"label":"X"}]');
+    expect(out).toContain('[{"label":"X"}]');
+    expect(out).not.toMatch(/channel/i);
+  });
+
+  it('stripGemma4Thinking strips markdown code fences', () => {
+    expect(stripGemma4Thinking('```json\n[{"label":"X"}]\n```')).toBe('[{"label":"X"}]');
+  });
+
+  it('extractJsonValue pulls array out of prose-wrapped output', () => {
+    const v = extractJsonValue('Here are the tags: [{"label":"X","pillar":"environmental"}] hope that helps');
+    expect(Array.isArray(v)).toBe(true);
+    expect((v as Array<{ label: string }>)[0].label).toBe('X');
+  });
+
+  it('extractJsonValue handles object-wrapped { labels: [...] }', () => {
+    const v = extractJsonValue('```json\n{"labels":[{"label":"Y"}]}\n```');
+    expect(v).toMatchObject({ labels: [{ label: 'Y' }] });
+  });
+
+  it('extractJsonValue returns null on non-JSON', () => {
+    expect(extractJsonValue('no json here')).toBeNull();
+  });
+
+  it('autoPair parses fenced JSON from local Gemma 4', async () => {
+    vi.stubEnv('LOCAL_GEMMA_SERVER_URL', 'http://localhost:11434');
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ response: '```json\n[{"label":"GHG","pillar":"environmental","confidence":0.8}]\n```' }),
+    })));
+    const res = await autoPair({ entityType: 'regulation', entityId: 'r2', content: 'ghg' });
+    expect(res.paired).toBe(true);
+    expect(res.labels).toContain('GHG');
+  });
+
+  it('autoPair parses object-wrapped labels from local Gemma 4', async () => {
+    vi.stubEnv('LOCAL_GEMMA_SERVER_URL', 'http://localhost:11434');
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ response: 'Some prose then {"labels":[{"label":"SDG","pillar":"social"}]}' }),
+    })));
+    const res = await autoPair({ entityType: 'regulation', entityId: 'r3', content: 'sdg' });
+    expect(res.paired).toBe(true);
+    expect(res.labels).toContain('SDG');
   });
 });
