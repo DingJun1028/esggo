@@ -6,6 +6,22 @@
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
+    // ── Sentry Error Monitoring (opt-in via SENTRY_DSN) ──
+    if (process.env.SENTRY_DSN) {
+      try {
+        const Sentry = await import('@sentry/node');
+        Sentry.init({
+          dsn: process.env.SENTRY_DSN,
+          environment: process.env.NODE_ENV || 'development',
+          tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+          enabled: process.env.NODE_ENV === 'production',
+        });
+        console.log('[Instrumentation] Sentry initialized');
+      } catch {
+        console.warn('[Instrumentation] Sentry not available, skipping');
+      }
+    }
+
     // Dynamically import to avoid edge runtime issues
     const { initCronJobs } = await import('@/lib/cron-jobs');
     
