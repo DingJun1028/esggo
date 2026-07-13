@@ -12,6 +12,7 @@
 
 import { createHash } from 'crypto';
 import { prisma } from '../../lib/prisma';
+import { publishThought } from '../../lib/bus';
 
 const LOCAL_GEMMA_MODEL = process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision';
 
@@ -20,16 +21,31 @@ function computeHashLock(uuid: string, timestamp: number, seed: string): string 
   return createHash('sha256').update(`${uuid}|${timestamp}|${seed}`).digest('hex');
 }
 
-// 清理 Gemma 4 思考頻道（<channel>thought ... <channel|> 等變體）與 markdown 圍欄，
-// 回傳可供 JSON 解析的純文字。
+// 把 Gemma 4 輸出拆分為「思考片段 thoughts」與「純淨答案 clean」。
+// 處理思考頻道變體：<channel>thought ... <channel|>) / </channel> / <channel/>
+// 以及 markdown code fences：```json ... ``` 或 ``` ... ```。
+export function splitThinking(raw: unknown): { thoughts: string[]; clean: string } {
+  if (typeof raw !== 'string') {
+    return { thoughts: [], clean: raw == null ? '' : String(raw) };
+  }
+  const thoughts: string[] = [];
+  const clean = raw
+    .replace(
+      /<\|?channel>\s*thought([\s\S]*?)(?:<\/?channel>|<channel\/>|<channel\|>)/gi,
+      (_m, body) => {
+        thoughts.push(String(body ?? '').trim());
+        return '';
+      },
+    )
+    .replace(/```(?:json)?\s*([\s\S]*?)```/gi, '$1')
+    .trim();
+  return { thoughts, clean };
+}
+
+// 清理 Gemma 4 思考頻道與 markdown 圍欄，回傳可供 JSON 解析的純文字。
+// （相容舊行為：等同 splitThinking(raw).clean）
 export function stripGemma4Thinking(raw: unknown): string {
-  if (typeof raw !== 'string') return raw == null ? '' : String(raw);
-  let text = raw;
-  // 1) 思考頻道：<channel>thought ... <channel|>) / </channel> / <channel/>
-  text = text.replace(/<\|?channel>\s*thought[\s\S]*?(?:<\/?channel>|<channel\/>|<channel\|>)/gi, '');
-  // 2) markdown code fences：```json ... ``` 或 ``` ... ```
-  text = text.replace(/```(?:json)?\s*([\s\S]*?)```/gi, '$1');
-  return text.trim();
+  return splitThinking(raw).clean;
 }
 
 // 從模型輸出抽取第一個 JSON 值（物件或陣列），容許前後綴散文與思考頻道。
@@ -190,7 +206,15 @@ export async function autoPair(params: {
     if (!res.ok) return { paired: false, labels: [], reason: `local model http ${res.status}` };
 
     const data = (await res.json()) as { response?: string; content?: string };
-    const parsed = extractJsonValue(data.response || data.content || '');
+    const raw = data.response || data.content || '';
+    // 拆分「思考頻道」與「純淨答案」，並把思考流同步發布到 OmniAgentBus
+    // （對齊 5T hashLock 溯源；runId 保證同一次推論的步驟可串接）
+    const { thoughts, clean } = splitThinking(raw);
+    const runId = `run-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    thoughts.forEach((t, i) =>
+      publishThought({ agentId: 'gemma4-local', runId, step: i + 1, content: t }),
+    );
+    const parsed = extractJsonValue(clean);
     let tags: Array<{ label: string; pillar?: string; confidence?: number }> | null = null;
     if (Array.isArray(parsed)) {
       tags = parsed as Array<{ label: string; pillar?: string; confidence?: number }>;
