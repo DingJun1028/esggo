@@ -259,16 +259,17 @@ def upsert_matrix(entity_uuid: str, origin_seq: int = 0, terminal_seq: int = 0, 
     conn = _connect("omni_lifecycle", DB_PWD)
     cur = conn.cursor()
     ts = int(datetime.now(timezone.utc).timestamp() * 1000)
+    # 命名 bind (oracledb 允許重複引用同一 key, 避免 positional bind 計數錯誤 DPY-4009)
     cur.execute(
         """MERGE INTO omni_lifecycle.sync_matrix m
-           USING (SELECT :1 AS entity_uuid FROM dual) s
+           USING (SELECT :uuid AS entity_uuid FROM dual) s
            ON (m.entity_uuid = s.entity_uuid)
            WHEN MATCHED THEN
-             UPDATE SET m.origin_seq=:2, m.terminal_seq=:3, m.status=:4, m.direction=:5, m.updated_at=:6
+             UPDATE SET m.origin_seq=:oseq, m.terminal_seq=:tseq, m.status=:sts, m.direction=:dir, m.updated_at=:ts
            WHEN NOT MATCHED THEN
              INSERT (entity_uuid, origin_seq, terminal_seq, status, direction, updated_at)
-             VALUES (:1, :2, :3, :4, :5, :6)""",
-        [entity_uuid, origin_seq, terminal_seq, status, direction, ts],
+             VALUES (:uuid, :oseq, :tseq, :sts, :dir, :ts)""",
+        {"uuid": entity_uuid, "oseq": origin_seq, "tseq": terminal_seq, "sts": status, "dir": direction, "ts": ts},
     )
     conn.commit()
     cur.close()
