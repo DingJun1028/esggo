@@ -119,9 +119,9 @@ export class VectorSearchService {
       relatedNotes.map(async (result) => {
         try {
           const note = await this.ncb.getNoteWithTags(result.note_id);
-          return { noteId: result.note_id, similarity: result.similarity, note };
+          return { noteId: result.note_id, similarity: result.similarity, note } as EnrichedSearchResult;
         } catch {
-          return { noteId: result.note_id, similarity: result.similarity, note: undefined };
+          return { noteId: result.note_id, similarity: result.similarity, note: undefined } as EnrichedSearchResult;
         }
       })
     );
