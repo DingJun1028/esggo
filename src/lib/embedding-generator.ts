@@ -73,8 +73,11 @@ export class EmbeddingGenerator {
       throw new Error(`OpenAI Embedding API Error: ${response.status} - ${error}`);
     }
 
-    const data = await response.json();
-    return data.data.map((item: any) => ({
+    const data = await response.json() as {
+      data: Array<{ embedding: number[] }>;
+      usage?: { total_tokens?: number };
+    };
+    return data.data.map((item) => ({
       embedding: item.embedding,
       model,
       dimensions: item.embedding.length,
