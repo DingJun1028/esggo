@@ -95,9 +95,9 @@ export class VectorSearchService {
             similarity: result.similarity,
             note,
             esgEntities: esgEntities.length > 0 ? esgEntities : undefined,
-          };
+          } as EnrichedSearchResult;
         } catch {
-          return { noteId: result.note_id, similarity: result.similarity, note: undefined };
+          return { noteId: result.note_id, similarity: result.similarity, note: undefined } as EnrichedSearchResult;
         }
       })
     );
