@@ -12,7 +12,11 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: Record<string, any>;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
 }
 
 // 零幻覺驗算結果
