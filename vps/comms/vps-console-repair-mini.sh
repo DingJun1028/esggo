@@ -13,14 +13,14 @@ if [ "${INTF:-}" != "" ]; then ip -4 addr show dev "$INTF" || true; fi
 ufw allow 22/tcp || true
 ufw allow 80/tcp || true
 ufw allow 443/tcp || true
-ufw allow 8042/tcp || true
+ufw allow 8642/tcp || true
 ufw allow 9999/tcp || true
 ufw reload || true
 ufw status verbose || true
 systemctl restart sshd || true
 ss -ltnp | grep ':22' || true
 journalctl -u sshd -n 50 --no-pager || true
-(curl -s --max-time 3 http://127.0.0.1:8042/health || echo "health: unavailable") | sed 's/^/[gateway] /'
+(curl -s --max-time 3 http://127.0.0.1:8642/health || echo "health: unavailable") | sed 's/^/[gateway] /'
 (curl -s --max-time 3 http://127.0.0.1:22 || echo "ssh: unavailable") | sed 's/^/[ssh] /'
 RELAY_TARGET="${RELAY_TARGET:-http://100.108.241.29:9999}"
 (curl -s --max-time 5 "$RELAY_TARGET/status" || echo "relay: unavailable") | sed 's/^/[relay] /'
