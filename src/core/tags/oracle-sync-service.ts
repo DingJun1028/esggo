@@ -195,7 +195,7 @@ export async function reconcileBidirectional(
       push: [],
       pull: [],
       matrix: [],
-      // reason 透過 ok:false 表達, 不污染矩陣
+      reason: `reconcile failed: ${(e as Error).message}`,
     } as ReconcileResult & { reason?: string };
   }
 }
