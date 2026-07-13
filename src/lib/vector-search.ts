@@ -12,6 +12,7 @@ import {
 import {
   getEmbeddingGenerator, extractEmbeddingText, type EmbeddingOptions,
 } from './embedding-generator';
+import type { NoteWithTags } from '@/types/notes';
 
 export interface VectorSearchOptions {
   limit?: number;
@@ -23,7 +24,7 @@ export interface VectorSearchOptions {
 export interface EnrichedSearchResult {
   noteId: string;
   similarity: number;
-  note?: Record<string, unknown>;
+  note?: NoteWithTags;
   esgEntities?: ESGEntityRow[];
 }
 
@@ -95,9 +96,9 @@ export class VectorSearchService {
             similarity: result.similarity,
             note,
             esgEntities: esgEntities.length > 0 ? esgEntities : undefined,
-          } as EnrichedSearchResult;
+          } as unknown as EnrichedSearchResult;
         } catch {
-          return { noteId: result.note_id, similarity: result.similarity, note: undefined } as EnrichedSearchResult;
+          return { noteId: result.note_id, similarity: result.similarity, note: undefined } as unknown as EnrichedSearchResult;
         }
       })
     );
