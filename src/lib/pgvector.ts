@@ -19,9 +19,9 @@ pool.on('error', (err) => {
 
 // ========== 基礎操作 ==========
 
-export async function query<T = any>(
+export async function query<T = unknown>(
   text: string,
-  params?: any[]
+  params?: unknown[]
 ): Promise<{ rows: T[]; rowCount: number }> {
   const client = await pool.connect();
   try {
@@ -138,7 +138,7 @@ export interface ESGEntityRow {
   entity_name: string;
   entity_id: string | null;
   confidence: number;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   created_at: Date;
 }
 
@@ -148,7 +148,7 @@ export async function storeESGEntity(entity: {
   entityName: string;
   entityId?: string;
   confidence?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }): Promise<ESGEntityRow> {
   const result = await query<ESGEntityRow>(
     `INSERT INTO esg_entities (note_id, entity_type, entity_name, entity_id, confidence, metadata)
@@ -199,7 +199,7 @@ export async function getEmbeddingStats() {
   );
   const row = result.rows[0];
   return {
-    totalEmbeddings: parseInt(row.total_embeddings as any) || 0,
+    totalEmbeddings: parseInt(String(row.total_embeddings), 10) || 0,
     modelsUsed: row.models_used || [],
     oldestEmbedding: row.oldest_embedding,
     newestEmbedding: row.newest_embedding,

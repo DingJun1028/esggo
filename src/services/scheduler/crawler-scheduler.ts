@@ -76,7 +76,10 @@ class CrawlerScheduler {
       const { getSourceConfig } = require('../../core/sonnar/sources-config');
       const cfg = getSourceConfig(sourceId);
       if (cfg) return cfg.crawlIntervalMs;
-    } catch {}
+    } catch (e) {
+      // sources-config not available, fall back to defaults
+      console.warn(`[CrawlerScheduler] sources-config unavailable for ${sourceId}:`, e);
+    }
     // Fallback
     const intervalMap: Record<string, number> = {
       'tw-fsc': 4 * 3600000,
