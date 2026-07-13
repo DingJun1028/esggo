@@ -5,13 +5,14 @@
 // 串接兩套現有標籤體系：
 //   - ESGTag (prisma/schema.prisma)  -> UniversalTag(kind='esg')
 //   - OmniTag (組件信任標籤)          -> UniversalTag(kind='omni') + TagPair
-// 並用本地 Gemma 4 (Ollama) 做 autoPair 自動標註配對。
+// 並用本地 Gemma 4 (Ollama) 做 autoPair 自動標籤配對。
 //
 // 注意：OmniTag 邏輯內聯（不跨目錄 import lib/omni-tag，避免其在
 // verify tsconfig 下的模組解析問題）。
 
 import { createHash } from 'crypto';
 import { prisma } from '../../lib/prisma';
+import { syncTagPairToOracle } from './oracle-sync-service';
 
 const LOCAL_GEMMA_MODEL = process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision';
 
@@ -25,10 +26,12 @@ function computeHashLock(uuid: string, timestamp: number, seed: string): string 
 export function stripGemma4Thinking(raw: unknown): string {
   if (typeof raw !== 'string') return raw == null ? '' : String(raw);
   let text = raw;
-  // 1) 思考頻道：<channel>thought ... <channel|>) / </channel> / <channel/>
-  text = text.replace(/<\|?channel>\s*thought[\s\S]*?(?:<\/?channel>|<channel\/>|<channel\|>)/gi, '');
+  // 1) 思考頻道：涵蓋 <channel>thought ... </channel> | <channel/> | <channel|> | <|channel>thought ... <channel|> 等變體
+  text = text.replace(/<\|?channel>?\s*thought[\s\S]*?(?:\||<\/?channel>|<channel\/>)/gi, '');
   // 2) markdown code fences：```json ... ``` 或 ``` ... ```
   text = text.replace(/```(?:json)?\s*([\s\S]*?)```/gi, '$1');
+  // 3) 殘留的開/閉標籤（無 thought 配對的孤立標籤）
+  text = text.replace(/<\|?channel>?/gi, '');
   return text.trim();
 }
 
@@ -67,9 +70,10 @@ function makeTagPair(anchor: ReturnType<typeof makeOmniTag>, evidence: ReturnTyp
 }
 
 // ── 1. 同步 ESGTag 進 UniversalTag ───────────────────────────
-export async function syncEsgTags(): Promise<number> {
+export async function syncEsgTags(): Promise<{ synced: number; labels: string[] }> {
   const esgTags = await prisma.eSGTag.findMany();
   let synced = 0;
+  const labels: string[] = [];
   for (const t of esgTags) {
     const existing = await prisma.universalTag.findUnique({
       where: { label_kind: { label: t.name, kind: 'esg' } },
@@ -90,9 +94,10 @@ export async function syncEsgTags(): Promise<number> {
         },
       });
       synced++;
+      labels.push(t.name);
     }
   }
-  return synced;
+  return { synced, labels };
 }
 
 // ── 2. 建立 OmniTag 信任配對 (anchor + evidence) ─────────────
@@ -156,6 +161,15 @@ export async function createOmniTagPair(params: {
       confidence: params.confidence ?? 1.0,
     },
   });
+
+  // 同步信任層進 Oracle ADB (graceful: 失敗不阻斷主流程)
+  if (pair.uuid) {
+    syncTagPairToOracle({
+      uuid: pair.uuid,
+      action: 'TRUST_GRANT',
+      timestamp: pair.createdAt?.getTime?.() ?? Date.now(),
+    }).catch((e) => console.warn('[UniversalTag] Oracle sync skipped:', e.message));
+  }
 
   return { pairId: pair.id, anchorId: anchorDb.id, evidenceId: evidenceDb?.id };
 }
@@ -222,7 +236,7 @@ export async function autoPair(params: {
           metadata: JSON.stringify({ pillar: t.pillar ?? 'unknown' }),
         },
       });
-      await prisma.tagPair.upsert({
+      const pairRec = await prisma.tagPair.upsert({
         where: { anchorTagId_entityType_entityId: { anchorTagId: u.id, entityType: params.entityType, entityId: params.entityId } },
         update: { confidence: t.confidence ?? 1.0 },
         create: {
@@ -236,6 +250,14 @@ export async function autoPair(params: {
           confidence: t.confidence ?? 1.0,
         },
       });
+      // 同步信任層進 Oracle ADB (graceful: 失敗不阻斷主流程)
+      if (pairRec?.uuid) {
+        syncTagPairToOracle({
+          uuid: pairRec.uuid,
+          action: 'TRUST_GRANT',
+          timestamp: pairRec.createdAt?.getTime?.() ?? Date.now(),
+        }).catch((e) => console.warn('[UniversalTag] Oracle sync skipped:', e.message));
+      }
       pairedCount++;
     }
     return { paired: true, labels: tags.map((t) => t.label), reason: `paired ${pairedCount} tags` };

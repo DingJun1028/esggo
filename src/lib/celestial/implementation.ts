@@ -224,7 +224,11 @@ export class CelestialController {
     // 1. 隔離失效現場，保留可用狀態 (WuZuoMiaoDe: 零干預降級)
     const fallbackData: Record<string, unknown> = {};
     for (const key of Object.keys(sealedData)) {
-      try { fallbackData[key] = sealedData[key]; } catch {}
+      try {
+        fallbackData[key] = sealedData[key];
+      } catch (e) {
+        console.warn(`[Celestial] Failed to copy sealedData key "${key}" during self-healing:`, e);
+      }
     }
     fallbackData.state = 'Recovered';
     fallbackData.degradationTriggered = true;
@@ -247,7 +251,9 @@ export class CelestialController {
         },
       });
       await prisma.$disconnect();
-    } catch {}
+    } catch (e) {
+      console.error('[Celestial] Failed to persist self-healing alert to DB:', e);
+    }
 
     // 3. 錯誤知識化 (Write to Notion KI / Stub)
     const kiPayload = {

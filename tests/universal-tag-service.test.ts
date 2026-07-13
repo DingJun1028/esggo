@@ -65,8 +65,9 @@ describe('universal-tag-service', () => {
       { id: 'e1', name: '碳排', pillar: 'Environmental', category: '碳', description: 'd' },
     ]);
     (prisma.universalTag.findUnique as unknown as vi.Mock).mockResolvedValue(null);
-    const n = await syncEsgTags();
-    expect(n).toBe(1);
+    const res = await syncEsgTags();
+    expect(res.synced).toBe(1);
+    expect(res.labels).toContain('碳排');
     expect((prisma.universalTag.create as unknown as vi.Mock).mock.calls.length).toBe(1);
   });
 
