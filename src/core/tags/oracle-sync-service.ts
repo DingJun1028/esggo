@@ -14,10 +14,11 @@
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
+import * as os from 'os';
 
 const execFileAsync = promisify(execFile);
 const SCRIPT = path.resolve(process.cwd(), 'scripts/oracle-sync.py');
-const PYTHON = process.env.OMNI_PYTHON || 'python3';
+const PYTHON = (process.env.OMNI_PYTHON || 'python3').replace(/^~/, os.homedir());
 
 function hasOracleCreds(): boolean {
   return !!process.env.OMNI_DB_PWD;
