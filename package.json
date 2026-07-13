@@ -11,21 +11,29 @@
     "apps/*"
   ],
   "scripts": {
-    "prepare": "node scripts/setup-hooks.mjs",
-    "dev": "next dev",
-    "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
-    "start": "node scripts/start-esggo-core.mjs",
-    "lint": "ts-node scripts/celestial-gate.ts",
-    "lint:full": "eslint src/ --max-warnings 50",
-    "typecheck": "tsc -p tsconfig.core.json",
-    "test": "vitest run",
+    "prepare": "node scripts/setup-hooks.mjs && node packages/omni-agent/src/bin/omni-agent.js init",
+    "dev": "pnpm omni:dev && next dev",
+    "build": "pnpm omni:build && cross-env NEXT_TELEMETRY_DISABLED=1 next build",
+    "start": "pnpm omni:start && next start -H 127.0.0.1",
+    "lint": "pnpm omni:lint && ts-node scripts/celestial-gate.ts",
+    "lint:full": "pnpm omni:lint:full && eslint src/ --max-warnings 50",
+    "typecheck": "pnpm omni:typecheck && tsc -p tsconfig.core.json",
+    "test": "pnpm omni:test && vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest run --reporter=verbose",
-    "turbo:dev": "next dev",
-    "turbo:build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
-    "turbo:start": "next start",
-    "turbo:lint": "eslint . --fix",
+    "test:coverage": "pnpm omni:test:coverage && vitest run --coverage",
+    "turbo:dev": "pnpm omni:dev && next dev",
+    "turbo:build": "pnpm omni:build && cross-env NEXT_TELEMETRY_DISABLED=1 next build",
+    "turbo:start": "pnpm omni:start && next start",
+    "turbo:lint": "pnpm omni:lint:full && eslint . --fix",
+    "omni:init": "node packages/omni-agent/src/bin/omni-agent.js init",
+    "omni:dev": "node packages/omni-agent/src/bin/omni-agent.js dev",
+    "omni:build": "node packages/omni-agent/src/bin/omni-agent.js build",
+    "omni:start": "node packages/omni-agent/src/bin/omni-agent.js start",
+    "omni:lint": "node packages/omni-agent/src/bin/omni-agent.js lint",
+    "omni:lint:full": "node packages/omni-agent/src/bin/omni-agent.js lint:full",
+    "omni:typecheck": "node packages/omni-agent/src/bin/omni-agent.js typecheck",
+    "omni:test": "node packages/omni-agent/src/bin/omni-agent.js test",
+    "omni:test:coverage": "node packages/omni-agent/src/bin/omni-agent.js test:coverage",
     "oa:summon": "ts-node --transpile-only scripts/run-summon.ts",
     "oa:summon:core": "ts-node --transpile-only scripts/run-summon.ts -- --core"
   },
@@ -71,5 +79,29 @@
     "turbo": "^2",
     "typescript": "^5",
     "vitest": "^4.1.9"
+  },
+  "engines": {
+    "node": "20.x",
+    "pnpm": "11.5.2"
+  },
+  "omnilules": {
+    "enabled": true,
+    "agents": [
+      "omni-agent",
+      "jules",
+      "antigravity",
+      "omninexus"
+    ],
+    "skills": [
+      "omni-sync-memory",
+      "omni-tag",
+      "omni-base",
+      "omni-seed",
+      "omni-agent",
+      "omni-write",
+      "omni-biz",
+      "omni-memory"
+    ],
+    "protocols": ["5t-protocol"]
   }
 }
