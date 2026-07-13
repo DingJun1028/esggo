@@ -117,11 +117,11 @@ model AlertTag {
 // 串接 ESGTag (法規分類) + OmniTag (組件信任) 為統一配對層
 model UniversalTag {
   id            String   @id @default(cuid())
-  uuid          String   @default(cuid()) // 5T: 全域唯一識別
+  uuid          String?                    // 5T: 全域唯一識別 (舊資料可為 NULL)
   version       Int      @default(1)       // 5T: 版本
-  sourceOrigin  String   @default("system") // 5T: 來源可驗證
+  sourceOrigin  String?                    // 5T: 來源可驗證
   hashLock      String?                    // 5T: SHA-256 不可篡改封印
-  lifecycleHooks String  @default("{}")      // 5T: 生命週期鉤子
+  lifecycleHooks String?                    // 5T: 生命週期鉤子
   label         String
   kind          String   // 'esg' | 'omni' | 'custom'
   esgTagId      String?  // 關聯 ESGTag.id (kind='esg')
@@ -139,10 +139,10 @@ model UniversalTag {
 
 model TagPair {
   id            String   @id @default(cuid())
-  uuid          String   @default(cuid())     // 5T: 全域唯一識別
-  sourceOrigin  String   @default("system")   // 5T: 來源可驗證
-  hashLock      String?                        // 5T: SHA-256 不可篡改封印
-  lifecycleHooks String  @default("{}")          // 5T: 生命週期鉤子
+  uuid          String?                      // 5T: 全域唯一識別
+  sourceOrigin  String?                      // 5T: 來源可驗證
+  hashLock      String?                      // 5T: SHA-256 不可篡改封印
+  lifecycleHooks String?                      // 5T: 生命週期鉤子
   anchorTagId   String
   evidenceTagId String?
   anchor        UniversalTag @relation("tagPairsAnchor", fields: [anchorTagId], references: [id], onDelete: Cascade)
