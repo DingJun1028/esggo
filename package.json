@@ -11,7 +11,7 @@
     "apps/*"
   ],
   "scripts": {
-    "prepare": "node scripts/setup-hooks.mjs && node packages/omni-agent/src/bin/omni-agent.js init",
+    "prepare": "node scripts/setup-hooks.mjs",
     "dev": "pnpm omni:dev && next dev",
     "build": "pnpm omni:build && cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "pnpm omni:start && next start -H 127.0.0.1",
@@ -81,7 +81,7 @@
     "vitest": "^4.1.9"
   },
   "engines": {
-    "node": "20.x",
+    "node": ">=20.x",
     "pnpm": "11.5.2"
   },
   "omnilules": {
