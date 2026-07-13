@@ -203,6 +203,8 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             pnpm install --frozen-lockfile
+            pnpm prisma migrate deploy 2>&1 | tail -8
+            pnpm prisma generate 2>&1 | tail -2
             pnpm run build
             pm2 restart esggo-core omniagent-gateway
             pm2 save
