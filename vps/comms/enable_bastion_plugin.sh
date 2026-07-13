@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # OA-VPS: 啟用 Oracle Cloud Agent + Bastion plugin（讓 OCI Bastion 能建 Managed SSH session 連 10.0.0.119:22）
-# 執行前提：root 在 OA_VPS 上跑（ssh root@161.118.248.180 -p 8042 進去後 sudo bash 此檔）
+# 執行前提：root 在 OA_VPS 上跑（ssh root@161.118.248.180 -p 22 進去後 sudo bash 此檔）
 # 注意：oracle-cloud-agent 是自動化運維代理，安裝後會接管部分監控/日誌上報；不改 SSH 配置、不動網路。
 #       若你不想裝完整 agent，可只裝 bastion 插件（見下方註解分支）。
 set -e

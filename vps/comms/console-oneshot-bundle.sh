@@ -24,7 +24,7 @@ echo "=== [4/9] firewall ==="
 ufw allow 22/tcp || true
 ufw allow 80/tcp || true
 ufw allow 443/tcp || true
-ufw allow 8042/tcp || true
+ufw allow 8642/tcp || true
 ufw allow 9999/tcp || true
 ufw reload || true
 ufw status || true
@@ -40,7 +40,7 @@ SUDO
 visudo -cf /etc/sudoers.d/101-oracle-cloud-agent-run-command || true
 systemctl restart oracle-cloud-agent || true
 echo "=== [7/9] local services ==="
-(curl -s --max-time 3 http://127.0.0.1:8042/health || echo "gateway: unavailable") | sed 's/^/[gateway] /'
+(curl -s --max-time 3 http://127.0.0.1:8642/health || echo "gateway: unavailable") | sed 's/^/[gateway] /'
 (ss -ltnp | grep ':3000' >/dev/null 2>&1 && echo "app: listening :3000" || echo "app: not listening :3000") | sed 's/^/[app] /'
 echo "=== [8/9] write agent ==="
 mkdir -p /opt/esggo
