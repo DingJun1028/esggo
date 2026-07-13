@@ -1,6 +1,6 @@
 /**
  * ESGGO Cron Jobs — 自動化任務調度器
- * 
+ *
  * Jobs:
  * 1. daily-report-generator — 每日自動生成永續觀察者日報
  * 2. crawler-trigger — 每 6 小時執行 ESG 爬蟲
@@ -9,12 +9,19 @@
 
 import { PrismaClient } from '@prisma/client';
 
+// 雙向 Oracle 同步協調器 (全域全端全量終始矩陣)
+import { runBidirectionalSync, hydrateFromOracle } from '../core/tags/oracle-sync-matrix';
+
 const prisma = new PrismaClient();
 
 // ============================================================
 // Job: Daily Report Generator
 // ============================================================
-async function generateDailyReportJob(): Promise<{ success: boolean; message: string; reportDate: string }> {
+async function generateDailyReportJob(): Promise<{
+  success: boolean;
+  message: string;
+  reportDate: string;
+}> {
   console.log('[Cron] Starting daily report generation...');
   const startTime = Date.now();
 
@@ -64,12 +71,15 @@ async function generateDailyReportJob(): Promise<{ success: boolean; message: st
       select: { id: true, title: true, sourceName: true, severity: true, esgPillar: true },
     });
 
-    const highlights = highlightAlerts.length > 0
-      ? highlightAlerts.map(a => a.title || '未命名警示')
-      : ['過去 2重大警示事件'];
+    const highlights =
+      highlightAlerts.length > 0
+        ? highlightAlerts.map((a) => a.title || '未命名警示')
+        : ['過去 2重大警示事件'];
 
     const sourceNameSet = new Set<string>();
-    for (const a of recentAlerts) { if (a.sourceName) sourceNameSet.add(a.sourceName); }
+    for (const a of recentAlerts) {
+      if (a.sourceName) sourceNameSet.add(a.sourceName);
+    }
     const topSources = Array.from(sourceNameSet).slice(0, 5);
 
     // Create daily report
@@ -129,7 +139,7 @@ async function checkUserAchievements(): Promise<{ checked: number; upgrades: num
         { name: 'seed', threshold: 0 },
       ];
 
-      const currentTier = tiers.find(t => user.totalPoints >= t.threshold);
+      const currentTier = tiers.find((t) => user.totalPoints >= t.threshold);
       if (currentTier && currentTier.name !== user.tier) {
         await prisma.userGrowth.update({
           where: { id: user.id },
@@ -199,6 +209,26 @@ const jobs: CronJob[] = [
     lastRun: 0,
     isRunning: false,
   },
+  {
+    // 全域全端全量雙向同步 — 終始矩陣對帳 (Oracle <-> app)
+    name: 'oracle-bidirectional-sync',
+    schedule: 10 * 60 * 1000, // 每 10 分鐘對帳一次
+    task: async () => {
+      const r = await runBidirectionalSync();
+      if (r.ok) {
+        console.log(
+          `[Cron] Oracle 雙向同步: 對帳 ${r.reconciled.total} (一致 ${r.reconciled.synced}, ` +
+            `app落後 ${r.reconciled.behindApp}, oracle落後 ${r.reconciled.behindOracle}) ` +
+            `推送 ${r.pushed} / 回拉 ${r.pulled}`,
+        );
+      } else {
+        console.warn(`[Cron] Oracle 雙向同步跳過: ${r.reason ?? 'unknown'}`);
+      }
+      return r;
+    },
+    lastRun: 0,
+    isRunning: false,
+  },
 ];
 
 let schedulerInterval: ReturnType<typeof setInterval> | null = null;
@@ -213,9 +243,12 @@ export function initCronJobs(): () => void {
       if (now - job.lastRun >= job.schedule) {
         job.isRunning = true;
         job.lastRun = now;
-        job.task()
-          .catch(err => console.error(`[Cron] Job "${job.name}" error:`, err))
-          .finally(() => { job.isRunning = false; });
+        job
+          .task()
+          .catch((err) => console.error(`[Cron] Job "${job.name}" error:`, err))
+          .finally(() => {
+            job.isRunning = false;
+          });
       }
     }
   }, 60 * 1000);
@@ -223,14 +256,23 @@ export function initCronJobs(): () => void {
   // Generate on startup if missing today
   const today = new Date().toISOString().split('T')[0];
   const todayStart = new Date(today + 'T00:00:00.000Z');
-  prisma.dailyReport.findUnique({ where: { reportDate: todayStart } })
-    .then(existing => {
+  prisma.dailyReport
+    .findUnique({ where: { reportDate: todayStart } })
+    .then((existing) => {
       if (!existing) {
         console.log('[Cron] No report for today, generating on startup...');
         generateDailyReportJob();
       }
     })
     .catch(() => {});
+
+  // 啟動 hydration — 從 Oracle 全量回拉信任帳本 (oracle->app)
+  hydrateFromOracle()
+    .then((h) => {
+      if (h.ok) console.log(`[Cron] Oracle hydration: 回拉 ${h.pulled} 筆, 標記 ${h.matched} 筆`);
+      else console.warn(`[Cron] Oracle hydration 跳過: ${h.reason ?? 'unknown'}`);
+    })
+    .catch((e) => console.warn('[Cron] Oracle hydration error:', e));
 
   console.log(`[Cron] Initialized ${jobs.length} jobs`);
   return () => stopCronJobs();
