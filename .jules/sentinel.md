@@ -13,3 +13,7 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+## 2026-07-13 - [Fix Command Injection in API Call]
+**Vulnerability:** The `predictAndPreFetch` function in `src/impl/core.ts` was vulnerable to command injection because it concatenated a user-provided string directly into a shell command executed via `execSync('curl ...')`.
+**Learning:** Using shell execution to perform API requests introduces severe security risks when any part of the command is influenced by user input, even if superficially encoded as JSON (since JSON does not escape single quotes by default in bash context).
+**Prevention:** Never use shell execution (e.g., `child_process.execSync`) to make external network requests. Always use native language tools (like the `fetch` API) to avoid command injection vulnerabilities completely.
