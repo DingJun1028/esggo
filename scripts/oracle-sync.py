@@ -33,22 +33,23 @@ except ImportError as e:
 
 ADMIN_PWD = os.environ.get("OMNI_ADMIN_PWD")
 DB_PWD = os.environ.get("OMNI_DB_PWD")
-WALLET_DIR = os.environ.get("OMNI_WALLET_DIR", os.path.expanduser("~/.wallet"))
-TNS = os.environ.get("OMNI_TNS", "omniurag_high")
-
+WALLET_PWD = os.environ.get("OMNI_WALLET_PWD")  # wallet (ewallet.p12) 密碼
 
 def _connect(user: str, pwd: str):
     if not pwd:
         raise RuntimeError(f"password for {user} not set")
     # thin mode + mTLS: ADB 要求 mutual TLS (is-mtls-connection-required=true)
     # wallet 目錄含 ewallet.p12 (client cert) + tnsnames.ora + sqlnet.ora
-    return oracledb.connect(
+    kwargs = dict(
         user=user,
         password=pwd,
         dsn=TNS,
         config_dir=WALLET_DIR,
         wallet_location=WALLET_DIR,
     )
+    if WALLET_PWD:
+        kwargs["wallet_password"] = WALLET_PWD
+    return oracledb.connect(**kwargs)
 def ensure_schema():
     """以 ADMIN 建立三個 user + 表。"""
     if not ADMIN_PWD:
