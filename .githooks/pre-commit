@@ -1,11 +1,50 @@
 #!/usr/bin/env node
-// pre-commit hook — Encoding validation via Node.js
+// pre-commit hook — Encoding validation + lockfile sync check
 // Git will run this via the system Node.js (cross-platform compatible)
 
 const { execSync } = require('child_process');
 
+// 1. Check encoding issues (U+FFFD, non-UTF-8)
 try {
   execSync('node scripts/encoding-check.mjs --staged', { stdio: 'inherit', encoding: 'utf-8' });
 } catch {
   process.exit(1);
+}
+
+// 2. Check lockfile sync — prevent CI --frozen-lockfile failures
+const fs = require('fs');
+const path = require('path');
+
+const pkgPath = path.resolve(__dirname, '..', 'package.json');
+const lockPath = path.resolve(__dirname, '..', 'pnpm-lock.yaml');
+
+if (fs.existsSync(pkgPath) && fs.existsSync(lockPath)) {
+  try {
+    // Quick check: does pnpm-lock.yaml contain the zod specifier from package.json?
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+    const lock = fs.readFileSync(lockPath, 'utf-8');
+    
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    let lockfileStale = false;
+    
+    for (const [name, version] of Object.entries(deps)) {
+      if (typeof version !== 'string') continue;
+      // Check if this dep appears anywhere in the lockfile
+      // Lockfile uses: 'name': (quoted) or name: (bare) or name@version (resolution)
+      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const pattern = new RegExp(`['"]?${escaped}['"]?:\\s|${escaped}@`, 'm');
+      if (!pattern.test(lock)) {
+        console.error(`[pre-commit] lockfile stale: ${name}@${version} not found in pnpm-lock.yaml`);
+        lockfileStale = true;
+      }
+    }
+    
+    if (lockfileStale) {
+      console.error('[pre-commit] Run "pnpm install" to update pnpm-lock.yaml before committing.');
+      process.exit(1);
+    }
+  } catch (e) {
+    // If we can't parse, just warn but don't block
+    console.warn('[pre-commit] Could not verify lockfile sync:', e.message);
+  }
 }
