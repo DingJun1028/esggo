@@ -39,11 +39,22 @@ interface HealthResponse {
  */
 async function checkDatabase(): Promise<HealthCheck> {
   const start = Date.now();
+  const dbUrl = process.env.DATABASE_URL;
   try {
+    // 若未配置 DATABASE_URL，或為非 PostgreSQL URL (如 file:./dev.db / SQLite)，
+    // 回傳 warn 而非 error（允許無 DB 模式）
+    if (!dbUrl || !dbUrl.startsWith('postgres://') && !dbUrl.startsWith('postgresql://')) {
+      return {
+        name: 'database',
+        status: 'warn',
+        message: dbUrl ? `非 PostgreSQL 連線字串 (${dbUrl.split(':')[0]})` : 'DATABASE_URL 未設定',
+      };
+    }
+
     // 嘗試動態引入 pg 進行快速 ping
     const { Pool } = await import('pg');
     const pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: dbUrl,
       connectionTimeoutMillis: 3000,
       max: 1,
     });
@@ -58,10 +69,6 @@ async function checkDatabase(): Promise<HealthCheck> {
       latencyMs: Date.now() - start,
     };
   } catch (error) {
-    // 若未配置 DATABASE_URL，回傳 warn 而非 error（允許無 DB 模式）
-    if (!process.env.DATABASE_URL) {
-      return { name: 'database', status: 'warn', message: 'DATABASE_URL 未設定' };
-    }
     return {
       name: 'database',
       status: 'error',
