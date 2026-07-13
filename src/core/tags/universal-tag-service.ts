@@ -20,13 +20,33 @@ function computeHashLock(uuid: string, timestamp: number, seed: string): string 
   return createHash('sha256').update(`${uuid}|${timestamp}|${seed}`).digest('hex');
 }
 
-function stripGemma4Thinking(raw: string): string {
-  if (typeof raw !== 'string') return raw;
-  const START = '<|channel>thought';
-  const END = '<channel|>';
-  if (!raw.includes(START)) return raw;
-  const lastEnd = raw.lastIndexOf(END);
-  return lastEnd === -1 ? raw.slice(raw.indexOf(START) + START.length) : raw.slice(lastEnd + END.length);
+// 清理 Gemma 4 思考頻道（<channel>thought ... <channel|> 等變體）與 markdown 圍欄，
+// 回傳可供 JSON 解析的純文字。
+export function stripGemma4Thinking(raw: unknown): string {
+  if (typeof raw !== 'string') return raw == null ? '' : String(raw);
+  let text = raw;
+  // 1) 思考頻道：<channel>thought ... <channel|>) / </channel> / <channel/>
+  text = text.replace(/<\|?channel>\s*thought[\s\S]*?(?:<\/?channel>|<channel\/>|<channel\|>)/gi, '');
+  // 2) markdown code fences：```json ... ``` 或 ``` ... ```
+  text = text.replace(/```(?:json)?\s*([\s\S]*?)```/gi, '$1');
+  return text.trim();
+}
+
+// 從模型輸出抽取第一個 JSON 值（物件或陣列），容許前後綴散文與思考頻道。
+export function extractJsonValue(raw: string): unknown | null {
+  const cleaned = stripGemma4Thinking(raw);
+  const first = cleaned.search(/[[{]/);
+  if (first === -1) return null;
+  const open = cleaned[first];
+  const close = open === '{' ? '}' : ']';
+  const last = cleaned.lastIndexOf(close);
+  if (last === -1 || last < first) return null;
+  const candidate = cleaned.slice(first, last + 1).trim();
+  try {
+    return JSON.parse(candidate);
+  } catch {
+    return null;
+  }
 }
 
 // ── 內聯 OmniTag 邏輯（自包含） ─────────────────────────────
@@ -170,17 +190,21 @@ export async function autoPair(params: {
     if (!res.ok) return { paired: false, labels: [], reason: `local model http ${res.status}` };
 
     const data = (await res.json()) as { response?: string; content?: string };
-    const raw = stripGemma4Thinking(data.response || data.content || '');
-    const jsonStart = raw.indexOf('[');
-    const jsonEnd = raw.lastIndexOf(']');
-    if (jsonStart === -1 || jsonEnd === -1) {
+    const parsed = extractJsonValue(data.response || data.content || '');
+    let tags: Array<{ label: string; pillar?: string; confidence?: number }> | null = null;
+    if (Array.isArray(parsed)) {
+      tags = parsed as Array<{ label: string; pillar?: string; confidence?: number }>;
+    } else if (parsed && typeof parsed === 'object') {
+      // 也接受 { labels: [...] } / { tags: [...] } 等物件包裝形式
+      const obj = parsed as Record<string, unknown>;
+      const candidate = obj.labels ?? obj.tags ?? obj.tag ?? obj.results ?? obj.data;
+      if (Array.isArray(candidate)) {
+        tags = candidate as Array<{ label: string; pillar?: string; confidence?: number }>;
+      }
+    }
+    if (!tags) {
       return { paired: false, labels: [], reason: 'no JSON array in model output' };
     }
-    const tags = JSON.parse(raw.slice(jsonStart, jsonEnd + 1)) as Array<{
-      label: string;
-      pillar?: string;
-      confidence?: number;
-    }>;
 
     let pairedCount = 0;
     for (const t of tags) {
