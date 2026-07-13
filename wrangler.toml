@@ -25,7 +25,9 @@ preview_id = "your-preview-kv-namespace-id"
 # GROQ_API_KEY = ""
 # HF_TOKEN = ""
 
+[build]
+command = "npm run build"
+
 # 觀測/日誌
 [observability]
 enabled = true
-logpush = true
