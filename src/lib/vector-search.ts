@@ -12,6 +12,7 @@ import {
 import {
   getEmbeddingGenerator, extractEmbeddingText, type EmbeddingOptions,
 } from './embedding-generator';
+import type { NoteWithTags } from '@/types/notes';
 
 export interface VectorSearchOptions {
   limit?: number;
@@ -23,7 +24,7 @@ export interface VectorSearchOptions {
 export interface EnrichedSearchResult {
   noteId: string;
   similarity: number;
-  note?: Record<string, unknown>;
+  note?: NoteWithTags;
   esgEntities?: ESGEntityRow[];
 }
 
