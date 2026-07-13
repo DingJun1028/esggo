@@ -22,7 +22,8 @@
 - Gemma 本地模型整合（feat/gemma-local-free-vps）：新增 local_gemma provider（Ollama VPS，100% 免費）+ callLocalOllama + 路由表本地為主；FREE_PROVIDER_POOL 自動派生 + isModelUp/markModelDown 降級 + 雲端池兜底；模型清單檔（models.txt / hermes-free-models.json）對齊 gemma3:4b / gemma3:12b / llama3.1:8b；修 tsconfig.verify.json 排除 __tests__（避免 vitest globals 型別缺口誤報）。free-provider.test.ts 14 passed。
 - 本地 Gemma 3 整合（feat/gemma-local-free-vps）：model-router 新增 `local_gemma` provider + `callLocalOllama`（Ollama /api/chat）；路由表全數改走本地 `gemma3:4b` / `gemma3:12b` / `llama3.1:8b`（100% 免費、私有、零算力）；`hermes-free-models.json` / `models.txt` 預設改為 `gemma3:4b`。修復兩個致命 bug：①`callFreeProvider` 因本地模型 `apiKeyEnv` 為空被誤判「無 Key」而全部跳過 → 改為空 Key 視為「免 Key」不跳過；②`VPS_OLLAMA_URL` 未被傳入呼叫端點 → 改由 `cfg.apiUrl`（PROVIDER_ENDPOINTS）傳入 `callLocalOllama`。新增 2 項測試（本地模型可選用 + 端點尊重 VPS_OLLAMA_URL）。
 - 萬能標籤配對合成層（#280 `49efcbd2`，feat/universal-tag）：`prisma/schema.prisma` 新增 `UniversalTag` + `TagPair`；`src/core/tags/universal-tag-service.ts`（syncEsgTags / createOmniTagPair / autoPair 走本地 Gemma 4 / getEntityTags，含 `stripGemma4Thinking` 清理思考頻道）；`app/api/tags/pair/route.ts` + `app/api/tags/universal/route.ts`；`tests/universal-tag-service.test.ts` 4 項全過。migration 另以 #281 `c3b9f89b`「加入 universal_tags migration 至 git 追蹤」補入 `prisma/migrations/20260712165810_universal_tags/migration.sql`。
-- VPS 部署交付物（feat/universal-tag-deploy，已自動併 main）：`vps-deploy-280.sh`（reset --hard origin/main + migrate deploy + generate + pm2 restart gateway）、`vps-push-280.sh`（複製 dev.db 至 gateway + db push 保留舊資料）、`vps-verify-280.sh`（pm2 status + 三道 curl 驗證）、`vps-diag*.sh`、`protection_body.json`（G1 PUT body）。
+- VPS 部署交付物（feat/universal-tag-deploy，已自動併 main）：`vps-deploy-280.sh`（reset --hard origin/main + migrate deploy + generate + pm2 restart gateway）、`vps-push-280.sh`（複製 dev.db 至 gateway + db push 保留舊資料）、`vps-verify-280.sh`（pm2 status + 三道 curl 驗證）、`vps-diag*.sh`、`protection_body.json`（G1 PUT body）。⚠️ 注意：`vps-deploy/push/verify-280.sh` 指向錯誤的 pm2 程序（`omniagent-gateway` / `apps/gateway`），實際服務 `/api/tags/*` 的是 **`esggo-core`**（Next.js, PORT 3000, cwd `/var/www/esggo`）；腳本須修正指向 esggo-core + root `.env` + `prisma/dev.db` 方能套用。
+- ✅ **#280 Universal Tag 已於 VPS 實際部署並端到端驗證成功（2026-07-12，經 SSH `esggo-vps` 授權執行）**：根因為 VPS 工作樹落後 `origin/main`（`HEAD` 停在缺 `app/api/tags/*` 路由的舊 commit `8756fa67`），舊 source 的 `next build` 會使 `.next` 遺漏 routes 導致 404。修復流程 = `git fetch origin && git reset --hard origin/main`（→#282 `c1cd86cd`）→ `pnpm prisma generate` → `pnpm build` → `pm2 restart esggo-core`。驗證：`omni` 模式回 `pairId/anchorId`、`auto` 模式（本地 Gemma 4 `hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_0`）回 `paired:true` 配對 2 個標籤、`sync-esg` 回 `synced:0`（無誤）、list 回傳 UniversalTag 資料；`esggo-core` pm2 狀態 online。
 - 生產 Ollama 端點已改為 Nginx Basic Auth 代理 `https://omniagent.esggo.co/ollama/api/chat`（需 `VPS_OLLAMA_USER`/`VPS_OLLAMA_PASS`）；Gemma 4 本地模型 `hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_0`（#279 將 vision 拆給 gemma3、text 給 Gemma4；#278 strip Gemma4 思考頻道；#277 修生產端點連線 + Basic Auth + 雲端兜底）。
 
 ### In Progress
@@ -41,12 +42,14 @@
 - ✅ 郵件通知已完成（#273）。可延伸：monorepo 其他子系統（如 twelve-omni）套用統一發布模式（twelve-omni 自身 secureForward 僅 hashLock+凍結、不發布至共享總線，為已知分歧，待評估併入）。
 - 可評估 E2E 整合測試（health + metrics + alerts + SSE 一體化驗證）。
 - ⚠️ 系統層級 UTF-8 字碼頁（OEMCP/ACP=65001）可根除顯示層亂碼，但需重啟且影響全機，待使用者明示同意（未執行）。
-- ⏳ `vps-fix-280.sh`（feat/vps-fix-280）：#280 上線後的 VPS 執行期補釘 — `prisma db push`（確保 UniversalTag/TagPair 表存在於 Next db）+ 注入 `LOCAL_GEMMA_*` 至 root `.env` + `pm2 restart esggo-core` + 三道 curl 驗證。已暫存於分支，尚未於 VPS 執行（需使用者同意且沙箱無法直連 VPS）。
+- ✅ `vps-fix-280.sh`（feat/vps-fix-280，已自動併 main）：#280 上線後的 VPS 執行期補釘 — 實際經 `esggo-vps` 執行。關鍵發現：一般 `prisma generate` + restart 不足，因 Prisma client 被 bundle 進 `.next`（非 externalized），schema 變更須整輪 `next build`。且 VPS 須先 `git reset --hard origin/main` 才 build，否則從落後的舊 source build 會漏掉 routes。實際部署已成功（見上 Done 條目）。
 
 ## Critical Context
 - ⚠️ G1 PUT 保護 body 必須用乾淨 body（無 url 包裹層）。
 - main 保護已重建（required_approving_review_count:1 / dismiss_stale_reviews:true）。
 - 倉內文字檔全為合法 UTF-8，亂碼純為 PowerShell 顯示層問題。
+- 🔧 **VPS 部署標準流程（esggo-core）**：`git fetch origin && git reset --hard origin/main` → `pnpm prisma generate` → `pnpm build` → `pm2 restart esggo-core`。Prisma 被 bundile 進 `.next`，故 schema 變更後必須 `next build`（不只 generate+restart）。VPS 經 SSH `esggo-vps`（161.118.248.180:22, root, `~/.ssh/vps_key`）直連；vps/comms relay 僅 localhost:9999，沙箱不可達。
+- ⚠️ **PowerShell `curl -d '{\"k\":\"v\"}'` 轉義陷阱**：`\"` 在 PowerShell 雙引號字串中會被保留為字面反斜線引號 → 送出 `{\"k\":\"v\"}` → 對端 `JSON.parse` 報錯或假 500。正解：本機寫乾淨 JSON 檔 → `scp` 至 VPS → `curl -d @/tmp/x.json`（omni/auto/sync-esg 三道驗證皆以此方式成功）。
 
 ## Relevant Files
 - src/lib/bus.ts：統一發布原語 publishBusEvent。
