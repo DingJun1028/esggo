@@ -6,6 +6,10 @@ import { gatewayKey, audit, summary, isSummoned, summonRitual } from './omni-mas
 const app = express();
 const port = 8642;
 
+// Trust first proxy (Cloudflare → VPS), required for express-rate-limit
+// to correctly read X-Forwarded-For for client IP identification.
+app.set('trust proxy', 1);
+
 const API_KEY = process.env.GEMINI_API_KEY;
 // 由 OmniMasterKey 模組統一解析：優先 OMNI_KEY，向後相容 GATEWAY_API_KEY / GATEWAY_KEY
 const GATEWAY_KEY = gatewayKey();
