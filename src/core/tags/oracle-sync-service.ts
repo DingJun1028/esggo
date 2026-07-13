@@ -121,7 +121,7 @@ export async function syncTagPairToOracle(pair: {
 }
 
 // 雙向讀取端 — 全量回拉 omni_trust.entry (Oracle->app hydration 用)
-export async function pullFromOracle(limit = 0): Promise<{ ok: boolean; count: number; entries: any[]; reason?: string }> {
+export async function pullFromOracle(limit = 0): Promise<{ ok: boolean; count: number; entries: unknown[]; reason?: string }> {
   if (!hasOracleCreds()) {
     return { ok: false, count: 0, entries: [], reason: 'OMNI_DB_PWD not set — skipping pull' };
   }
@@ -169,13 +169,16 @@ export async function reconcileBidirectional(
       timeout: 60000,
     });
     const out = JSON.parse(stdout.trim());
-    const toRow = (r: any): SyncMatrixRow => ({
-      uuid: r.uuid,
-      originSeq: r.origin_seq,
-      terminalSeq: r.terminal_seq,
-      status: r.status,
-      direction: r.direction ?? 'bidirectional',
-    });
+    const toRow = (r: unknown): SyncMatrixRow => {
+      const row = r as Record<string, unknown>;
+      return {
+        uuid: String(row.uuid ?? ''),
+        originSeq: Number(row.origin_seq ?? 0),
+        terminalSeq: Number(row.terminal_seq ?? 0),
+        status: row.status as SyncMatrixRow['status'],
+        direction: (row.direction as SyncMatrixRow['direction']) ?? 'bidirectional',
+      };
+    };
     return {
       ok: !!out.ok,
       summary: {

@@ -17,7 +17,7 @@
  * - 雙向同步：health checker 與 bus 訂閱者共享同一程序級 metrics 單例。
  */
 
-import { getDefaultJournal, type JournalRecord } from './journal';
+import { getDefaultJournal } from './journal';
 import { getDelegationMetrics, type DelegationMetricsSnapshot } from './metrics';
 
 /** 健康狀態等級 */
@@ -101,18 +101,16 @@ export function recordDelegationEventFlow(): void {
  */
 export async function checkDelegationHealth(): Promise<HealthReport> {
   const checks: HealthCheckItem[] = [];
-  let delegationMetrics: DelegationMetricsSnapshot | undefined;
-  let journalStats: JournalHealthStats | undefined;
 
   // ── 1. Journal 可讀寫 ──
   const journalCheck = checkJournalHealth();
   checks.push(journalCheck.item);
-  journalStats = journalCheck.stats;
+  const journalStats = journalCheck.stats;
 
   // ── 2. Metrics 觀測器存活 ──
   const metricsCheck = checkMetricsHealth();
   checks.push(metricsCheck.item);
-  delegationMetrics = metricsCheck.snapshot;
+  const delegationMetrics = metricsCheck.snapshot;
 
   // ── 3. 事件流活性 ──
   const flowCheck = checkEventFlowHealth();
