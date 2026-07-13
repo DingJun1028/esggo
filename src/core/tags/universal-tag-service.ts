@@ -10,9 +10,15 @@
 // 注意：OmniTag 邏輯內聯（不跨目錄 import lib/omni-tag，避免其在
 // verify tsconfig 下的模組解析問題）。
 
+import { createHash } from 'crypto';
 import { prisma } from '../../lib/prisma';
 
 const LOCAL_GEMMA_MODEL = process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision';
+
+// 5T: hashLock = SHA-256(uuid + timestamp + label) 不可逆封印
+function computeHashLock(uuid: string, timestamp: number, seed: string): string {
+  return createHash('sha256').update(`${uuid}|${timestamp}|${seed}`).digest('hex');
+}
 
 function stripGemma4Thinking(raw: string): string {
   if (typeof raw !== 'string') return raw;
@@ -49,8 +55,14 @@ export async function syncEsgTags(): Promise<number> {
       where: { label_kind: { label: t.name, kind: 'esg' } },
     });
     if (!existing) {
+      const uuid = `UT-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+      const ts = Date.now();
       await prisma.universalTag.create({
         data: {
+          uuid,
+          sourceOrigin: 'esg-sync',
+          hashLock: computeHashLock(uuid, ts, t.name),
+          lifecycleHooks: '{}',
           label: t.name,
           kind: 'esg',
           esgTagId: t.id,
@@ -80,6 +92,10 @@ export async function createOmniTagPair(params: {
     where: { label_kind: { label: anchor.label, kind: 'omni' } },
     update: {},
     create: {
+      uuid: `UT-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      sourceOrigin: 'omni-pair',
+      hashLock: computeHashLock(anchor.id, Date.now(), anchor.label),
+      lifecycleHooks: '{}',
       label: anchor.label,
       kind: 'omni',
       omniType: params.omniType ?? 'custom',
@@ -94,6 +110,10 @@ export async function createOmniTagPair(params: {
       where: { label_kind: { label: evidence.label, kind: 'omni' } },
       update: {},
       create: {
+        uuid: `UT-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+        sourceOrigin: 'omni-pair',
+        hashLock: computeHashLock(evidence.id, Date.now(), evidence.label),
+        lifecycleHooks: '{}',
         label: evidence.label,
         kind: 'omni',
         omniType: params.omniType ?? 'custom',
@@ -105,6 +125,10 @@ export async function createOmniTagPair(params: {
 
   const pair = await prisma.tagPair.create({
     data: {
+      uuid: `PAIR-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      sourceOrigin: 'omni-pair',
+      hashLock: computeHashLock(anchorDb.id, Date.now(), params.entityId),
+      lifecycleHooks: '{}',
       anchorTagId: anchorDb.id,
       evidenceTagId: evidenceDb?.id,
       entityType: params.entityType,
@@ -163,12 +187,25 @@ export async function autoPair(params: {
       const u = await prisma.universalTag.upsert({
         where: { label_kind: { label: t.label, kind: 'esg' } },
         update: {},
-        create: { label: t.label, kind: 'esg', status: 'active', metadata: JSON.stringify({ pillar: t.pillar ?? 'unknown' }) },
+        create: {
+          uuid: `UT-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+          sourceOrigin: 'auto-pair',
+          hashLock: computeHashLock(t.label, Date.now(), params.entityId),
+          lifecycleHooks: '{}',
+          label: t.label,
+          kind: 'esg',
+          status: 'active',
+          metadata: JSON.stringify({ pillar: t.pillar ?? 'unknown' }),
+        },
       });
       await prisma.tagPair.upsert({
         where: { anchorTagId_entityType_entityId: { anchorTagId: u.id, entityType: params.entityType, entityId: params.entityId } },
         update: { confidence: t.confidence ?? 1.0 },
         create: {
+          uuid: `PAIR-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+          sourceOrigin: 'auto-pair',
+          hashLock: computeHashLock(u.id, Date.now(), params.entityId),
+          lifecycleHooks: '{}',
           anchorTagId: u.id,
           entityType: params.entityType,
           entityId: params.entityId,
