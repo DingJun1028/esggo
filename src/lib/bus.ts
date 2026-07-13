@@ -23,3 +23,40 @@ export function publishBusEvent(topic: string, event: IBusEvent): { hashLock: st
   enhancedOmniBus.publish(topic, { ...event, hashLock } as IBusEvent);
   return { hashLock };
 }
+
+// ── 思考頻道（OmniAgentBus 同步思維流） ─────────────────────────
+// 把模型 / agent 的推理過程從「最終答案」拆出，發布到專屬頻道，
+// 供 UI / 日誌 / 其他 agent 即時訂閱這條同步思考流（對齊 5T hashLock 溯源）。
+export interface ThoughtEvent {
+  agentId: string;
+  runId: string;
+  step: number;
+  content: string;
+}
+
+/**
+ * 發布一段「思考」到 OmniAgentBus 頻道 `omni://agent/<agentId>/thought`。
+ * @returns 計算出的 hashLock（64 hex）
+ */
+export function publishThought(opts: ThoughtEvent): { hashLock: string } {
+  const topic = `omni://agent/${opts.agentId}/thought`;
+  const event = {
+    event: 'agent.thought',
+    payload: {
+      runId: opts.runId,
+      step: opts.step,
+      content: opts.content,
+      agentId: opts.agentId,
+    },
+    ts: Date.now(),
+    uuid: opts.runId,
+  };
+  return publishBusEvent(topic, event as unknown as IBusEvent);
+}
+
+/**
+ * 訂閱指定 topic（如思考流頻道），回傳取消訂閱函式。
+ */
+export function subscribeBusEvent(topic: string, cb: (event: IBusEvent) => void): () => void {
+  return enhancedOmniBus.subscribe(topic, cb);
+}
