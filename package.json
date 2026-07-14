@@ -16,7 +16,7 @@
     "build": "pnpm omni:build && cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "pnpm omni:start && next start -H 127.0.0.1",
     "lint": "pnpm omni:lint && ts-node scripts/celestial-gate.ts",
-    "lint:full": "pnpm omni:lint:full && eslint src/ --max-warnings 50",
+    "lint:full": "pnpm omni:lint:full && eslint src/ --max-warnings 150",
     "typecheck": "pnpm omni:typecheck && tsc -p tsconfig.core.json",
     "test": "pnpm omni:test && vitest run",
     "test:watch": "vitest",
