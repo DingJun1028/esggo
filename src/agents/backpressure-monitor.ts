@@ -61,6 +61,6 @@ export function monitorBackpressure(
   };
 
   // 暴露 stop 方法於函式屬性（非必要，但方便使用）
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   (monitorBackpressure as Record<string, unknown>).stop = stop;
 }
