@@ -48,24 +48,27 @@ interface StatusDotProps {
   label?: string;
 }
 
+const STATUS_DOT_COLOR_MAP: Record<string, string> = {
+  healthy: 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]',
+  active: 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]',
+  degraded: 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.6)]',
+  offline: 'bg-gray-400',
+  error: 'bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.6)]',
+};
+
+const STATUS_DOT_SIZE_MAP: Record<string, string> = {
+  sm: 'w-2 h-2',
+  md: 'w-2.5 h-2.5',
+  lg: 'w-3 h-3',
+};
+
 export function StatusDot({ ok, status, size = 'md', label }: StatusDotProps) {
   const resolvedStatus = status ?? (ok ? 'healthy' : 'error');
-  const colorMap: Record<string, string> = {
-    healthy: 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]',
-    active: 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]',
-    degraded: 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.6)]',
-    offline: 'bg-gray-400',
-    error: 'bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.6)]',
-  };
-  const sizeMap: Record<string, string> = {
-    sm: 'w-2 h-2',
-    md: 'w-2.5 h-2.5',
-    lg: 'w-3 h-3',
-  };
+
   return (
     <span className="inline-flex items-center gap-1.5">
       <span
-        className={`inline-block rounded-full ${sizeMap[size]} ${colorMap[resolvedStatus]}`}
+        className={`inline-block rounded-full ${STATUS_DOT_SIZE_MAP[size]} ${STATUS_DOT_COLOR_MAP[resolvedStatus]}`}
         role="status"
         aria-label={label || resolvedStatus}
       />
@@ -89,25 +92,27 @@ interface BadgeProps {
   size?: 'sm' | 'md';
 }
 
+const BADGE_COLOR_MAP: Record<string, string> = {
+  teal: 'bg-[#009EB0]/15 text-[#009EB0]',
+  gold: 'bg-[#D4AF37]/15 text-[#D4AF37]',
+  blue: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+  green: 'bg-emerald-500/15 text-emerald-500',
+  red: 'bg-red-500/15 text-red-500',
+  gray: 'bg-gray-500/15 text-gray-500',
+  purple: 'bg-purple-500/15 text-purple-500',
+  amber: 'bg-amber-500/15 text-amber-500',
+  cyan: 'bg-cyan-500/15 text-cyan-500',
+};
+
+const BADGE_SIZE_MAP: Record<string, string> = {
+  sm: 'text-[11px] px-2 py-0.5',
+  md: 'text-xs px-2.5 py-1',
+};
+
 export function Badge({ children, color = 'teal', size = 'sm' }: BadgeProps) {
-  const colorMap: Record<string, string> = {
-    teal: 'bg-[#009EB0]/15 text-[#009EB0]',
-    gold: 'bg-[#D4AF37]/15 text-[#D4AF37]',
-    blue: 'bg-[#3B82F6]/15 text-[#3B82F6]',
-    green: 'bg-emerald-500/15 text-emerald-500',
-    red: 'bg-red-500/15 text-red-500',
-    gray: 'bg-gray-500/15 text-gray-500',
-    purple: 'bg-purple-500/15 text-purple-500',
-    amber: 'bg-amber-500/15 text-amber-500',
-    cyan: 'bg-cyan-500/15 text-cyan-500',
-  };
-  const sizeMap: Record<string, string> = {
-    sm: 'text-[11px] px-2 py-0.5',
-    md: 'text-xs px-2.5 py-1',
-  };
   return (
     <span
-      className={`inline-block font-semibold rounded-md ${sizeMap[size]} ${colorMap[color] || colorMap.teal}`}
+      className={`inline-block font-semibold rounded-md ${BADGE_SIZE_MAP[size]} ${BADGE_COLOR_MAP[color] || BADGE_COLOR_MAP.teal}`}
     >
       {children}
     </span>
@@ -130,19 +135,20 @@ interface CardProps {
   className?: string;
 }
 
+const CARD_BORDER_MAP: Record<string, string> = {
+  teal: 'border-l-[#009EB0]',
+  gold: 'border-l-[#D4AF37]',
+  blue: 'border-l-[#3B82F6]',
+  purple: 'border-l-[#8B5CF6]',
+  green: 'border-l-emerald-500',
+  red: 'border-l-red-500',
+};
+
 export function Card({ title, icon, children, accent = 'teal', action, className = '' }: CardProps) {
-  const borderMap: Record<string, string> = {
-    teal: 'border-l-[#009EB0]',
-    gold: 'border-l-[#D4AF37]',
-    blue: 'border-l-[#3B82F6]',
-    purple: 'border-l-[#8B5CF6]',
-    green: 'border-l-emerald-500',
-    red: 'border-l-red-500',
-  };
   return (
     <div
       className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 border-l-4 ${
-        borderMap[accent] || borderMap.teal
+        CARD_BORDER_MAP[accent] || CARD_BORDER_MAP.teal
       } p-5 shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       <div className="flex items-center justify-between mb-4">
@@ -200,16 +206,17 @@ interface ProgressBarProps {
   showLabel?: boolean;
 }
 
+const PROGRESS_BAR_COLOR_MAP: Record<string, string> = {
+  teal: 'bg-[#009EB0]',
+  gold: 'bg-[#D4AF37]',
+  blue: 'bg-[#3B82F6]',
+  red: 'bg-red-500',
+  green: 'bg-emerald-500',
+};
+
 export function ProgressBar({ percent, color = 'teal', height = 'h-2', showLabel = false }: ProgressBarProps) {
-  const colorMap: Record<string, string> = {
-    teal: 'bg-[#009EB0]',
-    gold: 'bg-[#D4AF37]',
-    blue: 'bg-[#3B82F6]',
-    red: 'bg-red-500',
-    green: 'bg-emerald-500',
-  };
   const clamped = Math.min(100, Math.max(0, percent));
-  const barColor = clamped > 80 ? colorMap.red : colorMap[color] || colorMap.teal;
+  const barColor = clamped > 80 ? PROGRESS_BAR_COLOR_MAP.red : PROGRESS_BAR_COLOR_MAP[color] || PROGRESS_BAR_COLOR_MAP.teal;
   return (
     <div className="w-full">
       {showLabel && (
@@ -330,13 +337,14 @@ interface ErrorBannerProps {
   severity?: 'error' | 'warning';
 }
 
+const ERROR_BANNER_STYLES = {
+  error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400',
+  warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-600 dark:text-yellow-400',
+};
+
 export function ErrorBanner({ message, onRetry, severity = 'error' }: ErrorBannerProps) {
-  const styles = {
-    error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400',
-    warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-600 dark:text-yellow-400',
-  };
   return (
-    <div className={`px-4 py-3 border rounded-lg text-xs flex items-center justify-between ${styles[severity]}`}>
+    <div className={`px-4 py-3 border rounded-lg text-xs flex items-center justify-between ${ERROR_BANNER_STYLES[severity]}`}>
       <div className="flex items-center gap-2">
         <span>{severity === 'error' ? '✕' : '⚠'}</span>
         <span>{message}</span>
@@ -365,15 +373,16 @@ interface SpinnerProps {
   color?: string;
 }
 
+const SPINNER_SIZE_MAP: Record<string, string> = {
+  sm: 'w-4 h-4',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
+};
+
 export function Spinner({ size = 'md', color = '#009EB0' }: SpinnerProps) {
-  const sizeMap: Record<string, string> = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
-  };
   return (
     <div
-      className={`${sizeMap[size]} border-2 border-t-transparent rounded-full animate-spin`}
+      className={`${SPINNER_SIZE_MAP[size]} border-2 border-t-transparent rounded-full animate-spin`}
       style={{ borderColor: `${color} transparent transparent transparent` }}
       role="status"
       aria-label="Loading"
