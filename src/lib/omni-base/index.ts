@@ -994,7 +994,6 @@ export function createOmniBaseSystem(config?: {
 // ═══════════════════════════════════════════════════════════════
 
 let legacySystem: OmniBaseSystem | null = null;
-let legacyCounter = 0;
 
 function getLegacySystem(): OmniBaseSystem {
   if (!legacySystem) {
@@ -1010,7 +1009,6 @@ export function createOmniTag(
   entanglementType: EntanglementType = 'data-flow',
 ): OmniTag {
   const sys = getLegacySystem();
-  legacyCounter++;
   return sys.tagManager.createTag(chapterId, griCode, entanglementType);
 }
 

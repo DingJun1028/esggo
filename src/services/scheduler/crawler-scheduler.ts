@@ -5,6 +5,7 @@
 
 import { createAllCrawlers } from '../../crawlers/crawler-factory';
 import type { CrawlResult } from '../../crawlers/base-crawler';
+import { getSourceConfig } from '../../core/sonnar/sources-config';
 
 export interface ScheduledJob {
   id: string;
@@ -73,7 +74,6 @@ class CrawlerScheduler {
   private getDefaultInterval(sourceId: string): number {
     // Use sources-config if available, else hardcoded defaults
     try {
-      const { getSourceConfig } = require('../../core/sonnar/sources-config');
       const cfg = getSourceConfig(sourceId);
       if (cfg) return cfg.crawlIntervalMs;
     } catch (e) {

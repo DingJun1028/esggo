@@ -10,6 +10,7 @@
 
 import * as firebaseAdmin from 'firebase-admin';
 import type { App } from 'firebase-admin/app';
+import { getFirestore as _getFirestore } from 'firebase-admin/firestore';
 
 // Firebase Admin namespace export can be awkwardly typed; use a narrower cast
 const admin = firebaseAdmin as typeof firebaseAdmin & Record<string, unknown>;
@@ -53,10 +54,7 @@ export function getAdminApp(): App {
 function getDb(): ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null {
   if (_db) return _db;
   try {
-    const firestoreNS = require('firebase-admin/firestore');
-    _db = firestoreNS.getFirestore
-      ? firestoreNS.getFirestore(getAdminApp())
-      : firestoreNS.firestore?.(getAdminApp());
+    _db = _getFirestore(getAdminApp());
   } catch {
     try {
       const firestoreFn = (admin as Record<string, unknown>)['firestore'] as ((app: App) => unknown) | undefined;

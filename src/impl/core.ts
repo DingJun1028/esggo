@@ -16,7 +16,6 @@ import {
   IMartialLawEvent,
 } from "../types/core-contract";
 import { OmniSeed } from "../lib/omni-seed";
-import { OmniTag } from "../lib/omni-tag";
 import { OmniEvidence } from "./omni-evidence";
 import { OmniTime } from "./omni-time";
 import { OmniMemory } from "./omni-memory";

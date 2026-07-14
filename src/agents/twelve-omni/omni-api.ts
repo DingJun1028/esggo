@@ -123,7 +123,7 @@ export class OmniAPI implements IOmniAPI {
     const endpoints: Record<string, EndpointHealth> = {};
     let allHealthy = true;
 
-    for (const [id, _endpoint] of Array.from(this.endpoints.entries())) {
+    for (const id of Array.from(this.endpoints.keys())) {
       const recentCalls = this.callHistory.filter(
         (c) => c.endpointId === id && c.timestamp > Date.now() - 60000
       );
@@ -197,8 +197,6 @@ export class OmniAPI implements IOmniAPI {
    * 更新熔斷器 (內部輔助)
    */
   private updateCircuitBreaker(endpointId: string, success: boolean): void {
-    const _state = this.circuitStates.get(endpointId) || 'closed';
-
     if (success) {
       this.circuitStates.set(endpointId, 'closed');
     } else {

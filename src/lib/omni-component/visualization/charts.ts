@@ -271,7 +271,6 @@ export function createBarChartConfig(
   const {
     title = '',
     subtitle = '',
-    stacked: _stacked = false,
     horizontal = false,
   } = options;
 

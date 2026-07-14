@@ -7,7 +7,6 @@
 
 import * as child_process from "child_process";
 import { promisify } from "util";
-import * as path from "path";
 
 const exec = promisify(child_process.exec);
 

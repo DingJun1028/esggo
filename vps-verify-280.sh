@@ -13,3 +13,6 @@ echo ""
 echo "--- 3. list universal tags ---"
 curl -s http://127.0.0.1:3000/api/tags/universal 2>&1 | head -c 400
 echo ""
+echo "--- 4. gateway health (omniagent-gateway :8642) ---"
+curl -s --max-time 5 http://127.0.0.1:8642/health 2>&1 || echo "GATEWAY HEALTH FAIL"
+echo ""
