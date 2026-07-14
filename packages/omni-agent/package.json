@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/index.ts",
   "bin": {
-    "omni-agent": "./src/bin/omni-agent.js"
+    "omni-agent": "./src/bin_cli/omni-agent.js"
   },
   "scripts": {
     "start": "node dist/index.js",
@@ -16,15 +16,15 @@
     "lint:full": "eslint src/ --max-warnings 50",
     "typecheck": "tsc --noEmit",
     "version": "node scripts/version.js",
-    "omni:init": "node src/bin/omni-agent.js init",
-    "omni:dev": "node src/bin/omni-agent.js dev",
-    "omni:build": "node src/bin/omni-agent.js build",
-    "omni:start": "node src/bin/omni-agent.js start",
-    "omni:lint": "node src/bin/omni-agent.js lint",
-    "omni:lint:full": "node src/bin/omni-agent.js lint:full",
-    "omni:typecheck": "node src/bin/omni-agent.js typecheck",
-    "omni:test": "node src/bin/omni-agent.js test",
-    "omni:test:coverage": "node src/bin/omni-agent.js test:coverage"
+    "omni:init": "node src/bin_cli/omni-agent.js init",
+    "omni:dev": "node src/bin_cli/omni-agent.js dev",
+    "omni:build": "node src/bin_cli/omni-agent.js build",
+    "omni:start": "node src/bin_cli/omni-agent.js start",
+    "omni:lint": "node src/bin_cli/omni-agent.js lint",
+    "omni:lint:full": "node src/bin_cli/omni-agent.js lint:full",
+    "omni:typecheck": "node src/bin_cli/omni-agent.js typecheck",
+    "omni:test": "node src/bin_cli/omni-agent.js test",
+    "omni:test:coverage": "node src/bin_cli/omni-agent.js test:coverage"
   },
   "keywords": ["omnijules", "ai-agent", "esggo", "5t-protocol"],
   "author": "ESG GO Team",
