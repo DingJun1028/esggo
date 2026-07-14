@@ -280,6 +280,24 @@
     font-size: 13px; font-weight: 600;
     display: flex; gap: 8px; align-items: flex-start;
   }
+  .wk-fac {
+    margin-top: 5px;
+    font-size: 12.5px;
+    color: #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .wk-fac .lec { color: var(--cal-blue); font-weight: 600; }
+  .wk-fac .key { color: #92400e; font-weight: 600; }
+  .wk-journal {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    padding-left: 10px;
+    border-left: 2px solid var(--cal-gold-soft);
+  }
 
   .footer-note {
     text-align: center;
@@ -476,23 +494,23 @@
         <div class="schedule-col blue">
           <div class="schedule-head"><i class="fa-solid fa-chalkboard-user"></i> 6週 Lecture Syllabus</div>
           <ul class="weeks">
-            <li><span class="wk">Week 1</span><div class="wk-name">Purpose-Driven Strategy, Stakeholder & Materiality</div><div class="wk-desc">Global ESG trends, climate, energy, and AI disruptions</div></li>
-            <li><span class="wk">Week 2</span><div class="wk-name">Strategy Architecture and KPI Alignment</div><div class="wk-desc">Climate, energy transition & industrial transformation</div></li>
-            <li><span class="wk">Week 3</span><div class="wk-name">Innovation Matrix and ESG Project Portfolio</div><div class="wk-desc">Geopolitics, supply chain resilience, government incentives</div></li>
-            <li><span class="wk">Week 4</span><div class="wk-name">Ecosystem Platform Strategy & Impact Modeling</div><div class="wk-desc">Platform strategy and ecosystem governance</div></li>
-            <li><span class="wk">Week 5</span><div class="wk-name">Dashboard Blueprint and Data Architecture</div><div class="wk-desc">AI for ESG data governance, KPI prediction & automation</div></li>
-            <li><span class="wk">Week 6</span><div class="wk-name">Governance system, budgeting, strategic annual rhythm</div><div class="wk-desc">Blueprint Execution and Governance Model</div></li>
+            <li><span class="wk">Week 1</span><div class="wk-name">Purpose-Driven Strategy, Stakeholder & Materiality</div><div class="wk-desc">定義企業的 ESG 戰略挑戰</div><div class="wk-fac"><span class="lec">Lecture：Mathieu Aguesse</span><span class="key">Keynote：Ben Bradbury</span></div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規壓力 / 利害期待 / 策略機會）</div></li>
+            <li><span class="wk">Week 2</span><div class="wk-name">Strategy Architecture and KPI Alignment</div><div class="wk-desc">建立重大性矩陣與治理擁有人</div><div class="wk-fac"><span class="lec">Lecture：Chandra Vadhana Radhakrishnan</span><span class="key">Keynote：Aurelia Engelsberger</span></div><div class="wk-journal">Journal 2：誰應形塑 ESG 優先順序；組織缺乏的數據 / 治理 / 保證能力</div></li>
+            <li><span class="wk">Week 3</span><div class="wk-name">Innovation Matrix and ESG Project Portfolio</div><div class="wk-desc">盤點能力缺口與變革準備度</div><div class="wk-fac"><span class="lec">Lecture：Dave Rochlin</span><span class="key">Keynote：Ignacio de Juan-Creix y Umbert</span></div><div class="wk-journal">Journal 3：循環或責任科技如何重塑一項產品 / 服務 / 流程 / 供應鏈</div></li>
+            <li><span class="wk">Week 4</span><div class="wk-name">Ecosystem Platform Strategy & Impact Modeling</div><div class="wk-desc">形成一個 ESG 創新原型概念</div><div class="wk-fac"><span class="lec">Lecture：Karin Li</span><span class="key">Keynote：Madeleine Parisi</span></div><div class="wk-journal">Journal 4：組織內部必須改變什麼，才能讓 ESG 成為決策一部分</div></li>
+            <li><span class="wk">Week 5</span><div class="wk-name">Dashboard Blueprint and Data Architecture</div><div class="wk-desc">將矩陣推進至 owners / metrics / milestones</div><div class="wk-fac"><span class="lec">Lecture：Chris Bush</span><span class="key">Keynote：Pradeep Iyer</span></div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 倡議正當性</div></li>
+            <li><span class="wk">Week 6</span><div class="wk-name">Governance system, budgeting, strategic annual rhythm</div><div class="wk-desc">完成 final matrix 與溝通計畫</div><div class="wk-fac"><span class="lec">Lecture：Ganesh Iyer</span><span class="key">Keynote：Arding Hsu</span></div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害期待 / 策略機會）</div></li>
           </ul>
         </div>
         <div class="schedule-col gold">
           <div class="schedule-head"><i class="fa-solid fa-bullseye"></i> 6週 Consulting Time 交付成果</div>
           <ul class="weeks">
-            <li><span class="wk">Lab 1</span><div class="wk-name">組織永續戰略挑戰聚焦</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：組織永續戰略挑戰陳述書草案</div></li>
-            <li><span class="wk">Lab 2</span><div class="wk-name">重大性與治理結構對齊</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：重大性矩陣與治理擁有者地圖初稿</div></li>
-            <li><span class="wk">Lab 3</span><div class="wk-name">ESG 能力與包容創新評估</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：ESG 能力缺口評估與變革準備度</div></li>
-            <li><span class="wk">Lab 4</span><div class="wk-name">循環經濟與創新實踐</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：創新原型概念與循環經濟機會掃描</div></li>
-            <li><span class="wk">Lab 5</span><div class="wk-name">數據指標與里程碑確立</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：導入負責人與指標之執行矩陣 V2</div></li>
-            <li><span class="wk">Lab 6</span><div class="wk-name">最終審查與溝通行動</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：最終永續執行矩陣 (Final Matrix)</div></li>
+            <li><span class="wk">Lab 1</span><div class="wk-name">組織永續戰略挑戰聚焦</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：組織永續戰略挑戰陳述書草案</div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
+            <li><span class="wk">Lab 2</span><div class="wk-name">重大性與治理結構對齊</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：重大性矩陣與治理擁有者地圖初稿</div><div class="wk-journal">Journal 2：誰形塑 ESG 優先順序；缺乏的數據 / 治理 / 保證能力</div></li>
+            <li><span class="wk">Lab 3</span><div class="wk-name">ESG 能力與包容創新評估</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：ESG 能力缺口評估與變革準備度</div><div class="wk-journal">Journal 3：循環或責任科技如何重塑產品 / 服務 / 流程 / 供應鏈</div></li>
+            <li><span class="wk">Lab 4</span><div class="wk-name">循環經濟與創新實踐</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：創新原型概念與循環經濟機會掃描</div><div class="wk-journal">Journal 4：組織內部必須改變什麼，讓 ESG 成為決策一部分</div></li>
+            <li><span class="wk">Lab 5</span><div class="wk-name">數據指標與里程碑確立</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：導入負責人與指標之執行矩陣 V2</div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 正當性</div></li>
+            <li><span class="wk">Lab 6</span><div class="wk-name">最終審查與溝通行動</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：最終永續執行矩陣 (Final Matrix)</div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
           </ul>
         </div>
       </div>
