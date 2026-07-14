@@ -13,3 +13,8 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+
+## 2026-07-03 - [Fix Command Injection Vulnerability in OmniCore Integration]
+**Vulnerability:** The OmniCore AI execution integration (`src/impl/core.ts`) used `child_process.execSync` to dynamically construct and execute a `curl` command using user-supplied input (`userIntentStub`). Because the input was directly concatenated into a bash string literal, an attacker could potentially inject malicious shell commands on the host server.
+**Learning:** Shell string execution is fundamentally unsafe when handling user data or variables passed from upstream components. Even seemingly harmless interactions with external APIs can become command execution vectors if shell metacharacters are not properly escaped.
+**Prevention:** Avoid invoking the shell (e.g., `exec`, `execSync`) altogether whenever native equivalents exist. Always prefer the built-in native `fetch` API for HTTP requests rather than executing `curl` via shell interpolation.
