@@ -88,7 +88,7 @@ export class CelestialController {
 
   async executeCelestialFlow(input: InputData | CelestialData) {
     // 1. 感知異常 (Sense)
-    const _deviation = this.detectDeviation(input);
+    this.detectDeviation(input);
 
     // 2. 封印：確保數據安全 (Seal)
     const uuid = randomUUID();
@@ -212,7 +212,7 @@ export class CelestialController {
       });
       await prisma.$disconnect();
       console.log(`[Celestial] Engraved to repository: ${metadata.status}`);
-    } catch (_dbErr) {
+    } catch {
       // Fallback: console only (DB may be unavailable in edge runtimes)
       console.warn(`[Celestial] DB engrave failed, console fallback:`, metadata);
     }

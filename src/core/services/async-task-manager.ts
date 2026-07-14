@@ -12,6 +12,7 @@
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
 import { agnesApi, type AgnesResponse } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
+import { adminDb } from '@/lib/firebase-admin';
 import {
   createTaskState,
   getTaskState,
@@ -331,7 +332,6 @@ export function startAsyncTask(
     // RAG Retrieval via adminDb
     let ragContext = '';
     try {
-      const { adminDb } = require('@/lib/firebase-admin');
       if (adminDb) {
         const snapshot = await adminDb.collection('rag_knowledge').get();
         const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];

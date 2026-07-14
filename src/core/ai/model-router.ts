@@ -94,7 +94,7 @@ const MODELS = {
   or_gemma31b: {
     provider: 'openrouter' as const,
     model: 'google/gemma-4-31b-it:free',
-    maxTokens: 256,
+    maxTokens: 512,
     temperature: 0.6,
     reasoning: 'Gemma 31B: Google 品質',
   },

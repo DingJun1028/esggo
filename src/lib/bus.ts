@@ -60,5 +60,5 @@ export function publishThought(opts: ThoughtEvent): { hashLock: string } {
 export function subscribeBusEvent(topic: string, cb: (event: IBusEvent) => void): () => void {
   // enhancedOmniBus.subscribe 使用 omni-agent-bus 的簡易 IBusEvent（非泛型），
   // 與 contracts 的泛型 IBusEvent<T> 名稱相同但型別不同，故內部轉型。
-  return enhancedOmniBus.subscribe(topic, cb as (event: any) => void);
+  return enhancedOmniBus.subscribe(topic, cb as (event: unknown) => void);
 }
