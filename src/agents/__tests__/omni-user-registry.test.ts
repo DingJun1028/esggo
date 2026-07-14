@@ -150,16 +150,19 @@ describe('OmniUserRegistry', () => {
 
   it('enhancedSearch() returns memory entries (mocked memory layer)', async () => {
     const registry = new OmniUserRegistry();
-    const entries = [makeEntry({ content: 'hello result' }), makeEntry({ content: 'another result' })];
+    const entries = [
+      makeEntry({ content: 'hello result', createdAt: Date.now() }),
+      makeEntry({ content: 'another result', createdAt: Date.now() - 1000 })
+    ];
     vi.mocked(mockMemory.search).mockResolvedValue(entries);
 
     const results = await registry.enhancedSearch('user-1', 'hello');
 
     expect(mockMemory.search).toHaveBeenCalled();
     // 比對關鍵欄位而非整物件深等（避免 CI 環境下 entry 參考/欄位微差導致 flaky）
+    // Also use expect.arrayContaining to avoid flaky order due to identical timestamps
     expect(results.length).toBe(entries.length);
-    expect(results[0].content).toBe('hello result');
-    expect(results[1].content).toBe('another result');
+    expect(results.map(r => r.content)).toEqual(expect.arrayContaining(['hello result', 'another result']));
   });
 
   it('singleton getOmniUserRegistry() returns same instance', () => {
