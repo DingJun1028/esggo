@@ -190,7 +190,7 @@ export class SECCrawler extends BaseCrawler {
     const config: CrawlerConfig = {
       sourceId: 'us-sec', name: 'U.S. SEC Climate Disclosure Rules',
       baseUrl: 'https://www.sec.gov',
-      listUrl: 'https://www.sec.gov/news/whatsnew/wn-today',
+      listUrl: 'https://www.sec.gov/newsroom/whats-new',
       selectors: { list: 'table tr, .list-item', title: 'a', link: 'a', date: 'td:first-child' },
       maxItems: 10, requestDelay: 3000,
     };
@@ -231,7 +231,7 @@ export class HKEXCrawler extends BaseCrawler {
     const config: CrawlerConfig = {
       sourceId: 'ap-hkex', name: '香港交易所 HKEX ESG Reporting Guide',
       baseUrl: 'https://www.hkex.com.hk',
-      listUrl: 'https://www.hkex.com.hk/Market-Regulation/Listed-Issues-Regulatory-Requirements-Impact-of-New-Listing-Rules/ESG-in-Listed-Companies',
+      listUrl: 'https://www.hkex.com.hk/-/media/hkex-market/listing/rules-and-guidance/listing-rules-contingency/main-board-listing-rules/appendices/appendix_27',
       selectors: { list: '.article-item, .resource-item', title: 'a', link: 'a', date: '.date' },
       maxItems: 10, requestDelay: 3000,
     };
@@ -272,7 +272,7 @@ export class CDPCrawler extends BaseCrawler {
     const config: CrawlerConfig = {
       sourceId: '3p-cdp', name: 'CDP Carbon Disclosure Project',
       baseUrl: 'https://www.cdp.net',
-      listUrl: 'https://www.cdp.net/en/news',
+      listUrl: 'https://www.cdp.net/en/press-releases',
       selectors: { list: '.news-item, article', title: 'a', link: 'a', date: '.date' },
       maxItems: 10, requestDelay: 3000,
     };
