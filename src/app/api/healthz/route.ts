@@ -61,11 +61,11 @@ export async function GET(request: NextRequest) {
     };
 
     // 檢查事件存儲
-  const _timeRift = healthRouter.getTimeRiftEngine();
+    const timeRift = healthRouter.getTimeRiftEngine();
     if (timeRift) {
       try {
         await timeRift.eventStore.healthCheck();
-      } catch (_e) {
+      } catch {
         checks.eventStore = 'unhealthy';
       }
     }
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         if (!testContract.verification.isValid) {
           checks.gateway = 'degraded';
         }
-      } catch (_e) {
+      } catch {
         checks.gateway = 'unhealthy';
       }
     }
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       if (models.length === 0) {
         checks.modelDiscovery = 'degraded';
       }
-    } catch (_e) {
+    } catch {
       checks.modelDiscovery = 'unhealthy';
     }
 
@@ -152,7 +152,7 @@ export async function GET_METRICS() {
     healthRouter = await createSmartAIRouter({});
   }
 
-  const timeRift = healthRouter.getTimeRiftEngine();
+  const _timeRift = healthRouter.getTimeRiftEngine();
   
   // 收集指標 (實際應用可整合 prom-client)
   const metrics = [

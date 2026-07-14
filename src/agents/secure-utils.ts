@@ -15,11 +15,11 @@ export class SecureUtils {
   public static lockAndFreeze<T extends object>(obj: T): T {
     // Compute a deterministic SHA‑256 hash of the object's JSON representation.
     const json = JSON.stringify(obj);
-    const _hash = createHash("sha256").update(json).digest("hex");
+    const hash = createHash("sha256").update(json).digest("hex");
     // Ensure evidence object exists
     const rec = obj as Record<string, unknown>;
     if (!rec.evidence) rec.evidence = {};
-    (rec.evidence as Record<string, unknown>)['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    (rec.evidence as Record<string, unknown>)['hash_lock'] = `0xCELESTIAL_${hash.substring(0, 16)}_${Date.now()}`;
     // Execute native JavaScript Object.freeze() to prevent further tampering
     Object.freeze(obj);
     return Object.freeze(obj);
