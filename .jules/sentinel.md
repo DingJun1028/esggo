@@ -23,3 +23,13 @@
 **Vulnerability:** The project `package.json` had broken, unresolvable scripts referencing `omni-agent.js` that caused standard CI workflow commands (`pnpm install`, `pnpm build`, `pnpm typecheck`, `pnpm lint`) to fail. While this originally caused an infrastructure disruption, adding unverified CLI hooks to build lifecycle events (like `prepare`) is also a supply chain / arbitrary code execution risk if `omni-agent.js` was compromised.
 **Learning:** Build lifecycle scripts and proxy scripts should not point to missing or unverified `.js` bins in a workspace package, as it completely halts CI pipelines and poses an arbitrary code execution risk. Standard Next.js/TypeScript tooling should be called directly when custom wrapper scripts are broken or not fully implemented.
 **Prevention:** Avoid wrapping fundamental dev tools (`next build`, `tsc`, `vitest`) with custom opaque proxy scripts unless absolutely necessary and fully tested. Ensure lifecycle scripts like `prepare` only contain highly reliable tools.
+
+## 2026-07-04 - [Fix CI Failure Due to Missing Next.js Start Command for Lighthouse]
+**Vulnerability:** The Lighthouse CI job failed because `pnpm` was not found during execution, and more importantly, it attempted to run `lighthouse-ci-action` against `http://localhost:3000` without first starting the Next.js production server.
+**Learning:** Lighthouse CI requires a running server to test against. Simply depending on the `build` job does not persist running processes across jobs. Each job runs in an isolated runner environment.
+**Prevention:** Ensure isolated CI jobs that require testing against a running service correctly reinstall dependencies, build, and start the local server in the background (using `&`) before running test tools like Lighthouse or Playwright.
+
+## 2026-07-04 - [Fix ESLint Failures from Unused Variables in Agents]
+**Vulnerability:** Although not a direct security flaw, the continuous integration pipeline was failing to build and deploy because multiple typescript files had unused variable declarations and `prefer-const` violations, causing the strict linting step to reject the build.
+**Learning:** Security spans beyond just patching flaws; maintaining pipeline hygiene ensures that subsequent security updates can be successfully built, tested, and deployed without friction from broken checks.
+**Prevention:** Regularly run `pnpm typecheck` and `eslint` locally before committing to keep the codebase clear of trivial syntax and style violations that can block the delivery of critical patches.
