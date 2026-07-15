@@ -29,11 +29,11 @@ const NAV_MODULES = [
     href: '/sustain-center',
     icon: '🌱',
     title: '萬能永續中心',
-    subtitle: 'Sustain Center',
-    desc: 'ESG 儀表板 · 碳排驗算 · 趨勢分析',
+    subtitle: 'Sustain Center ∞ Evolution',
+    desc: 'ESG 儀表板 · 碳排驗算 · 永續發展無限進化',
     color: 'from-teal-500/20 to-emerald-500/10',
     accent: '#38b2ac',
-    badge: 'LIVE',
+    badge: 'EVOLUTION',
   },
   {
     href: '/village',
@@ -184,7 +184,7 @@ export default function HomePage() {
             animation: 'shimmer 3s linear infinite',
           }}
         >
-          OmniCore
+          ESGGO 永續發展無限進化
         </div>
         <p
           style={{
