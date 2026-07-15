@@ -281,14 +281,27 @@ esggo-deploy.bundle
 # 全量審計 sink 持久層（append-only JSONL，執行期產生）
 .audit/
 
-# Platform architecture skeleton (best practice)
-infra/
-platform/
-data/
-
 # Moved or generated deployment artifacts
 omniagent-gateway/node_modules/
 apps/gateway/node_modules/
 apps/gateway/.env.bak-*
 apps/gateway/*.backup*
 apps/gateway/*.backup-*
+
+# Keep platform skeleton unignored but ignore large/secret files inside
+data/prisma/prisma/dev.db
+data/prisma/prisma/*.db
+data/prisma/prisma/*.db-journal
+data/cache/
+
+# Legacy moved/unused locally
+deploy_hermes_windows.ps1
+esggo-vps-optimization.tar.gz
+omni_trace.txt
+protection_body.json
+render-fix.patch
+trace2.txt
+instrumentation.ts
+test.ts
+test-import.js
+pyproject.toml
