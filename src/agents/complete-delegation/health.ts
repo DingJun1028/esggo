@@ -17,7 +17,7 @@
  * - 雙向同步：health checker 與 bus 訂閱者共享同一程序級 metrics 單例。
  */
 
-import { getDefaultJournal, type JournalRecord } from './journal';
+import { getDefaultJournal } from './journal';
 import { getDelegationMetrics, type DelegationMetricsSnapshot } from './metrics';
 
 /** 健康狀態等級 */
