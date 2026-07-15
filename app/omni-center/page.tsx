@@ -9,11 +9,12 @@ import { RagKnowledgeManager } from './rag-knowledge-manager';
 import { WuzuoNoteView } from './wuzuo-note-view';
 import { OmniCalendarView } from './omni-calendar-view';
 import { UniversalOmniConsole } from './universal-omni-console';
+import LearningCenter from './learning-center';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
-type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn';
+type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn' | 'learning';
 
 const FIVE_T = [
   { key: 'traceable', zh: '真', color: 'var(--accent-blue)' },
@@ -129,6 +130,7 @@ const tabs: {id:Tab; label:string; icon:string}[] = [
   {id:'rag',      label:'萬能智庫',icon:'📚'},
   {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
   {id:'omniFn',   label:'萬能函數',icon:'🪄'},
+  {id:'learning', label:'學習中心',icon:'🎓'},
 ];
 
 export default function OmniCenterPage() {
@@ -450,6 +452,13 @@ export default function OmniCenterPage() {
       {tab === 'omniFn' && (
         <OmniBaseCard className="!p-4">
           <UniversalOmniConsole />
+        </OmniBaseCard>
+      )}
+
+      {/* Learning Center */}
+      {tab === 'learning' && (
+        <OmniBaseCard className="!p-4">
+          <LearningCenter />
         </OmniBaseCard>
       )}
     </div>
