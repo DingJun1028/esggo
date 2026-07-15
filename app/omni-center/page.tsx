@@ -13,7 +13,7 @@ import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
-type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn';
+type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn' | 'evolution';
 
 const FIVE_T = [
   { key: 'traceable', zh: '真', color: 'var(--accent-blue)' },
@@ -129,6 +129,7 @@ const tabs: {id:Tab; label:string; icon:string}[] = [
   {id:'rag',      label:'萬能智庫',icon:'📚'},
   {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
   {id:'omniFn',   label:'萬能函數',icon:'🪄'},
+  {id:'evolution',label:'無限進化',icon:'🌀'},
 ];
 
 export default function OmniCenterPage() {
