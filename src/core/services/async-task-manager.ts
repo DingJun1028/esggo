@@ -332,8 +332,9 @@ export function startAsyncTask(
     // RAG Retrieval via adminDb
     let ragContext = '';
     try {
-      if (adminDb) {
-        const snapshot = await adminDb.collection('rag_knowledge').get();
+      const collectionRef = adminDb.collection('rag_knowledge');
+      if (collectionRef) {
+        const snapshot = await collectionRef.get();
         const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];
         
         if (chunks.length > 0) {

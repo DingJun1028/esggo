@@ -45,7 +45,8 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
   }
   let matched = 0;
   for (const entry of res.entries) {
-    const uuid: string = entry.uuid;
+    const entryData = entry as { uuid?: string; seq?: number };
+    const uuid: string | undefined = entryData.uuid;
     if (!uuid) continue;
     // 在 app 端標記此 uuid 的實體為「Oracle 已確認」(sourceOrigin 補 oracle-confirmed)
     // 若 app 本地已有該 uuid 的 tagPair/universalTag, 更新其 lifecycleHooks 補 oracleConfirmed 標記
@@ -55,7 +56,7 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
         const meta = (existingPair.lifecycleHooks ? JSON.parse(existingPair.lifecycleHooks) : {}) as Record<string, unknown>;
         await prisma.tagPair.update({
           where: { id: existingPair.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
         });
         matched++;
       }
@@ -115,7 +116,10 @@ export async function reconcileAll(): Promise<{
   const appByUuid = new Map(appSeq.map((a) => [a.uuid, a.originSeq]));
   const terminalByUuid = new Map<string, number>();
   for (const e of pulled.entries) {
-    if (e.uuid) terminalByUuid.set(e.uuid, Math.max(terminalByUuid.get(e.uuid) ?? 0, e.seq));
+    const entryData = e as { uuid?: string; seq?: number };
+    if (entryData.uuid && entryData.seq !== undefined) {
+      terminalByUuid.set(entryData.uuid, Math.max(terminalByUuid.get(entryData.uuid) ?? 0, entryData.seq));
+    }
   }
   // 合併所有出現過的 uuid
   const allUuids = Array.from(new Set<string>([...Array.from(appByUuid.keys()), ...Array.from(terminalByUuid.keys())]));
@@ -151,7 +155,10 @@ export async function pullBehindApp(rows: SyncMatrixRow[]): Promise<{ pulled: nu
   if (rows.length === 0) return { pulled: 0, failed: 0 };
   const res = await pullFromOracle(0);
   if (!res.ok) return { pulled: 0, failed: rows.length };
-  const byUuid = new Map(res.entries.map((e) => [e.uuid, e]));
+  const byUuid = new Map(res.entries.map((e) => {
+    const data = e as { uuid?: string };
+    return [data.uuid, e];
+  }));
   let pulled = 0;
   let failed = 0;
   for (const r of rows) {
@@ -165,9 +172,10 @@ export async function pullBehindApp(rows: SyncMatrixRow[]): Promise<{ pulled: nu
       if (existing) {
         // app 已有 -> 補標 oracleConfirmed (不覆寫既有資料)
         const meta = (existing.lifecycleHooks ? JSON.parse(existing.lifecycleHooks) : {}) as Record<string, unknown>;
+        const entryData = entry as { seq?: number };
         await prisma.tagPair.update({
           where: { id: existing.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
         });
         pulled++;
       } else {
