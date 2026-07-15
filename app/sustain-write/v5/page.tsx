@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { FileText, ChevronDown, ChevronUp, X, Wand2 } from 'lucide-react';
 import { UniversalOmniConsole } from '../../omni-center/universal-omni-console';
-import { db } from '@/src/lib/firebase';
+import { db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { createFiveTComponent, type OmniResult } from '@/src/lib/esggo';
+import { createFiveTComponent, type OmniResult } from '@/lib/esggo';
 
 /**
  * ESGGO v5.2 — OmniBase Style Frontend
