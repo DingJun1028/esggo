@@ -125,22 +125,15 @@ export default function HomePage() {
           zIndex: 50,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {/* ⚡ Bolt Optimization: Replaced JS interval state with CSS keyframes to eliminate 1.2s render cycle */}
-          <div
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              background: '#52C41A',
-              animation: 'statusPulse 1.2s infinite',
-            }}
-          />
-          <span
-            style={{ fontSize: 14, color: '#63a6b0', fontWeight: 600, letterSpacing: '0.04em' }}
-          >
-            OmniCore ♾️ ESGGO v5.1 — TRANSCENDED
-          </span>
+        <div
+          style={{
+            fontSize: 14,
+            color: '#63a6b0',
+            fontWeight: 600,
+            letterSpacing: '0.04em',
+          }}
+        >
+          ESGGO 永續發展無限進化
         </div>
         <div
           style={{
