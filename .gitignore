@@ -145,7 +145,6 @@ bin/
 cli/scratch/
 config/
 dashboard/
-/data/
 dataconnect/
 esggo/
 esggo-dashboard/
@@ -263,8 +262,7 @@ dist/
 .idea/
 .vscode/
 
-# Static reports (generated, not source)
-reports/
+# Static reports are now in data/reports/
 README.OMNICOMPONENT.md
 TECHNICAL_INTEGRITY.md
 UNIVERSAL_COMPONENT_MATRIX.md
@@ -288,7 +286,7 @@ apps/gateway/.env.bak-*
 apps/gateway/*.backup*
 apps/gateway/*.backup-*
 
-# Keep platform skeleton unignored but ignore large/secret files inside
+# Platform skeleton: keep structure, ignore large/secret files inside
 data/prisma/prisma/dev.db
 data/prisma/prisma/*.db
 data/prisma/prisma/*.db-journal
