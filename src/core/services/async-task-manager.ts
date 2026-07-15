@@ -12,6 +12,7 @@
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
 import { agnesApi, type AgnesResponse } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
+import { adminDb } from '@/lib/firebase-admin';
 import {
   createTaskState,
   getTaskState,
@@ -331,32 +332,33 @@ export function startAsyncTask(
     // RAG Retrieval via adminDb
     let ragContext = '';
     try {
-      const { adminDb } = require('@/lib/firebase-admin');
-      if (adminDb) {
-        const snapshot = await adminDb.collection('rag_knowledge').get();
-        const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];
-        
-        if (chunks.length > 0) {
-          // Break currentTitle into keywords (at least 2 chars)
-          const userKeywords = currentTitle.toLowerCase().split(/[\\s、，。]/).filter(k => k.length > 1);
-          // Always add generic keywords that might be in reports
-          if (userKeywords.length === 0) userKeywords.push(currentTitle);
+      const collectionRef = adminDb.collection('rag_knowledge');
+      if (!collectionRef) {
+        return currentTitle;
+      }
+      const snapshot = await collectionRef.get();
+      const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];
+      
+      if (chunks.length > 0) {
+        // Break currentTitle into keywords (at least 2 chars)
+        const userKeywords = currentTitle.toLowerCase().split(/[\\s、，。]/).filter(k => k.length > 1);
+        // Always add generic keywords that might be in reports
+        if (userKeywords.length === 0) userKeywords.push(currentTitle);
 
-          const scored = chunks.map((chunk: RagChunk) => {
-            const content = String(chunk.content || '').toLowerCase();
-            let score = 0;
-            for (const kw of userKeywords) {
-              if (content.includes(kw)) score++;
-            }
-            return { ...chunk, score };
-          });
-          
-          scored.sort((a: ScoredChunk, b: ScoredChunk) => b.score - a.score);
-          const topChunks = scored.slice(0, 3).filter((c: ScoredChunk) => c.score > 0 || scored.length <= 3);
-          
-          if (topChunks.length > 0) {
-            ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+        const scored = chunks.map((chunk: RagChunk) => {
+          const content = String(chunk.content || '').toLowerCase();
+          let score = 0;
+          for (const kw of userKeywords) {
+            if (content.includes(kw)) score++;
           }
+          return { ...chunk, score };
+        });
+        
+        scored.sort((a: ScoredChunk, b: ScoredChunk) => b.score - a.score);
+        const topChunks = scored.slice(0, 3).filter((c: ScoredChunk) => c.score > 0 || scored.length <= 3);
+        
+        if (topChunks.length > 0) {
+          ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
         }
       }
     } catch (e) {
