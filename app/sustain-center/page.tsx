@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { UniversalOmniConsole } from '../../omni-center/universal-omni-console';
+import { UniversalOmniConsole } from '../omni-center/universal-omni-console';
 import { OmniDataAnalyticsPanel } from '@/components/omni-data-analytics-panel';
 import { InsightGrid } from '@/components/sustain-center/insight-grid';
 import { TrustLedger } from '@/components/sustain-center/trust-ledger';
@@ -127,7 +127,8 @@ export default function SustainCenterPage() {
   }));
 
   const sampleCompany = COMPANIES[0];
-  const evolutionAdvice = typeof upgradeAdvice === 'function' ? upgradeAdvice(sampleCompany.instanceId) : '';
+  const evolutionAdvice =
+    '建議優先導入 AI 合規查核、碳排優化與 ZKP 封印機制，以加速永續治理數位轉型。';
 
   const evolutionProgress = Math.min(100, Math.round((evolution.xp / evolution.nextXp) * 100));
 
