@@ -101,18 +101,17 @@ export function recordDelegationEventFlow(): void {
  */
 export async function checkDelegationHealth(): Promise<HealthReport> {
   const checks: HealthCheckItem[] = [];
-  let delegationMetrics: DelegationMetricsSnapshot | undefined;
-  let journalStats: JournalHealthStats | undefined;
 
   // ── 1. Journal 可讀寫 ──
   const journalCheck = checkJournalHealth();
   checks.push(journalCheck.item);
-  journalStats = journalCheck.stats;
+  const journalStats: JournalHealthStats | undefined = journalCheck.stats;
 
   // ── 2. Metrics 觀測器存活 ──
   const metricsCheck = checkMetricsHealth();
   checks.push(metricsCheck.item);
-  delegationMetrics = metricsCheck.snapshot;
+  const delegationMetrics: DelegationMetricsSnapshot | undefined =
+    metricsCheck.snapshot;
 
   // ── 3. 事件流活性 ──
   const flowCheck = checkEventFlowHealth();
