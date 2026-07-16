@@ -544,10 +544,10 @@ export default function ResourcesPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-                系統平台資源項目
+                系統平台資源項目 ∞ Evolution
               </h1>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                System Platform Resources — Modules, AI Models, Infrastructure
+                System Platform Resources — Modules, AI Models, Infrastructure · 永續發展無限進化
               </p>
             </div>
           </div>

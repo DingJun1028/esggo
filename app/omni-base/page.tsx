@@ -207,10 +207,10 @@ export default function OmniBasePage() {
           marginBottom: 24,
         }}>
           <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-            🔌 OmniBase 外掛系統
+            🔌 萬能基地 — ESGGO ∞ Evolution
           </h1>
           <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-            Plugin Registry · EventBus-driven · Hot-reload
+            萬能基地 · EventBus-driven · Hot-reload · 永續發展無限進化
           </p>
           <div style={{ display: 'flex', gap: 20, marginTop: 12, fontSize: 13, color: SC.textMuted }}>
             <span>📦 外掛 <strong style={{ color: SC.teal }}>{plugins.length}</strong></span>

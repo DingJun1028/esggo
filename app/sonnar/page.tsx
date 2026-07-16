@@ -378,10 +378,10 @@ export default function SonnarDashboard() {
                   color: SOLID_CARD_TOKENS.teal,
                 }}
               >
-                ESGSonar
+                ESGSonar — ESGGO ∞ Evolution
               </h1>
               <p style={{ fontSize: '12px', color: SOLID_CARD_TOKENS.textSecondary, margin: 0 }}>
-                ESG 法規信號雷達 — 20 源監控
+                ESG 法規信號雷達 — 20 源監控 · 永續發展無限進化
               </p>
             </div>
           </div>

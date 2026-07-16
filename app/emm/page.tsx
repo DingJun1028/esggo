@@ -256,8 +256,8 @@ export default function EMMIDEDashboard() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#009EB0] flex items-center justify-center text-white font-bold text-lg">E</div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800 dark:text-white">EMM IDE</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Environment + Model Monitor</p>
+              <h1 className="text-xl font-bold text-gray-800 dark:text-white">EMM IDE — ESGGO ∞ Evolution</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Environment + Model Monitor · 永續發展無限進化</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
