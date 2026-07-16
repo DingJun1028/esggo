@@ -14,6 +14,8 @@ import {
   ICompleteDelegationManager,
   DelegationPermission,
   DelegationRestriction,
+  DelegationEventNames,
+  DelegationTopics,
 } from '../../types/complete-delegation';
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
