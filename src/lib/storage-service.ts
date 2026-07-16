@@ -8,9 +8,7 @@ export { query, storeEmbedding, getEmbedding, semanticSearch, storeESGEntity } f
 
 import { prisma } from './prisma';
 
-/**
- * Readiness gate: verify primary + pgvector connectivity.
- */
+/** Readiness gate: verify primary + pgvector connectivity. */
 export async function verifyStorage() {
   const results: Record<string, boolean> = {};
 
@@ -34,7 +32,7 @@ export async function verifyStorage() {
   return results;
 }
 
-// ─── ESG Report ────────────────────────────────────────────
+// ─── ESG Report ──────────────────────────────────────────────
 
 export interface StoredReport {
   id: string;
@@ -57,7 +55,10 @@ export async function storeReport(input: {
   title: string;
   content: string;
 }): Promise<StoredReport> {
-  const hash = Buffer.from(`${input.framework}|${input.year}|${input.companyName}|${input.title}|${input.content}`).toString('base64').slice(0, 64);
+  const hash = Buffer.from(
+    `${input.framework}|${input.year}|${input.companyName}|${input.title}|${input.content}`,
+  ).toString('base64').slice(0, 64);
+
   return prisma.companyReport.create({
     data: {
       companyId: `auto-${Date.now()}`,
@@ -77,7 +78,7 @@ export async function getReportById(id: string): Promise<StoredReport | null> {
   return (await prisma.companyReport.findUnique({ where: { id } })) as unknown as StoredReport | null;
 }
 
-// ─── Delegation ──────────────────────────────────────────────
+// ─── Delegation ───────────────────────────────────────────────
 
 export interface StoredDelegation {
   id: string;
@@ -115,4 +116,89 @@ export async function storeDelegation(input: {
 
 export async function listDelegations(): Promise<StoredDelegation[]> {
   return [];
+}
+
+// ─── OmniCenter / OmniCore Persistence ────────────────────────
+
+export interface OmniCaseRecord {
+  id?: string;
+  kind: string;
+  actor: string;
+  payload: Record<string, unknown>;
+  hash?: string;
+  createdAt?: Date;
+}
+
+export async function storeOmniCase(input: {
+  kind: string;
+  actor: string;
+  payload: Record<string, unknown>;
+}): Promise<OmniCaseRecord> {
+  const hash = Buffer.from(
+    JSON.stringify({
+      kind: input.kind,
+      actor: input.actor,
+      payload: input.payload,
+      ts: Date.now(),
+    }),
+  ).toString('sha256');
+
+  const record = {
+    id: `omni-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    kind: input.kind,
+    actor: input.actor,
+    payload: input.payload,
+    hash,
+    createdAt: new Date(),
+  } as OmniCaseRecord;
+
+  // Best-effort persistence; keep a memory record even if DB is unavailable.
+  try {
+    await prisma.$executeRaw`
+      INSERT INTO omni_case (id, kind, actor, payload, hash, created_at, updated_at)
+      VALUES (${record.id}, ${record.kind}, ${record.actor}, ${JSON.stringify(record.payload)}::jsonb, ${hash}, now(), now())
+      ON CONFLICT (id) DO UPDATE SET payload = EXCLUDED.payload, hash = EXCLUDED.hash, updated_at = now()
+    `;
+  } catch {
+    // table may not exist until migration runs
+  }
+
+  return record;
+}
+
+export interface OmniConsoleSnapshot {
+  id?: string;
+  functionName: string;
+  input: unknown[];
+  output: unknown;
+  actor: string;
+  createdAt?: Date;
+}
+
+export async function storeOmniConsoleSnapshot(input: {
+  functionName: string;
+  input: unknown[];
+  output: unknown;
+  actor: string;
+}): Promise<OmniConsoleSnapshot> {
+  const record = {
+    id: `omni-fn-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    functionName: input.functionName,
+    input: input.input,
+    output: input.output,
+    actor: input.actor,
+    createdAt: new Date(),
+  } as OmniConsoleSnapshot;
+
+  try {
+    await prisma.$executeRaw`
+      INSERT INTO omni_console_snapshot (id, function_name, input, output, actor, created_at, updated_at)
+      VALUES (${record.id}, ${record.functionName}, ${JSON.stringify(record.input)}::jsonb, ${JSON.stringify(record.output)}::jsonb, ${record.actor}, now(), now())
+      ON CONFLICT (id) DO UPDATE SET output = EXCLUDED.output, updated_at = now()
+    `;
+  } catch {
+    // table may not exist until migration runs
+  }
+
+  return record;
 }

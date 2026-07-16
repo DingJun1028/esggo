@@ -199,7 +199,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     if (this._fullVolume) {
       const all = await getDefaultJournal().readAll();
       const audit = all.filter((e) => e.kind === 'audit');
-      const entries: AuditEntry[] = delegationId
+      const entries = delegationId
         ? audit.filter(
             (e) => (e as Record<string, unknown>).delegationId === delegationId,
           )
