@@ -54,6 +54,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     principalId: string;
     agentId: string;
     permissions: string[] | DelegationPermission[];
+    restrictions?: DelegationRestriction[];
     validFrom?: number;
     validUntil?: number;
     description?: string;
@@ -72,7 +73,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       agentId: params.agentId,
       validFrom,
       validUntil,
-      permissions: params.permissions,
+      permissions: params.permissions as DelegationPermission[],
       restrictions: params.restrictions ?? [],
       signature: '',
       description: params.description,
@@ -198,11 +199,12 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     if (this._fullVolume) {
       const all = await getDefaultJournal().readAll();
       const audit = all.filter((e) => e.kind === 'audit');
-      return delegationId
+      const entries: AuditEntry[] = delegationId
         ? audit.filter(
-            (e) => (e as Record<string, unknown>).delegationId === delegationId
+            (e) => (e as Record<string, unknown>).delegationId === delegationId,
           )
         : audit;
+      return entries.map((e) => ({ type: e.type, timestamp: e.ts, ...e })) as AuditEntry[];
     }
     return this.getAuditTrail();
   }

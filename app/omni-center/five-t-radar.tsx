@@ -24,7 +24,7 @@ function radarPath(scores: FiveTData, maxR:number, cx:number, cy:number): string
   }).join(' ') + ' Z';
 }
 
-interface Props { companyName?: string; onFetch?: ()=>Promise<FiveTData>; zkpCount?: number; }
+interface Props { companyName?: string; zkpCount?: number; evidenceCount?: number; }
 
 const DEMO_COMPANIES = [
   { name:'台積電 TSMC',    scores:{ traceable:0.94, transparent:0.91, tangible:0.88, trustworthy:0.96, trackable:0.89 } },
@@ -33,26 +33,43 @@ const DEMO_COMPANIES = [
   { name:'鴻海',            scores:{ traceable:0.88, transparent:0.86, tangible:0.85, trustworthy:0.90, trackable:0.84 } },
 ];
 
-export function FiveTRadar({ zkpCount }: Props) {
+export function FiveTRadar({ companyName, zkpCount, evidenceCount }: Props) {
   const [selected, setSelected] = useState(0);
+  const [remoteScores, setRemoteScores] = useState<FiveTData | null>(null);
   const [displayed, setDisplayed] = useState<FiveTData>({ traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 });
 
-  const traceScore = Math.min(0.99, 0.4 + (zkpCount || 0) * 0.06);
-  const trustScore = Math.min(0.99, 0.5 + (zkpCount || 0) * 0.05);
-  
-  const myTwin = {
-    name: '我的數位雙生',
-    scores: {
-      traceable: traceScore,
-      transparent: 0.85,
-      tangible: 0.80,
-      trustworthy: trustScore,
-      trackable: 0.88
-    }
-  };
+  const [traceable, transparent, tangible, trustworthy, trackable] = Object.values(remoteScores ?? {
+    traceable: Math.min(0.99, 0.4 + (zkpCount || 0) * 0.06),
+    transparent: 0.85,
+    tangible: 0.80,
+    trustworthy: Math.min(0.99, 0.5 + (zkpCount || 0) * 0.05),
+    trackable: 0.88,
+  });
 
-  const COMPANIES = useMemo(() => [myTwin, ...DEMO_COMPANIES], [myTwin]);
+  const MY_COMPANY = useMemo(() => ({
+    name: companyName || '我的數位雙生',
+    scores: {
+      traceable,
+      transparent,
+      tangible,
+      trustworthy,
+      trackable,
+    },
+  }), [companyName, traceable, transparent, tangible, trustworthy, trackable]);
+
+  const COMPANIES = useMemo(() => [MY_COMPANY, ...DEMO_COMPANIES], [MY_COMPANY]);
   const target = useMemo(() => COMPANIES[selected]?.scores ?? { traceable:0,transparent:0,tangible:0,trustworthy:0,trackable:0 }, [COMPANIES, selected]);
+
+  useEffect(() => {
+    const count = Number(evidenceCount || 0);
+    setRemoteScores({
+      traceable: Math.min(0.99, 0.4 + count * 0.006),
+      transparent: Math.min(0.99, 0.85 + count * 0.002),
+      tangible: Math.min(0.99, 0.80 + count * 0.003),
+      trustworthy: Math.min(0.99, 0.5 + count * 0.005),
+      trackable: Math.min(0.99, 0.88 + count * 0.002),
+    });
+  }, [evidenceCount]);
 
   useEffect(() => {
     let frame = 0;

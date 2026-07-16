@@ -139,6 +139,7 @@ export default function OmniCenterPage() {
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [omniSummary, setOmniSummary] = useState<{ caseCount: number; griIndicatorCount: number } | null>(null);
+  const [evidenceCount, setEvidenceCount] = useState<number>(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -150,6 +151,9 @@ export default function OmniCenterPage() {
             caseCount: Number(json.data.caseCount) || 47,
             griIndicatorCount: Number(json.data.griIndicatorCount) || 142,
           });
+          if (typeof json.data.evidenceCount === 'number') {
+            setEvidenceCount(json.data.evidenceCount);
+          }
         }
       })
       .catch(() => {
@@ -451,7 +455,7 @@ export default function OmniCenterPage() {
       {/* 5T Tab */}
       {tab === 'fiveT' && (
         <OmniBaseCard className="!p-4">
-          <FiveTRadar zkpCount={zkpCount} />
+          <FiveTRadar zkpCount={zkpCount} evidenceCount={evidenceCount} />
         </OmniBaseCard>
       )}
 
