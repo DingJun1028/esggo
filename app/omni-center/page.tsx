@@ -138,6 +138,29 @@ export default function OmniCenterPage() {
   const [zkpCount, setZkpCount] = useState<number>(0);
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [omniSummary, setOmniSummary] = useState<{ caseCount: number; griIndicatorCount: number } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/omni-center/summary')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (!cancelled && json?.success && json.data) {
+          setOmniSummary({
+            caseCount: Number(json.data.caseCount) || 47,
+            griIndicatorCount: Number(json.data.griIndicatorCount) || 142,
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOmniSummary({ caseCount: 47, griIndicatorCount: 142 });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const { isReady } = useAgnesApi();
 
@@ -356,9 +379,9 @@ export default function OmniCenterPage() {
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { l: '筆記數', v: notes.length, c: 'text-accentTeal' },
-                  { l: 'OmniOne 案件', v: 47, c: 'text-accentPurple' },
+                  { l: 'OmniOne 案件', v: omniSummary?.caseCount ?? 47, c: 'text-accentPurple' },
                   { l: 'ZKP 封印', v: zkpCount, c: 'text-accentBlue' },
-                  { l: 'GRI 指標', v: 142, c: 'text-accentGold' },
+                  { l: 'GRI 指標', v: omniSummary?.griIndicatorCount ?? 142, c: 'text-accentGold' },
                 ].map((s) => (
                   <div key={s.l} className="bg-primary rounded-lg py-2 px-2.5">
                     <div className={`font-['Fira_Code',monospace] text-xl font-bold ${s.c}`}>

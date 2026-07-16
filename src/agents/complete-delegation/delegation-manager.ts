@@ -43,11 +43,10 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     const sink: AuditSink | undefined =
       config?.auditSink ??
       (this._fullVolume
-        ? (e) => { void getDefaultJournal().append({ kind: 'audit', type: e.type, ts: e.timestamp, ...e }); }
+        ? (e) => { void getDefaultJournal().append({ kind: 'audit', ts: e.timestamp, ...e }); }
         : undefined);
     this._auditLogger = new AuditLogger(sink);
   }
-
   /**
    * 創建完全授權
    */
