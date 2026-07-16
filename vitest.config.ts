@@ -12,6 +12,8 @@ export default defineConfig({
       '**/__test__/**',
       'apps/gateway/sync/__test__/**',
       'apps/gateway/sync/dist/__test__/**',
+      // 隔離 .kilo 下的舊 worktree 測試，它們引用已不存在的 @/lib/* 路徑，會污染本分支 CI
+      '**/.kilo/**',
     ],
   },
   resolve: {
