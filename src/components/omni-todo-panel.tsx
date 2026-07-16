@@ -87,6 +87,8 @@ export function OmniTodoPanel() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 160 });
+  const [evolving, setEvolving] = useState(false);
 
   // ── 新建表單 ──────────────────────────────────────────────
   const [newTitle, setNewTitle] = useState('');
@@ -135,6 +137,26 @@ export function OmniTodoPanel() {
   }, [loadTodos, loadStats]);
 
   // ── 操作 ──────────────────────────────────────────────────
+
+  const evolveTodoSystem = async () => {
+    if (evolving) return;
+    setEvolving(true);
+    try {
+      await new Promise(r => setTimeout(r, 600));
+      setEvolution(prev => {
+        const xp = prev.xp + 30;
+        let level = prev.level;
+        let nextXp = prev.nextXp;
+        while (xp >= nextXp) {
+          level += 1;
+          nextXp = Math.floor(nextXp * 1.2);
+        }
+        return { level, xp: xp % nextXp, nextXp };
+      });
+    } finally {
+      setEvolving(false);
+    }
+  };
 
   const handleCreate = async () => {
     if (!newTitle.trim()) return;
@@ -257,6 +279,37 @@ export function OmniTodoPanel() {
           </OmniBaseCard>
         </div>
       )}
+
+      {/* ── ESGGO 無限進化卡 ─────────────────────────────── */}
+      <OmniBaseCard>
+        <div className="p-4 flex flex-wrap items-center gap-4">
+          <div>
+            <div className="text-xs font-semibold" style={{ color: 'var(--accent-purple)' }}>ESGGO 無限進化</div>
+            <div className="flex gap-3 mt-1">
+              <div>
+                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>LEVEL</div>
+                <div className="text-xl font-bold" style={{ color: 'var(--accent-gold)' }}>{evolution.level}</div>
+              </div>
+              <div>
+                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>XP</div>
+                <div className="text-xl font-bold" style={{ color: 'var(--accent-teal)' }}>{evolution.xp}/{evolution.nextXp}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={evolveTodoSystem}
+            disabled={evolving}
+            className="px-4 py-2 rounded-xl text-sm font-semibold border transition-colors disabled:opacity-50"
+            style={{
+              background: 'var(--accent-purple)15',
+              color: 'var(--accent-purple)',
+              borderColor: 'var(--accent-purple)40',
+            }}
+          >
+            {evolving ? '🧬 進化中...' : '🧬 啟動無限進化'}
+          </button>
+        </div>
+      </OmniBaseCard>
 
       {/* ── 工具列 ────────────────────────────────────────── */}
       <OmniBaseCard>
