@@ -155,6 +155,8 @@ export default function DailyReportPage() {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [archiveDates, setArchiveDates] = useState<string[]>([]);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 120 });
+  const [evolving, setEvolving] = useState(false);
 
   // Severity-filtered items
   const filteredItems = useMemo(() => {
@@ -267,6 +269,27 @@ export default function DailyReportPage() {
     }
     return counts;
   }, [report]);
+
+  const evolveDaily = async () => {
+    if (evolving) return;
+    setEvolving(true);
+    try {
+      await new Promise(r => setTimeout(r, 500));
+      setEvolution(prev => {
+        const nextXp = prev.nextXp + (typeof report?.alertCount === 'number' ? Math.min(report.alertCount * 2, 260) : 0);
+        const xp = prev.xp + 15;
+        let level = prev.level;
+        let cap = prev.nextXp;
+        while (xp >= cap) {
+          level += 1;
+          cap = Math.floor(cap * 1.18);
+        }
+        return { level, xp: xp % cap, nextXp: cap };
+      });
+    } finally {
+      setEvolving(false);
+    }
+  };
 
   // Generate date options (last 30 days)
   const _dateOptions = useMemo(() => {
@@ -454,6 +477,51 @@ export default function DailyReportPage() {
                 <span>🔔 快訊 <strong style={{ color: SC.gold }}>{report.alertCount}</strong></span>
                 <span>📅 {report.reportDate}</span>
               </div>
+            </div>
+
+            {/* ESGGO 今日進化 */}
+            <div style={{
+              background: `${SC.zkp}12`,
+              border: `1px solid ${SC.zkp}40`,
+              borderRadius: 12,
+              padding: 16,
+              marginBottom: 18,
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: SC.textSecondary }}>🧬 ESGGO 今日進化</div>
+                <div style={{ display: 'flex', gap: 16, marginTop: 6 }}>
+                  <div>
+                    <div style={{ fontSize: 10, color: SC.textMuted }}>LEVEL</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: SC.gold }}>{evolution.level}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 10, color: SC.textMuted }}>XP</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: SC.teal }}>{evolution.xp}/{evolution.nextXp}</div>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={evolveDaily}
+                disabled={evolving}
+                style={{
+                  padding: '8px 18px',
+                  background: evolving ? SC.surfaceHover : `${SC.zkp}25`,
+                  color: SC.zkp,
+                  border: `1px solid ${SC.zkp}50`,
+                  borderRadius: 10,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: evolving ? 'not-allowed' : 'pointer',
+                  opacity: evolving ? 0.7 : 1,
+                }}
+              >
+                {evolving ? '🧬 進化中...' : '🧬 啟動今日進化'}
+              </button>
             </div>
 
             {/* Severity Filter */}
