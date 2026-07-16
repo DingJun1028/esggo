@@ -2,18 +2,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAgnesApi } from "../../src/components/AgnesProvider";
 
-import { db } from "@/lib/firebase";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  query,
-  orderBy,
-} from "firebase/firestore";
-
 export interface NoteData {
   id: string;
   title: string;
@@ -25,9 +13,31 @@ export interface NoteData {
 
 import DOMPurify from "isomorphic-dompurify";
 
-/** Basic HTML sanitization: escape <script> and dangerous tags to prevent XSS */
 function sanitizeHtml(html: string): string {
   return DOMPurify.sanitize(html);
+}
+
+function loadNotes(): Promise<NoteData[]> {
+  return fetch("/api/notes").then((r) => {
+    if (!r.ok) throw new Error("Failed to fetch notes");
+    return r.json();
+  }).then((data) => {
+    const notes = Array.isArray(data?.notes) ? data.notes : [];
+    return notes
+      .map((n: any) => ({
+        id: String(n.id ?? n._id ?? ""),
+        title: String(n.title ?? ""),
+        content: String(n.content ?? ""),
+        tags: Array.isArray(n.tags) ? n.tags : [],
+        fiveTGate: n.fiveTGate ?? n.five_t_gate ?? undefined,
+        createdAt: typeof n.createdAt === "number"
+          ? n.createdAt
+          : n.created_at
+            ? new Date(n.created_at).getTime()
+            : Date.now(),
+      }))
+      .filter((n: NoteData) => n.id);
+  });
 }
 
 export function OmniNoteCRUD() {
@@ -46,15 +56,21 @@ export function OmniNoteCRUD() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    if (!db) return;
-    const q = query(collection(db, "notes"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as NoteData,
-      );
-      setNotes(data);
-    });
-    return () => unsubscribe();
+    let cancelled = false;
+
+    const bootstrap = async () => {
+      try {
+        const data = await loadNotes();
+        if (!cancelled) setNotes(data);
+      } catch {
+        if (!cancelled) setNotes([]);
+      }
+    };
+
+    bootstrap();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const startCreate = () => {
@@ -72,37 +88,54 @@ export function OmniNoteCRUD() {
     setEditing(n);
     setCreating(false);
   };
-  const cancel = () => {
+  const cancel = useCallback(() => {
     setCreating(false);
     setEditing(null);
-  };
+  }, []);
 
   const save = useCallback(async () => {
     const tags = (draft.tags || "")
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
+
+    const payload = {
+      title: draft.title || "未命名",
+      content: draft.content,
+      tags,
+      fiveTGate: draft.fiveTGate || null,
+      createdAt: editing?.createdAt ?? Date.now(),
+    };
+
+    const endpoint = editing
+      ? `/api/notes/${editing.id}`
+      : "/api/notes";
+
+    const method = editing ? "PUT" : "POST";
+
+    const res = await fetch(endpoint, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error(`Notes API failed: ${res.status}`);
+    const data = await res.json();
+    const saved = data?.note ?? data;
+
     if (editing) {
-      await updateDoc(doc(db, "notes", editing.id), {
-        title: draft.title || "未命名",
-        content: draft.content,
-        tags,
-        fiveTGate: draft.fiveTGate || null,
-      });
+      setNotes((prev) => prev.map((item) => (item.id === editing.id ? { ...item, ...saved } : item)));
     } else {
-      await addDoc(collection(db, "notes"), {
-        title: draft.title || "未命名",
-        content: draft.content,
-        tags,
-        fiveTGate: draft.fiveTGate || null,
-        createdAt: Date.now(),
-      });
+      setNotes((prev) => [saved, ...prev]);
     }
+
     cancel();
-  }, [draft, editing]);
+  }, [draft, editing, cancel]);
 
   const remove = useCallback(async (id: string) => {
-    await deleteDoc(doc(db, "notes", id));
+    const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
+    if (!res.ok) return;
+    setNotes((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
   const gateColorVar = (g?: string) =>

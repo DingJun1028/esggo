@@ -182,7 +182,7 @@ export function OmniOneChat() {
     }
 
     if (!reply) {
-      const responses = RESPONSES[ct] ?? RESPONSES.general;
+      const responses = RESPONSES[ct] ?? RESPONSES.general ?? [];
       reply = responses[Math.floor(Math.random() * responses.length)] ?? "已完成處理。";
     }
 
