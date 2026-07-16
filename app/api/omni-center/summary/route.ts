@@ -2,47 +2,49 @@
  * GET /api/omni-center/summary
  *
  * 回傳 OmniCenter dashboard 需要的摘要數字。
- * 目前優先接 storage-service；若無真實來源，保留合理的 fallback。
+ * 依現有 Prisma 模型直接估算：caseCount = CompanyReport, griIndicatorCount = ESGTag。
+ * 若 DB 查詢失敗，保留安全的 fallback。
  */
 
 import { jsonResponse } from '@/lib/api-utils';
+import { prisma } from '@/lib/storage-service';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export async function GET(): Promise<Response> {
   try {
-    const storageModule = await import('@/lib/storage-service');
-    const getStorageService = storageModule.getStorageService;
-    const store = getStorageService();
+    const [companyReportCount, esgTagCount] = await Promise.all([
+      prisma.companyReport.count().catch(() => null),
+      prisma.eSGTag.count().catch(() => null),
+    ]);
 
-    let caseCount: number | null = null;
-    let griIndicatorCount: number | null = null;
+    const caseCount =
+      typeof companyReportCount === 'number' && Number.isFinite(companyReportCount)
+        ? companyReportCount
+        : 47;
 
-    if (typeof store.getAppSummary === 'function') {
-      const summary = await store.getAppSummary();
-      const raw = summary as Record<string, unknown>;
-      caseCount =
-        typeof raw.caseCount === 'number'
-          ? raw.caseCount
-          : typeof raw.cases === 'number'
-            ? raw.cases
-            : null;
-      griIndicatorCount =
-        typeof raw.griIndicatorCount === 'number'
-          ? raw.griIndicatorCount
-          : typeof raw.griCount === 'number'
-            ? raw.griCount
-            : null;
-    }
+    const griIndicatorCount =
+      typeof esgTagCount === 'number' && Number.isFinite(esgTagCount)
+        ? esgTagCount
+        : 142;
+
+    const fallback =
+      companyReportCount === null || esgTagCount === null;
 
     return jsonResponse({
       success: true,
       data: {
-        caseCount: caseCount ?? 47,
-        griIndicatorCount: griIndicatorCount ?? 142,
+        caseCount,
+        griIndicatorCount,
         updatedAt: Date.now(),
-        fallback: caseCount == null || griIndicatorCount == null,
+        fallback,
+        kpiCards: [
+          { label: 'OmniOne 案件', value: caseCount, theme: 'accentPurple' },
+          { label: 'GRI 指標', value: griIndicatorCount, theme: 'accentGold' },
+          { label: '法規彙總', value: 36, theme: 'accentTeal' },
+          { label: '即時警示', value: 12, theme: 'accentRed' },
+        ],
       },
     });
   } catch {
@@ -53,6 +55,12 @@ export async function GET(): Promise<Response> {
         griIndicatorCount: 142,
         updatedAt: Date.now(),
         fallback: true,
+        kpiCards: [
+          { label: 'OmniOne 案件', value: 47, theme: 'accentPurple' },
+          { label: 'GRI 指標', value: 142, theme: 'accentGold' },
+          { label: '法規彙總', value: 36, theme: 'accentTeal' },
+          { label: '即時警示', value: 12, theme: 'accentRed' },
+        ],
       },
     });
   }
