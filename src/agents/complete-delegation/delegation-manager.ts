@@ -204,7 +204,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
             (e) => (e as Record<string, unknown>).delegationId === delegationId,
           )
         : audit;
-      return entries.map((e) => ({ type: e.type, timestamp: e.ts, ...e })) as AuditEntry[];
+      return entries.map((e) => ({ ...e, timestamp: e.ts })) as AuditEntry[];
     }
     return this.getAuditTrail();
   }
