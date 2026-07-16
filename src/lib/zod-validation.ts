@@ -16,6 +16,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ─── Generic Validators ─────────────────────────────────────────────
 
+/**
+ * Parse and validate the JSON body of a NextRequest against a Zod schema.
+ * Returns typed data on success, or a 400 NextResponse on failure.
+ */
 export async function validateBody<T>(
   req: NextRequest,
   schema: z.ZodSchema<T>

@@ -3,23 +3,23 @@
 // is installed, delete this file so the real types take over.
 declare module 'pg' {
   export type PoolClient = {
-    query(text: string, params?: any[]): Promise<{ rows: any[]; rowCount: number | null }>;
+    query(text: string, params?: unknown[]): Promise<{ rows: unknown[]; rowCount: number | null }>;
     release(): void;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 
   export class Pool {
-    constructor(options?: any);
+    constructor(options?: unknown);
     connect(): Promise<PoolClient>;
-    query(text: string, params?: any[]): Promise<{ rows: any[]; rowCount: number | null }>;
+    query(text: string, params?: unknown[]): Promise<{ rows: unknown[]; rowCount: number | null }>;
     end(): Promise<void>;
-    on(event: string, listener: (...args: any[]) => void): void;
+    on(event: string, listener: (...args: unknown[]) => void): void;
   }
 
   export class Client {
-    constructor(options?: any);
+    constructor(options?: unknown);
     connect(): Promise<void>;
-    query(text: string, params?: any[]): Promise<{ rows: any[]; rowCount: number | null }>;
+    query(text: string, params?: unknown[]): Promise<{ rows: unknown[]; rowCount: number | null }>;
     end(): Promise<void>;
   }
 }
