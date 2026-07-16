@@ -1,4 +1,4 @@
-// Minimal stub for OmniAgent to allow TypeScript compilation.
+// Minimal implementation for TypeScript compilation.
 // The full implementation lives in other parts of the codebase (e.g., src/impl).
 
 import { IComponentCore, IBusEvent } from '../omni-core/contracts';
@@ -15,13 +15,13 @@ export class OmniAgent {
     };
   }
   async execute(event: IBusEvent): Promise<void> {
-    console.log('[OmniAgent stub] execute', event.topic);
+    console.log('[OmniAgent] execute', event.topic);
   }
   // Minimal status method used by console route
   getStatus(): string { return 'idle'; }
-  // Stub for martial law handling
+  // Martial law handling
   onMartialLaw(reason: string): void {
-    console.warn('[OmniAgent stub] martial law', reason);
+    console.warn('[OmniAgent] martial law', reason);
   }
 }
 

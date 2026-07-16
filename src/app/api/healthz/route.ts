@@ -61,11 +61,10 @@ export async function GET(request: NextRequest) {
     };
 
     // 檢查事件存儲
-  const _timeRift = healthRouter.getTimeRiftEngine();
     if (timeRift) {
       try {
         await timeRift.eventStore.healthCheck();
-      } catch (_e) {
+      } catch {
         checks.eventStore = 'unhealthy';
       }
     }

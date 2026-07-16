@@ -34,6 +34,14 @@ except ImportError as e:
     print(json.dumps({"ok": False, "error": f"oracledb not installed: {e}"}))
     sys.exit(2)
 
+# Auto-load project .env so direct invocations inherit OMNI_* vars.
+try:
+    from pathlib import Path
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent / '.env')
+except Exception:
+    pass
+
 ADMIN_PWD = os.environ.get("OMNI_ADMIN_PWD")
 DB_PWD = os.environ.get("OMNI_DB_PWD")
 WALLET_DIR = os.environ.get("OMNI_WALLET_DIR", os.path.expanduser("~/.wallet"))

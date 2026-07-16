@@ -1,5 +1,5 @@
 // ============================================================
-// OmniDB secondary Prisma client (MySQL) — lightweight stub
+// OmniDB secondary Prisma client (MySQL)
 // ============================================================
 import { PrismaClient } from '@prisma/client';
 

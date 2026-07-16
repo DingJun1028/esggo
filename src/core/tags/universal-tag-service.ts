@@ -11,7 +11,7 @@
 // verify tsconfig 下的模組解析問題）。
 
 import { createHash } from 'crypto';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '@/lib/storage-service';
 import { syncTagPairToOracle } from './oracle-sync-service';
 import { publishThought } from '../../lib/bus';
 
