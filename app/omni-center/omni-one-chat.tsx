@@ -55,7 +55,7 @@ function classify(input: string): CaseType {
   return "general";
 }
 
-const RESPONSES: Record<CaseType, string[]> = {
+const RESPONSES: Partial<Record<CaseType, string[]>> = {
   code_optimization: [
     "識別出 3 個優化點：記憶化、惰性載入、並行處理。建議使用 `useMemo` 和 `React.lazy`。",
     "分析完成。瓶頸在 O(n²) 迴圈，可重構為 O(n log n) 排序算法。",
