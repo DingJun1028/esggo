@@ -10,6 +10,7 @@
 
 import { useMemo, useState } from 'react';
 import { Wand2, Play, Copy, CheckCircle2, XCircle, ShieldCheck } from 'lucide-react';
+import { persistOmniCase, persistConsoleSnapshot } from './universal-omni-console.actions';
 import { omni, omniFn, createFiveTComponent, type OmniKind, type OmniResult, type CaseType, type ComponentEvidence, type OmniRequest } from '@/lib/esggo';
 
 const KINDS: { key: OmniKind; label: string; hint: string }[] = [
@@ -106,22 +107,8 @@ export function UniversalOmniConsole() {
     }
 
     try {
-      const { storeOmniCase, storeOmniConsoleSnapshot } = await import('@/lib/storage-service');
-      if (localResult.kind === 'case' && localResult.data?.id) {
-        await storeOmniCase({
-          kind: localResult.kind,
-          actor: 'omni-console',
-          payload: localResult.data as Record<string, unknown>,
-        });
-      }
-      if (localResult.kind === 'fn') {
-        await storeOmniConsoleSnapshot({
-          functionName: req.name ?? fnName,
-          input: req.args ?? [],
-          output: localResult.data ?? localResult,
-          actor: 'omni-console',
-        });
-      }
+      await persistOmniCase(localResult);
+      await persistConsoleSnapshot(localResult, req, fnName);
     } catch {
       // Persist failure should not block UI result display.
     }

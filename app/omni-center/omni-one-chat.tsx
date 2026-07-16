@@ -1,8 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useAgnesApi } from "@/components/AgnesProvider";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+
 type CaseType =
   | "code_optimization"
   | "documentation"
@@ -92,13 +91,6 @@ function sanitizeTextHtml(html: string): string {
   return DOMPurify.sanitize(html);
 }
 
-interface RagChunk {
-  content: string;
-  source: string;
-  chunk_index: number;
-  [key: string]: unknown;
-}
-
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
   const [model, setModel] = useState<string>("Qwen");
@@ -136,104 +128,37 @@ export function OmniOneChat() {
     const start = Date.now();
 
     let reply = "";
-    let citations: string[] = [];
+    const citations: string[] = [];
     try {
-      // 1. Lightweight Retrieval from Firebase
-      let ragContext = "";
-      try {
-        if (db && ct === "esg_report") {
-          // Only retrieve for relevant cases to save time
-          const snapshot = await getDocs(
-            query(collection(db, "rag_knowledge")),
-          );
-          const chunks = snapshot.docs.map((d) => d.data() as RagChunk);
+      const apiRes = await fetch("/api/omni-one", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          input: userMsg.text,
+          caseType: ct,
+          model,
+          ragContext: "",
+        }),
+      });
 
-          if (chunks.length > 0) {
-            // Simple keyword overlap scoring
-            const userKeywords = trimmedInput
-              .toLowerCase()
-              .split(/\s+/)
-              .filter((k) => k.length > 1);
-            const scored = chunks.map((chunk) => {
-              const content = chunk.content.toLowerCase();
-              let score = 0;
-              for (const kw of userKeywords) {
-                if (content.includes(kw)) score++;
-              }
-              return { ...chunk, score };
-            });
-
-            scored.sort((a, b) => b.score - a.score);
-            const topChunks = scored
-              .slice(0, 3)
-              .filter((c) => c.score > 0 || scored.length <= 3); // pick top 3
-
-            if (topChunks.length > 0) {
-              const uniqueSources = Array.from(
-                new Set(topChunks.map((c) => c.source)),
-              );
-              citations = uniqueSources.map((s) => String(s));
-              ragContext = topChunks
-                .map(
-                  (c) =>
-                    `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`,
-                )
-                .join("\\n\\n");
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Firebase retrieval failed:", e);
-      }
-
-      if (isReady && processMessage) {
-        // Use AGNES API
-        const prompt = ragContext
-          ? `[Model: ${model}] 參考以下知識庫內容來回答問題:\\n${ragContext}\\n\\n問題: ${userMsg.text}`
-          : `[Model: ${model}] ${userMsg.text}`;
-
-        const agnesReply = await processMessage(prompt);
-        if (agnesReply) {
-          reply = agnesReply;
-        } else {
-          throw new Error("AGNES API returned empty response");
-        }
-      } else {
-        // Fallback to OmniOne Default Logic
-        const res = await fetch("/api/omni-one", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            input: userMsg.text,
-            caseType: ct,
-            model,
-            ragContext,
-          }),
-        });
-        if (!res.ok) throw new Error(`OmniOne API 返回 ${res.status}`);
-        const data = await res.json();
-        if (data && typeof data.output === "string") {
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (typeof data?.output === "string" && data.output.trim()) {
           reply = data.output;
-        } else if (data && typeof data === "string") {
-          reply = data;
-        } else {
-          // Fallback to local pattern
-          const responses = RESPONSES[ct] ?? RESPONSES.general;
-          reply =
-            responses[Math.floor(Math.random() * responses.length)] ??
-            "已完成處理。";
         }
       }
-    } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : "未知錯誤";
-      console.warn(
-        `[OmniOne/AGNES] API call failed (${errMsg}), using local fallback.`,
-      );
+    } catch {
+      // ignore API failure and fall back below
+    }
+
+    if (!reply && isReady && processMessage) {
+      const agnesReply = await processMessage(`[Model: ${model}] ${userMsg.text}`).catch(() => null);
+      if (agnesReply) reply = agnesReply;
+    }
+
+    if (!reply) {
       const responses = RESPONSES[ct] ?? RESPONSES.general;
-      reply =
-        responses[Math.floor(Math.random() * responses.length)] ??
-        "已完成處理。";
-      setError(`API 連線失敗，使用本地模式 (${errMsg})`);
+      reply = responses[Math.floor(Math.random() * responses.length)] ?? "已完成處理。";
     }
 
     const ms = Date.now() - start;
