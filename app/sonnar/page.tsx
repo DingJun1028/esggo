@@ -37,6 +37,9 @@ interface RadarSignal {
   lastUpdate: string;
 }
 
+// ⚡ Bolt: Hoisted static array to prevent redundant memory allocation on every render
+const VALID_REGIONS = ['TW', 'EU', 'INT', 'US', 'AP'];
+
 interface Topic {
   topic: string;
   count: number;
@@ -268,7 +271,7 @@ export default function SonnarDashboard() {
   const { regionCounts, maxRegionCount } = useMemo(() => {
     const counts = signals.reduce<Record<string, number>>((acc, s) => {
       const region = s.source.id.split('-')[0].toUpperCase();
-      const key = ['TW', 'EU', 'INT', 'US', 'AP'].includes(region) ? region : '3P';
+      const key = VALID_REGIONS.includes(region) ? region : '3P';
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -296,7 +299,7 @@ export default function SonnarDashboard() {
     if (regionFilter === 'all') return signals;
     return signals.filter((s) => {
       const region = s.source.id.split('-')[0].toUpperCase();
-      const key = ['TW', 'EU', 'INT', 'US', 'AP'].includes(region) ? region : '3P';
+      const key = VALID_REGIONS.includes(region) ? region : '3P';
       return key === regionFilter;
     });
   }, [signals, regionFilter]);
