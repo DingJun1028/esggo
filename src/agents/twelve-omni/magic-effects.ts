@@ -269,16 +269,16 @@ export class ProphetMatrix implements IProphetMatrix {
   /**
    * 預測意圖
    */
-  async predictIntent(stub: string): Promise<PredictedIntent> {
-    const intent: PredictedIntent = {
-      stub,
+  async predictIntent(intent: string): Promise<PredictedIntent> {
+    const result: PredictedIntent = {
+      intent,
       confidence: 0.5 + Math.random() * 0.5,
       predictedTopics: ['topic-a', 'topic-b'],
       predictedTimes: [Date.now() + 60000],
     };
 
-    this.predictions.push(intent);
-    return intent;
+    this.predictions.push(result);
+    return result;
   }
 
   /**

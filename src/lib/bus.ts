@@ -18,9 +18,10 @@ import type { IBusEvent } from './omni-agent-bus';
  * 將事件發布至 omni-agent-bus（含 SHA-256 hashLock 溯源）。
  * @returns 計算出的 hashLock（64 hex）
  */
-export function publishBusEvent(topic: string, event: IBusEvent): { hashLock: string } {
-  const hashLock = createHash('sha256').update(JSON.stringify(event)).digest('hex');
-  enhancedOmniBus.publish(topic, { ...event, hashLock } as IBusEvent);
+export function publishBusEvent(topic: string, event: unknown): { hashLock: string } {
+  const ev = event as IBusEvent;
+  const hashLock = createHash('sha256').update(JSON.stringify(ev)).digest('hex');
+  enhancedOmniBus.publish(topic, { ...ev, hashLock } as IBusEvent);
   return { hashLock };
 }
 
