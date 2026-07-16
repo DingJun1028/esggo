@@ -58,7 +58,7 @@ export async function publishDelegationEvent(
         payload: { type, ...payload },
       });
       // 將序號附回 bus 事件，供 SSE 即時幀帶 id（斷點續傳游標）
-      (event as Record<string, unknown>).journalId = journalId;
+      (event as unknown as Record<string, unknown>).journalId = journalId;
     } catch {
       /* best-effort */
     }
