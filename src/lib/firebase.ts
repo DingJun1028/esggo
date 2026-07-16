@@ -5,10 +5,6 @@ function createPlaceholderApp(): FirebaseApp {
   return initializeApp({ apiKey: 'placeholder', projectId: 'placeholder' });
 }
 
-function createPlaceholderDb(): Firestore {
-  return getFirestore(createPlaceholderApp());
-}
-
 export const app: FirebaseApp = (() => {
   try {
     const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
