@@ -169,6 +169,8 @@ export default function EMMIDEDashboard() {
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [gatewayAvailable, setGatewayAvailable] = useState(true);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 120 });
+  const [evolving, setEvolving] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
 
   const fetchMetrics = useCallback(async () => {
@@ -282,6 +284,48 @@ export default function EMMIDEDashboard() {
             Remote Gateway: {error} | Local Sonnar API: Active
           </div>
         )}
+
+        {/* ESGGO EMM 進化 */}
+        <div className="mt-4 rounded-xl border border-[#3B82F6]/40 bg-[#3B82F6]/10 p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">🧬 ESGGO EMM 進化</div>
+            <div className="flex gap-4 mt-1">
+              <div>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400">LEVEL</div>
+                <div className="text-xl font-bold text-[#D4AF37]">{evolution.level}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400">XP</div>
+                <div className="text-xl font-bold text-[#009EB0]">{evolution.xp}/{evolution.nextXp}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              if (evolving) return;
+              setEvolving(true);
+              try {
+                await new Promise(r => setTimeout(r, 500));
+                setEvolution(prev => {
+                  const xp = prev.xp + 20;
+                  let level = prev.level;
+                  let nextXp = prev.nextXp;
+                  while (xp >= nextXp) { level += 1; nextXp = Math.floor(nextXp * 1.2); }
+                  return { level, xp: xp % nextXp, nextXp };
+                });
+              } finally { setEvolving(false); }
+            }}
+            disabled={evolving}
+            className="px-4 py-2 rounded-lg text-xs font-bold border transition-colors disabled:opacity-70"
+            style={{
+              background: evolving ? '#E2E8F0' : 'rgba(59,130,246,0.15)',
+              color: '#3B82F6',
+              borderColor: 'rgba(59,130,246,0.5)',
+            }}
+          >
+            {evolving ? '🧬 進化中...' : '🧬 啟動 EMM 進化'}
+          </button>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
