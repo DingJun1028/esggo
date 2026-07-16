@@ -139,7 +139,7 @@ export default function OmniCenterPage() {
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const { isReady, status: _status } = useAgnesApi();
+  const { isReady } = useAgnesApi();
 
   useEffect(() => {
     setIsDarkMode(document.documentElement.classList.contains('dark'));

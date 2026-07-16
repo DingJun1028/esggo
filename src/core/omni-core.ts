@@ -527,7 +527,7 @@ export class OmniCore {
     const agent = await createCompleteDelegationAgent({
       principalId: params.principalId,
       agentId: params.agentId,
-      permissions: params.permissions as string[],
+      permissions: (params.permissions as string[] | string) ?? [],
       validUntil: params.validUntil,
       description: params.description,
     });
