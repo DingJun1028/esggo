@@ -56,9 +56,9 @@ export default function WikiClient({ files }: { files: WikiFile[] }) {
           📚
         </div>
         <div>
-          <h1 className="font-['Montserrat',sans-serif] text-3xl font-bold text-accentTeal">WIKI 知識庫</h1>
+          <h1 className="font-['Montserrat',sans-serif] text-3xl font-bold text-accentTeal">ESGGO 知識庫 ∞ Evolution</h1>
           <div className="text-sm text-textSecondary mt-1">
-            產品開發級 · 共 {files.length} 篇知識資產 · 符合 {filtered.length} 篇
+            共 {files.length} 篇知識資產 · 永續發展無限進化
           </div>
         </div>
       </div>
