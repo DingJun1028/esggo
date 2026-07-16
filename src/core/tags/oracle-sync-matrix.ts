@@ -44,8 +44,8 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
     return { ok: false, pulled: 0, matched: 0, reason: res.reason };
   }
   let matched = 0;
-  for (const entry of res.entries) {
-    const uuid: string = entry.uuid;
+  for (const entry of res.entries as Array<{ uuid?: string; seq?: number }>) {
+    const uuid = entry.uuid;
     if (!uuid) continue;
     // 在 app 端標記此 uuid 的實體為「Oracle 已確認」(sourceOrigin 補 oracle-confirmed)
     // 若 app 本地已有該 uuid 的 tagPair/universalTag, 更新其 lifecycleHooks 補 oracleConfirmed 標記
@@ -114,8 +114,8 @@ export async function reconcileAll(): Promise<{
   const appSeq = await collectAppOriginSeq();
   const appByUuid = new Map(appSeq.map((a) => [a.uuid, a.originSeq]));
   const terminalByUuid = new Map<string, number>();
-  for (const e of pulled.entries) {
-    if (e.uuid) terminalByUuid.set(e.uuid, Math.max(terminalByUuid.get(e.uuid) ?? 0, e.seq));
+  for (const e of pulled.entries as Array<{ uuid?: string; seq?: number }>) {
+    if (e.uuid) terminalByUuid.set(e.uuid, Math.max(terminalByUuid.get(e.uuid) ?? 0, e.seq ?? 0));
   }
   // 合併所有出現過的 uuid
   const allUuids = Array.from(new Set<string>([...Array.from(appByUuid.keys()), ...Array.from(terminalByUuid.keys())]));
@@ -151,7 +151,9 @@ export async function pullBehindApp(rows: SyncMatrixRow[]): Promise<{ pulled: nu
   if (rows.length === 0) return { pulled: 0, failed: 0 };
   const res = await pullFromOracle(0);
   if (!res.ok) return { pulled: 0, failed: rows.length };
-  const byUuid = new Map(res.entries.map((e) => [e.uuid, e]));
+  const byUuid = new Map<string, { uuid?: string; seq?: number }>(
+    (res.entries as Array<{ uuid?: string; seq?: number }>).map((e) => [e.uuid ?? '', e]),
+  );
   let pulled = 0;
   let failed = 0;
   for (const r of rows) {
