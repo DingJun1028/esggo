@@ -239,121 +239,96 @@ const MODELS = {
 // ── 任務類型 → 最佳模型路由表 ────────────────────────────────
 // 策略: 本地 Gemma 為主 (100% 免費)，雲端模型備援
 const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
-  // ISO 14064 碳排計算: 需要精確數字推理
   carbon_calculation: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 數學推理
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'carbon_calculation',
-    strategy: '本地零算力 + 數學推理',
+    strategy: 'Gemma4 主力 + 12B 深度推理備援',
   },
-
-  // CSRD/GRI 合規審查: 需要深度理解法規
   compliance_review: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 法規理解
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'compliance_review',
-    strategy: '本地零算力 + 法規理解',
+    strategy: 'Gemma4 主力 + 12B 法規備援',
   },
-
-  // GRI 報告草稿: 需要結構化輸出
   gri_report_draft: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告生成
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'gri_report_draft',
-    strategy: '本地零算力 + 結構化輸出',
+    strategy: 'Gemma4 主力 + 12B 結構化備援',
   },
-
-  // 帳單 OCR 提取: 需要精確提取
   evidence_ocr: {
-    primary: MODELS.local_gemma4,          // 本地 Gemma 4 提取
-    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_llama31,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'evidence_ocr',
-    strategy: '本地零算力 + 精確提取',
+    strategy: 'Gemma4 主力 + Llama 極速備援',
   },
-
-  // 郵件自動歸檔: 需要分類能力
   email_archival: {
-    primary: MODELS.local_gemma4,          // 本地 Gemma 4 分類
-    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_llama31,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'email_archival',
-    strategy: '本地零算力 + 極速分類',
+    strategy: 'Gemma4 主力 + Llama 極速備援',
   },
-
-  // 問卷分析: 需要統計分析
   stakeholder_analysis: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 統計分析
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'stakeholder_analysis',
-    strategy: '本地零算力 + 統計分析',
+    strategy: 'Gemma4 主力 + 12B 分析備援',
   },
-
-  // 自動修復: 需要程式碼理解
   omni_jules_heal: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 程式碼理解
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'omni_jules_heal',
-    strategy: '本地零算力 + 程式碼推理',
+    strategy: 'Gemma4 主力 + 12B 推理備援',
   },
-
-  // 蜂群調度: 需要快速決策
   swarm_orchestration: {
-    primary: MODELS.local_gemma4,          // 本地 Gemma 4 快速決策
-    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 極速
-    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_llama31,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'swarm_orchestration',
-    strategy: '本地零算力 + 極速決策',
+    strategy: 'Gemma4 主力 + Llama 極速備援',
   },
-
-  // TCFD 氣候風險分析: 需要深度分析
   tcfd_analysis: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 深度分析
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'tcfd_analysis',
-    strategy: '本地零算力 + 深度氣候分析',
+    strategy: 'Gemma4 主力 + 12B 氣候分析備援',
   },
-
-  // SDG 目標對應: 需要知識庫匹配
   sdg_mapping: {
-    primary: MODELS.local_gemma4,          // 本地 Gemma 4 知識匹配
-    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_llama31,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'sdg_mapping',
-    strategy: '本地零算力 + 知識匹配',
+    strategy: 'Gemma4 主力 + Llama 快速匹配備援',
   },
-
-  // 重大性矩陣: 需要優先級排序
   materiality_matrix: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 排序分析
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'materiality_matrix',
-    strategy: '本地零算力 + 優先級排序',
+    strategy: 'Gemma4 主力 + 12B 排序備援',
   },
-
-  // 報告組裝: 需要結構化輸出
   report_assembly: {
-    primary: MODELS.local_gemma12b,      // 本地 Gemma 3 12B 報告組裝
-    fallback1: MODELS.local_gemma4,        // 本地 Gemma 4 備援
-    fallback2: MODELS.cf_llama8b,       // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_gemma12b,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'report_assembly',
-    strategy: '本地零算力 + 結構化組裝',
+    strategy: 'Gemma4 主力 + 12B 結構化備援',
   },
-
-  // 通用任務: 均衡配置
   general: {
-    primary: MODELS.local_gemma4,          // 本地 Gemma 4 通用
-    fallback1: MODELS.local_llama31,       // 本地 Llama 3.1 快速
-    fallback2: MODELS.cf_llama8b,    // 雲端 Cloudflare 免費兜底（VPS 全掛時）
+    primary: MODELS.local_esggo_gemma4,
+    fallback1: MODELS.local_llama31,
+    fallback2: MODELS.cf_llama8b,
     taskType: 'general',
-    strategy: '本地零算力 + 均衡配置',
+    strategy: 'Gemma4 主力 + Llama 輕量備援',
   },
 };
 
