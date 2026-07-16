@@ -304,10 +304,10 @@ export default function DailyReportPage() {
         }}>
           <div>
             <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-              📰 永續觀察者日報
+              📰 永續觀察者日報 — ESGGO ∞ Evolution
             </h1>
             <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-              {report?.reportDate || selectedDate} · ESG 動態觀測
+              {report?.reportDate || selectedDate} · ESG 動態觀測 · 永續發展無限進化
             </p>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

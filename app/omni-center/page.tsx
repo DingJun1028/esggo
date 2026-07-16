@@ -195,9 +195,9 @@ export default function OmniCenterPage() {
         </div>
         <div>
           <h1 className="font-['Montserrat',sans-serif] text-xl font-bold text-accentTeal">
-            萬能中心 Omni-Core
+            萬能中心 Omni-Core — 無限進化
           </h1>
-          <div className="text-xs text-textSecondary">無礙圓通，無作筆記 — v1.0</div>
+          <div className="text-xs text-textSecondary">ESGGO 永續發展無限進化 · 無礙圓通</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
           {/* Dark Mode Toggle */}

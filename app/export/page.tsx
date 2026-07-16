@@ -86,10 +86,10 @@ export default function DataExportPage() {
         {/* Header */}
         <header style={{ borderBottom: `1px solid ${SC.border}`, paddingBottom: 16, marginBottom: 24 }}>
           <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-            📥 ESG 資料匯出
+            📥 ESG 資料匯出 ∞ Evolution
           </h1>
           <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-            匯出 ESG 爬蟲資料為 CSV 或 JSON 格式
+            匯出 ESG 爬蟲資料為 CSV 或 JSON 格式 — 永續發展無限進化
           </p>
         </header>
 
