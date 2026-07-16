@@ -5,7 +5,7 @@
  * 建議由前端明確觸發，不要在首屏靜默呼叫。
  */
 
-import { NextRequest } from 'next/server';
+
 import { initializeOmniCore } from '@/lib/omni-core';
 
 export const dynamic = 'force-dynamic';

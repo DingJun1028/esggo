@@ -43,7 +43,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     const sink: AuditSink | undefined =
       config?.auditSink ??
       (this._fullVolume
-        ? (e) => getDefaultJournal().append({ kind: 'audit', type: e.type, ts: e.timestamp, ...e })
+        ? (e) => { void getDefaultJournal().append({ kind: 'audit', type: e.type, ts: e.timestamp, ...e }); }
         : undefined);
     this._auditLogger = new AuditLogger(sink);
   }
@@ -54,8 +54,8 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   async createCompleteDelegation(params: {
     principalId: string;
     agentId: string;
-    permissions: DelegationPermission[];
-    restrictions?: DelegationRestriction[];
+    permissions: string[] | DelegationPermission[];
+    validFrom?: number;
     validUntil?: number;
     description?: string;
   }): Promise<ICompleteDelegationScope> {
@@ -339,7 +339,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   private async validateCreationParams(params: {
     principalId: string;
     agentId: string;
-    permissions: DelegationPermission[];
+    permissions: string[];
   }): Promise<void> {
     if (!params.principalId) {
       throw new Error('Principal ID is required');
@@ -354,7 +354,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     }
 
     // 驗證權限有效性
-    const validPermissions: DelegationPermission[] = [
+    const validPermissions: string[] = [
       'read',
       'write',
       'execute',
@@ -367,7 +367,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     ];
 
     for (const permission of params.permissions) {
-      if (!validPermissions.includes(permission)) {
+      if (!validPermissions.includes(permission as string)) {
         throw new Error(`Invalid permission: ${permission}`);
       }
     }
