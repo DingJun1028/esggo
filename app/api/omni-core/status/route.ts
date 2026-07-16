@@ -4,7 +4,6 @@
  * 回傳 OmniCore 單例狀態，不執行昂貴初始化。
  */
 
-import { NextRequest } from 'next/server';
 import { getOmniCoreStatus } from '@/lib/omni-core';
 
 export const dynamic = 'force-dynamic';
