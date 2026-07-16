@@ -59,7 +59,7 @@ export function UniversalOmniConsole() {
 
   const registry = useMemo(() => omniFn.list(), []);
 
-  const execute = () => {
+  const execute = async () => {
     setError(null);
     setResult(null);
     let req: OmniRequest = { kind: 'note', title, content };
@@ -93,9 +93,40 @@ export function UniversalOmniConsole() {
         return setError('未知的 kind');
     }
 
-    const res = omni(req);
-    if (!res.ok) setError(res.error);
-    else setResult(res);
+    let localResult: OmniResult | null = null;
+    try {
+      localResult = omni(req);
+      if (!localResult.ok) {
+        setError(localResult.error);
+        return;
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      return;
+    }
+
+    try {
+      const { storeOmniCase, storeOmniConsoleSnapshot } = await import('@/lib/storage-service');
+      if (localResult.kind === 'case' && localResult.data?.id) {
+        await storeOmniCase({
+          kind: localResult.kind,
+          actor: 'omni-console',
+          payload: localResult.data as Record<string, unknown>,
+        });
+      }
+      if (localResult.kind === 'fn') {
+        await storeOmniConsoleSnapshot({
+          functionName: req.name ?? fnName,
+          input: req.args ?? [],
+          output: localResult.data ?? localResult,
+          actor: 'omni-console',
+        });
+      }
+    } catch {
+      // Persist failure should not block UI result display.
+    }
+
+    setResult(localResult);
   };
 
   const copyResult = () => {
