@@ -856,7 +856,7 @@ export interface FissionResult {
  */
 export interface IProphetMatrix extends IComponentCore {
   /** 預測意圖 */
-  predictIntent(stub: string): Promise<PredictedIntent>;
+  predictIntent(intent: string): Promise<PredictedIntent>;
   /** 預取事件 */
   preFetch(intent: PredictedIntent): Promise<IBusEvent[]>;
   /** 預測準確度 */
@@ -864,7 +864,7 @@ export interface IProphetMatrix extends IComponentCore {
 }
 
 export interface PredictedIntent {
-  readonly stub: string;
+  readonly intent: string;
   readonly confidence: number;
   readonly predictedTopics: string[];
   readonly predictedTimes: number[];

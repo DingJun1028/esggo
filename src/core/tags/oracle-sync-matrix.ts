@@ -13,7 +13,7 @@
 //   - 每實體一筆 sync_matrix 狀態, 對帳後固化
 //   - graceful skip: 無 OMNI_DB_PWD 時全部 no-op (不阻斷主流程)
 
-import { prisma } from '../../lib/prisma';
+import { prisma } from '@/lib/storage-service';
 import {
   hasOracleCreds,
   pullFromOracle,
