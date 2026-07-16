@@ -9,6 +9,7 @@ export { query, storeEmbedding, getEmbedding, semanticSearch, storeESGEntity } f
 import { createHash } from 'crypto';
 import { prisma } from './prisma';
 import type { DelegationPermission } from '../types/complete-delegation';
+import type { NoteData } from '@/app/api/notes/route';
 
 /** Readiness gate: verify primary + pgvector connectivity. */
 export async function verifyStorage() {
@@ -203,4 +204,71 @@ export async function storeOmniConsoleSnapshot(input: {
   }
 
   return record;
+}
+
+// ─── OmniCenter Notes ────────────────────────────────────────
+
+export async function storeOmniNote(input: {
+  title: string;
+  content: string;
+  tags: string[];
+  fiveTGate?: string;
+  actor: string;
+}): Promise<NoteData> {
+  const id = `omni-note-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const createdAt = Date.now();
+
+  const record = {
+    id,
+    title: input.title || '未命名',
+    content: input.content,
+    tags: input.tags,
+    fiveTGate: input.fiveTGate || null,
+    createdAt,
+  } as NoteData;
+
+  try {
+    await prisma.$executeRaw`
+      INSERT INTO omni_note (id, title, content, tags, five_t_gate, created_at, updated_at, actor)
+      VALUES (${id}, ${record.title}, ${record.content}, ${JSON.stringify(record.tags)}::jsonb, ${record.fiveTGate}, to_timestamp(${createdAt} / 1000.0), now(), ${input.actor})
+      ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, content = EXCLUDED.content, tags = EXCLUDED.tags, five_t_gate = EXCLUDED.five_t_gate, updated_at = now()
+    `;
+  } catch {
+    // table may not exist until migration runs
+  }
+
+  return record;
+}
+
+export async function listOmniNotes(): Promise<NoteData[]> {
+  try {
+    const rows = await prisma.$queryRaw<any[]>`
+      SELECT id, title, content, tags, five_t_gate AS "fiveTGate", created_at AS "createdAt"
+      FROM omni_note
+      ORDER BY created_at DESC
+      LIMIT 100
+    `;
+
+    return rows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      content: row.content,
+      tags: Array.isArray(row.tags) ? row.tags : [],
+      fiveTGate: row.fiveTGate,
+      createdAt: typeof row.createdAt === 'number' ? row.createdAt : new Date(row.createdAt).getTime(),
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteOmniNote(id: string): Promise<boolean> {
+  try {
+    const result = await prisma.$executeRaw`
+      DELETE FROM omni_note WHERE id = ${id}
+    `;
+    return (result ?? 0) > 0;
+  } catch {
+    return false;
+  }
 }
