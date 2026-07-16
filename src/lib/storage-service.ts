@@ -83,7 +83,7 @@ export interface StoredDelegation {
   id: string;
   principalId: string;
   agentId: string;
-  permissions: string[];
+  permissions: string[] | DelegationPermission[];
   validUntil: string | null;
   description: string | null;
   status: string;
@@ -94,7 +94,7 @@ export interface StoredDelegation {
 export async function storeDelegation(input: {
   principalId: string;
   agentId: string;
-  permissions: string[];
+  permissions: string[] | DelegationPermission[];
   validUntil?: string | null;
   description?: string | null;
 }): Promise<StoredDelegation> {
