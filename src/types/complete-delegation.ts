@@ -338,7 +338,7 @@ export interface ICompleteDelegationAgent extends IComponentCore {
  */
 export interface IAutonomousDecisionEngine {
   /**
-   * 评估是否可自主執行
+   * 評估是否可自主執行
    */
   canAutonomouslyExecute(intent: string): Promise<boolean>;
   

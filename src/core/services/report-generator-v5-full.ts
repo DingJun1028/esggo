@@ -148,7 +148,7 @@ export async function generateFullV5Report(companyId: string, brandTone: string 
       }
     }
 
-    content += `<h3>關鍵绩效指標</h3>`;
+    content += `<h3>關鍵績效指標</h3>`;
     content += `<table><thead><tr><th>指標</th><th>2025</th><th>前年度</th><th>目標</th><th>達成率</th></tr></thead><tbody>`;
     const kpis = [['完成率','92%','85%','95%','97%'],['覆蓋率','88%','80%','90%','98%'],['合規度','100%','98%','100%','100%'],['滿意度','85%','78%','90%','94%'],['訓練時數','45h','40h','50h','90%']];
     for (const k of kpis) {
