@@ -6,7 +6,9 @@ export { prisma } from './prisma';
 export { getOmniPrisma, withOmni } from './prisma-omni';
 export { query, storeEmbedding, getEmbedding, semanticSearch, storeESGEntity } from './pgvector';
 
+import { createHash } from 'crypto';
 import { prisma } from './prisma';
+import type { DelegationPermission } from '../types/complete-delegation';
 
 /** Readiness gate: verify primary + pgvector connectivity. */
 export async function verifyStorage() {
@@ -134,14 +136,14 @@ export async function storeOmniCase(input: {
   actor: string;
   payload: Record<string, unknown>;
 }): Promise<OmniCaseRecord> {
-  const hash = Buffer.from(
-    JSON.stringify({
+  const hash = createHash('sha256')
+    .update(JSON.stringify({
       kind: input.kind,
       actor: input.actor,
       payload: input.payload,
       ts: Date.now(),
-    }),
-  ).toString('sha256');
+    }))
+    .digest('hex');
 
   const record = {
     id: `omni-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,

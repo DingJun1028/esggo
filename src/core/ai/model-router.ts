@@ -204,19 +204,28 @@ const MODELS = {
   },
   // Local VPS Ollama Hosting (100% Free, Private, Zero Compute Cost)
   // 端點統一由 PROVIDER_ENDPOINTS.local_gemma.apiUrl 提供（尊重 VPS_OLLAMA_URL 環境變數）。
-  local_gemma4: {
+  // VPS Ollama 主力模型：Gemma 4（免費、私有的本地首選）
+  local_esggo_gemma4: {
     provider: 'local_gemma' as const,
-    model: 'gemma3:4b',
+    model: 'esggo-gemma4',
     maxTokens: 4096,
     temperature: 0.7,
-    reasoning: 'VPS Gemma 3 4B (Ollama): 100% 免費，Oracle Cloud 免費層，通用/輕量',
+    reasoning: 'VPS esggo-gemma4 (Ollama): 免費主力，優先承擔所有 ESG 任務',
   },
+  // 仍保留本地較重備援與輕量備援
   local_gemma12b: {
     provider: 'local_gemma' as const,
     model: 'gemma3:12b',
     maxTokens: 4096,
     temperature: 0.7,
-    reasoning: 'VPS Gemma 3 12B (Ollama): 100% 免費，深度推理/法規/報告',
+    reasoning: 'VPS Gemma 3 12B (Ollama): 100% 免費，深度推理/法規/報告備援',
+  },
+  local_gemma4: {
+    provider: 'local_gemma' as const,
+    model: 'gemma3:4b',
+    maxTokens: 4096,
+    temperature: 0.7,
+    reasoning: 'VPS Gemma 3 4B (Ollama): 100% 免費，輕量備援',
   },
   local_llama31: {
     provider: 'local_gemma' as const,

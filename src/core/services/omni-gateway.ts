@@ -1,4 +1,4 @@
-import { IBusEvent } from '../../lib/omni-core/contracts';
+import { type IBusEvent } from '../../lib/omni-agent-bus';
 import { publishBusEvent } from '../../lib/bus';
 import { monitorBackpressure, shadowTestIngress, predictAndPreFetch, injectChaos, lifecycleCleanup } from '../../lib/omni-agent-bus';
 
