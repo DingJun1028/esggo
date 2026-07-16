@@ -4,10 +4,20 @@ import { useAgnesApi } from "@/components/AgnesProvider";
 
 type CaseType =
   | "code_optimization"
+  | "compliance_review"
+  | "gri_report_draft"
+  | "evidence_ocr"
+  | "email_archival"
   | "documentation"
   | "data_analysis"
   | "esg_report"
   | "ui_design"
+  | "tcfd_analysis"
+  | "sdg_mapping"
+  | "materiality_matrix"
+  | "report_assembly"
+  | "omni_jules_heal"
+  | "swarm_orchestration"
   | "architecture"
   | "bug_fix"
   | "general";
@@ -22,10 +32,25 @@ const PATTERNS: [RegExp, CaseType][] = [
   [/bug|fix|error|修復|TypeError/i, "bug_fix"],
 ];
 
+const EXTRA_PATTERNS: [RegExp, CaseType][] = [
+  [/csrd|合規|compliance|法規|審查/i, "compliance_review"],
+  [/gri|報告|report|草稿|撰寫/i, "gri_report_draft"],
+  [/ocr|帳單|收據|發票|提取|extract/i, "evidence_ocr"],
+  [/郵件|email|歸檔|archive/i, "email_archival"],
+  [/tcfd|氣候|climate|風險分析|淨零|net.?zero/i, "tcfd_analysis"],
+  [/sdg|永續發展目標|聯合國/i, "sdg_mapping"],
+  [/重大性|materiality|矩陣|priority/i, "materiality_matrix"],
+  [/蜂群|swarm|orchestrat|調度|協調/i, "swarm_orchestration"],
+];
+
 function classify(input: string): CaseType {
   if (!input) return "general";
+  const lower = input.toLowerCase();
+  for (const [p, t] of EXTRA_PATTERNS) {
+    if (p.test(lower)) return t;
+  }
   for (const [p, t] of PATTERNS) {
-    if (p.test(input)) return t;
+    if (p.test(lower)) return t;
   }
   return "general";
 }
@@ -93,7 +118,7 @@ function sanitizeTextHtml(html: string): string {
 
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
-  const [model, setModel] = useState<string>("Qwen");
+  const model = 'local:esggo-gemma4';
   const [msgs, setMsgs] = useState<Message[]>([
     {
       id: "0",
@@ -222,17 +247,11 @@ export function OmniOneChat() {
         <div className="text-xs font-semibold text-textSecondary tracking-wider">
           OmniOne 覺醒對話框
         </div>
-        {/* Model Switcher */}
-        <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg p-1">
-          {["Qwen", "Gemini Pro", "Gemini Flash"].map((m) => (
-            <button
-              key={m}
-              onClick={() => setModel(m)}
-              className={`text-[10px] px-2 py-1 rounded-md font-semibold transition-colors ${model === m ? "bg-accentTeal text-white" : "text-textSecondary hover:bg-secondary"}`}
-            >
-              {m}
-            </button>
-          ))}
+        <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg px-2.5 py-1">
+          <span className="text-[10px] text-textSecondary">主力模型：</span>
+          <span className="text-[10px] font-semibold text-accentTeal">
+            local:esggo-gemma4 / fallback gemma3:12b
+          </span>
         </div>
       </div>
 

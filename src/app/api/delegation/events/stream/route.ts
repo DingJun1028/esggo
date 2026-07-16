@@ -140,9 +140,7 @@ export async function GET(request: NextRequest) {
           if (typeof e.source_origin === 'string') return e.source_origin;
           return undefined;
         })();
-        if (!payload || payload.delegationId !== delegationId) return;
-        const frameType = payload.type ?? (e.event as string | undefined);
-        if (!frameType || !DELEGATION_EVENT_TYPES.has(frameType)) return;
+
         const ts =
           (typeof e.ts === 'number' ? e.ts : undefined) ??
           (delegationPayload && typeof delegationPayload === 'object' && typeof (delegationPayload as Record<string, unknown>).ts === 'number'
@@ -150,8 +148,8 @@ export async function GET(request: NextRequest) {
             : undefined);
         send(
           {
-            type: frameType,
-            delegationId: payload.delegationId!,
+            type: payload.type,
+            delegationId: payload.delegationId,
             hashLock,
             ts,
             payload,
@@ -160,7 +158,6 @@ export async function GET(request: NextRequest) {
           frameId
         );
       });
-    });
       heartbeat = setInterval(() => {
         if (closed) return;
         try {
