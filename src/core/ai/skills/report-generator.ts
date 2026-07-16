@@ -395,8 +395,8 @@ function generateTCFDKPIs(company: CompanyData): KPIMetric[] {
   const totalEmissions = (data?.ghgScope1 || 0) + (data?.ghgScope2 || 0) + (data?.ghgScope3 || 0);
   return [
     { name: '總排放量', nameEn: 'Total Emissions', value: totalEmissions.toLocaleString(), unit: 'tCO2e' },
-    { name: '能源強度', nameEn: 'Energy Intensity', value: 'N/A', unit: 'MWh/百万营收' },
-    { name: '碳強度', nameEn: 'Carbon Intensity', value: 'N/A', unit: 'tCO2e/百万营收' },
+    { name: '能源強度', nameEn: 'Energy Intensity', value: 'N/A', unit: 'MWh/百万營收' },
+    { name: '碳強度', nameEn: 'Carbon Intensity', value: 'N/A', unit: 'tCO2e/百万營收' },
   ];
 }
 

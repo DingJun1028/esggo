@@ -311,7 +311,7 @@ function generateMockAnswers(companyId: string): AnswerRecord[] {
         break;
       case 11:
         if (q.id === 'q11-01') answer = '{{report_year}}年合併營收為{{revenue}}元，稅後淨利{{net_income}}元，EPS為{{eps}}元。';
-        else if (q.id === 'q11-02') answer = '本公司ESG績效獲{{esg_rating}}评级，在{{esg_ranking}}排名中表現優異。';
+        else if (q.id === 'q11-02') answer = '本公司ESG績效獲{{esg_rating}}評級，在{{esg_ranking}}排名中表現優異。';
         else if (q.id === 'q11-03') answer = '透過{{ir_activities}}等方式與投資人保持密切溝通，維護良好投資人關係。';
         else answer = '本公司完成{{impact_assessments}}項社會影響力評估，量化社會價值創造。';
         break;
