@@ -5,29 +5,27 @@
  * The real modules are loaded lazily at runtime on the server.
  */
 
-// Lazy proxy that deferres actual loading to first use
+// Lazy proxy that defers actual loading to first use
 function createLazyProxy(importPath: string): unknown {
-  let cached: unknown = null;
-  const loader = () => {
+  let cached: Promise<unknown> | null = null;
+  const loader = (): Promise<unknown> => {
     if (!cached) {
-      try {
-        cached = require(importPath);
-      } catch {
-        console.warn(`[ServerStub] Failed to load ${importPath}`);
-        cached = {};
-      }
+      cached = import(importPath).catch((err) => {
+        console.warn(`[ServerStub] Failed to load ${importPath}`, err);
+        return {} as Record<string, unknown>;
+      });
     }
     return cached;
   };
-  return new Proxy({}, {
+  return new Proxy(function () {} as object, {
     get(_t, prop) {
-      const mod = loader();
-      return (mod as Record<string, unknown>)[prop as string];
+      return loader().then((mod) => (mod as Record<string, unknown>)[prop as string]);
     },
     apply(_t, _this, args) {
-      const mod = loader();
-      if (typeof mod === 'function') return mod(...args);
-      return mod;
+      return loader().then((mod) => {
+        if (typeof mod === 'function') return (mod as (...a: unknown[]) => unknown)(...args);
+        return mod;
+      });
     },
   });
 }

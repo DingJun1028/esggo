@@ -398,7 +398,7 @@ export class OASummon {
       console.log('  ✨ Stage 5: 覺醒 — 實際初始化 OmniCore（12-Omni + 9 Magic Effects）...');
       try {
         // 惰性 require：避免與 src/core/omni-core 的循環依賴
-        const { getOmniCore } = require('../core/omni-core');
+        const { getOmniCore } = await import('../core/omni-core');
         const core = getOmniCore({
           soulName: this._config.soulName,
           keyName: this._config.keyName,

@@ -137,8 +137,10 @@ export function observeSeed(seed: IOmniSeed): {
   };
 }
 
-export default {
+const omniSeed = {
   plantOmniSeed,
   createOmniSeed,
   observeSeed,
 };
+
+export default omniSeed;

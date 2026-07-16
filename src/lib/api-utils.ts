@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { ERROR_CODES, HTTP_STATUS } from '@esggo/errors';
 import type { ErrorCodeKey } from '@esggo/errors';
+import { createHash } from 'crypto';
 
 /**
  * Return a standard success JSON response.
@@ -84,8 +85,5 @@ export function generateId(prefix: string): string {
 export function computeHash(data: unknown): string {
   // Use Web Crypto API when available (Edge/Server), fallback to Node crypto
   const json = JSON.stringify(data);
-  // Use createHash from crypto via dynamic import pattern
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const crypto = require('crypto');
-  return crypto.createHash('sha256').update(json).digest('hex');
+  return createHash('sha256').update(json).digest('hex');
 }

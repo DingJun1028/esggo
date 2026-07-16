@@ -148,7 +148,7 @@ export class VectorSearchService {
 
   async storeESGEntities(noteId: string, entities: Array<{
     entityType: string; entityName: string; entityId?: string;
-    confidence?: number; metadata?: Record<string, any>;
+    confidence?: number; metadata?: Record<string, unknown>;
   }>): Promise<void> {
     for (const entity of entities) {
       await storeESGEntity({ noteId, ...entity });

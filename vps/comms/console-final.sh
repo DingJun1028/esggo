@@ -24,7 +24,7 @@ echo "=== [2/x] firewall ==="
 ufw allow 22/tcp || true
 ufw allow 80/tcp || true
 ufw allow 443/tcp || true
-ufw allow 8042/tcp || true
+ufw allow 8642/tcp || true
 ufw allow 9999/tcp || true
 ufw reload || true
 ufw status verbose || true
@@ -35,8 +35,8 @@ ss -ltnp | grep ':22' || true
 journalctl -u sshd -n 50 --no-pager || true
 
 echo "=== [4/x] local services ==="
-curl -s --max-time 3 http://127.0.0.1:8042/health || echo "health unavailable"
-ss -ltnp | grep -E ':22 |:8042 |:3000 ' || true
+curl -s --max-time 3 http://127.0.0.1:8642/health || echo "health unavailable"
+ss -ltnp | grep -E ':22 |:8642 |:3000 ' || true
 
 echo "=== [5/x] write agent ==="
 cat > /opt/esggo/vps-agent.sh <<'AGENT'
@@ -131,7 +131,7 @@ nohup bash /opt/esggo/vps-agent.sh 100.108.241.29 9999 esggo-relay-20260707 > /v
 echo "agent_pid=$!"
 
 echo "=== [7/x] current listening services ==="
-ss -ltnp | grep -E ':22 |:8042 |:3000 ' || true
+ss -ltnp | grep -E ':22 |:8642 |:3000 ' || true
 echo "=== [8/x] app check ==="
 curl -s --max-time 3 http://127.0.0.1:3000/health || echo "no /health"
 curl -s --max-time 3 http://127.0.0.1:3000/ | head -c 200 || echo "no /"

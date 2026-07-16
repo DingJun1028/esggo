@@ -11,7 +11,7 @@
 // defined in the "types" folder, making it a solid starting point for further
 // development.
 
-import { IComponentCore, LifecycleStage, IOmniAgent, ITaskSpec, ITaskResult, IFlowSnapshot } from "../types/omni-agent";
+import { LifecycleStage, IOmniAgent, ITaskSpec, ITaskResult, IFlowSnapshot } from "../types/omni-agent";
 import { IOmniAgentBus, IBusEvent } from "../types/omni-agent-bus";
 import { IOmniAgentGateway } from "../types/oag";
 import { v4 as uuidv4 } from "uuid";

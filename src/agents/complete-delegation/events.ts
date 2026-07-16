@@ -15,7 +15,6 @@
 
 import { randomUUID } from 'crypto';
 import { secureForward } from '../../core/services/omni-gateway';
-import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
 import type { IBusEvent } from '../../lib/omni-core/contracts';
 import { getDefaultJournal } from './journal';
 

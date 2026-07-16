@@ -66,20 +66,9 @@ interface RedisClient {
 let redisClient: RedisClient | null = null;
 const CACHE_PREFIX = 'esggo:async:';
 const TASK_TTL = 7 * 24 * 60 * 60; // 7 days
-const _PROGRESS_TTL = 60 * 60 * 2; // 2 hours
 
 // In-memory fallback
 const memoryStore = new Map<string, { value: unknown; expiry: number }>();
-
-function getMemoryStore(key: string): unknown {
-  const entry = memoryStore.get(key);
-  if (!entry) return null;
-  if (Date.now() > entry.expiry) {
-    memoryStore.delete(key);
-    return null;
-  }
-  return entry.value;
-}
 
 function setMemoryStore(key: string, value: unknown, ttl: number): void {
   memoryStore.set(key, { value, expiry: Date.now() + ttl * 1000 });
@@ -118,10 +107,6 @@ function chapterKey(taskId: string, chapterNum: number): string {
   return `${CACHE_PREFIX}chapter:${taskId}:${chapterNum}`;
 }
 
-function _progressKey(taskId: string): string {
-  return `${CACHE_PREFIX}progress:${taskId}`;
-}
-
 // ═══════════════════════════════════════════════════════════════
 // Task Store (Redis-backed)
 // ═══════════════════════════════════════════════════════════════
@@ -134,20 +119,6 @@ async function storeTaskState(state: TaskProgress): Promise<void> {
     await redis.setex(key, TASK_TTL, data);
   }
   setMemoryStore(key, state, TASK_TTL);
-}
-
-async function _getTaskState(taskId: string): Promise<TaskProgress | null> {
-  const key = taskKey(taskId);
-  const redis = await getRedis();
-  if (redis) {
-    try {
-      const data = await redis.get(key);
-      if (data) return JSON.parse(data);
-    } catch {
-      // fallback to memory
-    }
-  }
-  return getMemoryStore(key) as TaskProgress | null;
 }
 
 async function storeChapterState(taskId: string, chapter: ChapterState): Promise<void> {
@@ -315,7 +286,6 @@ function generateChapterContent(input: ChapterGenInput): { content: string; word
 const tasks = new Map<string, TaskProgress>();
 const cancelledTasks = new Set<string>();
 const concurrencyController = new ConcurrencyController(4); // 4 concurrent chapters
-const _taskConcurrencyController = new ConcurrencyController(8); // 8 concurrent tasks
 
 /**
  * Create a new async report task
@@ -514,7 +484,7 @@ async function processChapterWithConcurrency(
     }
     
     // Generate chapter content
-    const { content: _content, wordCount } = generateChapterContent({
+    const { wordCount } = generateChapterContent({
       chapterNum: chNum,
       title: template?.title || `第${chNum}章`,
       fiveTGate: template?.fiveTGate || 'tangible',
@@ -654,7 +624,7 @@ export function stopCleanupInterval(): void {
   }
 }
 
-export default {
+const asyncReportEngine = {
   createReportTask,
   startReportGeneration,
   getTaskProgress,
@@ -665,3 +635,5 @@ export default {
   startCleanupInterval,
   stopCleanupInterval,
 };
+
+export default asyncReportEngine;
