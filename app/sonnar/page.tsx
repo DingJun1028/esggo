@@ -140,6 +140,8 @@ export default function SonnarDashboard() {
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [wsConnected, setWsConnected] = useState(false);
   const [wsEvents, setWsEvents] = useState<WSEvent[]>([]);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 120 });
+  const [evolving, setEvolving] = useState(false);
 
   // Signal history (for sparklines) — keep last 20 ticks per source
   const [signalHistory, setSignalHistory] = useState<Record<string, number[]>>({});
@@ -444,6 +446,67 @@ export default function SonnarDashboard() {
           ))}
         </div>
       </nav>
+
+      {/* ESGGO Sonnar 進化 */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{
+          marginTop: 16,
+          marginBottom: 16,
+          background: `rgba(212,175,55,0.12)`,
+          border: `1px solid rgba(212,175,55,0.4)`,
+          borderRadius: 12,
+          padding: 14,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: SOLID_CARD_TOKENS.textSecondary }}>🧬 ESGGO Sonnar 進化</div>
+            <div style={{ display: 'flex', gap: 16, marginTop: 6 }}>
+              <div>
+                <div style={{ fontSize: 10, color: SOLID_CARD_TOKENS.textMuted }}>LEVEL</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: SOLID_CARD_TOKENS.gold }}>{evolution.level}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: SOLID_CARD_TOKENS.textMuted }}>XP</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: SOLID_CARD_TOKENS.teal }}>{evolution.xp}/{evolution.nextXp}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              if (evolving) return;
+              setEvolving(true);
+              try {
+                await new Promise(r => setTimeout(r, 500));
+                setEvolution(prev => {
+                  const xp = prev.xp + 20;
+                  let level = prev.level;
+                  let nextXp = prev.nextXp;
+                  while (xp >= nextXp) { level += 1; nextXp = Math.floor(nextXp * 1.2); }
+                  return { level, xp: xp % nextXp, nextXp };
+                });
+              } finally { setEvolving(false); }
+            }}
+            disabled={evolving}
+            style={{
+              padding: '8px 18px',
+              background: evolving ? '#E2E8F0' : 'rgba(212,175,55,0.18)',
+              color: SOLID_CARD_TOKENS.gold,
+              border: `1px solid rgba(212,175,55,0.5)`,
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: evolving ? 'not-allowed' : 'pointer',
+              opacity: evolving ? 0.7 : 1,
+            }}
+          >
+            {evolving ? '🧬 進化中...' : '🧬 啟動 Sonnar 進化'}
+          </button>
+        </div>
+      </div>
 
       <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px' }}>
         {/* ═══ Overview Tab ═══ */}
