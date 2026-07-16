@@ -519,7 +519,7 @@ export default function SustainWriteV5Page() {
             <div className="w-8 h-8 bg-accentTeal rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>
-            <h1 className="text-lg font-semibold text-textPrimary">ESGGO v5.2</h1>
+            <h1 className="text-lg font-semibold text-textPrimary">ESGGO 永續發展無限進化</h1>
           </div>
           <div className="flex items-center gap-4">
             <button
