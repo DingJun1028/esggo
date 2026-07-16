@@ -807,9 +807,9 @@ export default function OmniAgentConsolePage() {
             </div>
             <div>
               <h1 className="text-base font-bold text-textPrimary tracking-tight">
-                OmniAgent Console
+                OmniAgent Console — 無限進化
               </h1>
-              <p className="text-[10px] text-textSecondary">萬能中心 · 統一指揮介面 v1.0</p>
+              <p className="text-[10px] text-textSecondary">ESGGO 永續發展無限進化 · 統一指揮介面</p>
             </div>
           </div>
 
