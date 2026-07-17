@@ -33,6 +33,25 @@
     color: var(--text);
   }
 
+  /* 語言切換器 */
+  .lang-switch {
+    display: flex; justify-content: flex-end; gap: 6px;
+    margin: 0 auto 14px; max-width: 1240px; width: 100%;
+    padding: 0 18px;
+  }
+  .lang-switch button {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff; color: var(--cal-blue);
+    cursor: pointer; transition: all .15s ease;
+  }
+  .lang-switch button:hover { border-color: var(--cal-blue); }
+  .lang-switch button.active {
+    background: var(--cal-blue); color: #fff; border-color: var(--cal-blue);
+  }
+
   /* 可鑲嵌基底 */
   .esggo-portal {
     width: 100%; min-width: 0;
@@ -69,6 +88,16 @@
     position: relative; z-index: 1;
     padding: 40px 36px;
     color: #fff;
+  }
+  /* 2026 獨立眉標徽章（與標題分離，消除重疊） */
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; margin-bottom: 16px;
+    border-radius: 999px;
+    background: rgba(253,181,21,0.16);
+    border: 1px solid rgba(253,181,21,0.45);
+    color: var(--cal-gold);
+    font-weight: 700; font-size: 13px; letter-spacing: 1.5px;
   }
   .hero-title {
     margin: 0 0 12px;
@@ -280,24 +309,6 @@
     font-size: 13px; font-weight: 600;
     display: flex; gap: 8px; align-items: flex-start;
   }
-  .wk-fac {
-    margin-top: 5px;
-    font-size: 12.5px;
-    color: #334155;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .wk-fac .lec { color: var(--cal-blue); font-weight: 600; }
-  .wk-fac .key { color: #92400e; font-weight: 600; }
-  .wk-journal {
-    margin-top: 5px;
-    font-size: 12px;
-    color: var(--muted);
-    font-style: italic;
-    padding-left: 10px;
-    border-left: 2px solid var(--cal-gold-soft);
-  }
 
   .footer-note {
     text-align: center;
@@ -316,11 +327,19 @@
     .hero-inner { padding: 24px 20px; }
     .notice { flex-direction: column; gap: 8px; }
     .esggo-portal { padding: 16px 10px; }
+    .form-row { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 <div class="esggo-portal">
+  <!-- 語言切換器 -->
+  <div class="lang-switch" role="group" aria-label="語言選擇">
+    <button type="button" data-lang="zh-Hant" class="active">繁</button>
+    <button type="button" data-lang="zh-Hans">簡</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
   <div class="esggo-shell">
 
     <!-- 英雄橫幅 -->
@@ -328,36 +347,37 @@
       <div class="hero-layer-a" aria-hidden="true"></div>
       <div class="hero-layer-b" aria-hidden="true"></div>
       <div class="hero-inner">
-        <h1 class="hero-title">2026 <em>柏克萊國際永續人才培力</em> 課程服務中心</h1>
-        <p class="hero-lede">Berkeley Haas 永續策略創新 × TSISDA × 台灣尤努斯基金會，一站式入口平台：線上課程、協作資產、TA 營運、成果繳交、語音翻譯、课程回放。</p>
+        <span class="hero-eyebrow" data-i18n="eyebrow"><i class="fa-solid fa-calendar-star"></i> 2026 年度課程</span>
+        <h1 class="hero-title" data-i18n="heroTitle"><em>柏克萊國際永續人才培力</em> 課程服務中心</h1>
+        <p class="hero-lede" data-i18n="heroLede">Berkeley Haas 永續策略創新 × TSISDA × 台灣尤努斯基金會，一站式入口平台：線上課程、協作資產、TA 營運、成果繳交、語音翻譯、課程回放。</p>
         <div class="hero-cta">
-          <a class="btn btn-gold" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-laptop-file"></i> 進入線上課程</a>
-          <a class="btn btn-ghost" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> 學員共享雲端</a>
-          <a class="btn btn-ghost" href="#course-schedule-detail"><i class="fa-solid fa-calendar-days"></i> 查閱課程排程</a>
+          <a class="btn btn-gold" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-laptop-file"></i> <span data-i18n="ctaCourse">進入線上課程</span></a>
+          <a class="btn btn-ghost" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> <span data-i18n="ctaCloud">學員共享雲端</span></a>
+          <a class="btn btn-ghost" href="#course-schedule-detail"><i class="fa-solid fa-calendar-days"></i> <span data-i18n="ctaSchedule">查閱課程排程</span></a>
         </div>
       </div>
     </div>
 
     <!-- 徽章列 -->
     <div class="bar">
-      <div class="chip"><i class="fa-solid fa-calendar-day"></i> 週六主課程 08:00-14:00</div>
-      <div class="chip"><i class="fa-solid fa-comments-pie"></i> 週日 Consulting Lab</div>
-      <div class="chip"><i class="fa-solid fa-language"></i> AI 即時同步翻譯</div>
-      <div class="chip"><i class="fa-solid fa-clock-rotate-left"></i> 課後 Replay 複習庫</div>
-      <div class="chip"><i class="fa-solid fa-certificate"></i> 雙證審查 出席率 ≥80%</div>
+      <div class="chip"><i class="fa-solid fa-calendar-day"></i> <span data-i18n="chip1">週六主課程 08:00-14:00</span></div>
+      <div class="chip"><i class="fa-solid fa-comments-pie"></i> <span data-i18n="chip2">週日 Consulting Lab</span></div>
+      <div class="chip"><i class="fa-solid fa-language"></i> <span data-i18n="chip3">AI 即時同步翻譯</span></div>
+      <div class="chip"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="chip4">課後 Replay 複習庫</span></div>
+      <div class="chip"><i class="fa-solid fa-certificate"></i> <span data-i18n="chip5">雙證審查 出席率 ≥80%</span></div>
     </div>
 
     <!-- 最新公告 -->
     <div class="panel" id="announcements">
-      <h2 class="panel-title">最新公告</h2>
+      <h2 class="panel-title" data-i18n="annTitle">最新公告</h2>
       <div class="notice-list">
         <div class="notice">
           <div class="notice-date">2026/07/07</div>
           <div class="notice-body">
-            <span class="badge-urgent">重要行動</span>
-            <strong>[學員請注意]</strong> 請於本週五 <strong>07/10 中午 12:00</strong> 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。
+            <span class="badge-urgent" data-i18n="urgent">重要行動</span>
+            <strong data-i18n="annNote">[學員請注意]</strong> <span data-i18n="annText">請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。</span>
             <div style="margin-top:12px;">
-              <a class="link-btn primary" style="width:fit-content;display:inline-flex;" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> 填寫意願表單</a>
+              <a class="link-btn primary" style="width:fit-content;display:inline-flex;" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="annBtn">填寫意願表單</span></a>
             </div>
           </div>
         </div>
@@ -367,162 +387,350 @@
     <!-- 九宮格 -->
     <div class="grid">
       <div class="card">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-graduation-cap"></i></div>課程資訊大綱</div>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-graduation-cap"></i></div><span data-i18n="card1Title">課程資訊大綱</span></div>
         <ul>
-          <li><strong>目標：</strong>合規底盤與創價轉型。</li>
-          <li><strong>架構：</strong>6 週 / 72 小時高密度設計。</li>
-          <li><strong>時程：</strong>週六主課、週日顧問諮詢。</li>
-          <li><strong>修業：</strong>出席率 80% 可獲官方雙證書。</li>
-          <li>包含重大性分析與數據治理。</li>
+          <li><strong data-i18n="card1A">目標：</strong><span data-i18n="card1A2">合規底盤與創價轉型。</span></li>
+          <li><strong data-i18n="card1B">架構：</strong><span data-i18n="card1B2">6 週 / 72 小時高密度設計。</span></li>
+          <li><strong data-i18n="card1C">時程：</strong><span data-i18n="card1C2">週六主課、週日顧問諮詢。</span></li>
+          <li><strong data-i18n="card1D">修業：</strong><span data-i18n="card1D2">出席率 80% 可獲官方雙證書。</span></li>
+          <li data-i18n="card1E">包含重大性分析與數據治理。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn" href="#course-schedule-detail">查閱雙軌總進度表 <i class="fa-solid fa-chevron-down"></i></a>
+          <a class="link-btn" href="#course-schedule-detail"><span data-i18n="card1Link">查閱雙軌總進度表</span> <i class="fa-solid fa-chevron-down"></i></a>
         </div>
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-laptop-file"></i></div>線上課程大廳</div>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-laptop-file"></i></div><span data-i18n="card2Title">線上課程大廳</span></div>
         <ul>
-          <li><strong>週六主課程：</strong>線上 Live 學習同步口譯。</li>
-          <li><strong>週日諮詢：</strong>Mentor Office Hours 輔導。</li>
-          <li><strong>專題研討：</strong>策略創新房、轉型實務房。</li>
-          <li><strong>課堂常規：</strong>線上互動、改名與出席驗證。</li>
+          <li><strong data-i18n="card2A">週六主課程：</strong><span data-i18n="card2A2">線上 Live 學習同步口譯。</span></li>
+          <li><strong data-i18n="card2B">週日諮詢：</strong><span data-i18n="card2B2">Mentor Office Hours 輔導。</span></li>
+          <li><strong data-i18n="card2C">專題研討：</strong><span data-i18n="card2C2">策略創新房、轉型實務房。</span></li>
+          <li><strong data-i18n="card2D">課堂常規：</strong><span data-i18n="card2D2">線上互動、改名與出席驗證。</span></li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> 進入線上 Live 教室</a>
-          <a class="link-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> Office-Hour 諮詢室</a>
+          <a class="link-btn primary" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="card2Link1">進入線上 Live 教室</span></a>
+          <a class="link-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="card2Link2">Office-Hour 諮詢室</span></a>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-folder-open"></i></div>學員共享雲端</div>
+        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-folder-open"></i></div><span data-i18n="card3Title">學員共享雲端</span></div>
         <ul>
-          <li>2026 最新官方學員手冊下載。</li>
-          <li>Cohort Summer 通訊名單。</li>
-          <li>每週課堂精華包與補充閱讀。</li>
-          <li>學員反思筆記與個人矩陣模板。</li>
+          <li data-i18n="card3A">2026 最新官方學員手冊下載。</li>
+          <li data-i18n="card3B">Cohort Summer 通訊名單。</li>
+          <li data-i18n="card3C">每週課堂精華包與補充閱讀。</li>
+          <li data-i18n="card3D">學員反思筆記與個人矩陣模板。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> 打開學員 Google Drive</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="card3Link">打開學員 Google Drive</span></a>
         </div>
       </div>
 
       <div class="card slate-accent">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-file-pdf"></i></div>教材庫資產</div>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-file-pdf"></i></div><span data-i18n="card4Title">教材庫資產</span></div>
         <ul>
-          <li>Berkeley 教授簡報原始 PDF。</li>
-          <li>在地實務模組操作手冊。</li>
-          <li>協作公版素材與簡報框架。</li>
-          <li>精選隨堂問答整理與 FAQ。</li>
+          <li data-i18n="card4A">Berkeley 教授簡報原始 PDF。</li>
+          <li data-i18n="card4B">在地實務模組操作手冊。</li>
+          <li data-i18n="card4C">協作公版素材與簡報框架。</li>
+          <li data-i18n="card4D">精選隨堂問答整理與 FAQ。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-chevron-right"></i> 進入教材數據資產庫</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-chevron-right"></i> <span data-i18n="card4Link">進入教材數據資產庫</span></a>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-file-arrow-up"></i></div>作業成果提交</div>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-file-arrow-up"></i></div><span data-i18n="card5Title">作業成果提交</span></div>
         <ul>
-          <li><strong>每週要求：</strong>反思筆記與階段成果。</li>
-          <li><strong>最終 Capstone：</strong>永續執行矩陣。</li>
-          <li><strong>反饋：</strong>產學 Mentor 一對一回饋。</li>
-          <li>需符合指定 PDF 格式與命名原則。</li>
+          <li><strong data-i18n="card5A">每週要求：</strong><span data-i18n="card5A2">反思筆記與階段成果。</span></li>
+          <li><strong data-i18n="card5B">最終 Capstone：</strong><span data-i18n="card5B2">永續執行矩陣。</span></li>
+          <li><strong data-i18n="card5C">反饋：</strong><span data-i18n="card5C2">產學 Mentor 一對一回饋。</span></li>
+          <li data-i18n="card5D">需符合指定 PDF 格式與命名原則。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-upload"></i> 提交每週矩陣成果</a>
+          <a class="link-btn primary" href="https://forms.gle/1paHpA5xSSSZJSFy8" target="_blank" rel="noopener"><i class="fa-solid fa-upload"></i> <span data-i18n="card5Link">提交每週矩陣成果</span></a>
         </div>
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-photo-film"></i></div>線上回放複習</div>
+        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-photo-film"></i></div><span data-i18n="card6Title">線上回放複習</span></div>
         <ul>
-          <li>週六主課程全程錄影剪輯。</li>
-          <li>週日精選諮詢與小組討論存檔。</li>
-          <li><strong>安全性：</strong>觀看權限與加密密碼。</li>
-          <li>2026 學年度內全程保留。</li>
+          <li data-i18n="card6A">週六主課程全程錄影剪輯。</li>
+          <li data-i18n="card6B">週日精選諮詢與小組討論存檔。</li>
+          <li><strong data-i18n="card6C">安全性：</strong><span data-i18n="card6C2">觀看權限與加密密碼。</span></li>
+          <li data-i18n="card6D">2026 學年度內全程保留。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> 前往視訊重播資源庫</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> <span data-i18n="card6Link">前往視訊重播資源庫</span></a>
         </div>
       </div>
 
       <div class="card slate-accent">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-headset"></i></div>工具與技術支援</div>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-headset"></i></div><span data-i18n="card7Title">工具與技術支援</span></div>
         <ul>
-          <li>AI 即時同步翻譯工具設定指南。</li>
-          <li><strong>隱私傳輸：</strong>文叔叔高隱私通道。</li>
-          <li>AnyDesk 遠端桌面控制工具下載。</li>
-          <li>即時串流與聲音異常排除聯絡。</li>
+          <li data-i18n="card7A">AI 即時同步翻譯工具設定指南。</li>
+          <li><strong data-i18n="card7B">隱私傳輸：</strong><span data-i18n="card7B2">文叔叔高隱私通道。</span></li>
+          <li data-i18n="card7C">AnyDesk 遠端桌面控制工具下載。</li>
+          <li data-i18n="card7D">即時串流與聲音異常排除聯絡。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn" href="https://www.wenshushu.cn/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i> 開啟高隱私傳輸</a>
-          <a class="link-btn primary" href="https://anydesk.com/" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> 下載 AnyDesk</a>
+          <a class="link-btn" href="https://www.wenshushu.cn/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="card7Link1">開啟高隱私傳輸</span></a>
+          <a class="link-btn primary" href="https://anydesk.com/" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> <span data-i18n="card7Link2">下載 AnyDesk</span></a>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-users-gear"></i></div>TA 助教管理</div>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-users-gear"></i></div><span data-i18n="card8Title">TA 助教管理</span></div>
         <ul>
-          <li>線上課程主持口條、收場引導。</li>
-          <li>AI 翻譯平台與錄影權限管理。</li>
-          <li>助教每週排班、點名與催交規範。</li>
-          <li>學員永續矩陣作業初審對照表。</li>
+          <li data-i18n="card8A">線上課程主持口條、收場引導。</li>
+          <li data-i18n="card8B">AI 翻譯平台與錄影權限管理。</li>
+          <li data-i18n="card8C">助教每週排班、點名與催交規範。</li>
+          <li data-i18n="card8D">學員永續矩陣作業初審對照表。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1t6xfU6CmMXRwm8r828H2nuEsQxgWvhJv?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> TA 管理控制台</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1t6xfU6CmMXRwm8r828H2nuEsQxgWvhJv?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="card8Link">TA 管理控制台</span></a>
         </div>
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-hand-holding-heart"></i></div>企業健檢與影響力專案</div>
+        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-hand-holding-heart"></i></div><span data-i18n="card9Title">企業健檢與影響力專案</span></div>
         <ul>
-          <li><strong>ESG Sunshine：</strong>NT$29,000 高階顧問服務。</li>
-          <li>一對一企業轉型健檢與策略分析。</li>
-          <li>設計創價型 ESG 創新專案。</li>
-          <li>影響力投資與專案實作資源媒合。</li>
+          <li><strong data-i18n="card9A">ESG Sunshine：</strong><span data-i18n="card9A2">NT$29,000 高階顧問服務。</span></li>
+          <li data-i18n="card9B">一對一企業轉型健檢與策略分析。</li>
+          <li data-i18n="card9C">設計創價型 ESG 創新專案。</li>
+          <li data-i18n="card9D">影響力投資與專案實作資源媒合。</li>
         </ul>
         <div class="card-links">
-          <a class="link-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-right"></i> 預約專屬轉型健檢</a>
+          <a class="link-btn primary" href="https://forms.gle/q51BMDRKhYVAxF6k8" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="card9Link">預約專屬轉型健檢</span></a>
         </div>
       </div>
     </div>
 
     <!-- 雙軌排程 -->
     <div class="panel" id="course-schedule-detail">
-      <h2 class="panel-title">2026 Berkeley Haas 六週核心學程與產出</h2>
+      <h2 class="panel-title" data-i18n="schedTitle">2026 Berkeley Haas 六週核心學程與產出</h2>
       <div class="schedule-grid">
         <div class="schedule-col blue">
-          <div class="schedule-head"><i class="fa-solid fa-chalkboard-user"></i> 6週 Lecture Syllabus</div>
+          <div class="schedule-head"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="schedHead1">6週 Lecture Syllabus</span></div>
           <ul class="weeks">
-            <li><span class="wk">Week 1</span><div class="wk-name">Purpose-Driven Strategy, Stakeholder & Materiality</div><div class="wk-desc">定義企業的 ESG 戰略挑戰</div><div class="wk-fac"><span class="lec">Lecture：Mathieu Aguesse</span><span class="key">Keynote：Ben Bradbury</span></div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規壓力 / 利害期待 / 策略機會）</div></li>
-            <li><span class="wk">Week 2</span><div class="wk-name">Strategy Architecture and KPI Alignment</div><div class="wk-desc">建立重大性矩陣與治理擁有人</div><div class="wk-fac"><span class="lec">Lecture：Chandra Vadhana Radhakrishnan</span><span class="key">Keynote：Aurelia Engelsberger</span></div><div class="wk-journal">Journal 2：誰應形塑 ESG 優先順序；組織缺乏的數據 / 治理 / 保證能力</div></li>
-            <li><span class="wk">Week 3</span><div class="wk-name">Innovation Matrix and ESG Project Portfolio</div><div class="wk-desc">盤點能力缺口與變革準備度</div><div class="wk-fac"><span class="lec">Lecture：Dave Rochlin</span><span class="key">Keynote：Ignacio de Juan-Creix y Umbert</span></div><div class="wk-journal">Journal 3：循環或責任科技如何重塑一項產品 / 服務 / 流程 / 供應鏈</div></li>
-            <li><span class="wk">Week 4</span><div class="wk-name">Ecosystem Platform Strategy & Impact Modeling</div><div class="wk-desc">形成一個 ESG 創新原型概念</div><div class="wk-fac"><span class="lec">Lecture：Karin Li</span><span class="key">Keynote：Madeleine Parisi</span></div><div class="wk-journal">Journal 4：組織內部必須改變什麼，才能讓 ESG 成為決策一部分</div></li>
-            <li><span class="wk">Week 5</span><div class="wk-name">Dashboard Blueprint and Data Architecture</div><div class="wk-desc">將矩陣推進至 owners / metrics / milestones</div><div class="wk-fac"><span class="lec">Lecture：Chris Bush</span><span class="key">Keynote：Pradeep Iyer</span></div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 倡議正當性</div></li>
-            <li><span class="wk">Week 6</span><div class="wk-name">Governance system, budgeting, strategic annual rhythm</div><div class="wk-desc">完成 final matrix 與溝通計畫</div><div class="wk-fac"><span class="lec">Lecture：Ganesh Iyer</span><span class="key">Keynote：Arding Hsu</span></div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害期待 / 策略機會）</div></li>
+            <li><span class="wk">Week 1</span><div class="wk-name">Purpose-Driven Strategy, Stakeholder & Materiality</div><div class="wk-desc" data-i18n="w1d">定義企業的 ESG 戰略挑戰</div><div class="wk-fac"><span class="lec">Lecture：Mathieu Aguesse</span><span class="key">Keynote：Ben Bradbury</span></div></li>
+            <li><span class="wk">Week 2</span><div class="wk-name">Strategy Architecture and KPI Alignment</div><div class="wk-desc" data-i18n="w2d">建立重大性矩陣與治理擁有人</div><div class="wk-fac"><span class="lec">Lecture：Chandra Vadhana Radhakrishnan</span><span class="key">Keynote：Aurelia Engelsberger</span></div></li>
+            <li><span class="wk">Week 3</span><div class="wk-name">Innovation Matrix and ESG Project Portfolio</div><div class="wk-desc" data-i18n="w3d">盤點能力缺口與變革準備度</div><div class="wk-fac"><span class="lec">Lecture：Dave Rochlin</span><span class="key">Keynote：Ignacio de Juan-Creix y Umbert</span></div></li>
+            <li><span class="wk">Week 4</span><div class="wk-name">Ecosystem Platform Strategy & Impact Modeling</div><div class="wk-desc" data-i18n="w4d">形成一個 ESG 創新原型概念</div><div class="wk-fac"><span class="lec">Lecture：Karin Li</span><span class="key">Keynote：Madeleine Parisi</span></div></li>
+            <li><span class="wk">Week 5</span><div class="wk-name">Dashboard Blueprint and Data Architecture</div><div class="wk-desc" data-i18n="w5d">將矩陣推進至 owners / metrics / milestones</div><div class="wk-fac"><span class="lec">Lecture：Chris Bush</span><span class="key">Keynote：Pradeep Iyer</span></div></li>
+            <li><span class="wk">Week 6</span><div class="wk-name">Governance system, budgeting, strategic annual rhythm</div><div class="wk-desc" data-i18n="w6d">完成 final matrix 與溝通計畫</div><div class="wk-fac"><span class="lec">Lecture：Ganesh Iyer</span><span class="key">Keynote：Arding Hsu</span></div></li>
           </ul>
         </div>
         <div class="schedule-col gold">
-          <div class="schedule-head"><i class="fa-solid fa-bullseye"></i> 6週 Consulting Time 交付成果</div>
+          <div class="schedule-head"><i class="fa-solid fa-bullseye"></i> <span data-i18n="schedHead2">6週 Consulting Time 交付成果</span></div>
           <ul class="weeks">
-            <li><span class="wk">Lab 1</span><div class="wk-name">組織永續戰略挑戰聚焦</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：組織永續戰略挑戰陳述書草案</div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
-            <li><span class="wk">Lab 2</span><div class="wk-name">重大性與治理結構對齊</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：重大性矩陣與治理擁有者地圖初稿</div><div class="wk-journal">Journal 2：誰形塑 ESG 優先順序；缺乏的數據 / 治理 / 保證能力</div></li>
-            <li><span class="wk">Lab 3</span><div class="wk-name">ESG 能力與包容創新評估</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：ESG 能力缺口評估與變革準備度</div><div class="wk-journal">Journal 3：循環或責任科技如何重塑產品 / 服務 / 流程 / 供應鏈</div></li>
-            <li><span class="wk">Lab 4</span><div class="wk-name">循環經濟與創新實踐</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：創新原型概念與循環經濟機會掃描</div><div class="wk-journal">Journal 4：組織內部必須改變什麼，讓 ESG 成為決策一部分</div></li>
-            <li><span class="wk">Lab 5</span><div class="wk-name">數據指標與里程碑確立</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：導入負責人與指標之執行矩陣 V2</div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 正當性</div></li>
-            <li><span class="wk">Lab 6</span><div class="wk-name">最終審查與溝通行動</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：最終永續執行矩陣 (Final Matrix)</div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
+            <li><span class="wk">Lab 1</span><div class="wk-name" data-i18n="l1n">組織永續戰略挑戰聚焦</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l1d">產出：組織永續戰略挑戰陳述書草案</span></div></li>
+            <li><span class="wk">Lab 2</span><div class="wk-name" data-i18n="l2n">重大性與治理結構對齊</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l2d">產出：重大性矩陣與治理擁有者地圖初稿</span></div></li>
+            <li><span class="wk">Lab 3</span><div class="wk-name" data-i18n="l3n">ESG 能力與包容創新評估</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l3d">產出：ESG 能力缺口評估與變革準備度</span></div></li>
+            <li><span class="wk">Lab 4</span><div class="wk-name" data-i18n="l4n">循環經濟與創新實踐</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l4d">產出：創新原型概念與循環經濟機會掃描</span></div></li>
+            <li><span class="wk">Lab 5</span><div class="wk-name" data-i18n="l5n">數據指標與里程碑確立</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l5d">產出：導入負責人與指標之執行矩陣 V2</span></div></li>
+            <li><span class="wk">Lab 6</span><div class="wk-name" data-i18n="l6n">最終審查與溝通行動</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i><span data-i18n="l6d">產出：最終永續執行矩陣 (Final Matrix)</span></div></li>
           </ul>
         </div>
       </div>
     </div>
 
-    <div class="panel" style="background: linear-gradient(180deg, #ffffff 0%, var(--cal-blue-soft) 100%);">
-      <strong style="color:var(--cal-blue);">一站式綜效公約：</strong>
-      <span style="color:#334155;">本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。</span>
+    <!-- 線上預約（連結至官方必填表單） -->
+    <div class="panel" id="booking" style="border-top:4px solid var(--cal-gold); background: linear-gradient(180deg, #ffffff 0%, var(--cal-gold-soft) 100%);">
+      <h2 class="panel-title" data-i18n="bookTitle">預約企業轉型健檢 / Consulting 諮詢</h2>
+      <p style="font-size:14px;color:var(--muted);margin:-6px 0 16px;" data-i18n="bookSub">填寫官方表單的必填欄位，專屬顧問將於 2 個工作天內與您聯繫安排時段。</p>
+      <a class="btn btn-gold" href="https://forms.gle/q51BMDRKhYVAxF6k8" target="_blank" rel="noopener" style="width:fit-content;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="bookCta">前往填寫預約表單</span></a>
     </div>
 
-    <div class="footer-note">依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program</div>
+    <div class="panel" style="background: linear-gradient(180deg, #ffffff 0%, var(--cal-blue-soft) 100%);">
+      <strong style="color:var(--cal-blue);" data-i18n="pactTitle">一站式綜效公約：</strong>
+      <span style="color:#334155;" data-i18n="pactText">本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。</span>
+    </div>
+
+    <div class="footer-note" data-i18n="footer">依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program</div>
   </div>
 </div>
+
+<script>
+  // 三語內容表
+  const I18N = {
+    "zh-Hant": {
+      eyebrow: "2026 年度課程",
+      heroTitle: "<em>柏克萊國際永續人才培力</em> 課程服務中心",
+      heroLede: "Berkeley Haas 永續策略創新 × TSISDA × 台灣尤努斯基金會，一站式入口平台：線上課程、協作資產、TA 營運、成果繳交、語音翻譯、課程回放。",
+      ctaCourse: "進入線上課程", ctaCloud: "學員共享雲端", ctaSchedule: "查閱課程排程",
+      chip1: "週六主課程 08:00-14:00", chip2: "週日 Consulting Lab", chip3: "AI 即時同步翻譯", chip4: "課後 Replay 複習庫", chip5: "雙證審查 出席率 ≥80%",
+      annTitle: "最新公告", urgent: "重要行動", annNote: "[學員請注意]",
+      annText: "請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。",
+      annBtn: "填寫意願表單",
+      card1Title: "課程資訊大綱", card1A: "目標：", card1A2: "合規底盤與創價轉型。", card1B: "架構：", card1B2: "6 週 / 72 小時高密度設計。",
+      card1C: "時程：", card1C2: "週六主課、週日顧問諮詢。", card1D: "修業：", card1D2: "出席率 80% 可獲官方雙證書。", card1E: "包含重大性分析與數據治理。",
+      card1Link: "查閱雙軌總進度表",
+      card2Title: "線上課程大廳", card2A: "週六主課程：", card2A2: "線上 Live 學習同步口譯。", card2B: "週日諮詢：", card2B2: "Mentor Office Hours 輔導。",
+      card2C: "專題研討：", card2C2: "策略創新房、轉型實務房。", card2D: "課堂常規：", card2D2: "線上互動、改名與出席驗證。",
+      card2Link1: "進入線上 Live 教室", card2Link2: "Office-Hour 諮詢室",
+      card3Title: "學員共享雲端", card3A: "2026 最新官方學員手冊下載。", card3B: "Cohort Summer 通訊名單。",
+      card3C: "每週課堂精華包與補充閱讀。", card3D: "學員反思筆記與個人矩陣模板。", card3Link: "打開學員 Google Drive",
+      card4Title: "教材庫資產", card4A: "Berkeley 教授簡報原始 PDF。", card4B: "在地實務模組操作手冊。",
+      card4C: "協作公版素材與簡報框架。", card4D: "精選隨堂問答整理與 FAQ。", card4Link: "進入教材數據資產庫",
+      card5Title: "作業成果提交", card5A: "每週要求：", card5A2: "反思筆記與階段成果。", card5B: "最終 Capstone：", card5B2: "永續執行矩陣。",
+      card5C: "反饋：", card5C2: "產學 Mentor 一對一回饋。", card5D: "需符合指定 PDF 格式與命名原則。", card5Link: "提交每週矩陣成果",
+      card6Title: "線上回放複習", card6A: "週六主課程全程錄影剪輯。", card6B: "週日精選諮詢與小組討論存檔。",
+      card6C: "安全性：", card6C2: "觀看權限與加密密碼。", card6D: "2026 學年度內全程保留。", card6Link: "前往視訊重播資源庫",
+      card7Title: "工具與技術支援", card7A: "AI 即時同步翻譯工具設定指南。", card7B: "隱私傳輸：", card7B2: "文叔叔高隱私通道。",
+      card7C: "AnyDesk 遠端桌面控制工具下載。", card7D: "即時串流與聲音異常排除聯絡。", card7Link1: "開啟高隱私傳輸", card7Link2: "下載 AnyDesk",
+      card8Title: "TA 助教管理", card8A: "線上課程主持口條、收場引導。", card8B: "AI 翻譯平台與錄影權限管理。",
+      card8C: "助教每週排班、點名與催交規範。", card8D: "學員永續矩陣作業初審對照表。", card8Link: "TA 管理控制台",
+      card9Title: "企業健檢與影響力專案", card9A: "ESG Sunshine：", card9A2: "NT$29,000 高階顧問服務。",
+      card9B: "一對一企業轉型健檢與策略分析。", card9C: "設計創價型 ESG 創新專案。", card9D: "影響力投資與專案實作資源媒合。", card9Link: "預約專屬轉型健檢",
+      schedTitle: "2026 Berkeley Haas 六週核心學程與產出", schedHead1: "6週 Lecture Syllabus", schedHead2: "6週 Consulting Time 交付成果",
+      w1d: "定義企業的 ESG 戰略挑戰", w2d: "建立重大性矩陣與治理擁有人", w3d: "盤點能力缺口與變革準備度",
+      w4d: "形成一個 ESG 創新原型概念", w5d: "將矩陣推進至 owners / metrics / milestones", w6d: "完成 final matrix 與溝通計畫",
+      l1n: "組織永續戰略挑戰聚焦", l1d: "產出：組織永續戰略挑戰陳述書草案",
+      l2n: "重大性與治理結構對齊", l2d: "產出：重大性矩陣與治理擁有者地圖初稿",
+      l3n: "ESG 能力與包容創新評估", l3d: "產出：ESG 能力缺口評估與變革準備度",
+      l4n: "循環經濟與創新實踐", l4d: "產出：創新原型概念與循環經濟機會掃描",
+      l5n: "數據指標與里程碑確立", l5d: "產出：導入負責人與指標之執行矩陣 V2",
+      l6n: "最終審查與溝通行動", l6d: "產出：最終永續執行矩陣 (Final Matrix)",
+      bookTitle: "預約企業轉型健檢 / Consulting 諮詢",
+      bookSub: "填寫官方表單的必填欄位，專屬顧問將於 2 個工作天內與您聯繫安排時段。",
+      bookCta: "前往填寫預約表單",
+      fName: "姓名", fCompany: "公司 / 單位", fEmail: "Email", fPhone: "聯絡電話",
+      fType: "諮詢類型", fDate: "希望時段", fNote: "需求說明",
+      phName: "請輸入您的姓名", phCompany: "請輸入公司或單位名稱", phEmail: "name@company.com",
+      phPhone: "請輸入聯絡電話", phNote: "簡述您的諮詢需求（選填）",
+      optDefault: "請選擇", optHC: "企業轉型健檢（ESG Sunshine）", optConsult: "Consulting Time 顧問諮詢", optMentor: "產學 Mentor 導師配對",
+      pactTitle: "一站式綜效公約：",
+      pactText: "本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。",
+      footer: "依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+    },
+    "zh-Hans": {
+      eyebrow: "2026 年度课程",
+      heroTitle: "<em>柏克莱国际永续人才培力</em> 课程服务中心",
+      heroLede: "Berkeley Haas 永续策略创新 × TSISDA × 台湾尤努斯基金会，一站式入口平台：线上课程、协作资产、TA 营运、成果缴交、语音翻译、课程回放。",
+      ctaCourse: "进入线上课程", ctaCloud: "学员共享云端", ctaSchedule: "查阅课程排程",
+      chip1: "周六主课程 08:00-14:00", chip2: "周日 Consulting Lab", chip3: "AI 即时同步翻译", chip4: "课后 Replay 复习库", chip5: "双证审查 出席率 ≥80%",
+      annTitle: "最新公告", urgent: "重要行动", annNote: "[学员请注意]",
+      annText: "请于本周五 07/10 中午 12:00 前完成 Consulting Time 意愿填写，以便安排专属产学 Mentor 导师。",
+      annBtn: "填写意愿表单",
+      card1Title: "课程资讯大纲", card1A: "目标：", card1A2: "合规底盘与创价转型。", card1B: "架构：", card1B2: "6 周 / 72 小时高密度设计。",
+      card1C: "时程：", card1C2: "周六主课、周日顾问咨询。", card1D: "修业：", card1D2: "出席率 80% 可获官方双证书。", card1E: "包含重大性分析与数据治理。",
+      card1Link: "查阅双轨总进度表",
+      card2Title: "线上课程大厅", card2A: "周六主课程：", card2A2: "线上 Live 学习同步口译。", card2B: "周日咨询：", card2B2: "Mentor Office Hours 辅导。",
+      card2C: "专题研讨：", card2C2: "策略创新房、转型实务房。", card2D: "课堂常规：", card2D2: "线上互动、改名与出席验证。",
+      card2Link1: "进入线上 Live 教室", card2Link2: "Office-Hour 咨询室",
+      card3Title: "学员共享云端", card3A: "2026 最新官方学员手册下载。", card3B: "Cohort Summer 通讯名单。",
+      card3C: "每周课堂精华包与补充阅读。", card3D: "学员反思笔记与个人矩阵模板。", card3Link: "打开学员 Google Drive",
+      card4Title: "教材库资产", card4A: "Berkeley 教授简报原始 PDF。", card4B: "在地实务模块操作手册。",
+      card4C: "协作公版素材与简报框架。", card4D: "精选随堂问答整理与 FAQ。", card4Link: "进入教材数据资产库",
+      card5Title: "作业成果提交", card5A: "每周要求：", card5A2: "反思笔记与阶段成果。", card5B: "最终 Capstone：", card5B2: "永续执行矩阵。",
+      card5C: "反馈：", card5C2: "产学 Mentor 一对一反馈。", card5D: "需符合指定 PDF 格式与命名原则。", card5Link: "提交每周矩阵成果",
+      card6Title: "线上回放复习", card6A: "周六主课程全程录影剪辑。", card6B: "周日精选咨询与小组讨论存档。",
+      card6C: "安全性：", card6C2: "观看权限与加密密码。", card6D: "2026 学年度内全程保留。", card6Link: "前往视频重播资源库",
+      card7Title: "工具与技术支援", card7A: "AI 即时同步翻译工具设定指南。", card7B: "隐私传输：", card7B2: "文叔叔高隐私通道。",
+      card7C: "AnyDesk 远端桌面控制工具下载。", card7D: "即时串流与声音异常排除联络。", card7Link1: "开启高隐私传输", card7Link2: "下载 AnyDesk",
+      card8Title: "TA 助教管理", card8A: "线上课程主持口条、收场引导。", card8B: "AI 翻译平台与录影权限管理。",
+      card8C: "助教每周排班、点名与催交规范。", card8D: "学员永续矩阵作业初审对照表。", card8Link: "TA 管理控制台",
+      card9Title: "企业健检与影响力专案", card9A: "ESG Sunshine：", card9A2: "NT$29,000 高阶顾问服务。",
+      card9B: "一对一企业转型健检与策略分析。", card9C: "设计创价型 ESG 创新专案。", card9D: "影响力投资与专案实作资源媒合。", card9Link: "预约专属转型健检",
+      schedTitle: "2026 Berkeley Haas 六周核心学程与产出", schedHead1: "6周 Lecture Syllabus", schedHead2: "6周 Consulting Time 交付成果",
+      w1d: "定义企业的 ESG 战略挑战", w2d: "建立重大性矩阵与治理拥有人", w3d: "盘点能力缺口与变革准备度",
+      w4d: "形成一个 ESG 创新原型概念", w5d: "将矩阵推进至 owners / metrics / milestones", w6d: "完成 final matrix 与沟通计划",
+      l1n: "组织永续战略挑战聚焦", l1d: "产出：组织永续战略挑战陈述书草案",
+      l2n: "重大性与治理架构对齐", l2d: "产出：重大性矩阵与治理拥有者地图初稿",
+      l3n: "ESG 能力与包容创新评估", l3d: "产出：ESG 能力缺口评估与变革准备度",
+      l4n: "循环经济与创新实践", l4d: "产出：创新原型概念与循环经济机会扫描",
+      l5n: "数据指标与里程碑确立", l5d: "产出：导入负责人与指标之执行矩阵 V2",
+      l6n: "最终审查与沟通行动", l6d: "产出：最终永续执行矩阵 (Final Matrix)",
+      bookTitle: "预约企业转型健检 / Consulting 咨询",
+      bookSub: "填写官方表单的必填字段，专属顾问将于 2 个工作日内与您联系安排时段。",
+      bookCta: "前往填写预约表单",
+      fName: "姓名", fCompany: "公司 / 单位", fEmail: "Email", fPhone: "联络电话",
+      fType: "咨询类型", fDate: "希望时段", fNote: "需求说明",
+      phName: "请输入您的姓名", phCompany: "请输入公司或单位名称", phEmail: "name@company.com",
+      phPhone: "请输入联络电话", phNote: "简述您的咨询需求（选填）",
+      optDefault: "请选择", optHC: "企业转型健检（ESG Sunshine）", optConsult: "Consulting Time 顾问咨询", optMentor: "产学 Mentor 导师配对",
+      pactTitle: "一站式综效公约：",
+      pactText: "本服务中心旨在将「课程入口、线上教学、教材资产、复习录影、AI 翻译、成果缴交、TA 营运」整合成互斥且穷尽（MECE）的清晰架构，协助学员高效率将合规指标转化为企业竞争力。",
+      footer: "依据全球顶级合规与创价标准进行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+    },
+    "en": {
+      eyebrow: "2026 Annual Program",
+      heroTitle: "<em>Berkeley International Sustainability</em> Talent Empowerment Center",
+      heroLede: "Berkeley Haas Sustainability Strategy Innovation × TSISDA × Taiwan Yunus Foundation — a one-stop portal for online courses, collaborative assets, TA operations, deliverable submission, voice translation, and lecture replays.",
+      ctaCourse: "Enter Online Course", ctaCloud: "Student Shared Drive", ctaSchedule: "View Schedule",
+      chip1: "Sat Main Class 08:00-14:00", chip2: "Sun Consulting Lab", chip3: "AI Live Translation", chip4: "Post-class Replay Library", chip5: "Dual Cert. ≥80% Attendance",
+      annTitle: "Announcements", urgent: "Action Required", annNote: "[Students Note]",
+      annText: "Please complete the Consulting Time preference form by Fri 07/10 12:00 noon to assign your dedicated industry-academia Mentor.",
+      annBtn: "Fill Preference Form",
+      card1Title: "Course Overview", card1A: "Goal: ", card1A2: "Compliance foundation & value creation.", card1B: "Structure: ", card1B2: "6 weeks / 72 hours intensive.",
+      card1C: "Schedule: ", card1C2: "Sat lectures, Sun advisory.", card1D: "Graduation: ", card1D2: "80% attendance → official dual certificates.", card1E: "Includes materiality analysis & data governance.",
+      card1Link: "View Dual-track Roadmap",
+      card2Title: "Online Course Lobby", card2A: "Sat Lecture: ", card2A2: "Live class with simultaneous interpretation.", card2B: "Sun Consulting: ", card2B2: "Mentor Office Hours.",
+      card2C: "Seminars: ", card2C2: "Strategy-innovation & transition labs.", card2D: "Norms: ", card2D2: "Interaction, rename & attendance check.",
+      card2Link1: "Enter Live Classroom", card2Link2: "Office-Hour Room",
+      card3Title: "Student Shared Drive", card3A: "2026 official student handbook download.", card3B: "Cohort Summer mailing list.",
+      card3C: "Weekly highlights & supplementary reading.", card3D: "Reflection notes & personal matrix templates.", card3Link: "Open Student Google Drive",
+      card4Title: "Teaching Asset Library", card4A: "Original Berkeley professor slides (PDF).", card4B: "Local practice module manuals.",
+      card4C: "Collaborative public assets & slide frameworks.", card4D: "Curated Q&A and FAQ.", card4Link: "Enter Teaching Asset Library",
+      card5Title: "Deliverable Submission", card5A: "Weekly: ", card5A2: "Reflection notes & stage outputs.", card5B: "Final Capstone: ", card5B2: "Sustainability Execution Matrix.",
+      card5C: "Feedback: ", card5C2: "1-on-1 industry-academia Mentor review.", card5D: "Must follow specified PDF format & naming.", card5Link: "Submit Weekly Matrix",
+      card6Title: "Online Replay Review", card6A: "Full Sat lecture recordings edited.", card6B: "Sun curated consulting & group discussions.",
+      card6C: "Security: ", card6C2: "Gated viewing with encryption password.", card6D: "Retained through the 2026 academic year.", card6Link: "Go to Replay Library",
+      card7Title: "Tools & Support", card7A: "AI live-translation setup guide.", card7B: "Private transfer: ", card7B2: "Wenshushu high-privacy channel.",
+      card7C: "AnyDesk remote desktop download.", card7D: "Live-stream & audio troubleshooting contact.", card7Link1: "Open Private Transfer", card7Link2: "Download AnyDesk",
+      card8Title: "TA Management", card8A: "Online hosting scripts & wrap-up guidance.", card8B: "AI translate platform & recording rights.",
+      card8C: "Weekly TA shifts, attendance & reminders.", card8D: "Student matrix initial-review checklist.", card8Link: "TA Console",
+      card9Title: "Enterprise Health-check & Impact", card9A: "ESG Sunshine: ", card9A2: "NT$29,000 premium advisory.",
+      card9B: "1-on-1 enterprise transition health-check.", card9C: "Design value-creating ESG innovation projects.", card9D: "Impact investing & project matchmaking.", card9Link: "Book Dedicated Health-check",
+      schedTitle: "2026 Berkeley Haas 6-Week Core Program & Outputs", schedHead1: "6-Week Lecture Syllabus", schedHead2: "6-Week Consulting Time Deliverables",
+      w1d: "Define the firm's ESG strategic challenge", w2d: "Build materiality matrix & governance owners", w3d: "Inventory capability gaps & readiness",
+      w4d: "Form an ESG innovation prototype concept", w5d: "Advance matrix to owners / metrics / milestones", w6d: "Complete final matrix & comms plan",
+      l1n: "Focus org sustainability challenge", l1d: "Output: draft sustainability challenge statement",
+      l2n: "Materiality & governance alignment", l2d: "Output: materiality matrix & governance owner map",
+      l3n: "ESG capability & inclusive innovation", l3d: "Output: ESG capability gap & readiness assessment",
+      l4n: "Circular economy & innovation practice", l4d: "Output: prototype concept & circular opportunity scan",
+      l5n: "Data metrics & milestones", l5d: "Output: execution matrix V2 with owners & metrics",
+      l6n: "Final review & communication", l6d: "Output: Final Sustainability Execution Matrix",
+      bookTitle: "Book Enterprise Health-check / Consulting",
+      bookSub: "Complete the required fields on the official form; your dedicated advisor will contact you within 2 business days to schedule.",
+      bookCta: "Open Booking Form",
+      fName: "Name", fCompany: "Company / Org", fEmail: "Email", fPhone: "Phone",
+      fType: "Consulting Type", fDate: "Preferred Date", fNote: "Notes",
+      phName: "Enter your name", phCompany: "Enter company or org", phEmail: "name@company.com",
+      phPhone: "Enter phone number", phNote: "Briefly describe your needs (optional)",
+      optDefault: "Select", optHC: "Enterprise Health-check (ESG Sunshine)", optConsult: "Consulting Time Advisory", optMentor: "Industry-Academia Mentor Match",
+      pactTitle: "One-Stop Synergy Pact:",
+      pactText: "This center integrates 'course portal, online teaching, teaching assets, replays, AI translation, deliverables, TA operations' into a MECE structure, helping learners turn compliance metrics into competitiveness.",
+      footer: "Built to top global compliance & value-creation standards | 2026 Berkeley ESG Strategy & Innovation Program"
+    }
+  };
+
+  // 套用語言
+  function applyLang(lang) {
+    const dict = I18N[lang] || I18N["zh-Hant"];
+    document.documentElement.lang = (lang === "zh-Hans") ? "zh-CN" : (lang === "en" ? "en" : "zh-TW");
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+      const key = el.getAttribute("data-i18n-ph");
+      if (dict[key] !== undefined) el.setAttribute("placeholder", dict[key]);
+    });
+    document.querySelectorAll(".lang-switch button").forEach(b =>
+      b.classList.toggle("active", b.getAttribute("data-lang") === lang));
+    try { localStorage.setItem("portalLang", lang); } catch (e) {}
+  }
+
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.addEventListener("click", () => applyLang(btn.getAttribute("data-lang")));
+  });
+
+  let saved = "zh-Hant";
+  try { saved = localStorage.getItem("portalLang") || "zh-Hant"; } catch (e) {}
+  applyLang(saved);
+</script>
 </body>
 </html>
