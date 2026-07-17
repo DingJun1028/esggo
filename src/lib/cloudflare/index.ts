@@ -4,5 +4,6 @@
  * 詳見 docs/cloudflare-integration.md
  */
 export * from "./workers-ai";
+export * from "./workers-ai-fallback";
 export * from "./r2";
 export * from "./turnstile";
