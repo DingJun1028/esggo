@@ -9,6 +9,8 @@ import {
   IComponentCore,
   IBusEvent,
   LifecycleStage,
+  ITaskSpec,
+  ITaskResult,
   IOmniAgent,
   IOmniAgentBus,
   IOmniAgentGateway,
@@ -16,6 +18,7 @@ import {
   IMartialLawEvent,
 } from "../types/core-contract";
 import { OmniSeed } from "../lib/omni-seed";
+import { OmniTag } from "../lib/omni-tag";
 import { OmniEvidence } from "./omni-evidence";
 import { OmniTime } from "./omni-time";
 import { OmniMemory } from "./omni-memory";
@@ -192,7 +195,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as IBusEvent);
+      } as any);
       return Object.freeze(event);
     }
     const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
@@ -224,49 +227,84 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as IBusEvent);
+      } as any);
       return Object.freeze(event);
     }
     return Object.freeze({ ...event, hashLock: crypto.randomUUID() }) as IBusEvent;
   }
 
-  async secureForward(event: IBusEvent): Promise<IBusEvent> {
+  async secureForward(event: IBusEvent) {
     const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
-    return locked as IBusEvent;
+    return { status: "forwarded", hash: locked.hashLock };
   }
 
-  async predictAndPreFetch(intent: string): Promise<Array<IBusEvent>> {
+  async predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>> {
     const apiKey = process.env.NVAPI_KEY;
     if (!apiKey) {
       console.warn('[OAG] NVIDIA API key not set – returning empty predictions');
       return [];
     }
-    // Build request payload – forward intent as prompt.
-    const payload = JSON.stringify({ prompt: intent });
-    // Use curl to call NVIDIA API (placeholder endpoint). Adjust URL & headers as needed.
-    const curlCmd = `curl -s -X POST https://api.nvidia.com/v1/predict \
-      -H "Authorization: Bearer ${apiKey}" \
-      -H "Content-Type: application/json" \
-      -d '${payload}'`;
-    const { execSync } = await import('node:child_process');
-    let output: string;
-    try {
-      output = execSync(curlCmd, { encoding: 'utf8' });
-    } catch (e) {
+    // Forward the stub as a prompt to NVIDIA NIM (real endpoint, not the old
+    // placeholder). Ask for strict JSON so we can parse predictions directly.
+    const baseUrl = process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1';
+    const model = process.env.NVIDIA_PREDICT_MODEL || 'meta/llama-3.1-8b-instruct';
+    const sysPrompt =
+      'You are a scheduling predictor. Given a user intent stub, return ONLY a JSON ' +
+      'object of shape {"predictions":[{"title":string,"topic":string,"when":string}]} ' +
+      'with 1-3 plausible upcoming events. No prose, no markdown.';
+    const body = JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: sysPrompt },
+        { role: 'user', content: userIntentStub },
+      ],
+      temperature: 0.3,
+      max_tokens: 400,
+    });
+    const { request: httpsRequest } = await import('node:https');
+    const output: string = await new Promise<string>((resolve, reject) => {
+      const u = new URL(`${baseUrl}/chat/completions`);
+      const req = httpsRequest(
+        {
+          hostname: u.hostname,
+          path: u.pathname,
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body),
+          },
+        },
+        (res) => {
+          const chunks: Buffer[] = [];
+          res.on('data', (c) => chunks.push(c as Buffer));
+          res.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+        }
+      );
+      req.on('error', reject);
+      req.write(body);
+      req.end();
+    }).catch((e) => {
       console.error('[OAG] NVIDIA API call failed', e);
-      return [];
-    }
-    let resultArray: unknown[] = [];
+      return '';
+    });
+    if (!output) return [];
+    let resultArray: any[] = [];
     try {
       const parsed = JSON.parse(output);
-      // Assume API returns an array of predicted events under `predictions`.
-      resultArray = parsed.predictions ?? [];
+      // NIM returns OpenAI-style chat completion: the model's JSON lives in
+      // choices[0].message.content. Extract and re-parse that to get predictions.
+      const content: string =
+        parsed?.choices?.[0]?.message?.content ?? parsed?.predictions ?? '';
+      const inner =
+        typeof content === 'string' ? JSON.parse(content) : (content as any);
+      resultArray = Array.isArray(inner) ? inner : (inner?.predictions ?? []);
     } catch (e) {
       console.error('[OAG] Failed to parse NVIDIA response', e);
       return [];
     }
     // Transform each prediction into IBusEvent objects.
-    const events: IBusEvent[] = resultArray.map((p, _idx) =>
+    const events: IBusEvent[] = resultArray.map((p, idx) =>
       makeCore<IBusEvent>({
         uuid: crypto.randomUUID(),
         version: '1.0.0',
@@ -294,7 +332,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   }
 
   injectChaos(event: IBusEvent): IBusEvent {
-    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as IBusEvent;
+    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as any;
     console.warn(`[OAG] Chaos injected into event ${event.uuid}`);
     return mutated as IBusEvent;
   }
@@ -362,9 +400,9 @@ export class OmniCoreEcosystem {
   }
 
   /** Static helper used by OAB to apply Hash Lock & freeze */
-  public static lockAndFreeze<T extends IComponentCore>(obj: T): T {
-    obj.evidence = obj.evidence || {};
-    obj.evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+  public static lockAndFreeze<T extends object>(obj: T): T {
+    (obj as any).evidence = (obj as any).evidence || {};
+    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
       .toString(36)
       .substring(2, 9)}`;
     return Object.freeze(obj);
