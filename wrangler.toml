@@ -7,6 +7,10 @@ compatibility_flags = ["nodejs_compat"]
 ENVIRONMENT = "production"
 SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
+# 構建設定
+[build]
+command = "mkdir -p dist"
+
 # 靜態資源
 [assets]
 directory = "dist"
