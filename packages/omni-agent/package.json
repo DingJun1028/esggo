@@ -3,42 +3,30 @@
   "version": "5.1.0",
   "private": true,
   "type": "module",
-  "main": "src/index.ts",
-  "bin": {
-    "omni-agent": "./src/bin/omni-agent.js"
+  "main": "src/gates.ts",
+  "types": "src/gates.ts",
+  "exports": {
+    ".": "./src/gates.ts",
+    "./types": "./src/types.ts"
   },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "ts-node src/gates.ts",
     "build": "tsc",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node src/gates.ts",
     "test": "vitest",
     "lint": "eslint src/ --fix",
     "lint:full": "eslint src/ --max-warnings 50",
-    "typecheck": "tsc --noEmit",
-    "version": "node scripts/version.js",
-    "omni:init": "node src/bin/omni-agent.js init",
-    "omni:dev": "node src/bin/omni-agent.js dev",
-    "omni:build": "node src/bin/omni-agent.js build",
-    "omni:start": "node src/bin/omni-agent.js start",
-    "omni:lint": "node src/bin/omni-agent.js lint",
-    "omni:lint:full": "node src/bin/omni-agent.js lint:full",
-    "omni:typecheck": "node src/bin/omni-agent.js typecheck",
-    "omni:test": "node src/bin/omni-agent.js test",
-    "omni:test:coverage": "node src/bin/omni-agent.js test:coverage"
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": ["omnijules", "ai-agent", "esggo", "5t-protocol"],
+  "keywords": ["omnijules", "ai-agent", "esggo", "5t-protocol", "five-t-gate"],
   "author": "ESG GO Team",
   "license": "UNLICENSED",
-  "description": "OmniJules AI Agent - Sovereign Intelligence Core for ESG GO Platform",
+  "description": "OmniJules 5T Gate Verification Engine — 5T 閘道驗證核心 (traceable/transparent/tangible/trustworthy/trackable)",
   "dependencies": {
     "@esggo/shared": "workspace:*",
     "@esggo/errors": "workspace:*",
     "zod": "^3.25.0",
-    "typescript": "^5.0.0",
-    "chalk": "^4.1.2",
-    "figlet": "^1.5.0",
-    "inquirer": "^9.0.0",
-    "yargs": "^17.7.0"
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
