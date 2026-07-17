@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     };
 
     // 檢查事件存儲
-    const timeRift = healthRouter.getTimeRiftEngine();
+
     if (timeRift) {
       try {
         await timeRift.eventStore.healthCheck();
@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
       environment: process.env.NODE_ENV || 'development'
     }, { status: statusCode });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
@@ -152,6 +152,8 @@ export async function GET_METRICS() {
     healthRouter = await createSmartAIRouter({});
   }
 
+
+  
   // 收集指標 (實際應用可整合 prom-client)
   const metrics = [
     '# HELP smart_ai_router_uptime_seconds Service uptime in seconds',
