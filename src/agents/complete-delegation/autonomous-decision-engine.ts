@@ -49,7 +49,7 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
   }
 
   /**
-   * 评估是否可自主執行
+   * 評估是否可自主執行
    */
   async canAutonomouslyExecute(intent: string): Promise<boolean> {
     // 1. 分析意圖複雜度

@@ -7,12 +7,10 @@
  * 3. achievement-check — 每小時檢查用戶成就升級
  */
 
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/storage-service';
 
 // 雙向 Oracle 同步協調器 (全域全端全量終始矩陣)
 import { runBidirectionalSync, hydrateFromOracle } from '../core/tags/oracle-sync-matrix';
-
-const prisma = new PrismaClient();
 
 // ============================================================
 // Job: Daily Report Generator

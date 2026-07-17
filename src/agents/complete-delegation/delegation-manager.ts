@@ -14,6 +14,8 @@ import {
   ICompleteDelegationManager,
   DelegationPermission,
   DelegationRestriction,
+  DelegationEventNames,
+  DelegationTopics,
 } from '../../types/complete-delegation';
 import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
@@ -41,19 +43,19 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     const sink: AuditSink | undefined =
       config?.auditSink ??
       (this._fullVolume
-        ? (e) => getDefaultJournal().append({ kind: 'audit', type: e.type, ts: e.timestamp, ...e })
+        ? (e) => { void getDefaultJournal().append({ kind: 'audit', ts: e.timestamp, ...e }); }
         : undefined);
     this._auditLogger = new AuditLogger(sink);
   }
-
   /**
    * 創建完全授權
    */
   async createCompleteDelegation(params: {
     principalId: string;
     agentId: string;
-    permissions: DelegationPermission[];
+    permissions: string[] | DelegationPermission[];
     restrictions?: DelegationRestriction[];
+    validFrom?: number;
     validUntil?: number;
     description?: string;
   }): Promise<ICompleteDelegationScope> {
@@ -71,7 +73,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       agentId: params.agentId,
       validFrom,
       validUntil,
-      permissions: params.permissions,
+      permissions: params.permissions as DelegationPermission[],
       restrictions: params.restrictions ?? [],
       signature: '',
       description: params.description,
@@ -197,11 +199,12 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     if (this._fullVolume) {
       const all = await getDefaultJournal().readAll();
       const audit = all.filter((e) => e.kind === 'audit');
-      return delegationId
+      const entries = delegationId
         ? audit.filter(
-            (e) => (e as Record<string, unknown>).delegationId === delegationId
+            (e) => (e as Record<string, unknown>).delegationId === delegationId,
           )
         : audit;
+      return entries.map((e) => ({ ...e, timestamp: e.ts })) as AuditEntry[];
     }
     return this.getAuditTrail();
   }
@@ -337,7 +340,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   private async validateCreationParams(params: {
     principalId: string;
     agentId: string;
-    permissions: DelegationPermission[];
+    permissions: string[];
   }): Promise<void> {
     if (!params.principalId) {
       throw new Error('Principal ID is required');
@@ -352,7 +355,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     }
 
     // 驗證權限有效性
-    const validPermissions: DelegationPermission[] = [
+    const validPermissions: string[] = [
       'read',
       'write',
       'execute',
@@ -365,7 +368,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     ];
 
     for (const permission of params.permissions) {
-      if (!validPermissions.includes(permission)) {
+      if (!validPermissions.includes(permission as string)) {
         throw new Error(`Invalid permission: ${permission}`);
       }
     }

@@ -393,10 +393,10 @@ export default function UserGrowthPage() {
           marginBottom: 24,
         }}>
           <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-            🌿 用戶成長中心
+            🌿 用戶成長中心 ∞ Evolution
           </h1>
           <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-            完成任務、累積積分、解鎖成就，踏上你的永續成長之路
+            完成任務、累積積分、解鎖成就，踏上你的永續成長之路 · 永續發展無限進化
           </p>
         </header>
 

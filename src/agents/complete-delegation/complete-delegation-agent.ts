@@ -392,7 +392,7 @@ export async function createCompleteDelegationAgent(params: {
   const scope = await manager.createCompleteDelegation({
     principalId: params.principalId,
     agentId: params.agentId ?? `agent_${Date.now()}`,
-    permissions: params.permissions ?? ['full'],
+    permissions: (params.permissions ?? ['full']) as string[],
     validUntil: params.validUntil,
     description: params.description,
   });

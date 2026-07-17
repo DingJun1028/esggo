@@ -19,7 +19,7 @@ const GRI_STRUCTURE = {
   '3-5': { title: '重大主題', titleEn: 'Material Topics', description: '重大主題清單、排序' },
   '3-6': { title: '利害關係人觀點', titleEn: 'Stakeholder Perspectives', description: '利害關係人回饋摘要' },
   '3-7': { title: '重大性評估', titleEn: 'Materiality Assessment', description: '評估方法、結果' },
-  '3-8': { title: '參照 GRI 内容索引', titleEn: 'GRI Content Index', description: 'GRI 內容索引表' },
+  '3-8': { title: '參照 GRI 內容索引', titleEn: 'GRI Content Index', description: 'GRI 內容索引表' },
   '4': { title: '一般揭露', titleEn: 'General Disclosures', description: '組織治理、策略、管理' },
 };
 

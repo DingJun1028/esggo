@@ -269,8 +269,8 @@ export default function SustainWriteV5Page() {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   // 5T 知識結晶（報告封裝結果）
-  const [sealed, setSealed] = useState<OmniResult | null>(null);
-  const [sealing, setSealing] = useState(false);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 120 });
+  const [evolving, setEvolving] = useState(false);
 
   // Notes state
   const [notes, setNotes] = useState<NoteData[]>([]);
@@ -418,55 +418,30 @@ export default function SustainWriteV5Page() {
    * 報告產出後，自動以 omni({ kind: 'component' }) 封裝為 5T 知識結晶，
    * 並將 hash_lock 寫入 ZKP Vault（Firestore votes 集合）。
    */
-  const sealReportAsComponent = async () => {
-    if (!taskProgress?.result?.companyId) return;
-    setSealing(true);
-    setSealed(null);
-    try {
-      const data = {
-        kind: 'esg-report',
-        companyId: taskProgress.result.companyId,
-        templateId: taskProgress.templateId ?? 'gri',
-        totalWords: taskProgress.result.totalWords,
-        totalTags: taskProgress.result.totalTags,
-        trinityHash: taskProgress.result.trinityHash,
-        generatedAt: new Date().toISOString(),
-      };
-      const comp = createFiveTComponent(data, {
-        actor: 'sustain-write',
-        originCause: 'ESG 報告產出',
-        finalEffect: '封裝為 5T 知識結晶',
-      });
-      setSealed({
-        ok: true,
-        kind: 'component',
-        id: comp.uuid,
-        data: comp,
-        hash: comp.hash,
-        registered: false,
-      });
-      if (db) {
-        await setDoc(doc(db, 'votes', comp.uuid), {
-          id: comp.uuid,
-          project_id: 'esggo_5t',
-          user_id: 'u_01',
-          amount: 1,
-          cost: 0,
-          created_at: new Date().toISOString(),
-          hash_lock: comp.hash,
-        });
-      }
-    } catch (e) {
-      setSealed({ ok: false, kind: 'component', error: e instanceof Error ? e.message : String(e) });
-    } finally {
-      setSealing(false);
-    }
-  };
-
   const toggleNoteSelection = (noteId: string) => {
     setSelectedNoteIds(prev =>
       prev.includes(noteId) ? prev.filter(id => id !== noteId) : [...prev, noteId]
     );
+  };
+
+  const evolveReport = async () => {
+    if (!taskProgress?.result?.companyId || evolving) return;
+    setEvolving(true);
+    try {
+      await new Promise(r => setTimeout(r, 700));
+      setEvolution(prev => {
+        const xp = prev.xp + 45;
+        let level = prev.level;
+        let nextXp = prev.nextXp;
+        while (xp >= nextXp) {
+          level += 1;
+          nextXp = Math.floor(nextXp * 1.25);
+        }
+        return { level, xp: xp % nextXp, nextXp };
+      });
+    } finally {
+      setEvolving(false);
+    }
   };
 
   const saveCustomCompany = () => {
@@ -519,7 +494,7 @@ export default function SustainWriteV5Page() {
             <div className="w-8 h-8 bg-accentTeal rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>
-            <h1 className="text-lg font-semibold text-textPrimary">ESGGO v5.2</h1>
+            <h1 className="text-lg font-semibold text-textPrimary">ESGGO 永續發展無限進化</h1>
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -993,26 +968,33 @@ export default function SustainWriteV5Page() {
                         CSV
                       </button>
                       <button
-                        onClick={sealReportAsComponent}
-                        disabled={sealing}
+                        onClick={evolveReport}
+                        disabled={evolving}
                         className="px-4 py-2 text-sm font-medium rounded bg-secondary border border-borderColor text-accentPurple hover:border-accentPurple transition-colors disabled:opacity-50"
                       >
-                        {sealing ? '封裝中...' : '🔒 封裝為 5T 知識結晶'}
+                        {evolving ? '進化中...' : '🧬 啟動無限進化'}
                       </button>
                     </div>
                   </div>
                 )}
 
-                {sealed && (
+                {taskProgress?.result && (
                   <div className="mt-4 p-4 bg-primary rounded-lg border border-accentPurple/30">
-                    <div className="text-xs font-semibold text-accentPurple mb-2">5T 知識結晶（OmniResult）</div>
-                    {sealed.ok ? (
-                      <pre className="text-[11px] font-mono text-textPrimary whitespace-pre-wrap break-words max-h-48 overflow-auto">
-{JSON.stringify(sealed, null, 2)}
-                      </pre>
-                    ) : (
-                      <div className="text-xs text-red-500">{sealed.error}</div>
-                    )}
+                    <div className="text-xs font-semibold text-accentPurple mb-2">ESGGO 進化狀態</div>
+                    <div className="grid grid-cols-3 gap-3 text-center">
+                      <div>
+                        <div className="text-[11px] text-textSecondary">LEVEL</div>
+                        <div className="text-xl font-bold text-accentGold">{evolution.level}</div>
+                      </div>
+                      <div>
+                        <div className="text-[11px] text-textSecondary">XP</div>
+                        <div className="text-xl font-bold text-accentTeal">{evolution.xp}/{evolution.nextXp}</div>
+                      </div>
+                      <div>
+                        <div className="text-[11px] text-textSecondary">STATUS</div>
+                        <div className="text-xs font-bold mt-1">{evolving ? '🧬 進化中...' : '∞ READY'}</div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

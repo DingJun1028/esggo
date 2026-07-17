@@ -721,7 +721,10 @@ function ChatInterface() {
 export default function OmniAgentConsolePage() {
   const [subAgents, setSubAgents] = useState<SubAgent[]>([]);
   const [stats, setStats] = useState<CoreStats | null>(null);
-  const [activePanel, setActivePanel] = useState<'stats' | 'agents' | 'commands'>('stats');
+  const [activePanel, setActivePanel] = useState<'stats' | 'agents' | 'commands' | 'evolution'>('stats');
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 140 });
+  const [evolving, setEvolving] = useState(false);
+  const [evolutionLog, setEvolutionLog] = useState<string[]>([]);
 
   // Fetch initial data
   useEffect(() => {
@@ -770,10 +773,35 @@ export default function OmniAgentConsolePage() {
     }
   }, []);
 
+  const evolveAgent = useCallback(async () => {
+    if (evolving) return;
+    setEvolving(true);
+    try {
+      const res = await apiCall('quick_command', { commandId: 'cmd-evolve' });
+      const entry = res.success
+        ? `[${now()}] 進化成功：${res.reply || 'Agent 進化程序已執行'}`
+        : `[${now()}] 進化失敗：${res.error || '未知錯誤'}`;
+      setEvolutionLog((prev) => [entry, ...prev].slice(0, 20));
+      if (res.success) {
+        setEvolution((prev) => {
+          const xp = prev.xp + 25;
+          let level = prev.level;
+          let nextXp = prev.nextXp;
+          while (xp >= nextXp) {
+            level += 1;
+            nextXp = Math.floor(nextXp * 1.2);
+          }
+          return { level, xp: xp % nextXp, nextXp };
+        });
+      }
+    } finally {
+      setEvolving(false);
+    }
+  }, [evolving]);
+
   const handleQuickCommand = useCallback(async (cmd: QuickCommand) => {
     try {
       await apiCall('quick_command', { commandId: cmd.id });
-      // Refresh stats after command
       const statsRes = await apiCall('get_stats');
       if (statsRes.success) setStats(statsRes.data);
     } catch (err) {
@@ -807,9 +835,9 @@ export default function OmniAgentConsolePage() {
             </div>
             <div>
               <h1 className="text-base font-bold text-textPrimary tracking-tight">
-                OmniAgent Console
+                OmniAgent Console — 無限進化
               </h1>
-              <p className="text-[10px] text-textSecondary">萬能中心 · 統一指揮介面 v1.0</p>
+              <p className="text-[10px] text-textSecondary">ESGGO 永續發展無限進化 · 統一指揮介面</p>
             </div>
           </div>
 
@@ -866,8 +894,9 @@ export default function OmniAgentConsolePage() {
               {/* Tab Bar */}
               <div className="flex border-b border-borderColor shrink-0">
                 {(
-                  [
+                  [ 
                     { id: 'stats', label: '核心統計', icon: '◎' },
+                    { id: 'evolution', label: '無限進化', icon: '🧬' },
                     { id: 'agents', label: '子代理', icon: '🤖' },
                     { id: 'commands', label: '快速命令', icon: '⚡' },
                   ] as const
@@ -896,6 +925,50 @@ export default function OmniAgentConsolePage() {
                   <SubAgentPanel agents={subAgents} onDispatch={handleDispatchAgent} />
                 )}
                 {activePanel === 'commands' && <QuickCommands onExecute={handleQuickCommand} />}
+                {activePanel === 'evolution' && (
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <div className="text-xs font-semibold text-textSecondary tracking-wider mb-2">ESGGO 無限進化</div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="bg-primary border border-borderColor rounded-xl p-3 text-center">
+                          <div className="text-[10px] text-textSecondary">LEVEL</div>
+                          <div className="text-xl font-bold text-accentGold">{evolution.level}</div>
+                        </div>
+                        <div className="bg-primary border border-borderColor rounded-xl p-3 text-center">
+                          <div className="text-[10px] text-textSecondary">XP</div>
+                          <div className="text-xl font-bold text-accentTeal">{evolution.xp}/{evolution.nextXp}</div>
+                        </div>
+                        <div className="bg-primary border border-borderColor rounded-xl p-3 text-center">
+                          <div className="text-[10px] text-textSecondary">STATUS</div>
+                          <div className="text-xs font-bold mt-1">{evolving ? '🧬 進化中...' : '∞ READY'}</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={evolveAgent}
+                        disabled={evolving}
+                        className="mt-3 w-full py-2 rounded-xl border border-accentPurple/40 bg-accentPurple/10 text-sm font-semibold text-accentPurple hover:bg-accentPurple/20 transition-colors disabled:opacity-50"
+                      >
+                        {evolving ? '進化中...' : '🧬 啟動 Agent 無限進化'}
+                      </button>
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-textSecondary tracking-wider mb-2">進化紀錄</div>
+                      <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+                        {evolutionLog.length === 0 && (
+                          <div className="text-[11px] text-textSecondary">尚無進化紀錄，請執行進化程序。</div>
+                        )}
+                        {evolutionLog.map((log, idx) => (
+                          <div
+                            key={idx}
+                            className="text-[11px] font-mono bg-primary border border-borderColor rounded-lg px-3 py-2 text-textPrimary"
+                          >
+                            {log}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

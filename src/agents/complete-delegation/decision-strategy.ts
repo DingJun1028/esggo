@@ -62,8 +62,9 @@ export class AggressiveStrategy implements DecisionStrategy {
 }
 
 export function createDecisionStrategy(
-  name: DecisionStrategyName = 'balanced'
+  name: DecisionStrategyName | DecisionStrategy = 'balanced'
 ): DecisionStrategy {
+  if (typeof name !== 'string') return name;
   switch (name) {
     case 'conservative':
       return new ConservativeStrategy();

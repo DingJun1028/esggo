@@ -13,7 +13,7 @@ import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
-type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn';
+type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn' | 'evolution';
 
 const FIVE_T = [
   { key: 'traceable', zh: '真', color: 'var(--accent-blue)' },
@@ -129,6 +129,7 @@ const tabs: {id:Tab; label:string; icon:string}[] = [
   {id:'rag',      label:'萬能智庫',icon:'📚'},
   {id:'zkp',      label:'萬能憑證',icon:'🛡️'},
   {id:'omniFn',   label:'萬能函數',icon:'🪄'},
+  {id:'evolution',label:'無限進化',icon:'🌀'},
 ];
 
 export default function OmniCenterPage() {
@@ -137,8 +138,35 @@ export default function OmniCenterPage() {
   const [zkpCount, setZkpCount] = useState<number>(0);
   const [pulse, setPulse] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [omniSummary, setOmniSummary] = useState<{ caseCount: number; griIndicatorCount: number } | null>(null);
+  const [evidenceCount, setEvidenceCount] = useState<number>(0);
 
-  const { isReady, status: _status } = useAgnesApi();
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/omni-center/summary')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (!cancelled && json?.success && json.data) {
+          setOmniSummary({
+            caseCount: Number(json.data.caseCount) || 47,
+            griIndicatorCount: Number(json.data.griIndicatorCount) || 142,
+          });
+          if (typeof json.data.evidenceCount === 'number') {
+            setEvidenceCount(json.data.evidenceCount);
+          }
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOmniSummary({ caseCount: 47, griIndicatorCount: 142 });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const { isReady } = useAgnesApi();
 
   useEffect(() => {
     setIsDarkMode(document.documentElement.classList.contains('dark'));
@@ -194,9 +222,9 @@ export default function OmniCenterPage() {
         </div>
         <div>
           <h1 className="font-['Montserrat',sans-serif] text-xl font-bold text-accentTeal">
-            萬能中心 Omni-Core
+            萬能中心 Omni-Core — 無限進化
           </h1>
-          <div className="text-xs text-textSecondary">無礙圓通，無作筆記 — v1.0</div>
+          <div className="text-xs text-textSecondary">ESGGO 永續發展無限進化 · 無礙圓通</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
           {/* Dark Mode Toggle */}
@@ -355,9 +383,9 @@ export default function OmniCenterPage() {
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { l: '筆記數', v: notes.length, c: 'text-accentTeal' },
-                  { l: 'OmniOne 案件', v: 47, c: 'text-accentPurple' },
+                  { l: 'OmniOne 案件', v: omniSummary?.caseCount ?? 47, c: 'text-accentPurple' },
                   { l: 'ZKP 封印', v: zkpCount, c: 'text-accentBlue' },
-                  { l: 'GRI 指標', v: 142, c: 'text-accentGold' },
+                  { l: 'GRI 指標', v: omniSummary?.griIndicatorCount ?? 142, c: 'text-accentGold' },
                 ].map((s) => (
                   <div key={s.l} className="bg-primary rounded-lg py-2 px-2.5">
                     <div className={`font-['Fira_Code',monospace] text-xl font-bold ${s.c}`}>
@@ -427,7 +455,7 @@ export default function OmniCenterPage() {
       {/* 5T Tab */}
       {tab === 'fiveT' && (
         <OmniBaseCard className="!p-4">
-          <FiveTRadar zkpCount={zkpCount} />
+          <FiveTRadar zkpCount={zkpCount} evidenceCount={evidenceCount} />
         </OmniBaseCard>
       )}
 

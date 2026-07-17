@@ -333,7 +333,11 @@ export function startAsyncTask(
     let ragContext = '';
     try {
       if (adminDb) {
-        const snapshot = await adminDb.collection('rag_knowledge').get();
+        const snapshot = await (() => {
+          const col = adminDb.collection('rag_knowledge');
+          if (!col) throw new Error('Firestore collection unavailable');
+          return col.get();
+        })();
         const chunks = snapshot.docs.map((d: { data(): Record<string, unknown> }) => d.data()) as RagChunk[];
         
         if (chunks.length > 0) {

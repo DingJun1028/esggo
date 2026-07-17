@@ -235,14 +235,14 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     return locked as IBusEvent;
   }
 
-  async predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>> {
+  async predictAndPreFetch(intent: string): Promise<Array<IBusEvent>> {
     const apiKey = process.env.NVAPI_KEY;
     if (!apiKey) {
       console.warn('[OAG] NVIDIA API key not set – returning empty predictions');
       return [];
     }
-    // Build request payload – here we just forward the stub as a prompt.
-    const payload = JSON.stringify({ prompt: userIntentStub });
+    // Build request payload – forward intent as prompt.
+    const payload = JSON.stringify({ prompt: intent });
     // Use curl to call NVIDIA API (placeholder endpoint). Adjust URL & headers as needed.
     const curlCmd = `curl -s -X POST https://api.nvidia.com/v1/predict \
       -H "Authorization: Bearer ${apiKey}" \

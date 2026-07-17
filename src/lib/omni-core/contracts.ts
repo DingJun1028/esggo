@@ -60,7 +60,7 @@ export interface IOmniAgentBus {
 export interface IOmniAgentGateway {
   ingress(rawRequest: Record<string, unknown>): Promise<IBusEvent>;
   egress(event: IBusEvent): Promise<Record<string, unknown>>;
-  predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>>;
+  predictAndPreFetch(intent: string): Promise<Array<IBusEvent>>;
   injectChaos(event: IBusEvent): IBusEvent;
 }
 
