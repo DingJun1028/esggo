@@ -169,13 +169,18 @@ export async function reconcileBidirectional(
       timeout: 60000,
     });
     const out = JSON.parse(stdout.trim());
-    const toRow = (r: unknown): SyncMatrixRow => ({
-      uuid: r.uuid,
-      originSeq: r.origin_seq,
-      terminalSeq: r.terminal_seq,
-      status: r.status,
-      direction: r.direction ?? 'bidirectional',
-    });
+    const toRow = (r: unknown): SyncMatrixRow => {
+      const o = (typeof r === 'object' && r !== null ? r : {}) as Record<string, unknown>;
+      const status = (typeof o.status === 'string' ? o.status : 'synced') as SyncMatrixRow['status'];
+      const direction = (typeof o.direction === 'string' ? o.direction : 'bidirectional') as SyncMatrixRow['direction'];
+      return {
+        uuid: typeof o.uuid === 'string' ? o.uuid : String(o.uuid ?? ''),
+        originSeq: Number(o.origin_seq ?? 0),
+        terminalSeq: Number(o.terminal_seq ?? 0),
+        status,
+        direction,
+      };
+    };
     return {
       ok: !!out.ok,
       summary: {

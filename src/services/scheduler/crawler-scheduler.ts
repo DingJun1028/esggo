@@ -5,6 +5,7 @@
 
 import { createAllCrawlers } from '../../crawlers/crawler-factory';
 import type { CrawlResult } from '../../crawlers/base-crawler';
+import { getSourceConfig } from '../../core/sonnar/sources-config';
 
 export interface ScheduledJob {
   id: string;
@@ -71,15 +72,9 @@ class CrawlerScheduler {
   }
 
   private getDefaultInterval(sourceId: string): number {
-    // Use sources-config if available, else hardcoded defaults
-    try {
-      import { getSourceConfig } from '../../core/sonnar/sources-config';
-      const cfg = getSourceConfig(sourceId);
-      if (cfg) return cfg.crawlIntervalMs;
-    } catch (e) {
-      // sources-config not available, fall back to defaults
-      console.warn(`[CrawlerScheduler] sources-config unavailable for ${sourceId}:`, e);
-    }
+    // Prefer centralized sources-config; fall back to hardcoded defaults
+    const cfg = getSourceConfig(sourceId);
+    if (cfg) return cfg.crawlIntervalMs;
     // Fallback
     const intervalMap: Record<string, number> = {
       'tw-fsc': 4 * 3600000,

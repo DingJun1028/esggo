@@ -7,7 +7,6 @@
 
 import { FiveTGatekeeper, type FiveTScore } from './five-t-protocol';
 import { createHash, randomBytes } from 'crypto';
-import type { ChartAsset, TableAsset, ImageAsset, CalloutAsset, ReportAsset } from './report-brand-theme';
 
 export interface ReportResourceMeta {
   id: string;

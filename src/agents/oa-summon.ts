@@ -397,7 +397,7 @@ export class OASummon {
     if (this._config.initCore) {
       console.log('  ✨ Stage 5: 覺醒 — 實際初始化 OmniCore（12-Omni + 9 Magic Effects）...');
       try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
         const { getOmniCore } = require('../core/omni-core');
         const core = getOmniCore({
           soulName: this._config.soulName,
