@@ -32,7 +32,8 @@
 | B1 | 07-09~07-11 | pnpm 本機壞 | 本機 git-bash 跑 pnpm → `MODULE_NOT_FOUND` (corepack 壞) | Windows MSYS 環境 corepack 解析壞 | **本機用 `npm run`**；VPS(aarch64 Ubuntu) 上 pnpm 正常，部署用 `pnpm install --frozen-lockfile && pnpm run build` | 🔴 重複 | known | 多處 |
 | B2 | 07-10 | VPS 缺依賴 | VPS `pnpm build` 報找不到 `pg` | commit 274991fb 漏裝 pg | VPS 上 `pnpm add -w pg` 後 build 過 | 🟢 一次性 | fixed | 274991fb |
 | B3 | 07-11 | 半成品編譯錯 | untracked TS 草稿 import 解析不到（路徑少一層 / 缺 src/ / 缺匯出 / target 過低） | 開發中途未收尾 | 提交前先 `tsc --noEmit` 或 vitest 驗證；路徑錯用 `../../` 而非 `../`；cli 引用加 `src/` | 🟢 一次性 | fixed | #188 草稿 |
-| B4 | 07-11 | patch 工具路徑 | `patch` 把 `/c/var/www/...` 解析成 `C:\c\var\...` 報錯 | 工具對 MSYS 路徑處理 | **patch/write_file 一律用 Windows 絕對路徑 `C:\var\www\...`** | 🟢 一次性 | fixed | 本 session |
+| B4 | 07-11 | patch 工具路徑 | `patch` 把 `/c/var/www/...` 解析成 `C:\\c\\var\\...` 報錯 | 工具對 MSYS 路徑處理 | **patch/write_file 一律用 Windows 絕對路徑 `C:\\var\\www\\...`** | 🟢 一次性 | fixed | 本 session |
+| B5 | 07-14 | omni-agent 空殼 workspace 阻斷 pnpm 腳本 | 本機 `pnpm run <script>`（lint/test/build）在 deps 狀態檢查/prepare 階段炸 `MODULE_NOT_FOUND: ./src/bin/omni-agent.js`，整條 `pnpm run` 通道被截斷（之前多次「假過」是 deps-check 在 eslint 執行前就炸，eslint 根本沒跑） | `packages/omni-agent` 是空殼 workspace：src/ 只含 gates.ts/types.ts，無 index.ts、無 bin/、無 dist/，但 package.json 宣告 `bin.omni-agent='./src/bin/omni-agent.js'` 與一堆 `omni:*` 腳本指向不存在入口 | **最小化無害修復**：建 stub `packages/omni-agent/src/bin/omni-agent.js`（no-op），不動 package.json 宣告，避免連鎖崩潰，通道即打通。⚠️ 該 stub 被 `.gitignore` 忽略，屬**本機本地修復、不提交**（他人 omni-agent 若有真實 build 不受影響）。副作用：打通後首度真正跑 eslint，暴露 repo 既有 lint 債務（2 error prefer-const @ complete-delegation/health.ts:110,115 + 92 warnings 橫跨 src/agents/*，均為 07-12 delegation-health PR 引入的既有問題，**非本輪 PR #318**） | 🟢 一次性 | fixed（通道）/ open（既有 lint 債待修） | 本 session；health.ts 來自 c553a77c9 |
 
 ## 三、部署 / 雲端類
 
