@@ -225,19 +225,6 @@
     border-radius: 4px;
     background: linear-gradient(180deg, var(--cal-blue), var(--cal-gold));
   }
-  .notice-list { display: flex; flex-direction: column; gap: 14px; }
-  .notice { display: flex; gap: 14px; padding: 14px; border-radius: 10px; background: #f8fafc; border: 1px dashed #e2e8f0; }
-  .notice-date {
-    flex-shrink: 0;
-    padding: 6px 10px; border-radius: 8px;
-    background: #eef2ff; color: #3730a3;
-    font-weight: 700; font-size: 12px;
-    height: fit-content; white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-  .notice-body { font-size: 14.5px; color: #334155; }
-  .notice-body strong { color: #0f172a; }
-  .badge-urgent { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #fee2e2; color: #991b1b; font-weight: 700; font-size: 12px; margin-right: 6px; }
 
   .footer-note {
     text-align: center;
@@ -277,23 +264,6 @@
         <div class="hero-cta">
           <a class="btn btn-gold" href="#core"><i class="fa-solid fa-grip"></i> <span data-i18n="ctaCore">進入四大功能</span></a>
           <a class="btn btn-ghost" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="ctaBook">預約諮詢</span></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 最新公告 -->
-    <div class="panel" id="announcements">
-      <h2 class="panel-title" data-i18n="annTitle">最新公告</h2>
-      <div class="notice-list">
-        <div class="notice">
-          <div class="notice-date">2026/07/07</div>
-          <div class="notice-body">
-            <span class="badge-urgent" data-i18n="urgent">重要行動</span>
-            <strong data-i18n="annNote">[學員請注意]</strong> <span data-i18n="annText">請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。</span>
-            <div style="margin-top:12px;">
-              <a class="link-btn primary" style="width:fit-content;display:inline-flex;" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="annBtn">填寫意願表單</span></a>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -351,9 +321,6 @@
       centerName: "學員中心",
       heroLede: "柏克萊國際永續人才培力課程 · 第一版交付中心。學員能下載教材、提交作業、回看課程，並取得學習資源。",
       ctaCore: "進入四大功能", ctaBook: "預約諮詢",
-      annTitle: "最新公告", urgent: "重要行動", annNote: "[學員請注意]",
-      annText: "請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。",
-      annBtn: "填寫意願表單",
       c1Title: "教材下載", c1Desc: "教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。",
       c1Link: "進入教材資產庫",
       c2Title: "作業提交", c2Desc: "提交每週矩陣成果與反思筆記。個人上傳空間，僅你能看自己的檔案。",
@@ -372,9 +339,6 @@
       centerName: "学员中心",
       heroLede: "柏克莱国际永续人才培力课程 · 第一版交付中心。学员能下载教材、提交作业、回看课程，并取得学习资源。",
       ctaCore: "进入四大功能", ctaBook: "预约咨询",
-      annTitle: "最新公告", urgent: "重要行动", annNote: "[学员请注意]",
-      annText: "请于本周五 07/10 中午 12:00 前完成 Consulting Time 意愿填写，以便安排专属产学 Mentor 导师。",
-      annBtn: "填写意愿表单",
       c1Title: "教材下载", c1Desc: "教授简报 PDF、实务操作手册、简报框架与精选问答，随时取用。",
       c1Link: "进入教材资产库",
       c2Title: "作业提交", c2Desc: "提交每周矩阵成果与反思笔记。个人上传空间，仅你能看自己的档案。",
@@ -393,9 +357,6 @@
       centerName: "Student Center",
       heroLede: "Berkeley International Sustainability Talent Empowerment — v1 delivery hub. Students download materials, submit assignments, replay lectures, and access shared resources.",
       ctaCore: "Open the 4 Core Tools", ctaBook: "Book a Consult",
-      annTitle: "Announcements", urgent: "Action Required", annNote: "[Students Note]",
-      annText: "Please complete the Consulting Time preference form by Fri 07/10 12:00 noon to assign your dedicated industry-academia Mentor.",
-      annBtn: "Fill Preference Form",
       c1Title: "Course Materials", c1Desc: "Professor slides (PDF), practice manuals, slide frameworks and curated Q&A — available anytime.",
       c1Link: "Open Materials Library",
       c2Title: "Submit Assignment", c2Desc: "Submit weekly matrix & reflection notes. Private upload space — you only see your own files.",
