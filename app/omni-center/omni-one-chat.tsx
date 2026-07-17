@@ -220,6 +220,7 @@ export function OmniOneChat() {
       ui_design: "UI",
       architecture: "ARCH",
       bug_fix: "BUG",
+      compliance_review: "COMP",
       general: "GEN",
     })[ct || "general"] || "GEN";
 
