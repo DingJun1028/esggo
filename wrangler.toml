@@ -7,6 +7,10 @@ compatibility_flags = ["nodejs_compat"]
 ENVIRONMENT = "production"
 SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
+# 建置指令
+[build]
+command = "npm install && npm run build"
+
 # 靜態資源
 [assets]
 directory = "dist"
