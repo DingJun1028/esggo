@@ -249,7 +249,7 @@ export async function storeOmniNote(input: {
 
 export async function listOmniNotes(): Promise<NoteData[]> {
   try {
-    const rows = await prisma.$queryRaw<any[]>`
+    const rows = await prisma.$queryRaw<NoteData[]>`
       SELECT id, title, content, tags, five_t_gate AS "fiveTGate", created_at AS "createdAt"
       FROM omni_note
       ORDER BY created_at DESC
