@@ -4,7 +4,7 @@ description: "Use this skill to perform Zero-Knowledge Proof (ZKP) cryptographic
 version: 1.0.0
 ---
 
-# ZKP Seal Skill (稽核與封印技能)
+# ZKP Seal Skill (稽覈與封印技能)
 
 This Agent Skill equips you to handle the cryptographic sealing of ESG data and evidence. By performing a ZKP Seal, you are confirming the integrity, authenticity, and non-repudiation of a document or data row, transforming it into a "T4 Trustworthy" verified asset.
 

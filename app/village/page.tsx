@@ -199,7 +199,7 @@ export default function VillagePage() {
         <div>
           <h1 className="m-0 text-2xl font-bold text-accentTeal">善向永續村 (Village) ∞ Evolution</h1>
           <div className="text-xs text-textSecondary mt-1">
-            基於 5T 協議的去中心化永續社群與平方投票 (Quadratic Voting) 募資平台 — 永續發展無限進化
+            基於 5T 協議的去中心化永續社羣與平方投票 (Quadratic Voting) 募資平臺 — 永續發展無限進化
           </div>
         </div>
       </div>

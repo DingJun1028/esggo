@@ -305,7 +305,7 @@ export class ProphetMatrix implements IProphetMatrix {
 
 /**
  * OmniscientHive 實現
- * 共享黑板 + 群體決策
+ * 共享黑板 + 羣體決策
  */
 export class OmniscientHive implements IOmniscientHive {
   readonly uuid: string;
@@ -340,8 +340,8 @@ export class OmniscientHive implements IOmniscientHive {
   }
 
   /**
-   * 群體決策
-   * 基於多數投票的群體智慧
+   * 羣體決策
+   * 基於多數投票的羣體智慧
    */
   async swarmDecision(options: string[]): Promise<string> {
     // 簡化版：隨機選擇 (實際應基於代理共識)

@@ -337,7 +337,7 @@ export function seedDemoNotes(): void {
   // OmniOne 覺醒系統架構
   const devNote = createNote(
     'OmniOne 覺醒系統開發記錄',
-    '已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 OmniCore 平台。',
+    '已完成 AwakeningCore 引擎、MemorySystem、CaseHandler、AutonomousLearning 四大模組。下一步整合 OmniCore 平臺。',
     {
       category: 'note',
       tags: ['OmniOne', '開發', 'AI'],

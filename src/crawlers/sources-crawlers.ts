@@ -5,7 +5,7 @@
 
 import { BaseCrawler, CrawlResultItem, CrawlerConfig } from './base-crawler';
 
-// ─── 台灣 🇹🇼 ────────────────────────────────────────────────
+// ─── 臺灣 🇹🇼 ────────────────────────────────────────────────
 
 export class FSCCrawler extends BaseCrawler {
   constructor() {
@@ -280,7 +280,7 @@ export class CDPCrawler extends BaseCrawler {
   }
 }
 
-// ─── 台灣補充 ──────────────────────────────────────────────────
+// ─── 臺灣補充 ──────────────────────────────────────────────────
 
 export class MOFCrawler extends BaseCrawler {
   constructor() {

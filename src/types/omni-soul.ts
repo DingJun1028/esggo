@@ -162,7 +162,7 @@ export interface OmniSoulConfig {
   /** 初始覺醒狀態 */
   initialState?: SoulAwakeningState;
   
-  /** 治理對齊阈值 */
+  /** 治理對齊閾值 */
   alignmentThreshold?: number;
   
   /** 最大決策歷史記錄數 */

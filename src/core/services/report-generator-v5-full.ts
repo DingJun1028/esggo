@@ -117,7 +117,7 @@ export async function generateFullV5Report(companyId: string, brandTone: string 
 
     let content = '';
     content += `<h2>第${ch.num}章 ${ch.title}</h2>`;
-    content += `<p>${enterpriseData.companyName}（以下簡稱${profile.shortName}）營運據點包含${profile.operatingLocations}，主要業務為${profile.mainBusiness}。截至2025年12月31日，員工約${enterpriseData.employeeCount}人，年營收約${enterpriseData.revenue}，年用電量約${profile.electricityKwh.toLocaleString()}kWh，年用水量約${profile.waterTons.toLocaleString()}吨。${profile.shortName}在「${ch.title}」面向依5T協議${ch.fiveTGate}原則進行完整揭露。${toneStyle}</p>`;
+    content += `<p>${enterpriseData.companyName}（以下簡稱${profile.shortName}）營運據點包含${profile.operatingLocations}，主要業務為${profile.mainBusiness}。截至2025年12月31日，員工約${enterpriseData.employeeCount}人，年營收約${enterpriseData.revenue}，年用電量約${profile.electricityKwh.toLocaleString()}kWh，年用水量約${profile.waterTons.toLocaleString()}噸。${profile.shortName}在「${ch.title}」面向依5T協議${ch.fiveTGate}原則進行完整揭露。${toneStyle}</p>`;
 
     if (chAnswers.length > 0) {
       for (let i = 0; i < chAnswers.length; i++) {
@@ -165,7 +165,7 @@ export async function generateFullV5Report(companyId: string, brandTone: string 
         if (ch.num === 1) {
           const compliance = await swarmService.performComplianceCheck(highlightContent, 'EU CSRD');
           if (compliance && typeof compliance.content === 'string') {
-            highlightContent += `<br><br><strong>[由 L-Hub 代理集群協作驗證]</strong><br>${compliance.content}`;
+            highlightContent += `<br><br><strong>[由 L-Hub 代理集羣協作驗證]</strong><br>${compliance.content}`;
             swarmTrace.push(`[章節 1 雛形重點] 已完成 EU CSRD 跨國合規比對 (ZKP: ${String(compliance.uuid)})`);
           }
         }
@@ -293,7 +293,7 @@ export function fullReportToHtml(report: ExtendedV5Report): string {
 
   if (report.swarmTrace && report.swarmTrace.length > 0) {
     html += `<div class="service-teaching-block" style="border-color: var(--teal); background: rgba(0,158,176,0.05);">`;
-    html += `<h3 style="color: var(--teal); margin-top: 0;">L-Hub 代理集群協作軌跡 (Swarm Trace)</h3><ul>`;
+    html += `<h3 style="color: var(--teal); margin-top: 0;">L-Hub 代理集羣協作軌跡 (Swarm Trace)</h3><ul>`;
     for (const trace of report.swarmTrace) {
       html += `<li style="font-size: 13px;">${trace}</li>`;
     }

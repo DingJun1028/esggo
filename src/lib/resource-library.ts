@@ -39,7 +39,7 @@ const RESOURCES: ReportResourceMeta[] = [
     title: 'ESG 總分卡',
     description: '可重用的 ESG 分數雷達與五維度摘要卡',
     assetType: 'chart',
-    tags: ['ESG', '5T', '儀表板', '摘要'],
+    tags: ['ESG', '5T', '儀錶板', '摘要'],
     category: 'core',
     fiveT: DEFAULT_FIVE_T,
     source: 'sustain-center',

@@ -58,7 +58,7 @@ const SEMANTIC_KEYWORDS: Record<string, number[]> = {
   "check": [0, 0, 0, 0, 0],
   
   // 治理相關
-  "宪章": [0, 0, 0, 1, 0],
+  "憲章": [0, 0, 0, 1, 0],
   "5T": [0, 0, 0, 1, 0],
   "traceable": [0, 0, 0, 0, 1],
   "transparent": [0, 0, 0, 0, 1],

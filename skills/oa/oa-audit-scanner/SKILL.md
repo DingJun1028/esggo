@@ -14,7 +14,7 @@ metadata:
 
 ## Overview
 
-自動掃描報告、數據、流程是否符合 ESG 框架：GRI 2021、SASB、TCFD、SDGs、台灣金管會 (FSC)。零容忍原則，任一檢查點失敗即判定不合規。
+自動掃描報告、數據、流程是否符合 ESG 框架：GRI 2021、SASB、TCFD、SDGs、臺灣金管會 (FSC)。零容忍原則，任一檢查點失敗即判定不合規。
 
 ## When to Use
 
@@ -32,7 +32,7 @@ metadata:
 | SASB | 2023 | ~77 行業 | Industry-specific metrics |
 | TCFD | 2021 | 11 推薦揭露 | Governance, Strategy, Risk, Metrics |
 | SDGs | 2015 | 17 目標 169 指標 | 映射至業務影響 |
-| FSC (台灣) | 113 年版 | 24 章節 | 上市櫃永續報告書編製規範 |
+| FSC (臺灣) | 113 年版 | 24 章節 | 上市櫃永續報告書編製規範 |
 
 ## Core Workflow
 

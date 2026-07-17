@@ -20,7 +20,7 @@ export interface Subscription {
   id: string;
   type: SubscriptionType;
   target: string;         // 公司名/關鍵字/地區/指標
-  sourceGroups?: string[]; // 限定搜尋的來源群組 A~N
+  sourceGroups?: string[]; // 限定搜尋的來源羣組 A~N
   alertOn: AlertCondition[];
   active: boolean;
 }
@@ -170,7 +170,7 @@ export class SubscriptionEngine {
     return Math.min(score, 100);
   }
 
-  // 取得來源群組
+  // 取得來源羣組
   private getSourceGroup(sourceId: string): string {
     const source = ALL_SOURCES.find(s => s.id === sourceId);
     return source?.group || 'Z';

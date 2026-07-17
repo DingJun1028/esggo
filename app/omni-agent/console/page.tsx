@@ -63,7 +63,7 @@ export default function OmniAgentConsole() {
                 <span className="text-xs font-mono bg-accentGreen/10 text-accentGreen px-2 py-1 rounded-full border border-accentGreen/20">AWAKENED</span>
               </div>
               <div className="flex justify-between items-center border-b border-borderColor pb-2">
-                <span className="text-sm text-textSecondary">L-Hub 蜂群 (Swarm)</span>
+                <span className="text-sm text-textSecondary">L-Hub 蜂羣 (Swarm)</span>
                 <span className="text-xs font-mono bg-accentTeal/10 text-accentTeal px-2 py-1 rounded-full border border-accentTeal/20">ACTIVE</span>
               </div>
               <div className="flex justify-between items-center border-b border-borderColor pb-2">

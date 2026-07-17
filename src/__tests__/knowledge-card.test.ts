@@ -14,7 +14,7 @@ describe('KnowledgeCardService', () => {
     it('should create a knowledge card', () => {
       const card = KnowledgeCardService.createCard('C1', 'EVD-001', {
         type: 'receipt',
-        fields: { vendor: '台灣電力公司', category: '電費' },
+        fields: { vendor: '臺灣電力公司', category: '電費' },
       });
 
       expect(card.id).toBeDefined();
@@ -65,7 +65,7 @@ describe('KnowledgeCardService', () => {
     it('should generate Why/What/How content', () => {
       const content = KnowledgeCardService.generateContent('C5', {
         type: 'receipt',
-        fields: { vendor: '台灣電力公司', category: '電費', amount: '125,000' },
+        fields: { vendor: '臺灣電力公司', category: '電費', amount: '125,000' },
       });
 
       expect(content.why).toContain('能源');

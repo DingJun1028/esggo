@@ -31,7 +31,7 @@ function generateReport(framework, companyData, year) {
   const sections = [];
   if (framework === 'GRI') {
     sections.push({ id: 'GRI-1', title: '關於本報告', content: `## 關於本報告\n\n${companyData.name} 依據 GRI Standards 2021 編製本報告。\n\n- **報導期間**：${year}年1月1日至${year}年12月31日\n- **產業類別**：${companyData.industry}`, kpis: [] });
-    sections.push({ id: 'GRI-300', title: 'GRI 300: 環境', content: `## GRI 300: 環境\n\n- **能源消耗**：${companyData.esgData?.energyConsumption || 'N/A'} MWh\n- **再生能源占比**：${companyData.esgData?.renewableEnergy || 'N/A'}%\n- **Scope 1 排放**：${companyData.esgData?.ghgScope1 || 'N/A'} tCO2e\n- **Scope 2 排放**：${companyData.esgData?.ghgScope2 || 'N/A'} tCO2e`, kpis: [{ name: '能源消耗', value: companyData.esgData?.energyConsumption || 'N/A', unit: 'MWh' }, { name: 'Scope 1', value: companyData.esgData?.ghgScope1 || 'N/A', unit: 'tCO2e' }] });
+    sections.push({ id: 'GRI-300', title: 'GRI 300: 環境', content: `## GRI 300: 環境\n\n- **能源消耗**：${companyData.esgData?.energyConsumption || 'N/A'} MWh\n- **再生能源佔比**：${companyData.esgData?.renewableEnergy || 'N/A'}%\n- **Scope 1 排放**：${companyData.esgData?.ghgScope1 || 'N/A'} tCO2e\n- **Scope 2 排放**：${companyData.esgData?.ghgScope2 || 'N/A'} tCO2e`, kpis: [{ name: '能源消耗', value: companyData.esgData?.energyConsumption || 'N/A', unit: 'MWh' }, { name: 'Scope 1', value: companyData.esgData?.ghgScope1 || 'N/A', unit: 'tCO2e' }] });
     sections.push({ id: 'GRI-400', title: 'GRI 400: 社會', content: `## GRI 400: 社會\n\n- **員工人數**：${companyData.employees || 'N/A'}\n- **離職率**：${companyData.esgData?.turnoverRate || 'N/A'}%`, kpis: [] });
   }
   if (framework === 'TCFD') {

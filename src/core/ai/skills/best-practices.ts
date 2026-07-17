@@ -74,7 +74,7 @@ const ENVIRONMENTAL_PRACTICES: BestPractice[] = [
     nameEn: 'Develop Net-Zero Roadmap',
     description: '制定 2050 淨零排放策略，包含短中長期行動方案',
     level: 'advanced',
-    kpis: ['淨零目標年', '資本支出占比', '再生能源占比'],
+    kpis: ['淨零目標年', '資本支出佔比', '再生能源佔比'],
     references: ['Net-Zero Standard', 'TCFD'],
   },
 
@@ -208,7 +208,7 @@ const SOCIAL_PRACTICES: BestPractice[] = [
     nameEn: 'Promote Gender Equality Policy',
     description: '確保同工同酬，提升女性主管比例',
     level: 'basic',
-    kpis: ['男女薪酬比', '女性主管占比', '性騷擾案件數'],
+    kpis: ['男女薪酬比', '女性主管佔比', '性騷擾案件數'],
     references: ['性別平等工作法'],
   },
   {
@@ -232,9 +232,9 @@ const SOCIAL_PRACTICES: BestPractice[] = [
     subcategory: '供應商管理',
     name: '建立供應商行為準則',
     nameEn: 'Establish Supplier Code of Conduct',
-    description: '要求供應商遵守 ESG 標準，定期稽核',
+    description: '要求供應商遵守 ESG 標準，定期稽覈',
     level: 'basic',
-    kpis: ['供應商覆蓋率', '稽核頻率', '違規案件數'],
+    kpis: ['供應商覆蓋率', '稽覈頻率', '違規案件數'],
     references: ['SA8000', 'Supplier Code of Conduct'],
   },
   {
@@ -316,7 +316,7 @@ const GOVERNANCE_PRACTICES: BestPractice[] = [
     nameEn: 'Establish Diverse Board of Directors',
     description: '確保董事會成員多元，包含獨立董事',
     level: 'basic',
-    kpis: ['獨立董事占比', '女性董事比例', '董事會出席率'],
+    kpis: ['獨立董事佔比', '女性董事比例', '董事會出席率'],
     references: ['公司治理守則'],
   },
   {
@@ -328,7 +328,7 @@ const GOVERNANCE_PRACTICES: BestPractice[] = [
     nameEn: 'Establish Sustainability Committee',
     description: '在董事會層級設置 ESG 決策機制',
     level: 'intermediate',
-    kpis: ['委員會會議頻率', 'ESG 議題納入率', '績效考核'],
+    kpis: ['委員會會議頻率', 'ESG 議題納入率', '績效考覈'],
     references: ['TCFD Governance'],
   },
 
@@ -354,7 +354,7 @@ const GOVERNANCE_PRACTICES: BestPractice[] = [
     nameEn: 'Require Supplier Ethical Compliance',
     description: '將商業倫理要求納入供應商管理',
     level: 'intermediate',
-    kpis: ['供應商倫理培訓率', '違規案件數', '稽核頻率'],
+    kpis: ['供應商倫理培訓率', '違規案件數', '稽覈頻率'],
     references: ['Supply Chain Ethics'],
   },
 
@@ -433,7 +433,7 @@ const GOVERNANCE_PRACTICES: BestPractice[] = [
     description: '追蹤國內外 ESG 法規變化，確保合規',
     level: 'intermediate',
     kpis: ['法規追蹤頻率', '合規評估覆蓋率', '改善措施完成率'],
-    references: ['EU CSRD', '台灣永續發展法'],
+    references: ['EU CSRD', '臺灣永續發展法'],
   },
 ];
 

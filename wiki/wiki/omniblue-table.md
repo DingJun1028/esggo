@@ -42,7 +42,7 @@ ESG Governance Actions (證據封印、UCC 封裝、最佳實踐套用)
 
 ```
 OmniBlueClient (blueCC singleton)
-    ├── getSystemStatus()       → 集群健康狀態
+    ├── getSystemStatus()       → 集羣健康狀態
     ├── deployAgent(name, specs) → 部署 AI Agent 至雲端
     └── listResources()         → GPU_NODE / VECTOR_DB 資源清單
 ```
@@ -51,7 +51,7 @@ OmniBlueClient (blueCC singleton)
 | :--- | :--- |
 | `apiKey` / `token` | 認證憑證 (BLUE_CC_API_KEY, BLUE_CC_TOKEN) |
 | `baseUrl` | `https://api.blue.cc/v1` (預設) |
-| `cluster_id` | 目標集群識別碼 |
+| `cluster_id` | 目標集羣識別碼 |
 | `mode` | `CLOUD_OPTIMIZED` |
 
 ### 2. OmniTable 前端整合 (`lib/omni-table/`)
@@ -108,7 +108,7 @@ syncLogicNodesToOmniTable(nodes: LogicNode[]) → boolean
 | `真 (Truth)` | `source_origin` 追蹤每個 Logic Node 的來源系統 |
 | `善 (Goodness)` | Zod schema + TRPCError 全鏈路驗證 |
 | `美 (Beauty)` | Liquid Glass Cyan 元件整合於 Think Tank Dashboard |
-| `信 (Trust)` | Hash Lock 封印於每条 OmniTable 記錄更新 |
+| `信 (Trust)` | Hash Lock 封印於每條 OmniTable 記錄更新 |
 | `通 (Transferful)` | EventBus 廣播同步事件 (AGENT_TASK, MISSION_COMPLETE) |
 
 ---

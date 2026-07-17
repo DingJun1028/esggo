@@ -42,7 +42,7 @@ const alertStore: AlertItem[] = [
     alertType: 'policy_change',
     severity: 'medium',
     title: 'CSRD EFRAG 新版指引發布',
-    summary: 'ESRS 產業特定指引更新，影響台灣對歐供應鏈',
+    summary: 'ESRS 產業特定指引更新，影響臺灣對歐供應鏈',
     url: 'https://finance.ec.europa.eu',
     esgPillar: 'environmental',
     acknowledged: false,

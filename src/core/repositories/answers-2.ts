@@ -12,13 +12,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-01',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫公司中英文名稱、統一編號、成立年份、總部地址與主要營運據點。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '公司名稱;統編;成立年份;總部地址;營運據點',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司登記資料;組織網站;營業登記證',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -27,13 +27,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-02',
     chapter: 'C1 組織與報告邊界',
     question: '請說明公司法律型態、所有權結構、母公司/子公司關係。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '法律型態;股權結構;母子公司關係',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司章程;年報;股權結構圖',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -42,13 +42,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-03',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫本次永續揭露的報告期間、發布日期與報告週期。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '報告期間;發布日期;報告週期',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '前一年度報告;內部編報時程表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -57,13 +57,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-04',
     chapter: 'C1 組織與報告邊界',
     question: '請提供報告聯絡人、部門、Email與聯絡方式。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '聯絡窗口;部門;Email;電話',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '內部負責人名單',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -72,13 +72,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-05',
     chapter: 'C1 組織與報告邊界',
     question: '請描述主要產品/服務、營收來源與核心商業模式。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '產品服務;營收來源;商業模式',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '產品型錄;官網;營收分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -87,13 +87,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-06',
     chapter: 'C1 組織與報告邊界',
     question: '請說明上游供應商、中游營運活動、下游客戶與通路。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '上游;中游;下游;通路',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '價值鏈圖;供應商清單;客戶類型表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -102,13 +102,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-07',
     chapter: 'C1 組織與報告邊界',
     question: '請說明主要市場、服務國家/地區與客戶類型。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '市場區域;客戶類型;服務地區',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '銷售地區表;客戶分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -117,13 +117,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-08',
     chapter: 'C1 組織與報告邊界',
     question: '請定義員工統計邊界，包含全職、兼職、派遣、承攬是否納入。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將員工邊界;雇用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
-    primaryDataAtom: '員工邊界;雇用類型;統計口徑',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將員工邊界;僱用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
+    primaryDataAtom: '員工邊界;僱用類型;統計口徑',
     griImpactMapping: 'GRI 2-7;2-8',
     suggestedEvidence: '人資統計表;薪資系統匯出',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -132,13 +132,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-09',
     chapter: 'C1 組織與報告邊界',
     question: '請提供年度營收、資產規模、營運據點數與產能/服務量。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '營收;資產;據點數;產能',
     griImpactMapping: 'GRI 2-6;201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -147,13 +147,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-10',
     chapter: 'C1 組織與報告邊界',
     question: '本年度報告範疇是否與前期不同？若有，請說明差異。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '範疇異動;差異原因;前期比較',
     griImpactMapping: 'GRI 2-2;2-4',
     suggestedEvidence: '前期報告;範疇變更紀錄',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -162,13 +162,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-11',
     chapter: 'C1 組織與報告邊界',
     question: '請列出參與的外部永續倡議、公協會與會員資格。',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '外部倡議;公協會;會員資格',
     griImpactMapping: 'GRI 2-28',
     suggestedEvidence: '會員證明;倡議簽署文件',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -177,13 +177,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-12',
     chapter: 'C1 組織與報告邊界',
     question: '報告期間是否有重大組織、營運、股權、併購或產線變更？',
-    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新台幣31.4億元、員工數約690人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '信昌精密工業股份有限公司本次C版專業揭露以彰化總廠、越南協力加工廠為主要報告邊界，涵蓋金屬零組件加工、表面處理、機械設備零件製造。公司年度營收約新臺幣31.4億元、員工數約690人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '重大變更;變更日期;影響說明',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '董事會紀錄;重大訊息;內部公告',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -197,8 +197,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9',
     suggestedEvidence: '組織架構圖;董事會名單',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -212,8 +212,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9;405-1',
     suggestedEvidence: '董事會名單;年報',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -227,8 +227,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;2-13',
     suggestedEvidence: '董事會議事錄;委員會章程',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -242,8 +242,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-13',
     suggestedEvidence: 'ESG委員會章程;RACI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -252,13 +252,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C2-05',
     chapter: 'C2 治理與永續管理',
     question: '請列出永續、人權、環境、職安、供應鏈、誠信經營等政策。',
-    highFidelityAnswer: '信昌精密工業股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;核准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
-    primaryDataAtom: '政策名稱;政策範圍;核准層級',
+    highFidelityAnswer: '信昌精密工業股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;覈准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
+    primaryDataAtom: '政策名稱;政策範圍;覈准層級',
     griImpactMapping: 'GRI 2-23;2-24',
     suggestedEvidence: '政策文件;內部公告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -272,8 +272,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;3-3',
     suggestedEvidence: '風險管理報告;風險矩陣',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -281,14 +281,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C2-07',
     chapter: 'C2 治理與永續管理',
-    question: '永續資料與ESG流程是否納入內控或內部稽核？',
-    highFidelityAnswer: '信昌精密工業股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽核建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽核範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
-    primaryDataAtom: 'ESG內控;稽核範圍;缺失改善',
+    question: '永續資料與ESG流程是否納入內控或內部稽覈？',
+    highFidelityAnswer: '信昌精密工業股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽覈建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽覈範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
+    primaryDataAtom: 'ESG內控;稽覈範圍;缺失改善',
     griImpactMapping: 'GRI 2-12',
-    suggestedEvidence: '內控文件;稽核報告',
+    suggestedEvidence: '內控文件;稽覈報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -302,8 +302,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-19;2-20',
     suggestedEvidence: '薪酬政策;KPI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -317,8 +317,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-15',
     suggestedEvidence: '利益衝突政策;會議紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -332,8 +332,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;2-26',
     suggestedEvidence: '申訴制度;通報紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -347,8 +347,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-27',
     suggestedEvidence: '裁罰紀錄;法遵報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -362,8 +362,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '年度目標表;績效追蹤表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -377,8 +377,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '利害關係人盤點表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -392,8 +392,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '問卷;訪談紀錄;會議紀錄',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -407,8 +407,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '議題長清單;同業benchmark',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -422,8 +422,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '重大性方法說明;問卷設計',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -431,14 +431,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C3-05',
     chapter: 'C3 重大性與利害關係人',
-    question: '請填寫各議題對經濟、環境、人群之實際/潛在衝擊評分。',
+    question: '請填寫各議題對經濟、環境、人羣之實際/潛在衝擊評分。',
     highFidelityAnswer: '信昌精密工業股份有限公司以利害關係人議合與營運風險評估為基礎，辨識與影響重大性評分相關之重大性議題。公司依據產業特性、客戶要求、法規趨勢與內部營運數據，定期評估正負面衝擊及其邊界，並將議題;衝擊類型;嚴重性;可能性作為重大性管理與GRI 3-1;3-2揭露之資料基礎。',
     primaryDataAtom: '議題;衝擊類型;嚴重性;可能性',
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性評分表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -452,8 +452,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '財務重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -467,8 +467,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-2',
     suggestedEvidence: '重大議題清單',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -482,8 +482,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '影響邊界圖',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -497,8 +497,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '管理方案;年度計畫',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -512,8 +512,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '績效追蹤表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -527,8 +527,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;3-3',
     suggestedEvidence: '申訴紀錄;補救方案',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -542,8 +542,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -557,8 +557,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -572,8 +572,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: 'TCFD分析;風險報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -587,8 +587,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-3',
     suggestedEvidence: '精算報告;財報附註',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -597,13 +597,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C4-04',
     chapter: 'C4 經濟與誠信經營',
     question: '請揭露政府補助、租稅優惠或其他財務支持。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約11,800,000 kWh、用水量約94,000噸、廢棄物約1200噸；公司將政府補助;金額;用途納入月度管理，並以補助核定函;財報支援環境揭露。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約11,800,000 kWh、用水量約94,000噸、廢棄物約1200噸；公司將政府補助;金額;用途納入月度管理，並以補助覈定函;財報支援環境揭露。',
     primaryDataAtom: '政府補助;金額;用途',
     griImpactMapping: 'GRI 201-4',
-    suggestedEvidence: '補助核定函;財報',
+    suggestedEvidence: '補助覈定函;財報',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -617,8 +617,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-1',
     suggestedEvidence: '反貪腐風險評估報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -632,8 +632,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-2',
     suggestedEvidence: '訓練紀錄;簽到表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -647,8 +647,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-3',
     suggestedEvidence: '調查報告;處分紀錄',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -662,8 +662,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 206-1',
     suggestedEvidence: '法務報告;法院文件',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -677,8 +677,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-1',
     suggestedEvidence: '電費單;燃料發票;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -692,8 +692,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-3',
     suggestedEvidence: '產量表;營收表;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -707,8 +707,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-4',
     suggestedEvidence: '節能專案紀錄;M&V報告',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -722,8 +722,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-5',
     suggestedEvidence: '產品測試報告;客戶案例',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -737,8 +737,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-1',
     suggestedEvidence: '盤查清冊;排放係數;燃料資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -752,8 +752,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-2',
     suggestedEvidence: '電費單;再生能源憑證;排放係數',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -767,8 +767,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-3',
     suggestedEvidence: '供應鏈資料;差旅資料;物流資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -782,8 +782,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-4',
     suggestedEvidence: '排放清冊;營收/產量資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -797,8 +797,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-5',
     suggestedEvidence: '減碳專案紀錄;查證資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -812,8 +812,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-6',
     suggestedEvidence: '冷媒清冊;設備維修紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -827,8 +827,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-7',
     suggestedEvidence: '空污檢測報告;環保申報',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -842,8 +842,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3;305',
     suggestedEvidence: 'SBTi文件;內部目標表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -857,8 +857,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;201-2',
     suggestedEvidence: 'TCFD報告;會議紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -872,8 +872,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: '風險矩陣;情境分析',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -887,8 +887,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '內部碳價政策',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -902,8 +902,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305',
     suggestedEvidence: '碳權憑證;退休證明',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -917,8 +917,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: '水費單;水錶紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -932,8 +932,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: 'WRI Aqueduct截圖;據點清單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -947,8 +947,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-4',
     suggestedEvidence: '水質檢測;排放許可',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -962,8 +962,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-5',
     suggestedEvidence: '水務平衡表',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -977,8 +977,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-1;303-2',
     suggestedEvidence: '節水專案;設備改善紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -992,8 +992,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3',
     suggestedEvidence: '廢棄物清運聯單;過磅單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1007,8 +1007,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-4;306-5',
     suggestedEvidence: '清運合約;處理證明',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1022,8 +1022,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306',
     suggestedEvidence: '危廢申報;處理憑證',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1037,8 +1037,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-2',
     suggestedEvidence: '循環專案資料;產品設計文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1052,8 +1052,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3;2-27',
     suggestedEvidence: '事故報告;裁罰文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1067,8 +1067,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-1;301-2',
     suggestedEvidence: '採購資料;BOM',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1082,8 +1082,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-3',
     suggestedEvidence: '回收紀錄;合作合約',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1097,8 +1097,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-1',
     suggestedEvidence: 'GIS圖資;環評資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1112,8 +1112,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-2',
     suggestedEvidence: '環評報告;監測資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1127,8 +1127,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-3',
     suggestedEvidence: '復育報告;照片;合作證明',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1142,8 +1142,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-4',
     suggestedEvidence: '物種調查;專家報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1157,8 +1157,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1170,10 +1170,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '信昌精密工業股份有限公司針對職業安全衛生與健康管理建立事故通報、教育訓練與風險改善流程。公司依據供應鏈環境負面衝擊需求蒐集負面衝擊;改善;終止，並以職安紀錄、訓練簽到表、風險評估與改善報告支援揭露。',
     primaryDataAtom: '負面衝擊;改善;終止',
     griImpactMapping: 'GRI 308-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1187,8 +1187,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301/302/305',
     suggestedEvidence: 'LCA報告;產品碳足跡',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1202,8 +1202,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '資本支出表;專案報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1211,14 +1211,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C8-01',
     chapter: 'C8 員工與人才發展',
-    question: '請依性別、地區、職級、雇用型態揭露員工人數。',
-    highFidelityAnswer: '信昌精密工業股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;雇用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
-    primaryDataAtom: '員工數;性別;地區;職級;雇用型態',
+    question: '請依性別、地區、職級、僱用型態揭露員工人數。',
+    highFidelityAnswer: '信昌精密工業股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;僱用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
+    primaryDataAtom: '員工數;性別;地區;職級;僱用型態',
     griImpactMapping: 'GRI 2-7;405-1',
     suggestedEvidence: '人資系統匯出',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1232,8 +1232,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-8',
     suggestedEvidence: '派遣/承攬合約',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1247,8 +1247,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-1',
     suggestedEvidence: '人資報表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1262,8 +1262,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-2',
     suggestedEvidence: '福利辦法',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1277,8 +1277,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-3',
     suggestedEvidence: '人資紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1292,8 +1292,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-1',
     suggestedEvidence: 'LMS訓練紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1307,8 +1307,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-2',
     suggestedEvidence: '訓練計畫;課程資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1322,8 +1322,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-3',
     suggestedEvidence: '績效系統資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1337,8 +1337,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-1',
     suggestedEvidence: '董事資料表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1352,8 +1352,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-2',
     suggestedEvidence: '薪資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1367,8 +1367,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-1',
     suggestedEvidence: '薪資表;法規資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1382,8 +1382,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-2',
     suggestedEvidence: '人資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1397,8 +1397,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 402-1',
     suggestedEvidence: '勞資會議紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1412,8 +1412,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 403',
     suggestedEvidence: '員工問卷;EAP紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1427,8 +1427,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-1;403-8',
     suggestedEvidence: 'ISO證書;職安手冊',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1442,8 +1442,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-2',
     suggestedEvidence: '風險評估表;事故調查報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1457,8 +1457,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-3;403-6',
     suggestedEvidence: '健檢資料;活動紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1472,8 +1472,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-4',
     suggestedEvidence: '委員會紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1487,8 +1487,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-5',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1502,8 +1502,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-9',
     suggestedEvidence: '職災申報;職安統計',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1517,8 +1517,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-10',
     suggestedEvidence: '職業病紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1532,8 +1532,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-23;412-1',
     suggestedEvidence: '人權政策文件',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1547,8 +1547,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-1',
     suggestedEvidence: '人權評估報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1562,8 +1562,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-2',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1577,8 +1577,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 406-1',
     suggestedEvidence: '申訴紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1590,10 +1590,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '信昌精密工業股份有限公司依其營運與採購特性逐步建置供應商管理制度，針對關鍵供應商進行品質、交期、環境與社會風險評估。公司將童工風險;強迫勞動風險;改善納入供應鏈資料庫，支援GRI 408-1;409-1與客戶盡職調查需求。',
     primaryDataAtom: '童工風險;強迫勞動風險;改善',
     griImpactMapping: 'GRI 408-1;409-1',
-    suggestedEvidence: '稽核報告',
+    suggestedEvidence: '稽覈報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1607,8 +1607,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 413-1;413-2',
     suggestedEvidence: '社區溝通紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1622,8 +1622,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 413',
     suggestedEvidence: '活動照片;成果報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1637,8 +1637,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 204-1',
     suggestedEvidence: '採購系統資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1652,8 +1652,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '供應商清單',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1667,8 +1667,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1;414-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1676,14 +1676,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C10-04',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請揭露供應商稽核家數、缺失、改善率與終止合作。',
-    highFidelityAnswer: '信昌精密工業股份有限公司依產品與服務特性，針對供應商稽核建立品質、客戶溝通、資料保護與產品責任管理。公司以稽核家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '稽核家數;缺失;改善率;終止合作',
+    question: '請揭露供應商稽覈家數、缺失、改善率與終止合作。',
+    highFidelityAnswer: '信昌精密工業股份有限公司依產品與服務特性，針對供應商稽覈建立品質、客戶溝通、資料保護與產品責任管理。公司以稽覈家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '稽覈家數;缺失;改善率;終止合作',
     griImpactMapping: 'GRI 308-2;414-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1697,8 +1697,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-1',
     suggestedEvidence: '產品測試報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1712,8 +1712,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-2',
     suggestedEvidence: '召回紀錄;裁罰文件',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1727,8 +1727,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-1',
     suggestedEvidence: '標籤;產品說明書',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1742,8 +1742,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-2;417-3',
     suggestedEvidence: '法務紀錄',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1757,8 +1757,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 418-1',
     suggestedEvidence: '資安事件報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1772,8 +1772,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 418',
     suggestedEvidence: 'ISO27001證書;演練報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1787,8 +1787,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact',
     suggestedEvidence: '客戶問卷;客服資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1796,14 +1796,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C10-12',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請說明具永續效益的產品/服務、營收占比與影響。',
-    highFidelityAnswer: '信昌精密工業股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收占比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '永續產品;營收占比;環境/社會效益',
+    question: '請說明具永續效益的產品/服務、營收佔比與影響。',
+    highFidelityAnswer: '信昌精密工業股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收佔比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '永續產品;營收佔比;環境/社會效益',
     griImpactMapping: 'Impact/GRI 2-6',
     suggestedEvidence: '產品資料;銷售資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1812,13 +1812,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C11-01',
     chapter: 'C11 Impact與投資人敘事',
     question: '請說明企業希望解決的核心社會/環境問題。',
-    highFidelityAnswer: '信昌精密工業股份有限公司優先對應SDG 8、9、12、13，Impact重點為以製程改善、回收金屬與工安訓練降低傳統製造的環境與職安風險。針對Impact定位，公司以問題定義;目標族群;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
-    primaryDataAtom: '問題定義;目標族群;需求',
+    highFidelityAnswer: '信昌精密工業股份有限公司優先對應SDG 8、9、12、13，Impact重點為以製程改善、回收金屬與工安訓練降低傳統製造的環境與職安風險。針對Impact定位，公司以問題定義;目標族羣;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
+    primaryDataAtom: '問題定義;目標族羣;需求',
     griImpactMapping: 'Impact',
     suggestedEvidence: '問題分析;市場研究',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1833,7 +1833,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SDG對照表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1848,7 +1848,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '受益者名冊;活動紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1863,7 +1863,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'KPI追蹤表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1878,7 +1878,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '問卷;照片;第三方證明',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1890,10 +1890,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '信昌精密工業股份有限公司優先對應SDG 8、9、12、13，Impact重點為以製程改善、回收金屬與工安訓練降低傳統製造的環境與職安風險。針對受益人回饋，公司以回饋;滿意度;改善量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
     primaryDataAtom: '回饋;滿意度;改善',
     griImpactMapping: 'Impact',
-    suggestedEvidence: '問卷回饋;訪談紀錄',
+    suggestedEvidence: '問捲回饋;訪談紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1908,7 +1908,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '風險評估',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1923,7 +1923,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '營收資料;專案分析',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1938,7 +1938,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '募資簡報;故事素材',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
@@ -1953,157 +1953,157 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SROI估算表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-01',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明是否進行第三方查證、機構、範圍與確信等級。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證機構;範圍;等級',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-02',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請列出查證涵蓋的指標、據點、期間與排除項。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證指標;據點;期間;排除',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證計畫;聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-03',
-    chapter: 'C12 查核、佐證與資料治理',
-    question: '請為各資料領域指定資料提供者、覆核者與核准者。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;核准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
-    primaryDataAtom: '資料提供者;覆核者;核准者',
+    chapter: 'C12 查覈、佐證與資料治理',
+    question: '請為各資料領域指定資料提供者、覆核者與覈准者。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;覈准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    primaryDataAtom: '資料提供者;覆核者;覈准者',
     griImpactMapping: 'Assurance',
     suggestedEvidence: 'RACI表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-04',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請建立每題對應的佐證資料、檔名、版本與保存位置。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '檔名;版本;保存位置;對應題項',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '文件清單',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-05',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明資料完整性、準確性、一致性與時效性檢核方法。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '完整性;準確性;一致性;時效性',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '檢核表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-06',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '若前期資料有修正重編，請說明原因、影響與範圍。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '修正原因;影響;範圍',
     griImpactMapping: 'GRI 2-4',
     suggestedEvidence: '重編紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-07',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定資料檢視、編輯、覆核、下載與查證權限。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '權限角色;權限範圍',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '權限表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-08',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請啟用資料異動紀錄，包含誰、何時、改了什麼。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '異動人;時間;欄位;前後值',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '系統紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-09',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '需提供外部查證或供應鏈共享時，哪些資料需要去敏化？',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '敏感資料;去敏化規則',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '資料分類表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-06',
     companyType: '傳統金屬製造',
     companyName: '信昌精密工業股份有限公司',
     questionId: 'C12-10',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定需上鏈/雜湊/封存的重要資料與憑證。',
-    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '信昌精密工業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '封存資料;Hash;時間戳',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: 'Hash紀錄;封存證明',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2112,13 +2112,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-01',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫公司中英文名稱、統一編號、成立年份、總部地址與主要營運據點。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '公司名稱;統編;成立年份;總部地址;營運據點',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司登記資料;組織網站;營業登記證',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2127,13 +2127,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-02',
     chapter: 'C1 組織與報告邊界',
     question: '請說明公司法律型態、所有權結構、母公司/子公司關係。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '法律型態;股權結構;母子公司關係',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司章程;年報;股權結構圖',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2142,13 +2142,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-03',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫本次永續揭露的報告期間、發布日期與報告週期。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '報告期間;發布日期;報告週期',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '前一年度報告;內部編報時程表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2157,13 +2157,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-04',
     chapter: 'C1 組織與報告邊界',
     question: '請提供報告聯絡人、部門、Email與聯絡方式。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '聯絡窗口;部門;Email;電話',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '內部負責人名單',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2172,13 +2172,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-05',
     chapter: 'C1 組織與報告邊界',
     question: '請描述主要產品/服務、營收來源與核心商業模式。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '產品服務;營收來源;商業模式',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '產品型錄;官網;營收分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2187,13 +2187,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-06',
     chapter: 'C1 組織與報告邊界',
     question: '請說明上游供應商、中游營運活動、下游客戶與通路。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '上游;中游;下游;通路',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '價值鏈圖;供應商清單;客戶類型表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2202,13 +2202,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-07',
     chapter: 'C1 組織與報告邊界',
     question: '請說明主要市場、服務國家/地區與客戶類型。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '市場區域;客戶類型;服務地區',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '銷售地區表;客戶分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2217,13 +2217,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-08',
     chapter: 'C1 組織與報告邊界',
     question: '請定義員工統計邊界，包含全職、兼職、派遣、承攬是否納入。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將員工邊界;雇用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
-    primaryDataAtom: '員工邊界;雇用類型;統計口徑',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將員工邊界;僱用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
+    primaryDataAtom: '員工邊界;僱用類型;統計口徑',
     griImpactMapping: 'GRI 2-7;2-8',
     suggestedEvidence: '人資統計表;薪資系統匯出',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2232,13 +2232,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-09',
     chapter: 'C1 組織與報告邊界',
     question: '請提供年度營收、資產規模、營運據點數與產能/服務量。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '營收;資產;據點數;產能',
     griImpactMapping: 'GRI 2-6;201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2247,13 +2247,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-10',
     chapter: 'C1 組織與報告邊界',
     question: '本年度報告範疇是否與前期不同？若有，請說明差異。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '範疇異動;差異原因;前期比較',
     griImpactMapping: 'GRI 2-2;2-4',
     suggestedEvidence: '前期報告;範疇變更紀錄',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2262,13 +2262,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-11',
     chapter: 'C1 組織與報告邊界',
     question: '請列出參與的外部永續倡議、公協會與會員資格。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '外部倡議;公協會;會員資格',
     griImpactMapping: 'GRI 2-28',
     suggestedEvidence: '會員證明;倡議簽署文件',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2277,13 +2277,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-12',
     chapter: 'C1 組織與報告邊界',
     question: '報告期間是否有重大組織、營運、股權、併購或產線變更？',
-    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以台北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新台幣1.7億元、員工數約86人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司本次C版專業揭露以臺北共同辦公室、遠端團隊為主要報告邊界，涵蓋企業SaaS系統、資料分析服務與AI營運工具。公司年度營收約新臺幣1.7億元、員工數約86人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '重大變更;變更日期;影響說明',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '董事會紀錄;重大訊息;內部公告',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2297,8 +2297,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9',
     suggestedEvidence: '組織架構圖;董事會名單',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2312,8 +2312,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9;405-1',
     suggestedEvidence: '董事會名單;年報',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2327,8 +2327,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;2-13',
     suggestedEvidence: '董事會議事錄;委員會章程',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2342,8 +2342,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-13',
     suggestedEvidence: 'ESG委員會章程;RACI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2352,13 +2352,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C2-05',
     chapter: 'C2 治理與永續管理',
     question: '請列出永續、人權、環境、職安、供應鏈、誠信經營等政策。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;核准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
-    primaryDataAtom: '政策名稱;政策範圍;核准層級',
+    highFidelityAnswer: '曜點雲端科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;覈准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
+    primaryDataAtom: '政策名稱;政策範圍;覈准層級',
     griImpactMapping: 'GRI 2-23;2-24',
     suggestedEvidence: '政策文件;內部公告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2372,8 +2372,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;3-3',
     suggestedEvidence: '風險管理報告;風險矩陣',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2381,14 +2381,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C2-07',
     chapter: 'C2 治理與永續管理',
-    question: '永續資料與ESG流程是否納入內控或內部稽核？',
-    highFidelityAnswer: '曜點雲端科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽核建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽核範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
-    primaryDataAtom: 'ESG內控;稽核範圍;缺失改善',
+    question: '永續資料與ESG流程是否納入內控或內部稽覈？',
+    highFidelityAnswer: '曜點雲端科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽覈建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽覈範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
+    primaryDataAtom: 'ESG內控;稽覈範圍;缺失改善',
     griImpactMapping: 'GRI 2-12',
-    suggestedEvidence: '內控文件;稽核報告',
+    suggestedEvidence: '內控文件;稽覈報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2402,8 +2402,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-19;2-20',
     suggestedEvidence: '薪酬政策;KPI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2417,8 +2417,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-15',
     suggestedEvidence: '利益衝突政策;會議紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2432,8 +2432,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;2-26',
     suggestedEvidence: '申訴制度;通報紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2447,8 +2447,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-27',
     suggestedEvidence: '裁罰紀錄;法遵報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2462,8 +2462,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '年度目標表;績效追蹤表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2477,8 +2477,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '利害關係人盤點表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2492,8 +2492,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '問卷;訪談紀錄;會議紀錄',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2507,8 +2507,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '議題長清單;同業benchmark',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2522,8 +2522,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '重大性方法說明;問卷設計',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2531,14 +2531,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C3-05',
     chapter: 'C3 重大性與利害關係人',
-    question: '請填寫各議題對經濟、環境、人群之實際/潛在衝擊評分。',
+    question: '請填寫各議題對經濟、環境、人羣之實際/潛在衝擊評分。',
     highFidelityAnswer: '曜點雲端科技股份有限公司以利害關係人議合與營運風險評估為基礎，辨識與影響重大性評分相關之重大性議題。公司依據產業特性、客戶要求、法規趨勢與內部營運數據，定期評估正負面衝擊及其邊界，並將議題;衝擊類型;嚴重性;可能性作為重大性管理與GRI 3-1;3-2揭露之資料基礎。',
     primaryDataAtom: '議題;衝擊類型;嚴重性;可能性',
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性評分表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2552,8 +2552,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '財務重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2567,8 +2567,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-2',
     suggestedEvidence: '重大議題清單',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2582,8 +2582,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '影響邊界圖',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2597,8 +2597,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '管理方案;年度計畫',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2612,8 +2612,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '績效追蹤表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2627,8 +2627,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;3-3',
     suggestedEvidence: '申訴紀錄;補救方案',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2642,8 +2642,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2657,8 +2657,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2672,8 +2672,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: 'TCFD分析;風險報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2687,8 +2687,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-3',
     suggestedEvidence: '精算報告;財報附註',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2697,13 +2697,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C4-04',
     chapter: 'C4 經濟與誠信經營',
     question: '請揭露政府補助、租稅優惠或其他財務支持。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約360,000 kWh、用水量約1,800噸、廢棄物約8噸；公司將政府補助;金額;用途納入月度管理，並以補助核定函;財報支援環境揭露。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約360,000 kWh、用水量約1,800噸、廢棄物約8噸；公司將政府補助;金額;用途納入月度管理，並以補助覈定函;財報支援環境揭露。',
     primaryDataAtom: '政府補助;金額;用途',
     griImpactMapping: 'GRI 201-4',
-    suggestedEvidence: '補助核定函;財報',
+    suggestedEvidence: '補助覈定函;財報',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2717,8 +2717,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-1',
     suggestedEvidence: '反貪腐風險評估報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2732,8 +2732,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-2',
     suggestedEvidence: '訓練紀錄;簽到表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2747,8 +2747,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-3',
     suggestedEvidence: '調查報告;處分紀錄',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2762,8 +2762,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 206-1',
     suggestedEvidence: '法務報告;法院文件',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2777,8 +2777,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-1',
     suggestedEvidence: '電費單;燃料發票;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2792,8 +2792,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-3',
     suggestedEvidence: '產量表;營收表;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2807,8 +2807,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-4',
     suggestedEvidence: '節能專案紀錄;M&V報告',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2822,8 +2822,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-5',
     suggestedEvidence: '產品測試報告;客戶案例',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2837,8 +2837,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-1',
     suggestedEvidence: '盤查清冊;排放係數;燃料資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2852,8 +2852,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-2',
     suggestedEvidence: '電費單;再生能源憑證;排放係數',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2867,8 +2867,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-3',
     suggestedEvidence: '供應鏈資料;差旅資料;物流資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2882,8 +2882,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-4',
     suggestedEvidence: '排放清冊;營收/產量資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2897,8 +2897,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-5',
     suggestedEvidence: '減碳專案紀錄;查證資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2912,8 +2912,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-6',
     suggestedEvidence: '冷媒清冊;設備維修紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2927,8 +2927,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-7',
     suggestedEvidence: '空污檢測報告;環保申報',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2942,8 +2942,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3;305',
     suggestedEvidence: 'SBTi文件;內部目標表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2957,8 +2957,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;201-2',
     suggestedEvidence: 'TCFD報告;會議紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2972,8 +2972,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: '風險矩陣;情境分析',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -2987,8 +2987,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '內部碳價政策',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3002,8 +3002,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305',
     suggestedEvidence: '碳權憑證;退休證明',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3017,8 +3017,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: '水費單;水錶紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3032,8 +3032,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: 'WRI Aqueduct截圖;據點清單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3047,8 +3047,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-4',
     suggestedEvidence: '水質檢測;排放許可',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3062,8 +3062,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-5',
     suggestedEvidence: '水務平衡表',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3077,8 +3077,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-1;303-2',
     suggestedEvidence: '節水專案;設備改善紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3092,8 +3092,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3',
     suggestedEvidence: '廢棄物清運聯單;過磅單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3107,8 +3107,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-4;306-5',
     suggestedEvidence: '清運合約;處理證明',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3122,8 +3122,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306',
     suggestedEvidence: '危廢申報;處理憑證',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3137,8 +3137,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-2',
     suggestedEvidence: '循環專案資料;產品設計文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3152,8 +3152,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3;2-27',
     suggestedEvidence: '事故報告;裁罰文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3167,8 +3167,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-1;301-2',
     suggestedEvidence: '採購資料;BOM',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3182,8 +3182,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-3',
     suggestedEvidence: '回收紀錄;合作合約',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3197,8 +3197,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-1',
     suggestedEvidence: 'GIS圖資;環評資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3212,8 +3212,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-2',
     suggestedEvidence: '環評報告;監測資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3227,8 +3227,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-3',
     suggestedEvidence: '復育報告;照片;合作證明',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3242,8 +3242,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-4',
     suggestedEvidence: '物種調查;專家報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3257,8 +3257,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3270,10 +3270,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '曜點雲端科技股份有限公司針對職業安全衛生與健康管理建立事故通報、教育訓練與風險改善流程。公司依據供應鏈環境負面衝擊需求蒐集負面衝擊;改善;終止，並以職安紀錄、訓練簽到表、風險評估與改善報告支援揭露。',
     primaryDataAtom: '負面衝擊;改善;終止',
     griImpactMapping: 'GRI 308-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3287,8 +3287,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301/302/305',
     suggestedEvidence: 'LCA報告;產品碳足跡',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3302,8 +3302,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '資本支出表;專案報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3311,14 +3311,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C8-01',
     chapter: 'C8 員工與人才發展',
-    question: '請依性別、地區、職級、雇用型態揭露員工人數。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;雇用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
-    primaryDataAtom: '員工數;性別;地區;職級;雇用型態',
+    question: '請依性別、地區、職級、僱用型態揭露員工人數。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;僱用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
+    primaryDataAtom: '員工數;性別;地區;職級;僱用型態',
     griImpactMapping: 'GRI 2-7;405-1',
     suggestedEvidence: '人資系統匯出',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3332,8 +3332,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-8',
     suggestedEvidence: '派遣/承攬合約',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3347,8 +3347,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-1',
     suggestedEvidence: '人資報表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3362,8 +3362,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-2',
     suggestedEvidence: '福利辦法',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3377,8 +3377,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-3',
     suggestedEvidence: '人資紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3392,8 +3392,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-1',
     suggestedEvidence: 'LMS訓練紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3407,8 +3407,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-2',
     suggestedEvidence: '訓練計畫;課程資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3422,8 +3422,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-3',
     suggestedEvidence: '績效系統資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3437,8 +3437,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-1',
     suggestedEvidence: '董事資料表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3452,8 +3452,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-2',
     suggestedEvidence: '薪資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3467,8 +3467,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-1',
     suggestedEvidence: '薪資表;法規資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3482,8 +3482,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-2',
     suggestedEvidence: '人資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3497,8 +3497,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 402-1',
     suggestedEvidence: '勞資會議紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3512,8 +3512,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 403',
     suggestedEvidence: '員工問卷;EAP紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3527,8 +3527,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-1;403-8',
     suggestedEvidence: 'ISO證書;職安手冊',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3542,8 +3542,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-2',
     suggestedEvidence: '風險評估表;事故調查報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3557,8 +3557,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-3;403-6',
     suggestedEvidence: '健檢資料;活動紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3572,8 +3572,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-4',
     suggestedEvidence: '委員會紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3587,8 +3587,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-5',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3602,8 +3602,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-9',
     suggestedEvidence: '職災申報;職安統計',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3617,8 +3617,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-10',
     suggestedEvidence: '職業病紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3632,8 +3632,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-23;412-1',
     suggestedEvidence: '人權政策文件',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3647,8 +3647,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-1',
     suggestedEvidence: '人權評估報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3662,8 +3662,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-2',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3677,8 +3677,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 406-1',
     suggestedEvidence: '申訴紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3690,10 +3690,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '曜點雲端科技股份有限公司依其營運與採購特性逐步建置供應商管理制度，針對關鍵供應商進行品質、交期、環境與社會風險評估。公司將童工風險;強迫勞動風險;改善納入供應鏈資料庫，支援GRI 408-1;409-1與客戶盡職調查需求。',
     primaryDataAtom: '童工風險;強迫勞動風險;改善',
     griImpactMapping: 'GRI 408-1;409-1',
-    suggestedEvidence: '稽核報告',
+    suggestedEvidence: '稽覈報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3707,8 +3707,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 413-1;413-2',
     suggestedEvidence: '社區溝通紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3722,8 +3722,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 413',
     suggestedEvidence: '活動照片;成果報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3737,8 +3737,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 204-1',
     suggestedEvidence: '採購系統資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3752,8 +3752,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '供應商清單',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3767,8 +3767,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1;414-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3776,14 +3776,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C10-04',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請揭露供應商稽核家數、缺失、改善率與終止合作。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司依產品與服務特性，針對供應商稽核建立品質、客戶溝通、資料保護與產品責任管理。公司以稽核家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '稽核家數;缺失;改善率;終止合作',
+    question: '請揭露供應商稽覈家數、缺失、改善率與終止合作。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司依產品與服務特性，針對供應商稽覈建立品質、客戶溝通、資料保護與產品責任管理。公司以稽覈家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '稽覈家數;缺失;改善率;終止合作',
     griImpactMapping: 'GRI 308-2;414-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3797,8 +3797,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-1',
     suggestedEvidence: '產品測試報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3812,8 +3812,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-2',
     suggestedEvidence: '召回紀錄;裁罰文件',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3827,8 +3827,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-1',
     suggestedEvidence: '標籤;產品說明書',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3842,8 +3842,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-2;417-3',
     suggestedEvidence: '法務紀錄',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3857,8 +3857,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 418-1',
     suggestedEvidence: '資安事件報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3872,8 +3872,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 418',
     suggestedEvidence: 'ISO27001證書;演練報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3887,8 +3887,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact',
     suggestedEvidence: '客戶問卷;客服資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3896,14 +3896,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C10-12',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請說明具永續效益的產品/服務、營收占比與影響。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收占比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '永續產品;營收占比;環境/社會效益',
+    question: '請說明具永續效益的產品/服務、營收佔比與影響。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收佔比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '永續產品;營收佔比;環境/社會效益',
     griImpactMapping: 'Impact/GRI 2-6',
     suggestedEvidence: '產品資料;銷售資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3912,13 +3912,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C11-01',
     chapter: 'C11 Impact與投資人敘事',
     question: '請說明企業希望解決的核心社會/環境問題。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司優先對應SDG 8、9、13，Impact重點為以數位工具提升中小企業營運效率，並透過遠距工作降低通勤與辦公資源需求。針對Impact定位，公司以問題定義;目標族群;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
-    primaryDataAtom: '問題定義;目標族群;需求',
+    highFidelityAnswer: '曜點雲端科技股份有限公司優先對應SDG 8、9、13，Impact重點為以數位工具提升中小企業營運效率，並透過遠距工作降低通勤與辦公資源需求。針對Impact定位，公司以問題定義;目標族羣;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
+    primaryDataAtom: '問題定義;目標族羣;需求',
     griImpactMapping: 'Impact',
     suggestedEvidence: '問題分析;市場研究',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3933,7 +3933,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SDG對照表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3948,7 +3948,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '受益者名冊;活動紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3963,7 +3963,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'KPI追蹤表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3978,7 +3978,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '問卷;照片;第三方證明',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -3990,10 +3990,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '曜點雲端科技股份有限公司優先對應SDG 8、9、13，Impact重點為以數位工具提升中小企業營運效率，並透過遠距工作降低通勤與辦公資源需求。針對受益人回饋，公司以回饋;滿意度;改善量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
     primaryDataAtom: '回饋;滿意度;改善',
     griImpactMapping: 'Impact',
-    suggestedEvidence: '問卷回饋;訪談紀錄',
+    suggestedEvidence: '問捲回饋;訪談紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -4008,7 +4008,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '風險評估',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -4023,7 +4023,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '營收資料;專案分析',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -4038,7 +4038,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '募資簡報;故事素材',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
@@ -4053,157 +4053,157 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SROI估算表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-01',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明是否進行第三方查證、機構、範圍與確信等級。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證機構;範圍;等級',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-02',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請列出查證涵蓋的指標、據點、期間與排除項。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證指標;據點;期間;排除',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證計畫;聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-03',
-    chapter: 'C12 查核、佐證與資料治理',
-    question: '請為各資料領域指定資料提供者、覆核者與核准者。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;核准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
-    primaryDataAtom: '資料提供者;覆核者;核准者',
+    chapter: 'C12 查覈、佐證與資料治理',
+    question: '請為各資料領域指定資料提供者、覆核者與覈准者。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;覈准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    primaryDataAtom: '資料提供者;覆核者;覈准者',
     griImpactMapping: 'Assurance',
     suggestedEvidence: 'RACI表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-04',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請建立每題對應的佐證資料、檔名、版本與保存位置。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '檔名;版本;保存位置;對應題項',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '文件清單',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-05',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明資料完整性、準確性、一致性與時效性檢核方法。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '完整性;準確性;一致性;時效性',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '檢核表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-06',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '若前期資料有修正重編，請說明原因、影響與範圍。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '修正原因;影響;範圍',
     griImpactMapping: 'GRI 2-4',
     suggestedEvidence: '重編紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-07',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定資料檢視、編輯、覆核、下載與查證權限。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '權限角色;權限範圍',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '權限表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-08',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請啟用資料異動紀錄，包含誰、何時、改了什麼。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '異動人;時間;欄位;前後值',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '系統紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-09',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '需提供外部查證或供應鏈共享時，哪些資料需要去敏化？',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '敏感資料;去敏化規則',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '資料分類表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-07',
     companyType: 'SaaS新創',
     companyName: '曜點雲端科技股份有限公司',
     questionId: 'C12-10',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定需上鏈/雜湊/封存的重要資料與憑證。',
-    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '曜點雲端科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '封存資料;Hash;時間戳',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: 'Hash紀錄;封存證明',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4212,13 +4212,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-01',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫公司中英文名稱、統一編號、成立年份、總部地址與主要營運據點。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '公司名稱;統編;成立年份;總部地址;營運據點',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司登記資料;組織網站;營業登記證',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4227,13 +4227,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-02',
     chapter: 'C1 組織與報告邊界',
     question: '請說明公司法律型態、所有權結構、母公司/子公司關係。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '法律型態;股權結構;母子公司關係',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司章程;年報;股權結構圖',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4242,13 +4242,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-03',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫本次永續揭露的報告期間、發布日期與報告週期。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '報告期間;發布日期;報告週期',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '前一年度報告;內部編報時程表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4257,13 +4257,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-04',
     chapter: 'C1 組織與報告邊界',
     question: '請提供報告聯絡人、部門、Email與聯絡方式。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '聯絡窗口;部門;Email;電話',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '內部負責人名單',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4272,13 +4272,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-05',
     chapter: 'C1 組織與報告邊界',
     question: '請描述主要產品/服務、營收來源與核心商業模式。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '產品服務;營收來源;商業模式',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '產品型錄;官網;營收分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4287,13 +4287,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-06',
     chapter: 'C1 組織與報告邊界',
     question: '請說明上游供應商、中游營運活動、下游客戶與通路。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '上游;中游;下游;通路',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '價值鏈圖;供應商清單;客戶類型表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4302,13 +4302,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-07',
     chapter: 'C1 組織與報告邊界',
     question: '請說明主要市場、服務國家/地區與客戶類型。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '市場區域;客戶類型;服務地區',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '銷售地區表;客戶分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4317,13 +4317,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-08',
     chapter: 'C1 組織與報告邊界',
     question: '請定義員工統計邊界，包含全職、兼職、派遣、承攬是否納入。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將員工邊界;雇用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
-    primaryDataAtom: '員工邊界;雇用類型;統計口徑',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將員工邊界;僱用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    primaryDataAtom: '員工邊界;僱用類型;統計口徑',
     griImpactMapping: 'GRI 2-7;2-8',
     suggestedEvidence: '人資統計表;薪資系統匯出',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4332,13 +4332,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-09',
     chapter: 'C1 組織與報告邊界',
     question: '請提供年度營收、資產規模、營運據點數與產能/服務量。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '營收;資產;據點數;產能',
     griImpactMapping: 'GRI 2-6;201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4347,13 +4347,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-10',
     chapter: 'C1 組織與報告邊界',
     question: '本年度報告範疇是否與前期不同？若有，請說明差異。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '範疇異動;差異原因;前期比較',
     griImpactMapping: 'GRI 2-2;2-4',
     suggestedEvidence: '前期報告;範疇變更紀錄',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4362,13 +4362,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-11',
     chapter: 'C1 組織與報告邊界',
     question: '請列出參與的外部永續倡議、公協會與會員資格。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '外部倡議;公協會;會員資格',
     griImpactMapping: 'GRI 2-28',
     suggestedEvidence: '會員證明;倡議簽署文件',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4377,13 +4377,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-12',
     chapter: 'C1 組織與報告邊界',
     question: '報告期間是否有重大組織、營運、股權、併購或產線變更？',
-    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以台北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新台幣0.9億元、員工數約48人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司本次C版專業揭露以臺北辦公室、北中南合作社區據點為主要報告邊界，涵蓋循環包材服務、弱勢就業培力與社區回收教育。公司年度營收約新臺幣0.9億元、員工數約48人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。Impact成果、受益對象、社區參與、公益商業模式與量化成效為主軸。',
     primaryDataAtom: '重大變更;變更日期;影響說明',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '董事會紀錄;重大訊息;內部公告',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4397,8 +4397,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9',
     suggestedEvidence: '組織架構圖;董事會名單',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4412,8 +4412,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9;405-1',
     suggestedEvidence: '董事會名單;年報',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4427,8 +4427,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;2-13',
     suggestedEvidence: '董事會議事錄;委員會章程',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4442,8 +4442,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-13',
     suggestedEvidence: 'ESG委員會章程;RACI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4452,13 +4452,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C2-05',
     chapter: 'C2 治理與永續管理',
     question: '請列出永續、人權、環境、職安、供應鏈、誠信經營等政策。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;核准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
-    primaryDataAtom: '政策名稱;政策範圍;核准層級',
+    highFidelityAnswer: '共好循環社會企業股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;覈准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
+    primaryDataAtom: '政策名稱;政策範圍;覈准層級',
     griImpactMapping: 'GRI 2-23;2-24',
     suggestedEvidence: '政策文件;內部公告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4472,8 +4472,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;3-3',
     suggestedEvidence: '風險管理報告;風險矩陣',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4481,14 +4481,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C2-07',
     chapter: 'C2 治理與永續管理',
-    question: '永續資料與ESG流程是否納入內控或內部稽核？',
-    highFidelityAnswer: '共好循環社會企業股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽核建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽核範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
-    primaryDataAtom: 'ESG內控;稽核範圍;缺失改善',
+    question: '永續資料與ESG流程是否納入內控或內部稽覈？',
+    highFidelityAnswer: '共好循環社會企業股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽覈建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽覈範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
+    primaryDataAtom: 'ESG內控;稽覈範圍;缺失改善',
     griImpactMapping: 'GRI 2-12',
-    suggestedEvidence: '內控文件;稽核報告',
+    suggestedEvidence: '內控文件;稽覈報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4502,8 +4502,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-19;2-20',
     suggestedEvidence: '薪酬政策;KPI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4517,8 +4517,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-15',
     suggestedEvidence: '利益衝突政策;會議紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4532,8 +4532,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;2-26',
     suggestedEvidence: '申訴制度;通報紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4547,8 +4547,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-27',
     suggestedEvidence: '裁罰紀錄;法遵報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4562,8 +4562,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '年度目標表;績效追蹤表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4577,8 +4577,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '利害關係人盤點表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4592,8 +4592,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '問卷;訪談紀錄;會議紀錄',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4607,8 +4607,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '議題長清單;同業benchmark',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4622,8 +4622,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '重大性方法說明;問卷設計',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4631,14 +4631,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C3-05',
     chapter: 'C3 重大性與利害關係人',
-    question: '請填寫各議題對經濟、環境、人群之實際/潛在衝擊評分。',
+    question: '請填寫各議題對經濟、環境、人羣之實際/潛在衝擊評分。',
     highFidelityAnswer: '共好循環社會企業股份有限公司以利害關係人議合與營運風險評估為基礎，辨識與影響重大性評分相關之重大性議題。公司依據產業特性、客戶要求、法規趨勢與內部營運數據，定期評估正負面衝擊及其邊界，並將議題;衝擊類型;嚴重性;可能性作為重大性管理與GRI 3-1;3-2揭露之資料基礎。',
     primaryDataAtom: '議題;衝擊類型;嚴重性;可能性',
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性評分表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4652,8 +4652,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '財務重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4667,8 +4667,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-2',
     suggestedEvidence: '重大議題清單',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4682,8 +4682,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '影響邊界圖',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4697,8 +4697,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '管理方案;年度計畫',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4712,8 +4712,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '績效追蹤表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4727,8 +4727,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;3-3',
     suggestedEvidence: '申訴紀錄;補救方案',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4742,8 +4742,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4757,8 +4757,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4772,8 +4772,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: 'TCFD分析;風險報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4787,8 +4787,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-3',
     suggestedEvidence: '精算報告;財報附註',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4797,13 +4797,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C4-04',
     chapter: 'C4 經濟與誠信經營',
     question: '請揭露政府補助、租稅優惠或其他財務支持。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約210,000 kWh、用水量約2,300噸、廢棄物約120噸；公司將政府補助;金額;用途納入月度管理，並以補助核定函;財報支援環境揭露。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約210,000 kWh、用水量約2,300噸、廢棄物約120噸；公司將政府補助;金額;用途納入月度管理，並以補助覈定函;財報支援環境揭露。',
     primaryDataAtom: '政府補助;金額;用途',
     griImpactMapping: 'GRI 201-4',
-    suggestedEvidence: '補助核定函;財報',
+    suggestedEvidence: '補助覈定函;財報',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4817,8 +4817,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-1',
     suggestedEvidence: '反貪腐風險評估報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4832,8 +4832,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-2',
     suggestedEvidence: '訓練紀錄;簽到表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4847,8 +4847,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-3',
     suggestedEvidence: '調查報告;處分紀錄',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4862,8 +4862,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 206-1',
     suggestedEvidence: '法務報告;法院文件',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4877,8 +4877,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-1',
     suggestedEvidence: '電費單;燃料發票;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4892,8 +4892,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-3',
     suggestedEvidence: '產量表;營收表;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4907,8 +4907,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-4',
     suggestedEvidence: '節能專案紀錄;M&V報告',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4922,8 +4922,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-5',
     suggestedEvidence: '產品測試報告;客戶案例',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4937,8 +4937,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-1',
     suggestedEvidence: '盤查清冊;排放係數;燃料資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4952,8 +4952,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-2',
     suggestedEvidence: '電費單;再生能源憑證;排放係數',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4967,8 +4967,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-3',
     suggestedEvidence: '供應鏈資料;差旅資料;物流資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4982,8 +4982,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-4',
     suggestedEvidence: '排放清冊;營收/產量資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -4997,8 +4997,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-5',
     suggestedEvidence: '減碳專案紀錄;查證資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5012,8 +5012,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-6',
     suggestedEvidence: '冷媒清冊;設備維修紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5027,8 +5027,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-7',
     suggestedEvidence: '空污檢測報告;環保申報',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5042,8 +5042,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3;305',
     suggestedEvidence: 'SBTi文件;內部目標表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5057,8 +5057,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;201-2',
     suggestedEvidence: 'TCFD報告;會議紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5072,8 +5072,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: '風險矩陣;情境分析',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5087,8 +5087,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '內部碳價政策',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5102,8 +5102,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305',
     suggestedEvidence: '碳權憑證;退休證明',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5117,8 +5117,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: '水費單;水錶紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5132,8 +5132,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: 'WRI Aqueduct截圖;據點清單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5147,8 +5147,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-4',
     suggestedEvidence: '水質檢測;排放許可',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5162,8 +5162,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-5',
     suggestedEvidence: '水務平衡表',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5177,8 +5177,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-1;303-2',
     suggestedEvidence: '節水專案;設備改善紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5192,8 +5192,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3',
     suggestedEvidence: '廢棄物清運聯單;過磅單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5207,8 +5207,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-4;306-5',
     suggestedEvidence: '清運合約;處理證明',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5222,8 +5222,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306',
     suggestedEvidence: '危廢申報;處理憑證',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5237,8 +5237,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-2',
     suggestedEvidence: '循環專案資料;產品設計文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5252,8 +5252,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3;2-27',
     suggestedEvidence: '事故報告;裁罰文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5267,8 +5267,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-1;301-2',
     suggestedEvidence: '採購資料;BOM',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5282,8 +5282,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-3',
     suggestedEvidence: '回收紀錄;合作合約',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5297,8 +5297,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-1',
     suggestedEvidence: 'GIS圖資;環評資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5312,8 +5312,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-2',
     suggestedEvidence: '環評報告;監測資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5327,8 +5327,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-3',
     suggestedEvidence: '復育報告;照片;合作證明',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5342,8 +5342,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-4',
     suggestedEvidence: '物種調查;專家報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5357,8 +5357,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5370,10 +5370,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '共好循環社會企業股份有限公司針對職業安全衛生與健康管理建立事故通報、教育訓練與風險改善流程。公司依據供應鏈環境負面衝擊需求蒐集負面衝擊;改善;終止，並以職安紀錄、訓練簽到表、風險評估與改善報告支援揭露。',
     primaryDataAtom: '負面衝擊;改善;終止',
     griImpactMapping: 'GRI 308-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5387,8 +5387,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301/302/305',
     suggestedEvidence: 'LCA報告;產品碳足跡',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5402,8 +5402,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '資本支出表;專案報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5411,14 +5411,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C8-01',
     chapter: 'C8 員工與人才發展',
-    question: '請依性別、地區、職級、雇用型態揭露員工人數。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;雇用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
-    primaryDataAtom: '員工數;性別;地區;職級;雇用型態',
+    question: '請依性別、地區、職級、僱用型態揭露員工人數。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;僱用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
+    primaryDataAtom: '員工數;性別;地區;職級;僱用型態',
     griImpactMapping: 'GRI 2-7;405-1',
     suggestedEvidence: '人資系統匯出',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5432,8 +5432,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-8',
     suggestedEvidence: '派遣/承攬合約',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5447,8 +5447,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-1',
     suggestedEvidence: '人資報表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5462,8 +5462,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-2',
     suggestedEvidence: '福利辦法',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5477,8 +5477,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-3',
     suggestedEvidence: '人資紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5492,8 +5492,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-1',
     suggestedEvidence: 'LMS訓練紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5507,8 +5507,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-2',
     suggestedEvidence: '訓練計畫;課程資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5522,8 +5522,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-3',
     suggestedEvidence: '績效系統資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5537,8 +5537,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-1',
     suggestedEvidence: '董事資料表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5552,8 +5552,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-2',
     suggestedEvidence: '薪資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5567,8 +5567,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-1',
     suggestedEvidence: '薪資表;法規資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5582,8 +5582,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-2',
     suggestedEvidence: '人資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5597,8 +5597,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 402-1',
     suggestedEvidence: '勞資會議紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5612,8 +5612,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 403',
     suggestedEvidence: '員工問卷;EAP紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5627,8 +5627,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-1;403-8',
     suggestedEvidence: 'ISO證書;職安手冊',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5642,8 +5642,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-2',
     suggestedEvidence: '風險評估表;事故調查報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5657,8 +5657,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-3;403-6',
     suggestedEvidence: '健檢資料;活動紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5672,8 +5672,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-4',
     suggestedEvidence: '委員會紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5687,8 +5687,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-5',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5702,8 +5702,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-9',
     suggestedEvidence: '職災申報;職安統計',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5717,8 +5717,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-10',
     suggestedEvidence: '職業病紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5732,8 +5732,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-23;412-1',
     suggestedEvidence: '人權政策文件',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5747,8 +5747,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-1',
     suggestedEvidence: '人權評估報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5762,8 +5762,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-2',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5777,8 +5777,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 406-1',
     suggestedEvidence: '申訴紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5790,10 +5790,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '共好循環社會企業股份有限公司依其營運與採購特性逐步建置供應商管理制度，針對關鍵供應商進行品質、交期、環境與社會風險評估。公司將童工風險;強迫勞動風險;改善納入供應鏈資料庫，支援GRI 408-1;409-1與客戶盡職調查需求。',
     primaryDataAtom: '童工風險;強迫勞動風險;改善',
     griImpactMapping: 'GRI 408-1;409-1',
-    suggestedEvidence: '稽核報告',
+    suggestedEvidence: '稽覈報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5807,8 +5807,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 413-1;413-2',
     suggestedEvidence: '社區溝通紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5822,8 +5822,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 413',
     suggestedEvidence: '活動照片;成果報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5837,8 +5837,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 204-1',
     suggestedEvidence: '採購系統資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5852,8 +5852,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '供應商清單',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5867,8 +5867,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1;414-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5876,14 +5876,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C10-04',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請揭露供應商稽核家數、缺失、改善率與終止合作。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司依產品與服務特性，針對供應商稽核建立品質、客戶溝通、資料保護與產品責任管理。公司以稽核家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '稽核家數;缺失;改善率;終止合作',
+    question: '請揭露供應商稽覈家數、缺失、改善率與終止合作。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司依產品與服務特性，針對供應商稽覈建立品質、客戶溝通、資料保護與產品責任管理。公司以稽覈家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '稽覈家數;缺失;改善率;終止合作',
     griImpactMapping: 'GRI 308-2;414-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5897,8 +5897,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-1',
     suggestedEvidence: '產品測試報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5912,8 +5912,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-2',
     suggestedEvidence: '召回紀錄;裁罰文件',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5927,8 +5927,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-1',
     suggestedEvidence: '標籤;產品說明書',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5942,8 +5942,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-2;417-3',
     suggestedEvidence: '法務紀錄',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5957,8 +5957,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 418-1',
     suggestedEvidence: '資安事件報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5972,8 +5972,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 418',
     suggestedEvidence: 'ISO27001證書;演練報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5987,8 +5987,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact',
     suggestedEvidence: '客戶問卷;客服資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -5996,14 +5996,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C10-12',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請說明具永續效益的產品/服務、營收占比與影響。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收占比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '永續產品;營收占比;環境/社會效益',
+    question: '請說明具永續效益的產品/服務、營收佔比與影響。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收佔比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '永續產品;營收佔比;環境/社會效益',
     griImpactMapping: 'Impact/GRI 2-6',
     suggestedEvidence: '產品資料;銷售資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6012,13 +6012,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C11-01',
     chapter: 'C11 Impact與投資人敘事',
     question: '請說明企業希望解決的核心社會/環境問題。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司優先對應SDG 8、10、11、12、13，Impact重點為創造弱勢就業機會並減少一次性包材使用，兼具社會包容與環境減量效益。針對Impact定位，公司以問題定義;目標族群;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
-    primaryDataAtom: '問題定義;目標族群;需求',
+    highFidelityAnswer: '共好循環社會企業股份有限公司優先對應SDG 8、10、11、12、13，Impact重點為創造弱勢就業機會並減少一次性包材使用，兼具社會包容與環境減量效益。針對Impact定位，公司以問題定義;目標族羣;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
+    primaryDataAtom: '問題定義;目標族羣;需求',
     griImpactMapping: 'Impact',
     suggestedEvidence: '問題分析;市場研究',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6033,7 +6033,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SDG對照表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6048,7 +6048,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '受益者名冊;活動紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6063,7 +6063,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'KPI追蹤表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6078,7 +6078,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '問卷;照片;第三方證明',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6090,10 +6090,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '共好循環社會企業股份有限公司優先對應SDG 8、10、11、12、13，Impact重點為創造弱勢就業機會並減少一次性包材使用，兼具社會包容與環境減量效益。針對受益人回饋，公司以回饋;滿意度;改善量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
     primaryDataAtom: '回饋;滿意度;改善',
     griImpactMapping: 'Impact',
-    suggestedEvidence: '問卷回饋;訪談紀錄',
+    suggestedEvidence: '問捲回饋;訪談紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6108,7 +6108,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '風險評估',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6123,7 +6123,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '營收資料;專案分析',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6138,7 +6138,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '募資簡報;故事素材',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
@@ -6153,157 +6153,157 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SROI估算表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-01',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明是否進行第三方查證、機構、範圍與確信等級。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證機構;範圍;等級',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-02',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請列出查證涵蓋的指標、據點、期間與排除項。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證指標;據點;期間;排除',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證計畫;聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-03',
-    chapter: 'C12 查核、佐證與資料治理',
-    question: '請為各資料領域指定資料提供者、覆核者與核准者。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;核准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
-    primaryDataAtom: '資料提供者;覆核者;核准者',
+    chapter: 'C12 查覈、佐證與資料治理',
+    question: '請為各資料領域指定資料提供者、覆核者與覈准者。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;覈准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    primaryDataAtom: '資料提供者;覆核者;覈准者',
     griImpactMapping: 'Assurance',
     suggestedEvidence: 'RACI表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-04',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請建立每題對應的佐證資料、檔名、版本與保存位置。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '檔名;版本;保存位置;對應題項',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '文件清單',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-05',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明資料完整性、準確性、一致性與時效性檢核方法。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '完整性;準確性;一致性;時效性',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '檢核表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-06',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '若前期資料有修正重編，請說明原因、影響與範圍。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '修正原因;影響;範圍',
     griImpactMapping: 'GRI 2-4',
     suggestedEvidence: '重編紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-07',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定資料檢視、編輯、覆核、下載與查證權限。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '權限角色;權限範圍',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '權限表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-08',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請啟用資料異動紀錄，包含誰、何時、改了什麼。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '異動人;時間;欄位;前後值',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '系統紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-09',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '需提供外部查證或供應鏈共享時，哪些資料需要去敏化？',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '敏感資料;去敏化規則',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '資料分類表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-08',
     companyType: '社會企業',
     companyName: '共好循環社會企業股份有限公司',
     questionId: 'C12-10',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定需上鏈/雜湊/封存的重要資料與憑證。',
-    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '共好循環社會企業股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '封存資料;Hash;時間戳',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: 'Hash紀錄;封存證明',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6312,13 +6312,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-01',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫公司中英文名稱、統一編號、成立年份、總部地址與主要營運據點。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '公司名稱;統編;成立年份;總部地址;營運據點',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司登記資料;組織網站;營業登記證',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6327,13 +6327,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-02',
     chapter: 'C1 組織與報告邊界',
     question: '請說明公司法律型態、所有權結構、母公司/子公司關係。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '法律型態;股權結構;母子公司關係',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司章程;年報;股權結構圖',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6342,13 +6342,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-03',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫本次永續揭露的報告期間、發布日期與報告週期。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '報告期間;發布日期;報告週期',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '前一年度報告;內部編報時程表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6357,13 +6357,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-04',
     chapter: 'C1 組織與報告邊界',
     question: '請提供報告聯絡人、部門、Email與聯絡方式。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '聯絡窗口;部門;Email;電話',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '內部負責人名單',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6372,13 +6372,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-05',
     chapter: 'C1 組織與報告邊界',
     question: '請描述主要產品/服務、營收來源與核心商業模式。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '產品服務;營收來源;商業模式',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '產品型錄;官網;營收分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6387,13 +6387,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-06',
     chapter: 'C1 組織與報告邊界',
     question: '請說明上游供應商、中游營運活動、下游客戶與通路。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '上游;中游;下游;通路',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '價值鏈圖;供應商清單;客戶類型表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6402,13 +6402,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-07',
     chapter: 'C1 組織與報告邊界',
     question: '請說明主要市場、服務國家/地區與客戶類型。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '市場區域;客戶類型;服務地區',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '銷售地區表;客戶分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6417,13 +6417,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-08',
     chapter: 'C1 組織與報告邊界',
     question: '請定義員工統計邊界，包含全職、兼職、派遣、承攬是否納入。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將員工邊界;雇用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
-    primaryDataAtom: '員工邊界;雇用類型;統計口徑',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將員工邊界;僱用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
+    primaryDataAtom: '員工邊界;僱用類型;統計口徑',
     griImpactMapping: 'GRI 2-7;2-8',
     suggestedEvidence: '人資統計表;薪資系統匯出',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6432,13 +6432,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-09',
     chapter: 'C1 組織與報告邊界',
     question: '請提供年度營收、資產規模、營運據點數與產能/服務量。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '營收;資產;據點數;產能',
     griImpactMapping: 'GRI 2-6;201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6447,13 +6447,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-10',
     chapter: 'C1 組織與報告邊界',
     question: '本年度報告範疇是否與前期不同？若有，請說明差異。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '範疇異動;差異原因;前期比較',
     griImpactMapping: 'GRI 2-2;2-4',
     suggestedEvidence: '前期報告;範疇變更紀錄',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6462,13 +6462,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-11',
     chapter: 'C1 組織與報告邊界',
     question: '請列出參與的外部永續倡議、公協會與會員資格。',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '外部倡議;公協會;會員資格',
     griImpactMapping: 'GRI 2-28',
     suggestedEvidence: '會員證明;倡議簽署文件',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6477,13 +6477,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-12',
     chapter: 'C1 組織與報告邊界',
     question: '報告期間是否有重大組織、營運、股權、併購或產線變更？',
-    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以台北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新台幣3.2億元、員工數約120人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '睿禾顧問股份有限公司本次C版專業揭露以臺北總部、高雄辦公室為主要報告邊界，涵蓋企業管理顧問、人才培訓、數位轉型輔導與專案管理。公司年度營收約新臺幣3.2億元、員工數約120人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '重大變更;變更日期;影響說明',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '董事會紀錄;重大訊息;內部公告',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6497,8 +6497,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9',
     suggestedEvidence: '組織架構圖;董事會名單',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6512,8 +6512,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9;405-1',
     suggestedEvidence: '董事會名單;年報',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6527,8 +6527,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;2-13',
     suggestedEvidence: '董事會議事錄;委員會章程',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6542,8 +6542,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-13',
     suggestedEvidence: 'ESG委員會章程;RACI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6552,13 +6552,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C2-05',
     chapter: 'C2 治理與永續管理',
     question: '請列出永續、人權、環境、職安、供應鏈、誠信經營等政策。',
-    highFidelityAnswer: '睿禾顧問股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;核准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
-    primaryDataAtom: '政策名稱;政策範圍;核准層級',
+    highFidelityAnswer: '睿禾顧問股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;覈准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
+    primaryDataAtom: '政策名稱;政策範圍;覈准層級',
     griImpactMapping: 'GRI 2-23;2-24',
     suggestedEvidence: '政策文件;內部公告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6572,8 +6572,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;3-3',
     suggestedEvidence: '風險管理報告;風險矩陣',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6581,14 +6581,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C2-07',
     chapter: 'C2 治理與永續管理',
-    question: '永續資料與ESG流程是否納入內控或內部稽核？',
-    highFidelityAnswer: '睿禾顧問股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽核建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽核範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
-    primaryDataAtom: 'ESG內控;稽核範圍;缺失改善',
+    question: '永續資料與ESG流程是否納入內控或內部稽覈？',
+    highFidelityAnswer: '睿禾顧問股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽覈建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽覈範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
+    primaryDataAtom: 'ESG內控;稽覈範圍;缺失改善',
     griImpactMapping: 'GRI 2-12',
-    suggestedEvidence: '內控文件;稽核報告',
+    suggestedEvidence: '內控文件;稽覈報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6602,8 +6602,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-19;2-20',
     suggestedEvidence: '薪酬政策;KPI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6617,8 +6617,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-15',
     suggestedEvidence: '利益衝突政策;會議紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6632,8 +6632,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;2-26',
     suggestedEvidence: '申訴制度;通報紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6647,8 +6647,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-27',
     suggestedEvidence: '裁罰紀錄;法遵報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6662,8 +6662,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '年度目標表;績效追蹤表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6677,8 +6677,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '利害關係人盤點表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6692,8 +6692,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '問卷;訪談紀錄;會議紀錄',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6707,8 +6707,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '議題長清單;同業benchmark',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6722,8 +6722,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '重大性方法說明;問卷設計',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6731,14 +6731,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C3-05',
     chapter: 'C3 重大性與利害關係人',
-    question: '請填寫各議題對經濟、環境、人群之實際/潛在衝擊評分。',
+    question: '請填寫各議題對經濟、環境、人羣之實際/潛在衝擊評分。',
     highFidelityAnswer: '睿禾顧問股份有限公司以利害關係人議合與營運風險評估為基礎，辨識與影響重大性評分相關之重大性議題。公司依據產業特性、客戶要求、法規趨勢與內部營運數據，定期評估正負面衝擊及其邊界，並將議題;衝擊類型;嚴重性;可能性作為重大性管理與GRI 3-1;3-2揭露之資料基礎。',
     primaryDataAtom: '議題;衝擊類型;嚴重性;可能性',
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性評分表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6752,8 +6752,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '財務重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6767,8 +6767,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-2',
     suggestedEvidence: '重大議題清單',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6782,8 +6782,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '影響邊界圖',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6797,8 +6797,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '管理方案;年度計畫',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6812,8 +6812,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '績效追蹤表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6827,8 +6827,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;3-3',
     suggestedEvidence: '申訴紀錄;補救方案',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6842,8 +6842,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6857,8 +6857,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6872,8 +6872,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: 'TCFD分析;風險報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6887,8 +6887,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-3',
     suggestedEvidence: '精算報告;財報附註',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6897,13 +6897,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C4-04',
     chapter: 'C4 經濟與誠信經營',
     question: '請揭露政府補助、租稅優惠或其他財務支持。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約520,000 kWh、用水量約4,200噸、廢棄物約18噸；公司將政府補助;金額;用途納入月度管理，並以補助核定函;財報支援環境揭露。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約520,000 kWh、用水量約4,200噸、廢棄物約18噸；公司將政府補助;金額;用途納入月度管理，並以補助覈定函;財報支援環境揭露。',
     primaryDataAtom: '政府補助;金額;用途',
     griImpactMapping: 'GRI 201-4',
-    suggestedEvidence: '補助核定函;財報',
+    suggestedEvidence: '補助覈定函;財報',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6917,8 +6917,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-1',
     suggestedEvidence: '反貪腐風險評估報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6932,8 +6932,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-2',
     suggestedEvidence: '訓練紀錄;簽到表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6947,8 +6947,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-3',
     suggestedEvidence: '調查報告;處分紀錄',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6962,8 +6962,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 206-1',
     suggestedEvidence: '法務報告;法院文件',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6977,8 +6977,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-1',
     suggestedEvidence: '電費單;燃料發票;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -6992,8 +6992,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-3',
     suggestedEvidence: '產量表;營收表;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7007,8 +7007,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-4',
     suggestedEvidence: '節能專案紀錄;M&V報告',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7022,8 +7022,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-5',
     suggestedEvidence: '產品測試報告;客戶案例',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7037,8 +7037,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-1',
     suggestedEvidence: '盤查清冊;排放係數;燃料資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7052,8 +7052,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-2',
     suggestedEvidence: '電費單;再生能源憑證;排放係數',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7067,8 +7067,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-3',
     suggestedEvidence: '供應鏈資料;差旅資料;物流資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7082,8 +7082,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-4',
     suggestedEvidence: '排放清冊;營收/產量資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7097,8 +7097,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-5',
     suggestedEvidence: '減碳專案紀錄;查證資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7112,8 +7112,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-6',
     suggestedEvidence: '冷媒清冊;設備維修紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7127,8 +7127,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-7',
     suggestedEvidence: '空污檢測報告;環保申報',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7142,8 +7142,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3;305',
     suggestedEvidence: 'SBTi文件;內部目標表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7157,8 +7157,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;201-2',
     suggestedEvidence: 'TCFD報告;會議紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7172,8 +7172,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: '風險矩陣;情境分析',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7187,8 +7187,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '內部碳價政策',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7202,8 +7202,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305',
     suggestedEvidence: '碳權憑證;退休證明',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7217,8 +7217,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: '水費單;水錶紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7232,8 +7232,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: 'WRI Aqueduct截圖;據點清單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7247,8 +7247,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-4',
     suggestedEvidence: '水質檢測;排放許可',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7262,8 +7262,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-5',
     suggestedEvidence: '水務平衡表',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7277,8 +7277,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-1;303-2',
     suggestedEvidence: '節水專案;設備改善紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7292,8 +7292,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3',
     suggestedEvidence: '廢棄物清運聯單;過磅單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7307,8 +7307,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-4;306-5',
     suggestedEvidence: '清運合約;處理證明',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7322,8 +7322,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306',
     suggestedEvidence: '危廢申報;處理憑證',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7337,8 +7337,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-2',
     suggestedEvidence: '循環專案資料;產品設計文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7352,8 +7352,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3;2-27',
     suggestedEvidence: '事故報告;裁罰文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7367,8 +7367,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-1;301-2',
     suggestedEvidence: '採購資料;BOM',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7382,8 +7382,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-3',
     suggestedEvidence: '回收紀錄;合作合約',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7397,8 +7397,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-1',
     suggestedEvidence: 'GIS圖資;環評資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7412,8 +7412,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-2',
     suggestedEvidence: '環評報告;監測資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7427,8 +7427,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-3',
     suggestedEvidence: '復育報告;照片;合作證明',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7442,8 +7442,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-4',
     suggestedEvidence: '物種調查;專家報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7457,8 +7457,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7470,10 +7470,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '睿禾顧問股份有限公司針對職業安全衛生與健康管理建立事故通報、教育訓練與風險改善流程。公司依據供應鏈環境負面衝擊需求蒐集負面衝擊;改善;終止，並以職安紀錄、訓練簽到表、風險評估與改善報告支援揭露。',
     primaryDataAtom: '負面衝擊;改善;終止',
     griImpactMapping: 'GRI 308-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7487,8 +7487,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301/302/305',
     suggestedEvidence: 'LCA報告;產品碳足跡',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7502,8 +7502,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '資本支出表;專案報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7511,14 +7511,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C8-01',
     chapter: 'C8 員工與人才發展',
-    question: '請依性別、地區、職級、雇用型態揭露員工人數。',
-    highFidelityAnswer: '睿禾顧問股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;雇用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
-    primaryDataAtom: '員工數;性別;地區;職級;雇用型態',
+    question: '請依性別、地區、職級、僱用型態揭露員工人數。',
+    highFidelityAnswer: '睿禾顧問股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;僱用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
+    primaryDataAtom: '員工數;性別;地區;職級;僱用型態',
     griImpactMapping: 'GRI 2-7;405-1',
     suggestedEvidence: '人資系統匯出',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7532,8 +7532,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-8',
     suggestedEvidence: '派遣/承攬合約',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7547,8 +7547,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-1',
     suggestedEvidence: '人資報表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7562,8 +7562,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-2',
     suggestedEvidence: '福利辦法',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7577,8 +7577,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-3',
     suggestedEvidence: '人資紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7592,8 +7592,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-1',
     suggestedEvidence: 'LMS訓練紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7607,8 +7607,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-2',
     suggestedEvidence: '訓練計畫;課程資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7622,8 +7622,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-3',
     suggestedEvidence: '績效系統資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7637,8 +7637,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-1',
     suggestedEvidence: '董事資料表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7652,8 +7652,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-2',
     suggestedEvidence: '薪資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7667,8 +7667,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-1',
     suggestedEvidence: '薪資表;法規資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7682,8 +7682,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-2',
     suggestedEvidence: '人資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7697,8 +7697,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 402-1',
     suggestedEvidence: '勞資會議紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7712,8 +7712,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 403',
     suggestedEvidence: '員工問卷;EAP紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7727,8 +7727,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-1;403-8',
     suggestedEvidence: 'ISO證書;職安手冊',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7742,8 +7742,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-2',
     suggestedEvidence: '風險評估表;事故調查報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7757,8 +7757,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-3;403-6',
     suggestedEvidence: '健檢資料;活動紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7772,8 +7772,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-4',
     suggestedEvidence: '委員會紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7787,8 +7787,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-5',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7802,8 +7802,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-9',
     suggestedEvidence: '職災申報;職安統計',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7817,8 +7817,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-10',
     suggestedEvidence: '職業病紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7832,8 +7832,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-23;412-1',
     suggestedEvidence: '人權政策文件',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7847,8 +7847,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-1',
     suggestedEvidence: '人權評估報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7862,8 +7862,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-2',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7877,8 +7877,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 406-1',
     suggestedEvidence: '申訴紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7890,10 +7890,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '睿禾顧問股份有限公司依其營運與採購特性逐步建置供應商管理制度，針對關鍵供應商進行品質、交期、環境與社會風險評估。公司將童工風險;強迫勞動風險;改善納入供應鏈資料庫，支援GRI 408-1;409-1與客戶盡職調查需求。',
     primaryDataAtom: '童工風險;強迫勞動風險;改善',
     griImpactMapping: 'GRI 408-1;409-1',
-    suggestedEvidence: '稽核報告',
+    suggestedEvidence: '稽覈報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7907,8 +7907,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 413-1;413-2',
     suggestedEvidence: '社區溝通紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7922,8 +7922,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 413',
     suggestedEvidence: '活動照片;成果報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7937,8 +7937,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 204-1',
     suggestedEvidence: '採購系統資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7952,8 +7952,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '供應商清單',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7967,8 +7967,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1;414-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7976,14 +7976,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C10-04',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請揭露供應商稽核家數、缺失、改善率與終止合作。',
-    highFidelityAnswer: '睿禾顧問股份有限公司依產品與服務特性，針對供應商稽核建立品質、客戶溝通、資料保護與產品責任管理。公司以稽核家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '稽核家數;缺失;改善率;終止合作',
+    question: '請揭露供應商稽覈家數、缺失、改善率與終止合作。',
+    highFidelityAnswer: '睿禾顧問股份有限公司依產品與服務特性，針對供應商稽覈建立品質、客戶溝通、資料保護與產品責任管理。公司以稽覈家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '稽覈家數;缺失;改善率;終止合作',
     griImpactMapping: 'GRI 308-2;414-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -7997,8 +7997,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-1',
     suggestedEvidence: '產品測試報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8012,8 +8012,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-2',
     suggestedEvidence: '召回紀錄;裁罰文件',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8027,8 +8027,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-1',
     suggestedEvidence: '標籤;產品說明書',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8042,8 +8042,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-2;417-3',
     suggestedEvidence: '法務紀錄',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8057,8 +8057,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 418-1',
     suggestedEvidence: '資安事件報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8072,8 +8072,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 418',
     suggestedEvidence: 'ISO27001證書;演練報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8087,8 +8087,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact',
     suggestedEvidence: '客戶問卷;客服資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8096,14 +8096,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C10-12',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請說明具永續效益的產品/服務、營收占比與影響。',
-    highFidelityAnswer: '睿禾顧問股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收占比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '永續產品;營收占比;環境/社會效益',
+    question: '請說明具永續效益的產品/服務、營收佔比與影響。',
+    highFidelityAnswer: '睿禾顧問股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收佔比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '永續產品;營收佔比;環境/社會效益',
     griImpactMapping: 'Impact/GRI 2-6',
     suggestedEvidence: '產品資料;銷售資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8112,13 +8112,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C11-01',
     chapter: 'C11 Impact與投資人敘事',
     question: '請說明企業希望解決的核心社會/環境問題。',
-    highFidelityAnswer: '睿禾顧問股份有限公司優先對應SDG 4、8、9、13，Impact重點為透過人才培訓與企業輔導協助客戶強化創新、數位與永續轉型能力。針對Impact定位，公司以問題定義;目標族群;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
-    primaryDataAtom: '問題定義;目標族群;需求',
+    highFidelityAnswer: '睿禾顧問股份有限公司優先對應SDG 4、8、9、13，Impact重點為透過人才培訓與企業輔導協助客戶強化創新、數位與永續轉型能力。針對Impact定位，公司以問題定義;目標族羣;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
+    primaryDataAtom: '問題定義;目標族羣;需求',
     griImpactMapping: 'Impact',
     suggestedEvidence: '問題分析;市場研究',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8133,7 +8133,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SDG對照表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8148,7 +8148,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '受益者名冊;活動紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8163,7 +8163,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'KPI追蹤表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8178,7 +8178,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '問卷;照片;第三方證明',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8190,10 +8190,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '睿禾顧問股份有限公司優先對應SDG 4、8、9、13，Impact重點為透過人才培訓與企業輔導協助客戶強化創新、數位與永續轉型能力。針對受益人回饋，公司以回饋;滿意度;改善量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
     primaryDataAtom: '回饋;滿意度;改善',
     griImpactMapping: 'Impact',
-    suggestedEvidence: '問卷回饋;訪談紀錄',
+    suggestedEvidence: '問捲回饋;訪談紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8208,7 +8208,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '風險評估',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8223,7 +8223,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '營收資料;專案分析',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8238,7 +8238,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '募資簡報;故事素材',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
@@ -8253,157 +8253,157 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SROI估算表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-01',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明是否進行第三方查證、機構、範圍與確信等級。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證機構;範圍;等級',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-02',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請列出查證涵蓋的指標、據點、期間與排除項。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證指標;據點;期間;排除',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證計畫;聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-03',
-    chapter: 'C12 查核、佐證與資料治理',
-    question: '請為各資料領域指定資料提供者、覆核者與核准者。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;核准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
-    primaryDataAtom: '資料提供者;覆核者;核准者',
+    chapter: 'C12 查覈、佐證與資料治理',
+    question: '請為各資料領域指定資料提供者、覆核者與覈准者。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;覈准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    primaryDataAtom: '資料提供者;覆核者;覈准者',
     griImpactMapping: 'Assurance',
     suggestedEvidence: 'RACI表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-04',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請建立每題對應的佐證資料、檔名、版本與保存位置。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '檔名;版本;保存位置;對應題項',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '文件清單',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-05',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明資料完整性、準確性、一致性與時效性檢核方法。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '完整性;準確性;一致性;時效性',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '檢核表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-06',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '若前期資料有修正重編，請說明原因、影響與範圍。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '修正原因;影響;範圍',
     griImpactMapping: 'GRI 2-4',
     suggestedEvidence: '重編紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-07',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定資料檢視、編輯、覆核、下載與查證權限。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '權限角色;權限範圍',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '權限表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-08',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請啟用資料異動紀錄，包含誰、何時、改了什麼。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '異動人;時間;欄位;前後值',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '系統紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-09',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '需提供外部查證或供應鏈共享時，哪些資料需要去敏化？',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '敏感資料;去敏化規則',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '資料分類表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-09',
     companyType: '專業服務業',
     companyName: '睿禾顧問股份有限公司',
     questionId: 'C12-10',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定需上鏈/雜湊/封存的重要資料與憑證。',
-    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '睿禾顧問股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '封存資料;Hash;時間戳',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: 'Hash紀錄;封存證明',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8412,13 +8412,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-01',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫公司中英文名稱、統一編號、成立年份、總部地址與主要營運據點。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將公司名稱;統編;成立年份;總部地址;營運據點納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '公司名稱;統編;成立年份;總部地址;營運據點',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司登記資料;組織網站;營業登記證',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8427,13 +8427,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-02',
     chapter: 'C1 組織與報告邊界',
     question: '請說明公司法律型態、所有權結構、母公司/子公司關係。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將法律型態;股權結構;母子公司關係納入主資料管理，以支援GRI 2-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '法律型態;股權結構;母子公司關係',
     griImpactMapping: 'GRI 2-1',
     suggestedEvidence: '公司章程;年報;股權結構圖',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8442,13 +8442,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-03',
     chapter: 'C1 組織與報告邊界',
     question: '請填寫本次永續揭露的報告期間、發布日期與報告週期。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將報告期間;發布日期;報告週期納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '報告期間;發布日期;報告週期',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '前一年度報告;內部編報時程表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8457,13 +8457,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-04',
     chapter: 'C1 組織與報告邊界',
     question: '請提供報告聯絡人、部門、Email與聯絡方式。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將聯絡窗口;部門;Email;電話納入主資料管理，以支援GRI 2-3之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '聯絡窗口;部門;Email;電話',
     griImpactMapping: 'GRI 2-3',
     suggestedEvidence: '內部負責人名單',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8472,13 +8472,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-05',
     chapter: 'C1 組織與報告邊界',
     question: '請描述主要產品/服務、營收來源與核心商業模式。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將產品服務;營收來源;商業模式納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '產品服務;營收來源;商業模式',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '產品型錄;官網;營收分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8487,13 +8487,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-06',
     chapter: 'C1 組織與報告邊界',
     question: '請說明上游供應商、中游營運活動、下游客戶與通路。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將上游;中游;下游;通路納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '上游;中游;下游;通路',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '價值鏈圖;供應商清單;客戶類型表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8502,13 +8502,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-07',
     chapter: 'C1 組織與報告邊界',
     question: '請說明主要市場、服務國家/地區與客戶類型。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將市場區域;客戶類型;服務地區納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '市場區域;客戶類型;服務地區',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '銷售地區表;客戶分類表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8517,13 +8517,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-08',
     chapter: 'C1 組織與報告邊界',
     question: '請定義員工統計邊界，包含全職、兼職、派遣、承攬是否納入。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將員工邊界;雇用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
-    primaryDataAtom: '員工邊界;雇用類型;統計口徑',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將員工邊界;僱用類型;統計口徑納入主資料管理，以支援GRI 2-7;2-8之完整揭露。公司依其產業特性建立永續治理資料。',
+    primaryDataAtom: '員工邊界;僱用類型;統計口徑',
     griImpactMapping: 'GRI 2-7;2-8',
     suggestedEvidence: '人資統計表;薪資系統匯出',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8532,13 +8532,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-09',
     chapter: 'C1 組織與報告邊界',
     question: '請提供年度營收、資產規模、營運據點數與產能/服務量。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將營收;資產;據點數;產能納入主資料管理，以支援GRI 2-6;201-1之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '營收;資產;據點數;產能',
     griImpactMapping: 'GRI 2-6;201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8547,13 +8547,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-10',
     chapter: 'C1 組織與報告邊界',
     question: '本年度報告範疇是否與前期不同？若有，請說明差異。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將範疇異動;差異原因;前期比較納入主資料管理，以支援GRI 2-2;2-4之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '範疇異動;差異原因;前期比較',
     griImpactMapping: 'GRI 2-2;2-4',
     suggestedEvidence: '前期報告;範疇變更紀錄',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8562,13 +8562,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-11',
     chapter: 'C1 組織與報告邊界',
     question: '請列出參與的外部永續倡議、公協會與會員資格。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將外部倡議;公協會;會員資格納入主資料管理，以支援GRI 2-28之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '外部倡議;公協會;會員資格',
     griImpactMapping: 'GRI 2-28',
     suggestedEvidence: '會員證明;倡議簽署文件',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8577,13 +8577,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C1-12',
     chapter: 'C1 組織與報告邊界',
     question: '報告期間是否有重大組織、營運、股權、併購或產線變更？',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以台北研發中心、台中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平台。公司年度營收約新台幣7.5億元、員工數約240人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司本次C版專業揭露以臺北研發中心、臺中資料運算合作機房為主要報告邊界，涵蓋AI模型開發、智慧製造解決方案、資料治理與自動化平臺。公司年度營收約新臺幣7.5億元、員工數約240人，並將重大變更;變更日期;影響說明納入主資料管理，以支援GRI 2-6之完整揭露。公司依其產業特性建立永續治理資料。',
     primaryDataAtom: '重大變更;變更日期;影響說明',
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '董事會紀錄;重大訊息;內部公告',
     aiReportDirection: '可轉為「C1 組織與報告邊界」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8597,8 +8597,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9',
     suggestedEvidence: '組織架構圖;董事會名單',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8612,8 +8612,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-9;405-1',
     suggestedEvidence: '董事會名單;年報',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8627,8 +8627,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;2-13',
     suggestedEvidence: '董事會議事錄;委員會章程',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8642,8 +8642,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-13',
     suggestedEvidence: 'ESG委員會章程;RACI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8652,13 +8652,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C2-05',
     chapter: 'C2 治理與永續管理',
     question: '請列出永續、人權、環境、職安、供應鏈、誠信經營等政策。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;核准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
-    primaryDataAtom: '政策名稱;政策範圍;核准層級',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對政策與承諾建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與政策名稱;政策範圍;覈准層級連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-23;2-24所要求的治理透明度。',
+    primaryDataAtom: '政策名稱;政策範圍;覈准層級',
     griImpactMapping: 'GRI 2-23;2-24',
     suggestedEvidence: '政策文件;內部公告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8672,8 +8672,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;3-3',
     suggestedEvidence: '風險管理報告;風險矩陣',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8681,14 +8681,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C2-07',
     chapter: 'C2 治理與永續管理',
-    question: '永續資料與ESG流程是否納入內控或內部稽核？',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽核建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽核範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
-    primaryDataAtom: 'ESG內控;稽核範圍;缺失改善',
+    question: '永續資料與ESG流程是否納入內控或內部稽覈？',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司已將永續管理納入公司治理與內部管理流程，針對內控與稽覈建立權責分工、跨部門資料回報與管理層覆核機制。相關資料會與ESG內控;稽覈範圍;缺失改善連結，並以會議紀錄、政策文件與管理報表作為佐證，強化GRI 2-12所要求的治理透明度。',
+    primaryDataAtom: 'ESG內控;稽覈範圍;缺失改善',
     griImpactMapping: 'GRI 2-12',
-    suggestedEvidence: '內控文件;稽核報告',
+    suggestedEvidence: '內控文件;稽覈報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8702,8 +8702,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-19;2-20',
     suggestedEvidence: '薪酬政策;KPI表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8717,8 +8717,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-15',
     suggestedEvidence: '利益衝突政策;會議紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8732,8 +8732,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;2-26',
     suggestedEvidence: '申訴制度;通報紀錄',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8747,8 +8747,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-27',
     suggestedEvidence: '裁罰紀錄;法遵報告',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8762,8 +8762,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '年度目標表;績效追蹤表',
     aiReportDirection: '可轉為「C2 治理與永續管理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8777,8 +8777,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '利害關係人盤點表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8792,8 +8792,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-29',
     suggestedEvidence: '問卷;訪談紀錄;會議紀錄',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8807,8 +8807,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '議題長清單;同業benchmark',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8822,8 +8822,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '重大性方法說明;問卷設計',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8831,14 +8831,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C3-05',
     chapter: 'C3 重大性與利害關係人',
-    question: '請填寫各議題對經濟、環境、人群之實際/潛在衝擊評分。',
+    question: '請填寫各議題對經濟、環境、人羣之實際/潛在衝擊評分。',
     highFidelityAnswer: '凌曜智慧科技股份有限公司以利害關係人議合與營運風險評估為基礎，辨識與影響重大性評分相關之重大性議題。公司依據產業特性、客戶要求、法規趨勢與內部營運數據，定期評估正負面衝擊及其邊界，並將議題;衝擊類型;嚴重性;可能性作為重大性管理與GRI 3-1;3-2揭露之資料基礎。',
     primaryDataAtom: '議題;衝擊類型;嚴重性;可能性',
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性評分表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8852,8 +8852,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1',
     suggestedEvidence: '財務重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8867,8 +8867,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-2',
     suggestedEvidence: '重大議題清單',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8882,8 +8882,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '影響邊界圖',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8897,8 +8897,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '管理方案;年度計畫',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8912,8 +8912,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '績效追蹤表',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8927,8 +8927,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-25;3-3',
     suggestedEvidence: '申訴紀錄;補救方案',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8942,8 +8942,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-1;3-2',
     suggestedEvidence: '重大性矩陣',
     aiReportDirection: '可轉為「C3 重大性與利害關係人」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8957,8 +8957,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-1',
     suggestedEvidence: '財報;管理報表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8972,8 +8972,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: 'TCFD分析;風險報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8987,8 +8987,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-3',
     suggestedEvidence: '精算報告;財報附註',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -8997,13 +8997,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C4-04',
     chapter: 'C4 經濟與誠信經營',
     question: '請揭露政府補助、租稅優惠或其他財務支持。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約4,200,000 kWh、用水量約6,100噸、廢棄物約20噸；公司將政府補助;金額;用途納入月度管理，並以補助核定函;財報支援環境揭露。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於環境管理方面建立能源、水資源、廢棄物與污染防制之數據追蹤機制。2025年度用電量約4,200,000 kWh、用水量約6,100噸、廢棄物約20噸；公司將政府補助;金額;用途納入月度管理，並以補助覈定函;財報支援環境揭露。',
     primaryDataAtom: '政府補助;金額;用途',
     griImpactMapping: 'GRI 201-4',
-    suggestedEvidence: '補助核定函;財報',
+    suggestedEvidence: '補助覈定函;財報',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9017,8 +9017,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-1',
     suggestedEvidence: '反貪腐風險評估報告',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9032,8 +9032,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-2',
     suggestedEvidence: '訓練紀錄;簽到表',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9047,8 +9047,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 205-3',
     suggestedEvidence: '調查報告;處分紀錄',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9062,8 +9062,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 206-1',
     suggestedEvidence: '法務報告;法院文件',
     aiReportDirection: '可轉為「C4 經濟與誠信經營」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9077,8 +9077,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-1',
     suggestedEvidence: '電費單;燃料發票;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9092,8 +9092,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-3',
     suggestedEvidence: '產量表;營收表;能源報表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9107,8 +9107,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-4',
     suggestedEvidence: '節能專案紀錄;M&V報告',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9122,8 +9122,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 302-5',
     suggestedEvidence: '產品測試報告;客戶案例',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9137,8 +9137,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-1',
     suggestedEvidence: '盤查清冊;排放係數;燃料資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9152,8 +9152,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-2',
     suggestedEvidence: '電費單;再生能源憑證;排放係數',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9167,8 +9167,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-3',
     suggestedEvidence: '供應鏈資料;差旅資料;物流資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9182,8 +9182,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-4',
     suggestedEvidence: '排放清冊;營收/產量資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9197,8 +9197,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-5',
     suggestedEvidence: '減碳專案紀錄;查證資料',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9212,8 +9212,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-6',
     suggestedEvidence: '冷媒清冊;設備維修紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9227,8 +9227,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305-7',
     suggestedEvidence: '空污檢測報告;環保申報',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9242,8 +9242,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3;305',
     suggestedEvidence: 'SBTi文件;內部目標表',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9257,8 +9257,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-12;201-2',
     suggestedEvidence: 'TCFD報告;會議紀錄',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9272,8 +9272,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 201-2',
     suggestedEvidence: '風險矩陣;情境分析',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9287,8 +9287,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '內部碳價政策',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9302,8 +9302,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 305',
     suggestedEvidence: '碳權憑證;退休證明',
     aiReportDirection: '可轉為「C5 能源、碳與氣候」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9317,8 +9317,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: '水費單;水錶紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9332,8 +9332,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-3',
     suggestedEvidence: 'WRI Aqueduct截圖;據點清單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9347,8 +9347,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-4',
     suggestedEvidence: '水質檢測;排放許可',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9362,8 +9362,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-5',
     suggestedEvidence: '水務平衡表',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9377,8 +9377,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 303-1;303-2',
     suggestedEvidence: '節水專案;設備改善紀錄',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9392,8 +9392,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3',
     suggestedEvidence: '廢棄物清運聯單;過磅單',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9407,8 +9407,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-4;306-5',
     suggestedEvidence: '清運合約;處理證明',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9422,8 +9422,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306',
     suggestedEvidence: '危廢申報;處理憑證',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9437,8 +9437,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-2',
     suggestedEvidence: '循環專案資料;產品設計文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9452,8 +9452,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 306-3;2-27',
     suggestedEvidence: '事故報告;裁罰文件',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9467,8 +9467,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-1;301-2',
     suggestedEvidence: '採購資料;BOM',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9482,8 +9482,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301-3',
     suggestedEvidence: '回收紀錄;合作合約',
     aiReportDirection: '可轉為「C6 水資源與廢棄物」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9497,8 +9497,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-1',
     suggestedEvidence: 'GIS圖資;環評資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9512,8 +9512,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-2',
     suggestedEvidence: '環評報告;監測資料',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9527,8 +9527,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-3',
     suggestedEvidence: '復育報告;照片;合作證明',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9542,8 +9542,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 304-4',
     suggestedEvidence: '物種調查;專家報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9557,8 +9557,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9570,10 +9570,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '凌曜智慧科技股份有限公司針對職業安全衛生與健康管理建立事故通報、教育訓練與風險改善流程。公司依據供應鏈環境負面衝擊需求蒐集負面衝擊;改善;終止，並以職安紀錄、訓練簽到表、風險評估與改善報告支援揭露。',
     primaryDataAtom: '負面衝擊;改善;終止',
     griImpactMapping: 'GRI 308-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9587,8 +9587,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 301/302/305',
     suggestedEvidence: 'LCA報告;產品碳足跡',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9602,8 +9602,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 3-3',
     suggestedEvidence: '資本支出表;專案報告',
     aiReportDirection: '可轉為「C7 生物多樣性與環境衝擊」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9611,14 +9611,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C8-01',
     chapter: 'C8 員工與人才發展',
-    question: '請依性別、地區、職級、雇用型態揭露員工人數。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;雇用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
-    primaryDataAtom: '員工數;性別;地區;職級;雇用型態',
+    question: '請依性別、地區、職級、僱用型態揭露員工人數。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司重視人權、平等、多元與社會責任，並逐步將相關承諾轉化為政策、訓練與申訴機制。針對員工總數，公司以員工數;性別;地區;職級;僱用型態建立可追蹤資料，支援員工、供應商及社區關係之透明揭露。',
+    primaryDataAtom: '員工數;性別;地區;職級;僱用型態',
     griImpactMapping: 'GRI 2-7;405-1',
     suggestedEvidence: '人資系統匯出',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9632,8 +9632,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-8',
     suggestedEvidence: '派遣/承攬合約',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9647,8 +9647,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-1',
     suggestedEvidence: '人資報表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9662,8 +9662,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-2',
     suggestedEvidence: '福利辦法',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9677,8 +9677,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 401-3',
     suggestedEvidence: '人資紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9692,8 +9692,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-1',
     suggestedEvidence: 'LMS訓練紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9707,8 +9707,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-2',
     suggestedEvidence: '訓練計畫;課程資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9722,8 +9722,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 404-3',
     suggestedEvidence: '績效系統資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9737,8 +9737,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-1',
     suggestedEvidence: '董事資料表',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9752,8 +9752,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 405-2',
     suggestedEvidence: '薪資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9767,8 +9767,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-1',
     suggestedEvidence: '薪資表;法規資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9782,8 +9782,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 202-2',
     suggestedEvidence: '人資資料',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9797,8 +9797,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 402-1',
     suggestedEvidence: '勞資會議紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9812,8 +9812,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 403',
     suggestedEvidence: '員工問卷;EAP紀錄',
     aiReportDirection: '可轉為「C8 員工與人才發展」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9827,8 +9827,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-1;403-8',
     suggestedEvidence: 'ISO證書;職安手冊',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9842,8 +9842,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-2',
     suggestedEvidence: '風險評估表;事故調查報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9857,8 +9857,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-3;403-6',
     suggestedEvidence: '健檢資料;活動紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9872,8 +9872,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-4',
     suggestedEvidence: '委員會紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9887,8 +9887,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-5',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9902,8 +9902,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-9',
     suggestedEvidence: '職災申報;職安統計',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9917,8 +9917,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 403-10',
     suggestedEvidence: '職業病紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9932,8 +9932,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-23;412-1',
     suggestedEvidence: '人權政策文件',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9947,8 +9947,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-1',
     suggestedEvidence: '人權評估報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9962,8 +9962,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 412-2',
     suggestedEvidence: '訓練紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9977,8 +9977,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 406-1',
     suggestedEvidence: '申訴紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -9990,10 +9990,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '凌曜智慧科技股份有限公司依其營運與採購特性逐步建置供應商管理制度，針對關鍵供應商進行品質、交期、環境與社會風險評估。公司將童工風險;強迫勞動風險;改善納入供應鏈資料庫，支援GRI 408-1;409-1與客戶盡職調查需求。',
     primaryDataAtom: '童工風險;強迫勞動風險;改善',
     griImpactMapping: 'GRI 408-1;409-1',
-    suggestedEvidence: '稽核報告',
+    suggestedEvidence: '稽覈報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10007,8 +10007,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 413-1;413-2',
     suggestedEvidence: '社區溝通紀錄',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10022,8 +10022,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 413',
     suggestedEvidence: '活動照片;成果報告',
     aiReportDirection: '可轉為「C9 職安、人權與社會責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10037,8 +10037,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 204-1',
     suggestedEvidence: '採購系統資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10052,8 +10052,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 2-6',
     suggestedEvidence: '供應商清單',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10067,8 +10067,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 308-1;414-1',
     suggestedEvidence: '供應商評估表',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10076,14 +10076,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C10-04',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請揭露供應商稽核家數、缺失、改善率與終止合作。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司依產品與服務特性，針對供應商稽核建立品質、客戶溝通、資料保護與產品責任管理。公司以稽核家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '稽核家數;缺失;改善率;終止合作',
+    question: '請揭露供應商稽覈家數、缺失、改善率與終止合作。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司依產品與服務特性，針對供應商稽覈建立品質、客戶溝通、資料保護與產品責任管理。公司以稽覈家數;缺失;改善率;終止合作作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '稽覈家數;缺失;改善率;終止合作',
     griImpactMapping: 'GRI 308-2;414-2',
-    suggestedEvidence: '稽核報告;改善追蹤',
+    suggestedEvidence: '稽覈報告;改善追蹤',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10097,8 +10097,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-1',
     suggestedEvidence: '產品測試報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10112,8 +10112,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 416-2',
     suggestedEvidence: '召回紀錄;裁罰文件',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10127,8 +10127,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-1',
     suggestedEvidence: '標籤;產品說明書',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10142,8 +10142,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 417-2;417-3',
     suggestedEvidence: '法務紀錄',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10157,8 +10157,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'GRI 418-1',
     suggestedEvidence: '資安事件報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10172,8 +10172,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact/GRI 418',
     suggestedEvidence: 'ISO27001證書;演練報告',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10187,8 +10187,8 @@ export const ANSWERS_PART2: Answer[] = [
     griImpactMapping: 'Impact',
     suggestedEvidence: '客戶問卷;客服資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10196,14 +10196,14 @@ export const ANSWERS_PART2: Answer[] = [
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C10-12',
     chapter: 'C10 供應鏈與產品責任',
-    question: '請說明具永續效益的產品/服務、營收占比與影響。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收占比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
-    primaryDataAtom: '永續產品;營收占比;環境/社會效益',
+    question: '請說明具永續效益的產品/服務、營收佔比與影響。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司依產品與服務特性，針對永續產品/服務建立品質、客戶溝通、資料保護與產品責任管理。公司以永續產品;營收佔比;環境/社會效益作為內控與客戶信任基礎，並將重大客訴、資安或法遵事件納入管理層追蹤。',
+    primaryDataAtom: '永續產品;營收佔比;環境/社會效益',
     griImpactMapping: 'Impact/GRI 2-6',
     suggestedEvidence: '產品資料;銷售資料',
     aiReportDirection: '可轉為「C10 供應鏈與產品責任」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10212,13 +10212,13 @@ export const ANSWERS_PART2: Answer[] = [
     questionId: 'C11-01',
     chapter: 'C11 Impact與投資人敘事',
     question: '請說明企業希望解決的核心社會/環境問題。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司優先對應SDG 8、9、12、13，Impact重點為透過AI節能與智慧製造方案協助客戶提升能源效率與製程良率。針對Impact定位，公司以問題定義;目標族群;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
-    primaryDataAtom: '問題定義;目標族群;需求',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司優先對應SDG 8、9、12、13，Impact重點為透過AI節能與智慧製造方案協助客戶提升能源效率與製程良率。針對Impact定位，公司以問題定義;目標族羣;需求量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
+    primaryDataAtom: '問題定義;目標族羣;需求',
     griImpactMapping: 'Impact',
     suggestedEvidence: '問題分析;市場研究',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10233,7 +10233,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SDG對照表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10248,7 +10248,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '受益者名冊;活動紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10263,7 +10263,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'KPI追蹤表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10278,7 +10278,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '問卷;照片;第三方證明',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10290,10 +10290,10 @@ export const ANSWERS_PART2: Answer[] = [
     highFidelityAnswer: '凌曜智慧科技股份有限公司優先對應SDG 8、9、12、13，Impact重點為透過AI節能與智慧製造方案協助客戶提升能源效率與製程良率。針對受益人回饋，公司以回饋;滿意度;改善量化行動投入、成果與受益對象，並可轉化為投資人、客戶與合作夥伴可理解的影響力敘事。',
     primaryDataAtom: '回饋;滿意度;改善',
     griImpactMapping: 'Impact',
-    suggestedEvidence: '問卷回饋;訪談紀錄',
+    suggestedEvidence: '問捲回饋;訪談紀錄',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10308,7 +10308,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '風險評估',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10323,7 +10323,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '營收資料;專案分析',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10338,7 +10338,7 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: '募資簡報;故事素材',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
@@ -10353,157 +10353,157 @@ export const ANSWERS_PART2: Answer[] = [
     suggestedEvidence: 'SROI估算表',
     aiReportDirection: '可轉為「C11 Impact與投資人敘事」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
     dataMaturity: '進階補充',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-01',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明是否進行第三方查證、機構、範圍與確信等級。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對外部查證狀態建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證機構;範圍;等級納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證機構;範圍;等級',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-02',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請列出查證涵蓋的指標、據點、期間與排除項。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對查證範圍建立佐證上傳、版本控管、權限管理與資料封存流程。公司將查證指標;據點;期間;排除納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '查證指標;據點;期間;排除',
     griImpactMapping: 'GRI 2-5',
     suggestedEvidence: '查證計畫;聲明書',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-03',
-    chapter: 'C12 查核、佐證與資料治理',
-    question: '請為各資料領域指定資料提供者、覆核者與核准者。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;核准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
-    primaryDataAtom: '資料提供者;覆核者;核准者',
+    chapter: 'C12 查覈、佐證與資料治理',
+    question: '請為各資料領域指定資料提供者、覆核者與覈准者。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料負責人建立佐證上傳、版本控管、權限管理與資料封存流程。公司將資料提供者;覆核者;覈准者納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    primaryDataAtom: '資料提供者;覆核者;覈准者',
     griImpactMapping: 'Assurance',
     suggestedEvidence: 'RACI表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-04',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請建立每題對應的佐證資料、檔名、版本與保存位置。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對佐證資料清單建立佐證上傳、版本控管、權限管理與資料封存流程。公司將檔名;版本;保存位置;對應題項納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '檔名;版本;保存位置;對應題項',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '文件清單',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-05',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請說明資料完整性、準確性、一致性與時效性檢核方法。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料品質檢核建立佐證上傳、版本控管、權限管理與資料封存流程。公司將完整性;準確性;一致性;時效性納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '完整性;準確性;一致性;時效性',
     griImpactMapping: 'Assurance',
     suggestedEvidence: '檢核表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-06',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '若前期資料有修正重編，請說明原因、影響與範圍。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對修正重編建立佐證上傳、版本控管、權限管理與資料封存流程。公司將修正原因;影響;範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '修正原因;影響;範圍',
     griImpactMapping: 'GRI 2-4',
     suggestedEvidence: '重編紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-07',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定資料檢視、編輯、覆核、下載與查證權限。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料權限建立佐證上傳、版本控管、權限管理與資料封存流程。公司將權限角色;權限範圍納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '權限角色;權限範圍',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '權限表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-08',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請啟用資料異動紀錄，包含誰、何時、改了什麼。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對Audit Trail建立佐證上傳、版本控管、權限管理與資料封存流程。公司將異動人;時間;欄位;前後值納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '異動人;時間;欄位;前後值',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '系統紀錄',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-09',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '需提供外部查證或供應鏈共享時，哪些資料需要去敏化？',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對資料去敏化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將敏感資料;去敏化規則納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '敏感資料;去敏化規則',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: '資料分類表',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },
   {
     instanceId: 'DEMO-10',
     companyType: 'AI科技公司',
     companyName: '凌曜智慧科技股份有限公司',
     questionId: 'C12-10',
-    chapter: 'C12 查核、佐證與資料治理',
+    chapter: 'C12 查覈、佐證與資料治理',
     question: '請設定需上鏈/雜湊/封存的重要資料與憑證。',
-    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查核準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
+    highFidelityAnswer: '凌曜智慧科技股份有限公司於C版專業揭露中重視資料可信度與查覈準備，針對不可竄改與透明化建立佐證上傳、版本控管、權限管理與資料封存流程。公司將封存資料;Hash;時間戳納入Evidence Vault，支援第三方確信與5T信任機制之後續擴充。',
     primaryDataAtom: '封存資料;Hash;時間戳',
     griImpactMapping: 'Assurance/5T',
     suggestedEvidence: 'Hash紀錄;封存證明',
-    aiReportDirection: '可轉為「C12 查核、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
-    dataMaturity: 'C版專業可查核',
-    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查核的月度或部門別明細。'
+    aiReportDirection: '可轉為「C12 查覈、佐證與資料治理」章節段落，並由AI生成正式報告語氣、GRI索引文字、Evidence Vault連結及管理層摘要。',
+    dataMaturity: 'C版專業可查覈',
+    dataGap: '建議維持年度資料更新、保存原始佐證並補強可查覈的月度或部門別明細。'
   },];
 
 export default ANSWERS_PART2;

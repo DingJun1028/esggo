@@ -52,10 +52,10 @@ export default function DesignSystemPage() {
 function ComponentsShowcase() {
   return (
     <>
-      <Section title="指標卡片" subtitle="Metric Cards — 關鍵數據一目了然">
+      <Section title="指標卡片" subtitle="Metric Cards — 關鍵數據一目瞭然">
         <Grid columns={4}>
           <MetricCard label="碳排放量" value="12,450" unit="tCO2e" change={-8} trend="up" />
-          <MetricCard label="再生能源占比" value="67" unit="%" change={12} trend="up" />
+          <MetricCard label="再生能源佔比" value="67" unit="%" change={12} trend="up" />
           <MetricCard label="員工流動率" value="8.2" unit="%" change={3} trend="down" />
           <MetricCard label="董事會獨立性" value="75" unit="%" trend="neutral" />
         </Grid>

@@ -3,7 +3,7 @@
  * 完全代主自行 - 委派事件指標觀測器測試
  * ==========================================
  *
- * 驗證「監控/分析消費者」對齊平台不變量：
+ * 驗證「監控/分析消費者」對齊平臺不變量：
  * - 全域：訂閱同一 omni-agent-bus（enhancedOmniBus）單例。
  * - 全量：聚合所有委派事件（不抽樣、不截斷），非委派事件被忽略。
  * - 雙向同步：server 推送與 client 回寫進入同一總線，觀測器一視同仁聚合。
@@ -242,7 +242,7 @@ describe('alert dispatch (監控→告警→處置 閉環)', () => {
     m.setAlertPublisher(() => {}); // 避免真實發布副作用
     const before = m.getSnapshot().total;
 
-    // 觀測器自身發布的告警事件回流至總線
+    // 觀測器自身發布的告警事件迴流至總線
     enhancedOmniBus.publish('external-forward', {
       event: 'external-forward',
       payload: { type: 'delegation.alert.raised', delegationId: 'd1', level: 'critical' },

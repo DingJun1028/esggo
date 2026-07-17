@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 // ═══════════════════════════════════════════════════════════════
-// System Platform Resources — 系統平台資源項目
+// System Platform Resources — 系統平臺資源項目
 // Solid Card Design System (Teal #009EB0 / Gold #D4AF37 / ZKP Blue #3B82F6)
 // ═══════════════════════════════════════════════════════════════
 
@@ -546,7 +546,7 @@ export default function ResourcesPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-                系統平台資源項目 ∞ Evolution
+                系統平臺資源項目 ∞ Evolution
               </h1>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 System Platform Resources — Modules, AI Models, Infrastructure · 永續發展無限進化

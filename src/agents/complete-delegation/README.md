@@ -69,7 +69,7 @@ principal ──終止──> manager.terminateDelegation(id, reason)  → 移�
 | `decide` | 自主決策 |
 | `delegate` | 再委派 |
 | `govern` | 治理操作 |
-| `audit` | 稽核 |
+| `audit` | 稽覈 |
 | `monitor` | 監控 / 觀測（只讀觀測，不含變更） |
 | `full` | 包含以上全部（wildcard） |
 
@@ -236,7 +236,7 @@ const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
 
 ## 7. 後續擴充
 
-- [x] **稽核日誌**：`AuditLogger`（`autonomous-decision-engine.ts`）內建記憶體環形緩衝區（上限 1000 筆）+
+- [x] **稽覈日誌**：`AuditLogger`（`autonomous-decision-engine.ts`）內建記憶體環形緩衝區（上限 1000 筆）+
       可掛載 `auditSink`（持久化 / 轉送外部儲存），並提供 `getLogs()` / `query()`；
       `CompleteDelegationManager` 於 `DELEGATION_CREATED` / `DELEGATION_VALIDATED` / `DELEGATION_TERMINATED`
       寫入審計日誌，對外開放 `getAuditTrail()`。
@@ -251,7 +251,7 @@ const d = getDelegationMetrics().getDelegationSnapshot(delegationId);
 - [x] **全量事件留存 + SSE 回放 + 斷點續傳**：`publishDelegationEvent` 發布時經統一日誌持久化全量事件並分配 `id`；SSE 端點連線時先以 `REPLAY` 框（帶 `id`）回放該 `delegationId` 歷史，再以 `REPLAY_DONE` 收尾後續推即時事件（實現「進頁面即見完整脈絡」）。客戶端 `EventSource` 重連自帶 `Last-Event-ID`，服務端據 `sinceId` 僅回放其後事件（斷點續傳）。
 - [x] **RWD 事件觀測 UI**：新增 `/delegation/events` 響應式頁面 + `DelegationEventStream` client 元件（EventSource → SSE 端點），手機 / 桌面自適應呈現即時事件（含 `hashLock` 溯源、連線狀態、斷線自動重連），對齊「RWD / 全端 / 雙向同步」。
 - [x] **RWD UI 雙向同步閉環 + 斷點續傳**：`DelegationEventStream` 新增回寫輸入框，經 `POST /api/delegation/events`（型別 `delegation.client.sync`）將 client 訊號寫回同一 `omni-agent-bus`，事件經 SSE 迴路返回本面板並標記「本端傳送」，形成 client↔server 雙向閉環；SSE 即時幀帶 `source:'client'` 欄位供 UI 識別本端回寫（取代脆弱的 note 文字比對）。另將最後收到的 SSE `id` 存於 `localStorage`，全新連線（頁面重新整理）時以 `?sinceId=` 查詢參數續傳（服務端 `GET /stream` 已支援 `?sinceId=` 作為 `Last-Event-ID` 表頭之備援），實現「全量不漏」的斷點續傳。
-- [x] **委派事件指標觀測器（監控/分析消費者）**：`metrics.ts` 的 `getDelegationMetrics()` 單例訂閱同一 `omni-agent-bus`（`external-forward`），對所有委派生命週期事件進行**全量聚合**（不抽樣、不截斷，非委派事件一律忽略），提供全域（`total` / `byType` / `activeDelegations` / `lastSeenAt`）與 per-delegation（`getDelegationSnapshot`）指標快照，落實 summary 待辦「將委派事件接入實際監控/分析消費者」。對齊平台不變量：全域（與其他子系統共用同一總線，無孤島）、全量（觀測所有事件）、雙向同步（server 推送與 client 經 `POST /api/delegation/events` 回寫進入同一總線，觀測器一視同仁聚合）。
+- [x] **委派事件指標觀測器（監控/分析消費者）**：`metrics.ts` 的 `getDelegationMetrics()` 單例訂閱同一 `omni-agent-bus`（`external-forward`），對所有委派生命週期事件進行**全量聚合**（不抽樣、不截斷，非委派事件一律忽略），提供全域（`total` / `byType` / `activeDelegations` / `lastSeenAt`）與 per-delegation（`getDelegationSnapshot`）指標快照，落實 summary 待辦「將委派事件接入實際監控/分析消費者」。對齊平臺不變量：全域（與其他子系統共用同一總線，無孤島）、全量（觀測所有事件）、雙向同步（server 推送與 client 經 `POST /api/delegation/events` 回寫進入同一總線，觀測器一視同仁聚合）。
 - [x] **指標 API**：`GET /api/delegation/metrics[?delegationId=]` 暴露觀測器聚合；全球聚合（`?delegationId` 省略）僅回傳計數、不含 delegation 識別碼（最小暴露）；單一 delegation 須具備 `monitor` / `full` 權限（與 audit / stream 端點一致）；回應含 `alerts` 陣列（全量告警）。
 - [x] **指標總覽卡（RWD UI）**：`/delegation/events` 頁面新增 `DelegationMetricsOverview` 元件，消費 `GET /api/delegation/metrics` 呈現即時聚合（全球總事件數 / 活躍 delegation 數 / 事件類型分佈，以及連線 delegation 的專屬指標，需 `monitor`/`full`），5s 輕量輪詢；對齊 RWD / 全端 / 全量，關閉「監控消費者 → 可視化」閉環。
 - [x] **委派事件告警/閾值（監控/告警閉環）**：觀測器依規則產生告警——`delegation.emergency.stop`（critical）、`delegation.anomaly.detected`（warning），以及單一 delegation 事件總量達可設閱值（預設 1000）時發出 warning；告警全量留存於觀測器與 API（`alerts` 欄位，per-delegation 隔離），並於 `/delegation/events` 總覽卡以紅（critical）/ 琥珀（warning）呈現，完成「觀測 → 告警」閉環。

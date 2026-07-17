@@ -65,7 +65,7 @@ export function RagKnowledgeManager() {
       }
     } catch (error) {
       console.error('Error deleting source chunks:', error);
-      alert('刪除失敗，請查看控制台。');
+      alert('刪除失敗，請查看控制檯。');
     } finally {
       setDeleting(null);
     }

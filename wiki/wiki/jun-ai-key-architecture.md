@@ -16,14 +16,14 @@ evidence: "wiki\jun-ai-key-architecture.md"
 ```mermaid
 graph TD
     subgraph 用戶端 [Client Tier]
-        A[網頁控制台] --> B[CLI / OmniTerminal]
+        A[網頁控制檯] --> B[CLI / OmniTerminal]
         C[iOS App] --> B
         D[Android App] --> B
     end
 
     subgraph 萬能元鑰核心 [OmniKey Core / OmniAgent Bus]
         F[[API 網關]] --> G{路由分配器 / Intent Resolver}
-        G --> H[自我導航代理群 (Autonomous Swarm)]
+        G --> H[自我導航代理羣 (Autonomous Swarm)]
         G --> I[永久記憶庫 (Eternal Memory / 5T Vault)]
         G --> J[權能冶煉引擎 (Entropy Forge)]
         

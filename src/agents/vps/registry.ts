@@ -33,7 +33,7 @@ export class VPSAgentAdapter implements IOmniAgent {
   /** 內部 VPS Agent 實例 */
   private _vpsAgent: VPSAgent;
   
-  /** 當前生命周期階段 */
+  /** 當前生命週期階段 */
   private _state: LifecycleStage = "EMERGED";
   
   /** 配置 */
@@ -150,7 +150,7 @@ export class VPSAgentAdapter implements IOmniAgent {
    * 監聽背壓
    */
   monitorBackpressure(topic: string, threshold: number): void {
-    console.log(`[VPSAgentAdapter] 📊 監聽背壓: ${topic} (阈值: ${threshold})`);
+    console.log(`[VPSAgentAdapter] 📊 監聽背壓: ${topic} (閾值: ${threshold})`);
   }
 
   /**

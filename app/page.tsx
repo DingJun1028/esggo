@@ -10,7 +10,7 @@ const NAV_MODULES = [
     icon: '◎',
     title: '萬能中心',
     subtitle: 'OmniCore Center',
-    desc: 'ZKP 知識封印 · L-Hub 蜂群 · Trinity 覺醒',
+    desc: 'ZKP 知識封印 · L-Hub 蜂羣 · Trinity 覺醒',
     color: 'from-cyan-500/20 to-blue-500/10',
     accent: '#63a6b0',
     badge: '5T LIVE',
@@ -30,7 +30,7 @@ const NAV_MODULES = [
     icon: '🌱',
     title: '萬能永續中心',
     subtitle: 'Sustain Center ∞ Evolution',
-    desc: 'ESG 儀表板 · 碳排驗算 · 永續發展無限進化',
+    desc: 'ESG 儀錶板 · 碳排驗算 · 永續發展無限進化',
     color: 'from-teal-500/20 to-emerald-500/10',
     accent: '#38b2ac',
     badge: 'EVOLUTION',
@@ -40,7 +40,7 @@ const NAV_MODULES = [
     icon: '🏡',
     title: '村莊治理',
     subtitle: 'Village Governance',
-    desc: '二次方投票 · 任務看板 · 社群協作',
+    desc: '二次方投票 · 任務看板 · 社羣協作',
     color: 'from-purple-500/20 to-violet-500/10',
     accent: '#a78bfa',
     badge: 'DAO',
@@ -58,9 +58,9 @@ const NAV_MODULES = [
   {
     href: '/omni-agent',
     icon: '🤖',
-    title: 'AI 代理控制台',
+    title: 'AI 代理控制檯',
     subtitle: 'OmniAgent Console',
-    desc: 'CelestialFlow 監控 · 自癒協議 · 代理蜂群',
+    desc: 'CelestialFlow 監控 · 自癒協議 · 代理蜂羣',
     color: 'from-rose-500/20 to-pink-500/10',
     accent: '#f87171',
     badge: 'GNOSIS',
@@ -198,7 +198,7 @@ export default function HomePage() {
           善向永續 · 全通之心 · 無作妙德
         </p>
         <p style={{ fontSize: 14, color: '#64748b', maxWidth: 480, margin: '0 auto 40px' }}>
-          以 5T 協議驅動的萬能 (Omni) ESG 治理平台 — 從碳排計算到永續報告，全程 AI
+          以 5T 協議驅動的萬能 (Omni) ESG 治理平臺 — 從碳排計算到永續報告，全程 AI
           賦能、可驗算、不可篡改。
         </p>
 

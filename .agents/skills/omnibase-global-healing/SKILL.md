@@ -2,7 +2,7 @@
 
 # OmniBase 全域痊癒 — ESG GO v5 功能完善與架構重構
 
-> **目標**: 確保 ESG GO 平台 v5 所有功能100%運作，採用乾淨架構，遵循全域準則。
+> **目標**: 確保 ESG GO 平臺 v5 所有功能100%運作，採用乾淨架構，遵循全域準則。
 > **狀態**: 規劃階段 → 執行階段
 
 ---
@@ -77,7 +77,7 @@
 ### Phase 7: 報告生成優化 (Report Generation)
 - [ ] 7.1 章節生成邏輯優化 (28 chapters GRI)
 - [ ] 7.2 RAG 檢索優化 (Firebase rag_knowledge)
-- [ ] 7.3 L-Hub 蜂群摘要整合
+- [ ] 7.3 L-Hub 蜂羣摘要整合
 - [ ] 7.4 報告匯出格式完善 (HTML/Markdown)
 
 ### Phase 8: Omni-Knowledge Base (佐證資料)

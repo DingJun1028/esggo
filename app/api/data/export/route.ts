@@ -256,7 +256,7 @@ function generateMockExportData(limit: number): ExportSource[] {
   const categories = ['environmental', 'social', 'governance'];
   const regions = ['tw', 'eu', 'us', 'ap', 'int'];
   const sources = [
-    { id: 'tw-secuta', name: '台灣證交所重大訊息' },
+    { id: 'tw-secuta', name: '臺灣證交所重大訊息' },
     { id: 'eu-news', name: 'EU ESG News' },
     { id: 'us-sec', name: 'SEC ESG Filings' },
     { id: 'ap-carbon', name: 'APAC Carbon' },
