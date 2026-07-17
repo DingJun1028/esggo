@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "npm run dev",
+      "startServerCommand": "pnpm dev",
       "startServerTimeout": 30,
       "numberOfRuns": 1,
       "settings": {
