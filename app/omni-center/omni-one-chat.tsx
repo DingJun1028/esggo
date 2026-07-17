@@ -221,6 +221,15 @@ export function OmniOneChat() {
       architecture: "ARCH",
       bug_fix: "BUG",
       compliance_review: "COMP",
+      email_archival: "MAIL",
+      gri_report_draft: "GRI",
+      evidence_ocr: "OCR",
+      tcfd_analysis: "TCFD",
+      sdg_mapping: "SDG",
+      materiality_matrix: "MAT",
+      report_assembly: "RPT",
+      omni_jules_heal: "HEAL",
+      swarm_orchestration: "SWARM",
       general: "GEN",
     })[ct || "general"] || "GEN";
 
