@@ -7,10 +7,12 @@ import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
 import { getNCBClient } from '@/lib/ncb-client';
 import type { SearchResult } from '@/types/notes';
 
+import type { Pool } from 'pg';
+
 // PostgreSQL 連接池（pgvector）— lazy dynamic import 避免 build 期依賴 @types/pg
 // TODO: 待 PGVECTOR_URL 與 pgvector 函數 search_notes_semantic 就緒後啟用
-let pgPool: any = null;
-async function getPool(): Promise<any> {
+let pgPool: Pool | null = null;
+async function getPool(): Promise<Pool> {
   if (!pgPool) {
     if (!process.env.PGVECTOR_URL) throw new Error('PGVECTOR_URL not configured');
     // @ts-ignore - pg optional dependency (installed at runtime when PGVECTOR_URL set)
