@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
       type,
       resolvedTopic,
       {
+        type,
         delegationId,
         ...(payload && typeof payload === 'object' ? payload : {}),
       },

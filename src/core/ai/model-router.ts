@@ -213,19 +213,19 @@ const MODELS = {
     reasoning: 'VPS esggo-gemma4 (Ollama): 免費主力，優先承擔所有 ESG 任務',
   },
   // 仍保留本地較重備援與輕量備援
-  local_gemma12b: {
+  local_gemma_e2b: {
     provider: 'local_gemma' as const,
-    model: 'gemma3:12b',
+    model: 'hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_0',
     maxTokens: 4096,
     temperature: 0.7,
-    reasoning: 'VPS Gemma 3 12B (Ollama): 100% 免費，深度推理/法規/報告備援',
+    reasoning: 'VPS base Gemma 4 E2B (Ollama): 免費重試備援',
   },
   local_gemma4: {
     provider: 'local_gemma' as const,
     model: 'gemma3:4b',
     maxTokens: 4096,
     temperature: 0.7,
-    reasoning: 'VPS Gemma 3 4B (Ollama): 100% 免費，輕量備援',
+    reasoning: 'VPS Gemma 3 4B (Ollama): 輕量備援',
   },
   local_llama31: {
     provider: 'local_gemma' as const,
@@ -241,24 +241,24 @@ const MODELS = {
 const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   carbon_calculation: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'carbon_calculation',
-    strategy: 'Gemma4 主力 + 12B 深度推理備援',
+    strategy: 'Gemma4 主力 + E2B 推理備援',
   },
   compliance_review: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'compliance_review',
-    strategy: 'Gemma4 主力 + 12B 法規備援',
+    strategy: 'Gemma4 主力 + E2B 法規備援',
   },
   gri_report_draft: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'gri_report_draft',
-    strategy: 'Gemma4 主力 + 12B 結構化備援',
+    strategy: 'Gemma4 主力 + E2B 結構化備援',
   },
   evidence_ocr: {
     primary: MODELS.local_esggo_gemma4,
@@ -276,17 +276,17 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   },
   stakeholder_analysis: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'stakeholder_analysis',
-    strategy: 'Gemma4 主力 + 12B 分析備援',
+    strategy: 'Gemma4 主力 + E2B 分析備援',
   },
   omni_jules_heal: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'omni_jules_heal',
-    strategy: 'Gemma4 主力 + 12B 推理備援',
+    strategy: 'Gemma4 主力 + E2B 推理備援',
   },
   swarm_orchestration: {
     primary: MODELS.local_esggo_gemma4,
@@ -297,10 +297,10 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   },
   tcfd_analysis: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'tcfd_analysis',
-    strategy: 'Gemma4 主力 + 12B 氣候分析備援',
+    strategy: 'Gemma4 主力 + E2B 氣候分析備援',
   },
   sdg_mapping: {
     primary: MODELS.local_esggo_gemma4,
@@ -311,14 +311,14 @@ const ROUTING_TABLE: Record<ESGTaskType, RoutingResult> = {
   },
   materiality_matrix: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'materiality_matrix',
-    strategy: 'Gemma4 主力 + 12B 排序備援',
+    strategy: 'Gemma4 主力 + E2B 排序備援',
   },
   report_assembly: {
     primary: MODELS.local_esggo_gemma4,
-    fallback1: MODELS.local_gemma12b,
+    fallback1: MODELS.local_gemma_e2b,
     fallback2: MODELS.cf_llama8b,
     taskType: 'report_assembly',
     strategy: 'Gemma4 主力 + 12B 結構化備援',
