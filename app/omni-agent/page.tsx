@@ -335,7 +335,7 @@ function SubAgentPanel({
               <button
                 onClick={() => onDispatch(agent)}
                 disabled={agent.status === 'running'}
-                className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors disabled:opacity-40"
+                className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
                 style={{
                   backgroundColor:
                     agent.status === 'running'
@@ -498,7 +498,7 @@ function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }
           <button
             key={cmd.id}
             onClick={() => onExecute(cmd)}
-            className="bg-primary border border-borderColor rounded-xl p-3 text-left transition-all duration-200 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 active:translate-y-0 group"
+            className="bg-primary border border-borderColor rounded-xl p-3 text-left transition-all duration-200 hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 active:translate-y-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-teal-500"
           >
             <div className="flex items-center gap-2 mb-1">
               <span className="text-base group-hover:scale-110 transition-transform">
@@ -675,7 +675,7 @@ function ChatInterface() {
             onClick={() => {
               setInput(s);
             }}
-            className="text-[10px] bg-accentTeal/10 border border-teal-200 text-accentTeal rounded-lg px-2.5 py-1 hover:bg-teal-100 transition-colors font-medium"
+            className="text-[10px] bg-accentTeal/10 border border-teal-200 text-accentTeal rounded-lg px-2.5 py-1 hover:bg-teal-100 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
           >
             {s}
           </button>
@@ -892,7 +892,7 @@ export default function OmniAgentConsolePage() {
             {/* Panel Tabs */}
             <div className="bg-primary border border-borderColor rounded-2xl shadow-sm flex flex-col overflow-hidden flex-1 min-h-0">
               {/* Tab Bar */}
-              <div className="flex border-b border-borderColor shrink-0">
+              <div className="flex border-b border-borderColor shrink-0" role="tablist" aria-label="控制面板切換">
                 {(
                   [ 
                     { id: 'stats', label: '核心統計', icon: '◎' },
