@@ -230,7 +230,7 @@ function generateChapterContent(input: ChapterGenInput): { content: string; word
   const year = '2025';
   const emp = profile?.employees || '500';
   const rev = profile?.annualRevenue || '10億元';
-  const loc = profile?.operatingLocations || '台灣';
+  const loc = profile?.operatingLocations || '臺灣';
   
   // Generate rich chapter content with multiple sections
   let html = '';
@@ -241,7 +241,7 @@ function generateChapterContent(input: ChapterGenInput): { content: string; word
   for (let i = 0; i < template.keySections.length; i++) {
     const section = template.keySections[i];
     html += `<h3>${chapterNum}.${i + 1} ${section}</h3>`;
-    html += `<p>${shortName}於${year}年度針對「${section}」面向進行全面檢視與揭露。公司拥有完整的管理制度與執行機制，透過PDCA循環持續改善，確保永續發展目標之達成。相關作為皆已納入公司日常管理作業，並定期向董事會報告執行成效。</p>`;
+    html += `<p>${shortName}於${year}年度針對「${section}」面向進行全面檢視與揭露。公司擁有完整的管理制度與執行機制，透過PDCA循環持續改善，確保永續發展目標之達成。相關作為皆已納入公司日常管理作業，並定期向董事會報告執行成效。</p>`;
     html += `<p>在${year}年度具體執行成果方面，${shortName}透過系統化管理工具與專業團隊運作，建立完整的監測、量測與分析機制，確保各項指標之達成率持續提升，並作為未來策略擬定之依據。</p>`;
   }
   

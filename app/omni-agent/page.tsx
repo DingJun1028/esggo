@@ -564,7 +564,7 @@ function ChatInterface() {
     {
       id: '0',
       role: 'assistant',
-      text: '**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制台。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。',
+      text: '**OmniAgent Console 已啟動** ⊙\n\n歡迎使用 OmniAgent 控制檯。您可以：\n• 輸入自然語言指令\n• 點擊右側「快速命令」\n• 派遣 5T 子代理\n\n輸入 `幫助` 查看可用指令。',
       time: now(),
     },
   ]);

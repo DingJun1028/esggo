@@ -150,7 +150,7 @@ export function ZkpVault() {
           })}
         </div>
       )}
-      {/* 萬能函數控制台 — 直接呼叫 omni() 與 omniFn，並可一鍵建立 5T 組件寫入 Vault */}
+      {/* 萬能函數控制檯 — 直接呼叫 omni() 與 omniFn，並可一鍵建立 5T 組件寫入 Vault */}
       <div className="rounded-2xl border border-accentPurple/30 bg-secondary/40 p-4">
         <UniversalOmniConsole />
       </div>

@@ -104,7 +104,7 @@ describe('ESG Skills Registry', () => {
     const skills = getAllSkills();
     for (const skill of skills) {
       expect(typeof skill.userPrompt).toBe('function');
-      const prompt = skill.userPrompt({ company: '台積電', year: '2024' });
+      const prompt = skill.userPrompt({ company: '臺積電', year: '2024' });
       expect(typeof prompt).toBe('string');
       expect(prompt.length).toBeGreaterThan(0);
     }
@@ -112,7 +112,7 @@ describe('ESG Skills Registry', () => {
 
   it('each skill should have validate method returning boolean', () => {
     const skills = getAllSkills();
-    const ctx: SkillContext = { company: '台積電', year: '2024', language: 'zh-TW' };
+    const ctx: SkillContext = { company: '臺積電', year: '2024', language: 'zh-TW' };
     for (const skill of skills) {
       expect(typeof skill.validate).toBe('function');
       const result = skill.validate(ctx);

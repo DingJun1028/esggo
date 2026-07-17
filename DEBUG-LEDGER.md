@@ -63,7 +63,7 @@ await sleep(20);
 ### 雷區提醒
 - 判斷 vitest「bus 收不到」時，先區分是**真 bug** 還是**模組實例拷貝**；直接 publish 同實例能收即代表機制正常。
 - 永遠不要在事件名比對時用大寫 `DELEGATION_CREATED`：`DelegationEventNames` 的值是 dot 形式 `'delegation.created'`；
-  總線上 `ev.payload.type` 才是事件名，`ev.event` 亦同。
+  總線上 `ev.payload.type` 纔是事件名，`ev.event` 亦同。
 
 ---
 

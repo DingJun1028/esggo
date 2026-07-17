@@ -40,7 +40,7 @@ const EXTRA_PATTERNS: [RegExp, CaseType][] = [
   [/tcfd|氣候|climate|風險分析|淨零|net.?zero/i, "tcfd_analysis"],
   [/sdg|永續發展目標|聯合國/i, "sdg_mapping"],
   [/重大性|materiality|矩陣|priority/i, "materiality_matrix"],
-  [/蜂群|swarm|orchestrat|調度|協調/i, "swarm_orchestration"],
+  [/蜂羣|swarm|orchestrat|調度|協調/i, "swarm_orchestration"],
 ];
 
 function classify(input: string): CaseType {

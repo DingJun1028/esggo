@@ -55,14 +55,14 @@ describe('ESG API Business Logic', () => {
       const skill = getSkill('carbon_calculation');
       expect(skill).toBeDefined();
 
-      const ctx = { company: '台積電', year: '2024', language: 'zh-TW' as const };
+      const ctx = { company: '臺積電', year: '2024', language: 'zh-TW' as const };
       expect(skill!.validate(ctx)).toBe(true);
 
       const systemPrompt = skill!.systemPrompt(ctx);
       const userPrompt = skill!.userPrompt(ctx);
 
       expect(systemPrompt.length).toBeGreaterThan(0);
-      expect(userPrompt).toContain('台積電');
+      expect(userPrompt).toContain('臺積電');
       expect(userPrompt).toContain('2024');
     });
 
@@ -77,7 +77,7 @@ describe('ESG API Business Logic', () => {
         const skill = getSkill(taskType);
         expect(skill).toBeDefined();
 
-        const ctx = { company: '台積電', year: '2024', language: 'zh-TW' as const };
+        const ctx = { company: '臺積電', year: '2024', language: 'zh-TW' as const };
         const systemPrompt = skill!.systemPrompt(ctx);
         const userPrompt = skill!.userPrompt(ctx);
 

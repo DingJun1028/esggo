@@ -1,6 +1,6 @@
 /**
  * ==========================================
- * ESG GO 平台 - API 路由測試
+ * ESG GO 平臺 - API 路由測試
  * ==========================================
  */
 
@@ -424,7 +424,7 @@ describe('GET /api/delegation/events/stream', () => {
       }
       expect(text).toContain('CONNECTED');
       expect(text).toContain('REPLAY');
-      // REPLAY 框帶 SSE id 欄位（斷點續傳游標）
+      // REPLAY 框帶 SSE id 欄位（斷點續傳遊標）
       expect(text).toMatch(/id: \d+\ndata: \{"type":"REPLAY"/);
       expect(text).toContain(delegationId);
       expect(text).toContain('REPLAY_DONE');
@@ -465,7 +465,7 @@ describe('GET /api/delegation/events/stream', () => {
         'test'
       );
 
-      // 讀出日誌，取得首筆測試事件（note:'first'）的 id 作為續傳游標
+      // 讀出日誌，取得首筆測試事件（note:'first'）的 id 作為續傳遊標
       const journal = createDelegationJournal(tmpPath);
       const recs = journal
         .readAll()

@@ -128,7 +128,7 @@ export default function SustainCenterPage() {
 
   const sampleCompany = COMPANIES[0];
   const evolutionAdvice =
-    '建議優先導入 AI 合規查核、碳排優化與 ZKP 封印機制，以加速永續治理數位轉型。';
+    '建議優先導入 AI 合規查覈、碳排優化與 ZKP 封印機制，以加速永續治理數位轉型。';
 
   const evolutionProgress = Math.min(100, Math.round((evolution.xp / evolution.nextXp) * 100));
 

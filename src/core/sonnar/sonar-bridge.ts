@@ -119,7 +119,7 @@ function classifyEventType(title: string): string {
   if (lower.includes('價格') || lower.includes('碳價') || lower.includes('price') || lower.includes('cbam')) {
     return 'price_change';
   }
-  if (lower.includes('稽核') || lower.includes('audit') || lower.includes('inspection')) {
+  if (lower.includes('稽覈') || lower.includes('audit') || lower.includes('inspection')) {
     return 'audit';
   }
   if (lower.includes('制裁') || lower.includes('sanction') || lower.includes('ofac')) {
@@ -146,7 +146,7 @@ function extractCompanies(title: string): string[] {
   }
   
   // Also check for well-known abbreviations
-  const knownCompanies = ['台積電', '鴻海', '聯發科', '台達電', '富邦媒', '中信金', '群光', '漢唐'];
+  const knownCompanies = ['臺積電', '鴻海', '聯發科', '臺達電', '富邦媒', '中信金', '羣光', '漢唐'];
   for (const c of knownCompanies) {
     if (title.includes(c) && !companies.includes(c)) {
       companies.push(c);
@@ -165,7 +165,7 @@ function extractTopics(title: string): string[] {
     '碳排放': ['碳', '碳排放', '溫室氣體', 'GHG', 'carbon', 'emission'],
     '氣候': ['氣候', 'TCFD', '氣候變遷', '淨零', 'net zero'],
     '人權': ['人權', 'human rights', '勞動', '工時'],
-    '治理': ['董事會', '治理', 'ESG', '稽核', '吹哨'],
+    '治理': ['董事會', '治理', 'ESG', '稽覈', '吹哨'],
     '水資源': ['水', '水資源', '水污染'],
     '廢棄物': ['廢棄物', '垃圾', '回收', '循環經濟'],
     '能源': ['能源', '再生能源', '太陽能', '風電'],
@@ -189,7 +189,7 @@ function extractTopics(title: string): string[] {
 function extractRegions(title: string): string[] {
   const regions: string[] = [];
   const regionMap: Record<string, string[]> = {
-    '台灣': ['台灣', '台灣', 'TW', '金管會', '證交所'],
+    '臺灣': ['臺灣', '臺灣', 'TW', '金管會', '證交所'],
     '中國': ['中國', '大陸', 'CN', '北京'],
     '美國': ['美國', 'US', 'SEC', 'EPA', 'OFAC'],
     '歐盟': ['歐盟', 'EU', 'CSRD', 'ESRS', 'EFRAG'],
@@ -203,7 +203,7 @@ function extractRegions(title: string): string[] {
     }
   }
   
-  return regions.length > 0 ? regions : ['台灣'];
+  return regions.length > 0 ? regions : ['臺灣'];
 }
 
 /**
@@ -217,7 +217,7 @@ function assessSeverity(title: string): 'low' | 'medium' | 'high' | 'critical' {
     return 'critical';
   }
   if (lower.includes('修正') || lower.includes('草案') || lower.includes('proposal') ||
-      lower.includes('罚') || lower.includes('penalty')) {
+      lower.includes('罰') || lower.includes('penalty')) {
     return 'high';
   }
   if (lower.includes('公告') || lower.includes('notice') || lower.includes('update')) {

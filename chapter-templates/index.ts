@@ -23,7 +23,7 @@ export const CHAPTER_TEMPLATES: ChapterTemplate[] = [
     fiveTGate: 'traceable',
     griCodes: ['GRI 2-1', 'GRI 2-2', 'GRI 2-3', 'GRI 2-4', 'GRI 2-5', 'GRI 2-6', 'GRI 2-7', 'GRI 2-8', 'GRI 1'],
     expertPrompt: '撰寫組織溯源與報告邊界章節。包含：公司歷史沿革、股權結構、組織規模、營運據點、報告編製期間、報告邊界說明。要求：完整揭露集團架構、子公司列表、主要產品服務、供應鏈概述。',
-    keySections: ['公司歷史與沿革', '股權結構與集團架構', '組織規模與人力', '營運據點分布', '報告編製期間與邊界', '主要產品與服務', '供應鏈概述'],
+    keySections: ['公司歷史與沿革', '股權結構與集團架構', '組織規模與人力', '營運據點分佈', '報告編製期間與邊界', '主要產品與服務', '供應鏈概述'],
     wordCount: 10000,
   },
   {
@@ -32,7 +32,7 @@ export const CHAPTER_TEMPLATES: ChapterTemplate[] = [
     fiveTGate: 'transparent',
     griCodes: ['GRI 2-9', 'GRI 2-10', 'GRI 2-11', 'GRI 2-12', 'GRI 2-13', 'GRI 2-14', 'GRI 2-15', 'GRI 2-16', 'GRI 2-17', 'GRI 2-18', 'GRI 2-19', 'GRI 2-20', 'GRI 2-21'],
     expertPrompt: '撰寫永續治理架構章節。包含：董事會永續治理委員會設置、永續長/CSO權責、ESG治理架構圖、董事多元化、獨立董事比例、永續績效與薪酬連結。要求：揭露治理層級、決策流程、內稽內控機制。',
-    keySections: ['董事會永續治理組織', '永續長/CSO設置與權責', 'ESG治理架構', '董事多元化政策', '獨立董事組成', '永續績效與薪酬連結', '內部稽核與內控制度'],
+    keySections: ['董事會永續治理組織', '永續長/CSO設置與權責', 'ESG治理架構', '董事多元化政策', '獨立董事組成', '永續績效與薪酬連結', '內部稽覈與內控制度'],
     wordCount: 10000,
   },
   {
@@ -121,8 +121,8 @@ export const CHAPTER_TEMPLATES: ChapterTemplate[] = [
     title: '供應鏈永續管理',
     fiveTGate: 'trackable',
     griCodes: ['GRI 308-1', 'GRI 308-2', 'GRI 414-1', 'GRI 414-2', 'GRI 204-1'],
-    expertPrompt: '撰寫供應鏈永續管理章節。包含：供應商ESG評估、供應商準則、供應鏈風險管理、在地採購、供應商稽核。要求：揭露供應商數量與分級、ESG風險評估方法、改善計畫。',
-    keySections: ['供應鏈結構與複雜性', '供應商ESG評估準則', '供應商風險分級管理', '供應商稽核與改善', '在地採購策略', '供應鏈透明度', '負責任採購'],
+    expertPrompt: '撰寫供應鏈永續管理章節。包含：供應商ESG評估、供應商準則、供應鏈風險管理、在地採購、供應商稽覈。要求：揭露供應商數量與分級、ESG風險評估方法、改善計畫。',
+    keySections: ['供應鏈結構與複雜性', '供應商ESG評估準則', '供應商風險分級管理', '供應商稽覈與改善', '在地採購策略', '供應鏈透明度', '負責任採購'],
     wordCount: 10000,
   },
   {
@@ -166,8 +166,8 @@ export const CHAPTER_TEMPLATES: ChapterTemplate[] = [
     title: '氣候情境分析與機會',
     fiveTGate: 'transparent',
     griCodes: ['GRI 201-2', 'TCFD-S', 'TCFD-O', 'GRI 102-2', 'GRI 102-5'],
-    expertPrompt: '撰寫氣候情境分析與機會章節。包含：NGFS情境分析（1.5°C/2°C/3°C）、實體與轉型機會、低碳產品服務創新、綠色營收占比。要求：揭露情境假設、財務影響評估、機會把握策略。',
-    keySections: ['NGFS情境設定', '1.5°C情境分析', '實體機會評估', '轉型機會評估', '低碳創新策略', '綠色營收占比', '氣候相關財務影響'],
+    expertPrompt: '撰寫氣候情境分析與機會章節。包含：NGFS情境分析（1.5°C/2°C/3°C）、實體與轉型機會、低碳產品服務創新、綠色營收佔比。要求：揭露情境假設、財務影響評估、機會把握策略。',
+    keySections: ['NGFS情境設定', '1.5°C情境分析', '實體機會評估', '轉型機會評估', '低碳創新策略', '綠色營收佔比', '氣候相關財務影響'],
     wordCount: 10000,
   },
   {
@@ -202,7 +202,7 @@ export const CHAPTER_TEMPLATES: ChapterTemplate[] = [
     title: '智財權與研發創新',
     fiveTGate: 'tangible',
     griCodes: ['GRI 201-1', 'GRI 404-1', 'GRI 201-3'],
-    expertPrompt: '撰寫智財權與研發創新章節。包含：專利佈局、智財權管理、研發投入與產出、技術壁壘、創新文化。要求：揭露專利數量、研發占比、技術優勢、智財風險管理。',
+    expertPrompt: '撰寫智財權與研發創新章節。包含：專利佈局、智財權管理、研發投入與產出、技術壁壘、創新文化。要求：揭露專利數量、研發佔比、技術優勢、智財風險管理。',
     keySections: ['專利佈局與智財權', '研發投入與資源', '研發產出與創新', '技術壁壘與優勢', '智財風險管理', '創新文化與激勵', '產學合作'],
     wordCount: 10000,
   },

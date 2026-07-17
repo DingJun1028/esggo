@@ -10,7 +10,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           ESG GO 平台架構                                    │
+│                           ESG GO 平臺架構                                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
@@ -243,7 +243,7 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
   private _confidenceThreshold: number = 0.7;
   
   /**
-   * 评估是否可自主執行
+   * 評估是否可自主執行
    */
   async canAutonomouslyExecute(intent: string): Promise<boolean> {
     // 1. 分析意圖複雜度
@@ -702,11 +702,11 @@ export class DelegationSecurity {
 
 ## 5. 監控與審計
 
-### 5.1 監控儀表板
+### 5.1 監控儀錶板
 
 ```typescript
 /**
- * 完全代主自行 - 監控儀表板
+ * 完全代主自行 - 監控儀錶板
  */
 export interface DelegationDashboard {
   /** 活躍授權數量 */

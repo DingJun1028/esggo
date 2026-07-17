@@ -8,7 +8,7 @@
 
 ### 1.1 核心定義
 
-**完全代主自行** (wán quán dài zhǔ zì xíng) 是 ESG GO 平台的核心架構概念，定義了代理者（Agent）在被完全授權後，如何**自主、獨立、全面地**代替主體（Principal）執行所有授權事務。
+**完全代主自行** (wán quán dài zhǔ zì xíng) 是 ESG GO 平臺的核心架構概念，定義了代理者（Agent）在被完全授權後，如何**自主、獨立、全面地**代替主體（Principal）執行所有授權事務。
 
 ### 1.2 詞素解析
 
@@ -144,7 +144,7 @@ export interface DelegationRestriction {
  */
 export interface IAutonomousDecisionEngine {
   /**
-   * 评估是否可自主執行
+   * 評估是否可自主執行
    */
   canAutonomouslyExecute(intent: string): Promise<boolean>;
   

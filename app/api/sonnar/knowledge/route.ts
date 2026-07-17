@@ -8,7 +8,7 @@ function analyzeContext(context: string): { why: string; what: string; how: stri
     return {
       why: '能源使用數據是碳足跡盤查的核心輸入，直接影響範疇二排放計算。',
       what: '此單據包含用電量、費率與計費期間，可用於計算組織型碳足跡。',
-      how: '建議將此數據與台電帳單交叉比對，並導入能源管理系統(EMS)以自動化蒐集。',
+      how: '建議將此數據與臺電帳單交叉比對，並導入能源管理系統(EMS)以自動化蒐集。',
       tags: ['Energy', 'Scope2', 'EMS'],
     };
   }
@@ -43,7 +43,7 @@ function analyzeContext(context: string): { why: string; what: string; how: stri
   return {
     why: '此單據為ESG資料蒐集流程的一部分，需確認其完整性與正確性。',
     what: '擷取了原始單據中的關鍵數據欄位與時間戳記。',
-    how: '建議將此資料輸入ESG管理平台，並設定自動化資料品質檢查規則。',
+    how: '建議將此資料輸入ESG管理平臺，並設定自動化資料品質檢查規則。',
     tags: ['General', 'DataQuality'],
   };
 }

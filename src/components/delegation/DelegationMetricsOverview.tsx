@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
  * - 全球聚合：總事件數、活躍 delegation 數、最近觀測時間、各事件類型計數。
  * - 單一 delegation（當已連線且具 monitor / full 權限）：該 delegation 的事件聚合。
  *
- * 對齊平台不變量：RWD（響應式網格）、全端（client 直接消費同一總線衍生的 API）、
+ * 對齊平臺不變量：RWD（響應式網格）、全端（client 直接消費同一總線衍生的 API）、
  * 全量（指標本身來自全量觀測，不抽樣）。
  */
 

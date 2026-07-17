@@ -1,6 +1,6 @@
-# ESGGO v5.1 — 5T 萬能系統永續數據治理平台
+# ESGGO v5.1 — 5T 萬能系統永續數據治理平臺
 
-> **ESG 報告書生成 × RAG 知識檢索 × 善向永續村投票治理** — 一站式的 ESG 數據治理平台
+> **ESG 報告書生成 × RAG 知識檢索 × 善向永續村投票治理** — 一站式的 ESG 數據治理平臺
 >
 > **核心架構：** 5T 協議（真→善→美→信→通）· Hexa-Core 六位一體智慧中樞 · 雙向 TypeScript · OmniSkill Codex v2.1
 >
@@ -264,7 +264,7 @@ systemctl enable omnigateway
 |------|------|------|
 | OmniGateway | 8642 | AI 模型代理 |
 | Prometheus | 9090 | 指標收集 |
-| Grafana | 3000 | 儀表板 |
+| Grafana | 3000 | 儀錶板 |
 | Netdata | 19999 | 系統監控 |
 | Alertmanager | 9093 | 告警管理 |
 
@@ -318,7 +318,7 @@ esggo/
 │   │   ├── rag/                # RAG 知識庫
 │   │   ├── sustain-write/      # 報告生成 (v5, C 版)
 │   │   └── village/            # 善向永續村
-│   ├── omni-center/            # 萬能中心儀表板
+│   ├── omni-center/            # 萬能中心儀錶板
 │   └── sustain-write/          # 報告前端
 ├── src/
 │   ├── core/                   # 核心業務邏輯

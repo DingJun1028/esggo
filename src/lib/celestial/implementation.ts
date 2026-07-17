@@ -50,7 +50,7 @@ export class ZKPIntegrityModule implements IWuZuoMiaoDe {
       return Object.freeze({ ...data, sealTimestamp: Date.now() });
     },
     purify: (entropyLevel: number) => {
-      // 無作妙德：低干預修復
+      // 無作妙德：低幹預修復
       if (entropyLevel > 0.8) {
         this.state = "Calibrating";
         this.evidence.processTrace.push(`[PURIFY] Entropy reduction triggered. Level: ${entropyLevel}`);
@@ -219,7 +219,7 @@ export class CelestialController {
   private async handleFailure(error: unknown, sealedData: CelestialData) {
     console.error(`[Celestial] Anomaly detected. Initiating self-healing protocol...`);
     
-    // 1. 隔離失效現場，保留可用狀態 (WuZuoMiaoDe: 零干預降級)
+    // 1. 隔離失效現場，保留可用狀態 (WuZuoMiaoDe: 零幹預降級)
     const fallbackData: Record<string, unknown> = {};
     for (const key of Object.keys(sealedData)) {
       try {

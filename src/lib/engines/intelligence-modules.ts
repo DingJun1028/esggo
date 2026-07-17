@@ -75,8 +75,8 @@ export const CHANGE_TYPE_ACTIONS: Record<string, string> = {
   procurement:     '評估得標/失標原因與競爭態勢',
   penalty:         '立即啟動法務複議程序與公開說明',
   litigation:      '評估訴訟風險與潛在賠償金額',
-  audit:           '準備稽核回應與改善追蹤',
-  sanction:        '立即筛查供應鏈關聯性並停止高風險交易',
+  audit:           '準備稽覈回應與改善追蹤',
+  sanction:        '立即篩查供應鏈關聯性並停止高風險交易',
   standard_update: '比對新舊標準差異並啟動合規調整',
 };
 
@@ -88,7 +88,7 @@ export interface ImpactScore {
   financial: ImpactDimension;   // 成本/營收/資本支出
   compliance: ImpactDimension;  // 罰則/時程/審計
   supply: ImpactDimension;      // 交期/替代性/單點故障
-  reputation: ImpactDimension;  // 媒體/社群/訴訟
+  reputation: ImpactDimension;  // 媒體/社羣/訴訟
   composite: number;            // 綜合加權分數 0-100
   light: 'green' | 'yellow' | 'red' | 'black';
   reasoning: string[];
@@ -209,7 +209,7 @@ export type AnomalyType =
   | 'drop'           // 突然下跌
   | 'volatility'     // 波動率跳升
   | 'keyword_surge'  // 關鍵字激增
-  | 'cluster'        // 事件群聚
+  | 'cluster'        // 事件羣聚
   | 'trend_shift';   // 趨勢轉向
 
 /**
@@ -408,7 +408,7 @@ export function assessSupplyChainRisk(opts: {
   let score = 0;
   const recommendations: string[] = [];
 
-  if (top3share > 0.7) { score += 30; recommendations.push('前三大供應商占比>70%，建議分散採購'); }
+  if (top3share > 0.7) { score += 30; recommendations.push('前三大供應商佔比>70%，建議分散採購'); }
   if (sanctioned > 0) { score += 25; recommendations.push(`有 ${sanctioned} 家供應商在制裁名單中，建議立即排查替代方案`); }
   if (strategicDays < 14) { score += 25; recommendations.push('庫存低於 14 天，建議提升安全存量'); }
   if (strategicDays < 7)  { score += 20; recommendations.push('庫存低於 7 天，啟動緊急採購程序'); }
@@ -480,7 +480,7 @@ export interface Signal {
   title: string;
   sourceName: string;
   confidence: number;    // 可信度 0-1
-  relevance: string[];   // 受影響的 OmniCore 指標群組
+  relevance: string[];   // 受影響的 OmniCore 指標羣組
   actions: string[];
   detectedAt: string;
 }

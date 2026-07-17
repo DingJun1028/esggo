@@ -208,7 +208,7 @@ export class OmniAgent implements IOmniAgent {
     this._state = "REPLAYED";
     await this._runHooks("REPLAYED", { spec, result });
 
-    // 7️⃣ 冻結階段 – 任務生命週期結束
+    // 7️⃣ 凍結階段 – 任務生命週期結束
     this._state = "FROZEN";
     await this._runHooks("FROZEN", { spec, result });
 

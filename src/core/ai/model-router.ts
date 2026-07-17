@@ -17,7 +17,7 @@ export type ESGTaskType =
   | 'email_archival'        // 郵件自動歸檔
   | 'stakeholder_analysis'  // 問卷分析
   | 'omni_jules_heal'       // 自動修復
-  | 'swarm_orchestration'   // 蜂群調度
+  | 'swarm_orchestration'   // 蜂羣調度
   | 'tcfd_analysis'         // TCFD 氣候風險分析
   | 'sdg_mapping'           // SDG 目標對應
   | 'materiality_matrix'    // 重大性矩陣
@@ -398,8 +398,8 @@ export function inferTaskType(message: string): ESGTaskType {
     return 'email_archival';
   }
 
-  // 蜂群調度
-  if (lowerMsg.match(/蜂群|swarm|orchestrat|調度|協調/)) {
+  // 蜂羣調度
+  if (lowerMsg.match(/蜂羣|swarm|orchestrat|調度|協調/)) {
     return 'swarm_orchestration';
   }
 
@@ -683,7 +683,7 @@ export const FREE_PROVIDER_POOL: FreeProviderConfig[] = (Object.values(MODELS) a
     temperature: m.temperature,
     apiUrl: ep.apiUrl,
     apiKeyEnv: ep.apiKeyEnv,
-    // 本地模型永遠是免費的，雲端模型以 :free 結尾才算
+    // 本地模型永遠是免費的，雲端模型以 :free 結尾纔算
     isFreeTier: m.provider === 'local_gemma' || m.model.endsWith(':free'),
   };
 });

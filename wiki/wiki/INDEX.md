@@ -14,7 +14,7 @@
 
 ## 系統概述
 
-ESGGO 善向永續是一個企業級 ESG 治理平台，使用 Next.js 16 + TypeScript 5.3 構建，部署於 Vercel。
+ESGGO 善向永續是一個企業級 ESG 治理平臺，使用 Next.js 16 + TypeScript 5.3 構建，部署於 Vercel。
 
 ### 核心技術
 - **前端**: Next.js 16 (App Router) + React 18 + Tailwind CSS 4
@@ -39,7 +39,7 @@ ESGGO 善向永續是一個企業級 ESG 治理平台，使用 Next.js 16 + Type
 |------|------|------|------|----------|
 | T1 | 真 | Truth | 可感知/具體化 | 資料有明確數值、單位、時間戳 |
 | T2 | 善 | Goodness | 可溯源 | 資料有來源標記 |
-| T3 | 美 | Beauty | 可追蹤 | 資料有稽核軌跡 |
+| T3 | 美 | Beauty | 可追蹤 | 資料有稽覈軌跡 |
 | T4 | 信 | Trust | 不可篡改 | 資料有 hash_lock |
 | T5 | 通 | Transferful | 可透明驗算 | 資料可通過第三方驗證 |
 
@@ -60,13 +60,13 @@ ESGGO 善向永續是一個企業級 ESG 治理平台，使用 Next.js 16 + Type
 | `/` | 首頁（系統入口） |
 | `/login` | 登入頁面 |
 | `/dashboard` | 治理面板 |
-| `/5t-dashboard` | 5T 協議儀表板 |
+| `/5t-dashboard` | 5T 協議儀錶板 |
 | `/sustain-write` | 永續撰寫 |
 | `/vault` | 證據金庫 |
 | `/value-levels` | 價值階梯 |
 | `/alliance` | 聯盟協作 |
 | `/zkp-blockchain` | ZKP 區塊鏈封印 |
-| `/omni-agent` | OmniAgent 控制台 |
+| `/omni-agent` | OmniAgent 控制檯 |
 | `/admin` | 系統管理 |
 
 ### 管理功能
@@ -90,7 +90,7 @@ ESGGO 善向永續是一個企業級 ESG 治理平台，使用 Next.js 16 + Type
 | `/api/vault/seal` | POST | 文件封印 |
 | `/api/vault/verify` | POST | 驗證封印 |
 | `/api/omni-core/[id]` | * | OmniCore 核心 |
-| `/api/swarm/ws` | WS | 蜂群通訊 |
+| `/api/swarm/ws` | WS | 蜂羣通訊 |
 
 ### 健康檢查
 ```bash

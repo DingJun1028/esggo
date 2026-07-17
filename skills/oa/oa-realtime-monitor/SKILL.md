@@ -48,7 +48,7 @@ curl -N https://vps.esggo.org:8443/monitor/stream
 redis-cli SUBSCRIBE monitor:gateway monitor:agent monitor:vps
 ```
 
-### Step 2: 儀表板查看
+### Step 2: 儀錶板查看
 
 ```bash
 # 文字模式
