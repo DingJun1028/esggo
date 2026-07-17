@@ -9,12 +9,11 @@
  */
 
 import * as firebaseAdmin from 'firebase-admin';
+import { cert } from 'firebase-admin/app';
 import type { App } from 'firebase-admin/app';
-import { getFirestore as _getFirestore } from 'firebase-admin/firestore';
 
 // Firebase Admin namespace export can be awkwardly typed; use a narrower cast
 const admin = firebaseAdmin as typeof firebaseAdmin & Record<string, unknown>;
-const credential = (admin as Record<string, unknown>)['credential'] as Record<string, ((...args: unknown[]) => unknown) | undefined> | undefined;
 
 let _app: App | null = null;
 let _db: ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null = null;
@@ -30,7 +29,7 @@ function initAdminApp(): App {
     try {
       const serviceAccount = JSON.parse(serviceAccountJson);
       return admin.initializeApp({
-        credential: credential?.cert?.(serviceAccount) as import('firebase-admin/app').Credential | undefined ?? admin.applicationDefault(),
+        credential: cert(serviceAccount),
         projectId: serviceAccount.project_id,
       });
     } catch (e) {
@@ -39,9 +38,7 @@ function initAdminApp(): App {
   }
 
   const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID;
-  const appCred = typeof admin.applicationDefault === 'function'
-    ? admin.applicationDefault()
-    : credential?.createApplicationDefault?.() as import('firebase-admin/app').Credential | undefined;
+  const appCred = cert(serviceAccountJson ? JSON.parse(serviceAccountJson) : undefined);
   return admin.initializeApp({ credential: appCred, projectId });
 }
 
@@ -54,7 +51,10 @@ export function getAdminApp(): App {
 function getDb(): ReturnType<typeof import('firebase-admin/firestore').getFirestore> | null {
   if (_db) return _db;
   try {
-    _db = _getFirestore(getAdminApp());
+    const firestoreNS = require('firebase-admin/firestore');
+    _db = firestoreNS.getFirestore
+      ? firestoreNS.getFirestore(getAdminApp())
+      : firestoreNS.firestore?.(getAdminApp());
   } catch {
     try {
       const firestoreFn = (admin as Record<string, unknown>)['firestore'] as ((app: App) => unknown) | undefined;
