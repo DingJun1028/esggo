@@ -68,6 +68,10 @@
 ## 7. 既有專案說明（避免混淆）
 
 - `my-worker/` 是 **Notion Worker**（`@notionhq/workers`，`ntn workers deploy`），與 Cloudflare 無關。
-- 根 `wrangler.toml` 是孤立的 `smart-ai-router` Cloudflare Worker 設定，原指向不存在的 `src/index.ts`；
-  現已將 `main` 指向 `my-worker/src/index.ts` 以便 `wrangler deploy` 可定位（若未來要改用 Cloudflare Workers 部署此 smart router）。
+- 根 `wrangler.toml` 是孤立的 `smart-ai-router` Cloudflare Worker 設定，其 `main = "src/index.ts"`
+  **根本不存在**（entry 未實作）。本 PR **未**改動它——把它指向 `my-worker/src/index.ts`
+  會把 Notion Worker 語法餵給 `wrangler` 編譯，反而惡化既有的 Cloudflare Workers Build 失敗。
+- ⚠️ PR CI 中的 `Workers Builds: esggo` 失敗屬 **repo 既有結構性失效**（Cloudflare 直連 repo 自動
+  build 此 wrangler，但 entry 從未實作），與本 PR 的帳戶令牌整合**無因果**。歸類為預期紅、不在本 PR scope。
+  若要修，應另開 PR 實作 smart-ai-router 的 Cloudflare Worker entry，而非在本 PR 夾帶。
 - CI 已有 `ci.yml`（typecheck/vitest/secret-scan）+ `deploy.yml`（VPS Docker 部署），本整合不重造。
