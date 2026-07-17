@@ -22,10 +22,10 @@ export default function OmniTodoPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-              萬能待辦
+              萬能待辦 — ESGGO ∞ Evolution
             </h1>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              OmniTodo — 統一管理 ESG 任務、工作事項、個人待辦
+              OmniTodo — 統一管理 ESG 任務、工作事項、個人待辦 · 永續發展無限進化
             </p>
           </div>
         </div>

@@ -99,7 +99,7 @@ export default function CVersionReportPage() {
               C
             </div>
             <div>
-              <h1 className="text-lg font-bold text-textPrimary">C版專業永續報告</h1>
+              <h1 className="text-lg font-bold text-textPrimary">ESGGO 永續報告 ∞ Evolution</h1>
               <p className="text-xs text-textSecondary">5T 協議 · OmniTag 萬能標籤 · v3.7</p>
             </div>
           </div>

@@ -10,9 +10,8 @@
 
 import { useMemo, useState } from 'react';
 import { Wand2, Play, Copy, CheckCircle2, XCircle, ShieldCheck } from 'lucide-react';
+import { persistOmniCase, persistConsoleSnapshot } from './universal-omni-console.actions';
 import { omni, omniFn, createFiveTComponent, type OmniKind, type OmniResult, type CaseType, type ComponentEvidence, type OmniRequest } from '@/lib/esggo';
-import { db } from '@/lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 const KINDS: { key: OmniKind; label: string; hint: string }[] = [
   { key: 'note', label: '筆記 Note', hint: '標題 + 內容' },
@@ -61,7 +60,7 @@ export function UniversalOmniConsole() {
 
   const registry = useMemo(() => omniFn.list(), []);
 
-  const execute = () => {
+  const execute = async () => {
     setError(null);
     setResult(null);
     let req: OmniRequest = { kind: 'note', title, content };
@@ -95,9 +94,26 @@ export function UniversalOmniConsole() {
         return setError('未知的 kind');
     }
 
-    const res = omni(req);
-    if (!res.ok) setError(res.error);
-    else setResult(res);
+    let localResult: OmniResult | null = null;
+    try {
+      localResult = omni(req);
+      if (!localResult.ok) {
+        setError(localResult.error);
+        return;
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      return;
+    }
+
+    try {
+      await persistOmniCase(localResult);
+      await persistConsoleSnapshot(localResult, req, fnName);
+    } catch {
+      // Persist failure should not block UI result display.
+    }
+
+    setResult(localResult);
   };
 
   const copyResult = () => {
@@ -107,7 +123,7 @@ export function UniversalOmniConsole() {
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const sealToVault = async () => {
+  const sealToVault = () => {
     setError(null);
     setResult(null);
     try {
@@ -115,20 +131,6 @@ export function UniversalOmniConsole() {
         { demo: '5T 元件', generatedAt: new Date().toISOString() },
         { actor: 'omni-console' },
       );
-      if (!db) {
-        setResult({ ok: true, kind: 'component', id: comp.uuid, data: comp, hash: comp.hash, registered: false });
-        setError('Firestore 未初始化，僅本地建立組件（未寫入 Vault）');
-        return;
-      }
-      await setDoc(doc(db, 'votes', comp.uuid), {
-        id: comp.uuid,
-        project_id: 'esggo_5t',
-        user_id: 'u_01',
-        amount: 1,
-        cost: 0,
-        created_at: new Date().toISOString(),
-        hash_lock: comp.hash,
-      });
       setResult({ ok: true, kind: 'component', id: comp.uuid, data: comp, hash: comp.hash, registered: false });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));

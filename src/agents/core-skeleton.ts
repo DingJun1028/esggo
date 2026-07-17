@@ -7,7 +7,7 @@
 // main OmniAgent building blocks: the agent (IOmniAgent), the bus
 // (IOmniAgentBus) and the gateway (IOmniAgentGateway). The implementation is
 // intentionally lightweight – each method only logs its activity and returns
-// simple placeholder values – but it respects the full TypeScript contracts
+// For production, replace with real hashing/flow capture.
 // defined in the "types" folder, making it a solid starting point for further
 // development.
 
@@ -32,7 +32,7 @@ export class OmniAgent implements IOmniAgent {
   readonly version: string = "1.0.0";
   readonly timestamp: number = Date.now();
   evidence: Record<string, unknown> = {};
-  readonly hash: string = "<placeholder-hash>";
+  readonly hash: string = "";
   readonly salt?: string = undefined;
   readonly signature?: string = undefined;
 
@@ -74,7 +74,7 @@ export class OmniAgent implements IOmniAgent {
   // ---------------------------------------------------------------------
   async execute(event: IBusEvent): Promise<void> {
     console.debug(`[OmniAgent] execute(event) called – eventName=${event.eventName}`);
-    // Simple placeholder – in a real system this would translate the event into a task spec
+    // TODO: translate event into task spec
     return Promise.resolve();
   }
 
@@ -85,7 +85,7 @@ export class OmniAgent implements IOmniAgent {
       version: this.version,
       timestamp: Date.now(),
       evidence: {},
-      hash: "<result-hash>",
+      hash: "",
       taskId: spec.uuid,
       status: "success",
       output: null,
@@ -119,7 +119,7 @@ export class OmniAgent implements IOmniAgent {
   // ---------------------------------------------------------------
   monitorBackpressure(topic: string, threshold: number): void {
     console.info(`[OmniAgent] monitorBackpressure – topic=${topic}, threshold=${threshold}`);
-    // Stub – real implementation would subscribe to the bus and count events.
+    // TODO: subscribe to bus and count events.
   }
 }
 
@@ -145,7 +145,7 @@ export class OmniAgentBus implements IOmniAgentBus {
 
   async replayEvents(startTime: number, endTime: number, topic?: string): Promise<void> {
     console.info(`[OmniAgentBus] replayEvents – ${topic ?? "*"} from ${startTime} to ${endTime}`);
-    // Stub – a real implementation would retrieve persisted events and re‑publish them.
+    // TODO: retrieve persisted events and re-publish them.
   }
 }
 

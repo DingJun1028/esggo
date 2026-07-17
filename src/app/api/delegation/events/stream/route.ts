@@ -8,7 +8,7 @@
  *
  * 路由:
  * - GET /api/delegation/events/stream?delegationId=xxx
- *     ?delegationId 必需；須具備該 delegation 的 monitor (或 full) 權限
+ *     ?delegationId 必需；須具備該 delegation 的 monitor (or full) 權限
  *     -> text/event-stream，斷線自動退訂
  */
 
@@ -42,7 +42,6 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // 與 audit API 一致：僅 monitor / full 權限可訂閱即時事件流
   const canMonitor = await manager.validateDelegation(delegationId, 'monitor');
   if (!canMonitor) {
     return new Response(
@@ -54,10 +53,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 斷點續傳：客戶端（EventSource）重連時帶回 Last-Event-ID，僅回放其後的事件。
-  // 另支援 ?sinceId= 查詢參數：EventSource 在全新連線（如頁面重新整理）時不會自動
-  // 帶 Last-Event-ID 表頭，故由客戶端自 localStorage 讀取上次游標並以此參數續傳
-  // （表頭優先於查詢參數，相容原生 EventSource 自動重連行為）。
   const lastIdHeader = request.headers.get('Last-Event-ID');
   const sinceParam = searchParams.get('sinceId');
   const sinceId =
@@ -72,10 +67,8 @@ export async function GET(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       let closed = false;
-      let cleanup: (() => void) | null = null;
       let heartbeat: ReturnType<typeof setInterval> | null = null;
 
-      // send(data, id?)：可帶 SSE id 欄位，供客戶端 Last-Event-ID 斷點續傳
       const send = (data: unknown, id?: number) => {
         if (closed) return;
         const prefix = id != null ? `id: ${id}\n` : '';
@@ -88,7 +81,6 @@ export async function GET(request: NextRequest) {
 
       send({ type: 'CONNECTED', delegationId, ts: Date.now() });
 
-      // 全量回放：連線先送歷史事件（catch-up），可指定 sinceId 續傳（對齊「全量」+ RWD）
       try {
         const trail = await manager.getFullEventTrail(delegationId, sinceId);
         for (const rec of trail) {
@@ -109,60 +101,66 @@ export async function GET(request: NextRequest) {
         /* best-effort */
       }
 
-      const unsub = enhancedOmniBus.subscribe(
-        'external-forward',
-        (ev: unknown) => {
-          const e = ev as Record<string, unknown>;
-          const raw = e.payload as Record<string, unknown> | undefined;
-          // 真實事件（secureForward）封裝為 { event, payload: IBusEvent, ts }，
-          // 委派 payload 位於 raw.payload；手動發布（測試）則 raw 即委派 payload。
-          const delegationPayload =
-            raw && typeof raw === 'object' && raw.payload && typeof raw.payload === 'object'
-              ? (raw.payload as Record<string, unknown>)
-              : raw;
-          const hashLock =
-            raw && typeof raw.hashLock === 'string'
-              ? (raw.hashLock as string)
-              : typeof e.hashLock === 'string'
-                ? (e.hashLock as string)
-                : undefined;
-          // 斷點續傳游標：真實事件由 publishDelegationEvent 附 journalId 於 IBusEvent 上
-          const frameId =
-            raw && typeof raw.journalId === 'number' ? (raw.journalId as number) : undefined;
-          // 來源標記：client / test / server 等，供 RWD UI 區分「本端傳送」與外部事件
-          const frameSource =
-            raw && typeof raw === 'object' && raw.evidence && typeof raw.evidence === 'object'
-              ? (raw.evidence as Record<string, unknown>).source
-              : undefined;
-          const sourceVal =
-            typeof frameSource === 'string'
-              ? frameSource
-              : raw && typeof raw.source_origin === 'string'
-                ? (raw.source_origin as string)
-                : undefined;
-          const ts =
-            (typeof e.ts === 'number' ? e.ts : undefined) ??
-            (raw && typeof raw.ts === 'number' ? (raw.ts as number) : undefined);
-          const payload = delegationPayload as
-            | { type?: string; delegationId?: string }
-            | undefined;
-          if (!payload || payload.delegationId !== delegationId) return;
-          if (!payload.type || !DELEGATION_EVENT_TYPES.has(payload.type)) return;
-          send(
-            {
-              type: payload.type,
-              delegationId: payload.delegationId,
-              hashLock,
-              ts,
-              payload,
-              source: sourceVal,
-            },
-            frameId
-          );
-        }
-      );
+      const unsub = enhancedOmniBus.subscribe('external-forward', (ev: unknown) => {
+        const e = ev as Record<string, unknown>;
+        const raw = e.payload as Record<string, unknown> | undefined;
 
-      // 心跳保活：定期送 SSE 註解框，避免中間代理因閒置關閉連線（RWD / 全端穩健）
+        const delegationPayload = (() => {
+          if (!raw || typeof raw !== 'object') return raw;
+          if ('delegationId' in raw) return raw as Record<string, unknown>;
+          if (raw.payload && typeof raw.payload === 'object') return raw.payload as Record<string, unknown>;
+          return raw as Record<string, unknown>;
+        })();
+
+        const payload = delegationPayload as
+          | { type?: string; delegationId?: string }
+          | undefined;
+        if (!payload || payload.delegationId !== delegationId) return;
+        const eventType =
+          (payload && payload.type) ||
+          (typeof e.event === 'string' ? e.event : undefined);
+        if (!eventType || !DELEGATION_EVENT_TYPES.has(eventType)) return;
+
+        const hashLock =
+          raw && typeof raw.hashLock === 'string'
+            ? (raw.hashLock as string)
+            : typeof e.hashLock === 'string'
+              ? (e.hashLock as string)
+              : undefined;
+
+        const frameId =
+          raw && typeof raw.journalId === 'number' ? (raw.journalId as number) : undefined;
+
+        const sourceVal = (() => {
+          if (raw && typeof raw === 'object' && raw.evidence && typeof raw.evidence === 'object') {
+            const src = (raw.evidence as Record<string, unknown>).source;
+            if (typeof src === 'string') return src;
+          }
+          if (raw && typeof raw === 'object') {
+            const src = (raw as Record<string, unknown>).source_origin;
+            if (typeof src === 'string') return src;
+          }
+          if (typeof e.source_origin === 'string') return e.source_origin;
+          return undefined;
+        })();
+
+        const ts =
+          (typeof e.ts === 'number' ? e.ts : undefined) ??
+          (delegationPayload && typeof delegationPayload === 'object' && typeof (delegationPayload as Record<string, unknown>).ts === 'number'
+            ? ((delegationPayload as Record<string, unknown>).ts as number)
+            : undefined);
+        send(
+          {
+            type: payload.type,
+            delegationId: payload.delegationId,
+            hashLock,
+            ts,
+            payload,
+            source: sourceVal,
+          },
+          frameId
+        );
+      });
       heartbeat = setInterval(() => {
         if (closed) return;
         try {
@@ -172,7 +170,7 @@ export async function GET(request: NextRequest) {
         }
       }, 25000);
 
-      cleanup = () => {
+      request.signal.addEventListener('abort', () => {
         if (closed) return;
         closed = true;
         if (heartbeat) clearInterval(heartbeat);
@@ -182,12 +180,11 @@ export async function GET(request: NextRequest) {
         } catch {
           /* already closed */
         }
-      };
-
-      request.signal.addEventListener('abort', cleanup);
+      });
     },
     cancel() {
-      // 斷線清理由 abort 監聽處理；此處保留佔位以符合 ReadableStream 契約
+      // kept as placeholder to satisfy ReadableStream contract;
+      // abort-driven cleanup runs in start().
     },
   });
 

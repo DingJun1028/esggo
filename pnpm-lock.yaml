@@ -27,6 +27,12 @@ importers:
       '@google/genai':
         specifier: ^2.10.0
         version: 2.10.0
+      '@grpc/grpc-js':
+        specifier: 1.9.16
+        version: 1.9.16
+      '@grpc/proto-loader':
+        specifier: 0.8.1
+        version: 0.8.1
       '@notionhq/client':
         specifier: ^5.22.0
         version: 5.22.0
@@ -5107,7 +5113,6 @@ snapshots:
       long: 5.3.2
       protobufjs: 7.6.4
       yargs: 17.7.3
-    optional: true
 
   '@humanfs/core@0.19.2':
     dependencies:

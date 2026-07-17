@@ -77,7 +77,7 @@ function buildChapterContent(chNum: number, answers: AnswerRecord[], profile: Co
 
   let html = '';
   html += `<h2>第${chNum}章 ${ch.title} <span style="color:#009EB0;font-size:13px">[${gl}]</span></h2>`;
-  html += `<p>${company}（以下简称${short}）营运据点包含${loc}，主要业务为${biz}。截至${year}年12月31日，员工约${emp}人，年营收约${rev}，年用电量约${kwh.toLocaleString()}kWh，年用水量约${tons.toLocaleString()}吨。${short}在「${ch.title}」面向依5T协议${gl}（${gate}）原则进行完整揭露。</p>`;
+  html += `<p>${company}（以下简称${short}）營运据点包含${loc}，主要业务为${biz}。截至${year}年12月31日，员工约${emp}人，年營收约${rev}，年用电量约${kwh.toLocaleString()}kWh，年用水量约${tons.toLocaleString()}吨。${short}在「${ch.title}」面向依5T协议${gl}（${gate}）原则进行完整揭露。</p>`;
 
   if (answers.length > 0) {
     for (let i = 0; i < answers.length; i++) {
@@ -89,21 +89,21 @@ function buildChapterContent(chNum: number, answers: AnswerRecord[], profile: Co
     }
   } else {
     html += `<h3>${chNum}.1 管理策略</h3>`;
-    html += `<p>${short}于${year}年度依金管会「上市柜公司编制与申报永续报告书作业办法」及GRI 2021准则规范，就「${ch.title}」面向建立完整管理机制，并依据PDCA循环持续改善。公司高层对此面向高度重视，设立专责单位推动相关策略，并将执行成果定期向董事会报告。</p>`;
-    html += `<h3>${chNum}.2 目标与绩效</h3>`;
-    html += `<p>${year}年度具体绩效指标：完成率92%、覆盖率88%、合规度100%、满意度85%。前述数据已经第三方确信机构验证在案。</p>`;
+    html += `<p>${short}于${year}年度依金管会「上市柜公司编制与申报永续报告书作业办法」及GRI 2021准则規范，就「${ch.title}」面向建立完整管理机制，并依据PDCA循环持续改善。公司高層對此面向高度重視，設立专责单位推动相關策略，并将執行成果定期向董事会报告。</p>`;
+    html += `<h3>${chNum}.2 目標与績效</h3>`;
+    html += `<p>${year}年度具体績效指標：完成率92%、覆盖率88%、合規度100%、满意度85%。前述数据已經第三方确信机構驗證在案。</p>`;
   }
 
-  html += `<h3>关键绩效指标</h3>`;
-  html += `<table><thead><tr><th>指标</th><th>${year}</th><th>前年度</th><th>目标</th><th>达成率</th></tr></thead><tbody>`;
-  const kpis = [['完成率','92%','85%','95%','97%'],['覆盖率','88%','80%','90%','98%'],['合规度','100%','98%','100%','100%'],['满意度','85%','78%','90%','94%'],['训练时数','45h','40h','50h','90%']];
+  html += `<h3>關鍵績效指標</h3>`;
+  html += `<table><thead><tr><th>指標</th><th>${year}</th><th>前年度</th><th>目標</th><th>达成率</th></tr></thead><tbody>`;
+  const kpis = [['完成率','92%','85%','95%','97%'],['覆盖率','88%','80%','90%','98%'],['合規度','100%','98%','100%','100%'],['满意度','85%','78%','90%','94%'],['训練时数','45h','40h','50h','90%']];
   for (const k of kpis) {
     html += `<tr><td>${k[0]}</td><td>${k[1]}</td><td>${k[2]}</td><td>${k[3]}</td><td>${k[4]}</td></tr>`;
   }
   html += `</tbody></table>`;
 
-  html += `<h3>持续改善计划</h3>`;
-  html += `<p>${short}将持续强化${ch.title}相关工作，包括但不限于：导入数字化管理工具、强化内控制度、提升信息透明度、深化与利害关系人的对话机制。公司期望在${year}年度的基础上，持续提升永续发展水平，为利害关系人创造长期价值。</p>`;
+  html += `<h3>持续改善計划</h3>`;
+  html += `<p>${short}将持续强化${ch.title}相關工作，包括但不限于：導入数字化管理工具、强化內控制度、提升信息透明度、深化与利害關系人的對話机制。公司期望在${year}年度的基础上，持续提升永续发展水平，为利害關系人创造长期价值。</p>`;
 
   const chHash = zkp(html);
   html += `<p style="font-size:11px;font-family:monospace;color:#3B82F6;background:#f0f9ff;padding:4px 8px;border-radius:4px">ZKP: ${chHash} | OmniTag: OTG-${String(chNum).padStart(2,'0')}-${year}-${gate.toUpperCase()} | Trinity: V:sealed U:synced A:verified</p>`;
@@ -174,24 +174,24 @@ export function reportV5ToHtml(report: V5GeneratedReport): string {
   html += `.stat{background:#f1f5f9;padding:18px;border-radius:12px;text-align:center}`;
   html += `.stat-value{font-size:28px;font-weight:700;color:#009EB0}</style></head><body>`;
   html += `<h1>${report.companyName}</h1>`;
-  html += `<h2 style="border:none;color:#475569;font-size:16px;margin-top:5px">${year}年永续报告书 — ESGGO v5.0 万能系统版</h2>`;
+  html += `<h2 style="border:none;color:#475569;font-size:16px;margin-top:5px">${year}年永续报告书 — ESGGO v5.0 万能系統版</h2>`;
   html += `<div class="stats"><div class="stat"><div class="stat-value">28</div><div style="font-size:12px;color:#64748b">章节数</div></div>`;
-  html += `<div class="stat"><div class="stat-value">${report.totalWords.toLocaleString()}</div><div style="font-size:12px;color:#64748b">总字数</div></div>`;
+  html += `<div class="stat"><div class="stat-value">${report.totalWords.toLocaleString()}</div><div style="font-size:12px;color:#64748b">總字数</div></div>`;
   html += `<div class="stat"><div class="stat-value">5T</div><div style="font-size:12px;color:#64748b">真善美信通</div></div>`;
-  html += `<div class="stat"><div class="stat-value">ZKP</div><div style="font-size:12px;color:#64748b">零知识证明</div></div></div>`;
+  html += `<div class="stat"><div class="stat-value">ZKP</div><div style="font-size:12px;color:#64748b">零知識證明</div></div></div>`;
 
   for (const ch of report.chapters) {
     html += ch.content;
   }
 
-  html += `<hr><p style="text-align:center;color:#64748b;font-size:12px">ESGGO v5.0 | 总字数：${report.totalWords.toLocaleString()} | Trinity Hash: ${report.trinityHash}</p>`;
+  html += `<hr><p style="text-align:center;color:#64748b;font-size:12px">ESGGO v5.0 | 總字数：${report.totalWords.toLocaleString()} | Trinity Hash: ${report.trinityHash}</p>`;
   html += `</body></html>`;
   return html;
 }
 
 export function reportV5ToMarkdown(report: V5GeneratedReport): string {
   let md = `# ${report.companyName} ${report.reportVersion} 永续报告\n\n`;
-  md += `> 总字数：${report.totalWords.toLocaleString()} | Trinity Hash: ${report.trinityHash}\n\n---\n\n`;
+  md += `> 總字数：${report.totalWords.toLocaleString()} | Trinity Hash: ${report.trinityHash}\n\n---\n\n`;
   for (const ch of report.chapters) {
     md += `## 第${ch.num}章 ${ch.title}\n\n`;
     md += ch.content.replace(/<[^>]+>/g, '') + '\n\n---\n\n';

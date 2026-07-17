@@ -195,8 +195,7 @@ export class CelestialController {
   private async engraveToRepository(artifact: CelestialData, metadata: CelestialMetadata) {
     // 沉澱：寫入 OmniVault (Alert 表) — 5T Trackable
     try {
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const { prisma } = await import('@/lib/storage-service');
       await prisma.alert.create({
         data: {
           sourceId: 'celestial-flow',
@@ -210,7 +209,6 @@ export class CelestialController {
           esgPillar: '',
         },
       });
-      await prisma.$disconnect();
       console.log(`[Celestial] Engraved to repository: ${metadata.status}`);
     } catch {
       // Fallback: console only (DB may be unavailable in edge runtimes)
@@ -235,8 +233,7 @@ export class CelestialController {
     
     // 2. DB 持久化異常事件
     try {
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const { prisma } = await import('@/lib/storage-service');
       await prisma.alert.create({
         data: {
           sourceId: 'celestial-self-healing',
@@ -250,7 +247,6 @@ export class CelestialController {
           esgPillar: '',
         },
       });
-      await prisma.$disconnect();
     } catch (e) {
       console.error('[Celestial] Failed to persist self-healing alert to DB:', e);
     }

@@ -44,6 +44,8 @@ export default function DataExportPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ count: number; format: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 120 });
+  const [evolving, setEvolving] = useState(false);
 
   const handleExport = useCallback(async () => {
     try {
@@ -80,18 +82,83 @@ export default function DataExportPage() {
     }
   }, [format, category, region, fromDate, toDate, limit]);
 
+  const evolveExport = async () => {
+    if (evolving) return;
+    setEvolving(true);
+    try {
+      await new Promise(r => setTimeout(r, 500));
+      setEvolution(prev => {
+        const xp = prev.xp + 20;
+        let level = prev.level;
+        let nextXp = prev.nextXp;
+        while (xp >= nextXp) {
+          level += 1;
+          nextXp = Math.floor(nextXp * 1.2);
+        }
+        return { level, xp: xp % nextXp, nextXp };
+      });
+    } finally {
+      setEvolving(false);
+    }
+  };
+
   return (
     <div style={{ background: SC.bg, minHeight: '100vh', padding: '24px 16px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {/* Header */}
         <header style={{ borderBottom: `1px solid ${SC.border}`, paddingBottom: 16, marginBottom: 24 }}>
           <h1 style={{ color: SC.text, fontSize: 24, fontWeight: 700 }}>
-            📥 ESG 資料匯出
+            📥 ESG 資料匯出 ∞ Evolution
           </h1>
           <p style={{ color: SC.textSecondary, fontSize: 14, marginTop: 4 }}>
-            匯出 ESG 爬蟲資料為 CSV 或 JSON 格式
+            匯出 ESG 爬蟲資料為 CSV 或 JSON 格式 — 永續發展無限進化
           </p>
         </header>
+
+        {/* ESGGO 資料進化 */}
+        <div style={{
+          background: `${SC.gold}12`,
+          border: `1px solid ${SC.gold}40`,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 20,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: SC.textSecondary }}>🧬 ESGGO 資料進化</div>
+            <div style={{ display: 'flex', gap: 16, marginTop: 6 }}>
+              <div>
+                <div style={{ fontSize: 10, color: SC.textMuted }}>LEVEL</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: SC.gold }}>{evolution.level}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: SC.textMuted }}>XP</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: SC.teal }}>{evolution.xp}/{evolution.nextXp}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={evolveExport}
+            disabled={evolving}
+            style={{
+              padding: '8px 18px',
+              background: evolving ? SC.surfaceHover : `${SC.gold}22`,
+              color: SC.gold,
+              border: `1px solid ${SC.gold}55`,
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: evolving ? 'not-allowed' : 'pointer',
+              opacity: evolving ? 0.7 : 1,
+            }}
+          >
+            {evolving ? '🧬 進化中...' : '🧬 啟動資料進化'}
+          </button>
+        </div>
 
         {/* Filter Form */}
         <div style={{ background: SC.surface, border: `1px solid ${SC.border}`, borderRadius: 12, padding: 20, marginBottom: 20 }}>

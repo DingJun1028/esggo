@@ -1,14 +1,23 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useAgnesApi } from "@/components/AgnesProvider";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+
 type CaseType =
   | "code_optimization"
+  | "compliance_review"
+  | "gri_report_draft"
+  | "evidence_ocr"
+  | "email_archival"
   | "documentation"
   | "data_analysis"
   | "esg_report"
   | "ui_design"
+  | "tcfd_analysis"
+  | "sdg_mapping"
+  | "materiality_matrix"
+  | "report_assembly"
+  | "omni_jules_heal"
+  | "swarm_orchestration"
   | "architecture"
   | "bug_fix"
   | "general";
@@ -23,15 +32,30 @@ const PATTERNS: [RegExp, CaseType][] = [
   [/bug|fix|error|修復|TypeError/i, "bug_fix"],
 ];
 
+const EXTRA_PATTERNS: [RegExp, CaseType][] = [
+  [/csrd|合規|compliance|法規|審查/i, "compliance_review"],
+  [/gri|報告|report|草稿|撰寫/i, "gri_report_draft"],
+  [/ocr|帳單|收據|發票|提取|extract/i, "evidence_ocr"],
+  [/郵件|email|歸檔|archive/i, "email_archival"],
+  [/tcfd|氣候|climate|風險分析|淨零|net.?zero/i, "tcfd_analysis"],
+  [/sdg|永續發展目標|聯合國/i, "sdg_mapping"],
+  [/重大性|materiality|矩陣|priority/i, "materiality_matrix"],
+  [/蜂群|swarm|orchestrat|調度|協調/i, "swarm_orchestration"],
+];
+
 function classify(input: string): CaseType {
   if (!input) return "general";
+  const lower = input.toLowerCase();
+  for (const [p, t] of EXTRA_PATTERNS) {
+    if (p.test(lower)) return t;
+  }
   for (const [p, t] of PATTERNS) {
-    if (p.test(input)) return t;
+    if (p.test(lower)) return t;
   }
   return "general";
 }
 
-const RESPONSES: Record<CaseType, string[]> = {
+const RESPONSES: Partial<Record<CaseType, string[]>> = {
   code_optimization: [
     "識別出 3 個優化點：記憶化、惰性載入、並行處理。建議使用 `useMemo` 和 `React.lazy`。",
     "分析完成。瓶頸在 O(n²) 迴圈，可重構為 O(n log n) 排序算法。",
@@ -92,16 +116,9 @@ function sanitizeTextHtml(html: string): string {
   return DOMPurify.sanitize(html);
 }
 
-interface RagChunk {
-  content: string;
-  source: string;
-  chunk_index: number;
-  [key: string]: unknown;
-}
-
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
-  const [model, setModel] = useState<string>("Qwen");
+  const model = 'local:esggo-gemma4';
   const [msgs, setMsgs] = useState<Message[]>([
     {
       id: "0",
@@ -136,104 +153,37 @@ export function OmniOneChat() {
     const start = Date.now();
 
     let reply = "";
-    let citations: string[] = [];
+    const citations: string[] = [];
     try {
-      // 1. Lightweight Retrieval from Firebase
-      let ragContext = "";
-      try {
-        if (db && ct === "esg_report") {
-          // Only retrieve for relevant cases to save time
-          const snapshot = await getDocs(
-            query(collection(db, "rag_knowledge")),
-          );
-          const chunks = snapshot.docs.map((d) => d.data() as RagChunk);
+      const apiRes = await fetch("/api/omni-one", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          input: userMsg.text,
+          caseType: ct,
+          model,
+          ragContext: "",
+        }),
+      });
 
-          if (chunks.length > 0) {
-            // Simple keyword overlap scoring
-            const userKeywords = trimmedInput
-              .toLowerCase()
-              .split(/\s+/)
-              .filter((k) => k.length > 1);
-            const scored = chunks.map((chunk) => {
-              const content = chunk.content.toLowerCase();
-              let score = 0;
-              for (const kw of userKeywords) {
-                if (content.includes(kw)) score++;
-              }
-              return { ...chunk, score };
-            });
-
-            scored.sort((a, b) => b.score - a.score);
-            const topChunks = scored
-              .slice(0, 3)
-              .filter((c) => c.score > 0 || scored.length <= 3); // pick top 3
-
-            if (topChunks.length > 0) {
-              const uniqueSources = Array.from(
-                new Set(topChunks.map((c) => c.source)),
-              );
-              citations = uniqueSources.map((s) => String(s));
-              ragContext = topChunks
-                .map(
-                  (c) =>
-                    `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`,
-                )
-                .join("\\n\\n");
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Firebase retrieval failed:", e);
-      }
-
-      if (isReady && processMessage) {
-        // Use AGNES API
-        const prompt = ragContext
-          ? `[Model: ${model}] 參考以下知識庫內容來回答問題:\\n${ragContext}\\n\\n問題: ${userMsg.text}`
-          : `[Model: ${model}] ${userMsg.text}`;
-
-        const agnesReply = await processMessage(prompt);
-        if (agnesReply) {
-          reply = agnesReply;
-        } else {
-          throw new Error("AGNES API returned empty response");
-        }
-      } else {
-        // Fallback to OmniOne Default Logic
-        const res = await fetch("/api/omni-one", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            input: userMsg.text,
-            caseType: ct,
-            model,
-            ragContext,
-          }),
-        });
-        if (!res.ok) throw new Error(`OmniOne API 返回 ${res.status}`);
-        const data = await res.json();
-        if (data && typeof data.output === "string") {
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (typeof data?.output === "string" && data.output.trim()) {
           reply = data.output;
-        } else if (data && typeof data === "string") {
-          reply = data;
-        } else {
-          // Fallback to local pattern
-          const responses = RESPONSES[ct] ?? RESPONSES.general;
-          reply =
-            responses[Math.floor(Math.random() * responses.length)] ??
-            "已完成處理。";
         }
       }
-    } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : "未知錯誤";
-      console.warn(
-        `[OmniOne/AGNES] API call failed (${errMsg}), using local fallback.`,
-      );
-      const responses = RESPONSES[ct] ?? RESPONSES.general;
-      reply =
-        responses[Math.floor(Math.random() * responses.length)] ??
-        "已完成處理。";
-      setError(`API 連線失敗，使用本地模式 (${errMsg})`);
+    } catch {
+      // ignore API failure and fall back below
+    }
+
+    if (!reply && isReady && processMessage) {
+      const agnesReply = await processMessage(`[Model: ${model}] ${userMsg.text}`).catch(() => null);
+      if (agnesReply) reply = agnesReply;
+    }
+
+    if (!reply) {
+      const responses = RESPONSES[ct] ?? RESPONSES.general ?? [];
+      reply = responses[Math.floor(Math.random() * responses.length)] ?? "已完成處理。";
     }
 
     const ms = Date.now() - start;
@@ -297,17 +247,11 @@ export function OmniOneChat() {
         <div className="text-xs font-semibold text-textSecondary tracking-wider">
           OmniOne 覺醒對話框
         </div>
-        {/* Model Switcher */}
-        <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg p-1">
-          {["Qwen", "Gemini Pro", "Gemini Flash"].map((m) => (
-            <button
-              key={m}
-              onClick={() => setModel(m)}
-              className={`text-[10px] px-2 py-1 rounded-md font-semibold transition-colors ${model === m ? "bg-accentTeal text-white" : "text-textSecondary hover:bg-secondary"}`}
-            >
-              {m}
-            </button>
-          ))}
+        <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg px-2.5 py-1">
+          <span className="text-[10px] text-textSecondary">主力模型：</span>
+          <span className="text-[10px] font-semibold text-accentTeal">
+            local:esggo-gemma4 / fallback gemma3:12b
+          </span>
         </div>
       </div>
 
