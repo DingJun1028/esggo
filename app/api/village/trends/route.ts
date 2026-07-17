@@ -65,16 +65,45 @@ ${topProjects.join('\n')}
 回應請保持在 100 字以內，並展現你是一個「系統核心」的角色（開頭請加上： [OmniOne 趨勢預測] ...）。
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        temperature: 0.7,
-        maxOutputTokens: 256,
-      }
-    });
+    // 免費層級 Interactions API PoC (store=false 無狀態; 模型 gemini-2.5-flash 免費配額)
+    // 開關 USE_INTERACTIONS_API (default false) 可隨時切回舊 generateContent, 不破壞原行為
+    const USE_INTERACTIONS_API = process.env.USE_INTERACTIONS_API === 'true';
 
-    return jsonResponse({ trend: response.text, provider: 'gemini' });
+    let trendText: string;
+    if (USE_INTERACTIONS_API) {
+      // Interactions API: 單輪用 input 欄位; store=false 免費層級無狀態
+      const interaction = await ai.interactions.create({
+        model: 'gemini-2.5-flash',
+        input: prompt,
+        store: false,
+        generation_config: {
+          temperature: 0.7,
+          max_output_tokens: 256,
+        },
+      });
+      // model 輸出位於 steps 中 type==="model_output" 的 content.parts[].text
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const steps = (interaction.steps ?? []) as any[];
+      trendText = steps
+        .filter((s) => s.type === 'model_output')
+        .flatMap((s) => s.content ?? [])
+        .flatMap((c: any) => c.parts ?? [])
+        .map((p: any) => p.text ?? '')
+        .join('')
+        .trim();
+    } else {
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          temperature: 0.7,
+          maxOutputTokens: 256,
+        },
+      });
+      trendText = response.text ?? '';
+    }
+
+    return jsonResponse({ trend: trendText, provider: 'gemini' });
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
