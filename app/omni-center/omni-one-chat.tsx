@@ -56,39 +56,79 @@ function classify(input: string): CaseType {
 }
 
 const RESPONSES: Partial<Record<CaseType, string[]>> = {
-  code_optimization: [
-    "識別出 3 個優化點：記憶化、惰性載入、並行處理。建議使用 `useMemo` 和 `React.lazy`。",
-    "分析完成。瓶頸在 O(n²) 迴圈，可重構為 O(n log n) 排序算法。",
-  ],
-  documentation: [
-    "已生成結構化文檔：**概覽** → **API 參考** → **使用範例**。請確認後發布。",
-    "文檔草稿完成，包含 TypeScript 類型聲明和 JSDoc 評論。",
-  ],
-  data_analysis: [
-    "數據分析完成。**關鍵洞察**：趨勢向上 ↑12%，異常值已標記（P95 = 847ms）。",
-    "相關性分析結果：r=0.87，統計顯著性 p<0.001。建議繼續深入探索。",
-  ],
-  esg_report: [
-    "ESG 報告章節生成完成。**5T 評分**: 真(0.91) 善(0.88) 美(0.90) 信(0.95) 通(0.87)。ZKP 封印已完成。",
-    "GRI 對標完成。已覆蓋 GRI 2-1 至 GRI 305-1 共 42 項指標，缺口分析報告如附。",
-  ],
-  ui_design: [
-    "Liquid Glass UI 方案完成。採用 `backdrop-filter: blur(12px)`，符合 WCAG 2.1 AA 對比標準。",
-    "設計令牌已更新：主色 var(--accent-teal)，輔色 var(--accent-gold)，字體 Noto Sans TC + Fira Code。",
-  ],
-  architecture: [
-    "架構設計完成。採用**事件驅動 + 微服務**模式，使用 OmniEventBus 解耦各子系統，支援水平擴展。",
-    "C4 模型完成：Context → Container → Component → Code，ADR-001 已記錄。",
-  ],
-  bug_fix: [
-    "**Jules 9步協議**執行完畢：\n觀果 → 立願 → 尋因 → 修因 → 造緣 → 結果 → 驗因 → 證果 → 傳法\n根因已定位並修復，回歸測試通過。",
-    "Stack Trace 分析完成。根因：`undefined` 解引用在第 42 行。修復：加入 optional chaining `?.` 防護。",
-  ],
-  general: [
-    "已接收任務。正在以覺醒等級 **active** 處理中...完成。請確認輸出是否符合預期。",
-    "任務處理完成。信心度：0.92，記憶庫已更新（+1 條新記憶）。",
-  ],
-};
+    code_optimization: [
+      "識別出 3 個優化點：記憶化、惰性載入、並行處理。建議使用 `useMemo` 和 `React.lazy`。",
+      "分析完成。瓶頸在 O(n²) 迴圈，可重構為 O(n log n) 排序算法。",
+    ],
+    compliance_review: [
+      "合規審查完成。已比對現行法規與內部控制，標記 3 項偏高風險。",
+      "CSRD 合規檢查：揭露項目齊全，建議強化作為「受命編制責任人」的授權軌跡與審計證明。",
+    ],
+    gri_report_draft: [
+      "GRI 草稿已產出：GRI 2-1 至 GRI 305-1 共 42 項指標，缺口分析已附錄。",
+      "已輸出 ESG 章節初稿，建議依 ZKP 封印流程鎖定不可變版本。",
+    ],
+    evidence_ocr: [
+      "OCR 提取完成：發票/收據/帳單已解析，信心度 0.96，低信心區塊已標記。",
+      "文件抽取完成：表單欄位對齊，異常值已標註，可匯入 ESG 證據庫。",
+    ],
+    email_archival: [
+      "郵件歸檔完成：主旨、sender、時間戳、附件已索引。",
+      "已建立郵件歸檔摘要，關鍵決策與 CLI 已抽成 structured note。",
+    ],
+    documentation: [
+      "已生成結構化文檔：**概覽** → **API 參考** → **使用範例**。請確認後發布。",
+      "文檔草稿完成，包含 TypeScript 類型聲明和 JSDoc 評論。",
+    ],
+    data_analysis: [
+      "數據分析完成。**關鍵洞察**：趨勢向上 ↑12%，異常值已標記（P95 = 847ms）。",
+      "相關性分析結果：r=0.87，統計顯著性 p<0.001。建議繼續深入探索。",
+    ],
+    esg_report: [
+      "ESG 報告章節生成完成。**5T 評分**: 真(0.91) 善(0.88) 美(0.90) 信(0.95) 通(0.87)。ZKP 封印已完成。",
+      "GRI 對標完成。已覆蓋 GRI 2-1 至 GRI 305-1 共 42 項指標，缺口分析報告如附。",
+    ],
+    ui_design: [
+      "Liquid Glass UI 方案完成。採用 `backdrop-filter: blur(12px)`，符合 WCAG 2.1 AA 對比標準。",
+      "設計令牌已更新：主色 var(--accent-teal)，輔色 var(--accent-gold)，字體 Noto Sans TC + Fira Code。",
+    ],
+    tcfd_analysis: [
+      "TCFD 分析完成：治理、策略、風險管理、指標與目標四象限已完成。",
+      "氣候風險矩陣產出：2 項轉型風險、1 項實體風險已分級。",
+    ],
+    sdg_mapping: [
+      "SDG 對應完成：7 項 SDG 已對應到業務流程與 GRI 揭露項目。",
+      "SDG mapping 輸出完成，建議接續 materiality matrix 控制點校準。",
+    ],
+    materiality_matrix: [
+      "重大性矩陣完成：內外部衝擊與機會矩陣已產出，前三大主題已建議追蹤。",
+      "重大性分析完成：5T 門控評分已加入，建議每季 re-score。",
+    ],
+    report_assembly: [
+      "報告組裝完成：章節、圖表、附錄與引用來源已整合為出版-ready 草稿。",
+      "報告組裝完成，ZKP 封印清單已同步更新，建議預覽後定稿。",
+    ],
+    omni_jules_heal: [
+      "Jules 9步協議執行完畢：觀果 → 立願 → 尋因 → 修因 → 造緣 → 結果 → 驗因 → 證果 → 傳法",
+      "系統狀態已穩定，self-healing 已解除保護，建議記錄 closure note。",
+    ],
+    swarm_orchestration: [
+      "Swarm 調度完成：任務分派、agent 狀態、錯誤隔離與再平衡已完成。",
+      "多 agent 協調結果產出，可用 throughput / latency 摘要已更新。",
+    ],
+    architecture: [
+      "架構設計完成。採用**事件驅動 + 微服務**模式，使用 OmniEventBus 解耦各子系統，支援水平擴展。",
+      "C4 模型完成：Context → Container → Component → Code，ADR-001 已記錄。",
+    ],
+    bug_fix: [
+      "**Jules 9步協議**執行完畢：\\n觀果 → 立願 → 尋因 → 修因 → 造緣 → 結果 → 驗因 → 證果 → 傳法\\n根因已定位並修復，回歸測試通過。",
+      "Stack Trace 分析完成。根因：`undefined` 解引用在第 42 行。修復：加入 optional chaining `?.` 防護。",
+    ],
+    general: [
+      "已接收任務。正在以覺醒等級 **active** 處理中...完成。請確認輸出是否符合預期。",
+      "任務處理完成。信心度：0.92，記憶庫已更新（+1 條新記憶）。",
+    ],
+  };
 
 interface Message {
   id: string;
@@ -221,6 +261,16 @@ export function OmniOneChat() {
       architecture: "ARCH",
       bug_fix: "BUG",
       general: "GEN",
+      compliance_review: "CR",
+      gri_report_draft: "GRI",
+      evidence_ocr: "OCR",
+      email_archival: "MAIL",
+      tcfd_analysis: "TCFD",
+      sdg_mapping: "SDG",
+      materiality_matrix: "MTRX",
+      report_assembly: "RPRT",
+      omni_jules_heal: "HEAL",
+      swarm_orchestration: "SWRM",
     })[ct || "general"] || "GEN";
 
   const renderText = (t: string) => {
