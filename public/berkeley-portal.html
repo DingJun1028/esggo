@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 柏克萊國際永續策略人才培力課程服務中心</title>
+<title>2026 柏克萊國際永續策略人才培力 · 學員中心</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;700&family=Source+Serif+4:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
@@ -33,6 +33,25 @@
     color: var(--text);
   }
 
+  /* 語言切換器 */
+  .lang-switch {
+    display: flex; justify-content: flex-end; gap: 6px;
+    margin: 0 auto 14px; max-width: 1240px; width: 100%;
+    padding: 0 18px;
+  }
+  .lang-switch button {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff; color: var(--cal-blue);
+    cursor: pointer; transition: all .15s ease;
+  }
+  .lang-switch button:hover { border-color: var(--cal-blue); }
+  .lang-switch button.active {
+    background: var(--cal-blue); color: #fff; border-color: var(--cal-blue);
+  }
+
   /* 可鑲嵌基底 */
   .esggo-portal {
     width: 100%; min-width: 0;
@@ -44,7 +63,7 @@
     width: 100%;
   }
 
-  /* 英雄區交錯背景 */
+  /* 英雄區 */
   .hero-wrap {
     position: relative;
     border-radius: 16px;
@@ -69,6 +88,16 @@
     position: relative; z-index: 1;
     padding: 40px 36px;
     color: #fff;
+  }
+  /* 2026 獨立眉標徽章（與標題分離，消除重疊） */
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; margin-bottom: 16px;
+    border-radius: 999px;
+    background: rgba(253,181,21,0.16);
+    border: 1px solid rgba(253,181,21,0.45);
+    color: var(--cal-gold);
+    font-weight: 700; font-size: 13px; letter-spacing: 1.5px;
   }
   .hero-title {
     margin: 0 0 12px;
@@ -112,27 +141,10 @@
   }
   .btn-ghost:hover { background: rgba(255,255,255,0.18); border-color: var(--cal-gold); }
 
-  /* 優質徽章列 */
-  .bar {
-    display: flex; flex-wrap: wrap; gap: 10px;
-    margin-bottom: 22px;
-  }
-  .chip {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: #fff;
-    color: var(--cal-blue);
-    font-weight: 600; font-size: 13px;
-    border: 1px solid var(--line);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.02);
-  }
-  .chip i { color: #b47b00; }
-
-  /* 卡片網格交錯 */
+  /* 四核心功能網格 */
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
     margin-bottom: 22px;
   }
@@ -140,7 +152,7 @@
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 22px;
+    padding: 24px;
     display: flex; flex-direction: column;
     height: 100%;
     position: relative;
@@ -155,34 +167,30 @@
     background: linear-gradient(90deg, var(--cal-blue), var(--cal-gold));
   }
   .card.gold-accent::before { background: linear-gradient(90deg, var(--cal-gold), #f59e0b); }
-  .card.slate-accent::before { background: linear-gradient(90deg, #334155, #64748b); }
 
   .card-header {
     display: flex; align-items: center; gap: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     font-family: 'Noto Serif TC', 'Source Serif 4', serif;
-    font-weight: 700; font-size: 16.5px;
+    font-weight: 700; font-size: 18px;
     color: var(--cal-blue);
   }
   .icon-wrap {
-    width: 34px; height: 34px;
+    width: 40px; height: 40px;
     display: inline-flex; align-items: center; justify-content: center;
-    border-radius: 8px; flex-shrink: 0;
+    border-radius: 10px; flex-shrink: 0;
+    font-size: 17px;
   }
   .icon-wrap.a { background: var(--cal-blue-soft); color: var(--cal-blue); }
   .icon-wrap.b { background: var(--cal-gold-soft); color: #92400e; }
-  .icon-wrap.c { background: #eef2ff; color: #3730a3; }
-
-  .card ul { margin: 0 0 18px; padding: 0 0 0 18px; list-style: square; flex-grow: 1; }
-  .card li { margin: 7px 0; font-size: 14px; color: #334155; }
-
+  .card-desc { margin: 0 0 18px; font-size: 14px; color: var(--muted); flex-grow: 1; }
   .card-links { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
   .link-btn {
     display: inline-flex; align-items: center; justify-content: space-between;
     text-decoration: none;
-    padding: 10px 14px;
+    padding: 11px 15px;
     border-radius: 8px;
-    font-weight: 600; font-size: 13px;
+    font-weight: 600; font-size: 13.5px;
     border: 1px solid var(--line);
     background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
     color: var(--cal-blue);
@@ -196,7 +204,7 @@
   }
   .link-btn.primary:hover { filter: brightness(1.05); border-color: #b47b00; }
 
-  /* 公告 + 排程共用 section */
+  /* 公告 + 預約共用 section */
   .panel {
     background: #fff;
     border: 1px solid var(--line);
@@ -205,7 +213,7 @@
     margin-bottom: 22px;
   }
   .panel-title {
-    margin: 0 0 16px;
+    margin: 0 0 14px;
     font-family: 'Noto Serif TC', 'Source Serif 4', serif;
     font-size: 18px; font-weight: 700;
     color: var(--cal-blue);
@@ -217,8 +225,6 @@
     border-radius: 4px;
     background: linear-gradient(180deg, var(--cal-blue), var(--cal-gold));
   }
-
-  /* 公告 */
   .notice-list { display: flex; flex-direction: column; gap: 14px; }
   .notice { display: flex; gap: 14px; padding: 14px; border-radius: 10px; background: #f8fafc; border: 1px dashed #e2e8f0; }
   .notice-date {
@@ -233,72 +239,6 @@
   .notice-body strong { color: #0f172a; }
   .badge-urgent { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #fee2e2; color: #991b1b; font-weight: 700; font-size: 12px; margin-right: 6px; }
 
-  /* 課程排程雙軌 */
-  .schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-  .schedule-col {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 20px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  }
-  .schedule-col.blue { border-top: 5px solid var(--cal-blue); background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); }
-  .schedule-col.gold { border-top: 5px solid var(--cal-gold); background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%); }
-  .schedule-head {
-    display: flex; align-items: center; gap: 10px;
-    font-weight: 700; font-size: 15.5px;
-    margin-bottom: 14px;
-    font-family: 'Noto Serif TC', 'Source Serif 4', serif;
-  }
-  .schedule-col.blue .schedule-head { color: var(--cal-blue); }
-  .schedule-col.gold .schedule-head { color: #92400e; }
-  .weeks { list-style: none; margin: 0; padding: 0; }
-  .weeks li {
-    padding: 14px 14px;
-    border-bottom: 1px dashed #cbd5e1;
-    display: flex; flex-direction: column; gap: 5px;
-  }
-  .weeks li:last-child { border-bottom: none; padding-bottom: 4px; }
-  .wk {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: fit-content; padding: 3px 10px; border-radius: 6px;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
-    color: #fff;
-    background: linear-gradient(135deg, var(--cal-blue), #2563eb);
-  }
-  .schedule-col.gold .wk { background: linear-gradient(135deg, #f59e0b, #ef4444); color: var(--cal-blue); }
-  .wk-name { font-weight: 700; font-size: 14.5px; }
-  .wk-desc { font-size: 13.5px; color: var(--muted); }
-  .wk-deliver {
-    margin-top: 6px;
-    padding: 8px 12px; border-radius: 8px;
-    background: rgba(5,150,105,0.06);
-    color: var(--success);
-    font-size: 13px; font-weight: 600;
-    display: flex; gap: 8px; align-items: flex-start;
-  }
-  .wk-fac {
-    margin-top: 5px;
-    font-size: 12.5px;
-    color: #334155;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .wk-fac .lec { color: var(--cal-blue); font-weight: 600; }
-  .wk-fac .key { color: #92400e; font-weight: 600; }
-  .wk-journal {
-    margin-top: 5px;
-    font-size: 12px;
-    color: var(--muted);
-    font-style: italic;
-    padding-left: 10px;
-    border-left: 2px solid var(--cal-gold-soft);
-  }
-
   .footer-note {
     text-align: center;
     font-size: 12px;
@@ -307,12 +247,8 @@
   }
 
   /* RWD */
-  @media (max-width: 1024px) {
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
   @media (max-width: 720px) {
     .grid { grid-template-columns: 1fr; }
-    .schedule-grid { grid-template-columns: 1fr; }
     .hero-inner { padding: 24px 20px; }
     .notice { flex-direction: column; gap: 8px; }
     .esggo-portal { padding: 16px 10px; }
@@ -321,6 +257,13 @@
 </head>
 <body>
 <div class="esggo-portal">
+  <!-- 語言切換器 -->
+  <div class="lang-switch" role="group" aria-label="語言選擇">
+    <button type="button" data-lang="zh-Hant" class="active">繁</button>
+    <button type="button" data-lang="zh-Hans">簡</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
   <div class="esggo-shell">
 
     <!-- 英雄橫幅 -->
@@ -328,201 +271,165 @@
       <div class="hero-layer-a" aria-hidden="true"></div>
       <div class="hero-layer-b" aria-hidden="true"></div>
       <div class="hero-inner">
-        <h1 class="hero-title">2026 <em>柏克萊國際永續人才培力</em> 課程服務中心</h1>
-        <p class="hero-lede">Berkeley Haas 永續策略創新 × TSISDA × 台灣尤努斯基金會，一站式入口平台：線上課程、協作資產、TA 營運、成果繳交、語音翻譯、课程回放。</p>
+        <span class="hero-eyebrow" data-i18n="eyebrow"><i class="fa-solid fa-calendar-star"></i> 2026 年度課程</span>
+        <h1 class="hero-title"><em data-i18n="centerName">學員中心</em></h1>
+        <p class="hero-lede" data-i18n="heroLede">柏克萊國際永續人才培力課程 · 第一版交付中心。學員能下載教材、提交作業、回看課程，並取得學習資源。</p>
         <div class="hero-cta">
-          <a class="btn btn-gold" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-laptop-file"></i> 進入線上課程</a>
-          <a class="btn btn-ghost" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> 學員共享雲端</a>
-          <a class="btn btn-ghost" href="#course-schedule-detail"><i class="fa-solid fa-calendar-days"></i> 查閱課程排程</a>
+          <a class="btn btn-gold" href="#core"><i class="fa-solid fa-grip"></i> <span data-i18n="ctaCore">進入四大功能</span></a>
+          <a class="btn btn-ghost" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="ctaBook">預約諮詢</span></a>
         </div>
       </div>
     </div>
 
-    <!-- 徽章列 -->
-    <div class="bar">
-      <div class="chip"><i class="fa-solid fa-calendar-day"></i> 週六主課程 08:00-14:00</div>
-      <div class="chip"><i class="fa-solid fa-comments-pie"></i> 週日 Consulting Lab</div>
-      <div class="chip"><i class="fa-solid fa-language"></i> AI 即時同步翻譯</div>
-      <div class="chip"><i class="fa-solid fa-clock-rotate-left"></i> 課後 Replay 複習庫</div>
-      <div class="chip"><i class="fa-solid fa-certificate"></i> 雙證審查 出席率 ≥80%</div>
-    </div>
-
     <!-- 最新公告 -->
     <div class="panel" id="announcements">
-      <h2 class="panel-title">最新公告</h2>
+      <h2 class="panel-title" data-i18n="annTitle">最新公告</h2>
       <div class="notice-list">
         <div class="notice">
           <div class="notice-date">2026/07/07</div>
           <div class="notice-body">
-            <span class="badge-urgent">重要行動</span>
-            <strong>[學員請注意]</strong> 請於本週五 <strong>07/10 中午 12:00</strong> 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。
+            <span class="badge-urgent" data-i18n="urgent">重要行動</span>
+            <strong data-i18n="annNote">[學員請注意]</strong> <span data-i18n="annText">請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。</span>
             <div style="margin-top:12px;">
-              <a class="link-btn primary" style="width:fit-content;display:inline-flex;" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> 填寫意願表單</a>
+              <a class="link-btn primary" style="width:fit-content;display:inline-flex;" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="annBtn">填寫意願表單</span></a>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 九宮格 -->
-    <div class="grid">
+    <!-- 四核心功能 -->
+    <div class="grid" id="core">
       <div class="card">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-graduation-cap"></i></div>課程資訊大綱</div>
-        <ul>
-          <li><strong>目標：</strong>合規底盤與創價轉型。</li>
-          <li><strong>架構：</strong>6 週 / 72 小時高密度設計。</li>
-          <li><strong>時程：</strong>週六主課、週日顧問諮詢。</li>
-          <li><strong>修業：</strong>出席率 80% 可獲官方雙證書。</li>
-          <li>包含重大性分析與數據治理。</li>
-        </ul>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-file-pdf"></i></div><span data-i18n="c1Title">教材下載</span></div>
+        <p class="card-desc" data-i18n="c1Desc">教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。</p>
         <div class="card-links">
-          <a class="link-btn" href="#course-schedule-detail">查閱雙軌總進度表 <i class="fa-solid fa-chevron-down"></i></a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-chevron-right"></i> <span data-i18n="c1Link">進入教材資產庫</span></a>
         </div>
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-laptop-file"></i></div>線上課程大廳</div>
-        <ul>
-          <li><strong>週六主課程：</strong>線上 Live 學習同步口譯。</li>
-          <li><strong>週日諮詢：</strong>Mentor Office Hours 輔導。</li>
-          <li><strong>專題研討：</strong>策略創新房、轉型實務房。</li>
-          <li><strong>課堂常規：</strong>線上互動、改名與出席驗證。</li>
-        </ul>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-file-arrow-up"></i></div><span data-i18n="c2Title">作業提交</span></div>
+        <p class="card-desc" data-i18n="c2Desc">提交每週矩陣成果與反思筆記。個人上傳空間，僅你能看自己的檔案。</p>
         <div class="card-links">
-          <a class="link-btn primary" href="https://forms.google.com/" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> 進入線上 Live 教室</a>
-          <a class="link-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i> Office-Hour 諮詢室</a>
+          <a class="link-btn primary" href="https://forms.gle/1paHpA5xSSSZJSFy8" target="_blank" rel="noopener"><i class="fa-solid fa-upload"></i> <span data-i18n="c2Link">提交作業</span></a>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-folder-open"></i></div>學員共享雲端</div>
-        <ul>
-          <li>2026 最新官方學員手冊下載。</li>
-          <li>Cohort Summer 通訊名單。</li>
-          <li>每週課堂精華包與補充閱讀。</li>
-          <li>學員反思筆記與個人矩陣模板。</li>
-        </ul>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-photo-film"></i></div><span data-i18n="c3Title">課程回放</span></div>
+        <p class="card-desc" data-i18n="c3Desc">週六主課與週日諮詢全程錄影，課後複習、補齊重點。</p>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> 打開學員 Google Drive</a>
-        </div>
-      </div>
-
-      <div class="card slate-accent">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-file-pdf"></i></div>教材庫資產</div>
-        <ul>
-          <li>Berkeley 教授簡報原始 PDF。</li>
-          <li>在地實務模組操作手冊。</li>
-          <li>協作公版素材與簡報框架。</li>
-          <li>精選隨堂問答整理與 FAQ。</li>
-        </ul>
-        <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-chevron-right"></i> 進入教材數據資產庫</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-file-arrow-up"></i></div>作業成果提交</div>
-        <ul>
-          <li><strong>每週要求：</strong>反思筆記與階段成果。</li>
-          <li><strong>最終 Capstone：</strong>永續執行矩陣。</li>
-          <li><strong>反饋：</strong>產學 Mentor 一對一回饋。</li>
-          <li>需符合指定 PDF 格式與命名原則。</li>
-        </ul>
-        <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-upload"></i> 提交每週矩陣成果</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> <span data-i18n="c3Link">前往視訊重播庫</span></a>
         </div>
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-photo-film"></i></div>線上回放複習</div>
-        <ul>
-          <li>週六主課程全程錄影剪輯。</li>
-          <li>週日精選諮詢與小組討論存檔。</li>
-          <li><strong>安全性：</strong>觀看權限與加密密碼。</li>
-          <li>2026 學年度內全程保留。</li>
-        </ul>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-folder-open"></i></div><span data-i18n="c4Title">學員資源區</span></div>
+        <p class="card-desc" data-i18n="c4Desc">補充資料、學習包、筆記範本與公告，集中在一處方便查找。</p>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> 前往視訊重播資源庫</a>
-        </div>
-      </div>
-
-      <div class="card slate-accent">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-headset"></i></div>工具與技術支援</div>
-        <ul>
-          <li>AI 即時同步翻譯工具設定指南。</li>
-          <li><strong>隱私傳輸：</strong>文叔叔高隱私通道。</li>
-          <li>AnyDesk 遠端桌面控制工具下載。</li>
-          <li>即時串流與聲音異常排除聯絡。</li>
-        </ul>
-        <div class="card-links">
-          <a class="link-btn" href="https://www.wenshushu.cn/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i> 開啟高隱私傳輸</a>
-          <a class="link-btn primary" href="https://anydesk.com/" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> 下載 AnyDesk</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-users-gear"></i></div>TA 助教管理</div>
-        <ul>
-          <li>線上課程主持口條、收場引導。</li>
-          <li>AI 翻譯平台與錄影權限管理。</li>
-          <li>助教每週排班、點名與催交規範。</li>
-          <li>學員永續矩陣作業初審對照表。</li>
-        </ul>
-        <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1t6xfU6CmMXRwm8r828H2nuEsQxgWvhJv?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> TA 管理控制台</a>
-        </div>
-      </div>
-
-      <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap c"><i class="fa-solid fa-hand-holding-heart"></i></div>企業健檢與影響力專案</div>
-        <ul>
-          <li><strong>ESG Sunshine：</strong>NT$29,000 高階顧問服務。</li>
-          <li>一對一企業轉型健檢與策略分析。</li>
-          <li>設計創價型 ESG 創新專案。</li>
-          <li>影響力投資與專案實作資源媒合。</li>
-        </ul>
-        <div class="card-links">
-          <a class="link-btn" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-right"></i> 預約專屬轉型健檢</a>
+          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="c4Link">打開學員 Google Drive</span></a>
         </div>
       </div>
     </div>
 
-    <!-- 雙軌排程 -->
-    <div class="panel" id="course-schedule-detail">
-      <h2 class="panel-title">2026 Berkeley Haas 六週核心學程與產出</h2>
-      <div class="schedule-grid">
-        <div class="schedule-col blue">
-          <div class="schedule-head"><i class="fa-solid fa-chalkboard-user"></i> 6週 Lecture Syllabus</div>
-          <ul class="weeks">
-            <li><span class="wk">Week 1</span><div class="wk-name">Purpose-Driven Strategy, Stakeholder & Materiality</div><div class="wk-desc">定義企業的 ESG 戰略挑戰</div><div class="wk-fac"><span class="lec">Lecture：Mathieu Aguesse</span><span class="key">Keynote：Ben Bradbury</span></div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規壓力 / 利害期待 / 策略機會）</div></li>
-            <li><span class="wk">Week 2</span><div class="wk-name">Strategy Architecture and KPI Alignment</div><div class="wk-desc">建立重大性矩陣與治理擁有人</div><div class="wk-fac"><span class="lec">Lecture：Chandra Vadhana Radhakrishnan</span><span class="key">Keynote：Aurelia Engelsberger</span></div><div class="wk-journal">Journal 2：誰應形塑 ESG 優先順序；組織缺乏的數據 / 治理 / 保證能力</div></li>
-            <li><span class="wk">Week 3</span><div class="wk-name">Innovation Matrix and ESG Project Portfolio</div><div class="wk-desc">盤點能力缺口與變革準備度</div><div class="wk-fac"><span class="lec">Lecture：Dave Rochlin</span><span class="key">Keynote：Ignacio de Juan-Creix y Umbert</span></div><div class="wk-journal">Journal 3：循環或責任科技如何重塑一項產品 / 服務 / 流程 / 供應鏈</div></li>
-            <li><span class="wk">Week 4</span><div class="wk-name">Ecosystem Platform Strategy & Impact Modeling</div><div class="wk-desc">形成一個 ESG 創新原型概念</div><div class="wk-fac"><span class="lec">Lecture：Karin Li</span><span class="key">Keynote：Madeleine Parisi</span></div><div class="wk-journal">Journal 4：組織內部必須改變什麼，才能讓 ESG 成為決策一部分</div></li>
-            <li><span class="wk">Week 5</span><div class="wk-name">Dashboard Blueprint and Data Architecture</div><div class="wk-desc">將矩陣推進至 owners / metrics / milestones</div><div class="wk-fac"><span class="lec">Lecture：Chris Bush</span><span class="key">Keynote：Pradeep Iyer</span></div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 倡議正當性</div></li>
-            <li><span class="wk">Week 6</span><div class="wk-name">Governance system, budgeting, strategic annual rhythm</div><div class="wk-desc">完成 final matrix 與溝通計畫</div><div class="wk-fac"><span class="lec">Lecture：Ganesh Iyer</span><span class="key">Keynote：Arding Hsu</span></div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害期待 / 策略機會）</div></li>
-          </ul>
-        </div>
-        <div class="schedule-col gold">
-          <div class="schedule-head"><i class="fa-solid fa-bullseye"></i> 6週 Consulting Time 交付成果</div>
-          <ul class="weeks">
-            <li><span class="wk">Lab 1</span><div class="wk-name">組織永續戰略挑戰聚焦</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：組織永續戰略挑戰陳述書草案</div><div class="wk-journal">Journal 1：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
-            <li><span class="wk">Lab 2</span><div class="wk-name">重大性與治理結構對齊</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：重大性矩陣與治理擁有者地圖初稿</div><div class="wk-journal">Journal 2：誰形塑 ESG 優先順序；缺乏的數據 / 治理 / 保證能力</div></li>
-            <li><span class="wk">Lab 3</span><div class="wk-name">ESG 能力與包容創新評估</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：ESG 能力缺口評估與變革準備度</div><div class="wk-journal">Journal 3：循環或責任科技如何重塑產品 / 服務 / 流程 / 供應鏈</div></li>
-            <li><span class="wk">Lab 4</span><div class="wk-name">循環經濟與創新實踐</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：創新原型概念與循環經濟機會掃描</div><div class="wk-journal">Journal 4：組織內部必須改變什麼，讓 ESG 成為決策一部分</div></li>
-            <li><span class="wk">Lab 5</span><div class="wk-name">數據指標與里程碑確立</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：導入負責人與指標之執行矩陣 V2</div><div class="wk-journal">Journal 5：如何向 CFO / 營運主管 / 董事會證明 ESG 正當性</div></li>
-            <li><span class="wk">Lab 6</span><div class="wk-name">最終審查與溝通行動</div><div class="wk-deliver"><i class="fa-solid fa-check-circle"></i>產出：最終永續執行矩陣 (Final Matrix)</div><div class="wk-journal">Journal 6：未來三年最可能影響競爭力的 ESG 議題（合規 / 利害 / 策略）</div></li>
-          </ul>
-        </div>
-      </div>
+    <!-- 預約諮詢（獨立次要 CTA） -->
+    <div class="panel" id="booking" style="border-top:4px solid var(--cal-gold); background: linear-gradient(180deg, #ffffff 0%, var(--cal-gold-soft) 100%);">
+      <h2 class="panel-title" data-i18n="bookTitle">預約諮詢 / 企業轉型健檢</h2>
+      <p style="font-size:14px;color:var(--muted);margin:-6px 0 16px;" data-i18n="bookSub">填寫官方表單的必填欄位，專屬顧問將與您聯繫安排時段。</p>
+      <a class="btn btn-gold" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener" style="width:fit-content;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="bookCta">前往填寫預約表單</span></a>
     </div>
 
-    <div class="panel" style="background: linear-gradient(180deg, #ffffff 0%, var(--cal-blue-soft) 100%);">
-      <strong style="color:var(--cal-blue);">一站式綜效公約：</strong>
-      <span style="color:#334155;">本服務中心旨在將「課程入口、線上教學、教材資產、複習錄影、AI 翻譯、成果繳交、TA 營運」整合成互斥且窮盡（MECE）的清晰架構，協助學員高效率將合規指標轉化為企業競爭力。</span>
-    </div>
-
-    <div class="footer-note">依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program</div>
+    <div class="footer-note" data-i18n="footer">依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program</div>
   </div>
 </div>
+
+<script>
+  const I18N = {
+    "zh-Hant": {
+      eyebrow: "2026 年度課程",
+      centerName: "學員中心",
+      heroLede: "柏克萊國際永續人才培力課程 · 第一版交付中心。學員能下載教材、提交作業、回看課程，並取得學習資源。",
+      ctaCore: "進入四大功能", ctaBook: "預約諮詢",
+      annTitle: "最新公告", urgent: "重要行動", annNote: "[學員請注意]",
+      annText: "請於本週五 07/10 中午 12:00 前完成 Consulting Time 意願填寫，以便安排專屬產學 Mentor 導師。",
+      annBtn: "填寫意願表單",
+      c1Title: "教材下載", c1Desc: "教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。",
+      c1Link: "進入教材資產庫",
+      c2Title: "作業提交", c2Desc: "提交每週矩陣成果與反思筆記。個人上傳空間，僅你能看自己的檔案。",
+      c2Link: "提交作業",
+      c3Title: "課程回放", c3Desc: "週六主課與週日諮詢全程錄影，課後複習、補齊重點。",
+      c3Link: "前往視訊重播庫",
+      c4Title: "學員資源區", c4Desc: "補充資料、學習包、筆記範本與公告，集中在一處方便查找。",
+      c4Link: "打開學員 Google Drive",
+      bookTitle: "預約諮詢 / 企業轉型健檢",
+      bookSub: "填寫官方表單的必填欄位，專屬顧問將與您聯繫安排時段。",
+      bookCta: "前往填寫預約表單",
+      footer: "依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+    },
+    "zh-Hans": {
+      eyebrow: "2026 年度课程",
+      centerName: "学员中心",
+      heroLede: "柏克莱国际永续人才培力课程 · 第一版交付中心。学员能下载教材、提交作业、回看课程，并取得学习资源。",
+      ctaCore: "进入四大功能", ctaBook: "预约咨询",
+      annTitle: "最新公告", urgent: "重要行动", annNote: "[学员请注意]",
+      annText: "请于本周五 07/10 中午 12:00 前完成 Consulting Time 意愿填写，以便安排专属产学 Mentor 导师。",
+      annBtn: "填写意愿表单",
+      c1Title: "教材下载", c1Desc: "教授简报 PDF、实务操作手册、简报框架与精选问答，随时取用。",
+      c1Link: "进入教材资产库",
+      c2Title: "作业提交", c2Desc: "提交每周矩阵成果与反思笔记。个人上传空间，仅你能看自己的档案。",
+      c2Link: "提交作业",
+      c3Title: "课程回放", c3Desc: "周六主课与周日咨询全程录影，课后复习、补齐重点。",
+      c3Link: "前往视频重播库",
+      c4Title: "学员资源区", c4Desc: "补充资料、学习包、笔记范本与公告，集中在一处方便查找。",
+      c4Link: "打开学员 Google Drive",
+      bookTitle: "预约咨询 / 企业转型健检",
+      bookSub: "填写官方表单的必填字段，专属顾问将与您联系安排时段。",
+      bookCta: "前往填写预约表单",
+      footer: "依据全球顶级合规与创价标准进行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+    },
+    "en": {
+      eyebrow: "2026 Annual Program",
+      centerName: "Student Center",
+      heroLede: "Berkeley International Sustainability Talent Empowerment — v1 delivery hub. Students download materials, submit assignments, replay lectures, and access shared resources.",
+      ctaCore: "Open the 4 Core Tools", ctaBook: "Book a Consult",
+      annTitle: "Announcements", urgent: "Action Required", annNote: "[Students Note]",
+      annText: "Please complete the Consulting Time preference form by Fri 07/10 12:00 noon to assign your dedicated industry-academia Mentor.",
+      annBtn: "Fill Preference Form",
+      c1Title: "Course Materials", c1Desc: "Professor slides (PDF), practice manuals, slide frameworks and curated Q&A — available anytime.",
+      c1Link: "Open Materials Library",
+      c2Title: "Submit Assignment", c2Desc: "Submit weekly matrix & reflection notes. Private upload space — you only see your own files.",
+      c2Link: "Submit Assignment",
+      c3Title: "Lecture Replay", c3Desc: "Full Sat lecture & Sun consulting recordings for post-class review.",
+      c3Link: "Go to Replay Library",
+      c4Title: "Student Resources", c4Desc: "Supplements, study packs, note templates and announcements — all in one place.",
+      c4Link: "Open Student Google Drive",
+      bookTitle: "Book a Consult / Enterprise Health-check",
+      bookSub: "Complete the required fields on the official form; your dedicated advisor will contact you to schedule.",
+      bookCta: "Open Booking Form",
+      footer: "Built to top global compliance & value-creation standards | 2026 Berkeley ESG Strategy & Innovation Program"
+    }
+  };
+
+  function applyLang(lang) {
+    const dict = I18N[lang] || I18N["zh-Hant"];
+    document.documentElement.lang = (lang === "zh-Hans") ? "zh-CN" : (lang === "en" ? "en" : "zh-TW");
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll(".lang-switch button").forEach(b =>
+      b.classList.toggle("active", b.getAttribute("data-lang") === lang));
+    try { localStorage.setItem("portalLang", lang); } catch (e) {}
+  }
+
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.addEventListener("click", () => applyLang(btn.getAttribute("data-lang")));
+  });
+
+  let saved = "zh-Hant";
+  try { saved = localStorage.getItem("portalLang") || "zh-Hant"; } catch (e) {}
+  applyLang(saved);
+</script>
 </body>
 </html>
