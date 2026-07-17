@@ -116,7 +116,10 @@ export async function GET(request: NextRequest) {
           | { type?: string; delegationId?: string }
           | undefined;
         if (!payload || payload.delegationId !== delegationId) return;
-        if (!payload.type || !DELEGATION_EVENT_TYPES.has(payload.type)) return;
+        const eventType =
+          (payload && payload.type) ||
+          (typeof e.event === 'string' ? e.event : undefined);
+        if (!eventType || !DELEGATION_EVENT_TYPES.has(eventType)) return;
 
         const hashLock =
           raw && typeof raw.hashLock === 'string'
