@@ -243,15 +243,19 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     }
     // Build request payload – forward intent as prompt.
     const payload = JSON.stringify({ prompt: intent });
-    // Use curl to call NVIDIA API (placeholder endpoint). Adjust URL & headers as needed.
-    const curlCmd = `curl -s -X POST https://api.nvidia.com/v1/predict \
-      -H "Authorization: Bearer ${apiKey}" \
-      -H "Content-Type: application/json" \
-      -d '${payload}'`;
-    const { execSync } = await import('node:child_process');
+
     let output: string;
     try {
-      output = execSync(curlCmd, { encoding: 'utf8' });
+      // Use native fetch to call NVIDIA API (placeholder endpoint) to avoid command injection
+      const response = await fetch('https://api.nvidia.com/v1/predict', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: payload
+      });
+      output = await response.text();
     } catch (e) {
       console.error('[OAG] NVIDIA API call failed', e);
       return [];
