@@ -12,7 +12,8 @@ try {
   const envRaw = readFileSync(resolve(root, '.env'), 'utf8');
   for (const line of envRaw.split('\n')) {
     const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
-    if (m && !(m[1] in process.env)) {
+    // .env 強制覆寫 (避免 pm2 父環境殘留舊 key 導致 .env 失效, 見 GEMINI_API_KEY Vertex/AIza 切換問題)
+    if (m) {
       process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
     }
   }
