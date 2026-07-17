@@ -1,8 +1,8 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "pnpm dev",
-      "startServerTimeout": 30,
+      "startServerCommand": "pnpm build && pnpm start",
+      "startServerTimeout": 60,
       "numberOfRuns": 1,
       "settings": {
         "chromeFlags": "--no-sandbox --headless"
