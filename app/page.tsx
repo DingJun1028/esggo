@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useAuth } from '@/components/AuthProvider';
 import LoginButton from '@/components/LoginButton';
 import { useEffect, useState } from 'react';
+import { HeroSection } from './components/HeroSection';
+
 
 const NAV_MODULES = [
   {
@@ -10,7 +12,7 @@ const NAV_MODULES = [
     icon: '◎',
     title: '萬能中心',
     subtitle: 'OmniCore Center',
-    desc: 'ZKP 知識封印 · L-Hub 蜂羣 · Trinity 覺醒',
+    desc: 'ZKP 知識封印 · L-Hub 蜂群 · Trinity 覺醒',
     color: 'from-cyan-500/20 to-blue-500/10',
     accent: '#63a6b0',
     badge: '5T LIVE',
@@ -30,7 +32,7 @@ const NAV_MODULES = [
     icon: '🌱',
     title: '萬能永續中心',
     subtitle: 'Sustain Center ∞ Evolution',
-    desc: 'ESG 儀錶板 · 碳排驗算 · 永續發展無限進化',
+    desc: 'ESG 儀表板 · 碳排驗算 · 永續發展無限進化',
     color: 'from-teal-500/20 to-emerald-500/10',
     accent: '#38b2ac',
     badge: 'EVOLUTION',
@@ -40,7 +42,7 @@ const NAV_MODULES = [
     icon: '🏡',
     title: '村莊治理',
     subtitle: 'Village Governance',
-    desc: '二次方投票 · 任務看板 · 社羣協作',
+    desc: '二次方投票 · 任務看板 · 社群協作',
     color: 'from-purple-500/20 to-violet-500/10',
     accent: '#a78bfa',
     badge: 'DAO',
@@ -58,9 +60,9 @@ const NAV_MODULES = [
   {
     href: '/omni-agent',
     icon: '🤖',
-    title: 'AI 代理控制檯',
+    title: 'AI 代理控制台',
     subtitle: 'OmniAgent Console',
-    desc: 'CelestialFlow 監控 · 自癒協議 · 代理蜂羣',
+    desc: 'CelestialFlow 監控 · 自癒協議 · 代理蜂群',
     color: 'from-rose-500/20 to-pink-500/10',
     accent: '#f87171',
     badge: 'GNOSIS',
@@ -146,101 +148,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* ── Hero 區塊 ── */}
-      <section
-        style={{
-          textAlign: 'center',
-          padding: '80px 32px 60px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* 背景光暈 */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 600,
-            height: 600,
-            background: 'radial-gradient(circle, rgba(99,166,176,0.12) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
-
-        <div
-          style={{
-            display: 'inline-block',
-            background: 'linear-gradient(90deg, #63a6b0, #ffd700, #63a6b0)',
-            backgroundSize: '200% 100%',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontSize: 'clamp(42px, 6vw, 72px)',
-            fontWeight: 900,
-            letterSpacing: '-0.02em',
-            lineHeight: 1.1,
-            marginBottom: 16,
-            animation: 'shimmer 3s linear infinite',
-          }}
-        >
-          ESGGO 永續發展無限進化
-        </div>
-        <p
-          style={{
-            fontSize: 18,
-            color: '#94a3b8',
-            maxWidth: 520,
-            margin: '0 auto 12px',
-            lineHeight: 1.7,
-          }}
-        >
-          善向永續 · 全通之心 · 無作妙德
-        </p>
-        <p style={{ fontSize: 14, color: '#64748b', maxWidth: 480, margin: '0 auto 40px' }}>
-          以 5T 協議驅動的萬能 (Omni) ESG 治理平臺 — 從碳排計算到永續報告，全程 AI
-          賦能、可驗算、不可篡改。
-        </p>
-
-        {/* 5T 指示器 */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '12px',
-            flexWrap: 'wrap',
-          }}
-        >
-          {FIVE_T.map((t) => (
-            <div
-              key={t.symbol}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                background: 'rgba(255,255,255,0.04)',
-                border: `1px solid ${t.color}40`,
-                borderRadius: 12,
-                padding: '8px 16px',
-                minWidth: 80,
-                transition: 'transform 0.2s, border-color 0.2s',
-                cursor: 'default',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)';
-                (e.currentTarget as HTMLDivElement).style.borderColor = t.color;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
-                (e.currentTarget as HTMLDivElement).style.borderColor = `${t.color}40`;
-              }}
-            >
-              <span style={{ fontSize: 18, fontWeight: 900, color: t.color }}>{t.symbol}</span>
-              <span style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{t.zh}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ── 模組導航卡片 ── */}
       <section
