@@ -9,7 +9,7 @@ export { query, storeEmbedding, getEmbedding, semanticSearch, storeESGEntity } f
 import { createHash } from 'crypto';
 import { prisma } from './prisma';
 import type { DelegationPermission } from '../types/complete-delegation';
-import type { NoteData } from '@/app/api/notes/route';
+import type { NoteData } from '../../app/api/notes/route';
 
 /** Readiness gate: verify primary + pgvector connectivity. */
 export async function verifyStorage() {
