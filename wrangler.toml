@@ -1,7 +1,5 @@
 name = "smart-ai-router"
-# 指向已存在的 Notion Worker 程式（my-worker/src/index.ts），
-# 使 `wrangler deploy` 可定位 entry；若未來改以 Cloudflare Workers 部署 smart-ai-router。
-main = "my-worker/src/index.ts"
+main = "src/index.ts"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
