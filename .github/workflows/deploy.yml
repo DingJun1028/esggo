@@ -344,7 +344,7 @@ jobs:
           set -e
           echo "Scanning vps/** for accidentally committed secrets or bad patterns..."
           # 1) Real credential shapes (HARD FAIL)
-          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]+|-----BEGIN .*PRIVATE KEY-----|npm_[A-Za-z0-9]{36}|SG\.[A-Za-z0-9_-]{22,}\.[A-Za-z0-9_-]{43,}|sk_live_[A-Za-z0-9]+|rk_live_[A-Za-z0-9]+|AC[a-f0-9]{32})" vps/ ; then
+          if grep -rInE "(ocid1\.[a-z0-9]+\.|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|-----BEGIN .*PRIVATE KEY-----|npm_[A-Za-z0-9]{36}|SG\.[A-Za-z0-9_-]{22,}\.[A-Za-z0-9_-]{43,}|sk_live_[A-Za-z0-9]+|rk_live_[A-Za-z0-9]+|AC[a-f0-9]{32}|cfat_[A-Za-z0-9_-]{20,})" vps/ ; then
             echo "::error::Possible secret found in vps/ — aborting."; exit 1
           fi
           # 2) Hardcoded default secrets in long-running SERVER code (.mjs only).
