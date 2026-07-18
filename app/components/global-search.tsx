@@ -18,20 +18,118 @@ interface SearchResult {
 }
 
 const STATIC_RESULTS: SearchResult[] = [
-  { id: 'omni-center', title: '萬能中心', description: '8 分頁儀表板', category: 'module', url: '/omni-center', icon: '◎' },
-  { id: 'sustain-write', title: 'ESG 報告產生器', description: 'GRI/TCFD/投資人報告', category: 'module', url: '/sustain-write/v5', icon: '📊' },
-  { id: 'sustain-center', title: '萬能永續中心', description: 'ESG 儀表板與碳排驗算', category: 'module', url: '/sustain-center', icon: '🌱' },
-  { id: 'village', title: '村莊治理', description: '二次方投票與影響力專案', category: 'module', url: '/village', icon: '🏡' },
-  { id: 'wiki', title: '知識庫', description: 'ESG 法規查詢', category: 'module', url: '/wiki', icon: '📚' },
-  { id: 'omni-agent', title: 'AI 代理主控台', description: 'AI 聊天與子代理派遣', category: 'module', url: '/omni-agent', icon: '🤖' },
-  { id: 'daily', title: '每日永續觀察', description: 'ESG 每日摘要', category: 'module', url: '/daily', icon: '📅' },
-  { id: 'sonnar', title: 'ESG Sonnar', description: '資料爬取與雷達訊號', category: 'module', url: '/sonnar', icon: '🔍' },
-  { id: 'emm', title: 'EMM 環境監控', description: '系統指標與模型監控', category: 'module', url: '/emm', icon: '💻' },
-  { id: 'profile', title: '使用者成長系統', description: 'XP、成就、排行榜', category: 'module', url: '/profile', icon: '👤' },
-  { id: 'omni-todo', title: 'OmniTodo', description: '統一任務管理', category: 'module', url: '/omni-todo', icon: '✅' },
-  { id: 'omni-base', title: 'OmniBase 外掛系統', description: '外掛管理與 EventBus', category: 'module', url: '/omni-base', icon: '🔌' },
-  { id: 'resources', title: '平台資源總覽', description: '模組、AI 模型、基礎設施', category: 'page', url: '/resources', icon: '📋' },
-  { id: 'api-docs', title: 'API 路由文件', description: 'api-route_standard.md', category: 'api', url: '/api/health', icon: '🔗' },
+  {
+    id: 'omni-center',
+    title: '萬能中心',
+    description: '8 分頁儀表板',
+    category: 'module',
+    url: '/omni-center',
+    icon: '◎',
+  },
+  {
+    id: 'sustain-write',
+    title: 'ESG 報告產生器',
+    description: 'GRI/TCFD/投資人報告',
+    category: 'module',
+    url: '/sustain-write/v5',
+    icon: '📊',
+  },
+  {
+    id: 'sustain-center',
+    title: '萬能永續中心',
+    description: 'ESG 儀表板與碳排驗算',
+    category: 'module',
+    url: '/sustain-center',
+    icon: '🌱',
+  },
+  {
+    id: 'village',
+    title: '村莊治理',
+    description: '二次方投票與影響力專案',
+    category: 'module',
+    url: '/village',
+    icon: '🏡',
+  },
+  {
+    id: 'wiki',
+    title: '知識庫',
+    description: 'ESG 法規查詢',
+    category: 'module',
+    url: '/wiki',
+    icon: '📚',
+  },
+  {
+    id: 'omni-agent',
+    title: 'AI 代理主控台',
+    description: 'AI 聊天與子代理派遣',
+    category: 'module',
+    url: '/omni-agent',
+    icon: '🤖',
+  },
+  {
+    id: 'daily',
+    title: '每日永續觀察',
+    description: 'ESG 每日摘要',
+    category: 'module',
+    url: '/daily',
+    icon: '📅',
+  },
+  {
+    id: 'sonnar',
+    title: 'ESG Sonnar',
+    description: '資料爬取與雷達訊號',
+    category: 'module',
+    url: '/sonnar',
+    icon: '🔍',
+  },
+  {
+    id: 'emm',
+    title: 'EMM 環境監控',
+    description: '系統指標與模型監控',
+    category: 'module',
+    url: '/emm',
+    icon: '💻',
+  },
+  {
+    id: 'profile',
+    title: '使用者成長系統',
+    description: 'XP、成就、排行榜',
+    category: 'module',
+    url: '/profile',
+    icon: '👤',
+  },
+  {
+    id: 'omni-todo',
+    title: 'OmniTodo',
+    description: '統一任務管理',
+    category: 'module',
+    url: '/omni-todo',
+    icon: '✅',
+  },
+  {
+    id: 'omni-base',
+    title: 'OmniBase 外掛系統',
+    description: '外掛管理與 EventBus',
+    category: 'module',
+    url: '/omni-base',
+    icon: '🔌',
+  },
+  {
+    id: 'resources',
+    title: '平台資源總覽',
+    description: '模組、AI 模型、基礎設施',
+    category: 'page',
+    url: '/resources',
+    icon: '📋',
+  },
+  {
+    id: 'api-docs',
+    title: 'API 路由文件',
+    description: 'api-route_standard.md',
+    category: 'api',
+    url: '/api/health',
+    icon: '🔗',
+  },
 ];
 
 export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -56,10 +154,11 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
       return;
     }
     const q = query.toLowerCase();
-    const filtered = STATIC_RESULTS.filter(r =>
-      r.title.toLowerCase().includes(q) ||
-      r.description.toLowerCase().includes(q) ||
-      r.category.includes(q)
+    const filtered = STATIC_RESULTS.filter(
+      (r) =>
+        r.title.toLowerCase().includes(q) ||
+        r.description.toLowerCase().includes(q) ||
+        r.category.includes(q),
     );
     setResults(filtered);
     setSelectedIndex(0);
@@ -73,10 +172,10 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex(i => Math.min(i + 1, results.length - 1));
+      setSelectedIndex((i) => Math.min(i + 1, results.length - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex(i => Math.max(i - 1, 0));
+      setSelectedIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter' && results[selectedIndex]) {
       handleSelect(results[selectedIndex]);
     } else if (e.key === 'Escape') {
@@ -95,7 +194,12 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]" role="dialog" aria-modal="true" aria-label="全域搜尋">
+    <div
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="全域搜尋"
+    >
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-secondary rounded-xl border border-borderColor shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
         {/* Search Input */}
@@ -111,8 +215,13 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
             className="flex-1 bg-transparent text-sm text-textPrimary outline-none placeholder:text-textSecondary"
             aria-label="搜尋"
           />
-          <button onClick={onClose} className="text-textSecondary hover:text-textPrimary" aria-label="關閉搜尋">
-            <X size={16} />
+          <button
+            onClick={onClose}
+            className="text-textSecondary hover:text-textPrimary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded"
+            aria-label="關閉搜尋"
+            title="關閉搜尋"
+          >
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 
@@ -150,9 +259,24 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
 
         {/* Footer */}
         <div className="px-4 py-2 border-t border-borderColor flex items-center gap-4 text-[10px] text-textSecondary">
-          <span><kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">↑↓</kbd> 導航</span>
-          <span><kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">Enter</kbd> 選擇</span>
-          <span><kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">Esc</kbd> 關閉</span>
+          <span>
+            <kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">
+              ↑↓
+            </kbd>{' '}
+            導航
+          </span>
+          <span>
+            <kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">
+              Enter
+            </kbd>{' '}
+            選擇
+          </span>
+          <span>
+            <kbd className="px-1 py-0.5 bg-primary border border-borderColor rounded font-mono">
+              Esc
+            </kbd>{' '}
+            關閉
+          </span>
         </div>
       </div>
     </div>
