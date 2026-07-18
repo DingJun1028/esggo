@@ -21,6 +21,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "check": "pnpm run typecheck && vitest run src/impl/__tests__/core.test.ts src/agents/twelve-omni/__tests__",
     "turbo:dev": "next dev",
     "turbo:build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "turbo:start": "next start",
