@@ -222,6 +222,126 @@ jobs:
 | TypeScript 嚴格模式 | `pnpm run typecheck` | 0 errors |
 | 生產建置 | `pnpm run build` | Success |
 | 單元測試 | `pnpm run vitest run` | 100% pass |
+
+---
+
+## 🤖 Hermes Workspace / Agent 整合
+
+ESGGO 可以對接 **Hermes Agent** 作為後端大腦，並透過 **Hermes Workspace** 作為控制台 UI。
+Workspace 負責聊天、檔案、Memory、Skills、Terminal、Dashboard、Swarm Mode；
+Hermes Agent 負責 Gateway + Dashboard API + 對話/代理/工具調用。
+
+### 快速接線（attach existing）
+
+```bash
+# 1. 確認 hermes-agent gateway 已啟動
+hermes gateway run     # :8642
+hermes dashboard       # :9119
+
+# 2. Workspace 指向 Hermes Agent
+cd ~/hermes-workspace
+cp .env.example .env
+cat <<EOF >> .env
+HERMES_API_URL=http://127.0.0.1:8642
+HERMES_DASHBOARD_URL=http://127.0.0.1:9119
+EOF
+
+pnpm dev               # http://localhost:3000
+```
+
+### 驗證接線
+
+```bash
+curl http://127.0.0.1:8642/health    # → {"status":"ok","platform":"hermes-agent"}
+curl http://127.0.0.1:9119/api/status # → dashboard metadata
+```
+
+### 遠端 / Tailscale / VPN
+
+若 Workspace 和 Gateway 在不同機器，把 `HERMES_API_URL` 與 `HERMES_DASHBOARD_URL` 同時改為可達 IP：
+
+```env
+HERMES_API_URL=http://100.x.y.z:8642
+HERMES_DASHBOARD_URL=http://100.x.y.z:9119
+```
+
+並在 `~/.hermes/.env` 設定：
+
+```env
+API_SERVER_HOST=0.0.0.0
+```
+
+---
+
+## 🧠 本地模型 (Ollama / LM Studio / vLLM)
+
+ESGGO 內建的 Smart Router 已支援本地 Ollama（via Nginx `/ollama/`）。前端直接切換本地模型時，使用 Hermes Agent 的 `local_gemma` provider branch。
+
+### Hermes Agent 本地模型設定 (`~/.hermes/config.yaml`)
+
+**Ollama（直接連接，無 auth）**
+```yaml
+provider: ollama
+model: gemma3:4b
+custom_providers:
+  - name: ollama
+    base_url: http://127.0.0.1:11434/v1
+    api_key: ollama
+    api_mode: chat_completions
+```
+
+**Ollama（Nginx 反向代理，需 Basic Auth）**
+```yaml
+provider: ollama
+model: gemma3:4b
+custom_providers:
+  - name: ollama
+    base_url: https://omniagent.esggo.co/ollama/v1
+    api_key: <your-basic-auth-user:pass-base64>
+    api_mode: chat_completions
+```
+
+### 直接 Ollama CLI 測試
+
+```bash
+# 確認模型已下載
+ollama list
+
+# 互動對話
+ollama run gemma3:4b
+
+# API 呼叫
+curl http://127.0.0.1:11434/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gemma3:4b","messages":[{"role":"user","content":"hi"}]}'
+```
+
+---
+
+## 🧪 測試與品質
+
+```bash
+# 型別檢查（gate src/impl + omni-core）
+pnpm run typecheck
+
+# 範圍測試（D1-D5 相關模組）
+pnpm run check
+
+# 單元測試（全量）
+pnpm exec vitest run src/impl/__tests__/core.test.ts src/agents/twelve-omni/__tests__
+
+# Next.js app/ 額外檢查（如需）
+pnpm exec tsc --noEmit -p tsconfig.json
+```
+
+### 品質門檻
+
+| 檢查 | 指令 | 門檻 |
+|------|------|------|
+| TypeScript 嚴格模式 | `pnpm run typecheck` | 0 errors |
+| 核心單元測試 | `pnpm run check` | 100% green |
+| 單元測試（全量） | `pnpm exec vitest run` | 100% pass |
+| E2E | `pnpm exec vitest run tests/e2e.test.ts` | 不阻塞 build |
 | 程式碼格式 | `npx prettier --check .` | Pass |
 
 ---
