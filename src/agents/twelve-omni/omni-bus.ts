@@ -175,7 +175,7 @@ export class OmniBusV2 implements IOmniBusV2 {
       ...event,
       version: 'shadow-test',
       lifecycle_path: [
-        ...event.lifecycle_path,
+        ...(event.lifecycle_path ?? []),
         {
           stage: 'EMERGED' as LifecycleStage,
           timestamp: Date.now(),
