@@ -111,17 +111,30 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ---
 
-## 📚 五大萬能系統 (5T Omni-System)
+## 📚 十二大萬能系統 (12 Omni-Systems)
 
-| 模組 | 說明 | 關鍵技術 |
-|------|------|----------|
-| **OmniTag** 萬能標籤 | 量子糾纏式雙向同步定位，支援 5T 協議 | `src/lib/omni-tag/index.ts` |
-| **OmniBase** 萬能基地 | 企業資料管理、行業分類、C 版 / v5 報告資料庫 | `src/lib/omni-base/` |
-| **OmniSeed** 萬能種子 | 數據治理與 AI 模型訓練的基礎數據生成器 | `src/core/sonnar/omni-seed.ts` |
-| **OmniAgent** 萬能代理 | AI 報告生成引擎、RAG 知識檢索、語意搜尋 | `src/core/ai/` |
-| **OmniWrite** 萬能永撰 | 數據驅動永續報告生成引擎 (28 萬字、圖表、RWD、品牌化) | `src/lib/sustain-write/` |
-| **OmniBiz** 萬能商情 | 商情分析、競爭情報、行業數據整合 | `src/lib/sustain-write/biz-intelligence/` |
-| **OmniMemory** 萬能永憶 | 智能數據記憶、RAG 知識庫、對話歷史 | `omni-sync-memory` skill |
+> 以下均為實際存在的模組（路徑經 2026-07-18 驗證）。Hexa-Core 六位一體（OmniEye/Core/Pulse/Bone/Brain/Heart）為基礎設施層，見上節。
+
+| 模組 | 說明 | 關鍵技術 | 實作位置 |
+|------|------|----------|----------|
+| **OmniTag** 萬能標籤 | 量子糾纏式雙向同步定位，支援 5T 協議 | 雙向同步 | `src/lib/omni-tag/index.ts` |
+| **OmniBase** 萬能基地 | 企業資料管理、行業分類、C 版 / v5 報告資料庫 | 資料層 | `src/lib/omni-base/` |
+| **OmniSeed** 萬能種子 | 數據治理與 AI 模型訓練的基礎數據生成器 | 種子/治理 | `src/core/sonnar/omni-seed.ts` |
+| **OmniAgent** 萬能代理 | AI 報告生成引擎、RAG 知識檢索、語意搜尋 | AI/RAG | `src/core/ai/` + `src/agents/omni-agent.ts` |
+| **OmniWrite** 萬能永撰 | 數據驅動永續報告生成引擎 (28 萬字、圖表、RWD、品牌化) | 報告生成 | `src/lib/sustain-write/` |
+| **OmniBiz** 萬能商情 | 商情分析、競爭情報、行業數據整合 | 商情 | `src/lib/sustain-write/biz-intelligence/` |
+| **OmniMemory** 萬能永憶 | 智能數據記憶、RAG 知識庫、對話歷史 | 記憶 | `src/impl/omni-memory.ts` + `omni-sync-memory` skill |
+| **OmniWiki** 萬能維基 | 知識庫維基、文件協作、跨頁連結 | 知識圖譜 | `src/lib/omni-wiki/` |
+| **OmniTheme** 萬能主題 | 品牌主題、視覺令牌、多品牌化 | 主題引擎 | `src/lib/omni-theme/` |
+| **OmniComponent** 萬能組件 | 可複用 UI 組件庫、設計系統 | 組件系統 | `src/lib/omni-component/` |
+| **OmniTodo** 萬能待辦 | 任務追蹤、5T 治理待辦、工作流 | 任務 | `src/core/omni-todo/` |
+| **OmniNote** 萬能筆記 | AI 萬能筆記、混合架構、筆記知識化 | 筆記 | `src/lib/omni-core/omni-note.ts` + `docs/omni-note-architecture.md` |
+
+### 附屬型別與子系統
+- **OmniChart** 萬能圖表（5T Proof Locked）— `src/components/charts/`
+- **OmniSoul** 萬能靈魂 — `src/types/omni-soul.ts`（意志/價值對齊）
+- **OmniSingularity** 萬能奇點 — `src/types/omni-singularity.ts`（統一狀態）
+- **OmniKey** 萬能密鑰 — `src/types/omni-key.ts`（密碼學金鑰管理）
 
 ---
 
@@ -490,6 +503,7 @@ esggo/
 ## 🔗 相關連結
 
 - **GitHub Repo**: https://github.com/DingJun1028/esggo
+- **架構總覽**: [docs/architecture/ESGGO-OMNI-ARCHITECTURE.md](docs/architecture/ESGGO-OMNI-ARCHITECTURE.md) — 5T / Hexa-Core / OmniSkill / 雙向 TS 單一導航入口
 - **Issues**: https://github.com/DingJun1028/esggo/issues
 - **Security**: https://github.com/DingJun1028/esggo/security/dependabot
 - **Firebase Console**: https://console.firebase.google.com
