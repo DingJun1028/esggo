@@ -13,7 +13,6 @@ let pgPool: any = null;
 async function getPool(): Promise<any> {
   if (!pgPool) {
     if (!process.env.PGVECTOR_URL) throw new Error('PGVECTOR_URL not configured');
-    // @ts-ignore - pg optional dependency (installed at runtime when PGVECTOR_URL set)
     const pg = await import('pg');
     pgPool = new pg.Pool({ connectionString: process.env.PGVECTOR_URL });
   }
