@@ -26,7 +26,7 @@ import { OmniBlackboard, OmniHealing, OmniEvolution } from "./omni-helper-module
 import { OmniUserRegistry } from "./omni-user-registry";
 import { OmniAPI as FullOmniAPI } from '../agents/twelve-omni/omni-api';
 import { OmniBusV2 } from '../agents/twelve-omni/omni-bus';
-import { OmniGatewayV2 } from '../agents/twelve-omni/omni-gateway';
+
 
 // ---------- 1️⃣ Helper ----------
 const now = () => Date.now();
@@ -370,7 +370,7 @@ export class OmniCoreEcosystem {
   public readonly userRegistry = new OmniUserRegistry();
   public readonly bus = new OmniAgentBus(this.registry, this);
   public readonly busV2 = new OmniBusV2();
-  public readonly gateway = new OmniGatewayV2();
+  public readonly gateway = new OmniAgentGateway(this.bus);
   public migration: {
     legacyPath: string;
     writeIntervalMs: number;
@@ -397,7 +397,7 @@ export class OmniCoreEcosystem {
     userRegistry?: OmniUserRegistry;
     bus?: OmniAgentBus;
     busV2?: OmniBusV2;
-    gateway?: OmniGatewayV2;
+    gateway?: OmniAgentGateway;
     migration?: {
       legacyPath?: string;
       writeIntervalMs?: number;
