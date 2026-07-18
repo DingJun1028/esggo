@@ -285,9 +285,9 @@ describe('OmniCoreEcosystem modules', () => {
     ecosystem.userRegistry.recordGrowthEvent('u2', 'report_generate', { reportId: 'r2' });
 
     const profile = ecosystem.userRegistry.getUserProfile('u1');
-    expect(profile.preferences.map(p => p.key)).toContain('theme');
-    expect(profile.habits.map(h => h.behavior)).toContain('carbon disclosure');
-    expect(profile.growthEvents.map(e => e.event)).toContain('report_generate');
+    expect(profile.preferences.map((p: { key: string }) => p.key)).toContain('theme');
+    expect(profile.habits.map((h: { behavior: string }) => h.behavior)).toContain('carbon disclosure');
+    expect(profile.growthEvents.map((e: { event: string }) => e.event)).toContain('report_generate');
 
     const similar = ecosystem.userRegistry.recallSimilarUsers('u1', 'carbon');
     expect(similar).toHaveLength(1);
