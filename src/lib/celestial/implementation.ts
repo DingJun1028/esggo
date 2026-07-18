@@ -178,13 +178,12 @@ export class CelestialController {
       return Object.freeze(sanitized);
     }
     
-    if (data && data.evidence) {
+    if (data?.evidence) {
        const sanitized = { ...data };
-       const oldEvidence = sanitized.evidence as { processTrace?: string[]; finalEffect?: string };
-       const newEvidence = {
-         processTrace: [...(oldEvidence.processTrace ?? []), `[ALIGN] Validation passed.`],
-         finalEffect: 'Aligned',
-       };
+       const oldEvidence = sanitized.evidence as NonNullable<CelestialData['evidence']>;
+       const newEvidence = { ...oldEvidence };
+       newEvidence.processTrace = [...oldEvidence.processTrace, `[ALIGN] Validation passed.`];
+       newEvidence.finalEffect = 'Aligned';
        sanitized.evidence = newEvidence;
        return Object.freeze(sanitized);
     }
