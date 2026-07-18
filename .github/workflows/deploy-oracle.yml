@@ -206,7 +206,9 @@ jobs:
             pnpm prisma migrate deploy 2>&1 | tail -8
             pnpm prisma generate 2>&1 | tail -2
             pnpm run build
-            pm2 restart esggo-core omniagent-gateway
+            # 冪等重啟: 若 PM2 有殘留 (dead) 記錄 restart 會報 Process N not found,
+            # 改用 start (已存在則 restart, 不存在則 start) 避免部署因 VPS 進程狀態紅
+            pm2 start ecosystem.config.cjs --only esggo-core omniagent-gateway || pm2 restart esggo-core omniagent-gateway
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
@@ -242,7 +244,9 @@ jobs:
             git reset --hard origin/main
             pnpm install --frozen-lockfile
             pnpm run build
-            pm2 restart esggo-core omniagent-gateway
+            # 冪等重啟: 若 PM2 有殘留 (dead) 記錄 restart 會報 Process N not found,
+            # 改用 start (已存在則 restart, 不存在則 start) 避免部署因 VPS 進程狀態紅
+            pm2 start ecosystem.config.cjs --only esggo-core omniagent-gateway || pm2 restart esggo-core omniagent-gateway
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
