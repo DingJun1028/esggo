@@ -221,9 +221,9 @@ function renderMarkdown(text: string): string {
     .replace(/\n/g, '<br/>');
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 interface ApiResponse {
   success: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   reply?: string;
   actions?: string[];
@@ -240,7 +240,6 @@ async function apiCall(type: string, payload?: Record<string, unknown>): Promise
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // ═══════════════════════════════════════════════════════════════
 // Sub-Agent Panel Component
