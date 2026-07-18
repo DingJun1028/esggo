@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CelestialCoreProcessor } from '../../impl/celestial-core-processor';
+import { CelestialCoreProcessor } from '../../lib/omni-core/celestial-core-processor';
 import { IComponentCore } from '../../lib/omni-core/contracts';
 
 const core = new CelestialCoreProcessor();
