@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
 
 /**
  * 安全柵欄：預設 FREE_TIER_ONLY 為 true
@@ -45,21 +46,33 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const { GoogleGenAI } = await import('@google/genai');
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
     const tonePrompt = tonePrompts[tone] || tonePrompts.professional;
+    const contents = `${tonePrompt}\n\nOriginal text:\n${text}`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: `${tonePrompt}\n\nOriginal text:\n${text}`,
-    });
+    const result = await runGeminiWithWorkersAIFallback(
+      async () => {
+        const { GoogleGenAI } = await import('@google/genai');
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+        const r = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents,
+        });
+        return r.text ?? null;
+      },
+      contents,
+      { workersModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast' },
+    );
+
+    if (!result) {
+      return jsonError('INTERNAL_ERROR', '主推理端與 Cloudflare Workers AI 備援皆失敗', 503);
+    }
 
     return jsonResponse({
       success: true,
       originalText: text,
-      rewrittenText: response.text || text,
+      rewrittenText: result.text || text,
       toneApplied: tone,
-      provider: 'gemini',
+      provider: result.provider,
     });
   } catch (error) {
     console.error('Error processing grammar:', error);

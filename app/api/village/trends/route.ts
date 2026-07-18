@@ -1,4 +1,5 @@
 import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -70,6 +71,7 @@ ${topProjects.join('\n')}
     const USE_INTERACTIONS_API = process.env.USE_INTERACTIONS_API === 'true';
 
     let trendText: string;
+    let provider = 'gemini';
     if (USE_INTERACTIONS_API) {
       // Interactions API: 單輪用 input 欄位; store=false 免費層級無狀態
       const interaction = await ai.interactions.create({
@@ -92,18 +94,26 @@ ${topProjects.join('\n')}
         .join('')
         .trim();
     } else {
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          temperature: 0.7,
-          maxOutputTokens: 256,
+      const result = await runGeminiWithWorkersAIFallback(
+        async () => {
+          const r = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: { temperature: 0.7, maxOutputTokens: 256 },
+          });
+          return r.text ?? null;
         },
-      });
-      trendText = response.text ?? '';
+        prompt,
+        { workersModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast' },
+      );
+      if (!result) {
+        return jsonError('INTERNAL_ERROR', '主推理端與 Cloudflare Workers AI 備援皆失敗', 503);
+      }
+      trendText = result.text ?? '';
+      provider = result.provider;
     }
 
-    return jsonResponse({ trend: trendText, provider: 'gemini' });
+    return jsonResponse({ trend: trendText, provider });
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
