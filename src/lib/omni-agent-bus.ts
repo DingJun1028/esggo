@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { CelestialCoreProcessor } from '../impl/celestial-core-processor';
+import { CelestialCoreProcessor } from './omni-core/celestial-core-processor';
 
 /** Simple event shape used throughout the project */
 export interface IBusEvent {

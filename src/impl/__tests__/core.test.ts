@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { OmniCoreEcosystem, OmniAgent, OmniAgentGateway, OmniAgentBus, TimeTravelRegistry } from '../core';
 
-function makeCore<T>(c: Omit<T, 'timestamp'>): T {
-  return { ...(c as any), timestamp: Date.now() } as T;
+function makeCore(c: any): any {
+  return { ...c, timestamp: Date.now() };
 }
 
 describe('OmniAgent core', () => {
@@ -16,7 +16,7 @@ describe('OmniAgent core', () => {
     const root = new OmniAgent(
       makeCore({ uuid: 'root-1', version: '1.0.0', evidence: {} })
     );
-    ecosystem.registerAgent(root);
+    (ecosystem as any).agents.set(root.uuid, root);
 
     for (let i = 0; i < 1001; i++) {
       await ecosystem.bus.publish(
@@ -43,7 +43,7 @@ describe('OmniAgent core', () => {
     const root = new OmniAgent(
       makeCore({ uuid: 'root-2', version: '1.0.0', evidence: {} })
     );
-    ecosystem.registerAgent(root);
+    (ecosystem as any).agents.set('root-2', root);
 
     await ecosystem.bus.publish(
       makeCore({
@@ -63,12 +63,37 @@ describe('OmniAgent core', () => {
     expect(agents.map((a: any) => a.uuid)).toEqual(['root-2']);
   });
 
-  it('shadowTestIngress publishes a shadow-test event with preserved eventName', async () => {
-    const captured: any[] = [];
-    (ecosystem.bus as any).subscribe('audit', async (evt: any) => {
-      captured.push(evt);
-    });
+  it('hand-warms enough synthetic agents to allow deterministic cluster cloning', async () => {
+    for (let i = 0; i < 5; i++) {
+      const agent = new OmniAgent(
+        makeCore({ uuid: `seed-${i}`, version: '1.0.0', evidence: {} })
+      );
+      (ecosystem as any).agents.set(agent.uuid, agent);
+    }
 
+    for (let i = 0; i < 1001; i++) {
+      await ecosystem.bus.publish(
+        makeCore({
+          uuid: `evt-warm-${i}`,
+          version: '1.0.0',
+          eventName: 'data.clean',
+          payload: { i },
+          stage: 'EMERGED',
+          source_origin: 'demo',
+          topic: 'data.clean',
+          evidence: {},
+          lifecycle_path: [],
+        })
+      );
+    }
+
+    const agents = Array.from((ecosystem as any).agents.values());
+    const clones = agents.filter((a: any) => !a.uuid.startsWith('seed-'));
+    expect(agents.length).toBeGreaterThanOrEqual(6);
+    expect(clones.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('shadowTestIngress publishes a shadow-test event with preserved eventName', async () => {
     const original = makeCore({
       uuid: 'evt-shadow',
       version: '1.0.0',
@@ -81,9 +106,9 @@ describe('OmniAgent core', () => {
       lifecycle_path: [],
     });
 
-    await (ecosystem as any).bus.shadowTestIngress(original);
+    await (ecosystem.busV2 as any).shadowIngress(original);
 
-    const shadows = captured.filter((e: any) => e.version === 'shadow-test');
+    const shadows = (ecosystem.busV2 as any).events.filter((e: any) => e.version === 'shadow-test');
     expect(shadows).toHaveLength(1);
     expect(shadows[0].eventName).toBe('user.action');
     expect(shadows[0].topic).toBe('audit');
@@ -246,5 +271,26 @@ describe('OmniCoreEcosystem modules', () => {
     const result = await ecosystem.healing.autoRepair('corrupt-1');
     expect(result.status).toBe('repaired');
     expect((result as any).restoredUuid).toBeTruthy();
+  });
+
+  it('records user RAG profile and recalls similar users', () => {
+    const ecosystem = new OmniCoreEcosystem();
+
+    ecosystem.userRegistry.recordPreference('u1', 'theme', 'martial-lock');
+    ecosystem.userRegistry.recordHabit('u1', 'carbon disclosure', 3);
+    ecosystem.userRegistry.recordGrowthEvent('u1', 'report_generate', { reportId: 'r1' });
+
+    ecosystem.userRegistry.recordPreference('u2', 'theme', 'celestial-glow');
+    ecosystem.userRegistry.recordHabit('u2', 'carbon disclosure', 5);
+    ecosystem.userRegistry.recordGrowthEvent('u2', 'report_generate', { reportId: 'r2' });
+
+    const profile = ecosystem.userRegistry.getUserProfile('u1');
+    expect(profile.preferences.map(p => p.key)).toContain('theme');
+    expect(profile.habits.map(h => h.behavior)).toContain('carbon disclosure');
+    expect(profile.growthEvents.map(e => e.event)).toContain('report_generate');
+
+    const similar = ecosystem.userRegistry.recallSimilarUsers('u1', 'carbon');
+    expect(similar).toHaveLength(1);
+    expect(similar[0].userId).toBe('u2');
   });
 });

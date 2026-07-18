@@ -81,7 +81,7 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
     const securedEvent: IBusEvent = {
       ...event,
       lifecycle_path: [
-        ...event.lifecycle_path,
+        ...(event.lifecycle_path ?? []),
         {
           stage: 'EMERGED',
           timestamp: Date.now(),
