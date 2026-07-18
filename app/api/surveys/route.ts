@@ -50,10 +50,11 @@ export async function POST(request: Request) {
 
     if (backend === 'firebase') {
       const { adminDb } = await import('@/lib/firebase-admin');
-      if (!adminDb?.collection) {
+      if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const docRef = await adminDb!.collection('surveys').add({
+      // @ts-ignore - Ignore the undefined check since we checked it right above
+      const docRef = await adminDb.collection('surveys').add({
         week: payload.week,
         date: payload.date,
         topic: payload.topic,
@@ -98,10 +99,11 @@ export async function GET() {
     const backend = (process.env.SURVEY_BACKEND || '').trim().toLowerCase();
     if (backend === 'firebase') {
       const { adminDb } = await import('@/lib/firebase-admin');
-      if (!adminDb?.collection) {
+      if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const snap = await adminDb!.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
+      // @ts-ignore - Ignore the undefined check since we checked it right above
+      const snap = await adminDb.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
       const rows = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return NextResponse.json({ ok: true, rows }, { status: 200 });
     }
