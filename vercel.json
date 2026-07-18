@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "pnpm run build",
+  "buildCommand": "pnpm prisma generate && pnpm run build",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "devCommand": "pnpm run dev",
   "github": {
