@@ -31,6 +31,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
+# healthcheck 探活依賴 curl
+RUN apk add --no-cache curl
 
 # 複製構建出的靜態資源與 .next
 COPY --from=builder /app/public ./public
@@ -41,6 +43,10 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-workspace.yaml* ./
 
 EXPOSE 3000
+
+# 容器健康探活：Next.js 監聽 127.0.0.1:3000，探 /api/healthz
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+  CMD curl -f -s -o /dev/null http://127.0.0.1:3000/api/healthz || exit 1
 
 # 啟動服務
 CMD ["pnpm", "start"]

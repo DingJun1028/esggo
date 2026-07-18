@@ -378,6 +378,45 @@ esggo/
 
 ---
 
+## 🛠️ 開發與合規合併
+
+> 本節為貢獻者指南（repo 刻意不追蹤 `CONTRIBUTING.md`，此處併入 README）。
+
+### 提交前驗證（必做）
+
+```bash
+pnpm run lint        # 0 error（warning 可接受）
+pnpm run typecheck   # tsc -p tsconfig.core.json，0 error
+pnpm run test        # vitest，全過
+```
+
+注意：`tsconfig.core.json` 只 gate `src/impl` + `src/lib/omni-core` + `src/lib/cloudflare`。
+**`app/` 改動請補跑** `pnpm exec tsc --noEmit -p tsconfig.json`。Windows 上 `pnpm` 裸指令可能失敗，用絕對路徑 `/c/Users/Administrator/AppData/Roaming/npm/pnpm.cmd`。
+
+### 分支與 PR
+
+- 從最新 `origin/main` 切分支；**一關注點一 PR**；標題用 conventional commits 風格
+- 分支基底過舊時勿整條 `rebase origin/main`（會引爆歷史衝突），改在最新 main 上 `cherry-pick` 專屬 commit
+
+### 合規合併（受保護 main 自合併）
+
+唯一維護者時 GitHub 禁止自批准，合規流程：**DELETE 保護 → squash merge → PUT 重建**（同 session 內走完，絕不留 main 裸奔）。詳見 `ERROR-LEDGER.md` G1。
+
+### CI 紅燈辨因
+
+- ✅ **Workers Builds: esggo = FAILURE**：結構性失效（`wrangler.toml` 指向孤立 entry），預期紅不修
+- 🔴 **`pnpm run typecheck` 紅**：真錯誤，先修再合併
+- ✅ **GitGuardian / CodeRabbit = SUCCESS**：通過
+
+### 型別衛生
+
+- 移除無 `any` 卻掛 `eslint-disable @typescript-eslint/no-explicit-any` 的贅餘註解
+- 檔案級 `/* eslint-disable */` 只為單一 `any` 服務時，收斂為單行 `// eslint-disable-next-line`
+- `as any` 斷言優先用 `unknown` + 運行期守衛（`Array.isArray` / `typeof`）
+- 動態邊界（pg 欄位、函數庫 `any[]`、外部 API、SDK 回傳）保留 `any` 並加 why 註解，不做假收斂
+
+---
+
 ## 📜 License
 
 © 2026 ESGGO. All rights reserved.
