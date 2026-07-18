@@ -26,6 +26,17 @@ function getMemoryRows(): ResourceRow[] {
   return memoryStore.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')).slice(0, 200);
 }
 
+function findMemoryRow(id: string): ResourceRow | undefined {
+  return memoryStore.find((item) => item.id === id);
+}
+
+function deleteMemoryRow(id: string): boolean {
+  const index = memoryStore.findIndex((item) => item.id === id);
+  if (index < 0) return false;
+  memoryStore.splice(index, 1);
+  return true;
+}
+
 export async function GET() {
   try {
     const adminDb = (await import('@/lib/firebase-admin')).adminDb;
@@ -57,6 +68,8 @@ export async function POST(request: Request) {
         title,
         category,
         url: typeof payload.url === 'string' ? payload.url.trim() : '',
+        week: typeof payload.week === 'number' ? payload.week : undefined,
+        createdBy: typeof payload.createdBy === 'string' ? payload.createdBy : undefined,
         createdAt: new Date().toISOString(),
       });
       return NextResponse.json({ ok: true, row }, { status: 200 });
@@ -74,6 +87,8 @@ export async function POST(request: Request) {
       title,
       category,
       url: typeof payload.url === 'string' ? payload.url.trim() : '',
+      week: typeof payload.week === 'number' ? payload.week : undefined,
+      createdBy: typeof payload.createdBy === 'string' ? payload.createdBy : undefined,
       createdAt: new Date().toISOString(),
     };
     return NextResponse.json({ ok: true, row }, { status: 200 });
@@ -93,7 +108,8 @@ export async function DELETE(request: Request) {
     const adminDb = (await import('@/lib/firebase-admin')).adminDb;
     const docRef = adminDb.doc('resources/' + id);
     if (!docRef) {
-      return NextResponse.json({ ok: false, message: 'Resource storage is not configured' }, { status: 500 });
+      const deleted = deleteMemoryRow(id);
+      return NextResponse.json({ ok: deleted }, { status: deleted ? 200 : 404 });
     }
     await docRef.delete();
     return NextResponse.json({ ok: true }, { status: 200 });
