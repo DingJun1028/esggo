@@ -27,7 +27,6 @@ import { OmniUserRegistry } from "./omni-user-registry";
 import { OmniAPI as FullOmniAPI } from '../agents/twelve-omni/omni-api';
 import { OmniBusV2 } from '../agents/twelve-omni/omni-bus';
 
-
 // ---------- 1️⃣ Helper ----------
 const now = () => Date.now();
 function makeCore<T extends IComponentCore>(c: Omit<T, "timestamp">): T {
