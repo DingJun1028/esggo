@@ -113,9 +113,16 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ## 📚 十二大萬能系統 (12 Omni-Systems)
 
-> 以下均為實際存在的模組（路徑經 2026-07-18 驗證）。Hexa-Core 六位一體（OmniEye/Core/Pulse/Bone/Brain/Heart）為基礎設施層，見上節。
+> **MECE 分類**：以下系統依「架構關注點」劃分為四互斥層（治理 / 資料 / 智慧 / 呈現），詳見 [架構總覽](docs/architecture/ESGGO-OMNI-ARCHITECTURE.md) 第 1–6 節。所有模組路徑經 2026-07-18 驗證存在。
 
-| 模組 | 說明 | 關鍵技術 | 實作位置 |
+| MECE 層 | 所屬系統 |
+|---------|----------|
+| 治理層 Governance | Hexa-Core 六位一體（OmniEye/Core/Pulse/Bone/Brain/Heart）· OmniSoul · OmniKey |
+| 資料層 Data | OmniTag · OmniBase · OmniSeed · OmniMemory · OmniWiki · OmniNote · OmniSingularity |
+| 智慧層 Intelligence | OmniAgent · OmniBiz |
+| 呈現層 Presentation | OmniWrite · OmniTheme · OmniComponent · OmniChart · OmniTodo |
+
+### 業務系統詳表
 |------|------|----------|----------|
 | **OmniTag** 萬能標籤 | 量子糾纏式雙向同步定位，支援 5T 協議 | 雙向同步 | `src/lib/omni-tag/index.ts` |
 | **OmniBase** 萬能基地 | 企業資料管理、行業分類、C 版 / v5 報告資料庫 | 資料層 | `src/lib/omni-base/` |
