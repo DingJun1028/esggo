@@ -102,11 +102,16 @@ export async function GET() {
   try {
     const backend = (process.env.SURVEY_BACKEND || '').trim().toLowerCase();
     if (backend === 'firebase') {
-      const { adminDb } = await import('@/lib/firebase-admin');
-      if (!adminDb?.collection) {
+      const imported = await import('@/lib/firebase-admin');
+      const adminDb = imported.adminDb;
+      if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const snap = await adminDb.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
+      const collection = adminDb.collection('surveys');
+      if (!collection) {
+        return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
+      }
+      const snap = await collection.orderBy('submittedAt', 'desc').limit(200).get();
       const rows = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return NextResponse.json({ ok: true, rows }, { status: 200 });
     }
