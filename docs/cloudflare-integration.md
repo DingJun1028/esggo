@@ -75,3 +75,18 @@
   build 此 wrangler，但 entry 從未實作），與本 PR 的帳戶令牌整合**無因果**。歸類為預期紅、不在本 PR scope。
   若要修，應另開 PR 實作 smart-ai-router 的 Cloudflare Worker entry，而非在本 PR 夾帶。
 - CI 已有 `ci.yml`（typecheck/vitest/secret-scan）+ `deploy.yml`（VPS Docker 部署），本整合不重造。
+
+## 8. 落地狀態（Workers AI 備援降級鏈接入清單）
+
+`runGeminiWithWorkersAIFallback` 薄封裝已接入以下 `@google/genai` 呼叫端（nexus 在前一 commit，grammar/trends 本 commit）。
+主端 Gemini 失敗 → 自動降級 Cloudflare Workers AI（`cfat_` 帳戶令牌）；兩者皆敗回 `INTERNAL_ERROR` 503，不靜默造假。
+
+| Route | 接入 | 原因 / 備註 |
+| --- | --- | --- |
+| `app/api/nexus/route.ts` | ✅ | trinity.awaken 核心端；provider 標註 gemini\|workers-ai |
+| `app/api/sustain-write/v5/grammar/route.ts` | ✅ | 單一 gemini 呼叫、無既有 fallback，與 nexus 對稱 |
+| `app/api/village/trends/route.ts` | ✅ | 單一 gemini 呼叫（generateContent 段）；interactions API 段維持原樣不動 |
+| `app/api/omni-one/route.ts` | ❌ 刻意不接 | 已有多 provider 路由（Groq→OpenRouter→Gemini→mock），強插會破壞既有降級鏈，且語意重疊 |
+| `app/api/rag/query/route.ts` | ❌ 刻意不接 | gemini 用於 embedContent（產生向量）+ generateContent；Workers AI 不產 Gemini 相容向量，僅最終段可備援，收益低且會複雜化 embedding 依賴；留待後續評估 |
+
+驗證：`pnpm build` 通過（exit 0，含 app/** TypeScript 檢查），`pnpm typecheck` / `pnpm lint` 通過。
