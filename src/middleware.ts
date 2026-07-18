@@ -157,22 +157,6 @@ function cleanupRateLimitStore() {
   }
 }
 
-// ─── Token Verification ─────────────────────────────────────────────
-
-async function verifyFirebaseToken(
-  token: string
-): Promise<{ uid: string; email?: string } | null> {
-  try {
-    const { getAuth } = await import('firebase-admin/auth');
-    const { getAdminApp } = await import('./lib/firebase-admin');
-    const app = getAdminApp();
-    const decoded = await getAuth(app).verifyIdToken(token);
-    return { uid: decoded.uid, email: decoded.email };
-  } catch {
-    return null;
-  }
-}
-
 // ─── Middleware Entry ────────────────────────────────────────────────
 
 export async function middleware(request: NextRequest) {
