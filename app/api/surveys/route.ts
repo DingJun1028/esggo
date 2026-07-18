@@ -54,7 +54,11 @@ export async function POST(request: Request) {
       if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const docRef = await adminDb.collection('surveys').add({
+      const collection = adminDb.collection('surveys');
+      if (!collection) {
+        return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
+      }
+      const docRef = await collection.add({
         week: payload.week,
         date: payload.date,
         topic: payload.topic,
