@@ -211,7 +211,7 @@ jobs:
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
             pm2 kill 2>/dev/null || true
             sleep 2
-            pm2 start ecosystem.config.cjs --only esggo-core omniagent-gateway
+            pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
@@ -251,7 +251,7 @@ jobs:
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
             pm2 kill 2>/dev/null || true
             sleep 2
-            pm2 start ecosystem.config.cjs --only esggo-core omniagent-gateway
+            pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
