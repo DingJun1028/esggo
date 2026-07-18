@@ -91,10 +91,11 @@ export function OmniTodoBoard() {
         pageSize: 50,
       });
 
+      const nested = data?.data?.items;
       const list = Array.isArray(data?.items)
         ? data.items
-        : Array.isArray((data as any)?.data?.items)
-          ? (data as any).data.items
+        : Array.isArray(nested)
+          ? nested
           : [];
 
       const normalized = list.map((item) => ({
