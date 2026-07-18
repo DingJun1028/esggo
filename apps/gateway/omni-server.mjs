@@ -43,6 +43,29 @@ try {
   }
 } catch { console.warn('[OmniGateway] No .env file — using process env'); }
 
+// ── Env Loader ──────────────────────────────────────────────
+// PM2 `--update-env` 偶爾不會把 .env 新欄位注入 forked process，
+// 所以 gateway 啟動時強制再讀一次 `apps/gateway/.env`，避免 Telegram 等欄位被吃掉。
+function loadGatewayEnv() {
+  const envPath = join(__dirname, '.env');
+  try {
+    const text = readFileSync(envPath, 'utf8');
+    for (const raw of text.split('\n')) {
+      const line = raw.trim();
+      if (!line || line.startsWith('#')) continue;
+      const idx = line.indexOf('=');
+      if (idx === -1) continue;
+      const key = line.slice(0, idx).trim();
+      const value = line.slice(idx + 1).trim();
+      if (!(key in process.env)) process.env[key] = value;
+    }
+    console.log(`[OmniGateway] env loaded from ${envPath}`);
+  } catch (err) {
+    console.warn(`[OmniGateway] failed to load ${envPath}: ${err.message}`);
+  }
+}
+loadGatewayEnv();
+
 // Strip Gemma 4 thinking channels so only the final answer is returned.
 // Gemma 4 emits reasoning in channel blocks with multiple known variants:
 //   <channel>thought ... </channel>  |  <channel/>  |  <channel|>  |  <|channel>thought ... <channel|>
@@ -432,6 +455,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '4mb' }));
+app.set('trust proxy', 'loopback');
 app.use(rateLimit({ windowMs: 60_000, max: 120 }));
 
 const aiLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'AI rate limit: max 30 req/min' } });
@@ -958,12 +982,93 @@ if (TELEGRAM_BOT_TOKEN) {
 
     bot.on('message', async (msg) => {
       const chatId = msg.chat.id;
-      const text = msg.text || '';
+      const text = (msg.text || '').trim();
       console.log(`[Telegram] 📩 Received from ${chatId}: ${text.slice(0, 80)}`);
 
       try {
-        const reply = `🤖 *OmniAgent Gateway*\n\n收到訊息：\n${text}`;
-        await safeSend(chatId, reply);
+        if (!text.startsWith('/')) {
+          await safeSend(chatId, '請使用指令：\n/task <任務描述> — 交辦工作\n/status — 查看 Gateway 狀態\n/help — 說明');
+          return;
+        }
+
+        const [name, ...args] = text.split(' ').filter(Boolean);
+        const arg = args.join(' ');
+
+        if (name === '/start' || name === '/help') {
+          await safeSend(chatId,
+            '🤖 *OmniAgent Gateway*\n' +
+            '可直接在這裡交辦工作，Gateway 會排程並回報進度。\n\n' +
+            '指令：\n' +
+            '/task <描述> — 交辦新任務\n' +
+            '/status — 檢視在线狀態\n' +
+            '/help — 說明');
+          return;
+        }
+
+        if (name === '/status') {
+          const token = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || '';
+          const statusRes = await fetch(`http://127.0.0.1:${PORT}/status`, {
+            headers: token ? { 'X-Omni-Token': token } : {},
+          });
+          const statusData = await statusRes.json().catch(() => ({}));
+          const providers = statusData?.providers || {};
+          const lines = [
+            '📊 *Gateway 狀態*',
+            `狀態：${statusData?.status || 'unknown'}`,
+            `版本：${statusData?.version || '-'}`,
+            `Gemini：${providers.gemini ? '✅' : '❌'}`,
+            `OpenRouter：${providers.openrouter ? '✅' : '❌'}`,
+            `Groq：${providers.groq ? '✅' : '❌'}`,
+            `WS：${statusData?.websocket?.enabled ? 'on' : 'off'} (clients=${statusData?.websocket?.clients ?? 0})`,
+          ];
+          await safeSend(chatId, lines.join('\n'));
+          return;
+        }
+
+        if (name === '/task') {
+          if (!arg) {
+            await safeSend(chatId, '⚠️ 請輸入任務描述，例如：\n/task 分析 2024 碳排盤查報告');
+            return;
+          }
+          const token = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || '';
+          if (!token) {
+            await safeSend(chatId, '⚠️ Gateway key 未設定，無法交辦。');
+            return;
+          }
+          const taskId = `tg_${Date.now()}`;
+          await safeSend(chatId, `📨 已接收任務：${arg}\n任務ID：${taskId}\n狀態： dispatched`);
+          try {
+            const execRes = await fetch(`http://127.0.0.1:${PORT}/execute`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Omni-Token': token,
+              },
+              body: JSON.stringify({
+                task: {
+                  id: taskId,
+                  taskType: 'compliance_review',
+                  title: arg,
+                  prompt: arg,
+                },
+                skillId: 'compliance_review',
+              }),
+            });
+            const execData = await execRes.json().catch(() => ({}));
+            if (!execRes.ok) {
+              await safeSend(chatId, `❌ 執行失敗：${execData?.error || execRes.status}`);
+              return;
+            }
+            const content = execData?.artifact?.content || execData?.result || JSON.stringify(execData);
+            const preview = typeof content === 'string' ? content.slice(0, 1800) : JSON.stringify(content).slice(0, 1800);
+            await safeSend(chatId, `✅ 任務完成：${arg}\n\`\`\`\n${preview}\n\`\`\``);
+          } catch (err) {
+            await safeSend(chatId, `❌ 任務執行例外：${err.message}`);
+          }
+          return;
+        }
+
+        await safeSend(chatId, '不認識的指令，請用 /help 查看可用指令。');
       } catch (err) {
         console.error(`[Telegram] Error handling message: ${err.message}`);
         try {
