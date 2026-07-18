@@ -75,7 +75,7 @@
     "vitest": "^4.1.9"
   },
   "engines": {
-    "node": "20.x",
+    "node": ">=20",
     "pnpm": "11.5.2"
   },
   "omnilules": {
