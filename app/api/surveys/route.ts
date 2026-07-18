@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       if (!adminDb?.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const docRef = await adminDb.collection('surveys').add({
+      const docRef = await adminDb!.collection('surveys').add({
         week: payload.week,
         date: payload.date,
         topic: payload.topic,
@@ -101,7 +101,7 @@ export async function GET() {
       if (!adminDb?.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const snap = await adminDb.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
+      const snap = await adminDb!.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
       const rows = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return NextResponse.json({ ok: true, rows }, { status: 200 });
     }
