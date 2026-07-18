@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
 import { useAgnesApi } from "@/components/AgnesProvider";
 
 type CaseType =
