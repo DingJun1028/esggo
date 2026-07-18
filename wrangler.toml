@@ -1,5 +1,5 @@
 name = "smart-ai-router"
-main = "src/index.ts"
+main = ".agents/skills/smart-ai-router/index.ts"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
@@ -28,4 +28,6 @@ preview_id = "your-preview-kv-namespace-id"
 # 觀測/日誌
 [observability]
 enabled = true
-logpush = true
+# logpush = true
+[build]
+command = "pnpm install && pnpm run build"
