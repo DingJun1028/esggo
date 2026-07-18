@@ -182,7 +182,6 @@ public/lib/
 Gemini CLI*/
 
 # Chinese-named dirs
-的角色與技能集：
 
 # Extra docs (non-essential for build)
 ADK_GUIDE.md
@@ -282,3 +281,5 @@ esggo-deploy.bundle
 
 # 全量審計 sink 持久層（append-only JSONL，執行期產生）
 .audit/
+
+.vercel
