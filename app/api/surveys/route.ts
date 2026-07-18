@@ -49,7 +49,8 @@ export async function POST(request: Request) {
     const backend = (process.env.SURVEY_BACKEND || '').trim().toLowerCase();
 
     if (backend === 'firebase') {
-      const { adminDb } = await import('@/lib/firebase-admin');
+      const imported = await import('@/lib/firebase-admin');
+      const adminDb = imported.adminDb;
       if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
