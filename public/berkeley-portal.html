@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,7 +89,6 @@
     padding: 40px 36px;
     color: #fff;
   }
-  /* 2026 獨立眉標徽章（與標題分離，消除重疊） */
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 6px 14px; margin-bottom: 16px;
@@ -204,7 +203,7 @@
   }
   .link-btn.primary:hover { filter: brightness(1.05); border-color: #b47b00; }
 
-  /* 公告 + 預約共用 section */
+  /* 預約諮詢用 panel */
   .panel {
     background: #fff;
     border: 1px solid var(--line);
@@ -263,7 +262,7 @@
         <p class="hero-lede" data-i18n="heroLede">柏克萊國際永續人才培力課程 · 第一版交付中心。學員能下載教材、提交作業、回看課程，並取得學習資源。</p>
         <div class="hero-cta">
           <a class="btn btn-gold" href="#core"><i class="fa-solid fa-grip"></i> <span data-i18n="ctaCore">進入四大功能</span></a>
-          <a class="btn btn-ghost" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="ctaBook">預約諮詢</span></a>
+          <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdqFeKkOJOrg0erjaP1EFG9zyj98I5E3GpA4m1Zlzy2ZATiEw/viewform" target="_blank" rel="noopener"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="ctaBook">預約諮詢</span></a>
         </div>
       </div>
     </div>
@@ -271,7 +270,7 @@
     <!-- 四核心功能 -->
     <div class="grid" id="core">
       <div class="card">
-        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-file-pdf"></i></div><span data-i18n="c1Title">教材下載</span></div>
+        <div class="card-header"><div class="icon-wrap a"><i class="fa-solid fa-book-bookmark"></i></div><span data-i18n="c1Title">教材下載</span></div>
         <p class="card-desc" data-i18n="c1Desc">教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。</p>
         <div class="card-links">
           <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-chevron-right"></i> <span data-i18n="c1Link">進入教材資產庫</span></a>
@@ -295,22 +294,22 @@
       </div>
 
       <div class="card gold-accent">
-        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-folder-open"></i></div><span data-i18n="c4Title">學員資源區</span></div>
-        <p class="card-desc" data-i18n="c4Desc">補充資料、學習包、筆記範本與公告，集中在一處方便查找。</p>
+        <div class="card-header"><div class="icon-wrap b"><i class="fa-solid fa-clipboard-list"></i></div><span data-i18n="c4Title">每週滿意度調查</span></div>
+        <p class="card-desc" data-i18n="c4Desc">每週課後填寫滿意度調查，幫助我們持續改善課程內容、講師安排、教材設計與學習支持。</p>
         <div class="card-links">
-          <a class="link-btn primary" href="https://drive.google.com/drive/folders/1-ZOC6sPNGISeD7Rf6lYT3Q10yYZaTdAy?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="c4Link">打開學員 Google Drive</span></a>
+          <a class="link-btn primary" href="https://berkeley-satisfaction-survey.vercel.app/" target="_blank" rel="noopener"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="c4Link">填寫問卷</span></a>
         </div>
       </div>
     </div>
 
-    <!-- 預約諮詢（獨立次要 CTA） -->
-    <div class="panel" id="booking" style="border-top:4px solid var(--cal-gold); background: linear-gradient(180deg, #ffffff 0%, var(--cal-gold-soft) 100%);">
-      <h2 class="panel-title" data-i18n="bookTitle">預約諮詢 / 企業轉型健檢</h2>
+    <!-- 預約諮詢 -->
+    <div class="panel" id="booking">
+      <h2 class="panel-title" data-i18n="bookTitle">預約諮詢</h2>
       <p style="font-size:14px;color:var(--muted);margin:-6px 0 16px;" data-i18n="bookSub">填寫官方表單的必填欄位，專屬顧問將與您聯繫安排時段。</p>
-      <a class="btn btn-gold" href="https://forms.gle/ErFffsbVrmAgyFQJA" target="_blank" rel="noopener" style="width:fit-content;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="bookCta">前往填寫預約表單</span></a>
+      <a class="btn btn-gold" href="https://docs.google.com/forms/d/e/1FAIpQLSdqFeKkOJOrg0erjaP1EFG9zyj98I5E3GpA4m1Zlzy2ZATiEw/viewform" target="_blank" rel="noopener" style="width:fit-content;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="bookCta">前往填寫預約表單</span></a>
     </div>
 
-    <div class="footer-note" data-i18n="footer">依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program</div>
+    <div class="footer-note" data-i18n="footer">2026 Berkeley ESG Strategy &amp; Innovation Program</div>
   </div>
 </div>
 
@@ -321,54 +320,42 @@
       centerName: "學員中心",
       heroLede: "柏克萊國際永續人才培力課程 · 第一版交付中心。學員能下載教材、提交作業、回看課程，並取得學習資源。",
       ctaCore: "進入四大功能", ctaBook: "預約諮詢",
-      c1Title: "教材下載", c1Desc: "教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。",
-      c1Link: "進入教材資產庫",
-      c2Title: "作業提交", c2Desc: "提交每週矩陣成果與反思筆記。個人上傳空間，僅你能看自己的檔案。",
-      c2Link: "提交作業",
-      c3Title: "課程回放", c3Desc: "週六主課與週日諮詢全程錄影，課後複習、補齊重點。",
-      c3Link: "前往視訊重播庫",
-      c4Title: "學員資源區", c4Desc: "補充資料、學習包、筆記範本與公告，集中在一處方便查找。",
-      c4Link: "打開學員 Google Drive",
-      bookTitle: "預約諮詢 / 企業轉型健檢",
+      c1Title: "教材下載", c1Desc: "教授簡報 PDF、實務操作手冊、簡報框架與精選問答，隨時取用。", c1Link: "進入教材資產庫",
+      c2Title: "作業提交", c2Desc: "提交每週矩陣成果與反思筆記。個人上傳空間，僅你能看自己的檔案。", c2Link: "提交作業",
+      c3Title: "課程回放", c3Desc: "週六主課與週日諮詢全程錄影，課後複習、補齊重點。", c3Link: "前往視訊重播庫",
+      c4Title: "每週滿意度調查", c4Desc: "每週課後填寫滿意度調查，幫助我們持續改善課程內容、講師安排、教材設計與學習支持。", c4Link: "填寫問卷",
+      bookTitle: "預約諮詢",
       bookSub: "填寫官方表單的必填欄位，專屬顧問將與您聯繫安排時段。",
       bookCta: "前往填寫預約表單",
-      footer: "依據全球頂級合規與創價標準進行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+      footer: "2026 Berkeley ESG Strategy &amp; Innovation Program"
     },
     "zh-Hans": {
       eyebrow: "2026 年度课程",
       centerName: "学员中心",
       heroLede: "柏克莱国际永续人才培力课程 · 第一版交付中心。学员能下载教材、提交作业、回看课程，并取得学习资源。",
       ctaCore: "进入四大功能", ctaBook: "预约咨询",
-      c1Title: "教材下载", c1Desc: "教授简报 PDF、实务操作手册、简报框架与精选问答，随时取用。",
-      c1Link: "进入教材资产库",
-      c2Title: "作业提交", c2Desc: "提交每周矩阵成果与反思笔记。个人上传空间，仅你能看自己的档案。",
-      c2Link: "提交作业",
-      c3Title: "课程回放", c3Desc: "周六主课与周日咨询全程录影，课后复习、补齐重点。",
-      c3Link: "前往视频重播库",
-      c4Title: "学员资源区", c4Desc: "补充资料、学习包、笔记范本与公告，集中在一处方便查找。",
-      c4Link: "打开学员 Google Drive",
-      bookTitle: "预约咨询 / 企业转型健检",
+      c1Title: "教材下载", c1Desc: "教授简报 PDF、实务操作手册、简报框架与精选问答，随时取用。", c1Link: "进入教材资产库",
+      c2Title: "作业提交", c2Desc: "提交每周矩阵成果与反思笔记。个人上传空间，仅你能看自己的档案。", c2Link: "提交作业",
+      c3Title: "课程回放", c3Desc: "周六主课与周日咨询全程录影，课后复习、补齐重点。", c3Link: "前往视频重播库",
+      c4Title: "每周满意度调查", c4Desc: "每周课后填写满意度调查，帮助我们持续改善课程内容、讲师安排、教材设计与学习支持。", c4Link: "填写问卷",
+      bookTitle: "预约咨询",
       bookSub: "填写官方表单的必填字段，专属顾问将与您联系安排时段。",
       bookCta: "前往填写预约表单",
-      footer: "依据全球顶级合规与创价标准进行刻印建置 | 2026 Berkeley ESG Strategy & Innovation Program"
+      footer: "2026 Berkeley ESG Strategy &amp; Innovation Program"
     },
     "en": {
       eyebrow: "2026 Annual Program",
       centerName: "Student Center",
       heroLede: "Berkeley International Sustainability Talent Empowerment — v1 delivery hub. Students download materials, submit assignments, replay lectures, and access shared resources.",
       ctaCore: "Open the 4 Core Tools", ctaBook: "Book a Consult",
-      c1Title: "Course Materials", c1Desc: "Professor slides (PDF), practice manuals, slide frameworks and curated Q&A — available anytime.",
-      c1Link: "Open Materials Library",
-      c2Title: "Submit Assignment", c2Desc: "Submit weekly matrix & reflection notes. Private upload space — you only see your own files.",
-      c2Link: "Submit Assignment",
-      c3Title: "Lecture Replay", c3Desc: "Full Sat lecture & Sun consulting recordings for post-class review.",
-      c3Link: "Go to Replay Library",
-      c4Title: "Student Resources", c4Desc: "Supplements, study packs, note templates and announcements — all in one place.",
-      c4Link: "Open Student Google Drive",
-      bookTitle: "Book a Consult / Enterprise Health-check",
+      c1Title: "Course Materials", c1Desc: "Slides, practice manuals, frameworks, and selected Q&A — available anytime.", c1Link: "Open Materials Library",
+      c2Title: "Submit Assignment", c2Desc: "Submit weekly matrix & reflection notes. Private upload space — you only see your own files.", c2Link: "Submit Assignment",
+      c3Title: "Lecture Replay", c3Desc: "Full Sat lecture & Sun consulting recordings for post-class review.", c3Link: "Go to Replay Library",
+      c4Title: "Weekly Satisfaction Survey", c4Desc: "Complete the weekly survey after class to help us improve content, instruction, materials, and learner support.", c4Link: "Take Survey",
+      bookTitle: "Book a Consult",
       bookSub: "Complete the required fields on the official form; your dedicated advisor will contact you to schedule.",
       bookCta: "Open Booking Form",
-      footer: "Built to top global compliance & value-creation standards | 2026 Berkeley ESG Strategy & Innovation Program"
+      footer: "2026 Berkeley ESG Strategy &amp; Innovation Program"
     }
   };
 
