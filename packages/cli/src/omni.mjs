@@ -227,5 +227,214 @@ program
     process.exit(res.status ?? 1);
   });
 
+// ── shared spawn helper (Windows/MSYS 相容) ───────────────
+import { readFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { homedir } from 'node:os';
+
+function repoRoot() {
+  const here = dirname(fileURLToPath(import.meta.url));
+  return dirname(dirname(dirname(here)));
+}
+
+// 統一 spawn：Windows 下外部 CLI (vercel/gh/git) 需 shell:true 否則 ENOENT。
+// 回傳 { status, out, err }，錯誤時不輸出 undefined。
+function run(cmd, args, opts = {}) {
+  const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, ...opts });
+  const out = (res.stdout || '').trim();
+  const err = res.error ? res.error.message : (res.stderr || '').trim();
+  return { status: res.status, out, err };
+}
+
+function logHistory(line) {
+  try {
+    const dir = resolve(homedir(), '.esggo');
+    mkdirSync(dir, { recursive: true });
+    appendFileSync(resolve(dir, 'history.log'), `${new Date().toISOString()} ${line}\n`);
+  } catch { /* non-fatal */ }
+}
+
+// ── secret ─────────────────────────────────────────────────
+function loadEnvFile() {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(here)));
+  const envPath = resolve(root, '.env');
+  const map = new Map();
+  if (!existsSync(envPath)) return { map, envPath };
+  const text = readFileSync(envPath, 'utf8');
+  for (const line of text.split('\n')) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (!m) continue;
+    let val = m[2];
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    map.set(m[1], val);
+  }
+  return { map, envPath };
+}
+
+function mask(value) {
+  if (!value) return '(empty)';
+  if (value.length <= 8) return '****';
+  return value.slice(0, 4) + '****' + value.slice(-4);
+}
+
+const SENSITIVE_PREFIX = ['FIREBASE', 'NEXT_PUBLIC_FIREBASE', 'FIRESTORE', 'GEMINI', 'OPENROUTER', 'GROQ', 'SUPABASE', 'UPSTASH', 'GATEWAY', 'VPS_', 'OCI_', 'PRIVATE'];
+
+function isSensitive(key) {
+  return SENSITIVE_PREFIX.some((p) => key.startsWith(p));
+}
+
+program
+  .command('secret')
+  .description('查看秘密並同步到 Vercel（Omni 秘密管理）')
+  .addCommand(
+    new (await import('commander')).Command('list')
+      .description('列出 .env 中所有秘密 key（不含值）')
+      .action(() => {
+        const { map, envPath } = loadEnvFile();
+        if (map.size === 0) {
+          console.log(`[secret] ${envPath} 無內容或不存在`);
+          return;
+        }
+        console.log(`[secret] ${map.size} 個秘密 (來源: ${envPath}):`);
+        for (const key of [...map.keys()].sort()) {
+          const tag = isSensitive(key) ? '🔒' : '·';
+          console.log(`  ${tag} ${key}`);
+        }
+      })
+  )
+  .addCommand(
+    new (await import('commander')).Command('view')
+      .description('查看特定秘密（敏感值打碼）')
+      .argument('<key>', '秘密名稱')
+      .action((key) => {
+        const { map } = loadEnvFile();
+        if (!map.has(key)) {
+          console.log(`[secret] 找不到: ${key}`);
+          return;
+        }
+        const val = map.get(key);
+        if (isSensitive(key)) {
+          console.log(`${key} = ${mask(val)}`);
+        } else {
+          console.log(`${key} = ${val}`);
+        }
+      })
+  )
+  .addCommand(
+    new (await import('commander')).Command('sync')
+      .description('把 Firebase/Firestore 秘密同步到目標平台 (vercel | github)')
+      .argument('<target>', 'vercel | github')
+      .option('--env <name>', 'Vercel 環境 (production/preview/development)', 'production')
+      .option('--yes', '非互動（跳過確認提示）')
+      .action((target, opts) => {
+        logHistory(`secret sync ${target} --env ${opts.env}`);
+        const root = repoRoot();
+        const { map } = loadEnvFile();
+        const keys = [...map.keys()].filter(
+          (k) => k.startsWith('FIREBASE') || k.startsWith('NEXT_PUBLIC_FIREBASE') || k.startsWith('FIRESTORE')
+        );
+        if (keys.length === 0) {
+          console.log('[secret] .env 中無 Firebase/Firestore 秘密可同步');
+          return;
+        }
+        if (target === 'vercel') {
+          const ls = run('vercel', ['env', 'ls', opts.env], { cwd: root });
+          const existing = new Set(ls.out.split('\n').map((l) => l.trim().split(/\s+/)[0]).filter(Boolean));
+          let added = 0;
+          for (const key of keys.sort()) {
+            const val = map.get(key);
+            if (existing.has(key)) { console.log(`[secret] 跳過 (已存在): ${key}`); continue; }
+            const r = run('vercel', ['env', 'add', key, opts.env], { input: val + '\nN\n', cwd: root });
+            if (r.status === 0) { console.log(`[secret] ✅ 已同步: ${key}`); added++; }
+            else console.error(`[secret] ❌ 同步失敗: ${key} — ${r.err || r.out}`);
+          }
+          console.log(`[secret] Vercel 同步完成: 新增 ${added} / 共 ${keys.length}`);
+        } else if (target === 'github') {
+          let added = 0;
+          for (const key of keys.sort()) {
+            const val = map.get(key);
+            const r = run('gh', ['secret', 'set', key, '--body', val, '--repo', 'DingJun1028/esggo']);
+            if (r.status === 0) { console.log(`[secret] ✅ 已同步: ${key}`); added++; }
+            else console.error(`[secret] ❌ 同步失敗: ${key} — ${r.err || r.out}`);
+          }
+          console.log(`[secret] GitHub 同步完成: 新增 ${added} / 共 ${keys.length}`);
+        } else {
+          console.error(`[secret] 不支援的同步目標: ${target}（僅 vercel | github）`);
+          process.exit(1);
+        }
+      })
+  )
+  .addCommand(
+    new (await import('commander')).Command('pull')
+      .description('從 Vercel 拉回環境變數到本地 .env（雙向同步）')
+      .argument('<target>', '目前僅支援: vercel')
+      .option('--env <name>', 'Vercel 環境', 'production')
+      .action((target, opts) => {
+        if (target !== 'vercel') { console.error(`[secret] 不支援: ${target}`); process.exit(1); }
+        logHistory(`secret pull ${target} --env ${opts.env}`);
+        const root = repoRoot();
+        const r = run('vercel', ['env', 'pull', '.env.vercel', opts.env], { cwd: root });
+        if (r.status !== 0) { console.error(`[secret] ❌ 拉取失敗: ${r.err || r.out}`); process.exit(1); }
+        console.log('[secret] ✅ 已從 Vercel 拉取至 .env.vercel（手動 merge 到 .env 避免覆蓋本地值）');
+      })
+  );
+
+// ── verify ────────────────────────────────────────────────
+// 一鍵本地驗證：lint + typecheck + test + next build (app/ 必跑 next build)
+program
+  .command('verify')
+  .description('一鍵本地驗證 (lint + typecheck + test + next build)')
+  .action(async () => {
+    logHistory('verify');
+    const root = repoRoot();
+    const steps = [
+      ['lint', ['run', 'lint']],
+      ['typecheck', ['run', 'typecheck']],
+      ['test', ['run', 'test']],
+    ];
+    for (const [name, args] of steps) {
+      process.stdout.write(`[verify] ${name} ... `);
+      const r = run('pnpm', args, { cwd: root });
+      if (r.status === 0) console.log('✅');
+      else { console.log('❌'); console.error(r.err || r.out); process.exit(1); }
+    }
+    // app/ 路由型別只靠 next build 驗證（root tsconfig EXCLUDES app/**）
+    process.stdout.write('[verify] next build (app/ 型別門檻) ... ');
+    const b = run('pnpm', ['exec', 'next', 'build'], { cwd: root });
+    if (b.status === 0) console.log('✅ BUILD_EXIT=0');
+    else { console.log('❌'); console.error(b.err || b.out); process.exit(1); }
+    console.log('[verify] 全綠 — 可安全合規合併');
+  });
+
+// ── deploy ────────────────────────────────────────────────
+const deploy = program
+  .command('deploy')
+  .description('觸發部署 (vercel | vps)');
+deploy
+  .command('vercel')
+  .description('觸發 Vercel 生產部署')
+  .action(() => {
+    logHistory('deploy vercel');
+    const root = repoRoot();
+    const r = run('vercel', ['--prod'], { cwd: root });
+    console.log(r.status === 0 ? '[deploy] ✅ Vercel 部署已觸發' : `[deploy] ❌ ${r.err || r.out}`);
+    process.exit(r.status === 0 ? 0 : 1);
+  });
+deploy
+  .command('vps')
+  .description('觸發 Deploy to Oracle VPS (GitHub Actions)')
+  .action(() => {
+    logHistory('deploy vps');
+    const r = run('gh', ['workflow', 'run', 'deploy-oracle.yml', '--ref', 'main'], { cwd: repoRoot() });
+    console.log(r.status === 0 ? '[deploy] ✅ VPS 部署已觸發 (GitHub Actions)' : `[deploy] ❌ ${r.err || r.out}`);
+    process.exit(r.status === 0 ? 0 : 1);
+  });
+
 // ── Parse ──────────────────────────────────────────────────
 program.parse();
+
