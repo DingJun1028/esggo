@@ -22,7 +22,17 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'SystemInit',
+    processTrace: ['Initialized'],
+    finalEffect: 'Standby'
+  };
+  readonly isFrozen: boolean = true;
 
   /** 戒嚴狀態 */
   private martialLawActive: boolean = false;

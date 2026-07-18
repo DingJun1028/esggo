@@ -58,6 +58,9 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
     ],
     evidence: {
       ...seed.evidence,
+      originCause: seed.evidence?.originCause ?? 'Seed Planted',
+      processTrace: [...(seed.evidence?.processTrace ?? []), 'plantOmniSeed'],
+      finalEffect: 'Seed Awakened',
       activation_log: "ChainLog::Activated_At_" + Date.now(),
       iso_verification: "[ISO-14064-1] 零幻覺驗證通過",
       planted_location: targetLocation,
@@ -90,7 +93,12 @@ export function createOmniSeed(params?: {
     uuid,
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: params?.evidence ?? {},
+    evidence: {
+      originCause: 'Seed Creation',
+      processTrace: ['createDormantSeed'],
+      finalEffect: 'Dormant Seed Created',
+      ...(params?.evidence ?? {})
+    },
     hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     hashLock: params?.hashLock ?? `0xHASHLOCK_${Date.now()}`,
     entropyControl: params?.entropyControl ?? 0.1,

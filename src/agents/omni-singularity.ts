@@ -72,6 +72,9 @@ export class OmniSingularity implements IOmniSingularity {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
+        originCause: 'Singularity Creation',
+        processTrace: ['createOmniSingularity'],
+        finalEffect: 'Singularity Created',
         type: "omni-singularity",
         name: "OmniSingularity",
         purpose: "the_one_and_only_origin",
@@ -155,6 +158,9 @@ export class OmniSingularity implements IOmniSingularity {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
+        originCause: 'Singularity Manifestation',
+        processTrace: ['manifest'],
+        finalEffect: 'Manifested',
         type: intent.type,
         name: intent.name,
         purpose: intent.purpose,

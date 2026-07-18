@@ -111,7 +111,17 @@ export class OmniUserRegistry {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'SystemInit',
+    processTrace: ['Initialized'],
+    finalEffect: 'Standby'
+  };
+  readonly isFrozen: boolean = true;
 
   /** 用戶偏好表 (userId → preferences) */
   private _preferences: Map<string, UserPreference[]> = new Map();

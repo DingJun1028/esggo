@@ -72,6 +72,9 @@ class UserGrowthService {
 
     // Create the genesis OmniSeed for the new user!
     const genesisEvidence = {
+      originCause: 'User Registration',
+      processTrace: ['getOrCreateUser'],
+      finalEffect: 'User Genesis Created',
       email: email || 'anonymous@esggo.org',
       displayName: displayName || '永續觀察者',
       role: '永續觀察者',
