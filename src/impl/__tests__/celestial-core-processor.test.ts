@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { CelestialCoreProcessor } from '../../impl/celestial-core-processor';
 import { IComponentCore } from '../../lib/omni-core/contracts';
