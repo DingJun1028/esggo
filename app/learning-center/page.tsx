@@ -54,7 +54,7 @@ export default function LearningCenterPage() {
       c5Desc: { 'zh-Hant': '課程、技術、行政問題統一提交。', 'zh-Hans': '课程、技术、行政问题统一提交。', en: 'Submit course, technical, or admin questions.' },
       c6Title: { 'zh-Hant': '滿意調查', 'zh-Hans': '满意度调查', en: 'Survey' },
       c6Desc: { 'zh-Hant': '每週課後調查，協助持續改善。', 'zh-Hans': '每周课后调查，协助持续改善。', en: 'Weekly post-class survey to improve content and support.' },
-      footer: { 'zh-Hant': '2026 Berkeley ESG Strategy &amp; Innovation Program', 'zh-Hans': '2026 Berkeley ESG Strategy &amp; Innovation Program', en: '2026 Berkeley ESG Strategy &amp; Innovation Program' },
+      footer: { 'zh-Hant': '2026 Berkeley ESG Strategy & Innovation Program', 'zh-Hans': '2026 Berkeley ESG Strategy & Innovation Program', en: '2026 Berkeley ESG Strategy & Innovation Program' },
       sectionResources: { 'zh-Hant': '已儲存資源', 'zh-Hans': '已保存资源', en: 'Saved resources' },
       login: { 'zh-Hant': '登入 / 註冊', 'zh-Hans': '登录 / 注册', en: 'Sign in' },
       logout: { 'zh-Hant': '登出', 'zh-Hans': '登出', en: 'Sign out' },
