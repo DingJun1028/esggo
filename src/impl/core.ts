@@ -233,9 +233,9 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     return Object.freeze({ ...event, hashLock: crypto.randomUUID() }) as IBusEvent;
   }
 
-  async secureForward(event: IBusEvent) {
-    const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
-    return { status: "forwarded", hash: locked.hashLock };
+  async secureForward(event: IBusEvent): Promise<IBusEvent> {
+    const locked: IBusEvent = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
+    return locked;
   }
 
   async predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>> {
