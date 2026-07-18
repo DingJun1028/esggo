@@ -22,7 +22,11 @@ import { OmniTag } from "../lib/omni-tag";
 import { OmniEvidence } from "./omni-evidence";
 import { OmniTime } from "./omni-time";
 import { OmniMemory } from "./omni-memory";
-import { OmniAPI, OmniBlackboard, OmniHealing, OmniEvolution } from "./omni-helper-modules";
+import { OmniBlackboard, OmniHealing, OmniEvolution } from "./omni-helper-modules";
+import { OmniUserRegistry } from "./omni-user-registry";
+import { OmniAPI as FullOmniAPI } from '../agents/twelve-omni/omni-api';
+import { OmniBusV2 } from '../agents/twelve-omni/omni-bus';
+import { OmniGatewayV2 } from '../agents/twelve-omni/omni-gateway';
 
 // ---------- 1️⃣ Helper ----------
 const now = () => Date.now();
@@ -355,32 +359,54 @@ export class OmniAgentGateway implements IOmniAgentGateway {
 // ---------- 6️⃣ Ecosystem – wires everything together ----------
 export class OmniCoreEcosystem {
   public readonly registry = new TimeTravelRegistry();
-  public readonly bus: OmniAgentBus;
-  public readonly gateway: OmniAgentGateway;
   public readonly time = new OmniTime();
   public readonly evidence = new OmniEvidence('[ISO-14064-1]');
   public readonly memory = new OmniMemory();
-  public readonly api = new OmniAPI();
+  public readonly api = new FullOmniAPI();
   public readonly blackboard = new OmniBlackboard();
   public readonly healing = new OmniHealing();
   public readonly evolution = new OmniEvolution();
   public readonly seed = new OmniSeed();
+  public readonly userRegistry = new OmniUserRegistry();
+  public readonly bus = new OmniAgentBus(this.registry, this);
+  public readonly busV2 = new OmniBusV2();
+  public readonly gateway = new OmniGatewayV2();
+  public migration: {
+    legacyPath: string;
+    writeIntervalMs: number;
+    maxBatchSize: number;
+    snapshotIntervalMs: number;
+    enableSnapshot: boolean;
+    enableShadowSync: boolean;
+  };
 
   // Map of all agents (including clones) – key is uuid
   private agents = new Map<string, IOmniAgent>();
   // Track clones per topic for cleanup
   private clonesPerTopic = new Map<string, Set<string>>();
 
-  constructor(opts?: {
+  constructor(opts: {
     time?: OmniTime;
     evidence?: OmniEvidence;
     memory?: OmniMemory;
-    api?: OmniAPI;
+    api?: FullOmniAPI;
     blackboard?: OmniBlackboard;
     healing?: OmniHealing;
     evolution?: OmniEvolution;
     seed?: OmniSeed;
-  }) {
+    userRegistry?: OmniUserRegistry;
+    bus?: OmniAgentBus;
+    busV2?: OmniBusV2;
+    gateway?: OmniGatewayV2;
+    migration?: {
+      legacyPath?: string;
+      writeIntervalMs?: number;
+      maxBatchSize?: number;
+      snapshotIntervalMs?: number;
+      enableSnapshot?: boolean;
+      enableShadowSync?: boolean;
+    };
+  } = {}) {
     this.time = opts?.time ?? this.time;
     this.evidence = opts?.evidence ?? this.evidence;
     this.memory = opts?.memory ?? this.memory;
@@ -389,14 +415,19 @@ export class OmniCoreEcosystem {
     this.healing = opts?.healing ?? this.healing;
     this.evolution = opts?.evolution ?? this.evolution;
     this.seed = opts?.seed ?? this.seed;
+    this.userRegistry = opts?.userRegistry ?? this.userRegistry;
+    this.bus = opts?.bus ?? this.bus;
+    this.busV2 = opts?.busV2 ?? this.busV2;
+    this.gateway = opts?.gateway ?? this.gateway;
 
-    this.bus = new OmniAgentBus(this.registry, this);
-    this.gateway = new OmniAgentGateway(this.bus);
-  }
-
-  /** Register a base agent (usually the first OA) */
-  registerAgent(agent: IOmniAgent) {
-    this.agents.set(agent.uuid, agent);
+    this.migration = {
+      legacyPath: opts?.migration?.legacyPath ?? '',
+      writeIntervalMs: opts?.migration?.writeIntervalMs ?? 2000,
+      maxBatchSize: opts?.migration?.maxBatchSize ?? 20,
+      snapshotIntervalMs: opts?.migration?.snapshotIntervalMs ?? 60000,
+      enableSnapshot: opts?.migration?.enableSnapshot ?? true,
+      enableShadowSync: opts?.migration?.enableShadowSync ?? false,
+    };
   }
 
   /** Static helper used by OAB to apply Hash Lock & freeze */
@@ -443,38 +474,5 @@ export class OmniCoreEcosystem {
     });
     this.clonesPerTopic.delete(topic);
   }
-}
-
-// ------------------------------------------------------------
-// Example bootstrap – only runs in non‑production environments
-// ------------------------------------------------------------
-if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
-  const ecosystem = new OmniCoreEcosystem();
-  // Create an initial OA instance and register it
-  const rootAgent = new OmniAgent(
-    makeCore<IComponentCore>({ uuid: crypto.randomUUID(), version: "1.0.0", evidence: {} })
-  );
-  ecosystem.registerAgent(rootAgent);
-
-  // Example: publish some events to trigger back‑pressure cloning
-  (async () => {
-    // Example: publish some events to trigger back‑pressure cloning
-    for (let i = 0; i < 1100; i++) {
-      await ecosystem.bus.publish(
-        makeCore<IBusEvent>({
-          uuid: crypto.randomUUID(),
-          version: "1.0.0",
-          eventName: "data.clean",
-          payload: { index: i },
-          stage: "EMERGED",
-          source_origin: "demo",
-          topic: "data.clean",
-          evidence: {},
-          lifecycle_path: [],
-        })
-      );
-    }
-    // After processing you could clear the queue manually for demo purposes
-  })();
 }
 
