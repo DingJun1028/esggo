@@ -38,12 +38,13 @@ on:
     paths:
       - "vps/**"
       - "src/**"
+      - "app/**"
       - "packages/**"
       - "apps/**"
       - "public/**"
       - "prisma/**"
       - "next.config.js"
-      - "package.json"
+      - "next.config.mjs"
       - "pnpm-lock.yaml"
       - "ecosystem.config.cjs"
   workflow_dispatch:
