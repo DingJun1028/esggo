@@ -2,6 +2,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -53,9 +54,6 @@ export async function POST(req: Request) {
         });
       }
 
-      const { GoogleGenAI } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-      
       // 1. Gather Village Data (Quadratic Voting & Projects)
       const projSnapshot = await getDocs(query(collection(db, 'village_projects'), orderBy('current_points', 'desc'), limit(5)));
       const projects = projSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -82,25 +80,38 @@ ${JSON.stringify(activities)}
 ${JSON.stringify(tasks)}
 `;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
+      const result = await runGeminiWithWorkersAIFallback(
+        async () => {
+          const { GoogleGenAI } = await import('@google/genai');
+          const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+          const r = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+          });
+          return r.text ?? null;
+        },
+        prompt,
+        { workersModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast' },
+      );
+
+      if (!result) {
+        return jsonError('INTERNAL_ERROR', '主推理端與 Cloudflare Workers AI 備援皆失敗', 503);
+      }
 
       return jsonResponse({
         success: true,
         data: {
-          prediction: response.text,
-          mode
+          prediction: result.text,
+          mode,
         },
         metadata: {
           timestamp: Date.now(),
-          trustScore: 99.9,
+          trustScore: result.provider === 'workers-ai' ? 95 : 99.9,
           tool: 'trinity.awaken',
           domain: 'omni-core',
           uuid: uuidv4(),
-          provider: 'gemini'
-        }
+          provider: result.provider,
+        },
       });
     }
     
