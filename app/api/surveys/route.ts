@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       (key) => typeof (payload as Record<string, unknown>)[key] === 'undefined'
     );
     if (missing.length > 0) {
-      return NextResponse.json({ ok: false, message: `Missing required fields: ${missing.join(', ')}' }, { status: 400 });
+      return NextResponse.json({ ok: false, message: 'Missing required fields: ' + missing.join(', ') }, { status: 400 });
     }
 
     if (!adminDb.collection) {
