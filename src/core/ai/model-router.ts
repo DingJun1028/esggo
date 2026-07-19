@@ -3,12 +3,6 @@
 // 根據 ESG 任務類型自動選擇最佳免費模型 + 技能整合
 // ═══════════════════════════════════════════════════════════════
 
-// 匯入技能系統（自動註冊所有 ESG 技能）
-import { getSkill, getAllSkills } from './skills/registry';
-import type { SkillContext } from './skills/registry';
-
-export type { SkillContext };
-
 export type ESGTaskType =
   | 'carbon_calculation'    // ISO 14064 碳排計算
   | 'compliance_review'     // CSRD/GRI 合規審查
@@ -427,42 +421,6 @@ export function formatRoutingResult(result: RoutingResult): string {
   return `[${result.taskType}] Strategy: ${result.strategy} | Primary: ${result.primary.provider}/${result.primary.model} | Fallback1: ${result.fallback1.provider}/${result.fallback1.model} | Fallback2: ${result.fallback2.provider}/${result.fallback2.model}`;
 }
 
-// ── 技能整合 ─────────────────────────────────────────────────
-
-/**
- * 根據任務類型獲取對應的 ESG 技能
- */
-export function getESGSkill(taskType: string) {
-  return getSkill(taskType);
-}
-
-/**
- * 獲取所有可用的 ESG 技能列表
- */
-export function getAvailableSkills() {
-  return getAllSkills().map(skill => skill.getInfo());
-}
-
-/**
- * 為指定任務生成完整的提示詞（系統 + 用戶）
- */
-export function generatePrompts(taskType: string, ctx: SkillContext) {
-  const skill = getSkill(taskType);
-  if (!skill) {
-    return {
-      system: '你是 OmniCore 的 AI 助手，請用繁體中文回答 ESG 相關問題。',
-      user: ctx.data ? JSON.stringify(ctx.data) : '',
-      skillId: null,
-    };
-  }
-
-  return {
-    system: skill.systemPrompt(ctx),
-    user: skill.userPrompt(ctx),
-    skillId: skill.id,
-  };
-}
-
 // ── Cloudflare AI Workers API ─────────────────────────────────
 
 export interface CloudflareAIResponse {
@@ -627,12 +585,6 @@ export async function validateCloudflareToken(): Promise<boolean> {
 /**
  * 後處理 AI 回應（套用技能特定的後處理）
  */
-export function postProcessResponse(taskType: string, response: string, ctx: SkillContext): string {
-  const skill = getSkill(taskType);
-  if (!skill) return response;
-  return skill.postProcess(response, ctx);
-}
-
 // ── Free Provider 代理層（統一免費模型池 + 自動故障轉移）─────────
 // 將所有免費層（Groq / OpenRouter :free / Cloudflare / Together / Mistral free tier）
 // 聚合為統一代理，並依路由表提供 primary → fallback1 → fallback2 自動轉移。

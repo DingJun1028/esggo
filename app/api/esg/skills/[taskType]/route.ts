@@ -4,7 +4,8 @@
 
 import { NextRequest } from 'next/server';
 import { getSkill } from '@/core/ai/skills/registry';
-import { routeModel, type SkillContext } from '@/core/ai/model-router';
+import type { SkillContext } from '@/core/ai/skills/registry';
+import { routeModel } from '@/core/ai/model-router';
 import { jsonResponse, jsonError } from '@/lib/api-utils';
 
 interface RouteContext {
