@@ -7,7 +7,7 @@
  */
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 // Solid Card Tokens
 const SC = {
@@ -104,7 +104,7 @@ function SeverityBadge({ severity }: { severity: string }) {
   );
 }
 
-function ReportItemCard({ item }: { item: ReportItem }) {
+const ReportItemCard = React.memo(function ReportItemCard({ item }: { item: ReportItem }) {
   return (
     <div style={{
       background: SC.surfaceHover,
@@ -145,7 +145,7 @@ function ReportItemCard({ item }: { item: ReportItem }) {
       </div>
     </div>
   );
-}
+});
 
 export default function DailyReportPage() {
   const [report, setReport] = useState<DailyReportData | null>(null);
