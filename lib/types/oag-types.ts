@@ -117,7 +117,7 @@ export function createGateway(): IOmniGateway {
 
       // 2️⃣ Hash‑Lock & freeze
       const hash = await computeHash(JSON.stringify(event), opts?.hashConfig);
-      const locked = deepFreeze({ ...event, evidence: { ...(event.evidence || {}), hash } });
+      const locked = deepFreeze({ ...event, evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',  ...(event.evidence || { }), hash } });
 
       // 3️⃣ Example external forward (placeholder – real implementation may use axios/fetch)
       // Here we simply simulate a successful forward.

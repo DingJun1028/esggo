@@ -119,11 +119,11 @@ export class OmniSoul implements IOmniSoul {
       uuid,
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
         type: "omni-soul",
         name: this._config.name,
         purpose: "semantic_guidance_and_governance_alignment",
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 

@@ -11,7 +11,12 @@ export interface IComponentCore {
   /** 時間戳（毫秒） */
   readonly timestamp: number;
   /** 證據庫，存放驗算、簽章等額外資訊 */
-  evidence: Record<string, unknown>;
+      evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;     // 允許動態屬性如 hash_lock 等
+  };
 }
 
 /** 系統生命週期階段 */

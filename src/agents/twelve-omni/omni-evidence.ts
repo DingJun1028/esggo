@@ -26,7 +26,7 @@ export class OmniEvidence implements IOmniEvidence {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } = { originCause: '', processTrace: [], finalEffect: '' };
 
   /** 證據存儲 */
   private evidenceStore: Map<EvidenceId, EvidenceRecord> = new Map();

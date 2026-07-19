@@ -111,7 +111,7 @@ export class OmniUserRegistry {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } = { originCause: '', processTrace: [], finalEffect: '' };
 
   /** 用戶偏好表 (userId → preferences) */
   private _preferences: Map<string, UserPreference[]> = new Map();

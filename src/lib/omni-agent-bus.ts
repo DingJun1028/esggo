@@ -42,7 +42,7 @@ class SimpleOmniBus {
         uuid: `${topic}-clone`,
         version: '1.0',
         timestamp: Date.now(),
-        evidence: {},
+        evidence: { originCause: '', processTrace: [], finalEffect: '' },
       };
       this.entropyProcessor.monitorBackpressure(
         component as unknown as Parameters<typeof this.entropyProcessor.monitorBackpressure>[0],

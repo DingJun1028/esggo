@@ -48,7 +48,7 @@ const req = https.request(options, (res) => {
       stage: 'EMERGED',
       source_origin: 'nvidia',
       topic: 'prediction',
-      evidence: {},
+      evidence: { originCause: '', processTrace: [], finalEffect: '' },
       lifecycle_path: [],
       hashLock: crypto.randomUUID(),
     }));

@@ -11,7 +11,7 @@ export class OmniAgent {
       uuid: `agent-${Date.now()}`,
       version: '2.1.0',
       timestamp: Date.now(),
-      evidence: {},
+      evidence: { originCause: '', processTrace: [], finalEffect: '' },
     };
   }
   async execute(event: IBusEvent): Promise<void> {
