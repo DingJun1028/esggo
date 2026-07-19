@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // ESGGO Smart AI Router — Cloudflare Workers 入口
-// wrangler.toml: main = "src/index.ts"
+// wrangler.toml: main = "worker/src/index.ts"
 // 接既有路由層 (src/core/ai/model-router.ts) 提供 $0 免費 ESG 推理 API。
+// 此 entry 獨立於 Next.js 的 src/，避免污染 app build。
 // ═══════════════════════════════════════════════════════════════
 
-import { callFreeProvider, inferTaskType, routeModel, type ChatMessage } from './core/ai/model-router';
+import { callFreeProvider, inferTaskType, routeModel, type ChatMessage } from '../../src/core/ai/model-router';
 
 export interface Env {
   ENVIRONMENT?: string;
