@@ -39,7 +39,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
   readonly uuid: string;
   readonly version: string = "1.0.0";
   readonly timestamp: number;
-  readonly evidence: Record<string, unknown> = {};
+  readonly evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } = { originCause: '', processTrace: [], finalEffect: '' };
 
   private _manager: CompleteDelegationManager;
   private _executionHistory: DelegationResult[] = [];
@@ -67,10 +67,10 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
       uuid: this.delegationScope.agentId,
       version: '1.0.0',
       timestamp: Date.now(),
-      evidence: {
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
         delegationId: this.delegationScope.delegationId,
         principal: this.principal,
-      },
+       },
     };
   }
 

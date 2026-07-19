@@ -82,10 +82,13 @@ export class KnowledgeCardService {
   static generateContent(
     chapter: string,
     evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
       type?: string;
       fields?: Record<string, string>;
       tags?: string[];
-    }
+     }
   ): { why: string; what: string; how: string } {
     const template = CARD_TEMPLATES[chapter] || {
       whyPrefix: '揭露永續資訊，',
@@ -112,10 +115,13 @@ export class KnowledgeCardService {
     chapter: string,
     evidenceId: string,
     evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
       type?: string;
       fields?: Record<string, string>;
       tags?: string[];
-    }
+     }
   ): KnowledgeCard {
     const cardId = this.generateCardId(chapter, evidenceId);
     const { why, what, how } = this.generateContent(chapter, evidence);
@@ -194,10 +200,13 @@ export function createKnowledgeCard(
   chapter: string,
   evidenceId: string,
   evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
     type?: string;
     fields?: Record<string, string>;
     tags?: string[];
-  }
+   }
 ): KnowledgeCard {
   return KnowledgeCardService.createCard(chapter, evidenceId, evidence);
 }

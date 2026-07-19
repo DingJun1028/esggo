@@ -31,10 +31,10 @@ async function testAwakening() {
   // 4. OmniSeed 種子植栽
   console.log(`\n[OmniSeed] 創建萬能種子...`);
   const seed = createOmniSeed({
-    evidence: {
+    evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
       purpose: 'system_awakening',
       createdBy: 'omni-summon-script'
-    }
+     }
   });
   console.log(`[OmniSeed] 種子創建成功: ${seed.uuid.substring(0,8)}...`);
   console.log(`[OmniSeed] 狀態: ${seed.status}`);

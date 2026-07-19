@@ -100,7 +100,7 @@ function createResult(
     uuid,
     version: "1.0.0",
     timestamp: Date.now(),
-    evidence: evidence ?? {},
+    evidence: { originCause: 'system', processTrace: [], finalEffect: 'handled', ...(evidence ?? {}) },
     hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     status,
     logs,

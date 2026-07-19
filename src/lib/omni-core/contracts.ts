@@ -9,7 +9,12 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: Record<string, unknown>;
+      evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;     // 允許動態屬性如 hash_lock 等
+  };
 }
 
 // 數據流轉狀態類型 (用於 Trackable 可追蹤 Hook)
@@ -75,16 +80,16 @@ export class OmniCoreEcosystem {
   private bus!: IOmniAgentBus;
   private agents: Map<string, IOmniAgent> = new Map();
 
-  private static hasEvidence(obj: unknown): obj is { evidence: Record<string, unknown> } {
+  private static hasEvidence(obj: unknown): obj is { evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } } {
     return typeof obj === 'object' && obj !== null && 'evidence' in obj;
   }
 
   // 核心禁區：鎖定數據並防止篡改的具體執行常式
   public static lockAndFreeze<T extends object>(obj: T): T {
     if (!OmniCoreEcosystem.hasEvidence(obj)) {
-      (obj as { evidence: Record<string, unknown> }).evidence = {};
+      (obj as { evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } }).evidence = { originCause: 'system_init', processTrace: [], finalEffect: 'initialized' };
     }
-    (obj as { evidence: Record<string, unknown> }).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    (obj as { evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } }).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     return Object.freeze(obj);
   }
 }

@@ -18,7 +18,12 @@ export interface IComponentCore {
   /** Creation timestamp in milliseconds since epoch */
   readonly timestamp: number;
   /** Arbitrary evidence payload that can be enriched during the lifecycle */
-  evidence: Record<string, unknown>;
+      evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;     // 允許動態屬性如 hash_lock 等
+  };
 }
 
 /**

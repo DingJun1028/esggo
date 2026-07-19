@@ -12,7 +12,12 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: Record<string, any>;
+      evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+    [key: string]: any;     // 允許動態屬性如 hash_lock 等
+  };
 }
 
 // 零幻覺驗算結果

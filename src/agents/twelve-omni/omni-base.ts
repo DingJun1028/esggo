@@ -30,7 +30,7 @@ export class OmniBase implements IOmniBase {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: { [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; originCause: string; processTrace: string[]; finalEffect: string; } = { originCause: '', processTrace: [], finalEffect: '' };
 
   readonly constants: OmniConstants = {
     MAX_EVENT_PAYLOAD: 1024 * 1024, // 1MB

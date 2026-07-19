@@ -8,7 +8,7 @@ const mockComponent: IComponentCore = {
   uuid: 'test-uuid',
   version: '1.0',
   timestamp: Date.now(),
-  evidence: {},
+  evidence: { originCause: '', processTrace: [], finalEffect: '' },
 };
 
 describe('CelestialCoreProcessor', () => {

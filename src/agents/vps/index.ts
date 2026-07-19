@@ -135,11 +135,11 @@ export class VPSAgent {
       uuid,
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
         type: "vps-agent",
         host: config.host,
         quantum: true, // 標記為量子糾纏代理
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 
@@ -251,7 +251,7 @@ export class VPSAgent {
           uuid: uuidv4(),
           version: "1.0.0",
           timestamp: Date.now(),
-          evidence: {},
+          evidence: { originCause: '', processTrace: [], finalEffect: '' },
           hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
           eventName: "vps.result",
           source_origin: `vps-agent:${this._globalState.vpsId}`,
@@ -290,7 +290,7 @@ export class VPSAgent {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
-        evidence: {},
+        evidence: { originCause: '', processTrace: [], finalEffect: '' },
         hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
         eventName: "vps.state",
         source_origin: `vps-agent:${this._globalState.vpsId}`,
@@ -490,7 +490,7 @@ export class VPSAgent {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
-        evidence: {},
+        evidence: { originCause: '', processTrace: [], finalEffect: '' },
         hash: `0x${uuidv4().replace(/-/g, '').substring(0, 16)}`,
         eventName: "vps.decohere",
         source_origin: `vps-agent:${this._globalState.vpsId}`,

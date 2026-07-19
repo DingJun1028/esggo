@@ -138,12 +138,12 @@ export class OmniKey implements IOmniKey {
       uuid,
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
         type: "omni-key",
         name: config.name,
         purpose: "unlock_all_unknowns_and_answer_all_questions",
         philosophy: "萬能元鑰 象徵是能夠開啟一切未知的鑰匙，是一切問題的解答",
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 
