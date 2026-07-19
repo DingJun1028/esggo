@@ -120,6 +120,8 @@ export class ESGVisualizationEngine {
    * 生成圓餅圖配置
    */
   generatePieChart(scores: ESGScores): VisualizationComponent {
+    const _total = scores.environmental.score + scores.social.score + scores.governance.score;
+
     return {
       id: 'pie-scores',
       type: 'pie',
@@ -275,6 +277,8 @@ export class ESGVisualizationEngine {
    * 生成 HTML 報告
    */
   generateHTMLReport(result: ESGAnalysisResult): string {
+    const _dashboard = this.generateDashboard(result);
+
     return `
 <!DOCTYPE html>
 <html lang="zh-TW">

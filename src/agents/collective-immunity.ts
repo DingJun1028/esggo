@@ -15,7 +15,7 @@ import { IBlackboard } from "../types/blackboard-types";
  */
 export function setupCollectiveImmunity(agent: IOmniAgent, blackboard: IBlackboard): void {
   // 在事件被廣播到 OMNI Bus 的 EMERGED 階段先檢測是否為全域戒嚴指令
-  agent.registerHook(LifecycleStage.EMERGED, async ({ spec }) => {
+  agent.registerHook(LifecycleStage.EMERGED, async ({ spec, error }) => {
     // 此 hook 只關注來自 Bus 的原始事件，若是直接 call execute(spec) 則不會有 event
     // 因此我們同時支援 `spec` 為 IBusEvent 的情況（使用者可自行轉換）
     const maybeEvent = (spec as unknown) as IBusEvent;

@@ -61,11 +61,11 @@ export async function GET(request: NextRequest) {
     };
 
     // 檢查事件存儲
-    const timeRift = healthRouter.getTimeRiftEngine();
+  const _timeRift = healthRouter.getTimeRiftEngine();
     if (timeRift) {
       try {
         await timeRift.eventStore.healthCheck();
-      } catch {
+      } catch (_e) {
         checks.eventStore = 'unhealthy';
       }
     }
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         if (!testContract.verification.isValid) {
           checks.gateway = 'degraded';
         }
-      } catch {
+      } catch (_e) {
         checks.gateway = 'unhealthy';
       }
     }
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       if (models.length === 0) {
         checks.modelDiscovery = 'degraded';
       }
-    } catch {
+    } catch (_e) {
       checks.modelDiscovery = 'unhealthy';
     }
 
@@ -152,6 +152,8 @@ export async function GET_METRICS() {
     healthRouter = await createSmartAIRouter({});
   }
 
+  const timeRift = healthRouter.getTimeRiftEngine();
+  
   // 收集指標 (實際應用可整合 prom-client)
   const metrics = [
     '# HELP smart_ai_router_uptime_seconds Service uptime in seconds',
