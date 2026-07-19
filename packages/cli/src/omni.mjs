@@ -435,6 +435,60 @@ deploy
     process.exit(r.status === 0 ? 0 : 1);
   });
 
+// ── gateway ────────────────────────────────────────────────
+const gateway = program.command('gateway').description('OmniGateway 代理交辦與狀態查詢');
+gateway
+  .command('status')
+  .description('查詢 Gateway 狀態')
+  .option('-h, --host <host>', 'Gateway host', '127.0.0.1')
+  .option('-p, --port <port>', 'Gateway port', '8642')
+  .action(async (opts) => {
+    const base = `http://${opts.host}:${opts.port}`;
+    try {
+      const token = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || '';
+      const r = await fetch(`${base}/status`, {
+        headers: token ? { 'X-Omni-Token': token, Accept: 'application/json' } : { Accept: 'application/json' },
+        signal: AbortSignal.timeout(5000),
+      });
+      const json = await r.json().catch(() => ({}));
+      console.log(JSON.stringify(json, null, 2));
+      if (!r.ok) process.exit(1);
+    } catch (err) {
+      console.error(`Cannot reach ${base} — ${err.message}`);
+      process.exit(1);
+    }
+  });
+gateway
+  .command('task <title>')
+  .description('透過 Gateway 交辦任務')
+  .option('-h, --host <host>', 'Gateway host', '127.0.0.1')
+  .option('-p, --port <port>', 'Gateway port', '8642')
+  .action(async (title, opts) => {
+    const base = `http://${opts.host}:${opts.port}`;
+    try {
+      const token = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || '';
+      if (!token) {
+        console.error('Missing GATEWAY_API_KEY / GATEWAY_KEY');
+        process.exit(1);
+      }
+      const r = await fetch(`${base}/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Omni-Token': token, Accept: 'application/json' },
+        body: JSON.stringify({
+          task: { id: `cli_${Date.now()}`, taskType: 'compliance_review', title, prompt: title },
+          skillId: 'compliance_review',
+        }),
+        signal: AbortSignal.timeout(120000),
+      });
+      const json = await r.json().catch(() => ({}));
+      console.log(JSON.stringify(json, null, 2));
+      if (!r.ok) process.exit(1);
+    } catch (err) {
+      console.error(`Gateway task failed: ${err.message}`);
+      process.exit(1);
+    }
+  });
+
 // ── Parse ──────────────────────────────────────────────────
 program.parse();
 
