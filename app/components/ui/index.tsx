@@ -403,18 +403,20 @@ interface TabBarProps {
 
 export function TabBar({ tabs, active, onChange }: TabBarProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2" role="tablist">
       {tabs.map(tab => (
         <button
           key={tab.id}
           onClick={() => onChange(tab.id)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
+          role="tab"
+          aria-selected={active === tab.id}
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
             active === tab.id
               ? 'bg-[#009EB0] text-white shadow-lg shadow-[#009EB0]/25'
               : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
           }`}
         >
-          {tab.icon && <span>{tab.icon}</span>}
+          {tab.icon && <span aria-hidden="true">{tab.icon}</span>}
           <span>{tab.label}</span>
           {tab.count !== undefined && (
             <span
