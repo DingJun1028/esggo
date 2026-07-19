@@ -94,7 +94,7 @@ const MODELS = {
   or_gemma31b: {
     provider: 'openrouter' as const,
     model: 'google/gemma-4-31b-it:free',
-    maxTokens: 512,
+    maxTokens: 256,
     temperature: 0.6,
     reasoning: 'Gemma 31B: Google 品質',
   },
@@ -207,10 +207,10 @@ const MODELS = {
   // VPS Ollama 主力模型：Gemma 4（免費、私有的本地首選）
   local_esggo_gemma4: {
     provider: 'local_gemma' as const,
-    model: 'esggo-gemma4',
+    model: 'gemma3:4b',
     maxTokens: 4096,
     temperature: 0.7,
-    reasoning: 'VPS esggo-gemma4 (Ollama): 免費主力，優先承擔所有 ESG 任務',
+    reasoning: 'VPS gemma3:4b (Ollama): 已驗證可正常回覆，優先承擔所有 ESG 任務',
   },
   // 仍保留本地較重備援與輕量備援
   local_gemma_e2b: {

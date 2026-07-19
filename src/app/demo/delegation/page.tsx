@@ -104,7 +104,7 @@ export default function DelegationDemo() {
       addLog(`✅ 授權已創建: ${newDelegation.delegationId}`);
       addLog(`   主體: ${newDelegation.principalId}`);
       addLog(`   權限: ${newDelegation.permissions.join(', ')}`);
-    } catch {
+    } catch (_error) {
       addLog('❌ 創建授權失敗');
     } finally {
       setIsLoading(false);
@@ -129,7 +129,7 @@ export default function DelegationDemo() {
       }
 
       addLog(`✅ 授權已終止: ${delegationId}`);
-    } catch {
+    } catch (_error) {
       addLog('❌ 終止授權失敗');
     } finally {
       setIsLoading(false);
@@ -164,7 +164,7 @@ export default function DelegationDemo() {
       addLog(`   執行 ID: ${result.executionId}`);
       addLog(`   耗時: ${result.duration}ms`);
       addLog(`   結果: ${JSON.stringify(result.result, null, 2)}`);
-    } catch {
+    } catch (_error) {
       addLog('❌ 任務執行失敗');
     } finally {
       setIsLoading(false);

@@ -15,6 +15,14 @@ import type {
   TodoRecurrence,
 } from './types';
 
+// ── 優先級權重 ─────────────────────────────────────────────
+const _PRIORITY_WEIGHT: Record<TodoPriority, number> = {
+  urgent: 100,
+  high: 75,
+  medium: 50,
+  low: 25,
+};
+
 // ── 類別中文名稱 ────────────────────────────────────────────
 export const CATEGORY_LABELS: Record<TodoCategory, string> = {
   esg_carbon: '碳排管理',

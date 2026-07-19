@@ -119,7 +119,7 @@ function sanitizeTextHtml(html: string): string {
 
 export function OmniOneChat() {
   const { isReady, processMessage } = useAgnesApi();
-  const model = 'local:esggo-gemma4';
+  const model = 'local:gemma3:4b';
   const [msgs, setMsgs] = useState<Message[]>([
     {
       id: "0",
@@ -261,7 +261,7 @@ export function OmniOneChat() {
         <div className="flex gap-1.5 items-center bg-primary border border-borderColor rounded-lg px-2.5 py-1">
           <span className="text-[10px] text-textSecondary">主力模型：</span>
           <span className="text-[10px] font-semibold text-accentTeal">
-            local:esggo-gemma4 / fallback gemma3:12b
+            local:gemma3:4b / fallback gemma3:12b
           </span>
         </div>
       </div>
