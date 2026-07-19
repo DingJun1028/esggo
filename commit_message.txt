@@ -1,0 +1,13 @@
+⚡ Bolt: [performance improvement] Optimize list item rendering
+
+💡 What:
+Wrapped functional components `ReportItemCard` (in `app/daily/page.tsx`), `BarChart`, and `Sparkline` (in `app/sonnar/page.tsx`) with `React.memo()`.
+
+🎯 Why:
+These components act as leaf nodes or list items that are rendered multiple times in lists or grids. Without memoization, they would re-render needlessly when parent components (`DailyReportPage` and `SonnarDashboard`) re-render due to unrelated state updates (e.g. filter changes, incoming WS data), causing redundant layout calculations and DOM diffing.
+
+📊 Impact:
+Significantly reduces unnecessary React render cycles when the overarching dashboards update their status/reports state.
+
+🔬 Measurement:
+Run the app in dev mode and use React DevTools Profiler while toggling regions or severity levels; the memoized components will bypass re-rendering if their props are unchanged.
