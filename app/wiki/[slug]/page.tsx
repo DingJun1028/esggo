@@ -17,16 +17,22 @@ interface WikiPageProps {
 export default function WikiPage({ params }: WikiPageProps) {
   const { slug } = params;
   const decodedSlug = decodeURIComponent(slug);
-  const filePath = path.join(process.cwd(), 'wiki', 'wiki', `${decodedSlug}.md`);
-  
+  const baseDir = path.resolve(process.cwd(), 'wiki', 'wiki');
+  const filePath = path.resolve(baseDir, `${decodedSlug}.md`);
+
   let content = '';
   let error = '';
 
-  try {
-    content = fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    error = '查無此 WIKI 文件。請確認檔名是否正確。';
-    console.error("Error reading wiki file:", err);
+  if (!filePath.startsWith(baseDir + path.sep)) {
+    error = '無效的路徑請求。';
+    console.error('Path traversal attempt detected:', filePath);
+  } else {
+    try {
+      content = fs.readFileSync(filePath, 'utf-8');
+    } catch (err) {
+      error = '查無此 WIKI 文件。請確認檔名是否正確。';
+      console.error('Error reading wiki file:', err);
+    }
   }
 
   const title = decodedSlug.replace(/-/g, ' ');
@@ -34,13 +40,16 @@ export default function WikiPage({ params }: WikiPageProps) {
   return (
     <div className="min-h-[calc(100vh-52px)] p-6 md:p-10 max-w-5xl mx-auto">
       <div className="mb-6">
-        <Link href="/wiki" className="inline-flex items-center text-sm font-semibold text-accentTeal hover:text-accentTeal/80 transition-colors">
+        <Link
+          href="/wiki"
+          className="inline-flex items-center text-sm font-semibold text-accentTeal hover:text-accentTeal/80 transition-colors"
+        >
           ← 返回 WIKI 知識庫總覽
         </Link>
       </div>
 
-      <OmniBaseCard 
-        variant="liquid-glass" 
+      <OmniBaseCard
+        variant="liquid-glass"
         className="!p-8 md:!p-12"
         statusIndicator="trustworthy"
         hashLock={`0x${crypto.createHash('md5').update(decodedSlug).digest('hex').slice(0, 8)}...`}
@@ -60,9 +69,7 @@ export default function WikiPage({ params }: WikiPageProps) {
         </div>
 
         {error ? (
-          <div className="text-red-500 font-bold bg-red-500/10 p-4 rounded-lg">
-            {error}
-          </div>
+          <div className="text-red-500 font-bold bg-red-500/10 p-4 rounded-lg">{error}</div>
         ) : (
           <article className="prose dark:prose-invert prose-teal max-w-none">
             <ReactMarkdown>{content}</ReactMarkdown>

@@ -13,3 +13,7 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+## 2024-05-31 - Fix Path Traversal in Wiki Router
+**Vulnerability:** The dynamic route `app/wiki/[slug]/page.tsx` constructed file paths using `path.join` with unsanitized user input (`slug`). This allowed attackers to use `../` sequences to read arbitrary files on the server (Path Traversal).
+**Learning:** Using `path.join` does not prevent path traversal if the user input contains directory traversal characters. The resulting path can still point outside the intended directory.
+**Prevention:** Always use `path.resolve` to construct the absolute file path and verify that it strictly starts with the intended base directory (including `path.sep` to avoid partial directory name matches) before accessing the file system.
