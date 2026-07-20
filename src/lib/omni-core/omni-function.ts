@@ -296,6 +296,7 @@ export function processCaseLocal(caseType: CaseType, input: string): ProcessResu
     processingTimeMs: Date.now() - start,
     memoryHits: 0,
     learningDelta: 0,
+    isFrozen: true,
   });
 }
 
