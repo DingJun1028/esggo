@@ -46,9 +46,10 @@ export function createTask(
     status: 'pending',
     dueAt: opts.dueAt,
     tags: opts.tags ?? [],
-    assignee: opts.assignee,
+    assignee: opts.assignee ? EntropyForge.purify(opts.assignee) : undefined,
     createdAt: now,
     updatedAt: now,
+    isFrozen: true,
   });
 }
 
@@ -56,9 +57,9 @@ export function createTask(
 export function toggleTaskCompletion(task: OmniTask): OmniTask {
   const now = Date.now();
   if (task.status === 'completed') {
-    return Object.freeze({ ...task, status: 'pending', completedAt: undefined, updatedAt: now });
+    return Object.freeze({ ...task, status: 'pending', completedAt: undefined, updatedAt: now, isFrozen: true });
   }
-  return Object.freeze({ ...task, status: 'completed', completedAt: now, updatedAt: now });
+  return Object.freeze({ ...task, status: 'completed', completedAt: now, updatedAt: now, isFrozen: true });
 }
 
 /** Update task status */
@@ -69,6 +70,7 @@ export function updateTaskStatus(task: OmniTask, status: TaskStatus): OmniTask {
     status,
     completedAt: status === 'completed' ? now : task.completedAt,
     updatedAt: now,
+    isFrozen: true,
   });
 }
 

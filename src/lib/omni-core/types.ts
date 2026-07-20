@@ -147,6 +147,7 @@ export interface OmniTask {
   createdAt: number;
   updatedAt: number;
   completedAt?: number;
+  readonly isFrozen: boolean;
 }
 
 export interface OmniNote {
@@ -225,4 +226,5 @@ export interface ProcessResult {
   readonly processingTimeMs: number;
   readonly memoryHits: number;
   readonly learningDelta: number;
+  readonly isFrozen: boolean;
 }
