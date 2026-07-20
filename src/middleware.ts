@@ -157,20 +157,34 @@ function cleanupRateLimitStore() {
   }
 }
 
+type DecodedUser = {
+  uid: string;
+  email?: string;
+  claims: Record<string, unknown>;
+};
+
 // ─── Token Verification ─────────────────────────────────────────────
 
 async function verifyFirebaseToken(
   token: string
-): Promise<{ uid: string; email?: string } | null> {
+): Promise<DecodedUser | null> {
   try {
     const { getAuth } = await import('firebase-admin/auth');
     const { getAdminApp } = await import('./lib/firebase-admin');
     const app = getAdminApp();
     const decoded = await getAuth(app).verifyIdToken(token);
-    return { uid: decoded.uid, email: decoded.email };
+    return { uid: decoded.uid, email: decoded.email, claims: decoded };
   } catch {
     return null;
   }
+}
+
+function getRoleFromClaims(claims: Record<string, unknown>): string | null {
+  const value = claims['role'];
+  if (value === 'student' || value === 'TA' || value === 'admin') {
+    return value;
+  }
+  return null;
 }
 
 // ─── Middleware Entry ────────────────────────────────────────────────
@@ -226,10 +240,13 @@ export async function middleware(request: NextRequest) {
       );
     }
 
+    const role = getRoleFromClaims(user.claims);
+
     // Inject user info into headers for downstream route handlers
     const response = NextResponse.next();
     response.headers.set('X-User-Id', user.uid);
     if (user.email) response.headers.set('X-User-Email', user.email);
+    if (role) response.headers.set('X-Auth-Role', role);
     response.headers.set('X-RateLimit-Remaining', String(remaining));
     return handleCors(request, applySecurityHeaders(response));
   }

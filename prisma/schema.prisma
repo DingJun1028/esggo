@@ -387,15 +387,15 @@ model DailyReport {
 model DailyReportItem {
   id            String   @id @default(cuid())
   reportId      String
-  alertId       String?  // 對應 Alert.id（可選）
-  itemType      String   // regulation / report / company / topic / opinion
+  alertId       String?
+  itemType      String
   title         String
   summary       String   @default("")
   sourceName    String?
   sourceUrl     String?
   severity      String   @default("low")
   esgPillar     String   @default("")
-  orderIndex    Int      @default(0)  // 排序
+  orderIndex    Int      @default(0)
   createdAt     DateTime @default(now())
 
   report        DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)

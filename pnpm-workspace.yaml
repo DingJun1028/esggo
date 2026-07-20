@@ -33,3 +33,4 @@ minimumReleaseAgeExclude:
   - postcss@8.5.10
   - uuid@11.1.1
   - react-native-screens@4.26.0
+  - '@cloudflare/workers-types@5.20260719.1'

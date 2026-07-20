@@ -57,6 +57,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "5.20260719.1",
     "@next/eslint-plugin-next": "16.0.0",
     "@types/node": "^20.19.43",
     "@types/react": "^19.2.17",

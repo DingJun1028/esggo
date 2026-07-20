@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
 function createPlaceholderApp(): FirebaseApp {
-  return initializeApp({ apiKey: 'placeholder', projectId: 'placeholder' });
+  return initializeApp({ apiKey: '***', projectId: 'placeholder' });
 }
 
 export const app: FirebaseApp = (() => {
