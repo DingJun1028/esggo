@@ -717,6 +717,13 @@ function ChatInterface() {
 // Main OmniAgent Console Page
 // ═══════════════════════════════════════════════════════════════
 
+const PANEL_TABS = [
+  { id: 'stats', label: '核心統計', icon: '◎' },
+  { id: 'evolution', label: '無限進化', icon: '🧬' },
+  { id: 'agents', label: '子代理', icon: '🤖' },
+  { id: 'commands', label: '快速命令', icon: '⚡' },
+] as const;
+
 export default function OmniAgentConsolePage() {
   const [subAgents, setSubAgents] = useState<SubAgent[]>([]);
   const [stats, setStats] = useState<CoreStats | null>(null);
@@ -892,14 +899,7 @@ export default function OmniAgentConsolePage() {
             <div className="bg-primary border border-borderColor rounded-2xl shadow-sm flex flex-col overflow-hidden flex-1 min-h-0">
               {/* Tab Bar */}
               <div className="flex border-b border-borderColor shrink-0">
-                {(
-                  [ 
-                    { id: 'stats', label: '核心統計', icon: '◎' },
-                    { id: 'evolution', label: '無限進化', icon: '🧬' },
-                    { id: 'agents', label: '子代理', icon: '🤖' },
-                    { id: 'commands', label: '快速命令', icon: '⚡' },
-                  ] as const
-                ).map((tab) => (
+                {PANEL_TABS.map((tab) => (
                   <button
                     key={tab.id}
                     role="tab"
