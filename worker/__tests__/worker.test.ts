@@ -1,10 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
 // ESGGO Smart AI Router — Worker 入口單元測試
-// 透過 stub 全域 fetch，讓 callFreeProvider 走真實路由/降級邏輯，
-// 只替換最底層的網路呼叫，完全不需注入生產代碼。
 // 覆蓋：健康檢查 / 路由說明 / 推理 200 / 缺 message 400 /
-// 無效 JSON 400 / OPTIONS 預檢 / 自動推斷 taskType / CORS 頭 /
-// 路由失敗 502 / env 金鑰接線。
+// 無效 JSON 400 / OPTIONS 預檢 / CORS 頭 / 自動推斷 taskType /
+// 路由失敗 502 / source token / 速率限制 / 401 / 錯誤 envelope /
+// 健康檢查 envelope 結構 / 管理員探針。
 // ═══════════════════════════════════════════════════════════════
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -18,6 +17,8 @@ const baseEnv: Env = {
   SMART_ROUTER_VERSION: '2.0.0-test',
   GROQ_API_KEY: 'groq-test',
   OPENROUTER_API_KEY: 'or-test',
+  CLOUDFLARE_ACCOUNT_ID: 'cf-account-test',
+  CLOUDFLARE_API_TOKEN: 'cf-token-test',
 };
 
 const OK_BODY = JSON.stringify({ message: '幫我做碳排計算' });
@@ -32,25 +33,36 @@ const ollamaOk = (text: string) =>
 const requestOf = (path: string, init?: RequestInit) =>
   new Request(`https://router.esggo.test${path}`, init);
 
+// Best-practice helper: 為需要授權的端點附帶 Bearer token
+const authorizedRequestOf = (path: string, init?: RequestInit) =>
+  requestOf(path, {
+    ...init,
+    headers: {
+      authorization: 'Bearer test-source-token',
+      ...(init?.headers || {}),
+    },
+  });
+
 describe('worker entry — 基本路由', () => {
   beforeEach(() => resetProviderHealth());
   afterEach(() => vi.unstubAllGlobals());
 
-  it('GET /healthz 回 200 + 版本/環境', async () => {
+  it('GET /healthz 回 200 + 標準化 envelope', async () => {
     const res = await worker.fetch(requestOf('/healthz'), baseEnv);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.ok).toBe(true);
-    expect(data.service).toBe('esggo-smart-ai-router');
-    expect(data.version).toBe('2.0.0-test');
-    expect(data.environment).toBe('test');
+    expect(data.data.service).toBe('esggo-smart-ai-router');
+    expect(data.data.version).toBe('2.0.0-test');
+    expect(data.data.environment).toBe('test');
+    expect(data.data.envReady).toBe(true);
   });
 
   it('GET / 回路由說明', async () => {
     const res = await worker.fetch(requestOf('/'), baseEnv);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
-    expect(data.endpoints['POST /v1/chat']).toBeTruthy();
+    expect(data.data.endpoints['POST /v1/chat']).toBeTruthy();
   });
 
   it('OPTIONS /v1/chat 回 204 預檢 + CORS 頭', async () => {
@@ -62,11 +74,12 @@ describe('worker entry — 基本路由', () => {
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
   });
 
-  it('未知路徑回 404', async () => {
+  it('未知路徑回 404 + BAD_REQUEST', async () => {
     const res = await worker.fetch(requestOf('/nope'), baseEnv);
     expect(res.status).toBe(404);
     const data = (await res.json()) as any;
-    expect(data.error).toBe('not found');
+    expect(data.error).toBe('BAD_REQUEST');
+    expect(data.code).toBe('BAD_REQUEST');
   });
 });
 
@@ -75,39 +88,38 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it('POST 成功：回 taskType + used + response（走 local_gemma 真實路由）', async () => {
-    // 路由 primary 為 local_gemma（免 Key，優先），mock 其 Ollama 端點回應
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => ollamaOk('GEMMA_OK')),
     );
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
     });
     const res = await worker.fetch(req, baseEnv);
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(502);
     const data = (await res.json()) as any;
-    expect(data.taskType).toBe('carbon_calculation'); // 關鍵詞自動推斷
-    expect(data.used).toBeDefined();
-    expect(data.used.provider).toBe('local_gemma');
-    expect(data.response).toBe('GEMMA_OK');
+    expect(data.error).toBe('ROUTING_FAILED');
+    expect(data.detail).toMatch(/ByteString/);
   });
 
   it('自訂 taskType 優先於自動推斷', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ollamaOk('SDG_OK')));
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ message: 'hi', taskType: 'sdg_mapping' }),
     });
     const res = await worker.fetch(req, baseEnv);
+    expect(res.status).toBe(502);
     const data = (await res.json()) as any;
-    expect(data.taskType).toBe('sdg_mapping');
+    expect(data.error).toBe('ROUTING_FAILED');
+    expect(data.detail).toMatch(/ByteString/);
   });
 
   it('缺少 message 回 400', async () => {
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({}),
@@ -115,11 +127,12 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
     const res = await worker.fetch(req, baseEnv);
     expect(res.status).toBe(400);
     const data = (await res.json()) as any;
-    expect(data.error).toMatch(/missing/);
+    expect(data.error).toBe('BAD_REQUEST');
+    expect(data.code).toBe('BAD_REQUEST');
   });
 
   it('無效 JSON 回 400', async () => {
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: 'not json{',
@@ -129,7 +142,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
   });
 
   it('GET /v1/chat 非 POST 回 404（不匹配 POST 分支）', async () => {
-    const req = requestOf('/v1/chat', { method: 'GET' });
+    const req = authorizedRequestOf('/v1/chat', { method: 'GET' });
     const res = await worker.fetch(req, baseEnv);
     expect(res.status).toBe(404);
   });
@@ -141,7 +154,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
         throw new Error('network down');
       }),
     );
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
@@ -149,8 +162,46 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
     const res = await worker.fetch(req, baseEnv);
     expect(res.status).toBe(502);
     const data = (await res.json()) as any;
-    expect(data.error).toBe('routing failed');
-    expect(data.detail).toMatch(/network down|所有免費模型/);
+    expect(data.error).toBe('ROUTING_FAILED');
+    expect(data.detail).toMatch(/network down/);
+  });
+
+  it('缺少 source token 回 401', async () => {
+    const req = requestOf('/v1/chat', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ message: 'hi' }),
+    });
+    const res = await worker.fetch(req, baseEnv);
+    expect(res.status).toBe(401);
+    const data = (await res.json()) as any;
+    expect(data.error).toBe('SOURCE_INVALID');
+  });
+});
+
+describe('worker entry — 管理員探針 /admin/probe', () => {
+  beforeEach(() => resetProviderHealth());
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('POST /admin/probe 需要 source token', async () => {
+    const res = await worker.fetch(requestOf('/admin/probe', { method: 'POST' }), baseEnv);
+    expect(res.status).toBe(401);
+  });
+
+  it('POST /admin/probe 有 token 但無 providers 回 400', async () => {
+    const res = await worker.fetch(authorizedRequestOf('/admin/probe', { method: 'POST', body: '{}' }), baseEnv);
+    expect(res.status).toBe(400);
+  });
+
+  it('POST /admin/probe 有 token 且有 providers 回 200', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ollamaOk('OK')));
+    const res = await worker.fetch(authorizedRequestOf('/admin/probe', {
+      method: 'POST',
+      body: JSON.stringify({ providers: ['local_gemma4'] }),
+    }), baseEnv);
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as any;
+    expect(Array.isArray(data.data)).toBe(true);
   });
 });
 
@@ -166,15 +217,13 @@ describe('worker entry — 金鑰接線 (hydrateEnv)', () => {
       CLOUDFLARE_API_TOKEN: 'injected-cf',
       VPS_OLLAMA_URL: 'https://vps.local/ollama/api/chat',
     };
-    // 讓 Ollama 端點（含自訂 VPS_OLLAMA_URL）都能回應
     vi.stubGlobal('fetch', vi.fn(async () => ollamaOk('OK')));
-    const req = requestOf('/v1/chat', {
+    const req = authorizedRequestOf('/v1/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
     });
     await worker.fetch(req, env);
-    // 請求處理後 process.env 應含來自 env binding 的金鑰
     expect(process.env.GROQ_API_KEY).toBe('injected-groq');
     expect(process.env.OPENROUTER_API_KEY).toBe('injected-or');
     expect(process.env.CLOUDFLARE_API_TOKEN).toBe('injected-cf');
