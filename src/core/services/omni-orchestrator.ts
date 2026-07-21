@@ -64,6 +64,9 @@ export class OmniOrchestrator {
     // Plant an OmniSeed to create an immutable frozen audit seal in #記憶聖所
     try {
       const auditEvidence = {
+        originCause: context.sourceOrigin,
+        processTrace: [errorDetail],
+        finalEffect: 'SELF_HEALING_COMPLETED',
         errorType: 'SYSTEM_ANOMALY',
         detail: errorDetail,
         traceId: context.traceId,
