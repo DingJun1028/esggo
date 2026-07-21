@@ -1,0 +1,34 @@
+name: vps-ssh-diagnose
+on: workflow_dispatch
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+    steps:
+      - name: Inspect SSH keys
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          for var in SSH_PRIVATE_KEY VPS_SSH_KEY; do
+            val="${!var}"
+            [ -n "$val" ] || { echo "$var=<EMPTY>"; continue; }
+            f=~/.ssh/$var
+            printf '%s' "$val" > "$f"
+            chmod 600 "$f"
+            echo "=== $var ==="
+            head -2 "$f" || true
+            if grep -q 'BEGIN OPENSSH PRIVATE KEY' "$f"; then fmt=OpenSSH;
+            elif grep -q 'BEGIN RSA PRIVATE KEY' "$f"; then fmt=PEM-RSA;
+            elif grep -q 'BEGIN EC PRIVATE KEY' "$f"; then fmt=PEM-EC;
+            elif grep -q 'BEGIN PRIVATE KEY' "$f"; then fmt=PEM-PKCS8;
+            else fmt=UNKNOWN; fi
+            echo "FORMAT=$fmt"
+            out=$(ssh-keygen -l -f "$f" 2>&1) || true
+            echo "SSH_KEYGEN=$out"
+          done
