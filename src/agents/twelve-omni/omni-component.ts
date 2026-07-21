@@ -24,7 +24,16 @@ export class OmniComponent implements IOmniComponent {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 組件存儲 */
   private components: Map<ComponentId, ComponentInfo> = new Map();

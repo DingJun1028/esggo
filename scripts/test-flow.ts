@@ -22,7 +22,11 @@ async function runTest() {
     uuid: 'test-event-001',
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: {},
+    evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
     source_origin: 'TestHarness',
     topic,
     payload: { action: 'demo', value: 42 },

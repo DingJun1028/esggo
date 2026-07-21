@@ -87,7 +87,11 @@ export class OmniAgent implements IOmniAgent {
       uuid,
       version,
       timestamp: Date.now(),
-      evidence: {},
+      evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
       hash: "",
     } as IComponentCore;
 
@@ -172,7 +176,11 @@ export class OmniAgent implements IOmniAgent {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
         hash: "",
         taskId: spec.uuid,
         status: "success",
@@ -186,7 +194,11 @@ export class OmniAgent implements IOmniAgent {
         uuid: uuidv4(),
         version: "1.0.0",
         timestamp: Date.now(),
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
         hash: "",
         taskId: spec.uuid,
         status: "failed",
@@ -229,7 +241,11 @@ export class OmniAgent implements IOmniAgent {
       uuid: uuidv4(),
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {},
+      evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
       hash: "",
       stage,
       // 與 IComponentCore 兼容的最小欄位

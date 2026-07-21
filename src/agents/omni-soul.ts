@@ -120,6 +120,9 @@ export class OmniSoul implements IOmniSoul {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
+        originCause: 'unknown',
+        processTrace: [],
+        finalEffect: 'unknown',
         type: "omni-soul",
         name: this._config.name,
         purpose: "semantic_guidance_and_governance_alignment",

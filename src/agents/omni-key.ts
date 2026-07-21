@@ -139,6 +139,9 @@ export class OmniKey implements IOmniKey {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
+        originCause: 'unknown',
+        processTrace: [],
+        finalEffect: 'unknown',
         type: "omni-key",
         name: config.name,
         purpose: "unlock_all_unknowns_and_answer_all_questions",
