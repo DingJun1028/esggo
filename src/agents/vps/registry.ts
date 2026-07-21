@@ -109,7 +109,11 @@ export class VPSAgentAdapter implements IOmniAgent {
         uuid: this._vpsAgent.signature.uuid,
         version: this._vpsAgent.signature.version,
         timestamp: Date.now(),
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
         hash: this._vpsAgent.signature.hash,
         taskId: spec.uuid,
         status: "failed",

@@ -15,7 +15,11 @@ async function test9MagicEffects() {
     uuid: `evt-${Date.now()}`,
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: {},
+    evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
     source_origin: 'test',
     topic,
     lifecycle_path: [{ stage: 'EMERGED' as const, timestamp: Date.now(), node: 'test' }],

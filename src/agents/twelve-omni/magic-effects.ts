@@ -59,7 +59,16 @@ export class ChaosHealing implements IChaosHealing {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 混沌注入歷史 */
   private chaosHistory: ChaosHealingResult[] = [];
@@ -121,7 +130,16 @@ export class TemporalRift implements ITemporalRift {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 活躍會話 */
   private sessions: Map<string, TemporalRiftSession> = new Map();
@@ -201,7 +219,16 @@ export class CellularFission implements ICellularFission {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 背壓閾值 */
   private backpressureThresholds: Map<string, number> = new Map();
@@ -256,7 +283,16 @@ export class ProphetMatrix implements IProphetMatrix {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 預測歷史 */
   private predictions: PredictedIntent[] = [];
@@ -311,7 +347,16 @@ export class OmniscientHive implements IOmniscientHive {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 共享黑板 */
   private blackboard: Map<string, { value: unknown; provider: string; timestamp: number }> = new Map();
@@ -379,7 +424,16 @@ export class MartialLaw implements IMartialLaw {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 戒嚴狀態 */
   private _martialLawStatus: MartialLawStatus = {
@@ -451,7 +505,16 @@ export class UniversalMemory implements IUniversalMemory {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** 個人化存儲 */
   private userMemories: Map<string, MemoryEntry[]> = new Map();
@@ -531,7 +594,16 @@ export class TaiChiResonance implements ITaiChiResonance {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   constructor() {
     this.uuid = randomUUID();
@@ -596,7 +668,16 @@ export class OmniConvergence implements IOmniConvergence {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   constructor() {
     this.uuid = randomUUID();

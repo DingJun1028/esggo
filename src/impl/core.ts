@@ -166,7 +166,11 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   private core: IComponentCore;
 
   constructor(private readonly bus: IOmniAgentBus, core?: IComponentCore) {
-    this.core = core ?? { uuid: crypto.randomUUID(), version: "1.0.0", timestamp: Date.now(), evidence: {} };
+    this.core = core ?? { uuid: crypto.randomUUID(), version: "1.0.0", timestamp: Date.now(), evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  } };
   }
 
   // IComponentCore getters
@@ -185,7 +189,11 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         reason: "evidence mismatch",
         source: "OAG",
         relatedEvent: event,
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
       });
       await this.bus.publish({
         uuid: ml.uuid,
@@ -217,7 +225,11 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         reason: "egress evidence mismatch",
         source: "OAG",
         relatedEvent: event,
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
       });
       await this.bus.publish({
         uuid: ml.uuid,
@@ -317,7 +329,11 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         stage: 'EMERGED',
         source_origin: 'nvidia',
         topic: 'prediction',
-        evidence: {},
+        evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
         lifecycle_path: [],
         hashLock: crypto.randomUUID(),
       })

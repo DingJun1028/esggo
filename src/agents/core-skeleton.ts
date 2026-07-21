@@ -31,7 +31,12 @@ export class OmniAgent implements IOmniAgent {
   readonly uuid: string = uuidv4();
   readonly version: string = "1.0.0";
   readonly timestamp: number = Date.now();
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {};
   readonly hash: string = "";
   readonly salt?: string = undefined;
   readonly signature?: string = undefined;
@@ -84,7 +89,11 @@ export class OmniAgent implements IOmniAgent {
       uuid: uuidv4(),
       version: this.version,
       timestamp: Date.now(),
-      evidence: {},
+      evidence: {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  },
       hash: "",
       taskId: spec.uuid,
       status: "success",
@@ -157,7 +166,12 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   readonly uuid: string = uuidv4();
   readonly version: string = "1.0.0";
   readonly timestamp: number = Date.now();
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {};
   readonly hash: string = "<gateway-hash>";
   readonly salt?: string = undefined;
   readonly signature?: string = undefined;

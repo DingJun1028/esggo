@@ -26,7 +26,16 @@ export class OmniAPI implements IOmniAPI {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  } = {
+    originCause: 'unknown',
+    processTrace: [],
+    finalEffect: 'unknown'
+  };
 
   /** API 端點 */
   private endpoints: Map<string, APIEndpoint> = new Map();
