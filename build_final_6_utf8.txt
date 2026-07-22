@@ -1,0 +1,224 @@
+﻿
+> ai-studio-applet@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+node.exe :  ⚠ Compiled with warnings i
+n 13.8s
+位於 線路:1 字元:1
++ & "C:\Program Files\nodejs/node.exe"
+ "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpec 
+   ified: ( ⚠ Compiled with warnings  
+   in 13.8s:String) [], RemoteExcep   
+ tion
+    + FullyQualifiedErrorId : NativeC 
+   ommandError
+ 
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+Critical dependency: the request of a 
+dependency is an expression
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+   Linting and checking validity of types ...
+
+./components/views/system/guide-view.tsx
+502:14  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+569:6  Warning: React Hook useEffect has a missing dependency: 'currentChapter.template'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+Failed to compile.
+
+./components/views/system/omni-note-vi
+ew.tsx:212:41
+Type error: Parameter 'tag' implicitly
+ has an 'any' type.
+
+[0m [90m 210 |[39m                 
+    [33m<[39m[33mdiv[39m className
+[33m=[39m[32m"flex items-center jus
+tify-between border-t border-white/5 p
+t-6"[39m[33m>[39m
+ [90m 211 |[39m                     
+  [33m<[39m[33mdiv[39m className[
+33m=[39m[32m"flex gap-1"[39m[33m>
+[39m
+[31m[1m>[22m[39m[90m 212 |[39m  
+                       {note[33m.[39
+mtags[33m.[39mmap((tag[33m,[39m i)
+ [33m=>[39m (
+ [90m     |[39m                     
+                    [31m[1m^[22m[3
+9m
+ [90m 213 |[39m                     
+      [33m<[39m[33mspan[39m key[3
+3m=[39m{i} className[33m=[39m[32m"
+text-[9px] font-mono text-primary/60 b
+g-primary/5 px-2 py-0.5 rounded-full b
+order border-primary/10"[39m[33m>[3
+9m[33m#[39m{tag}[33m<[39m[33m/[3
+9m[33mspan[39m[33m>[39m
+ [90m 214 |[39m                     
+    ))}
+ [90m 215 |[39m                     
+  [33m<[39m[33m/[39m[33mdiv[39m
+[33m>[39m[0m
+Next.js build worker exited with code:
+ 1 and signal: null

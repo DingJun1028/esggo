@@ -1,0 +1,326 @@
+﻿
+> ai-studio-applet@0.1.0 lint
+> eslint .
+
+
+C:\Project\esggo\components\ui\omni\omni-calendar.tsx
+  199:30  error  'Badge' is not defined  react/jsx-no-undef
+
+C:\Project\esggo\components\ui\soul-navigator-log.tsx
+  88:21  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  88:32  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\views\system\NoCodeBackendView.tsx
+  506:11   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  506:111  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\views\system\OmnipotentThinkTank.tsx
+  515:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  515:51  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\views\system\guide-view.tsx
+  502:14  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  569:6   warning  React Hook useEffect has a missing dependency: 'currentChapter.template'. Either include it or remove the dependency array                                                                                                                                                               react-hooks/exhaustive-deps
+
+C:\Project\esggo\components\views\system\omni-design-terminal.tsx
+  37:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\system\omni-design-terminal.tsx:37:5
+  35 |
+  36 |   useEffect(() => {
+> 37 |     setMounted(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |   }, []);
+  39 |
+  40 |   // Simulation of AI design logs                                                                                                                  react-hooks/set-state-in-effect
+  43:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\system\omni-design-terminal.tsx:43:7
+  41 |   useEffect(() => {
+  42 |     if (isOpen) {
+> 43 |       setLogs([]);
+     |       ^^^^^^^ Avoid calling setState() directly within an effect
+  44 |       const messages = [
+  45 |         "Initializing OMNI_CORE_V1.4.2...",
+  46 |         `Loading Theme: ${activeTheme.toUpperCase()} (Physical Render)`,  react-hooks/set-state-in-effect
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx
+  213:25  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx:213:25
+  211 |                   initial={{ opacity: 0 }}
+  212 |                   animate={{ 
+> 213 |                     x: [Math.random() * 600 - 300, Math.random() * 600 - 300],
+      |                         ^^^^^^^^^^^^^ Cannot call impure function
+  214 |                     y: [Math.random() * 400 - 200, Math.random() * 400 - 200],
+  215 |                     opacity: [0, 0.4, 0],
+  216 |                     scale: [0.5, 1.2, 0.5]                                       react-hooks/purity
+  213:52  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx:213:52
+  211 |                   initial={{ opacity: 0 }}
+  212 |                   animate={{ 
+> 213 |                     x: [Math.random() * 600 - 300, Math.random() * 600 - 300],
+      |                                                    ^^^^^^^^^^^^^ Cannot call impure function
+  214 |                     y: [Math.random() * 400 - 200, Math.random() * 400 - 200],
+  215 |                     opacity: [0, 0.4, 0],
+  216 |                     scale: [0.5, 1.2, 0.5]            react-hooks/purity
+  214:25  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx:214:25
+  212 |                   animate={{ 
+  213 |                     x: [Math.random() * 600 - 300, Math.random() * 600 - 300],
+> 214 |                     y: [Math.random() * 400 - 200, Math.random() * 400 - 200],
+      |                         ^^^^^^^^^^^^^ Cannot call impure function
+  215 |                     opacity: [0, 0.4, 0],
+  216 |                     scale: [0.5, 1.2, 0.5]
+  217 |                   }}                                                             react-hooks/purity
+  214:52  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx:214:52
+  212 |                   animate={{ 
+  213 |                     x: [Math.random() * 600 - 300, Math.random() * 600 - 300],
+> 214 |                     y: [Math.random() * 400 - 200, Math.random() * 400 - 200],
+      |                                                    ^^^^^^^^^^^^^ Cannot call impure function
+  215 |                     opacity: [0, 0.4, 0],
+  216 |                     scale: [0.5, 1.2, 0.5]
+  217 |                   }}                                  react-hooks/purity
+  218:47  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-hub-view.tsx:218:47
+  216 |                     scale: [0.5, 1.2, 0.5]
+  217 |                   }}
+> 218 |                   transition={{ duration: 4 + Math.random() * 4, repeat: Infinity, ease: "easeInOut" }}
+      |                                               ^^^^^^^^^^^^^ Cannot call impure function
+  219 |                   className={cn(
+  220 |                     "absolute w-1 h-1 rounded-full blur-[1px]",
+  221 |                     i % 2 === 0 ? "bg-purple-400" : "bg-blue-400"  react-hooks/purity
+
+C:\Project\esggo\components\views\system\omni-knowledge-view.tsx
+   34:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\system\omni-knowledge-view.tsx:34:5
+  32 |   useEffect(() => {
+  33 |     // Refresh nodes from omniIndex
+> 34 |     setNodes(omniIndex.getAllNodes());
+     |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  35 |   }, []);
+  36 |
+  37 |   const selectedNode = nodes.find(n => n.nodeId === selectedNodeId) || null;  react-hooks/set-state-in-effect
+  137:19  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  react/no-unescaped-entities
+  137:49  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  react/no-unescaped-entities
+
+C:\Project\esggo\components\views\system\omni-library-view.tsx
+  357:61   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  357:134  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\views\system\omni-note-view.tsx
+   49:5   error  Error: Cannot access variable before it is declared
+
+`fetchNotes` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Project\esggo\components\views\system\omni-note-view.tsx:49:5
+  47 |
+  48 |   useEffect(() => {
+> 49 |     fetchNotes();
+     |     ^^^^^^^^^^ `fetchNotes` accessed before it is declared
+  50 |   }, []);
+  51 |
+  52 |   const fetchNotes = async () => {
+
+C:\Project\esggo\components\views\system\omni-note-view.tsx:52:3
+  50 |   }, []);
+  51 |
+> 52 |   const fetchNotes = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     setLoading(true);
+     | ^^^^^^^^^^^^^^^^^^^^^
+> 54 |     const { data } = await omniNoteApi.list();
+     | ^^^^^^^^^^^^^^^^^^^^^
+> 55 |     setNotes(data || []);
+     | ^^^^^^^^^^^^^^^^^^^^^
+> 56 |     setLoading(false);
+     | ^^^^^^^^^^^^^^^^^^^^^
+> 57 |   };
+     | ^^^^^ `fetchNotes` is declared here
+  58 |
+  59 |   const handleSave = async () => {
+  60 |     if (!activeNote?.content) return;  react-hooks/immutability
+  373:37  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\system\omni-note-view.tsx:373:37
+  371 |                        </div>
+  372 |                        <div className="text-[9px] text-primary/60 font-mono break-all leading-relaxed">
+> 373 |                           0x4F8A...{Math.random().toString(16).substring(2, 24).toUpperCase()}
+      |                                     ^^^^^^^^^^^^^ Cannot call impure function
+  374 |                        </div>
+  375 |                     </div>
+  376 |                     <div className="p-6 rounded-2xl bg-bg-surface border border-white/5 space-y-4">                                                                                                                       react-hooks/purity
+
+C:\Project\esggo\components\views\tasteful\dashboard-view.tsx
+  179:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\tasteful\dashboard-view.tsx:179:5
+  177 |   useEffect(() => {
+  178 |     const now = Date.now();
+> 179 |     setCoreData(prev => ({
+      |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  180 |       ...prev,
+  181 |       uuid: "TRH-A1-" + Math.random().toString(36).slice(2, 6).toUpperCase(),
+  182 |       timestamp: now,  react-hooks/set-state-in-effect
+
+C:\Project\esggo\components\views\thankful\sme-dashboard-view.tsx
+  103:20  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\thankful\sme-dashboard-view.tsx:103:20
+  101 |         uuid: "SME-TSK-001",
+  102 |         version: 'v1.0.0-immutable',
+> 103 |         timestamp: Date.now(),
+      |                    ^^^^^^^^^^ Cannot call impure function
+  104 |         source_origin: "MANUAL_UPLOAD",
+  105 |         payload: { value: "3.2", unit: "Tons", label: "廢棄物總量 (Total Waste)" },
+  106 |         evidence: [],                                                                                                                                                    react-hooks/purity
+  107:62  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\thankful\sme-dashboard-view.tsx:107:62
+  105 |         payload: { value: "3.2", unit: "Tons", label: "廢棄物總量 (Total Waste)" },
+  106 |         evidence: [],
+> 107 |         traceability_chain: [{ action: 'GENESIS', timestamp: Date.now(), actor: 'USER_SME', source_origin: 'MANUAL_UPLOAD' }]
+      |                                                              ^^^^^^^^^^ Cannot call impure function
+  108 |       } as IComponentCore
+  109 |     },
+  110 |     { id: 2, text: "確認供應商 A 的碳排聲明書 (Verify Supplier A Decl.)", isSealed: false },  react-hooks/purity
+
+C:\Project\esggo\components\views\thankful\thankful-dashboard-view.tsx
+  305:62   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  310:87   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  310:93   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  310:146  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  310:153  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  365:93   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  365:108  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+
+C:\Project\esggo\components\views\thankful\village-rpg-view.tsx
+  188:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\thankful\village-rpg-view.tsx:188:7
+  186 |   useEffect(() => {
+  187 |     if (aiProxyMode) {
+> 188 |       setBossHp(Math.floor(internalEntropy * 1000));
+      |       ^^^^^^^^^ Avoid calling setState() directly within an effect
+  189 |     }
+  190 |   }, [internalEntropy, aiProxyMode]);
+  191 |  react-hooks/set-state-in-effect
+
+C:\Project\esggo\components\views\transferrful\omni-agent-nexus-view.tsx
+  54:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\components\views\transferrful\omni-agent-nexus-view.tsx:54:5
+  52 |       };
+  53 |     });
+> 54 |     setAllAgents([...INITIAL_AGENTS, ...apostles]);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  55 |
+  56 |     const unsubscribe = AgentNetworkBus.subscribe((status) => {
+  57 |       setAgentStatuses(prev => ({  react-hooks/set-state-in-effect
+
+C:\Project\esggo\components\views\transferrful\omni-supply-view.tsx
+  183:32  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\transferrful\omni-supply-view.tsx:183:32
+  181 |                     uuid: selectedNode.trustHash || "PENDING",
+  182 |                     version: "v1.0.0-immutable",
+> 183 |                     timestamp: Date.now(),
+      |                                ^^^^^^^^^^ Cannot call impure function
+  184 |                     source_origin: selectedNode.name,
+  185 |                     payload: { value: selectedNode.emissions, unit: "tCO2e", label: selectedNode.name },
+  186 |                     evidence: [],  react-hooks/purity
+
+C:\Project\esggo\components\views\trustful\impact-nexus-view.tsx
+  86:67  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Project\esggo\components\views\trustful\impact-nexus-view.tsx:86:67
+  84 |     if (targetNode) {
+  85 |       const engravedData = engraveHashLock(
+> 86 |         { ...targetNode, impact_score: targetNode.impact_score + (Math.random() * 2) },
+     |                                                                   ^^^^^^^^^^^^^ Cannot call impure function
+  87 |         `nexus://node/${id}`
+  88 |       );
+  89 |  react-hooks/purity
+
+C:\Project\esggo\lib\hooks\use-omni-index.ts
+  42:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Project\esggo\lib\hooks\use-omni-index.ts:42:7
+  40 |
+  41 |     if (node) {
+> 42 |       setCurrentNode(node);
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  43 |     }
+  44 |
+  45 |     // 3. 卸載時清理紀錄  react-hooks/set-state-in-effect
+
+✖ 38 problems (36 errors, 2 warnings)
+

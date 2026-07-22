@@ -1,0 +1,565 @@
+﻿
+> ai-studio-applet@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+node.exe :  ⚠ Compiled with warnings in 8.
+1s
+位於 線路:1 字元:1
++ & "C:\Program Files\nodejs/node.exe" "C:
+\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: ( ⚠ Compiled with warnings in 8.1s  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Configuration.js
+Critical dependency: the request of a depe
+ndency is an expression
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Configuration.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+require.extensions is not supported by web
+pack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/services/adk/apostle-dispatcher-serv
+er.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+require.extensions is not supported by web
+pack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/services/adk/apostle-dispatcher-serv
+er.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../../pac
+kage.json' in 'C:\Project\esggo\node_modul
+es\@google\adk\node_modules\@mikro-orm\cor
+e\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/services/adk/apostle-dispatcher-serv
+er.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+require.extensions is not supported by web
+pack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+require.extensions is not supported by web
+pack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../../pac
+kage.json' in 'C:\Project\esggo\node_modul
+es\@google\adk\node_modules\@mikro-orm\cor
+e\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/typings.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.js
+./node_modules/@google/adk/node_modules/@m
+ikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/index.
+js
+./lib/services/adk/adk-squad-factory.ts
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./components/views/system/guide-view.tsx
+502:14  Warning: Using `<img>` could resul
+t in slower LCP and higher bandwidth. Cons
+ider using `<Image />` from `next/image` o
+r a custom image loader to automatically o
+ptimize images. This may incur additional 
+usage or cost from your provider. See: htt
+ps://nextjs.org/docs/messages/no-img-eleme
+nt  @next/next/no-img-element
+569:6  Warning: React Hook useEffect has a
+ missing dependency: 'currentChapter.templ
+ate'. Either include it or remove the depe
+ndency array.  react-hooks/exhaustive-deps
+
+./components/views/system/NoCodeBackendVie
+w.tsx
+514:11  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+514:111  Error: `"` can be escaped with `&
+quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  re
+act/no-unescaped-entities
+
+./components/views/system/omni-hub-view.ts
+x
+223:25  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-hub-view.tsx:223:25
+  221 |                   initial={{ opaci
+ty: 0 }}
+  222 |                   animate={{ 
+> 223 |                     x: [Math.rando
+m() * 600 - 300, Math.random() * 600 - 300
+],
+      |                         ^^^^^^^^^^
+^^^ Cannot call impure function
+  224 |                     y: [Math.rando
+m() * 400 - 200, Math.random() * 400 - 200
+],
+  225 |                     opacity: [0, 0
+.4, 0],
+  226 |                     scale: [0.5, 1
+.2, 0.5]  react-hooks/purity
+223:52  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-hub-view.tsx:223:52
+  221 |                   initial={{ opaci
+ty: 0 }}
+  222 |                   animate={{ 
+> 223 |                     x: [Math.rando
+m() * 600 - 300, Math.random() * 600 - 300
+],
+      |                                   
+                 ^^^^^^^^^^^^^ Cannot call
+ impure function
+  224 |                     y: [Math.rando
+m() * 400 - 200, Math.random() * 400 - 200
+],
+  225 |                     opacity: [0, 0
+.4, 0],
+  226 |                     scale: [0.5, 1
+.2, 0.5]  react-hooks/purity
+224:25  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-hub-view.tsx:224:25
+  222 |                   animate={{ 
+  223 |                     x: [Math.rando
+m() * 600 - 300, Math.random() * 600 - 300
+],
+> 224 |                     y: [Math.rando
+m() * 400 - 200, Math.random() * 400 - 200
+],
+      |                         ^^^^^^^^^^
+^^^ Cannot call impure function
+  225 |                     opacity: [0, 0
+.4, 0],
+  226 |                     scale: [0.5, 1
+.2, 0.5]
+  227 |                   }}  react-hooks/
+purity
+224:52  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-hub-view.tsx:224:52
+  222 |                   animate={{ 
+  223 |                     x: [Math.rando
+m() * 600 - 300, Math.random() * 600 - 300
+],
+> 224 |                     y: [Math.rando
+m() * 400 - 200, Math.random() * 400 - 200
+],
+      |                                   
+                 ^^^^^^^^^^^^^ Cannot call
+ impure function
+  225 |                     opacity: [0, 0
+.4, 0],
+  226 |                     scale: [0.5, 1
+.2, 0.5]
+  227 |                   }}  react-hooks/
+purity
+228:47  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-hub-view.tsx:228:47
+  226 |                     scale: [0.5, 1
+.2, 0.5]
+  227 |                   }}
+> 228 |                   transition={{ du
+ration: 4 + Math.random() * 4, repeat: Inf
+inity, ease: "easeInOut" }}
+      |                                   
+            ^^^^^^^^^^^^^ Cannot call impu
+re function
+  229 |                   className={cn(
+  230 |                     "absolute w-1 
+h-1 rounded-full blur-[1px]",
+  231 |                     i % 2 === 0 ? 
+"bg-purple-400" : "bg-blue-400"  react-hoo
+ks/purity
+
+./components/views/system/omni-knowledge-v
+iew.tsx
+132:19  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+132:49  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+
+./components/views/system/omni-note-view.t
+sx
+390:37  Error: React Hook "useMemo" is cal
+led conditionally. React Hooks must be cal
+led in the exact same order in every compo
+nent render. Did you accidentally call a R
+eact Hook after an early return?  react-ho
+oks/rules-of-hooks
+390:51  Error: Error: Cannot call impure f
+unction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\system\o
+mni-note-view.tsx:390:51
+  388 |                        </div>
+  389 |                        <div classN
+ame="text-[9px] text-primary/60 font-mono 
+break-all leading-relaxed">
+> 390 |                           0x4F8A..
+.{useMemo(() => Math.random().toString(16)
+.substring(2, 24).toUpperCase(), [])}
+      |                                   
+                ^^^^^^^^^^^^^ Cannot call 
+impure function
+  391 |                        </div>
+  392 |                     </div>
+  393 |                     <div className
+="p-6 rounded-2xl bg-bg-surface border bor
+der-white/5 space-y-4">  react-hooks/purit
+y
+
+./components/views/system/OmnipotentThinkT
+ank.tsx
+515:25  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+515:51  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+
+./components/views/thankful/thankful-dashb
+oard-view.tsx
+305:62  Error: Comments inside children se
+ction of tag should be placed inside brace
+s  react/jsx-no-comment-textnodes
+310:87  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+310:93  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+310:146  Error: `"` can be escaped with `&
+quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  re
+act/no-unescaped-entities
+310:153  Error: `"` can be escaped with `&
+quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  re
+act/no-unescaped-entities
+365:93  Error: `"` can be escaped with `&q
+uot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  rea
+ct/no-unescaped-entities
+365:108  Error: `"` can be escaped with `&
+quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  re
+act/no-unescaped-entities
+
+./components/views/transferrful/omni-agent
+-nexus-view.tsx
+54:5  Error: Error: Calling setState synch
+ronously within an effect can trigger casc
+ading renders
+
+Effects are intended to synchronize state 
+between React and external systems such as
+ manually updating the DOM, state manageme
+nt libraries, or other platform APIs. In g
+eneral, the body of an effect should do on
+e or both of the following:
+* Update external systems with the latest 
+state from React.
+* Subscribe for updates from some external
+ system, calling setState in a callback fu
+nction when external state changes.
+
+Calling setState synchronously within an e
+ffect body causes cascading renders that c
+an hurt performance, and is not recommende
+d. (https://react.dev/learn/you-might-not-
+need-an-effect).
+
+C:\Project\esggo\components\views\transfer
+rful\omni-agent-nexus-view.tsx:54:5
+  52 |       };
+  53 |     });
+> 54 |     setAllAgents([...INITIAL_AGENTS
+, ...apostles]);
+     |     ^^^^^^^^^^^^ Avoid calling setS
+tate() directly within an effect
+  55 |
+  56 |     const unsubscribe = AgentNetwor
+kBus.subscribe((status) => {
+  57 |       setAgentStatuses(prev => ({  
+react-hooks/set-state-in-effect
+
+./components/views/transferrful/omni-suppl
+y-view.tsx
+180:25  Error: Compilation Skipped: Existi
+ng memoization could not be preserved
+
+React Compiler has skipped optimizing this
+ component because the existing manual mem
+oization could not be preserved. This valu
+e was memoized in source but not in compil
+ation output.
+
+C:\Project\esggo\components\views\transfer
+rful\omni-supply-view.tsx:180:25
+  178 |               <div className="spac
+e-y-4 flex-1 overflow-y-auto pr-1">
+  179 |                 <LiquidGlassCard 
+> 180 |                   data={React.useM
+emo(() => ({
+      |                         ^^^^^^^^^^
+^^^^^^^^^^^^
+> 181 |                     uuid: selected
+Node.trustHash || "PENDING",
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 182 |                     version: "v1.0
+.0-immutable",
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 183 |                     timestamp: 171
+0580800000, 
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 184 |                     source_origin:
+ selectedNode.name,
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 185 |                     payload: { val
+ue: selectedNode.emissions, unit: "tCO2e",
+ label: selectedNode.name },
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 186 |                     evidence: [] a
+s any[],
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 187 |                     traceability_c
+hain: [] as any[]
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 188 |                   }), [selectedNod
+e])}
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^ Could not preserve existing memoizati
+on
+  189 |
+  190 |                   isSealed={select
+edNode["5t"]}
+  191 |                   isComputing={isV
+erifying}  react-hooks/preserve-manual-mem
+oization
+180:25  Error: React Hook "React.useMemo" 
+is called conditionally. React Hooks must 
+be called in the exact same order in every
+ component render.  react-hooks/rules-of-h
+ooks
+
+./components/views/trustful/impact-nexus-v
+iew.tsx
+85:32  Error: Error: Cannot call impure fu
+nction during render
+
+`Math.random` is an impure function. Calli
+ng an impure function can produce unstable
+ results that update unpredictably when th
+e component happens to re-render. (https:/
+/react.dev/reference/rules/components-and-
+hooks-must-be-pure#components-and-hooks-mu
+st-be-idempotent).
+
+C:\Project\esggo\components\views\trustful
+\impact-nexus-view.tsx:85:32
+  83 |     const targetNode = nodes.find(n
+ => n.id === id);
+  84 |     if (targetNode) {
+> 85 |       const impactAdjustment = Math
+.random() * 2;
+     |                                ^^^^
+^^^^^^^^^ Cannot call impure function
+  86 |       const engravedData = engraveH
+ashLock(
+  87 |         { ...targetNode, impact_sco
+re: targetNode.impact_score + impactAdjust
+ment },
+  88 |         `nexus://node/${id}`  react
+-hooks/purity
+
+./lib/hooks/use-omni-index.ts
+48:6  Warning: React Hook useEffect has a 
+missing dependency: 'omniNode'. Either inc
+lude it or remove the dependency array.  r
+eact-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules?
+ Learn more here: https://nextjs.org/docs/
+app/api-reference/config/eslint#disabling-
+rules
