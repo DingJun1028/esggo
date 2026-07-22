@@ -12,7 +12,12 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: Record<string, any>;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 // 零幻覺驗算結果
@@ -255,7 +260,10 @@ export class OmniAgentGateway {
     taskType: string
   ): Promise<any> {
     // 1. 建立證據資料
-    const evidence: Record<string, any> = {
+    const evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any } = {
+      originCause: 'unknown',
+      processTrace: [],
+      finalEffect: 'unknown',
       model: model.id,
       promptLength: prompt.length,
       taskType,

@@ -21,7 +21,7 @@ export class OmniMemory implements IOmniMemory {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: Record<string, unknown> = {};
+  evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 記憶體存儲 (mutable, renamed to avoid conflict with store() method) */
   private _entries: Map<MemoryId, MemoryEntry> = new Map();
