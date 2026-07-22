@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 # 執行：wrangler deploy --config wrangler.toml
 
 [build]
-command = "echo 'No build required for worker'"
+command = "npx pnpm install --frozen-lockfile"
 
 [vars]
 ENVIRONMENT = "production"
