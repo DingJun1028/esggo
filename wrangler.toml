@@ -6,6 +6,9 @@ compatibility_flags = ["nodejs_compat"]
 # 獨立 worker 目錄，避免污染 Next.js 的 src/
 # 執行：wrangler deploy --config wrangler.toml
 
+[build]
+command = "echo 'No build required for worker'"
+
 [vars]
 ENVIRONMENT = "production"
 SMART_ROUTER_VERSION = "2.0.0-beta.1"
