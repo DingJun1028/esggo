@@ -308,7 +308,7 @@ export function EmptyState({ icon = '📭', message, description, actionLabel, o
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="mt-4 px-4 py-2 text-xs font-semibold bg-[#009EB0] text-white rounded-lg hover:bg-[#007d8f] transition-colors"
+          className="mt-4 px-4 py-2 text-xs font-semibold bg-[#009EB0] text-white rounded-lg hover:bg-[#007d8f] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
         >
           {actionLabel}
         </button>
@@ -344,7 +344,8 @@ export function ErrorBanner({ message, onRetry, severity = 'error' }: ErrorBanne
       {onRetry && (
         <button
           onClick={onRetry}
-          className="font-semibold underline hover:no-underline"
+          className="font-semibold underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded"
+          aria-label="重試"
         >
           重試
         </button>
@@ -403,12 +404,14 @@ interface TabBarProps {
 
 export function TabBar({ tabs, active, onChange }: TabBarProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2" role="tablist">
       {tabs.map(tab => (
         <button
           key={tab.id}
+          role="tab"
+          aria-selected={active === tab.id}
           onClick={() => onChange(tab.id)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
             active === tab.id
               ? 'bg-[#009EB0] text-white shadow-lg shadow-[#009EB0]/25'
               : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
@@ -462,12 +465,14 @@ export function SearchInput({ onSearch, placeholder = 'Search...', debounceMs = 
         value={value}
         onChange={e => setValue(e.target.value)}
         placeholder={placeholder}
+        aria-label="搜尋"
         className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#009EB0]/50 focus:border-[#009EB0] transition-all"
       />
       {value && (
         <button
           onClick={() => setValue('')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded"
+          aria-label="清除搜尋"
         >
           ✕
         </button>
