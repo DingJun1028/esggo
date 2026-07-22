@@ -6,8 +6,7 @@ describe('OmniSeed Core Contract & Hook', () => {
     uuid: 'omni-subject-uuid-001',
     version: '1.0.0-alpha',
     timestamp: Date.now(),
-    evidence: {
-      source_origin: 'Celestial Registry',
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', source_origin: 'Celestial Registry',
       scope_verification: 'ISO-14064-1 Approved'
     },
     hashLock: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',

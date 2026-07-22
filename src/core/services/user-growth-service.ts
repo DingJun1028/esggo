@@ -71,7 +71,7 @@ class UserGrowthService {
     if (existing) return existing;
 
     // Create the genesis OmniSeed for the new user!
-    const genesisEvidence = {
+    const genesisEvidence = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown',
       email: email || 'anonymous@esggo.org',
       displayName: displayName || '永續觀察者',
       role: '永續觀察者',

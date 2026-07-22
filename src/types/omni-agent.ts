@@ -12,7 +12,12 @@ export interface IComponentCore {
   /** 刻印時間戳 (Unix Epoch, ms) */
   readonly timestamp: number;
   /** 證據佐證庫 (用於零幻覺驗算，如 ISO‑14064‑1) */
-  evidence: Record<string, unknown>;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
   /** 防篡改雜湊值（SHA‑256、Keccak‑256 …） */
   readonly hash: string;
   /** （可選）雜湊 Salt，用於提升撞庫抗性 */

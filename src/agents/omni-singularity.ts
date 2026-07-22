@@ -71,8 +71,7 @@ export class OmniSingularity implements IOmniSingularity {
       uuid,
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {
-        type: "omni-singularity",
+      evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', type: "omni-singularity",
         name: "OmniSingularity",
         purpose: "the_one_and_only_origin",
         philosophy: "道生一，一生二，二生三，三生萬物",
@@ -154,8 +153,7 @@ export class OmniSingularity implements IOmniSingularity {
       uuid,
       version: "1.0.0",
       timestamp: Date.now(),
-      evidence: {
-        type: intent.type,
+      evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', type: intent.type,
         name: intent.name,
         purpose: intent.purpose,
         manifestFrom: this.signature.uuid,
