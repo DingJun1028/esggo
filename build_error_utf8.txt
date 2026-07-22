@@ -1,0 +1,180 @@
+﻿
+> ai-studio-applet@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+node.exe :  ⚠ Compiled with warnings i
+n 13.6s
+位於 線路:1 字元:1
++ & "C:\Program Files\nodejs/node.exe"
+ "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpec 
+   ified: ( ⚠ Compiled with warnings  
+   in 13.6s:String) [], RemoteExcep   
+ tion
+    + FullyQualifiedErrorId : NativeC 
+   ommandError
+ 
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+Critical dependency: the request of a 
+dependency is an expression
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/arvo-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+   Linting and checking validity of types ...

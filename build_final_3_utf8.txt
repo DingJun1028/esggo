@@ -1,0 +1,373 @@
+﻿
+> ai-studio-applet@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+node.exe :  ⚠ Compiled with warnings i
+n 6.4s
+位於 線路:1 字元:1
++ & "C:\Program Files\nodejs/node.exe"
+ "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpec 
+   ified: ( ⚠ Compiled with warnings  
+   in 6.4s:String) [], RemoteExcept   
+ ion
+    + FullyQualifiedErrorId : NativeC 
+   ommandError
+ 
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+Critical dependency: the request of a 
+dependency is an expression
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Configuration.
+js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/ten-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/services/adk/apostle-dispatcher-
+server.ts
+./lib/actions/adk-actions.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/ten-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+require.extensions is not supported by
+ webpack. Use a loader instead.
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/ten-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+Module not found: Can't resolve '../..
+/package.json' in 'C:\Project\esggo\no
+de_modules\@google\adk\node_modules\@m
+ikro-orm\core\utils'
+
+Import trace for requested module:
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/utils/Utils.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/typings.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.js
+./node_modules/@google/adk/node_module
+s/@mikro-orm/core/index.mjs
+./node_modules/@google/adk/dist/esm/in
+dex.js
+./lib/services/adk/adk-squad-factory.t
+s
+./lib/adk/ten-wings-agents.ts
+./app/api/awaken/ritual/route.ts
+
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./components/views/system/guide-view.t
+sx
+502:14  Warning: Using `<img>` could r
+esult in slower LCP and higher bandwid
+th. Consider using `<Image />` from `n
+ext/image` or a custom image loader to
+ automatically optimize images. This m
+ay incur additional usage or cost from
+ your provider. See: https://nextjs.or
+g/docs/messages/no-img-element  @next/
+next/no-img-element
+569:6  Warning: React Hook useEffect h
+as a missing dependency: 'currentChapt
+er.template'. Either include it or rem
+ove the dependency array.  react-hooks
+/exhaustive-deps
+
+./components/views/system/omni-hub-vie
+w.tsx
+37:9  Error: Error: Cannot call impure
+ function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-hub-view.tsx:37:9
+  35 |   // Generate stable particle d
+ata to avoid purity violations
+  36 |   const particles = useMemo(() 
+=> [...Array(12)].map(() => ({
+> 37 |     x: [Math.random() * 600 - 3
+00, Math.random() * 600 - 300],
+     |         ^^^^^^^^^^^^^ Cannot ca
+ll impure function
+  38 |     y: [Math.random() * 400 - 2
+00, Math.random() * 400 - 200],
+  39 |     duration: 4 + Math.random()
+ * 4
+  40 |   })), []);  react-hooks/purity
+37:36  Error: Error: Cannot call impur
+e function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-hub-view.tsx:37:36
+  35 |   // Generate stable particle d
+ata to avoid purity violations
+  36 |   const particles = useMemo(() 
+=> [...Array(12)].map(() => ({
+> 37 |     x: [Math.random() * 600 - 3
+00, Math.random() * 600 - 300],
+     |                                
+    ^^^^^^^^^^^^^ Cannot call impure f
+unction
+  38 |     y: [Math.random() * 400 - 2
+00, Math.random() * 400 - 200],
+  39 |     duration: 4 + Math.random()
+ * 4
+  40 |   })), []);  react-hooks/purity
+38:9  Error: Error: Cannot call impure
+ function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-hub-view.tsx:38:9
+  36 |   const particles = useMemo(() 
+=> [...Array(12)].map(() => ({
+  37 |     x: [Math.random() * 600 - 3
+00, Math.random() * 600 - 300],
+> 38 |     y: [Math.random() * 400 - 2
+00, Math.random() * 400 - 200],
+     |         ^^^^^^^^^^^^^ Cannot ca
+ll impure function
+  39 |     duration: 4 + Math.random()
+ * 4
+  40 |   })), []);
+  41 |  react-hooks/purity
+38:36  Error: Error: Cannot call impur
+e function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-hub-view.tsx:38:36
+  36 |   const particles = useMemo(() 
+=> [...Array(12)].map(() => ({
+  37 |     x: [Math.random() * 600 - 3
+00, Math.random() * 600 - 300],
+> 38 |     y: [Math.random() * 400 - 2
+00, Math.random() * 400 - 200],
+     |                                
+    ^^^^^^^^^^^^^ Cannot call impure f
+unction
+  39 |     duration: 4 + Math.random()
+ * 4
+  40 |   })), []);
+  41 |  react-hooks/purity
+39:19  Error: Error: Cannot call impur
+e function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-hub-view.tsx:39:19
+  37 |     x: [Math.random() * 600 - 3
+00, Math.random() * 600 - 300],
+  38 |     y: [Math.random() * 400 - 2
+00, Math.random() * 400 - 200],
+> 39 |     duration: 4 + Math.random()
+ * 4
+     |                   ^^^^^^^^^^^^^
+ Cannot call impure function
+  40 |   })), []);
+  41 |
+  42 |   const noteCount = Object.keys
+(notes).length;  react-hooks/purity
+
+./components/views/system/omni-note-vi
+ew.tsx
+42:39  Error: Error: Cannot call impur
+e function during render
+
+`Math.random` is an impure function. C
+alling an impure function can produce 
+unstable results that update unpredict
+ably when the component happens to re-
+render. (https://react.dev/reference/r
+ules/components-and-hooks-must-be-pure
+#components-and-hooks-must-be-idempote
+nt).
+
+C:\Project\esggo\components\views\syst
+em\omni-note-view.tsx:42:39
+  40 |
+  41 |   // Generate stable hash lock 
+to avoid conditional hook rules
+> 42 |   const hashLockValue = useMemo
+(() => Math.random().toString(16).subs
+tring(2, 24).toUpperCase(), []);
+     |                                
+       ^^^^^^^^^^^^^ Cannot call impur
+e function
+  43 |
+  44 |   const [loading, setLoading] =
+ useState(true);
+  45 |   const [isCreating, setIsCreat
+ing] = useState(false);  react-hooks/p
+urity
+
+info  - Need to disable some ESLint ru
+les? Learn more here: https://nextjs.o
+rg/docs/app/api-reference/config/eslin
+t#disabling-rules

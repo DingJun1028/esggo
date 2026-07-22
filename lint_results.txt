@@ -1,0 +1,63 @@
+﻿
+> ai-studio-applet@0.1.0 lint
+> eslint .
+
+
+C:\Project\esggo\components\layout\spirit-modal.tsx
+  326:80  error  React Hook "useAppContext" is called in function "handleSend" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use"  react-hooks/rules-of-hooks
+
+C:\Project\esggo\components\ui\digital-certificate.tsx
+  48:15  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  48:71  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\ui\esg-report-pdf.tsx
+  141:172  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  141:190  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Project\esggo\components\ui\esg-swarm-hud.tsx
+  27:39  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `context`, but the source dependencies were [isOptimized, mode]. Inferred different dependency than source.
+
+C:\Project\esggo\components\ui\esg-swarm-hud.tsx:27:39
+  25 |   const [isOptimized, setIsOptimized] = useState(false);
+  26 |
+> 27 |   const startSimulation = useCallback(async () => {
+     |                                       ^^^^^^^^^^^^^
+> 28 |     setIsStreaming(true);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 29 |     setAgentStream([]);
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 62 |     }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 63 |   }, [isOptimized, mode]);
+     | ^^^^ Could not preserve existing manual memoization
+  64 |
+  65 |   const handleSelfOptimize = async () => {
+  66 |     setIsStreaming(true);     react-hooks/preserve-manual-memoization
+  27:39  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `onComplete`, but the source dependencies were [isOptimized, mode]. Inferred different dependency than source.
+
+C:\Project\esggo\components\ui\esg-swarm-hud.tsx:27:39
+  25 |   const [isOptimized, setIsOptimized] = useState(false);
+  26 |
+> 27 |   const startSimulation = useCallback(async () => {
+     |                                       ^^^^^^^^^^^^^
+> 28 |     setIsStreaming(true);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 29 |     setAgentStream([]);
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 62 |     }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 63 |   }, [isOptimized, mode]);
+     | ^^^^ Could not preserve existing manual memoization
+  64 |
+  65 |   const handleSelfOptimize = async () => {
+  66 |     setIsStreaming(true);  react-hooks/preserve-manual-memoization
+  63:6   warning  React Hook useCallback has missing dependencies: 'context' and 'onComplete'. Either include them or remove the dependency array. If 'onComplete' changes too often, find the parent component that defines it and wrap that definition in useCallback                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+
+✖ 8 problems (7 errors, 1 warning)
+
