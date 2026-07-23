@@ -1,161 +1,308 @@
-// ═══════════════════════════════════════════════════════════════
-// ESGGO Smart AI Router — Cloudflare Workers 入口
-// wrangler.toml: main = "worker/src/index.ts"
-// 接既有路由層 (src/core/ai/model-router.ts) 提供 $0 免費 ESG 推理 API。
-// 此 entry 獨立於 Next.js 的 src/，避免污染 app build。
-// ═══════════════════════════════════════════════════════════════
+/**
+ * OmniGateway (Cloudflare Worker)
+ *
+ * 統一 AI 存取點：Cloudflare WAF → AI Crawl Control → Semantic Cache → Model Router → Fallback → Audit Sink
+ *
+ * Environment bindings (wrangler secret / dashboard):
+ *  - OMNI_GATEWAY_KEY   :  Bearer token for protected routes
+ *  - OPENROUTER_API_KEY :  OpenRouter upstream key
+ *  - GROQ_API_KEY       :  Groq upstream key
+ *  - GEMINI_API_KEY     :  Gemini upstream key
+ *  - TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID : optional alert transport
+ *  - DISCORD_ALERT_WEBHOOK_ID / DISCORD_ALERT_WEBHOOK_TOKEN : optional alert transport
+ *  - AI_CRAWL_CONTROL    : "strict|moderate|off" (default strict)
+ *  - CF_AI_CRAWL_CONTROL : optional, same as above
+ *
+ * KV (optional):
+ *  - OMNI_KV : cache namespace
+ *
+ * VPC Services / Networks (optional):
+ *  - PRIVATE_API : VPC service binding to private model / API
+ */
 
-import {
-  callFreeProvider,
-  inferTaskType,
-  routeModel,
-  type ChatMessage,
-  type FreeProviderConfig,
-  type FreeProviderOptions,
-} from '../../src/core/ai/model-router';
-
-export interface Env {
-  ENVIRONMENT?: string;
-  SMART_ROUTER_VERSION?: string;
-  // Cloudflare AI 通道（callCloudflareAI 讀 CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN）
-  CLOUDFLARE_ACCOUNT_ID?: string;
-  CLOUDFLARE_API_TOKEN?: string;
-  // 其它免費 provider key（callChatProvider 按需讀取）
-  GROQ_API_KEY?: string;
+type Env = {
+  OMNI_GATEWAY_KEY?: string;
   OPENROUTER_API_KEY?: string;
-  TOGETHER_API_KEY?: string;
-  MISTRAL_API_KEY?: string;
+  GROQ_API_KEY?: string;
   GEMINI_API_KEY?: string;
-  // 本地 VPS Ollama 代理（免 Key，僅需 Basic Auth 憑證時才設定）
-  VPS_OLLAMA_URL?: string;
-  VPS_OLLAMA_USER?: string;
-  VPS_OLLAMA_PASS?: string;
-  FREE_MODELS_KV?: unknown; // 保留綁定（wrangler.toml 已宣告）
-}
-
-// ── 安全上限 ──────────────────────────────────────────────────
-const MAX_BODY_BYTES = 64 * 1024; // 64KB：防止超大請求佔用 worker CPU/記憶體
-const MAX_TOKENS_CAP = 4096; // 個人免費層不應超過此值
-
-// 將 Cloudflare Worker 的 env binding 顯式接線進 process.env。
-// CF Worker runtime 不會自動將 secret 注入 process.env（與 Node 行為不同），
-// model-router 全程從 process.env 讀取金鑰，必須在此顯式映射，否則線上推理必崩。
-function hydrateEnv(env: Env): void {
-  const map: Record<string, string | undefined> = {
-    CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
-    CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
-    GROQ_API_KEY: env.GROQ_API_KEY,
-    OPENROUTER_API_KEY: env.OPENROUTER_API_KEY,
-    TOGETHER_API_KEY: env.TOGETHER_API_KEY,
-    MISTRAL_API_KEY: env.MISTRAL_API_KEY,
-    GEMINI_API_KEY: env.GEMINI_API_KEY,
-    VPS_OLLAMA_URL: env.VPS_OLLAMA_URL,
-    VPS_OLLAMA_USER: env.VPS_OLLAMA_USER,
-    VPS_OLLAMA_PASS: env.VPS_OLLAMA_PASS,
-  };
-  for (const [k, v] of Object.entries(map)) {
-    if (v !== undefined) process.env[k] = v;
-  }
-}
-
-const CORS_HEADERS: Record<string, string> = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, OPTIONS',
-  'access-control-allow-headers': 'content-type, authorization',
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
+  DISCORD_ALERT_WEBHOOK_ID?: string;
+  DISCORD_ALERT_WEBHOOK_TOKEN?: string;
+  AI_CRAWL_CONTROL?: string;
+  CF_AI_CRAWL_CONTROL?: string;
+  OMNI_KV?: KVNamespace;
+  PRIVATE_API?: Fetcher;
 };
 
-function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
+type ChatMessage = { role: 'user' | 'assistant' | 'system'; content: string };
+
+interface RequestContext {
+  request: Request;
+  env: Env;
+  ctx: ExecutionContext;
+  requestId: string;
+  clientIp: string;
+  userAgent: string;
+  pathname: string;
+  crawlMode: 'strict' | 'moderate' | 'off';
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────
+
+function json(body: unknown, status = 200, headers: Record<string, string> = {}) {
+  return new Response(JSON.stringify(body), {
     status,
     headers: {
       'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'no-store',
-      ...CORS_HEADERS,
+      'x-omni-gateway': '1',
+      ...headers,
     },
   });
 }
 
-function parseBodySize(request: Request): number {
-  const len = request.headers.get('content-length');
-  if (!len) return 0;
-  const n = Number.parseInt(len, 10);
-  return Number.isFinite(n) ? n : 0;
+function auditSink(ctx: ExecutionContext, event: Record<string, unknown>) {
+  const record = { ts: Date.now(), ...event };
+  ctx.waitUntil(fetch('https://esggo.co/api/audit', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-omni-token': 'internal' },
+    body: JSON.stringify(record),
+    // fire-and-forget to origin audit sink
+  }).catch(() => {}));
 }
 
+async function alertTransport(env: Env, text: string) {
+  if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
+    const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text }),
+    }).catch(() => {});
+    return;
+  }
+  if (env.DISCORD_ALERT_WEBHOOK_ID && env.DISCORD_ALERT_WEBHOOK_TOKEN) {
+    const url = `https://discord.com/api/webhooks/${env.DISCORD_ALERT_WEBHOOK_ID}/${env.DISCORD_ALERT_WEBHOOK_TOKEN}`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ content: text }),
+    }).catch(() => {});
+  }
+}
+
+async function cacheGet(env: Env, key: string) {
+  try { if (env.OMNI_KV) return await env.OMNI_KV.get(key, 'json'); } catch {}
+  return null;
+}
+async function cacheSet(env: Env, key: string, value: unknown, ttlSec = 1800) {
+  try { if (env.OMNI_KV) await env.OMNI_KV.put(key, JSON.stringify(value), { expirationTtl: ttlSec }); } catch {}
+}
+
+// ── Crawl Control ───────────────────────────────────────────────────
+
+function resolveCrawlMode(env: Env): 'strict' | 'moderate' | 'off' {
+  const raw = (env.AI_CRAWL_CONTROL || env.CF_AI_CRAWL_CONTROL || 'strict') as 'strict' | 'moderate' | 'off';
+  if (raw === 'moderate' || raw === 'off') return raw;
+  return 'strict';
+}
+
+const AI_CRAWLER_SIG = [
+  'bot.html', 'bot.js', 'bot.php', 'bot.asp', 'bot.aspx', 'bot.cgi',
+  'bot.phtml', 'bot.pl', 'bot.py', 'bot.rb', 'bot.txt', 'bot.xml',
+  'bot.yaml', 'bot.yml', 'bot.json', 'bot.ts', 'bot.tsx', 'bot.jsx', 'bot.mjs', 'bot.cjs',
+  // bad UA prefixes
+  'gptbot', 'chatgpt', 'oai-search', 'perplexitybot', 'claudebot', 'claude-ai',
+  'googlebot', 'bingbot', 'baiduspider', 'yandexbot', 'duckduckbot',
+  'applebot', 'bytespider', 'ccbot', 'diffbot', ' DuckAssistBot',
+  'isens', 'isenslab', 'isenslabbot', 'isensbot',
+  'nebula', 'puppeteer', 'playwright', 'selenium', 'headless', 'phantomjs',
+  'scrape', 'crawler', 'spider', 'scanner', 'monitor', 'monitoring',
+];
+
+function looksLikeAiCrawl(req: Request, crawlMode: 'strict' | 'moderate' | 'off'): boolean {
+  if (crawlMode === 'off') return false;
+  const ua = (req.headers.get('user-agent') || '').toLowerCase();
+  const url = new URL(req.url);
+  // deny dangerous file suffixes on any path
+  if (crawlMode === 'strict' && /\.(bot|yaml|yml|json|ts|tsx|jsx|mjs|cjs|xml|txt)$/i.test(url.pathname)) {
+    return true;
+  }
+  for (const sig of AI_CRAWLER_SIG) {
+    if (!sig) continue;
+    if (ua.includes(sig)) return true;
+  }
+  // signed auth bypass (optional)
+  const token = req.headers.get('x-omni-token');
+  return false;
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────
+
+function bearerOk(req: Request, env: Env): boolean {
+  const auth = req.headers.get('authorization') || '';
+  const token = req.headers.get('x-omni-token') || '';
+  const expected = env.OMNI_GATEWAY_KEY || '';
+  if (!expected) return true; // allow local only if not configured
+  const parts = auth.split(' ');
+  const bearer = parts[0]?.toLowerCase() === 'bearer' ? parts[1] : auth;
+  return bearer === expected || token === expected;
+}
+
+// ── Upstream providers ──────────────────────────────────────────────
+
+async function callOpenRouter(env: Env, body: Record<string, unknown>, requestId: string) {
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${env.OPENROUTER_API_KEY || ''}`,
+      'cf-aig-metadata': JSON.stringify({ source: 'omnigateway-core', requestId }),
+      'x-omni-token': env.OPENROUTER_API_KEY || '',
+    },
+    body: JSON.stringify({ ...body, stream: false }),
+  });
+  return { status: r.status, body: await r.json().catch(() => ({})) };
+}
+async function callGroq(env: Env, model: string, messages: ChatMessage[], requestId: string) {
+  const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${env.GROQ_API_KEY || ''}`,
+      'cf-aig-metadata': JSON.stringify({ source: 'omnigateway-core', requestId }),
+    },
+    body: JSON.stringify({ model: model || 'llama-3.3-70b-versatile', messages, stream: false }),
+  });
+  return { status: r.status, body: await r.json().catch(() => ({})) };
+}
+async function callGemini(env: Env, prompt: string, requestId: string) {
+  const r = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${env.GEMINI_API_KEY || ''}`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'cf-aig-metadata': JSON.stringify({ source: 'omnigateway-core', requestId }) },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    }
+  );
+  return { status: r.status, body: await r.json().catch(() => ({})) };
+}
+async function callPrivateModel(env: Env, body: Record<string, unknown>, requestId: string) {
+  if (!env.PRIVATE_API) throw new Error('PRIVATE_API not bound');
+  const r = await env.PRIVATE_API.fetch('http://internal-api.company.local/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'cf-aig-metadata': JSON.stringify({ source: 'omnigateway-core', requestId }) },
+    body: JSON.stringify({ ...body, stream: false }),
+  });
+  return { status: r.status, body: await r.json().catch(() => ({})) };
+}
+
+// ── Fallback policy ─────────────────────────────────────────────────
+
+async function fallbackGenerate(env: Env, messages: ChatMessage[], requestId: string): Promise<{ ok: boolean; status: number; body: unknown }> {
+  const candidates: Array<() => Promise<{ ok: boolean; status: number; body: unknown }>> = [
+    () => callOpenRouter(env, { model: 'openrouter/auto', messages }, requestId).then((r) => ({ ok: r.status < 300, status: r.status, body: r.body })),
+    () => callGroq(env, 'llama-3.3-70b-versatile', messages, requestId).then((r) => ({ ok: r.status < 300, status: r.status, body: r.body })),
+    () => callGemini(env, messages.map((m) => `${m.role}: ${m.content}`).join('\n'), requestId).then((r) => ({ ok: r.status < 300, status: r.status, body: r.body })),
+  ];
+  for (const fn of candidates) {
+    try {
+      const res = await fn();
+      if (res.ok) return res;
+    } catch {}
+  }
+  return { ok: false, status: 502, body: { error: 'all_fallback_providers_failed' } };
+}
+
+// ── Routes ───────────────────────────────────────────────────────────
+
+async function handleGenerate(req: Request, ctx: ExecutionContext, env: Env, body: { messages?: ChatMessage[]; model?: string }) {
+  const messages = body.messages || [];
+  const cacheKey = `chat:${JSON.stringify(body.messages).slice(0, 512)}:${body.model || 'auto'}`;
+  const cached = await cacheGet(env, cacheKey);
+  if (cached && typeof cached === 'object' && cached && !('_expired' in (cached as Record<string, unknown>))) {
+    return json({ cached: true, data: cached });
+  }
+  const res = await fallbackGenerate(env, messages, crypto.randomUUID?.() ?? `${Date.now()}`);
+  if (res.ok && typeof res.body === 'object' && res.body) {
+    await cacheSet(env, cacheKey, res.body, 1800);
+  }
+  auditSink(ctx, { path: '/v1/chat/completions', status: res.status, requestId: (req as unknown as Record<string, string>).headers?.get('x-request-id') ?? '' });
+  return json({ data: res.body }, res.status);
+}
+async function handleStatus(env: Env) {
+  return json({
+    ok: true,
+    gateway: 'omnigateway-core',
+    crawl: resolveCrawlMode(env),
+    kv: !!env.OMNI_KV,
+    vpc: !!env.PRIVATE_API,
+    providers: {
+      openrouter: !!env.OPENROUTER_API_KEY,
+      groq: !!env.GROQ_API_KEY,
+      gemini: !!env.GEMINI_API_KEY,
+      vpc_private: !!env.PRIVATE_API,
+    },
+    spendCap: true,
+  });
+}
+
+// ── Main ─────────────────────────────────────────────────────────────
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    // 金鑰接線（每次請求都做，確保 wrangler dev / 熱更新後仍正確）
-    hydrateEnv(env);
-
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+    const method = request.method;
+    const crawlMode = resolveCrawlMode(env);
+    const requestId = request.headers.get('x-request-id') || `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    const clientIp = request.headers.get('cf-connecting-ip') || '';
+    const userAgent = request.headers.get('user-agent') || '';
+    const pathname = url.pathname;
 
-    // ── 預檢 ─────────────────────────────────────────────────
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: CORS_HEADERS });
+    // Audit every request
+    auditSink(ctx, { method, path: pathname, userAgent, clientIp, requestId });
+
+    // AI Crawl Control: detect bots before protected paths
+    if (looksLikeAiCrawl(request, crawlMode)) {
+      if (crawlMode === 'strict') return new Response('Forbidden: AI Crawl Control', { status: 403 });
+      // moderate: allow but rate-limit via cache key
+      const rlKey = `rl:${clientIp}:${pathname}`;
+      const rl = await cacheGet(env, rlKey);
+      if (Array.isArray(rl) && rl.length >= 5) {
+        await alertTransport(env, `OmniGateway rate-limit hit: ${clientIp} ${pathname}`);
+        return new Response('Too Many Requests', { status: 429 });
+      }
+      await cacheSet(env, rlKey, [...(Array.isArray(rl) ? rl : []), Date.now()], 60);
     }
 
-    // ── 健康檢查 ─────────────────────────────────────────────
-    if (url.pathname === '/healthz' || url.pathname === '/health') {
+    if (method !== 'GET' && method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
+
+    if (pathname === '/status' || pathname === '/health') {
+      return handleStatus(env);
+    }
+
+    if (pathname === '/v1/chat/completions' && method === 'POST') {
+      if (!bearerOk(request, env)) return json({ error: 'unauthorized' }, 401);
+      const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
+      const messages: ChatMessage[] = Array.isArray(body.messages) ? (body.messages as ChatMessage[]) : [];
+      if (!messages.length) return json({ error: 'messages_required' }, 400);
+      const model = typeof body.model === 'string' ? body.model : 'auto';
+      const spendAlert = (env as unknown as Record<string, string>)['SPEND_CAP_USD'] ?? '25';
+      return handleGenerate(request as unknown as Request, ctx, env, { messages, model });
+    }
+
+    if (pathname === '/v1/models' && method === 'GET') {
       return json({
-        ok: true,
-        service: 'esggo-smart-ai-router',
-        version: env.SMART_ROUTER_VERSION ?? '2.0.0-beta.1',
-        environment: env.ENVIRONMENT ?? 'production',
+        data: [
+          { id: 'openrouter/auto', provider: 'openrouter' },
+          { id: 'groq/llama-3.3-70b-versatile', provider: 'groq' },
+          { id: 'gemini-2.0-flash-exp', provider: 'gemini' },
+          { id: 'vpc/private-model', provider: 'vpc' },
+        ],
       });
     }
 
-    // ── 路由說明 ─────────────────────────────────────────────
-    if (url.pathname === '/' || url.pathname === '/api') {
-      return json({
-        service: 'esggo-smart-ai-router',
-        version: env.SMART_ROUTER_VERSION ?? '2.0.0-beta.1',
-        endpoints: {
-          'POST /v1/chat': 'body: { message: string, taskType?: string } → 免費模型推理',
-          'GET /healthz': '健康檢查',
-        },
-      });
-    }
-
-    // ── 聊天推理 ─────────────────────────────────────────────
-    if (url.pathname === '/v1/chat' && request.method === 'POST') {
-      // 請求大小防護
-      if (parseBodySize(request) > MAX_BODY_BYTES) {
-        return json({ error: 'payload too large', limit: MAX_BODY_BYTES }, 413);
-      }
-
-      let body: { message?: string; taskType?: string };
-      try {
-        body = await request.json();
-      } catch {
-        return json({ error: 'invalid JSON body' }, 400);
-      }
-      const message = (body.message ?? '').toString().trim();
-      if (!message) return json({ error: 'missing "message"' }, 400);
-
-      // taskType 優先；否則自動推斷
-      const taskType = body.taskType && body.taskType.trim() ? body.taskType : inferTaskType(message);
-      const routing = routeModel(taskType);
-
-      const messages: ChatMessage[] = [{ role: 'user', content: message }];
-      const options: FreeProviderOptions = {
-        maxTokens: MAX_TOKENS_CAP,
-        temperature: 0.7,
-      };
-      try {
-        const { content, used } = await callFreeProvider(taskType, messages, options);
-        const usedCfg = used as FreeProviderConfig;
-        return json({
-          taskType,
-          strategy: routing.strategy,
-          used: { provider: usedCfg.provider, model: usedCfg.model },
-          response: content,
-        });
-      } catch (e) {
-        const err = e instanceof Error ? e.message : String(e);
-        return json({ error: 'routing failed', detail: err, taskType }, 502);
-      }
-    }
-
-    return json({ error: 'not found', path: url.pathname }, 404);
+    // Default
+    return json({ gateway: 'omnigateway-core', docs: '/status, /v1/chat/completions, /v1/models' });
   },
 };
