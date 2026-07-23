@@ -490,5 +490,63 @@ gateway
   });
 
 // ── Parse ──────────────────────────────────────────────────
+// ── run — unified python pipeline ──────────────────────────
+const { spawn } = await import('node:child_process');
+const { existsSync } = await import('node:fs');
+
+const PIPELINE_STAGES = [
+  { key: 'gen',   label: 'Generate ESG data',     file: 'scripts/generate_esg_data.py' },
+  { key: 'build', label: 'Build full DB',          file: 'scripts/build_full_db.py' },
+  { key: 'vault', label: 'Run vault',              file: 'run_vault.py' },
+  { key: 'sync',  label: 'Oracle sync',            file: 'scripts/oracle-sync.py' },
+];
+
+function resolvePython() {
+  const candidates = ['python3', 'python', 'python3.11', 'python3.12'];
+  return candidates.find((bin) => {
+    try { require('node:child_process').execSync(`${bin} --version`, { stdio: 'ignore' }); return true; }
+    catch { return false; }
+  }) || 'python3';
+}
+
+function runStage(py, file, cwd) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(py, [file], { cwd, stdio: 'inherit', env: process.env });
+    child.on('error', reject);
+    child.on('close', (code) => resolve(code));
+  });
+}
+
+const runCmd = program
+  .command('run')
+  .description('Run ESGGO unified Python pipeline (gen → build → vault → sync).')
+  .option('-c, --cwd <path>', 'Project root', process.cwd())
+  .option('-p, --python <bin>', 'Python binary', '')
+  .option('--stage <name>', 'Run only one stage: gen|build|vault|sync')
+  .action(async (opts) => {
+    const cwd = opts.cwd;
+    const py = opts.python || resolvePython();
+    const only = opts.stage ? [opts.stage] : PIPELINE_STAGES.map((s) => s.key);
+    console.log(`[esggo-run] cwd=${cwd} python=${py}`);
+    for (const stage of PIPELINE_STAGES) {
+      if (!only.includes(stage.key)) continue;
+      console.log(`
+[esggo-run] >>> ${stage.label} (${stage.file})`);
+      if (!existsSync(`${cwd}/${stage.file}`)) {
+        console.warn(`[esggo-run] skip ${stage.file}: not found`);
+        continue;
+      }
+      const code = await runStage(py, stage.file, cwd);
+      if (code !== 0) {
+        console.error(`[esggo-run] ${stage.label} failed with exit ${code}`);
+        process.exitCode = code ?? 1;
+        return;
+      }
+      console.log(`[esggo-run] <<< ${stage.label} OK`);
+    }
+    console.log(`
+[esggo-run] Pipeline complete.`);
+  });
+
 program.parse();
 
