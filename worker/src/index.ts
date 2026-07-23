@@ -189,11 +189,11 @@ async function callGemini(env: Env, prompt: string, requestId: string) {
 }
 async function callPrivateModel(env: Env, body: Record<string, unknown>, requestId: string) {
   if (!env.PRIVATE_API) throw new Error('PRIVATE_API not bound');
-  const r = await env.PRIVATE_API.fetch('http://internal-api.company.local/v1/chat/completions', {
+  const r = await env.PRIVATE_API.fetch(new Request('http://internal-api.company.local/v1/chat/completions', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'cf-aig-metadata': JSON.stringify({ source: 'omnigateway-core', requestId }) },
     body: JSON.stringify({ ...body, stream: false }),
-  });
+  }));
   return { status: r.status, body: await r.json().catch(() => ({})) };
 }
 
@@ -227,7 +227,7 @@ async function handleGenerate(req: Request, ctx: ExecutionContext, env: Env, bod
   if (res.ok && typeof res.body === 'object' && res.body) {
     await cacheSet(env, cacheKey, res.body, 1800);
   }
-  auditSink(ctx, { path: '/v1/chat/completions', status: res.status, requestId: (req as unknown as Record<string, string>).headers?.get('x-request-id') ?? '' });
+  auditSink(ctx, { path: '/v1/chat/completions', status: res.status, requestId: req.headers.get('x-request-id') ?? '' });
   return json({ data: res.body }, res.status);
 }
 async function handleStatus(env: Env) {
