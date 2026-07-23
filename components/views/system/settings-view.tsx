@@ -39,7 +39,7 @@ export function SettingsView() {
   const [smtpConfig, setSmtpConfig] = useState({
     from: "jun@esgsunshine.com",
     user: "jun@esgsunshine.com",
-    password: "!S1421680s",
+    password: "",
     host: "esgsunshine.com",
     port: "465",
     security: "TLS",
@@ -61,7 +61,7 @@ export function SettingsView() {
 
   const [llmConfig, setLlmConfig] = useState({
     provider: "Google Gemini",
-    apiKey: "AIzaSyB-xxxxxxxxxxxxxxxxxxxx",
+    apiKey: "",
     modelId: "gemini-3.0-pro",
     temperature: "0.7"
   });
@@ -108,7 +108,7 @@ export function SettingsView() {
 
       setTimeout(() => {
         setIsTesting(false);
-        if (smtpConfig.password !== "!S1421680s") {
+        if (!smtpConfig.password) {
           setTestResult("error");
           setTestErrorMessage("Authentication failed. Please verify credentials.");
         } else {
