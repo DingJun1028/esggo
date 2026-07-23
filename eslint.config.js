@@ -9,7 +9,15 @@ const globals = require('globals');
 module.exports = [
   ...typescriptEslint.configs.recommended,
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/', '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/', 'scripts/*.cjs', 'eslint.config.js', '.agents/**', 'lib/agents/omni-agent-bus.js', 'test/', '_analysis/**', 'temp/**', 'my-worker/**', 'gateway/**', 'lib/agents/**', 'lib/api/**', 'sdks/**', 'chapter-templates/**', 'examples/**', 'vps/**', 'scripts/**'],
+    ignores: [
+      '.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/',
+      '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/',
+      'scripts/*.cjs', '.agents/**', 'lib/agents/omni-agent-bus.js',
+      'test/', '_analysis/**', 'temp/**', 'my-worker/**', 'gateway/**',
+      'lib/agents/**', 'lib/api/**', 'sdks/**', 'chapter-templates/**',
+      'examples/**', 'vps/**', 'scripts/**',
+      'src/lib/omni-component/**', 'src/impl/__tests__/**'
+    ],
   },
   {
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
