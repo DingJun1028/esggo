@@ -1,0 +1,50 @@
+name: Deploy OmniGateway Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - 'wrangler.toml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy OmniGateway Worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Wrangler
+        run: npm install -g wrangler@latest
+
+      - name: Typecheck Worker
+        working-directory: worker
+        run: npx tsc --noEmit -p tsconfig.json
+
+      - name: Lint Worker
+        working-directory: worker
+        run: npx eslint src/index.ts
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: worker
+          secretKeys: |
+            OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}
+            GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          wranglerOptions: |
+            --env production
