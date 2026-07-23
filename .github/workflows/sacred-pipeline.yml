@@ -22,7 +22,7 @@ jobs:
       - name: ⚙️ 構築結界 (Setup Node.js)
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: 📦 注入依賴 (Install dependencies)
