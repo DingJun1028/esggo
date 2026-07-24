@@ -535,8 +535,8 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-text-main text-lg">2026年 3月</h3>
               <div className="flex gap-2">
-                <button className="p-1.5 hover:bg-primary/10 rounded-lg transition-colors"><ChevronLeft className="w-4 h-4 text-text-muted"/></button>
-                <button className="p-1.5 hover:bg-primary/10 rounded-lg transition-colors"><ChevronRight className="w-4 h-4 text-text-muted"/></button>
+                <button aria-label="Previous month" title="Previous month" className="p-1.5 hover:bg-primary/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"><ChevronLeft className="w-4 h-4 text-text-muted" aria-hidden="true" /></button>
+                <button aria-label="Next month" title="Next month" className="p-1.5 hover:bg-primary/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"><ChevronRight className="w-4 h-4 text-text-muted" aria-hidden="true" /></button>
               </div>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center mb-2">
@@ -587,11 +587,11 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
                           }}
                           suppressHydrationWarning
                         />
-                        <button onClick={() => saveEditTask(task.id)} className="p-1 text-primary hover:bg-primary/10 rounded-md">
-                          <Save className="w-4 h-4" />
+                        <button onClick={() => saveEditTask(task.id)} aria-label="Save task" title="Save task" className="p-1 text-primary hover:bg-primary/10 rounded-md focus-visible:ring-2 focus-visible:ring-primary focus:outline-none">
+                          <Save className="w-4 h-4" aria-hidden="true" />
                         </button>
-                        <button onClick={() => setEditingTaskId(null)} className="p-1 text-text-muted hover:bg-slate-100 rounded-md">
-                          <X className="w-4 h-4" />
+                        <button onClick={() => setEditingTaskId(null)} aria-label="Cancel edit" title="Cancel edit" className="p-1 text-text-muted hover:bg-slate-100 rounded-md focus-visible:ring-2 focus-visible:ring-primary focus:outline-none">
+                          <X className="w-4 h-4" aria-hidden="true" />
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
@@ -1144,8 +1144,8 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
                   <Database className="w-5 h-5 text-primary" />
                   溯源存證鏈 (Traceability Chain)
                 </h3>
-                <button onClick={() => setActiveTrace(null)} className="p-2 hover:bg-bg-base rounded-full text-text-muted">
-                  <X className="w-5 h-5" />
+                <button onClick={() => setActiveTrace(null)} aria-label="Close Traceability Chain" title="Close Traceability Chain" className="p-2 hover:bg-bg-base rounded-full text-text-muted focus-visible:ring-2 focus-visible:ring-primary focus:outline-none">
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
               <div className="space-y-6">

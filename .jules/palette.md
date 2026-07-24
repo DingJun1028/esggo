@@ -22,3 +22,7 @@
 ## 2024-05-18 - Component-Specific Focus Rings and ARIA Roles
 **Learning:** Found missing `role="tab"` and `role="tablist"` attributes on custom tab navigation, missing `aria-label`s on icon buttons, and missing `focus-visible` styles in `app/omni-center/page.tsx`, rendering these elements inaccessible via keyboard and screen readers.
 **Action:** Applied `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to custom buttons. Implemented proper `role="tablist"`, `role="tab"`, and `aria-selected` for custom tabs. Added `aria-label` descriptions for icon-only components while hiding decorative inner elements with `aria-hidden="true"`.
+
+## 2026-07-24 - Interactive Icon Buttons in Complex Views
+**Learning:** Icon-only buttons used for secondary interactions (like calendar navigation, editing controls, or modal dismissals) within complex data-dense views like `DashboardView` often lack both accessible names (`aria-label`) and explicit keyboard focus indicators (`focus-visible`).
+**Action:** When auditing or implementing dense dashboard components, ensure all icon-only buttons receive descriptive `aria-label` and `title` attributes. Additionally, always explicitly hide their inner SVG icons using `aria-hidden="true"` and apply high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-primary focus:outline-none`) to guarantee they are discoverable and usable by assistive technologies and keyboard navigators alike.
