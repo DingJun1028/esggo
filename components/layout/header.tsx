@@ -24,6 +24,27 @@ import { Badge } from "@/components/ui/badge";
 import { NAVIGATION } from "@/lib/config/navigation";
 import { useAppContext } from "@/lib/context/app-context";
 
+// ⚡ Bolt: Hoisted static configurations to module scope to prevent reallocation on every re-render
+const PROXY_LABELS: Record<string, { zh: string; en: string }> = {
+  "dashboard": { zh: "萬能核心", en: "Omni AI Core" },
+  "reconnaissance": { zh: "萬能監測", en: "Omni Monitor" },
+  "omni-note": { zh: "萬能採集", en: "Omni AI Harvest" },
+  "omni-truth": { zh: "萬能核對", en: "Omni AI QA" },
+  "reports": { zh: "萬能生成", en: "Omni AI Draft" },
+  "omni-src": { zh: "萬能管理", en: "Omni AI Proxy" },
+  "newsletter": { zh: "萬能專欄", en: "Omni AI Newsletter" },
+  "omni-chrono": { zh: "萬能時程", en: "Omni AI Timeline" },
+  "omni-aura": { zh: "萬能主題", en: "Omni OmniAura" },
+};
+
+const THEMES = [
+  { id: "light", name: "晨光清泉 (Morning)", icon: Sun },
+  { id: "dark", name: "深空光流 (Deep Space)", icon: Moon },
+  { id: "emerald", name: "翡翠森林 (Emerald)", icon: Droplets },
+  { id: "amber", name: "琥珀赤沙 (Amber)", icon: Zap },
+  { id: "ice", name: "冰晶極光 (Ice)", icon: Box },
+] as const;
+
 export function Header() {
   const {
     activeTab,
@@ -39,18 +60,6 @@ export function Header() {
     setTheme
   } = useAppContext();
 
-  const PROXY_LABELS: Record<string, { zh: string; en: string }> = {
-    "dashboard": { zh: "萬能核心", en: "Omni AI Core" },
-    "reconnaissance": { zh: "萬能監測", en: "Omni Monitor" },
-    "omni-note": { zh: "萬能採集", en: "Omni AI Harvest" },
-    "omni-truth": { zh: "萬能核對", en: "Omni AI QA" },
-    "reports": { zh: "萬能生成", en: "Omni AI Draft" },
-    "omni-src": { zh: "萬能管理", en: "Omni AI Proxy" },
-    "newsletter": { zh: "萬能專欄", en: "Omni AI Newsletter" },
-    "omni-chrono": { zh: "萬能時程", en: "Omni AI Timeline" },
-    "omni-aura": { zh: "萬能主題", en: "Omni OmniAura" },
-  };
-
   const activeLabel = (() => {
     const item = NAVIGATION.find((n) => n.id === activeTab);
     if (!item) return "";
@@ -62,14 +71,6 @@ export function Header() {
   })();
 
   const [showThemeMenu, setShowThemeMenu] = useState(false);
-
-  const THEMES = [
-    { id: "light", name: "晨光清泉 (Morning)", icon: Sun },
-    { id: "dark", name: "深空光流 (Deep Space)", icon: Moon },
-    { id: "emerald", name: "翡翠森林 (Emerald)", icon: Droplets },
-    { id: "amber", name: "琥珀赤沙 (Amber)", icon: Zap },
-    { id: "ice", name: "冰晶極光 (Ice)", icon: Box },
-  ] as const;
 
   const activeThemeObj = THEMES.find(t => t.id === theme) || THEMES[1];
 
