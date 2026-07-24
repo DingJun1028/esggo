@@ -5,20 +5,21 @@ import { Menu, User } from "lucide-react";
 import { NAVIGATION, SECTION_LABELS } from "@/lib/config/navigation";
 import { useAppContext } from "@/lib/context/app-context";
 
+// ⚡ Bolt: Hoisted static configurations to module scope to prevent reallocation on every re-render
+const PROXY_LABELS: Record<string, { zh: string; en: string }> = {
+  "dashboard": { zh: "Omni Core (萬能核心)", en: "Omni AI Core" },
+  "reconnaissance": { zh: "Omni Monitor (萬能監測)", en: "Omni Monitor" },
+  "omni-note": { zh: "Omni WuZuo (悟作筆記)", en: "Omni AI WuZuo" },
+  "omni-knowledge": { zh: "Omni ThinkTank (萬能智庫)", en: "Omni ThinkTank" },
+  "omni-hub": { zh: "Omni Hub (萬能圓通)", en: "Omni Center" },
+  "omni-truth": { zh: "Omni QA (萬能核對)", en: "Omni AI QA" },
+};
+
+const SECTIONS = ["recon", "settle", "evidence", "draft", "assets", "system"];
+
 export function Sidebar() {
   const { activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, lang, aiProxyMode } =
     useAppContext();
-
-  const PROXY_LABELS: Record<string, { zh: string; en: string }> = {
-    "dashboard": { zh: "Omni Core (萬能核心)", en: "Omni AI Core" },
-    "reconnaissance": { zh: "Omni Monitor (萬能監測)", en: "Omni Monitor" },
-    "omni-note": { zh: "Omni WuZuo (悟作筆記)", en: "Omni AI WuZuo" },
-    "omni-knowledge": { zh: "Omni ThinkTank (萬能智庫)", en: "Omni ThinkTank" },
-    "omni-hub": { zh: "Omni Hub (萬能圓通)", en: "Omni Center" },
-    "omni-truth": { zh: "Omni QA (萬能核對)", en: "Omni AI QA" },
-  };
-
-  const SECTIONS = ["recon", "settle", "evidence", "draft", "assets", "system"];
 
   return (
     <motion.aside
