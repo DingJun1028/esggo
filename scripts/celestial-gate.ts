@@ -10,7 +10,7 @@ try {
 
   // 2. 針對整個 src/ 執行 lint 並自動修正
   console.log('🛠️ 3️⃣ 執行核心 Lint (pnpm eslint src/ ...)');
-  execSync(`pnpm eslint ${CORE_PATHS.join(' ')} --fix --ignore-pattern src/lib/omni-component/** --ignore-pattern src/impl/__tests__/** --max-warnings 120`, { stdio: 'inherit' });
+  execSync(`pnpm eslint ${CORE_PATHS.join(' ')} --fix --max-warnings 120`, { stdio: 'inherit' });
 
   console.log('✅ 核心目錄通過熵境門檻，遺留路徑已被隔離。');
 } catch (e) {
