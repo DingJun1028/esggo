@@ -17,12 +17,17 @@ interface WikiPageProps {
 export default function WikiPage({ params }: WikiPageProps) {
   const { slug } = params;
   const decodedSlug = decodeURIComponent(slug);
-  const filePath = path.join(process.cwd(), 'wiki', 'wiki', `${decodedSlug}.md`);
+
+  const baseDir = path.resolve(process.cwd(), 'wiki', 'wiki');
+  const filePath = path.resolve(baseDir, `${decodedSlug}.md`);
   
   let content = '';
   let error = '';
 
   try {
+    if (!filePath.startsWith(baseDir + path.sep)) {
+      throw new Error('Invalid file path');
+    }
     content = fs.readFileSync(filePath, 'utf-8');
   } catch (err) {
     error = '查無此 WIKI 文件。請確認檔名是否正確。';
