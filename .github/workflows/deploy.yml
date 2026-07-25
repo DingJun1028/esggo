@@ -48,30 +48,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'pnpm'
       
       - name: Install dependencies
         id: install
         run: |
           set -e
-          if [ -f pnpm-lock.yaml ]; then
-            echo "Using pnpm"
-            # Install pnpm via npm (corepack enable fails on pnpm@11.5.2 signature keyid check)
-            npm install -g "pnpm@$(node -p "require('./package.json').packageManager.replace('pnpm@','').split(' ')[0]")"
-            pnpm install --frozen-lockfile
-          elif [ -f yarn.lock ]; then
-            echo "Using yarn"
-            yarn install --frozen-lockfile
-          elif [ -f package-lock.json ]; then
-            echo "Using npm"
-            npm ci
-          else
-            echo "No lockfile found, installing dependencies"
-            npm install
-          fi
+          echo "Using pnpm"
+          pnpm install --frozen-lockfile
       
       - name: Run ESLint (if configured)
         if: ${{ always() }}
