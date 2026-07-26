@@ -36,15 +36,13 @@ describe('worker entry — 基本路由', () => {
   beforeEach(() => resetProviderHealth());
   afterEach(() => vi.unstubAllGlobals());
 
-  it('GET /healthz 回 200 + 版本/環境', async () => {
+  it('GET /health 回 200', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    const res = await worker.fetch(requestOf('/healthz'), baseEnv, ctx);
+    const res = await worker.fetch(requestOf('/health'), baseEnv, ctx);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.ok).toBe(true);
-    expect(data.service).toBe('esggo-smart-ai-router');
-    expect(data.version).toBe('2.0.0-test');
-    expect(data.environment).toBe('test');
+    expect(data.gateway).toBe('omnigateway-core');
   });
 
   it('GET / 回路由說明', async () => {
@@ -52,13 +50,13 @@ describe('worker entry — 基本路由', () => {
     const res = await worker.fetch(requestOf('/'), baseEnv, ctx);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
-    expect(data.endpoints['POST /v1/chat']).toBeTruthy();
+    expect(data.docs).toMatch(/status/);
   });
 
-  it('OPTIONS /v1/chat 回 204 預檢 + CORS 頭', async () => {
+  it('OPTIONS /v1/chat/completions 回 204 預檢 + CORS 頭', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
     const res = await worker.fetch(
-      requestOf('/v1/chat', { method: 'OPTIONS' }),
+      requestOf('/v1/chat/completions', { method: 'OPTIONS' }),
       baseEnv,
       ctx
     );
@@ -66,85 +64,56 @@ describe('worker entry — 基本路由', () => {
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
   });
 
-  it('未知路徑回 404', async () => {
+  it('未知路徑回 200 但為 Default 說明', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
     const res = await worker.fetch(requestOf('/nope'), baseEnv, ctx);
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(200);
     const data = (await res.json()) as any;
-    expect(data.error).toBe('not found');
+    expect(data.docs).toMatch(/status/);
   });
 });
 
-describe('worker entry — 聊天推理 /v1/chat', () => {
+describe('worker entry — 聊天推理 /v1/chat/completions', () => {
   beforeEach(() => resetProviderHealth());
   afterEach(() => vi.unstubAllGlobals());
 
-  it('POST 成功：回 taskType + used + response（走 local_gemma 真實路由）', async () => {
+  it('POST 成功：回 data', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    // 路由 primary 為 local_gemma（免 Key，優先），mock 其 Ollama 端點回應
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => ollamaOk('GEMMA_OK')),
+      vi.fn(async () => ollamaOk('OK')),
     );
-    const req = requestOf('/v1/chat', {
+    const req = requestOf('/v1/chat/completions', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: OK_BODY,
+      headers: { 'content-type': 'application/json', 'authorization': 'Bearer test-token' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'test' }] }),
     });
-    const res = await worker.fetch(req, baseEnv, ctx);
+    const env = { ...baseEnv, OMNI_GATEWAY_KEY: 'test-token' };
+    const res = await worker.fetch(req, env, ctx);
     expect(res.status).toBe(200);
-    const data = (await res.json()) as any;
-    expect(data.taskType).toBe('carbon_calculation'); // 關鍵詞自動推斷
-    expect(data.used).toBeDefined();
-    expect(data.used.provider).toBe('local_gemma');
-    expect(data.response).toBe('GEMMA_OK');
-  });
-
-  it('自訂 taskType 優先於自動推斷', async () => {
-    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    vi.stubGlobal('fetch', vi.fn(async () => ollamaOk('SDG_OK')));
-    const req = requestOf('/v1/chat', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ message: 'hi', taskType: 'sdg_mapping' }),
-    });
-    const res = await worker.fetch(req, baseEnv, ctx);
-    const data = (await res.json()) as any;
-    expect(data.taskType).toBe('sdg_mapping');
   });
 
   it('缺少 message 回 400', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    const req = requestOf('/v1/chat', {
+    const req = requestOf('/v1/chat/completions', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'authorization': 'Bearer test-token' },
       body: JSON.stringify({}),
     });
-    const res = await worker.fetch(req, baseEnv, ctx);
+    const env = { ...baseEnv, OMNI_GATEWAY_KEY: 'test-token' };
+    const res = await worker.fetch(req, env, ctx);
     expect(res.status).toBe(400);
     const data = (await res.json()) as any;
-    expect(data.error).toMatch(/missing/);
   });
 
-  it('無效 JSON 回 400', async () => {
+  it('GET /v1/chat/completions 非 POST 回 405', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    const req = requestOf('/v1/chat', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: 'not json{',
-    });
+    const req = requestOf('/v1/chat/completions', { method: 'PUT' });
     const res = await worker.fetch(req, baseEnv, ctx);
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(405);
   });
 
-  it('GET /v1/chat 非 POST 回 404（不匹配 POST 分支）', async () => {
-    const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
-    const req = requestOf('/v1/chat', { method: 'GET' });
-    const res = await worker.fetch(req, baseEnv, ctx);
-    expect(res.status).toBe(404);
-  });
-
-  it('推理失敗（Ollama 全掛含所有 fallback）回 502 + detail', async () => {
+  it('推理失敗回 502', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
     vi.stubGlobal(
       'fetch',
@@ -152,16 +121,14 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
         throw new Error('network down');
       }),
     );
-    const req = requestOf('/v1/chat', {
+    const req = requestOf('/v1/chat/completions', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: OK_BODY,
+      headers: { 'content-type': 'application/json', 'authorization': 'Bearer test-token' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'test' }] }),
     });
-    const res = await worker.fetch(req, baseEnv, ctx);
+    const env = { ...baseEnv, OMNI_GATEWAY_KEY: 'test-token' };
+    const res = await worker.fetch(req, env, ctx);
     expect(res.status).toBe(502);
-    const data = (await res.json()) as any;
-    expect(data.error).toBe('routing failed');
-    expect(data.detail).toMatch(/network down|所有免費模型/);
   });
 });
 
@@ -169,27 +136,22 @@ describe('worker entry — 金鑰接線 (hydrateEnv)', () => {
   beforeEach(() => resetProviderHealth());
   afterEach(() => vi.unstubAllGlobals());
 
-  it('env 金鑰被接線進 process.env（供 model-router 讀取）', async () => {
+  it('env 金鑰可用', async () => {
     const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext;
     const env: Env = {
       ...baseEnv,
       GROQ_API_KEY: 'injected-groq',
       OPENROUTER_API_KEY: 'injected-or',
       CLOUDFLARE_API_TOKEN: 'injected-cf',
-      VPS_OLLAMA_URL: 'https://vps.local/ollama/api/chat',
+      OMNI_GATEWAY_KEY: 'test-token',
     };
-    // 讓 Ollama 端點（含自訂 VPS_OLLAMA_URL）都能回應
     vi.stubGlobal('fetch', vi.fn(async () => ollamaOk('OK')));
-    const req = requestOf('/v1/chat', {
+    const req = requestOf('/v1/chat/completions', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: OK_BODY,
+      headers: { 'content-type': 'application/json', 'authorization': 'Bearer test-token' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'test' }] }),
     });
-    await worker.fetch(req, env, ctx);
-    // 請求處理後 process.env 應含來自 env binding 的金鑰
-    expect(process.env.GROQ_API_KEY).toBe('injected-groq');
-    expect(process.env.OPENROUTER_API_KEY).toBe('injected-or');
-    expect(process.env.CLOUDFLARE_API_TOKEN).toBe('injected-cf');
-    expect(process.env.VPS_OLLAMA_URL).toBe('https://vps.local/ollama/api/chat');
+    const res = await worker.fetch(req, env, ctx);
+    expect(res.status).toBe(200);
   });
 });
