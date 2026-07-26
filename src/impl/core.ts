@@ -9,8 +9,6 @@ import {
   IComponentCore,
   IBusEvent,
   LifecycleStage,
-  ITaskSpec,
-  ITaskResult,
   IOmniAgent,
   IOmniAgentBus,
   IOmniAgentGateway,
@@ -18,7 +16,6 @@ import {
   IMartialLawEvent,
 } from "../types/core-contract";
 import { OmniSeed } from "../lib/omni-seed";
-import { OmniTag } from "../lib/omni-tag";
 import { OmniEvidence } from "./omni-evidence";
 import { OmniTime } from "./omni-time";
 import { OmniMemory } from "./omni-memory";
@@ -199,7 +196,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as any);
+      } as unknown as IBusEvent);
       return Object.freeze(event);
     }
     const locked = Object.freeze({ ...event, hashLock: crypto.randomUUID() });
@@ -231,7 +228,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
         topic: "system",
         lifecycle_path: [],
         hashLock: undefined,
-      } as any);
+      } as unknown as IBusEvent);
       return Object.freeze(event);
     }
     return Object.freeze({ ...event, hashLock: crypto.randomUUID() }) as IBusEvent;
@@ -293,7 +290,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       return '';
     });
     if (!output) return [];
-    let resultArray: any[] = [];
+    let resultArray: unknown[] = [];
     try {
       const parsed = JSON.parse(output);
       // NIM returns OpenAI-style chat completion: the model's JSON lives in
@@ -301,19 +298,19 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       const content: string =
         parsed?.choices?.[0]?.message?.content ?? parsed?.predictions ?? '';
       const inner =
-        typeof content === 'string' ? JSON.parse(content) : (content as any);
+        typeof content === 'string' ? JSON.parse(content) : (content as { predictions?: unknown[] });
       resultArray = Array.isArray(inner) ? inner : (inner?.predictions ?? []);
     } catch (e) {
       console.error('[OAG] Failed to parse NVIDIA response', e);
       return [];
     }
     // Transform each prediction into IBusEvent objects.
-    const events: IBusEvent[] = resultArray.map((p, idx) =>
+    const events: IBusEvent[] = resultArray.map((p) =>
       makeCore<IBusEvent>({
         uuid: crypto.randomUUID(),
         version: '1.0.0',
         eventName: 'nvidia.prediction',
-        payload: p,
+        payload: p as Record<string, unknown>,
         stage: 'EMERGED',
         source_origin: 'nvidia',
         topic: 'prediction',
@@ -336,9 +333,9 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   }
 
   injectChaos(event: IBusEvent): IBusEvent {
-    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as any;
+    const mutated = { ...event, chaos: true, injectedAt: Date.now() } as unknown as IBusEvent;
     console.warn(`[OAG] Chaos injected into event ${event.uuid}`);
-    return mutated as IBusEvent;
+    return mutated;
   }
 
   onMartialLaw(reason: string) {
@@ -431,9 +428,9 @@ export class OmniCoreEcosystem {
   }
 
   /** Static helper used by OAB to apply Hash Lock & freeze */
-  public static lockAndFreeze<T extends object>(obj: T): T {
-    (obj as any).evidence = (obj as any).evidence || {};
-    (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+  public static lockAndFreeze<T extends { evidence?: Record<string, unknown> }>(obj: T): T {
+    obj.evidence = obj.evidence || {};
+    obj.evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
       .toString(36)
       .substring(2, 9)}`;
     return Object.freeze(obj);
