@@ -18,7 +18,12 @@ export interface IComponentCore {
   /** Creation timestamp in milliseconds since epoch */
   readonly timestamp: number;
   /** Arbitrary evidence payload that can be enriched during the lifecycle */
-  evidence: Record<string, unknown>;
+    evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 /**

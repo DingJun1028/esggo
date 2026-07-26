@@ -38,6 +38,11 @@ export interface IComponentCore<T = Record<string, any>> {
   readonly timestamp: number;
   readonly source_origin: string;
   readonly payload: T;
-  readonly evidence: IEvidenceHash[];
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
   readonly traceability_chain: ITraceableLog[];
 }
