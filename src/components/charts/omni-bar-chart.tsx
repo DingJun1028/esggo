@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { OmniBarChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
@@ -17,20 +17,27 @@ export function OmniBarChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  if (!data || data.length === 0) return <div>No data available</div>;
-
-  const maxValue = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
   const padding = { top: 40, right: 20, bottom: 40, left: 50 };
-  const graphHeight = Number(height) - padding.top - padding.bottom;
-  
-  // Hardcode viewBox width for relative coordinate calculation
   const viewBoxWidth = 600;
-  const graphWidth = viewBoxWidth - padding.left - padding.right;
-  
-  const barWidth = Math.min((graphWidth / data.length) * 0.6, 40);
-  const barSpacing = (graphWidth - (barWidth * data.length)) / (data.length + 1);
-
   const defaultColor = 'var(--accent-teal)';
+  const graphHeight = Number(height) - padding.top - padding.bottom;
+
+  const { maxValue, barWidth, barSpacing } = useMemo(() => {
+    if (!data || data.length === 0) return { maxValue: 1, barWidth: 0, barSpacing: 0 };
+    const maxVal = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
+    const graphWidth = viewBoxWidth - padding.left - padding.right;
+
+    const computedBarWidth = Math.min((graphWidth / data.length) * 0.6, 40);
+    const computedBarSpacing = (graphWidth - (computedBarWidth * data.length)) / (data.length + 1);
+
+    return {
+      maxValue: maxVal,
+      barWidth: computedBarWidth,
+      barSpacing: computedBarSpacing
+    };
+  }, [data, padding.left, padding.right]);
+
+  if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LineChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
@@ -18,30 +18,41 @@ export function OmniLineChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  if (!data || data.length === 0) return <div>No data available</div>;
-
-  const maxValue = Math.max(...data.map(d => d.value), 1);
-  const minValue = Math.min(...data.map(d => d.value), 0);
-  const valueRange = maxValue - minValue || 1;
   const padding = { top: 40, right: 20, bottom: 40, left: 50 };
-  const graphHeight = Number(height) - padding.top - padding.bottom;
   const viewBoxWidth = 800;
-  const graphWidth = viewBoxWidth - padding.left - padding.right;
-  const stepX = data.length > 1 ? graphWidth / (data.length - 1) : 0;
-
   const defaultColor = 'var(--accent-teal)';
+  const graphHeight = Number(height) - padding.top - padding.bottom;
 
-  const points = data.map((point, index) => {
-    const x = padding.left + stepX * index;
-    const y = padding.top + graphHeight - ((point.value - minValue) / valueRange) * graphHeight;
-    return { x, y, point };
-  });
+  const { points, pathD, areaD, minValue, valueRange } = useMemo(() => {
+    if (!data || data.length === 0) return { points: [], pathD: '', areaD: '', minValue: 0, valueRange: 1 };
+    const maxVal = Math.max(...data.map(d => d.value), 1);
+    const minVal = Math.min(...data.map(d => d.value), 0);
+    const vRange = maxVal - minVal || 1;
+    const graphWidth = viewBoxWidth - padding.left - padding.right;
+    const stepX = data.length > 1 ? graphWidth / (data.length - 1) : 0;
 
-  const pathD = points
-    .map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : smooth ? `S ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
-    .join(' ');
+    const computedPoints = data.map((point, index) => {
+      const x = padding.left + stepX * index;
+      const y = padding.top + graphHeight - ((point.value - minVal) / vRange) * graphHeight;
+      return { x, y, point };
+    });
 
-  const areaD = `${pathD} L ${points[points.length - 1].x} ${padding.top + graphHeight} L ${points[0].x} ${padding.top + graphHeight} Z`;
+    const computedPathD = computedPoints
+      .map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : smooth ? `S ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
+      .join(' ');
+
+    const computedAreaD = `${computedPathD} L ${computedPoints[computedPoints.length - 1].x} ${padding.top + graphHeight} L ${computedPoints[0].x} ${padding.top + graphHeight} Z`;
+
+    return {
+      points: computedPoints,
+      pathD: computedPathD,
+      areaD: computedAreaD,
+      minValue: minVal,
+      valueRange: vRange
+    };
+  }, [data, graphHeight, smooth, padding.left, padding.right, padding.top]);
+
+  if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
