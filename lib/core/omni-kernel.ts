@@ -8,6 +8,12 @@ export interface IComponentCore {
   uuid: string;
   version: string;
   timestamp: number;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 export class OmniKernel implements IComponentCore {
@@ -15,6 +21,7 @@ export class OmniKernel implements IComponentCore {
   readonly uuid: string;
   readonly version: string = "3.1.0-Omni";
   readonly timestamp: number;
+  evidence = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
   
   // Trustworthy 核心禁區：物理級 Hash Lock
   readonly A_Tagging: {
