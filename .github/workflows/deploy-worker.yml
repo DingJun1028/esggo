@@ -28,9 +28,13 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler@latest
 
+      - name: Install Worker deps
+        working-directory: worker
+        run: npm init -y && npm install --save-dev typescript @types/node
+
       - name: Typecheck Worker
         working-directory: worker
-        run: npm install -g typescript && (cd worker && npm init -y && npm install --save-dev @types/node typescript && npx tsc --noEmit -p tsconfig.json)
+        run: npx tsc --noEmit -p tsconfig.json
 
       - name: Lint Worker
         working-directory: worker
