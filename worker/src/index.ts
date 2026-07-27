@@ -70,6 +70,7 @@ function auditSink(ctx: ExecutionContext, event: Record<string, unknown>) {
     body: JSON.stringify(record),
     // fire-and-forget to origin audit sink
   }).catch(() => {}));
+  }
 }
 
 async function alertTransport(env: Env, text: string) {
