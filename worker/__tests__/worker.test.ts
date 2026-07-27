@@ -37,7 +37,7 @@ describe('worker entry — 基本路由', () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it('GET /healthz 回 200 + 版本/環境', async () => {
-    const res = await worker.fetch(requestOf('/healthz'), baseEnv);
+    const res = await worker.fetch(requestOf('/healthz'), baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.ok).toBe(true);
@@ -47,7 +47,7 @@ describe('worker entry — 基本路由', () => {
   });
 
   it('GET / 回路由說明', async () => {
-    const res = await worker.fetch(requestOf('/'), baseEnv);
+    const res = await worker.fetch(requestOf('/'), baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.endpoints['POST /v1/chat']).toBeTruthy();
@@ -57,13 +57,14 @@ describe('worker entry — 基本路由', () => {
     const res = await worker.fetch(
       requestOf('/v1/chat', { method: 'OPTIONS' }),
       baseEnv,
+      { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any
     );
     expect(res.status).toBe(204);
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
   });
 
   it('未知路徑回 404', async () => {
-    const res = await worker.fetch(requestOf('/nope'), baseEnv);
+    const res = await worker.fetch(requestOf('/nope'), baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(404);
     const data = (await res.json()) as any;
     expect(data.error).toBe('not found');
@@ -85,7 +86,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.taskType).toBe('carbon_calculation'); // 關鍵詞自動推斷
@@ -101,7 +102,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ message: 'hi', taskType: 'sdg_mapping' }),
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     const data = (await res.json()) as any;
     expect(data.taskType).toBe('sdg_mapping');
   });
@@ -112,7 +113,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({}),
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(400);
     const data = (await res.json()) as any;
     expect(data.error).toMatch(/missing/);
@@ -124,13 +125,13 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
       headers: { 'content-type': 'application/json' },
       body: 'not json{',
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(400);
   });
 
   it('GET /v1/chat 非 POST 回 404（不匹配 POST 分支）', async () => {
     const req = requestOf('/v1/chat', { method: 'GET' });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(404);
   });
 
@@ -146,7 +147,7 @@ describe('worker entry — 聊天推理 /v1/chat', () => {
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     expect(res.status).toBe(502);
     const data = (await res.json()) as any;
     expect(data.error).toBe('routing failed');
@@ -173,7 +174,7 @@ describe('worker entry — 金鑰接線 (hydrateEnv)', () => {
       headers: { 'content-type': 'application/json' },
       body: OK_BODY,
     });
-    await worker.fetch(req, env);
+    await worker.fetch(req, env, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
     // 請求處理後 process.env 應含來自 env binding 的金鑰
     expect(process.env.GROQ_API_KEY).toBe('injected-groq');
     expect(process.env.OPENROUTER_API_KEY).toBe('injected-or');

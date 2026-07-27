@@ -63,7 +63,8 @@ function json(body: unknown, status = 200, headers: Record<string, string> = {})
 
 function auditSink(ctx: ExecutionContext, event: Record<string, unknown>) {
   const record = { ts: Date.now(), ...event };
-  ctx.waitUntil(fetch('https://esggo.co/api/audit', {
+  if (ctx && typeof ctx.waitUntil === 'function') {
+    ctx.waitUntil(fetch('https://esggo.co/api/audit', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-omni-token': 'internal' },
     body: JSON.stringify(record),

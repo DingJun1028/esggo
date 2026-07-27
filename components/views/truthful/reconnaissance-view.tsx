@@ -32,7 +32,12 @@ interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: any[];
+    evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 export interface IIntelNode5T extends IComponentCore {
