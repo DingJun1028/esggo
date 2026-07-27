@@ -30,7 +30,7 @@ jobs:
 
       - name: Typecheck Worker
         working-directory: worker
-        run: npm install -g typescript && npx tsc --noEmit -p tsconfig.json
+        run: npm install -g typescript && (cd worker && npm init -y && npm install --save-dev @types/node typescript && npx tsc --noEmit -p tsconfig.json)
 
       - name: Lint Worker
         working-directory: worker
