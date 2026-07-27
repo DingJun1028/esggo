@@ -30,7 +30,7 @@ jobs:
 
       - name: Typecheck Worker
         working-directory: worker
-        run: npx tsc --noEmit -p tsconfig.json
+        run: npm install typescript || true && npx tsc --noEmit -p tsconfig.json
 
       - name: Lint Worker
         working-directory: worker
