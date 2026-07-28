@@ -253,12 +253,10 @@ export function VaultView() {
                     <td className="p-6 pl-8">
                       <button
                         onClick={() => setSelectedRecord(record)}
-                        className="text-[11px] font-black italic text-primary hover:underline flex items-center gap-2 tracking-tight uppercase focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
-                        aria-label={`查看記錄 ${record.record_id}`}
-                        title={`查看記錄 ${record.record_id}`}
+                        className="text-[11px] font-black italic text-primary hover:underline flex items-center gap-2 tracking-tight uppercase"
                       >
                         {record.record_id}
-                        <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                        <ExternalLink className="w-3 h-3" />
                       </button>
                     </td>
                     <td className="p-6">
@@ -317,11 +315,9 @@ export function VaultView() {
                 </div>
                 <button
                   onClick={() => setSelectedRecord(null)}
-                  className="text-text-muted hover:text-text-main transition-colors p-2 rounded-[1px] hover:bg-bg-base focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
-                  aria-label="Close Modal"
-                  title="Close Modal"
+                  className="text-text-muted hover:text-text-main transition-colors p-2 rounded-[1px] hover:bg-bg-base"
                 >
-                  <X className="w-6 h-6" aria-hidden="true" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 

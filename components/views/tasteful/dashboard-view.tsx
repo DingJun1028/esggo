@@ -646,20 +646,18 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
                       {!task.completed && editingTaskId !== task.id && (
                         <button
                           onClick={() => startEditTask(task.id, task.text, task.priority, task.dueDate)}
-                          className="text-slate-300 hover:text-primary transition-colors p-1.5 rounded-md hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+                          className="text-slate-300 hover:text-primary transition-colors p-1.5 rounded-md hover:bg-primary/10"
                           title="編輯任務"
-                          aria-label="編輯任務"
                         >
-                          <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
+                          <Edit2 className="w-3.5 h-3.5" />
                         </button>
                       )}
                       <button
                         onClick={() => requestDeleteTask(task.id)}
-                        className="text-slate-300 hover:text-rose-500 transition-colors p-1.5 rounded-md hover:bg-rose-50 focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+                        className="text-slate-300 hover:text-rose-500 transition-colors p-1.5 rounded-md hover:bg-rose-50"
                         title="刪除任務"
-                        aria-label="刪除任務"
                       >
-                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
@@ -983,15 +981,13 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
               </div>
               <button
                 onClick={() => setSelectedEsgDomain(null)}
-                className={`p-2 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none ${
+                className={`p-2 rounded-full transition-colors ${
                   selectedEsgDomain === 'AGC' 
                     ? 'hover:bg-rose-900/50 text-rose-500 hover:text-rose-400' 
                     : 'hover:bg-black/5 text-text-muted hover:text-text-muted'
                 }`}
-                aria-label="關閉"
-                title="關閉"
               >
-                <X className="w-6 h-6" aria-hidden="true" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
