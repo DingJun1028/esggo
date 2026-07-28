@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -142,9 +142,19 @@ export function MaterialityMatrixView() {
     fetchTopics();
   }, []);
 
-  const filteredTopics = activeCategory === "ALL" 
-    ? topics 
-    : topics.filter(t => t.category === activeCategory);
+  // ⚡ Bolt Optimization: Memoize filtering to prevent O(N) recalculations on unrelated state changes (like window resize/animations)
+  // Impact: Reduces CPU cycles during render phase by caching the filtered subset
+  const filteredTopics = useMemo(() => {
+    return activeCategory === "ALL"
+      ? topics
+      : topics.filter(t => t.category === activeCategory);
+  }, [topics, activeCategory]);
+
+  // ⚡ Bolt Optimization: Extract inline .sort() from JSX to prevent O(N log N) recalculations on every single re-render
+  // Impact: Significant improvement in framerate when hovering nodes or triggering React updates
+  const sortedFilteredTopics = useMemo(() => {
+    return [...filteredTopics].sort((a, b) => (b.business_impact + b.stakeholder_importance) - (a.business_impact + a.stakeholder_importance));
+  }, [filteredTopics]);
 
   return (
     <div className="view-container animate-in fade-in duration-500">
@@ -289,9 +299,7 @@ export function MaterialityMatrixView() {
               </div>
             ) : (
               <div className="space-y-4">
-                {[...filteredTopics]
-                  .sort((a, b) => (b.business_impact + b.stakeholder_importance) - (a.business_impact + a.stakeholder_importance))
-                  .map((topic) => {
+                {sortedFilteredTopics.map((topic) => {
                     const Icon = CATEGORY_ICONS[topic.category as keyof typeof CATEGORY_ICONS];
                     const color = CATEGORY_COLORS[topic.category as keyof typeof CATEGORY_COLORS];
                     const isHighPriority = topic.business_impact >= 7.5 && topic.stakeholder_importance >= 7.5;
