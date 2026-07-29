@@ -9,8 +9,6 @@ import {
   IComponentCore,
   IBusEvent,
   LifecycleStage,
-  ITaskSpec,
-  ITaskResult,
   IOmniAgent,
   IOmniAgentBus,
   IOmniAgentGateway,
@@ -18,7 +16,6 @@ import {
   IMartialLawEvent,
 } from "../types/core-contract";
 import { OmniSeed } from "../lib/omni-seed";
-import { OmniTag } from "../lib/omni-tag";
 import { OmniEvidence } from "./omni-evidence";
 import { OmniTime } from "./omni-time";
 import { OmniMemory } from "./omni-memory";
