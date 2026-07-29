@@ -246,8 +246,8 @@ export function SentientSpiritHub({ variant = "floating", className }: SentientS
                     </motion.div>
                   )}
                 </div>
-                <button onClick={() => setIsExpanded(false)} className="hover:rotate-90 transition-transform">
-                  <X className="w-4 h-4" />
+                <button onClick={() => setIsExpanded(false)} className="hover:rotate-90 transition-transform focus-visible:ring-2 focus-visible:ring-primary rounded-sm" aria-label="關閉" title="關閉">
+                  <X className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
 
