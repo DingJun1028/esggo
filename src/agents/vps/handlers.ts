@@ -17,11 +17,11 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import { execFile as execFileCb } from "child_process";
+import { exec as execCb } from "child_process";
 import { promisify } from "util";
 import { IComponentCore } from "../../types/omni-agent";
 
-const execFileAsync = promisify(execFileCb);
+const execAsync = promisify(execCb);
 
 // ==========================================
 // VPS 連接配置
@@ -43,18 +43,19 @@ async function sshExec(
   command: string,
   timeoutMs: number = 30000
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
-  const sshArgs = [
+  const sshCmd = [
+    "ssh",
     "-o", "StrictHostKeyChecking=no",
     "-o", `ConnectTimeout=10`,
     "-o", `BatchMode=yes`,
     "-p", String(VPS_CONNECTION.port),
     "-i", VPS_CONNECTION.keyPath,
     `${VPS_CONNECTION.user}@${VPS_CONNECTION.host}`,
-    command,
-  ];
+    `"${command.replace(/"/g, '\\"')}"`,
+  ].join(" ");
 
   try {
-    const result = await execFileAsync("ssh", sshArgs, {
+    const result = await execAsync(sshCmd, {
       timeout: timeoutMs,
       encoding: "utf-8",
     });

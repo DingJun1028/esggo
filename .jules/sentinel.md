@@ -13,10 +13,3 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
-## 2026-07-03 - [Fix Command Injection Vulnerability in sshExec]
-
-**Vulnerability:** The `sshExec` function in `src/agents/vps/handlers.ts` used `child_process.exec` (via `execAsync`) to run SSH commands. Since `exec` uses a shell to run the command, constructing the command string with interpolated variables leaves the application vulnerable to command injection.
-
-**Learning:** Shell interpolation using string concatenation or template literals is inherently unsafe. Functions like `exec` or `execSync` spawn a shell, which interprets metacharacters like `;`, `|`, or `&`, allowing arbitrary code execution.
-
-**Prevention:** Use `child_process.execFile` (or `spawn`) with an array of arguments instead of a raw command string. These functions bypass the shell and pass arguments directly to the executable, eliminating the risk of shell injection.
