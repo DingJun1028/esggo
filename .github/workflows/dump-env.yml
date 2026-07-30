@@ -1,5 +1,7 @@
 name: Dump .env
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+
 jobs:
   dump:
     runs-on: ubuntu-latest
