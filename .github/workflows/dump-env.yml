@@ -7,18 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          cat > .env.production << 'ENVEOF'
-GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
-OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}
-GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
-NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-DATABASE_URL=${{ secrets.SUPABASE_DB_URL }}
-GATEWAY_API_KEY=${{ secrets.OMNIKEY }}
-AGNES_API=${{ secrets.GEMINI_API_KEY }}
-NEXT_PUBLIC_AGNES_API_KEY=${{ secrets.GEMINI_API_KEY }}
-ENVEOF
+          set -e
+          echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" > .env.production
+          echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> .env.production
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env.production
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.production
+          echo "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" >> .env.production
+          echo "DATABASE_URL=${{ secrets.SUPABASE_DB_URL }}" >> .env.production
+          echo "GATEWAY_API_KEY=${{ secrets.OMNIKEY }}" >> .env.production
+          echo "AGNES_API=${{ secrets.GEMINI_API_KEY }}" >> .env.production
+          echo "NEXT_PUBLIC_AGNES_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env.production
           cat .env.production
       - uses: actions/upload-artifact@v4
         with:
