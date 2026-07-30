@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -142,9 +142,15 @@ export function MaterialityMatrixView() {
     fetchTopics();
   }, []);
 
-  const filteredTopics = activeCategory === "ALL" 
-    ? topics 
-    : topics.filter(t => t.category === activeCategory);
+  const filteredTopics = useMemo(() => {
+    return activeCategory === "ALL"
+      ? topics
+      : topics.filter(t => t.category === activeCategory);
+  }, [activeCategory, topics]);
+
+  const sortedTopics = useMemo(() => {
+    return [...filteredTopics].sort((a, b) => (b.business_impact + b.stakeholder_importance) - (a.business_impact + a.stakeholder_importance));
+  }, [filteredTopics]);
 
   return (
     <div className="view-container animate-in fade-in duration-500">
@@ -289,9 +295,7 @@ export function MaterialityMatrixView() {
               </div>
             ) : (
               <div className="space-y-4">
-                {[...filteredTopics]
-                  .sort((a, b) => (b.business_impact + b.stakeholder_importance) - (a.business_impact + a.stakeholder_importance))
-                  .map((topic) => {
+                {sortedTopics.map((topic) => {
                     const Icon = CATEGORY_ICONS[topic.category as keyof typeof CATEGORY_ICONS];
                     const color = CATEGORY_COLORS[topic.category as keyof typeof CATEGORY_COLORS];
                     const isHighPriority = topic.business_impact >= 7.5 && topic.stakeholder_importance >= 7.5;
