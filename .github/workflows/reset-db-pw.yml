@@ -20,24 +20,23 @@ jobs:
       - name: Reset Supabase database password
         id: supabase_reset
         run: |
-          HTTP_CODE=$(curl -s -o /tmp/suparesp.json -w "%{http_code}" \
-            -X PATCH "https://api.supabase.com/v1/projects/yhwfmavnhaivvgzeuklx/database/password" \
-            -H "Authorization: Bearer $_{secrets.SUPABASE_ACCESS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d "{\"password\":\"${{steps.gen.outputs.password}}\"}"
+          HTTP_CODE=$(curl -s -o /tmp/suparesp.json -w "%{http_code}" -X PATCH "https://api.supabase.com/v1/projects/yhwfmavnhaivvgzeuklx/database/password" -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" -H "Content-Type: application/json" -d "{\"password\":\"${{ steps.gen.outputs.password }}\"}")
           echo "HTTP_CODE=$HTTP_CODE" >> $GITHUB_OUTPUT
           cat /tmp/suparesp.json
 
-      - name: Update .env on VPS
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{secrets.VPS_SSH_KEY}}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H -T 10 ${{secrets.VPS_HOST}} >> ~/.ssh/known_hosts 2>/dev/null || true
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{secrets.VPS_HOST}} "sudo sed -i 's|^DATABASE_URL=.*|DATABASE_URL=${{steps.gen.outputs.url}}|' /opt/esggo/vps/.env"
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{secrets.VPS_HOST}} "grep -q '^GATEWAY_API_KEY=' /opt/esggo/vps/.env && sudo sed -i 's|^GATEWAY_API_KEY=.*|GATEWAY_API_KEY=${{secrets.OPENROUTER_API_KEY}|}' /opt/esggo/vps/.env || echo 'GATEWAY_API_KEY=${{secrets.OPENROUTER_API_KEY}}' | sudo tee -a /opt/esggo/vps/.env > /dev/null"
+          ssh-keyscan -H -T 10 ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Update .env on VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo sed -i 's|^DATABASE_URL=.*|DATABASE_URL=${{ steps.gen.outputs.url }}|' /opt/esggo/vps/.env"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "grep -q '^GATEWAY_API_KEY=' /opt/esggo/vps/.env && sudo sed -i 's|^GATEWAY_API_KEY=.*|GATEWAY_API_KEY=${{ secrets.OPENROUTER_API_KEY }}|' /opt/esggo/vps/.env || echo 'GATEWAY_API_KEY=${{ secrets.OPENROUTER_API_KEY }}' | sudo tee -a /opt/esggo/vps/.env > /dev/null"
 
       - name: Verify
         run: |
-          echo "New URL: ${{steps.gen.outputs.url}}"
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{secrets.VPS_HOST}} "grep '^DATABASE_URL=' /opt/esggo/vps/.env && echo '---' && grep '^GATEWAY_API_KEY=' /opt/esggo/vps/.env"
+          echo "New URL: ${{ steps.gen.outputs.url }}"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "grep '^DATABASE_URL=' /opt/esggo/vps/.env && echo '---' && grep '^GATEWAY_API_KEY=' /opt/esggo/vps/.env"
