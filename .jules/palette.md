@@ -26,3 +26,7 @@
 ## 2026-07-24 - Interactive Icon Buttons in Complex Views
 **Learning:** Icon-only buttons used for secondary interactions (like calendar navigation, editing controls, or modal dismissals) within complex data-dense views like `DashboardView` often lack both accessible names (`aria-label`) and explicit keyboard focus indicators (`focus-visible`).
 **Action:** When auditing or implementing dense dashboard components, ensure all icon-only buttons receive descriptive `aria-label` and `title` attributes. Additionally, always explicitly hide their inner SVG icons using `aria-hidden="true"` and apply high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-primary focus:outline-none`) to guarantee they are discoverable and usable by assistive technologies and keyboard navigators alike.
+
+## 2024-07-30 - Interactive UI Component Accessibility (TabBar & SearchInput)
+**Learning:** Custom tab implementations and search inputs often omit essential ARIA roles (`tablist`, `tab`), states (`aria-selected`), accessible names for icon-only buttons, and explicit `focus-visible` styling, rendering them inaccessible to screen readers and keyboard users.
+**Action:** Always add `role="tablist"` to tab containers, `role="tab"` and `aria-selected` to tab buttons. For search inputs, ensure inputs have `aria-label`s and clear buttons have descriptive `aria-label`s and `focus-visible` styles. Decorative icons should be hidden with `aria-hidden="true"`.
