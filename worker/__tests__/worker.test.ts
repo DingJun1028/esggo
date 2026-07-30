@@ -7,10 +7,10 @@ const baseEnv: Env = {
 };
 
 const requestOf = (path: string, init?: RequestInit) =>
-  new Request(https://router.esggo.test$ + {path}, init);
+  new Request("https://router.esggo.test" + path, init);
 
 const jsonBody = (data: Record<string, unknown>) => JSON.stringify(data);
-  new Request(`https://router.esggo.test${path}`, init);
+
 describe('OmniGateway basic routes', () => {
   afterEach(() => vi.unstubAllGlobals());
 
@@ -36,7 +36,7 @@ describe('OmniGateway basic routes', () => {
     expect(res.status).toBe(200);
     const data = (await res.json()) as any;
     expect(data.gateway).toBe('omnigateway-core');
-    expect(data.docs).toMatch(/\x2fstatus|\x2fv1\x2fchat\x2fcompletions/);
+    expect(data.docs).toMatch(/\/status|\/v1\/chat\/completions/);
   });
 
   it('unknown path returns 200 with default message (catch-all)', async () => {
