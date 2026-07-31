@@ -135,11 +135,12 @@ export function Header() {
         <div className="relative">
           <button
             onClick={() => setShowThemeMenu(!showThemeMenu)}
-            className="flex items-center gap-2 p-2.5 hover:bg-primary/5 rounded-xl transition-colors text-text-muted hover:text-primary group"
+            className="flex items-center gap-2 p-2.5 hover:bg-primary/5 rounded-xl transition-colors text-text-muted hover:text-primary group focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+            aria-label={lang === "zh" ? "切換 Omni 主題" : "Switch Omni Theme"}
             title={lang === "zh" ? "切換 Omni 主題" : "Switch Omni Theme"}
           >
-            <activeThemeObj.icon className="w-4 h-4" />
-            <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showThemeMenu ? 'rotate-180' : ''}`} />
+            <activeThemeObj.icon className="w-4 h-4" aria-hidden="true" />
+            <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showThemeMenu ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
 
           <AnimatePresence>
@@ -206,9 +207,11 @@ export function Header() {
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2.5 hover:bg-primary/5 rounded-xl transition-colors relative flex items-center justify-center group"
+            className="p-2.5 hover:bg-primary/5 rounded-xl transition-colors relative flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+            aria-label="通知 (Notifications)"
+            title="通知 (Notifications)"
           >
-            <Bell className="w-5 h-5 text-text-muted group-hover:text-primary transition-colors" />
+            <Bell className="w-5 h-5 text-text-muted group-hover:text-primary transition-colors" aria-hidden="true" />
             <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-status-lethal rounded-full" />
           </button>
 
