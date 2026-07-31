@@ -10,9 +10,9 @@ export interface IComponentCore {
   readonly version: string;
   readonly timestamp: number;
     evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
+    originCause?: string;
+    processTrace?: string[];
+    finalEffect?: string;
     [key: string]: any;
   };
 }
