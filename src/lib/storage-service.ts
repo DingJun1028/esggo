@@ -249,7 +249,7 @@ export async function listOmniNotes(): Promise<NoteData[]> {
       LIMIT 100
     `;
 
-    return rows.map((row) => ({
+    return rows.map((row: { id: string; title: string | null; content: string | null; tags: unknown; fiveTGate: string | null; createdAt: number | string }) => ({
       id: row.id,
       title: row.title,
       content: row.content,

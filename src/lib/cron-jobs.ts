@@ -66,11 +66,10 @@ async function generateDailyReportJob(): Promise<{ success: boolean; message: st
     });
 
     const highlights = highlightAlerts.length > 0
-      ? highlightAlerts.map(a => a.title || '未命名警示')
+      ? highlightAlerts.map((a: { title: string | null }) => a.title || '未命名警示')
       : ['過去 2重大警示事件'];
 
-    const sourceNameSet = new Set<string>();
-    for (const a of recentAlerts) { if (a.sourceName) sourceNameSet.add(a.sourceName); }
+    const sourceNameSet = new Set<string>();    for (const a of recentAlerts) { if (a.sourceName) sourceNameSet.add(a.sourceName); }
     const topSources = Array.from(sourceNameSet).slice(0, 5);
 
     // Create daily report
@@ -91,7 +90,7 @@ async function generateDailyReportJob(): Promise<{ success: boolean; message: st
     // Create report items for critical alerts
     if (highlightAlerts.length > 0) {
       await prisma.dailyReportItem.createMany({
-        data: highlightAlerts.map((item) => ({
+        data: highlightAlerts.map((item: { id: string; title: string | null; sourceName: string | null; severity: string | null; esgPillar: string | null }) => ({
           reportId: report.id,
           alertId: item.id,
           itemType: 'alert',
@@ -245,7 +244,7 @@ export function initCronJobs(): () => void {
   const today = new Date().toISOString().split('T')[0];
   const todayStart = new Date(today + 'T00:00:00.000Z');
   prisma.dailyReport.findUnique({ where: { reportDate: todayStart } })
-    .then(existing => {
+    .then((existing: { id: string } | null) => {
       if (!existing) {
         console.log('[Cron] No report for today, generating on startup...');
         generateDailyReportJob();
