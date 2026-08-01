@@ -1,16 +1,38 @@
 name: vps-ssh-diagnose
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'diagnose | repair | deploy'
+        required: true
+        default: 'diagnose'
+        type: choice
+        options:
+          - diagnose
+          - repair
+          - deploy
 
 jobs:
-  diagnose:
+  run:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 90
     env:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
       VPS_USER: ${{ secrets.VPS_USER }}
       VPS_HOST: ${{ secrets.VPS_HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      OCI_USER: ${{ secrets.OCI_USER_OCID }}
+      OCI_TENANCY: ${{ secrets.OCI_TENANCY_OCID }}
+      OCI_REGION: ${{ secrets.OCI_REGION }}
+      OCI_FINGERPRINT: ${{ secrets.OCI_API_FINGERPRINT }}
+      OCI_KEY: ${{ secrets.OCI_API_KEY }}
+      OCI_TARGET: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Inspect SSH keys
         run: |
           set -euo pipefail
@@ -54,17 +76,10 @@ jobs:
             [ -f "$f" ] || continue
             echo "=== ssh with $var ==="
             timeout 25 ssh -i "$f" -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o BatchMode=yes \
-              "${VPS_USER}@${VPS_HOST}" 'echo SSH_OK_$(hostname)' 2>&1 || echo "FAILED ($var)"
+              -p "$SSH_PORT" "${VPS_USER}@${VPS_HOST}" 'echo SSH_OK_$(hostname)' 2>&1 || echo "FAILED ($var)"
           done
 
-      - name: OCI instance status (via TARGET_RESOURCE_ID secret)
-        env:
-          OCI_USER: ${{ secrets.OCI_USER_OCID }}
-          OCI_TENANCY: ${{ secrets.OCI_TENANCY_OCID }}
-          OCI_REGION: ${{ secrets.OCI_REGION }}
-          OCI_FINGERPRINT: ${{ secrets.OCI_API_FINGERPRINT }}
-          OCI_KEY: ${{ secrets.OCI_API_KEY }}
-          OCI_TARGET: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
+      - name: OCI full inventory (instances, vnics, bastions, all compartments)
         run: |
           set -euo pipefail
           pip3 install --user --quiet oci-cli
@@ -80,14 +95,135 @@ jobs:
           EOFCONF
           printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
           chmod 600 /tmp/oci_key.pem
+
           echo "TARGET_OCID=$OCI_TARGET"
           oci compute instance get --instance-id "$OCI_TARGET" \
-            --query 'data.{lifecycle:"lifecycle-state",shape:shape,region:"region",ip:"public-ip"}' \
-            --output json 2>&1 || echo 'instance get failed (may not be an instance OCID)'
-          echo '--- root-compartment instance list ---'
-          oci compute instance list --compartment-id "$OCI_TENANCY" \
-            --query 'data[].{"name":`display-name`,lifecycle:"lifecycle-state",ip:"public-ip",ocid:id}' \
-            --output json 2>&1 || true
-          echo '--- vnics ---'
-          oci compute instance list-vnics --instance-id "$OCI_TARGET" \
-            --query 'data[].{"public-ip":`public-ip`,name:name}' --output json 2>&1 || true
+            --query 'data."lifecycle-state"' --raw-output 2>&1 \
+            | sed 's/^/TARGET_GET=/' || echo 'TARGET_GET=not-an-instance-ocid'
+
+          echo '=== compartments ==='
+          {
+            echo "$OCI_TENANCY"
+            oci iam compartment list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
+              | jq -r '.[] | [.id, .name] | @tsv'
+          } | tee /tmp/comps.tsv | sed 's/^/COMPARTMENT /'
+
+          echo '=== all instances (per compartment) ==='
+          while IFS=$'\t' read -r cid cname; do
+            echo "--- compartment: $cname ---"
+            oci compute instance list -c "$cid" --all --output json 2>/dev/null \
+              | jq -r '.[] | [.["display-name"], .["lifecycle-state"], .shape, .id] | @tsv' \
+              | while IFS=$'\t' read -r iname istate ishape iid; do
+                  echo "INSTANCE name=$iname state=$istate shape=$ishape id=$iid"
+                  oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
+                    | jq -r '.[] | "VNCIP " + (."public-ip" // "NULL") + " vnic=" + (.["display-name"] // "?")'
+                done
+          done < /tmp/comps.tsv
+
+          echo '=== bastions ==='
+          oci bastion bastion list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
+            | jq -r '.[] | [.name, .id, ."lifecycle-state", (. | .["client-cidr-block-allow-list"] // [] | join(","))] | @tsv' \
+            | sed 's/^/BASTION /'
+          echo '=== bastion sessions ==='
+          oci bastion session list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
+            | jq -r '.[] | [."display-name", ."lifecycle-state", ."bastion-id", .id] | @tsv' \
+            | sed 's/^/SESSION /'
+
+      - name: Identify target instance (public IP == VPS_HOST) and repair if stopped
+        if: inputs.mode == 'repair' || inputs.mode == 'deploy'
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.local/bin:$PATH"
+          echo "TARGET_IP=$VPS_HOST"
+          TID=''
+          {
+            echo "$OCI_TENANCY"
+            oci iam compartment list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
+              | jq -r '.[].id'
+          } | while read -r cid; do
+            oci compute instance list -c "$cid" --all --output json 2>/dev/null \
+              | jq -r '.[].id' \
+              | while read -r iid; do
+                ip=$(oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
+                  | jq -r '.[]."public-ip" // empty' | head -1)
+                if [ -n "$ip" ] && [ "$ip" = "$VPS_HOST" ]; then echo "FOUND_OCID=$iid"; fi
+              done
+          done | tee /tmp/found.txt
+          TID=$(grep '^FOUND_OCID=' /tmp/found.txt | head -1 | cut -d= -f2- || true)
+          if [ -z "$TID" ]; then
+            echo 'TARGET_NOT_FOUND_IN_OCI: no instance with public IP matching VPS_HOST'
+            exit 0
+          fi
+          echo "TARGET_INSTANCE=$TID"
+          state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)
+          echo "CURRENT_STATE=$state"
+          if [ "$state" = STOPPING ] || [ "$state" = STARTING ]; then
+            echo '--- waiting for state to settle ---'
+            for i in $(seq 1 30); do
+              state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)
+              echo "state=$state ($i/30)"
+              [ "$state" = RUNNING ] || [ "$state" = STOPPED ] && break
+              sleep 20
+            done
+          fi
+          if [ "$state" = STOPPED ]; then
+            echo '--- starting instance ---'
+            oci compute instance action --instance-id "$TID" --action START \
+              --wait-for-state RUNNING --wait-interval-seconds 20 --max-wait-seconds 600 \
+              --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/START_RESULT=/'
+          fi
+          echo "FINAL_STATE=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)"
+
+      - name: Re-probe connectivity after repair
+        if: inputs.mode == 'repair' || inputs.mode == 'deploy'
+        run: |
+          set -euo pipefail
+          echo '--- waiting for SSH (up to 5 min) ---'
+          ok=0
+          for i in $(seq 1 30); do
+            if timeout 15 ssh -i ~/.ssh/VPS_SSH_KEY -o StrictHostKeyChecking=no -o ConnectTimeout=10 \
+              -o BatchMode=yes -p "$SSH_PORT" "${VPS_USER}@${VPS_HOST}" 'echo SSH_OK_$(hostname)' 2>/dev/null; then
+              ok=1; break
+            fi
+            echo "ssh attempt $i/30 failed, sleeping 10s"
+            sleep 10
+          done
+          [ "$ok" = 1 ] || { echo 'SSH STILL DOWN AFTER REPAIR'; exit 1; }
+
+      - name: Upload deployment package
+        if: inputs.mode == 'deploy'
+        run: |
+          set -euo pipefail
+          cat > ~/.ssh/config <<EOF
+          Host vps
+            HostName ${VPS_HOST}
+            User ${VPS_USER}
+            Port ${SSH_PORT}
+            IdentityFile ~/.ssh/VPS_SSH_KEY
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+          EOF
+          ssh vps 'sudo mkdir -p /opt/deer-flow-patches && sudo chown $(whoami) /opt/deer-flow-patches'
+          scp -r vps-deploy/* vps:/opt/deer-flow-patches/
+          ssh vps 'chmod +x /opt/deer-flow-patches/*.sh && ls -la /opt/deer-flow-patches'
+
+      - name: Run deploy-deerflow.sh (docker + compose + ufw)
+        if: inputs.mode == 'deploy'
+        run: |
+          ssh vps "sudo OPENROUTER_API_KEY='$OPENROUTER_API_KEY' bash /opt/deer-flow-patches/deploy-deerflow.sh"
+
+      - name: Run setup-ssl.sh (certbot + renewal cron)
+        if: inputs.mode == 'deploy'
+        run: |
+          ssh vps 'sudo bash /opt/deer-flow-patches/setup-ssl.sh'
+
+      - name: Verify deployment
+        if: inputs.mode == 'deploy'
+        run: |
+          set -euo pipefail
+          echo '--- docker ps on VPS ---'
+          ssh vps 'docker ps --format "{{.Names}}: {{.Status}} {{.Ports}}"'
+          echo '--- https check ---'
+          sleep 5
+          curl -sI --max-time 20 https://deerflow.esggo.co | head -1 || echo 'https not yet reachable'
+          curl -sI --max-time 20 http://161.118.248.180:2026 | head -1 || true
