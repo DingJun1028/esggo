@@ -97,42 +97,58 @@ jobs:
           EOFCONF
           printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
           chmod 600 /tmp/oci_key.pem
+          PARSER='(if type == "array" then . else (.data // []) end)'
 
           echo "TARGET_OCID_HEX=$(printf '%s' "$OCI_TARGET" | od -An -tx1 | tr -d ' \n')"
-          echo '--- try: instance get on TARGET ---'
-          oci compute instance get --instance-id "$OCI_TARGET" \
-            --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_INSTANCE_GET=/'
-          echo '--- try: bastion get on TARGET ---'
-          oci bastion bastion get --bastion-id "$OCI_TARGET" \
-            --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_BASTION_GET=/'
+          echo "OCI_REGION_HEX=$(printf '%s' "$OCI_REGION" | od -An -tx1 | tr -d ' \n')"
+          TARGET_REGION=$(printf '%s' "$OCI_TARGET" | tr '.' ' ' | awk '{print $4}')
+          echo "TARGET_REGION=$TARGET_REGION"
 
-          echo '=== compartments ==='
-          {
-            echo "$OCI_TENANCY"
-            oci iam compartment list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-              | jq -r '.[] | [.id, .name] | @tsv'
-          } | tee /tmp/comps.tsv | sed 's/^/COMPARTMENT /'
+          echo '=== regions (global view) ==='
+          oci iam region list --output json 2>/dev/null \
+            | jq -r "$PARSER" | jq -r '.[] | [.name, ."is-ad-region", ."is-home-region"] | @tsv' 2>/dev/null \
+            | sed 's/^/REGION /' | head -40
 
-          echo '=== all instances (per compartment) ==='
-          while IFS=$'\t' read -r cid cname; do
-            echo "--- compartment: ${cname:-root} ($cid) ---"
-            oci compute instance list -c "$cid" --output json 2>/dev/null \
-              | jq -r 'if type == "array" then .[] else empty end | [(.["display-name"] // "?"), (.["lifecycle-state"] // "?"), (.shape // "?"), (.id // "?")] | @tsv' \
-              | while IFS=$'\t' read -r iname istate ishape iid; do
-                  echo "INSTANCE name=$iname state=$istate shape=$ishape id=$iid"
-                  oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
-                    | jq -r 'if type == "array" then .[] else empty end | "VNCIP " + ((."public-ip") // "NULL") + " vnic=" + ((.["display-name"]) // "?")'
-                done
-          done < /tmp/comps.tsv
+          for REG in "$TARGET_REGION" "$OCI_REGION"; do
+            [ -n "$REG" ] || continue
+            echo "########## REGION=$REG ##########"
+            echo '--- try: instance get on TARGET ---'
+            oci compute instance get --instance-id "$OCI_TARGET" --region "$REG" \
+              --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_INSTANCE_GET('"$REG"')=/'
+            echo '--- try: bastion get on TARGET ---'
+            oci bastion bastion get --bastion-id "$OCI_TARGET" --region "$REG" \
+              --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_BASTION_GET('"$REG"')=/'
 
-          echo '=== bastions ==='
-          oci bastion bastion list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-            | jq -r 'if type == "array" then .[] else empty end | [.name, .id, ."lifecycle-state", ((.["client-cidr-block-allow-list"] // []) | join(","))] | @tsv' \
-            | sed 's/^/BASTION /'
-          echo '=== bastion sessions ==='
-          oci bastion session list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-            | jq -r 'if type == "array" then .[] else empty end | [(.["display-name"] // "?"), (."lifecycle-state" // "?"), (."bastion-id" // "?"), (.id // "?")] | @tsv' \
-            | sed 's/^/SESSION /'
+            echo '=== compartments ==='
+            {
+              echo "$OCI_TENANCY"
+              oci iam compartment list -c "$OCI_TENANCY" --all --region "$REG" --output json 2>/dev/null \
+                | jq -r "$PARSER" | jq -r '.[] | [.id, .name] | @tsv' 2>/dev/null
+            } | tee /tmp/comps.tsv | sed 's/^/COMPARTMENT /'
+
+            echo '=== all instances (per compartment) ==='
+            while IFS=$'\t' read -r cid cname; do
+              echo "--- compartment: ${cname:-root} ---"
+              oci compute instance list -c "$cid" --region "$REG" --output json 2>/tmp/inst.err \
+                | jq -r "$PARSER" | jq -r '.[] | [(.["display-name"] // "?"), (.["lifecycle-state"] // "?"), (.shape // "?"), (.id // "?")] | @tsv' 2>>/tmp/inst.err
+              while IFS=$'\t' read -r iname istate ishape iid; do
+                echo "INSTANCE name=$iname state=$istate shape=$ishape id=$iid"
+                oci compute instance list-vnics --instance-id "$iid" --region "$REG" --output json 2>/dev/null \
+                  | jq -r "$PARSER" | jq -r '.[] | "VNCIP " + ((."public-ip") // "NULL") + " vnic=" + ((.["display-name"]) // "?")' 2>/dev/null
+              done
+              [ -s /tmp/inst.err ] && sed 's/^/INST_ERR=/I' /tmp/inst.err | head -3
+              rm -f /tmp/inst.err
+            done < /tmp/comps.tsv
+
+            echo '=== bastions ==='
+            oci bastion bastion list -c "$OCI_TENANCY" --all --region "$REG" --output json 2>/dev/null \
+              | jq -r "$PARSER" | jq -r '.[] | [.name, .id, ."lifecycle-state", ((.["client-cidr-block-allow-list"] // []) | join(","))] | @tsv' 2>/dev/null \
+              | sed 's/^/BASTION /'
+            echo '=== bastion sessions ==='
+            oci bastion session list -c "$OCI_TENANCY" --all --region "$REG" --output json 2>/dev/null \
+              | jq -r "$PARSER" | jq -r '.[] | [(.["display-name"] // "?"), (."lifecycle-state" // "?"), (."bastion-id" // "?"), (.id // "?")] | @tsv' 2>/dev/null \
+              | sed 's/^/SESSION /'
+          done
           echo '=== inventory step done ==='
 
       - name: Identify target instance (public IP == VPS_HOST) and repair if stopped
@@ -142,17 +158,20 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
           export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
           export SUPPRESS_LABEL_WARNING=True
+          PARSER='(if type == "array" then . else (.data // []) end)'
+          TARGET_REGION=$(printf '%s' "$OCI_TARGET" | tr '.' ' ' | awk '{print $4}')
           echo "TARGET_IP=$VPS_HOST"
+          echo "TARGET_REGION=$TARGET_REGION"
           {
             echo "$OCI_TENANCY"
-            oci iam compartment list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-              | jq -r '.[].id'
+            oci iam compartment list -c "$OCI_TENANCY" --all --region "$TARGET_REGION" --output json 2>/dev/null \
+              | jq -r "$PARSER" | jq -r '.[].id' 2>/dev/null
           } | while read -r cid; do
-            oci compute instance list -c "$cid" --output json 2>/dev/null \
-              | jq -r 'if type == "array" then .[] else empty end | .id' \
+            oci compute instance list -c "$cid" --region "$TARGET_REGION" --output json 2>/dev/null \
+              | jq -r "$PARSER" | jq -r '.[].id' 2>/dev/null \
               | while read -r iid; do
-                ip=$(oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
-                  | jq -r 'if type == "array" then .[] else empty end | ."public-ip" // empty' | head -1)
+                ip=$(oci compute instance list-vnics --instance-id "$iid" --region "$TARGET_REGION" --output json 2>/dev/null \
+                  | jq -r "$PARSER" | jq -r '.[]."public-ip" // empty' 2>/dev/null | head -1)
                 if [ -n "$ip" ] && [ "$ip" = "$VPS_HOST" ]; then echo "FOUND_OCID=$iid"; fi
               done
           done | tee /tmp/found.txt
@@ -162,12 +181,12 @@ jobs:
             exit 0
           fi
           echo "TARGET_INSTANCE=$TID"
-          state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
+          state=$(oci compute instance get --instance-id "$TID" --region "$TARGET_REGION" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
           echo "CURRENT_STATE=$state"
           if [ "$state" = STOPPING ] || [ "$state" = STARTING ]; then
             echo '--- waiting for state to settle ---'
             for i in $(seq 1 30); do
-              state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
+              state=$(oci compute instance get --instance-id "$TID" --region "$TARGET_REGION" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
               echo "state=$state ($i/30)"
               [ "$state" = RUNNING ] || [ "$state" = STOPPED ] && break
               sleep 20
@@ -175,11 +194,11 @@ jobs:
           fi
           if [ "$state" = STOPPED ]; then
             echo '--- starting instance ---'
-            oci compute instance action --instance-id "$TID" --action START \
+            oci compute instance action --instance-id "$TID" --region "$TARGET_REGION" --action START \
               --wait-for-state RUNNING --wait-interval-seconds 20 --max-wait-seconds 600 \
               --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/START_RESULT=/'
           fi
-          echo "FINAL_STATE=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)"
+          echo "FINAL_STATE=$(oci compute instance get --instance-id "$TID" --region "$TARGET_REGION" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)"
 
       - name: Re-probe connectivity after repair
         if: inputs.mode == 'repair' || inputs.mode == 'deploy'
