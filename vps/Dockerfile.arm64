@@ -1,98 +1,46 @@
 # =============================================================================
-# ESG GO — ARM64 Multi-stage Build (Oracle Ampere A1)
-# =============================================================================
-# 為 Oracle Cloud ARM Ampere A1 優化的 Dockerfile
-# Monorepo 套件直接導出 .ts，由 Next.js 在建置時解析
+# ESG GO — ARM64 Multi-Stage Docker Build
+# Platform: linux/arm64 (Oracle Cloud Ampere A1 / Apple Silicon)
 # =============================================================================
 
-# ─── Stage 1: 依賴安裝 ──────────────────────────────────────────
 FROM --platform=linux/arm64 node:22-alpine AS deps
 WORKDIR /app
-
-RUN apk upgrade --no-cache && \
-    apk add --no-cache libc6-compat
-
+RUN apk upgrade --no-cache && apk add --no-cache libc6-compat build-base python3
 RUN corepack enable pnpm
-
-# 複製套件管理檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 COPY packages/errors/package.json packages/errors/
 COPY packages/shared/package.json packages/shared/
 COPY packages/ui/package.json packages/ui/
-
-# 安裝所有依賴（monorepo 套件需要 workspace 連結）
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# ─── Stage 2: 建置 ──────────────────────────────────────────────
 FROM --platform=linux/arm64 node:22-alpine AS builder
 WORKDIR /app
-
-RUN apk upgrade --no-cache
-RUN corepack enable pnpm
-
-# 複製所有原始碼
+RUN apk upgrade --no-cache && corepack enable pnpm && rm -rf /var/cache/apk/*
 COPY . .
-
-# 從 deps 階段複製 node_modules（含 workspace 連結）
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages/errors/node_modules ./packages/errors/node_modules 2>/dev/null || true
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
-COPY --from=deps /app/packages/ui/node_modules ./packages/ui/node_modules 2>/dev/null || true
-
-# 設定生產環境變數
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
-
-# 手動執行 prisma generate（--ignore-scripts 跳過了 postinstall）
+ENV NEXT_TELEMETRY_DISABLED=1 NODE_ENV=production CI=true
 RUN npx prisma generate
-
-# 執行建置（ARM64 原生構建）
 RUN pnpm run build
 
-# ─── Stage 3: 生產映像 ─────────────────────────────────────────
 FROM --platform=linux/arm64 node:22-alpine AS runner
 WORKDIR /app
-
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-RUN apk upgrade --no-cache
-RUN corepack enable pnpm
-
-# 安裝生產依賴（僅 root package）
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-COPY packages/errors/package.json packages/errors/
-COPY packages/shared/package.json packages/shared/
-COPY packages/ui/package.json packages/ui/
-
-# 安裝僅生產依賴
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
-
-# 複製構建產物
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 CI=true
+# Install runtime deps with security hardening
+RUN apk add --no-cache libssl3 ca-certificates && rm -rf /var/cache/apk/*
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/package.json ./package.json
-
-# 複製 monorepo 套件原始碼（.ts 直接導出，需要原始碼）
-COPY --from=builder /app/packages/errors/src ./packages/errors/src
-COPY --from=builder /app/packages/errors/package.json ./packages/errors/
-COPY --from=builder /app/packages/shared/src ./packages/shared/src
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/
-COPY --from=builder /app/packages/ui/src ./packages/ui/src
-COPY --from=builder /app/packages/ui/package.json ./packages/ui/
-
-# 設定使用者（非 root）
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+COPY --from=builder /app/packages ./packages
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 RUN chown -R nextjs:nodejs /app
-
 USER nextjs
-
 EXPOSE 3000
-
-# 健康檢查
+LABEL org.opencontainers.image.title="esggo" \
+      org.opencontainers.image.description="ESG GO Next.js application (ARM64)" \
+      org.opencontainers.image.version="1.0.0" \
+      org.opencontainers.image.vendor="ESG GO" \
+      org.opencontainers.image.licenses="AGPL-3.0"
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
-
-# 啟動服務
-CMD ["pnpm", "start"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-H", "0.0.0.0", "-p", "3000"]

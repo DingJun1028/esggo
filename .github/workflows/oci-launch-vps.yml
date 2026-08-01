@@ -68,33 +68,49 @@ EOFCONF
           echo "ip=$(echo $INSTANCE | jq -r '.ip')" >> $GITHUB_OUTPUT
           echo "instance=$(echo $INSTANCE | jq -r '.id')" >> $GITHUB_OUTPUT
 
-      - name: Open firewall ports
-        run: |
-          VNIC_ID=$(oci compute instance list-vnics \
-            --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
-            --instance-id ${{ steps.launch.outputs.instance }} \
-            --query 'data[0].id' --raw-output)
-          SUBNET_ID=$(oci network vnic get --vnic-id $VNIC_ID --query 'data.subnet-id' --raw-output)
-          NSG_ID=$(oci network subnet get --subnet-id $SUBNET_ID --query 'data.network-security-group-ids[0]' --raw-output)
-          oci network security-group add-security-rules --nsg-id $NSG_ID \
-            --security-rules '[
-              {
-                "direction": "INGRESS",
-                "protocol": "tcp",
-                "source": "0.0.0.0/0",
-                "is-stateless": false,
-                "tcp-options": {"destination-port-range": {"min": 22, "max": 22}},
-                "description": "SSH"
-              },
-              {
-                "direction": "INGRESS",
-                "protocol": "tcp",
-                "source": "0.0.0.0/0",
-                "is-stateless": false,
-                "tcp-options": {"destination-port-range": {"min": 8642, "max": 8642}},
-                "description": "App 8642"
-              }
-            ]' 2>/dev/null || echo "Rules may already exist"
+       - name: Open firewall ports
+         run: |
+           VNIC_ID=$(oci compute instance list-vnics \
+             --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
+             --instance-id ${{ steps.launch.outputs.instance }} \
+             --query 'data[0].id' --raw-output)
+           SUBNET_ID=$(oci network vnic get --vnic-id $VNIC_ID --query 'data.subnet-id' --raw-output)
+           NSG_ID=$(oci network subnet get --subnet-id $SUBNET_ID --query 'data.network-security-group-ids[0]' --raw-output)
+           oci network security-group add-security-rules --nsg-id $NSG_ID \
+             --security-rules '[
+               {
+                 "direction": "INGRESS",
+                 "protocol": "tcp",
+                 "source": "10.0.0.0/8",
+                 "is-stateless": false,
+                 "tcp-options": {"destination-port-range": {"min": 22, "max": 22}},
+                 "description": "SSH (VPN/bastion only)"
+               },
+               {
+                 "direction": "INGRESS",
+                 "protocol": "tcp",
+                 "source": "10.0.0.0/8",
+                 "is-stateless": false,
+                 "tcp-options": {"destination-port-range": {"min": 8642, "max": 8642}},
+                 "description": "App 8642 (VPN/bastion only)"
+               },
+               {
+                 "direction": "INGRESS",
+                 "protocol": "tcp",
+                 "source": "0.0.0.0/0",
+                 "is-stateless": false,
+                 "tcp-options": {"destination-port-range": {"min": 80, "max": 80}},
+                 "description": "HTTP (public)"
+               },
+               {
+                 "direction": "INGRESS",
+                 "protocol": "tcp",
+                 "source": "0.0.0.0/0",
+                 "is-stateless": false,
+                 "tcp-options": {"destination-port-range": {"min": 443, "max": 443}},
+                 "description": "HTTPS (public)"
+               }
+             ]' 2>/dev/null || echo "Rules may already exist"
 
       - name: Output connection info
         run: |

@@ -44,10 +44,13 @@ jobs:
           pnpm audit --audit-level=high || {
             echo "::warning::High-severity vulnerabilities found — review pnpm audit report"
           }
-      - name: Check for critical vulnerabilities
-        run: |
-          echo "=== pnpm security audit (critical only) ==="
-          pnpm audit --audit-level=critical
+       - name: Check for critical vulnerabilities
+         run: |
+           echo "=== pnpm security audit (critical only) ==="
+           pnpm audit --audit-level=critical || {
+             echo "::error::Critical vulnerabilities found — review pnpm audit report"
+             exit 1
+           }
 
   # ─── Secret 洩漏掃描 ──────────────────────────────────────────
   secret-scan:

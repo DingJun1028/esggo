@@ -197,7 +197,7 @@ jobs:
           SESSION: ${{ steps.bastion.outputs.session }}
         run: |
           set -e
-          ssh -o ProxyCommand="$PROXY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
+          ssh -o ProxyCommand="$PROXY" -o UserKnownHostsFile=/dev/null -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
             cd /var/www/esggo
             git checkout -f main
@@ -239,7 +239,7 @@ jobs:
         if: needs.pre-check.outputs.mode == 'direct'
         run: |
           set -e
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
+          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
             cd /var/www/esggo
             git checkout -f main
@@ -267,8 +267,9 @@ jobs:
           VPS
 
       - name: Cleanup
-        if: always() && needs.pre-check.outputs.mode == 'bastion'
-        run: rm -f ~/.ssh/bastion_key ~/.ssh/bastion_key.pub ~/.oci/key.pem || true
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key ~/.ssh/bastion_key ~/.ssh/bastion_key.pub ~/.oci/key.pem ~/.ssh/known_hosts || true
 
   # ─── 通知 ───────────────────────────────────────────────────
   notify:

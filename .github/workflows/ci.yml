@@ -245,6 +245,19 @@ jobs:
             if bash -n "$f"; then echo "OK  $f"; else echo "FAIL $f"; fail=1; fi
           done
           exit $fail
+      - name: Docker syntax check
+        run: |
+          set -e
+          for f in $(find vps -name 'Dockerfile*' -o -name 'docker-compose.yml'); do
+            if [ -f "$f" ]; then
+              echo "Checking $(basename "$f")..."
+              docker compose -f "$f" config 2>/dev/null || {
+                echo "::error::$(basename "$f") docker configuration invalid"
+                exit 1
+              }
+            fi
+          done
+          echo "✅ All docker configurations valid"
       - name: Node syntax check
         run: |
           set -e
