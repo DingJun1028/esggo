@@ -72,13 +72,13 @@ jobs:
           sudo /tmp/oci/oci-cli/install.sh -b /usr/local/bin >/dev/null
           mkdir -p ~/.oci
           cat > ~/.oci/config <<EOFCONF
-[DEFAULT]
-user=$OCI_USER
-tenancy=$OCI_TENANCY
-region=$OCI_REGION
-key_file=/tmp/oci_key.pem
-fingerprint=$OCI_FINGERPRINT
-EOFCONF
+          [DEFAULT]
+          user=$OCI_USER
+          tenancy=$OCI_TENANCY
+          region=$OCI_REGION
+          key_file=/tmp/oci_key.pem
+          fingerprint=$OCI_FINGERPRINT
+          EOFCONF
           printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
           chmod 600 /tmp/oci_key.pem
           echo "TARGET_OCID=$OCI_TARGET"
