@@ -32,3 +32,59 @@ jobs:
             out=$(ssh-keygen -l -f "$f" 2>&1) || true
             echo "SSH_KEYGEN=$out"
           done
+
+      - name: Resolve VPS_HOST and probe connectivity
+        run: |
+          set -euo pipefail
+          echo "VPS_HOST=$VPS_HOST"
+          getent hosts "$VPS_HOST" | head -2 || true
+          echo '--- TCP + banner test port 22 ---'
+          timeout 15 bash -c "exec 3<>/dev/tcp/$VPS_HOST/22 && head -c 40 <&3" || echo 'NO BANNER (hang/drop)'
+          echo '--- TCP test port 80/443 ---'
+          for p in 80 443 2026; do
+            if timeout 8 bash -c "exec 3<>/dev/tcp/$VPS_HOST/$p" 2>/dev/null; then echo "port $p: TCP OK (no data test)"; else echo "port $p: FAIL"; fi
+          done
+
+      - name: SSH attempts (both keys)
+        run: |
+          set -euo pipefail
+          for var in SSH_PRIVATE_KEY VPS_SSH_KEY; do
+            f=~/.ssh/$var
+            [ -f "$f" ] || continue
+            echo "=== ssh with $var ==="
+            timeout 25 ssh -i "$f" -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o BatchMode=yes \
+              "${VPS_USER}@${VPS_HOST}" 'echo SSH_OK_$(hostname)' 2>&1 || echo "FAILED ($var)"
+          done
+
+      - name: OCI instance status (via TARGET_RESOURCE_ID secret)
+        env:
+          OCI_USER: ${{ secrets.OCI_USER_OCID }}
+          OCI_TENANCY: ${{ secrets.OCI_TENANCY_OCID }}
+          OCI_REGION: ${{ secrets.OCI_REGION }}
+          OCI_FINGERPRINT: ${{ secrets.OCI_API_FINGERPRINT }}
+          OCI_KEY: ${{ secrets.OCI_API_KEY }}
+          OCI_TARGET: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          curl -sL -o /tmp/oci-cli.zip https://download.oracle.com/otn_scripts/linux/instantclient/oci-cli/oci-cli-3.45.0.zip
+          unzip -q /tmp/oci-cli.zip -d /tmp/oci
+          sudo /tmp/oci/oci-cli/install.sh -b /usr/local/bin >/dev/null
+          mkdir -p ~/.oci
+          cat > ~/.oci/config <<EOFCONF
+[DEFAULT]
+user=$OCI_USER
+tenancy=$OCI_TENANCY
+region=$OCI_REGION
+key_file=/tmp/oci_key.pem
+fingerprint=$OCI_FINGERPRINT
+EOFCONF
+          printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
+          chmod 600 /tmp/oci_key.pem
+          echo "TARGET_OCID=$OCI_TARGET"
+          oci compute instance get --instance-id "$OCI_TARGET" \
+            --query 'data.{lifecycle:"lifecycle-state",shape:shape,region:"region",ip:"public-ip"}' \
+            --output json 2>&1 || echo 'instance get failed (may not be an instance OCID)'
+          echo '--- vnics ---'
+          oci compute instance list-vnics --instance-id "$OCI_TARGET" \
+            --query 'data[].{"public-ip":`public-ip`,name:name}' --output json 2>&1 || true
