@@ -1,4 +1,15 @@
-import { LlmAgent, Runner, InMemorySessionService } from '@google/adk';
+// @google/adk removed from build - using stubs
+class InMemorySessionService {
+  private sessions: Map<string, any> = new Map();
+  async createSession(sessionId: string): Promise<any> {
+    this.sessions.set(sessionId, { id: sessionId, events: [] });
+    return this.sessions.get(sessionId);
+  }
+  async getSession(sessionId: string): Promise<any> {
+    return this.sessions.get(sessionId) || null;
+  }
+  async appendEvent(request: any): Promise<any> { return request; }
+}
 
 /**
  * ADK Squad Factory

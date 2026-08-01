@@ -50,6 +50,9 @@
       ],
       "@esggo/errors/*": [
         "./packages/errors/src/*"
+      ],
+      "@shared/*": [
+        "./shared/*"
       ]
     },
     "incremental": true
