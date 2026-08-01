@@ -1,5 +1,5 @@
-import { defineRune } from "@/lib/adk/core";
-import { ConsistencyCheckSchema } from "@/lib/schemas/navigation-schema";
+import { defineRune } from '@lib/adk/core';
+import { ConsistencyCheckSchema } from '@lib/schemas/navigation-schema';
 
 export const consistencyVerificationRune = defineRune({
   name: "cross_chapter_consistency_check",

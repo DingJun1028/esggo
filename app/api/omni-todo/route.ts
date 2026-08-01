@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { NextRequest } from 'next/server';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 import { OmniTodoEngine } from '@/core/omni-todo';
 import type { TodoSort } from '@/core/omni-todo';
 

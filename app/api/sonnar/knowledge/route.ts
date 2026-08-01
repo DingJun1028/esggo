@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 
 function analyzeContext(context: string): { why: string; what: string; how: string; tags: string[] } {
   const lower = context.toLowerCase();

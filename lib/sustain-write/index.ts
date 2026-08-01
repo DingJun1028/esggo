@@ -1,4 +1,4 @@
-export * from '../src/lib/sustain-write/theme-manager';
+export * from '@/lib/sustain-write/theme-manager';
 export {
   type DataField,
   type DataQualityIssue,
@@ -7,7 +7,7 @@ export {
   normalizeValue,
   summarizeMetric,
   gapFillNumeric,
-} from '../src/lib/sustain-write/data-processing';
+} from '@/lib/sustain-write/data-processing';
 export {
   type MarketSignal,
   type CompetitorSnapshot,
@@ -16,10 +16,10 @@ export {
   summarizeTrend,
   BizIntelligenceEngine,
   bizIntelligence,
-} from '../src/lib/sustain-write/biz-intelligence';
+} from '@/lib/sustain-write/biz-intelligence';
 export {
   getAvailableCompanies,
   assembleCVersionReport,
   reportToHtml,
   reportToMarkdown,
-} from '../src/lib/sustain-write/c-version';
+} from '@/lib/sustain-write/c-version';

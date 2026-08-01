@@ -1,5 +1,5 @@
 import { sentientBus } from './sentient-bus';
-import { HolyLinter } from '@/lib/core/omni-linter';
+import { HolyLinter } from '@lib/core/omni-linter';
 
 export type AutomationTrigger = 'NOTE_SAVED' | 'TASK_COMPLETED' | 'THRESHOLD_REACHED' | 'EXTERNAL_SYNC';
 

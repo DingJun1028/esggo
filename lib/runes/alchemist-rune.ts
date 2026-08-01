@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [R9] 熵減煉金術師 (The Alchemist) — 奧義：熵減煉金

@@ -8,7 +8,7 @@
 
 import { NextRequest } from 'next/server';
 import { generateAIReport, ReportRequest, ReportSection } from '../../../../src/core/ai/report-generator';
-import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

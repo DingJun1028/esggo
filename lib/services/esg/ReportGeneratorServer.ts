@@ -1,6 +1,6 @@
-import { EsgMetric } from "@/lib/ncb-service";
+import { EsgMetric } from '@lib/ncb-service';
 import { dispatchToApostleServer } from "../adk/apostle-dispatcher-server";
-import { omniIndex } from "@/lib/core/omni-index";
+import { omniIndex } from '@lib/core/omni-index';
 
 /**
  * [聖典報告] ReportGeneratorServer

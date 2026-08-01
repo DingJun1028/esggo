@@ -5,7 +5,7 @@
 
 import { createHash } from 'crypto';
 import type { FiveTDimension, FiveTVerificationResult, FiveTScore } from './types';
-import { FIVE_T_META } from './types';
+import { FIVE_T_META, FIVE_T_GATES } from './types';
 
 // ── Gate Minimum Requirements ─────────────────────────────────
 

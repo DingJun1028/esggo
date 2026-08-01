@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { jsonResponse } from '@/lib/api-utils';
+import { jsonResponse } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

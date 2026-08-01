@@ -1,13 +1,13 @@
-import { createAgent } from "@/lib/adk/core";
+import { createAgent } from '@lib/adk/core';
 
 // Import Runes (Skills)
-import { engraverRune } from "@/lib/runes/engraver-rune";
-import { ncbdbEngraveRune } from "@/lib/runes/ncbdb-engrave-rune";
-import { semanticistRune } from "@/lib/runes/semanticist-rune";
-import { aestheticRune } from "@/lib/runes/aesthetic-rune";
-import { validatorRune } from "@/lib/runes/validator-rune";
-import { telepathRune } from "@/lib/runes/telepath-rune";
-import { strategicMappingRune } from "@/lib/runes/strategic-mapping-rune";
+import { engraverRune } from '@lib/runes/engraver-rune';
+import { ncbdbEngraveRune } from '@lib/runes/ncbdb-engrave-rune';
+import { semanticistRune } from '@lib/runes/semanticist-rune';
+import { aestheticRune } from '@lib/runes/aesthetic-rune';
+import { validatorRune } from '@lib/runes/validator-rune';
+import { telepathRune } from '@lib/runes/telepath-rune';
+import { strategicMappingRune } from '@lib/runes/strategic-mapping-rune';
 
 /**
  * ─────────────────────────────────────────────────────────────────

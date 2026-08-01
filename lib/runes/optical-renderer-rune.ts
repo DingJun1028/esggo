@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A1] 光學渲染隊 (Optical Renderer) — 奧義：神蹟顯現

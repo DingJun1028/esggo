@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
+import { db } from '@lib/firebase';
 import { collection, onSnapshot, query, orderBy, deleteDoc, doc, writeBatch } from 'firebase/firestore';
 import { Trash2, ChevronDown, ChevronUp, Database, FileText } from 'lucide-react';
 

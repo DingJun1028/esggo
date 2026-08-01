@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { evidenceVaultApi } from '@/lib/ncb-service';
+import { evidenceVaultApi } from '@lib/ncb-service';
 
 // --- Types ---
 export interface INCBDBSyncMetadata {

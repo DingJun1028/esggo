@@ -1,4 +1,4 @@
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 import { z } from "zod";
 
 const BenchmarkResultSchema = z.object({

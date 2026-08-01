@@ -1,46 +1,79 @@
 $ cross-env NEXT_TELEMETRY_DISABLED=1 next build
-⚠ `eslint` configuration in next.config.js is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
-⚠ Invalid next.config.js options detected: 
-⚠     Unrecognized key(s) in object: 'eslint'
-⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
-▲ Next.js 16.2.9 (Turbopack)
+▲ Next.js 16.2.10 (Turbopack)
 - Environments: .env.local, .env
 
   Creating an optimized production build ...
-✓ Compiled successfully in 16.1s
+✓ Compiled successfully in 46s
   Skipping validation of types
-  Finished TypeScript config validation in 23ms ...
-  Collecting page data using 15 workers ...
-  Generating static pages using 15 workers (0/28) ...
-  Generating static pages using 15 workers (7/28) 
-  Generating static pages using 15 workers (14/28) 
-  Generating static pages using 15 workers (21/28) 
-✓ Generating static pages using 15 workers (28/28) in 829ms
+  Finished TypeScript config validation in 138ms ...
+  Collecting page data using 11 workers ...
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+prisma:warn In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)
+  Generating static pages using 11 workers (0/49) ...
+  Generating static pages using 11 workers (12/49) 
+  Generating static pages using 11 workers (24/49) 
+  Generating static pages using 11 workers (36/49) 
+✓ Generating static pages using 11 workers (49/49) in 5.2s
   Finalizing page optimization ...
 
 Route (app)
-┌ ƒ /
-├ ƒ /_not-found
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/agent/[id]/thought/stream
 ├ ƒ /api/agnes
+├ ƒ /api/ai-notes
+├ ƒ /api/ai-notes/[id]
+├ ƒ /api/ai-notes/[id]/summarize
+├ ƒ /api/ai-notes/search
+├ ƒ /api/ai-notes/tags
 ├ ƒ /api/ai/generate
+├ ƒ /api/ai/status
 ├ ƒ /api/async
+├ ƒ /api/awaken/pulse
+├ ƒ /api/awaken/ritual
 ├ ƒ /api/cron
 ├ ƒ /api/daily-report
 ├ ƒ /api/daily-report/generate
 ├ ƒ /api/data/export
 ├ ƒ /api/emm/metrics
 ├ ƒ /api/emm/metrics/stream
+├ ƒ /api/esg-sonnar
+├ ƒ /api/esg/assess
+├ ƒ /api/esg/best-practices
+├ ƒ /api/esg/go
+├ ƒ /api/esg/report
+├ ƒ /api/esg/skills
+├ ƒ /api/esg/skills/[taskType]
+├ ƒ /api/esg/verify
+├ ƒ /api/evidence/parse
+├ ƒ /api/hashlock
 ├ ƒ /api/health
+├ ƒ /api/healthz
+├ ƒ /api/library/download
+├ ƒ /api/local-ai/chat
 ├ ƒ /api/memory
 ├ ƒ /api/nexus
 ├ ƒ /api/nexus/agent
+├ ƒ /api/notes
 ├ ƒ /api/omni-agent
 ├ ƒ /api/omni-agent/console
+├ ƒ /api/omni-center/summary
+├ ƒ /api/omni-core/status
 ├ ƒ /api/omni-one
+├ ƒ /api/omni-soul
+├ ƒ /api/omni-todo
+├ ƒ /api/omni-user-registry
 ├ ƒ /api/omni/plugins
+├ ƒ /api/omni/sync
 ├ ƒ /api/pdf/parse
 ├ ƒ /api/rag/ingest
 ├ ƒ /api/rag/query
+├ ƒ /api/reconnaissance/gateway
+├ ƒ /api/resources
 ├ ƒ /api/sonnar/alerts
 ├ ƒ /api/sonnar/crawl
 ├ ƒ /api/sonnar/document-progress
@@ -49,6 +82,7 @@ Route (app)
 ├ ƒ /api/sonnar/ocr
 ├ ƒ /api/sonnar/radar
 ├ ƒ /api/sonnar/sustainability
+├ ƒ /api/surveys
 ├ ƒ /api/sustain-center/dashboard
 ├ ƒ /api/sustain-write/c-version
 ├ ƒ /api/sustain-write/v5
@@ -59,6 +93,8 @@ Route (app)
 ├ ƒ /api/sustain-write/v5/grammar
 ├ ƒ /api/sustain-write/v5/preview
 ├ ƒ /api/sustain-write/v5/progress/[taskId]
+├ ƒ /api/tags/pair
+├ ƒ /api/tags/universal
 ├ ƒ /api/user/growth
 ├ ƒ /api/user/growth/xp
 ├ ƒ /api/user/leaderboard
@@ -69,21 +105,29 @@ Route (app)
 ├ ƒ /api/village/projects
 ├ ƒ /api/village/trends
 ├ ƒ /api/village/vote
+├ ƒ /api/zkp
 ├ ƒ /daily
 ├ ƒ /emm
+├ ○ /export
+├ ○ /login
 ├ ƒ /omni-agent
 ├ ƒ /omni-agent/console
 ├ ƒ /omni-base
 ├ ƒ /omni-center
+├ ○ /omni-todo
 ├ ƒ /profile
+├ ○ /resources
 ├ ƒ /sonnar
 ├ ƒ /sustain-center
 ├ ƒ /sustain-write/c-version
 ├ ƒ /sustain-write/v5
 ├ ƒ /village
-├ ƒ /wiki
+├ ○ /wiki
 └ ƒ /wiki/[slug]
 
 
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
 

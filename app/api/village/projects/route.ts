@@ -1,4 +1,4 @@
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { EntropyForge } from '@/lib/omni-core/entropy-forge';
 
 // ----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A3] 視覺感知隊 (Visual Perceptor) — 奧義：聖典共鳴

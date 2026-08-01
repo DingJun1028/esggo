@@ -1,4 +1,4 @@
-import { IComponentCore, ITraceableLog, IEvidenceHash } from "@/lib/types/esg-core";
+import { IComponentCore, ITraceableLog, IEvidenceHash } from '@lib/types/esg-core';
 import crypto from "crypto";
 
 /**

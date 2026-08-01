@@ -4,7 +4,7 @@
  */
 import { NextRequest } from 'next/server';
 import { getTask, cancelTask } from '@/core/services/async-task-manager';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

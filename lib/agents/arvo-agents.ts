@@ -1,11 +1,11 @@
-import { createAgent } from "@/lib/adk/core";
+import { createAgent } from '@lib/adk/core';
 
 // Import Runes (Skills)
-import { strategicMappingRune } from "@/lib/runes/strategic-mapping-rune";
-import { consistencyVerificationRune } from "@/lib/runes/consistency-rune";
-import { evidenceVerificationRune } from "@/lib/runes/evidence-verification-rune";
-import { telepathRune } from "@/lib/runes/telepath-rune";
-import { aestheticRune } from "@/lib/runes/aesthetic-rune";
+import { strategicMappingRune } from '@lib/runes/strategic-mapping-rune';
+import { consistencyVerificationRune } from '@lib/runes/consistency-rune';
+import { evidenceVerificationRune } from '@lib/runes/evidence-verification-rune';
+import { telepathRune } from '@lib/runes/telepath-rune';
+import { aestheticRune } from '@lib/runes/aesthetic-rune';
 
 /**
  * ─────────────────────────────────────────────────────────────────

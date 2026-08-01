@@ -6,7 +6,7 @@
 //   僅接受 POST /api/omni/sync（ESGGO 自身狀態），不暴露拓撲給匿名者。
 // ============================================================================
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 const SYNC_URL = process.env.OMNI_SYNC_URL || 'http://127.0.0.1:8650';
 const TOKEN = process.env.OMNI_KEY || process.env.GATEWAY_API_KEY || '';

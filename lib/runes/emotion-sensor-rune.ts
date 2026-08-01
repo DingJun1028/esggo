@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A7] 情緒感測隊 (Emotion Sensor) — 奧義：神蹟顯現

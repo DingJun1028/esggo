@@ -2,8 +2,8 @@ import { ApostleSquadManager } from './apostle-squad-manager';
 import { AdkSquadFactory } from './adk-squad-factory';
 import { PersistentSessionService } from './persistent-session-service';
 import { AgentNetworkBus } from '../EntropyAgent';
-import { omniIndex } from '@/lib/core/omni-index';
-import { ApostleMetadata } from '@/lib/adk/types';
+import { omniIndex } from '@lib/core/omni-index';
+import { ApostleMetadata } from '@lib/adk/types';
 
 const runners = new Map<string, any>();
 const sessionService = new PersistentSessionService();

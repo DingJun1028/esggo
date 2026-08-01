@@ -1,5 +1,5 @@
-import { defineRune } from "@/lib/adk/core";
-import { DebateInputSchema, GeminiDebateResultSchema } from "@/lib/schemas/navigation-schema";
+import { defineRune } from '@lib/adk/core';
+import { DebateInputSchema, GeminiDebateResultSchema } from '@lib/schemas/navigation-schema';
 import { GoogleGenAI } from "@google/genai";
 
 export const debateRune = defineRune({

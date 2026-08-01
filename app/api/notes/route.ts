@@ -2,7 +2,7 @@
  * GET /api/notes — Fetch all notes from Firestore (server-side)
  * Used by Sustain Write to reference notes in report generation
  */
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export interface NoteData {
   id: string;

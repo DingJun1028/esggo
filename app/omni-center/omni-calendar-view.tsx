@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { db } from '@/lib/firebase';
+import { db } from '@lib/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 
 export interface OmniTask {

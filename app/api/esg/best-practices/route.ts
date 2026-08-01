@@ -10,7 +10,7 @@ import {
   validateMECEExclusivity,
 } from '@/core/ai/skills/registry';
 import type { ESGPillar, PracticeLevel } from '@/core/ai/skills/registry';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export async function POST(request: NextRequest) {
   try {

@@ -11,7 +11,7 @@
 import { useMemo, useState } from 'react';
 import { Wand2, Play, Copy, CheckCircle2, XCircle, ShieldCheck } from 'lucide-react';
 import { persistOmniCase, persistConsoleSnapshot } from './universal-omni-console.actions';
-import { omni, omniFn, createFiveTComponent, type OmniKind, type OmniResult, type CaseType, type ComponentEvidence, type OmniRequest } from '@/lib/esggo';
+import { omni, omniFn, createFiveTComponent, type OmniKind, type OmniResult, type CaseType, type ComponentEvidence, type OmniRequest } from '@lib/esggo';
 
 const KINDS: { key: OmniKind; label: string; hint: string }[] = [
   { key: 'note', label: '筆記 Note', hint: '標題 + 內容' },
