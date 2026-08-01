@@ -104,13 +104,17 @@ jobs:
           TARGET_REGION=$(printf '%s' "$OCI_TARGET" | tr '.' ' ' | awk '{print $4}')
           echo "TARGET_REGION=$TARGET_REGION"
 
-          echo '=== regions (global view) ==='
+          REGS=$(mktemp)
           oci iam region list --output json 2>/dev/null \
-            | jq -r "$PARSER" | jq -r '.[] | [.name, ."is-ad-region", ."is-home-region"] | @tsv' 2>/dev/null \
-            | sed 's/^/REGION /' | head -40
-
-          for REG in "$TARGET_REGION" "$OCI_REGION"; do
-            [ -n "$REG" ] || continue
+            | jq -r "$PARSER" | jq -r '.[] | (.name // "?")' 2>/dev/null > "$REGS"
+          oci iam region-subscription list --tenancy-id "$OCI_TENANCY" --output json 2>/dev/null \
+            | jq -r "$PARSER" | jq -r '.[] | (.region-name // "?")' 2>/dev/null >> "$REGS"
+          echo "$TARGET_REGION" >> "$REGS"
+          echo "$OCI_REGION" >> "$REGS"
+          for fallback in ap-singapore-1 us-ashburn-1 us-phoenix-1 eu-frankfurt-1 uk-london-1 ap-mumbai-1 ap-seoul-1 ap-tokyo-1 ca-toronto-1 me-jeddah-1 sa-saopaulo-1; do
+            echo "$fallback" >> "$REGS"
+          done
+          sort -u "$REGS" | grep -v '?' | while read -r REG; do
             echo "########## REGION=$REG ##########"
             echo '--- try: instance get on TARGET ---'
             oci compute instance get --instance-id "$OCI_TARGET" --region "$REG" \
