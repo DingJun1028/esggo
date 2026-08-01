@@ -41,15 +41,16 @@ const renderFiles = (files) => (
   </div>
 );
 
+const Field = ({ label, value }) => value ? (
+  <div className="mb-2">
+    <div className="text-xs font-bold text-slate-400 mb-0.5">{label}</div>
+    <div className="text-sm text-slate-700 whitespace-pre-wrap break-words">{value}</div>
+  </div>
+) : null;
+
 const DetailPanel = ({ t, item }) => {
   const d = item.data || {};
   const atts = d.attachments || [];
-  const Field = ({ label, value }) => value ? (
-    <div className="mb-2">
-      <div className="text-xs font-bold text-slate-400 mb-0.5">{label}</div>
-      <div className="text-sm text-slate-700 whitespace-pre-wrap break-words">{value}</div>
-    </div>
-  ) : null;
   return (
     <div className="text-sm">
       {item.type === 'upload' && (<>
@@ -185,6 +186,55 @@ const RecordsView = ({ data, isAdmin, t, lang }) => {
   );
 };
 
+const LayoutShell = ({ children, view, setView, t, lang, setLang, profileMenuRef, user, setProfileMenuOpen, profileMenuOpen, handleGoogleSignIn, role, handleSignOut }) => (
+  <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
+    <nav className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap justify-between items-center gap-2 sm:gap-4 sticky top-0 z-50 shadow-sm">
+      <div className="flex items-center gap-4">
+        <span className="text-sm font-extrabold text-[#003262] tracking-tight">ESGGO</span>
+        {view !== 'home' && (
+          <button onClick={() => setView('home')} className="text-sm font-bold text-slate-500 hover:text-[#003262] inline-flex items-center gap-1 transition-colors bg-slate-100 px-3 py-1.5 rounded-md hover:bg-slate-200">
+            <ArrowLeft size={16} /> {t.back}
+          </button>
+        )}
+      </div>
+      <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+        <select value={lang} onChange={(e) => setLang(e.target.value)} className="bg-slate-100 border-none text-sm font-semibold text-[#003262] rounded-lg py-2 px-3 outline-none cursor-pointer hover:bg-slate-200 transition-colors">
+          <option value="zh-TW">繁體中文</option>
+          <option value="zh-CN">简体中文</option>
+          <option value="en">English</option>
+        </select>
+        <div className="relative" ref={profileMenuRef}>
+          {user && !user.isLocal && !user.isAnonymous ? (
+            <button onClick={() => setProfileMenuOpen(!profileMenuOpen)} className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-[#003262] px-3 py-2 rounded-lg text-sm font-semibold transition-colors" title={user.email || user.displayName || ''}>
+              {user.photoURL ? (<img src={user.photoURL} alt="" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />) : (<User size={16} />)}
+              <span className="hidden sm:inline max-w-[100px] truncate">{user.displayName || user.email?.split('@')[0] || ''}</span>
+              <ChevronDown size={14} />
+            </button>
+          ) : (
+            <button onClick={handleGoogleSignIn} className="inline-flex items-center gap-2 bg-[#003262] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#002244] transition-colors shadow-sm">
+              <LogIn size={16} /> <span className="hidden sm:inline">{t.auth?.signInGoogle || 'Google 登入'}</span>
+            </button>
+          )}
+          {profileMenuOpen && user && !user.isLocal && !user.isAnonymous && (
+            <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg w-56 z-[60] overflow-hidden" onClick={() => setProfileMenuOpen(false)}>
+              <div className="px-4 py-3 border-b border-slate-100">
+                <div className="text-sm font-bold text-[#003262] truncate">{user.displayName || ''}</div>
+                <div className="text-xs text-slate-400 truncate">{user.email || ''}</div>
+                <div className="mt-1 text-[10px] font-semibold text-[#b47b00] bg-[#FDB515]/15 inline-block px-2 py-0.5 rounded">{t[`role${role === 'admin' ? 'Admin' : role === 'TA' ? 'TA' : 'Student'}`] || role}</div>
+              </div>
+              <button onClick={async () => { await handleSignOut(); setProfileMenuOpen(false); }} className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 inline-flex items-center gap-2 transition-colors">
+                <LogOut size={16} /> {t.auth?.signOut || '登出'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+    {children}
+    <footer className="text-center text-slate-400 text-xs mt-12 pb-6">{t.footer}</footer>
+  </div>
+);
+
 export default function App() {
   const [lang, setLang] = useState('zh-TW');
   const [view, setView] = useState('home');
@@ -227,9 +277,13 @@ export default function App() {
     return () => { if (unsub) unsub(); };
   }, [user]);
 
+  if (view === 'replay') {
+    if (replayView !== 'list') setReplayView('list');
+    if (selectedVideo !== null) setSelectedVideo(null);
+  }
+
   useEffect(() => {
     if (view !== 'replay') return;
-    setReplayView('list'); setSelectedVideo(null);
     let cancelled = false;
     (async () => {
       try {
@@ -300,57 +354,14 @@ export default function App() {
     } finally { if (submitBtn) { submitBtn.innerText = originalText; submitBtn.disabled = false; } }
   };
 
-  const LayoutShell = ({ children }) => (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
-      <nav className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap justify-between items-center gap-2 sm:gap-4 sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-extrabold text-[#003262] tracking-tight">ESGGO</span>
-          {view !== 'home' && (
-            <button onClick={() => setView('home')} className="text-sm font-bold text-slate-500 hover:text-[#003262] inline-flex items-center gap-1 transition-colors bg-slate-100 px-3 py-1.5 rounded-md hover:bg-slate-200">
-              <ArrowLeft size={16} /> {t.back}
-            </button>
-          )}
-        </div>
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-          <select value={lang} onChange={(e) => setLang(e.target.value)} className="bg-slate-100 border-none text-sm font-semibold text-[#003262] rounded-lg py-2 px-3 outline-none cursor-pointer hover:bg-slate-200 transition-colors">
-            <option value="zh-TW">繁體中文</option>
-            <option value="zh-CN">简体中文</option>
-            <option value="en">English</option>
-          </select>
-          <div className="relative" ref={profileMenuRef}>
-            {user && !user.isLocal && !user.isAnonymous ? (
-              <button onClick={() => setProfileMenuOpen(!profileMenuOpen)} className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-[#003262] px-3 py-2 rounded-lg text-sm font-semibold transition-colors" title={user.email || user.displayName || ''}>
-                {user.photoURL ? (<img src={user.photoURL} alt="" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />) : (<User size={16} />)}
-                <span className="hidden sm:inline max-w-[100px] truncate">{user.displayName || user.email?.split('@')[0] || ''}</span>
-                <ChevronDown size={14} />
-              </button>
-            ) : (
-              <button onClick={handleGoogleSignIn} className="inline-flex items-center gap-2 bg-[#003262] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#002244] transition-colors shadow-sm">
-                <LogIn size={16} /> <span className="hidden sm:inline">{t.auth?.signInGoogle || 'Google 登入'}</span>
-              </button>
-            )}
-            {profileMenuOpen && user && !user.isLocal && !user.isAnonymous && (
-              <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg w-56 z-[60] overflow-hidden" onClick={() => setProfileMenuOpen(false)}>
-                <div className="px-4 py-3 border-b border-slate-100">
-                  <div className="text-sm font-bold text-[#003262] truncate">{user.displayName || ''}</div>
-                  <div className="text-xs text-slate-400 truncate">{user.email || ''}</div>
-                  <div className="mt-1 text-[10px] font-semibold text-[#b47b00] bg-[#FDB515]/15 inline-block px-2 py-0.5 rounded">{t[`role${role === 'admin' ? 'Admin' : role === 'TA' ? 'TA' : 'Student'}`] || role}</div>
-                </div>
-                <button onClick={async () => { await handleSignOut(); setProfileMenuOpen(false); }} className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 inline-flex items-center gap-2 transition-colors">
-                  <LogOut size={16} /> {t.auth?.signOut || '登出'}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
-      {children}
-      <footer className="text-center text-slate-400 text-xs mt-12 pb-6">{t.footer}</footer>
-    </div>
-  );
 
   return (
-    <LayoutShell>
+    <LayoutShell
+      view={view} setView={setView} t={t} lang={lang} setLang={setLang}
+      profileMenuRef={profileMenuRef} user={user} setProfileMenuOpen={setProfileMenuOpen}
+      profileMenuOpen={profileMenuOpen} handleGoogleSignIn={handleGoogleSignIn}
+      role={role} handleSignOut={handleSignOut}
+    >
       {authMessage && (<div className="max-w-5xl mx-auto mb-4"><div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-4">{authMessage}</div></div>)}
       {error && (<div className="max-w-5xl mx-auto mb-6"><div className="bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl p-4 whitespace-pre-wrap font-mono">{error?.message}{'\n'}{error?.stack}</div></div>)}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-1">
