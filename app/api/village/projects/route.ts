@@ -1,5 +1,5 @@
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import { EntropyForge } from '@/lib/omni-core/entropy-forge';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import { EntropyForge } from '@lib/omni-core/entropy-forge';
 
 // ----------------------------------------------------------------------------
 // OmniVillage Projects Database (Mock)

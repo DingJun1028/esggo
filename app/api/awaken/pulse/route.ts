@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { dispatchToApostleServer } from '@/lib/services/adk/apostle-dispatcher-server';
-import { ApostleSquadManager } from '@/lib/services/adk/apostle-squad-manager';
+import { dispatchToApostleServer } from '@lib/services/adk/apostle-dispatcher-server';
+import { ApostleSquadManager } from '@lib/services/adk/apostle-squad-manager';
 
 export async function POST(request: Request) {
   try {

@@ -3,9 +3,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@/lib/sustain-write';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import type { ReportChapter } from '@/lib/sustain-write/omni-tag';
+import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@lib/sustain-write';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import type { ReportChapter } from '@lib/sustain-write/omni-tag';
 
 interface CVersionReport {
   companyId: string;

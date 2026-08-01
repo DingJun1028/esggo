@@ -10,7 +10,7 @@
 import { NextRequest } from 'next/server';
 import { getOmniUserRegistry } from '@/agents/omni-user-registry';
 import type { UserInteraction } from '@/agents/omni-user-registry';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

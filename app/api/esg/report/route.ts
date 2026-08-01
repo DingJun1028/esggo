@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ReportGeneratorServer } from '@/lib/services/esg/ReportGeneratorServer';
+import { ReportGeneratorServer } from '@lib/services/esg/ReportGeneratorServer';
 
 export async function POST(request: Request) {
   try {

@@ -6,7 +6,7 @@
 
 import { NextRequest } from 'next/server';
 import { getUserGrowthService, XP_REWARDS } from '@/core/services/user-growth-service';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

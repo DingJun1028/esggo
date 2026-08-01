@@ -1,5 +1,5 @@
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import { runGeminiWithWorkersAIFallback } from '@lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

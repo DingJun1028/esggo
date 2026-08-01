@@ -1,5 +1,5 @@
-import { seedVillageData } from '@/lib/village-seeder';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { seedVillageData } from '@lib/village-seeder';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

@@ -5,8 +5,8 @@
  */
 
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import { getPluginRegistry } from '@/lib/omni-base/plugin-registry';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import { getPluginRegistry } from '@lib/omni-base/plugin-registry';
 
 export const dynamic = 'force-dynamic';
 

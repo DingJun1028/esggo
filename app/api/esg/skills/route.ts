@@ -2,7 +2,7 @@
 // POST /api/esg/skills - 列出所有可用 ESG 技能
 // ═══════════════════════════════════════════════════════════════
 
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { getAllSkills } from '@/core/ai/skills/registry';
 
 export async function POST() {

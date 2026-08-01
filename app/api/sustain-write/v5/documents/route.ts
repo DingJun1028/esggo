@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { processDocumentWithOcr } from '@/core/services/document-processor';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 
 export async function POST(req: NextRequest) {
   try {

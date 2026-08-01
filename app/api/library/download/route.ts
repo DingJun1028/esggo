@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jsPDF } from 'jspdf';
-import { uploadToDrive } from '@/lib/services/google-drive';
-import { saveDocumentMetadata } from '@/lib/services/ncbdb';
+import { uploadToDrive } from '@lib/services/google-drive';
+import { saveDocumentMetadata } from '@lib/services/ncbdb';
 
 export async function POST(req: NextRequest) {
   try {

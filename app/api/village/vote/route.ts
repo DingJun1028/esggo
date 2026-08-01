@@ -1,6 +1,6 @@
-import { rateLimit } from '@/lib/rate-limit';
-import { CelestialController } from '@/lib/celestial/implementation';
-import { jsonResponse, jsonError, validateParams, validatePositiveNumber } from '@/lib/api-utils';
+import { rateLimit } from '@lib/rate-limit';
+import { CelestialController } from '@lib/celestial/implementation';
+import { jsonResponse, jsonError, validateParams, validatePositiveNumber } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

@@ -1,5 +1,5 @@
-import { jsonResponse } from '@/lib/api-utils';
-import { CelestialController } from '@/lib/celestial/implementation';
+import { jsonResponse } from '@lib/api-utils';
+import { CelestialController } from '@lib/celestial/implementation';
 import { getRedisHealth } from '@lib/redis/client';
 
 export const dynamic = 'force-dynamic';

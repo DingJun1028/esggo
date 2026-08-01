@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { getAnswersByCompany, QUESTIONS } from '@/core/repositories/sustain-write-answer-database';
 import { createHash } from 'crypto';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;

@@ -3,7 +3,7 @@
 // app/api/tags/pair/route.ts
 // ============================================================
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { createOmniTagPair, autoPair } from '@/core/tags/universal-tag-service';
 
 // POST /api/tags/pair

@@ -10,7 +10,7 @@ import {
   calculateOverallScore,
 } from '@/core/ai/skills/registry';
 import type { PracticeAssessment } from '@/core/ai/skills/registry';
-import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
 
 export async function POST(request: NextRequest) {
   try {

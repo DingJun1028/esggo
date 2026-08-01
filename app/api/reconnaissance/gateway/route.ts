@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { IIntelNode5T } from "@/lib/core/5t-protocol";
+import { IIntelNode5T } from "@lib/core/5t-protocol";
 
 // --- Utility Functions ---
 const generateHash = (data: string): string => {

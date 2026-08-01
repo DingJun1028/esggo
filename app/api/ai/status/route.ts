@@ -1,4 +1,4 @@
-import { jsonResponse } from '@/lib/api-utils';
+import { jsonResponse } from '@lib/api-utils';
 
 interface AIStatus {
   timestamp: string;

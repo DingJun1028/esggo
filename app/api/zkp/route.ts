@@ -3,8 +3,8 @@
  */
 
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import { ZKPService } from '@/lib/zkp-service';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import { ZKPService } from '@lib/zkp-service';
 
 export const dynamic = 'force-dynamic';
 

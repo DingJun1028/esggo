@@ -3,8 +3,8 @@
 // ============================================================
 
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
-import { getNCBClient } from '@/lib/ncb-client';
+import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
+import { getNCBClient } from '@lib/ncb-client';
 import type { SearchResult } from '@/types/notes';
 
 import type { Pool } from 'pg';

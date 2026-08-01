@@ -9,8 +9,8 @@
 //   GET 僅回傳服務資訊，不執行任何寫入。
 // ============================================================================
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
-import { FiveTHashLock } from '@/lib/five-t-protocol';
+import { jsonResponse, jsonError } from '@lib/api-utils';
+import { FiveTHashLock } from '@lib/five-t-protocol';
 
 export const dynamic = 'force-dynamic';
 

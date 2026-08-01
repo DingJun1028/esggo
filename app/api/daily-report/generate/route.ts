@@ -6,7 +6,7 @@
 
 import { NextRequest } from 'next/server';
 import { getDailyReportService } from '@/core/services/daily-report-service';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

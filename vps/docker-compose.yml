@@ -41,7 +41,7 @@ services:
   # Next.js 主應用
   esggo:
     build:
-      context: /opt/esggo
+      context: ..
       dockerfile: Dockerfile
     container_name: esggo-core
     ports:
@@ -102,7 +102,7 @@ services:
   # OmniAgent Gateway
   omniagent-gateway:
     build:
-      context: /opt/esggo
+      context: ..
       dockerfile: vps/Dockerfile.gateway
     container_name: omniagent-gateway
     ports:
