@@ -140,7 +140,15 @@ jobs:
                 oci compute instance list-vnics --instance-id "$iid" --region "$REG" --output json 2>/dev/null \
                   | jq -r "$PARSER" | jq -r '.[] | "VNCIP " + ((."public-ip") // "NULL") + " vnic=" + ((.["display-name"]) // "?")' 2>/dev/null
               done
-              [ -s /tmp/inst.err ] && sed 's/^/INST_ERR=/I' /tmp/inst.err | head -3
+              if [ -s /tmp/inst.err ]; then
+                echo '--- instance list error details ---'
+                grep -E '"code"|"message"|"status"' /tmp/inst.err | sed 's/^/INST_ERR=/' | head -6
+              fi
+              if [ "$REG" = "$TARGET_REGION" ] && [ -z "$(grep -E '"code"' /tmp/inst.err)" ]; then
+                echo '--- raw instance list response (target region) ---'
+                oci compute instance list -c "$cid" --region "$REG" --output json 2>&1 | head -c 1200
+                echo
+              fi
               rm -f /tmp/inst.err
             done < /tmp/comps.tsv
 
@@ -153,6 +161,10 @@ jobs:
               | jq -r "$PARSER" | jq -r '.[] | [(.["display-name"] // "?"), (."lifecycle-state" // "?"), (."bastion-id" // "?"), (.id // "?")] | @tsv' 2>/dev/null \
               | sed 's/^/SESSION /'
           done
+          echo '=== IAM policies (root compartment) ==='
+          oci iam policy list -c "$OCI_TENANCY" --region "$OCI_REGION" --output json 2>/dev/null \
+            | jq -r "$PARSER" | jq -r '.[] | [.name, (.statements | join(" | "))] | @tsv' 2>/dev/null \
+            | sed 's/^/POLICY /' | head -30
           echo '=== inventory step done ==='
 
       - name: Identify target instance (public IP == VPS_HOST) and repair if stopped
