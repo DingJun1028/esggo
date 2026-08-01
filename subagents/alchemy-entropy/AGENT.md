@@ -60,9 +60,16 @@ low-risk refactors that keep CI green.
 
 ## Known entropy hotspots (2026-08-01 audit)
 
+- 🔴 **Build break**: 7 routes import root `lib/` via broken `@/lib/...` paths
+  (`@/*` → `src/lib/`); fix with `@lib/...` alias → unblocks `pnpm build`.
+  Routes: `app/api/awaken/{ritual,pulse}`, `app/api/esg/{go,verify,report}`,
+  `app/api/library/download`, `app/api/reconnaissance/gateway`. (Tracked as
+  `fix-broken-lib-imports` teammate.)
 - `src/app/` dead route tree (never built) — 14 files incl. 10 API routes.
-- Root `lib/` legacy tree (~20 unreferenced files, incl. a 2.5MB
-  `sustain-write/answer-database.ts`).
+- Root `lib/` legacy tree (unreferenced files, incl. a 2.5MB
+  `sustain-write/answer-database.ts`). ⚠️ `lib/adk`, `lib/services`,
+  `lib/core/5t-protocol.ts` are referenced by the routes above — do NOT delete
+  until the alias fix lands.
 - 5 duplicated answer-database modules (~5.9MB on disk; 750KB server chunk).
 - `src/impl/celestial-core-processor.ts` + `src/impl/omni-*` shadow modules.
 - `src/types/esg-charts.ts` byte-identical to `packages/shared` copy.

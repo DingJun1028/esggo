@@ -22,6 +22,7 @@ tracked TS/TSX plus a legacy `lib/` tree. The audit found:
 | Dead root lib | ~20 root `lib/` files unreferenced (legacy parallel tree) | MED-HIGH | ~2.8M bytes, 2.5MB single data file |
 | Dead components | 5 tracked components with zero importers | MED | ~40KB |
 | Dead modules | `src/lib/types/esg-charts.ts`, `src/impl/*` shadow modules | MED | type drift |
+| **Build-break** | 7 routes import root `lib/` via broken `@/lib/...` paths (resolve to `src/lib/`, missing) | **HIGH** | `pnpm build` fails — 11× Module not found on `origin/main` |
 | Bundle bloat | 750KB server chunk from `sustain-write-answer-database.ts` | HIGH | largest non-vendor chunk |
 | Unused deps | `@grpc/grpc-js`, `@grpc/proto-loader` in `package.json` with no source usage | LOW | install/bloat |
 | Boilerplate | 11/13 route `layout.tsx` files are identical | LOW | cleanup |
@@ -133,8 +134,33 @@ Active counterparts exist under `src/lib/` (`api-utils`, `esggo`, `firebase`,
   which itself has no importers.
 - `src/core/services/report-templates.ts` — imported by nothing under `core/services`
   (the active template lives at `src/core/ai/skills/report-templates.ts`).
-- `lib/adk/*` — a separate ADK rune tree that nothing imports from `src/`/`app/`
-  (imports `@/lib/types/esg-core` which does not exist — build-breaking if bundled).
+- `lib/adk/*`, `lib/services/*`, `lib/core/5t-protocol.ts` — **NOT dead** (correction,
+  2026-08-01 audit verification). They ARE imported by 7 live route files under root
+  `app/api/*`, but only via **broken `@/lib/...` paths** that resolve against `src/lib/`
+  (where the files don't exist). This is the root cause of the `Build Check` CI failure
+  on `origin/main` (11× `Module not found`). These routes must either be fixed to use the
+  `@lib/*` alias (→ root `lib/`) or the referenced modules migrated into `src/lib/`
+  before any `lib/` deletion is considered.
+
+### 3.6 Build-breaking broken imports (verified 2026-08-01, HIGH)
+
+The alias `@/*` → `./src/*` (tsconfig.json), while root `lib/` is only reachable via
+`@lib/*` → `./lib/*`. Seven live route files import from root `lib/` using the **wrong
+alias** `@/lib/...`, so the build fails on `origin/main`:
+
+| Route file | Broken import (fix: use `@lib/`) |
+|---|---|
+| `app/api/awaken/ritual/route.ts` | `@/lib/adk/ten-wings-agents`, `@/lib/adk/arvo-wings-agents`, `@/lib/services/adk/apostle-squad-manager` |
+| `app/api/awaken/pulse/route.ts` | `@/lib/services/adk/apostle-dispatcher-server`, `@/lib/services/adk/apostle-squad-manager` |
+| `app/api/esg/go/route.ts` | `@/lib/services/esg/DataOrchestratorServer` |
+| `app/api/esg/verify/route.ts` | `@/lib/services/esg/DataOrchestratorServer` |
+| `app/api/esg/report/route.ts` | `@/lib/services/esg/ReportGeneratorServer` |
+| `app/api/library/download/route.ts` | `@/lib/services/google-drive`, `@/lib/services/ncbdb` |
+| `app/api/reconnaissance/gateway/route.ts` | `@/lib/core/5t-protocol` |
+
+All targets exist at root `lib/{adk,services,core}/...`. Fix is a 1-line alias swap per
+import; verify with `pnpm build`. Tracked separately as `fix-broken-lib-imports`
+(esggo-swarm bugfix teammate, PR to follow).
 
 ---
 
@@ -196,8 +222,9 @@ Refactor targets:
 
 | # | Action | Risk | Est. saving |
 |---|---|---|---|
+| **0** | **Fix 11 broken `@/lib/...` imports in 7 routes → `@lib/...`** (unblocks `pnpm build`) | LOW (1-line alias swap) | restores CI Build Check |
 | 1 | Delete `src/app/` dead tree (or migrate delegation routes) | LOW-MED (routes currently shadowed) | ~180K src + confusion |
-| 2 | Remove root `lib/` legacy files (keep `lib/redis`) | LOW | ~2.8 MB on disk |
+| 2 | Remove root `lib/` legacy files (keep `lib/redis`, `lib/adk`, `lib/services`, `lib/core/5t-protocol` until #0 is merged) | LOW (after #0) | ~2.8 MB on disk |
 | 3 | Consolidate 5 answer-database files → 1 canonical + JSON | MED (API surface) | up to 750KB chunk + 4MB disk |
 | 4 | Delete `src/impl/celestial-core-processor.ts` + shadow `src/impl/omni-*` | LOW | removes type drift |
 | 5 | `src/types/esg-charts.ts` re-export from `@esggo/shared` | LOW | single source of truth |
