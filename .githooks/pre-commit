@@ -48,3 +48,24 @@ if (fs.existsSync(pkgPath) && fs.existsSync(lockPath)) {
     console.warn('[pre-commit] Could not verify lockfile sync:', e.message);
   }
 }
+
+// 3. Verify agents.yaml (OA-Team 30-Swarm) when it changes
+try {
+  const staged = execSync('git diff --cached --name-only --diff-filter=ACMR', { encoding: 'utf-8' })
+    .split('\n')
+    .map((f) => f.trim())
+    .filter(Boolean);
+  const agentsYaml = staged.find((f) => f === 'agents.yaml');
+  if (agentsYaml) {
+    try {
+      execSync('python3 scripts/verify-agents-yaml.py', { stdio: 'inherit', encoding: 'utf-8' });
+      console.log('[pre-commit] agents.yaml verification passed.');
+    } catch {
+      console.error('[pre-commit] agents.yaml verification FAILED — fix the framework before committing.');
+      process.exit(1);
+    }
+  }
+} catch (e) {
+  // git/python may not be available in some environments — warn but don't block
+  console.warn('[pre-commit] Could not run agents.yaml verification (skipping):', e.message);
+}
