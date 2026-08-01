@@ -50,8 +50,9 @@ jobs:
         run: pnpm install
 
       - name: Verify sync
+        working-directory: apps/learning-center
         run: |
-          GENERATED="$(pnpm -F ./apps/learning-center check:types-sync)"
+          GENERATED="$(node scripts/check-types-sync.js)"
           echo "$GENERATED"
           if [ "$GENERATED" != "TYPES_IN_SYNC" ]; then
             echo "Type sync check failed"
