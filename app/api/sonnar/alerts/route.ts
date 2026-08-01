@@ -4,7 +4,7 @@
 // ============================================================
 
 import { NextRequest } from 'next/server';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 
 interface AlertItem {
   id: string;

@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown, getV5Companies } from '@/core/services/report-generator-v5';
 import { generateFullV5Report, fullReportToHtml } from '@/core/services/report-generator-v5-full';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export async function GET() {
   const companies = getV5Companies();

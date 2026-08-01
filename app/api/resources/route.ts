@@ -3,7 +3,7 @@
 // app/api/resources/route.ts
 // ============================================================
 
-import { jsonResponse } from '@/lib/api-utils';
+import { jsonResponse } from '@lib/api-utils';
 
 export interface ModuleResource {
   id: string;

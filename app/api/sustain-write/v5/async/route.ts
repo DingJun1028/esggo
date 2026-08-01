@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { createTask, startAsyncTask, getAllTasks, getCompanyList } from '../../../../../src/core/services/async-task-manager';
 import { CelestialController } from '../../../../../src/lib/celestial/implementation';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

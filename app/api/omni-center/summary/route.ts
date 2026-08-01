@@ -6,8 +6,8 @@
  * 若 DB 查詢失敗，保留安全的 fallback。
  */
 
-import { jsonResponse } from '@/lib/api-utils';
-import { prisma } from '@/lib/storage-service';
+import { jsonResponse } from '@lib/api-utils';
+import { prisma } from '@lib/storage-service';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

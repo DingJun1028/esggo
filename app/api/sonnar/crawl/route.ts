@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server';
 import { crawlerScheduler } from '@/services/scheduler/crawler-scheduler';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 import type { SubscriptionMatch } from '@/core/sonnar/sonar-bridge';
 
 // GET /api/sonnar/crawl — Get scheduler status & job list

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateV5Report, reportV5ToHtml, reportV5ToMarkdown } from '@/core/services/report-generator-v5';
-import { jsonError } from '@/lib/api-utils';
+import { jsonError } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 

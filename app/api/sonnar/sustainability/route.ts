@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { jsonResponse } from '@/lib/api-utils';
+import { jsonResponse } from '@lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const companyId = req.nextUrl.searchParams.get('companyId') || 'unknown';

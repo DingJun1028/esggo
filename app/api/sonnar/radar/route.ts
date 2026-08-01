@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server';
 import { getRegisteredSources } from '@/crawlers/crawler-factory';
-import { jsonResponse } from '@/lib/api-utils';
+import { jsonResponse } from '@lib/api-utils';
 
 /**
  * Signal Radar — aggregates all detected ESG signals across sources

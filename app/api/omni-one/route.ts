@@ -1,4 +1,4 @@
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { routeModel, inferTaskType, formatRoutingResult } from '@/core/ai/model-router';
 
 export const dynamic = 'force-dynamic';

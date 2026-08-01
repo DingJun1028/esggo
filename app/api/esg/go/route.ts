@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { DataOrchestratorServer } from '@/lib/services/esg/DataOrchestratorServer';
+import { DataOrchestratorServer } from '@lib/services/esg/DataOrchestratorServer';
 import { IEsgMetric } from '@/shared/types';
 
 export async function POST(request: Request) {
