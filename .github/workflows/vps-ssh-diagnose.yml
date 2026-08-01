@@ -36,8 +36,9 @@ jobs:
       - name: Resolve VPS_HOST and probe connectivity
         run: |
           set -euo pipefail
-          echo "VPS_HOST=$VPS_HOST"
-          getent hosts "$VPS_HOST" | head -2 || true
+          echo "VPS_HOST_HEX=$(printf '%s' "$VPS_HOST" | od -An -tx1 | tr -d ' \n')"
+          echo "VPS_USER_HEX=$(printf '%s' "$VPS_USER" | od -An -tx1 | tr -d ' \n')"
+          getent ahosts "$VPS_HOST" | head -2 || true
           echo '--- TCP + banner test port 22 ---'
           timeout 15 bash -c "exec 3<>/dev/tcp/$VPS_HOST/22 && head -c 40 <&3" || echo 'NO BANNER (hang/drop)'
           echo '--- TCP test port 80/443 ---'
@@ -66,10 +67,8 @@ jobs:
           OCI_TARGET: ${{ secrets.OCI_TARGET_RESOURCE_ID }}
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          curl -sL -o /tmp/oci-cli.zip https://download.oracle.com/otn_scripts/linux/instantclient/oci-cli/oci-cli-3.45.0.zip
-          unzip -q /tmp/oci-cli.zip -d /tmp/oci
-          sudo /tmp/oci/oci-cli/install.sh -b /usr/local/bin >/dev/null
+          pip3 install --user --quiet oci-cli
+          export PATH="$HOME/.local/bin:$PATH"
           mkdir -p ~/.oci
           cat > ~/.oci/config <<EOFCONF
           [DEFAULT]
@@ -85,6 +84,10 @@ jobs:
           oci compute instance get --instance-id "$OCI_TARGET" \
             --query 'data.{lifecycle:"lifecycle-state",shape:shape,region:"region",ip:"public-ip"}' \
             --output json 2>&1 || echo 'instance get failed (may not be an instance OCID)'
+          echo '--- root-compartment instance list ---'
+          oci compute instance list --compartment-id "$OCI_TENANCY" \
+            --query 'data[].{"name":`display-name`,lifecycle:"lifecycle-state",ip:"public-ip",ocid:id}' \
+            --output json 2>&1 || true
           echo '--- vnics ---'
           oci compute instance list-vnics --instance-id "$OCI_TARGET" \
             --query 'data[].{"public-ip":`public-ip`,name:name}' --output json 2>&1 || true
