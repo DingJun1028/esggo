@@ -1,32 +1,21 @@
-import { jsonResponse } from '@/lib/api-utils';
+// ═══════════════════════════════════════════════════════════════
+// /api/ai/status — AI Provider Status
+// Uses @esggo/shared/config for unified configuration
+// ═══════════════════════════════════════════════════════════════
 
-interface AIStatus {
-  timestamp: string;
-  providers: {
-    groq: {
-      available: boolean;
-      models: string[];
-      rateLimit: string;
-    };
-    openrouter: {
-      available: boolean;
-      models: number;
-      dailyLimit: string;
-    };
-    gemini: {
-      available: boolean;
-    };
-  };
-  fallbackChain: string[];
-  totalFreeModels: number;
-}
+import { NextResponse } from 'next/server';
+import { getConfig } from '@esggo/shared/config';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const status: AIStatus = {
+  const config = getConfig();
+
+  const status = {
     timestamp: new Date().toISOString(),
     providers: {
       groq: {
-        available: !!process.env.GROQ_API_KEY,
+        available: !!config.ai.groqApiKey,
         models: [
           'llama-3.3-70b-versatile',
           'llama-3.1-8b-instant',
@@ -36,12 +25,12 @@ export async function GET() {
         rateLimit: '30 req/min',
       },
       openrouter: {
-        available: !!process.env.OPENROUTER_API_KEY,
+        available: !!config.ai.openrouterApiKey,
         models: 11,
         dailyLimit: '200 req/day',
       },
       gemini: {
-        available: !!process.env.GEMINI_API_KEY,
+        available: !!config.ai.geminiApiKey,
       },
     },
     fallbackChain: [
@@ -52,7 +41,8 @@ export async function GET() {
       'Mock',
     ],
     totalFreeModels: 15,
+    freeTierOnly: config.ai.freeTierOnly,
   };
 
-  return jsonResponse(status);
+  return NextResponse.json({ success: true, data: status });
 }

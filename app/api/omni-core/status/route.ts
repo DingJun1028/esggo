@@ -1,10 +1,10 @@
-/**
- * GET /api/omni-core/status
- *
- * 回傳 OmniCore 單例狀態，不執行昂貴初始化。
- */
+// ═══════════════════════════════════════════════════════════════
+// /api/omni-core/status — OmniCore Status
+// Uses @esggo/errors/api for unified error handling
+// ═══════════════════════════════════════════════════════════════
 
 import { getOmniCoreStatus } from '@/lib/omni-core';
+import { apiSuccess, apiInternalError } from '@esggo/errors/api';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -12,11 +12,10 @@ export const runtime = 'nodejs';
 export async function GET(): Promise<Response> {
   try {
     const status = await getOmniCoreStatus();
-    return Response.json({ success: true, data: status }, { status: 200 });
+    return apiSuccess(status);
   } catch (error) {
-    return Response.json(
-      { success: false, error: error instanceof Error ? error.message : '取得 OmniCore 狀態失敗' },
-      { status: 500 }
+    return apiInternalError(
+      error instanceof Error ? error.message : 'Failed to get OmniCore status'
     );
   }
 }
