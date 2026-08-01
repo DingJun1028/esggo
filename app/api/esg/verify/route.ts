@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { DataOrchestratorServer } from '@/lib/services/esg/DataOrchestratorServer';
+import { DataOrchestratorServer } from '@lib/services/esg/DataOrchestratorServer';
 
 export async function POST(request: Request) {
   try {

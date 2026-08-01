@@ -1,6 +1,6 @@
-import { db } from '@/lib/firebase';
+import { db } from '@lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A5] 交互直覺隊 (Intuition Designer) — 奧義：神蹟顯現

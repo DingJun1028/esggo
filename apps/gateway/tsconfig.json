@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
@@ -12,8 +14,16 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["*.ts", "*.mjs"],
-  "exclude": ["node_modules", "dist", "*.backup*"]
+  "include": [
+    "sync/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.backup*"
+  ]
 }

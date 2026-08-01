@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [02] 語義版本官 (The Semanticist) — 奧義：永恆刻印

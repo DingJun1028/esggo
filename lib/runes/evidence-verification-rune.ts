@@ -1,6 +1,6 @@
-import { defineRune } from "@/lib/adk/core";
-import { EvidenceVerificationSchema } from "@/lib/schemas/navigation-schema";
-import { esgMetricsApi, evidenceVaultApi } from "@/lib/ncb-service";
+import { defineRune } from '@lib/adk/core';
+import { EvidenceVerificationSchema } from '@lib/schemas/navigation-schema';
+import { esgMetricsApi, evidenceVaultApi } from '@lib/ncb-service';
 
 export const evidenceVerificationRune = defineRune({
   name: "verify_claims_against_src",

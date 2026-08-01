@@ -1,6 +1,6 @@
 import { dispatchToApostleServer } from '../adk/apostle-dispatcher-server';
 import { AgentNetworkBus } from '../EntropyAgent';
-import { omniIndex } from '@/lib/core/omni-index';
+import { omniIndex } from '@lib/core/omni-index';
 import { IEsgMetric } from '@/shared/types';
 
 /**

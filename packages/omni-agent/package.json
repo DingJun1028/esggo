@@ -8,13 +8,18 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "ts-node src/index.ts",
-    "test": "vitest",
+    "test": "vitest run --passWithNoTests",
     "lint": "eslint src/ --fix",
     "lint:full": "eslint src/ --max-warnings 50",
     "typecheck": "tsc --noEmit",
     "version": "node scripts/version.js"
   },
-  "keywords": ["omnijules", "ai-agent", "esggo", "5t-protocol"],
+  "keywords": [
+    "omnijules",
+    "ai-agent",
+    "esggo",
+    "5t-protocol"
+  ],
   "author": "ESG GO Team",
   "license": "UNLICENSED",
   "description": "OmniJules AI Agent - Sovereign Intelligence Core for ESG GO Platform",
@@ -44,8 +49,18 @@
     "agent": {
       "name": "OmniJules",
       "version": "5.1.0",
-      "capabilities": ["ai", "agent", "editor", "devops", "security"],
-      "protocols": ["5t-protocol", "esggo-standards", "omniskill-codex"]
+      "capabilities": [
+        "ai",
+        "agent",
+        "editor",
+        "devops",
+        "security"
+      ],
+      "protocols": [
+        "5t-protocol",
+        "esggo-standards",
+        "omniskill-codex"
+      ]
     }
   }
 }

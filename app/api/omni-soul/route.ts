@@ -2,7 +2,7 @@
 // POST /api/omni-soul — OmniSoul 系統端點
 // ═══════════════════════════════════════════════════════════════
 
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { createOmniSoul, getOmniSoul } from '@/agents/omni-soul';
 import type { SoulAwakeningState } from '@/types/omni-soul';
 import { initSoul } from '@/agents/omni-soul-auto-seed';

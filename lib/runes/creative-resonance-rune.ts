@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A4] 創意共鳴隊 (Creative Resonator) — 奧義：聖典共鳴

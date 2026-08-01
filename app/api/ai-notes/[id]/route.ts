@@ -3,7 +3,7 @@
 // ============================================================
 
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError, validateParams } from '@/lib/api-utils';
+import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
 import { getNCBClient } from '@/lib/ncb-client';
 import type { UpdateNoteInput } from '@/types/notes';
 

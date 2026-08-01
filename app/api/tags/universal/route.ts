@@ -3,7 +3,7 @@
 // app/api/tags/universal/route.ts
 // ============================================================
 import { NextRequest } from 'next/server';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 import { prisma } from '@/lib/prisma';
 import { syncEsgTags, getEntityTags } from '@/core/tags/universal-tag-service';
 

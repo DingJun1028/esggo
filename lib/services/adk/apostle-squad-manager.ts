@@ -1,11 +1,11 @@
-import { TEN_WINGS_APOSTLES } from '@/lib/adk/ten-wings';
-import { ARVO_WINGS_APOSTLES } from '@/lib/adk/arvo-wings';
-import { ApostleMetadata } from '@/lib/adk/types';
+import { TEN_WINGS_APOSTLES } from '@lib/adk/ten-wings';
+import { ARVO_WINGS_APOSTLES } from '@lib/adk/arvo-wings';
+import { ApostleMetadata } from '@lib/adk/types';
 import { AgentNetworkBus } from '../EntropyAgent';
-import { HolyLinter } from '@/lib/core/omni-linter';
-import { omniIndex } from '@/lib/core/omni-index';
-import { initApostleAgents } from '@/lib/adk/ten-wings-agents';
-import { initArvoApostleAgents } from '@/lib/adk/arvo-wings-agents';
+import { HolyLinter } from '@lib/core/omni-linter';
+import { omniIndex } from '@lib/core/omni-index';
+import { initApostleAgents } from '@lib/adk/ten-wings-agents';
+import { initArvoApostleAgents } from '@lib/adk/arvo-wings-agents';
 
 /**
  * ApostleSquadManager (Client-Safe Version)

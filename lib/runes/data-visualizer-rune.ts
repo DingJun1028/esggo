@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A8] 數據可視隊 (Data Visualizer) — 奧義：神蹟顯現

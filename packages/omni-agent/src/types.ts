@@ -1,4 +1,4 @@
-interface Task {
+export interface Task {
   id: string
   type: 'analysis' | 'refactor' | 'test' | 'build' | 'deploy' | 'monitor' | 'optimize' | 'security'
   description: string
@@ -12,7 +12,7 @@ interface Task {
   metadata?: Record<string, any>
 }
 
-interface TaskResult {
+export interface TaskResult {
   success: boolean
   result?: any
   error?: string
@@ -26,7 +26,7 @@ interface TaskResult {
   timestamp: number
 }
 
-interface MultiStepResult {
+export interface MultiStepResult {
   success: boolean
   results: TaskResult[]
   summary: {
@@ -39,7 +39,7 @@ interface MultiStepResult {
   recommendations: string[]
 }
 
-interface OptimizationStrategy {
+export interface OptimizationStrategy {
   id: string
   description: string
   priority: 'high' | 'medium' | 'low'
@@ -54,7 +54,7 @@ interface OptimizationStrategy {
   }
 }
 
-interface OptimizationTask {
+export interface OptimizationTask {
   id: string
   name: string
   description: string
@@ -64,7 +64,7 @@ interface OptimizationTask {
   requiredSkills: string[]
 }
 
-interface ImplementationPlan {
+export interface ImplementationPlan {
   phases: ImplementationPhase[]
   totalPhases: number
   estimatedTotalTime: number
@@ -72,7 +72,7 @@ interface ImplementationPlan {
   successMetrics: string[]
 }
 
-interface ImplementationPhase {
+export interface ImplementationPhase {
   phase: number
   description: string
   tasks: {
@@ -86,7 +86,7 @@ interface ImplementationPhase {
   estimatedTime: number
 }
 
-interface FeedbackReport {
+export interface FeedbackReport {
   systemHealth: SystemHealth
   aiPerformance: AIPerformance
   coordinationMetrics: CoordinationMetrics
@@ -94,7 +94,7 @@ interface FeedbackReport {
   nextReview: Date
 }
 
-interface SystemHealth {
+export interface SystemHealth {
   overallScore: number
   performance: {
     score: number
@@ -110,27 +110,27 @@ interface SystemHealth {
   }
 }
 
-interface AIPerformance {
+export interface AIPerformance {
   modelLatency: number
   responseAccuracy: number
   costPerTask: number
   tasksProcessed: number
 }
 
-interface CoordinationMetrics {
+export interface CoordinationMetrics {
   tasksCompleted: number
   collaborationEfficiency: number
   communicationLatency: number
 }
 
-interface Recommendation {
+export interface Recommendation {
   category: 'performance' | 'security' | 'coordination' | 'quality'
   message: string
   priority: 'high' | 'medium' | 'low'
   action: string
 }
 
-interface StepResult {
+export interface StepResult {
   taskId: string
   success: boolean
   result?: any
@@ -139,7 +139,7 @@ interface StepResult {
   qualityScore: number
 }
 
-interface AgentStatus {
+export interface AgentStatus {
   name: string
   version: string
   status: 'online' | 'offline' | 'degraded' | 'maintenance'
@@ -150,10 +150,39 @@ interface AgentStatus {
   lastTask?: string
 }
 
-interface ExecutionContext {
+export interface ExecutionContext {
   startTime: number
   currentTasks: string[]
   completedTasks: string[]
   failedTasks: string[]
   getLastTask(): string
 }
+
+// ── 5T Gate Contracts (restored for gates.ts) ────────────────
+
+export type FiveTDimension = 'traceable' | 'transparent' | 'tangible' | 'trustworthy' | 'trackable';
+
+export interface FiveTVerificationResult {
+  passed: boolean;
+  issues: string[];
+  gate: FiveTDimension;
+  score: number;
+}
+
+export type FiveTScore = Record<FiveTDimension, number>;
+
+export const FIVE_T_GATES: FiveTDimension[] = [
+  'traceable',
+  'transparent',
+  'tangible',
+  'trustworthy',
+  'trackable',
+];
+
+export const FIVE_T_META: Record<FiveTDimension, { zh: string; color: string }> = {
+  traceable: { zh: '可追溯', color: '#2563EB' },
+  transparent: { zh: '可透明', color: '#0EA5E9' },
+  tangible: { zh: '可量化', color: '#F59E0B' },
+  trustworthy: { zh: '可信任', color: '#10B981' },
+  trackable: { zh: '可追蹤', color: '#8B5CF6' },
+};

@@ -6,7 +6,7 @@ import { NextRequest } from 'next/server';
 import { getSkill } from '@/core/ai/skills/registry';
 import type { SkillContext } from '@/core/ai/skills/registry';
 import { routeModel } from '@/core/ai/model-router';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 interface RouteContext {
   params: Promise<{ taskType: string }>;

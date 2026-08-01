@@ -6,7 +6,7 @@
 import { NextRequest } from 'next/server';
 import { parsePDFReport } from '../../../../src/core/pdf/pdf-parser';
 import { PrismaClient } from '@prisma/client';
-import { jsonError, jsonResponse } from '@/lib/api-utils';
+import { jsonError, jsonResponse } from '@lib/api-utils';
 
 const prisma = new PrismaClient();
 export const runtime = 'nodejs';

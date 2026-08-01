@@ -1,5 +1,5 @@
-import { defineRune } from "@/lib/adk/core";
-import { RegulationUpdateSchema } from "@/lib/schemas/navigation-schema";
+import { defineRune } from '@lib/adk/core';
+import { RegulationUpdateSchema } from '@lib/schemas/navigation-schema';
 
 export const regulationUpdateRune = defineRune({
   name: "fetch_latest_esg_regulations",

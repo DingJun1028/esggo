@@ -107,7 +107,7 @@ function polarPoint(a: number, r: number, cx: number, cy: number) {
   return { x: cx + r * Math.cos(a - Math.PI / 2), y: cy + r * Math.sin(a - Math.PI / 2) };
 }
 
-import { db } from '@/lib/firebase';
+import { db } from '@lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 const SCORES = { traceable:0.91, transparent:0.88, tangible:0.90, trustworthy:0.94, trackable:0.87 };

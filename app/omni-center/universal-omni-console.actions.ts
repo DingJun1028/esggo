@@ -1,7 +1,7 @@
 'use server';
 
 import { storeOmniCase, storeOmniConsoleSnapshot } from '@/lib/storage-service';
-import type { OmniRequest, OmniResult } from '@/lib/esggo';
+import type { OmniRequest, OmniResult } from '@lib/esggo';
 
 function getFnName(req: OmniRequest, fallback: string): string {
   if (req.kind === 'fn') return req.name;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
+import { db } from '@lib/firebase';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { ShieldCheck, Hash, Clock, Heart, ChevronDown, ChevronUp } from 'lucide-react';
 import { UniversalOmniConsole } from './universal-omni-console';

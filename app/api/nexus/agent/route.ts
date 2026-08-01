@@ -1,5 +1,5 @@
 import { omniOrchestrator } from '@/core/services/omni-orchestrator';
-import { jsonResponse, jsonError } from '@/lib/api-utils';
+import { jsonResponse, jsonError } from '@lib/api-utils';
 
 export async function POST(req: Request) {
   try {

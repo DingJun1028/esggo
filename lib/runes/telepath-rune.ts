@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [R8] 遠端通訊官 (The Telepath) — 奧義：神蹟顯現

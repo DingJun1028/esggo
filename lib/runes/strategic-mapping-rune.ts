@@ -1,6 +1,6 @@
-import { defineRune } from "@/lib/adk/core";
-import { StrategicMappingSchema } from "@/lib/schemas/navigation-schema";
-import { evidenceVaultApi } from "@/lib/ncb-service";
+import { defineRune } from '@lib/adk/core';
+import { StrategicMappingSchema } from '@lib/schemas/navigation-schema';
+import { evidenceVaultApi } from '@lib/ncb-service';
 import crypto from "crypto";
 
 export const strategicMappingRune = defineRune({

@@ -123,7 +123,7 @@ fix-*.js
 fix-*.cjs
 fix_*.py
 tmp-fix-*.cjs
-index.html
+/index.html
 mongo-init.js
 ctl.ps1
 clean_logs.ps1
@@ -288,3 +288,6 @@ esggo-deploy.bundle
 .audit/
 
 .vercel
+
+# turbo task runner artifacts
+**/.turbo/

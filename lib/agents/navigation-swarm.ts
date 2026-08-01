@@ -1,14 +1,14 @@
-import { createAgent, createSwarm } from "@/lib/adk/core";
+import { createAgent, createSwarm } from '@lib/adk/core';
 import { z } from "zod";
 import { GoogleGenAI } from "@google/genai";
-import { strategicMappingRune } from "@/lib/runes/strategic-mapping-rune";
-import { consistencyVerificationRune } from "@/lib/runes/consistency-rune";
-import { evidenceVerificationRune } from "@/lib/runes/evidence-verification-rune";
-import { industryBenchmarkRune } from "@/lib/runes/benchmark-rune";
-import { verificationCertificateRune } from "@/lib/runes/verification-certificate-rune";
-import { regulationUpdateRune } from "@/lib/runes/regulation-rune";
-import { marketAdaptationRune } from "@/lib/runes/market-adaptation-rune";
-import { debateRune } from "@/lib/runes/debate-rune";
+import { strategicMappingRune } from '@lib/runes/strategic-mapping-rune';
+import { consistencyVerificationRune } from '@lib/runes/consistency-rune';
+import { evidenceVerificationRune } from '@lib/runes/evidence-verification-rune';
+import { industryBenchmarkRune } from '@lib/runes/benchmark-rune';
+import { verificationCertificateRune } from '@lib/runes/verification-certificate-rune';
+import { regulationUpdateRune } from '@lib/runes/regulation-rune';
+import { marketAdaptationRune } from '@lib/runes/market-adaptation-rune';
+import { debateRune } from '@lib/runes/debate-rune';
 import { 
   GeminiStrategicMappingSchema, 
   StrategicMapping,
@@ -21,7 +21,7 @@ import {
   MarketAdaptation,
   GeminiDebateResultSchema,
   DebateResult
-} from "@/lib/schemas/navigation-schema";
+} from '@lib/schemas/navigation-schema';
 import crypto from "crypto";
 
 // --- Agents ---

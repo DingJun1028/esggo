@@ -9,7 +9,7 @@
  *  - In-memory fallback for development
  *
  * Usage:
- *   import { getRedis, isRedisReady, shutdownRedis } from '@/lib/redis/client';
+ *   import { getRedis, isRedisReady, shutdownRedis } from '@lib/redis/client';
  *   const redis = await getRedis();
  *   if (redis) { await redis.set('key', 'value'); }
  */

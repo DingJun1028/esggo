@@ -1,5 +1,5 @@
-import { defineRune } from "@/lib/adk/core";
-import { MarketAdaptationSchema } from "@/lib/schemas/navigation-schema";
+import { defineRune } from '@lib/adk/core';
+import { MarketAdaptationSchema } from '@lib/schemas/navigation-schema';
 
 export const marketAdaptationRune = defineRune({
   name: "adapt_content_for_market",

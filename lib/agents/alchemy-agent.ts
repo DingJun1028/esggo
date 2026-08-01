@@ -1,8 +1,8 @@
-import { createAgent } from "@/lib/adk/core";
-import { ncbdbEngraveRune } from "@/lib/runes/ncbdb-engrave-rune";
+import { createAgent } from '@lib/adk/core';
+import { ncbdbEngraveRune } from '@lib/runes/ncbdb-engrave-rune';
 import { GoogleGenAI } from "@google/genai";
-import { GeminiESGCalculationSchema, ESGCalculationResult } from "@/lib/schemas/alchemy-schema";
-import { alchemistRune } from "@/lib/runes/alchemist-rune";
+import { GeminiESGCalculationSchema, ESGCalculationResult } from '@lib/schemas/alchemy-schema';
+import { alchemistRune } from '@lib/runes/alchemist-rune';
 
 export const AlchemyAgent = createAgent({
   name: "熵減煉金術師",

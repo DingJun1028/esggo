@@ -11,7 +11,7 @@ module.exports = [
   {
     ignores: [
       '.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/', 'dist/',
-      '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/', 'packages/',
+      '*.cjs', '*.mjs', 'assets/vendor/', 'esggo/', 'apps/',
       'scripts/*.cjs', '.agents/**', 'lib/agents/omni-agent-bus.js',
       'test/', '_analysis/**', 'temp/**', 'my-worker/**', 'gateway/**',
       'lib/agents/**', 'lib/api/**', 'sdks/**', 'chapter-templates/**',

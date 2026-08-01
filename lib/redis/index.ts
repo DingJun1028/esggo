@@ -2,7 +2,7 @@
  * ESGGO Redis Cache Layer — Barrel Export
  *
  * Usage:
- *   import { getRedis, getTaskState, updateChapterProgress } from '@/lib/redis';
+ *   import { getRedis, getTaskState, updateChapterProgress } from '@lib/redis';
  */
 
 // Client

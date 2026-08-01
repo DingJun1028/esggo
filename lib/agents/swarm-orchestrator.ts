@@ -1,4 +1,4 @@
-import { createSwarm } from "@/lib/adk/core";
+import { createSwarm } from '@lib/adk/core';
 import { AlchemyAgent, executeAlchemyTask } from "./alchemy-agent";
 import {
   CovenanterAgent,

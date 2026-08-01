@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineRune } from "@/lib/adk/core";
+import { defineRune } from '@lib/adk/core';
 
 /**
  * [A6] 零幻覺驗算隊 (Hallucination Slayer) — 奧義：熵減煉金

@@ -1,6 +1,6 @@
-import { defineRune } from "@/lib/adk/core";
-import { VerificationCertificateSchema } from "@/lib/schemas/navigation-schema";
-import { evidenceVaultApi } from "@/lib/ncb-service";
+import { defineRune } from '@lib/adk/core';
+import { VerificationCertificateSchema } from '@lib/schemas/navigation-schema';
+import { evidenceVaultApi } from '@lib/ncb-service';
 import crypto from "crypto";
 
 export const verificationCertificateRune = defineRune({
