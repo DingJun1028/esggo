@@ -216,6 +216,18 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
           NEXT_PUBLIC_SUPABASE_ANON_KEY: "build-placeholder"
 
+  # ─── agents.yaml 框架驗證 ─────────────────────────────────────
+  agents-yaml:
+    name: agents.yaml Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PyYAML
+        run: python3 -m pip install pyyaml
+      - name: Run OA-Team 30-Swarm verification
+        run: python3 scripts/verify-agents-yaml.py
+
   # ─── VPS 腳本語法檢查 ─────────────────────────────────────────
   validate-vps:
     name: Validate VPS Scripts
