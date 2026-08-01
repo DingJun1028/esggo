@@ -1,9 +1,10 @@
 # CLAUDE.md — ESG GO Engineering Conventions & Enforcement Rules
 
-> Version: 1.0.0
+> Version: 1.1.0
 > Classification: Internal Standard
 > Language: English Standard, Traditional Chinese Broad (英標繁博)
 > Tags: [security:internal][agent:07][squad:符文契約][lifecycle:active][p1][platform:esggo][best-practice:awakened]
+> Last Updated: 2026-08-01 (rune-contract audit)
 
 ---
 
@@ -123,7 +124,7 @@ grep -rn "@ts-ignore\|@ts-nocheck" src app packages || true  # expect empty
 grep -rn "jsonResponse({ success: true" app/api --include="route.ts"
 grep -rn "error.message\|err.message\|error instanceof Error" app/api --include="route.ts"
 # Ad-hoc codes (expect only @esggo/errors keys)
-grep -rn "jsonError('" app/api --include="route.ts" | grep -vE "ERROR_CODES|'INVALID_PARAMS'|'NOT_FOUND'|'INTERNAL_ERROR'|'UNAUTHORIZED'|'FORBIDDEN'|'SKILL_NOT_FOUND'|'PROJECT_NOT_FOUND'|'MEMBER_NOT_FOUND'|'INSUFFICIENT_POINTS'|'RATE_LIMITED'|'EMBEDDING_FAILED'|'RAG_QUERY_FAILED'|'SOURCE_NOT_FOUND'|'CRAWL_ERROR'|'TASK_NOT_FOUND'|'COMPANY_NOT_FOUND'|'INVALID_ACTION'|'UNKNOWN_ERROR'|'METHOD_NOT_ALLOWED'|'UNKNOWN_TOOL'|'ALERT_NOT_FOUND'" || true
+grep -rn "jsonError('" app/api --include="route.ts" | grep -vE "ERROR_CODES|'INVALID_PARAMS'|'NOT_FOUND'|'INTERNAL_ERROR'|'UNAUTHORIZED'|'FORBIDDEN'|'SKILL_NOT_FOUND'|'PROJECT_NOT_FOUND'|'MEMBER_NOT_FOUND'|'INSUFFICIENT_POINTS'|'RATE_LIMITED'|'EMBEDDING_FAILED'|'RAG_QUERY_FAILED'|'SOURCE_NOT_FOUND'|'CRAWL_ERROR'|'TASK_NOT_FOUND'|'COMPANY_NOT_FOUND'|'INVALID_ACTION'|'UNKNOWN_ERROR'|'METHOD_NOT_ALLOWED'|'INVALID_ACTION'|'UNKNOWN_TOOL'|'ALERT_NOT_FOUND'" || true
 ```
 
 ---
@@ -194,25 +195,99 @@ pnpm test:coverage   # coverage report
 High-value cleanup targets identified during the audit (fixing these is a follow-up task,
 not required for this file):
 
-- **API**: 10 double-envelope lines across 7 route files (`daily-report`,
-  `daily-report/generate`, `user/leaderboard`, `user/subscription`, `user/growth`,
-  `user/growth/xp`, `user/tasks`); 27 error-leak sites across 20 routes (catch blocks
-  interpolate `error.message`); 12+ business routes bypass `jsonResponse` (`esg/*`,
-  `awaken/*`, `omni-core/status`, `surveys`, `sustain-center/dashboard`, `local-ai/chat`,
-  `data/export`, `reconnaissance/gateway`, `sustain-write/c-version` — `healthz` and
-  PDF-download are exempt); only 1 route uses Zod (`omni/sync`); 5 mutating routes have
-  no auth (`cron`, `memory`, `sonnar/crawl`, `tags/universal`, `tags/pair`).
-- **TypeScript**: 35 prod `any` sites in 20 files — hotspots `src/impl/core.ts` (7),
-  `app/api/ai-notes/search/route.ts` (4), `app/api/village/trends/route.ts` (3),
-  `app/api/reconnaissance/gateway/route.ts` (3), `packages/omni-agent/src/types.ts` (2),
-  plus 15 single-site files (`src/types.ts`, `esg/*`, `awaken/*`, `omni-bus.ts`, etc.).
-  `tsconfig.core.json` covers only `src/impl`, `src/lib/omni-core`, `src/lib/cloudflare`
-  — broaden CI typecheck to `src/core`, `src/agents`, `src/lib` as strictness improves.
-  Zero `@ts-ignore` / `@ts-nocheck` sites found.
-- **Tests**: 228 src `.ts` files (non-test) vs 37 test files (18 in `src/`, 17 in
-  `tests/`, 2 in `worker/`+`apps/`); `packages/*` have zero tests; `src/lib/omni-tag/`,
-  `src/lib/omni-seed/`, and `src/core/sonnar` are untested.
+### 6.1 API Routes (76 total)
+
+- **Double-envelope**: 10 occurrences across 7 route files wrap `{ success: true, ... }`
+  inside `jsonResponse()`: `daily-report` (3×), `user/growth` (2×), `daily-report/generate`,
+  `user/leaderboard`, `user/subscription`, `user/growth/xp`, `user/tasks` (1× each).
+- **Error message leaks**: 21 leak sites across 18 routes interpolate `error.message` /
+  `err.message` in catch blocks. Key offenders: `sustain-write/v5/preview`,
+  `sustain-write/v5/download`, `data/export`, `daily-report`, `daily-report/generate`,
+  `user/*` routes, `nexus`, `village/*`, `omni/plugins`, `omni-agent/console`,
+  `omni-user-registry`, `omni-core/status`.
+- **Missing auth on mutators**: `cron`, `memory`, `rag/ingest`, `sonnar/crawl` POST
+  handlers lack authentication checks (`X-Omni-Token` / `verifyIdToken`).
+- **Raw Response.json**: 6 routes bypass `jsonResponse()`/`jsonError()`:
+  `surveys`, `local-ai/chat`, `sustain-center/dashboard`, `sustain-write/c-version`,
+  `data/export`, `omni-core/status`.
+- **Ad-hoc error codes**: `local-ai/chat` uses `LOCAL_AI_DISABLED`, `BAD_REQUEST`,
+  `EMPTY_PROMPT`, `OLLAMA_ERR` — not from `@esggo/errors`.
+- **No OPTIONS handlers**: Clean — all routes rely on Next.js auto-405.
+- **Runtime exports**: 39 routes export `dynamic = 'force-dynamic'`; 14 export
+  `runtime = 'nodejs'`.
+
+### 6.2 TypeScript Strictness
+
+- **strict mode**: `tsconfig.json` has `"strict": true` — compliant.
+- **`any` usage in production code** (20 occurrences, non-test):
+  - `src/impl/core.ts`: 7 occurrences (chaos injection, event mutation).
+  - `src/lib/omni-core/omni-function.ts`: 1 occurrence (`FnImpl` type).
+  - `app/api/ai-notes/search/route.ts`: 4 occurrences (vector result mapping).
+  - `app/api/village/trends/route.ts`: 3 occurrences (interaction parsing).
+  - `app/api/agent/[id]/thought/stream/route.ts`: 1 occurrence (bus event).
+  - `app/omni-center/omni-note-crud.tsx`: 1 occurrence (note mapping).
+  - `app/omni-agent/page.tsx`: 1 occurrence (data prop).
+  - `packages/omni-agent/src/types.ts`: 2 occurrences (`result?: any`).
+- **`@ts-ignore` / `@ts-nocheck`**: 0 occurrences — compliant.
+- **`@ts-expect-error`**: 1 occurrence in `src/agents/omni-agent.ts:239` with comment.
+- **Relative deep imports**: 3 routes import directly into `src/` via
+  `../../../../src/` style paths: `sustain-write/v5/async`, `ai/generate`, `pdf/parse`.
+- **tsconfig.core.json scope**: Only covers `src/impl`, `src/lib/omni-core`,
+  `src/lib/cloudflare` — does not typecheck `src/core`, `src/agents`, `src/lib` main.
+
+### 6.3 Test Coverage
+
+- **Source files**: 227 `.ts` files in `src/` (excluding tests).
+- **Test files**: 18 test files in `src/` (8% coverage by file count) + 19 in `tests/`
+  + 2 in `worker/`+`apps/` — 39 total repo-wide.
+- **Packages**: 0 test files across all 5 packages (`errors`, `shared`, `ui`, `cli`,
+  `omni-agent`).
+- **Critical paths covered**: ZKP service, 5T protocol, OmniTag factory, omni-soul,
+  omni-user-registry, omni-api, omni-bus-v2, omni-gateway-v2, core processor,
+  report generator, AI skills registry, engine.
+- **Key gaps**:
+  - `src/lib/` — only `omni-core/omni-function.test.ts` exists; no tests for
+    `api-utils`, `safe-api`, `zod-validation`, `firebase`, `auth`, `storage-service`,
+    `pgvector`, `esg-sonnar`, `zkp-service` (has test in `src/__tests__/`).
+  - `src/core/services/*` — zero tests.
+  - `src/core/ai/skills/*` — only 3 of 12 skills tested.
+  - `packages/*` — zero tests despite `omni-agent` having test infrastructure.
+- **CI test command**: `pnpm vitest run --reporter=verbose` in `ci.yml`.
+- **Fast gate**: `pnpm check` runs typecheck + core + twelve-omni suites only.
+
+### 6.4 Error Codes
+
+- **Single source of truth**: `packages/errors/src/index.ts` (335 lines).
+- **31 error codes** across 8 domain categories (GEN, AUTH, ESG, AI, VLG, CRAWL, GATEWAY, BRIDGE).
+- **Compat layer**: `src/lib/errors.ts` re-exports types only — no new definitions.
+- **Usage**: `src/lib/api-utils.ts` imports `ERROR_CODES` and `ErrorCodeKey` from
+  `@esggo/errors`. Zero API routes import directly from `@esggo/errors`.
+
+### 6.5 OmniTag System
+
+- **Core implementation**: `src/lib/sustain-write/omni-tag.ts` (350 lines).
+  - `OmniTagFactory` — create, entangle, sync, get paired tags.
+  - `FiveTReportEngine` — assemble 5T-compliant reports.
+  - `ReportChapter`, `GeneratedReport` interfaces.
+- **5T Protocol**: Traceable, Transparent, Tangible, Trustworthy, Trackable.
+- **Agent implementation**: `src/agents/twelve-omni/omni-tag.ts` — separate `OmniTag` class
+  with IOmniTag interface.
+- **No tests** for `src/lib/sustain-write/omni-tag.ts` or `src/agents/twelve-omni/omni-tag.ts`.
+
+### 6.6 Enforcement Gaps
+
+| Rule | Current State | Gap |
+|---|---|---|
+| No `any` in prod code | 20 occurrences in 8 files | Need cleanup in `src/impl/core.ts`, route files, `packages/omni-agent` |
+| No `@ts-ignore` | 0 | Compliant |
+| API envelope | 10 double-wraps across 7 routes | Fix `daily-report`, `user/*` routes |
+| Error message leaks | 21 sites across 18 routes | Replace with `jsonError('INTERNAL_ERROR', 'Internal server error')` |
+| Auth on mutators | 4 routes missing | Add auth to `cron`, `memory`, `rag/ingest`, `sonnar/crawl` |
+| Zod validation | 1 route | Expand to all POST routes with complex bodies |
+| Tests for new modules | 18/227 files in `src/` | Need ~200 more test files |
+| Package tests | 0/5 packages | Add tests to `errors`, `shared`, `ui`, `omni-agent` |
+| tsconfig.core.json scope | 3 directories | Broaden to `src/core`, `src/agents`, `src/lib` |
 
 ---
 
-ESG GO Engineering Conventions v1.0.0 · License: AGPL-3.0
+ESG GO Engineering Conventions v1.1.0 · License: AGPL-3.0
