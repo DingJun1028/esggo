@@ -81,9 +81,11 @@ jobs:
 
       - name: OCI full inventory (instances, vnics, bastions, all compartments)
         run: |
-          set -euo pipefail
+          set +e
           pip3 install --user --quiet oci-cli
           export PATH="$HOME/.local/bin:$PATH"
+          export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
+          export SUPPRESS_LABEL_WARNING=True
           mkdir -p ~/.oci
           cat > ~/.oci/config <<EOFCONF
           [DEFAULT]
@@ -96,10 +98,13 @@ jobs:
           printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
           chmod 600 /tmp/oci_key.pem
 
-          echo "TARGET_OCID=$OCI_TARGET"
+          echo "TARGET_OCID_HEX=$(printf '%s' "$OCI_TARGET" | od -An -tx1 | tr -d ' \n')"
+          echo '--- try: instance get on TARGET ---'
           oci compute instance get --instance-id "$OCI_TARGET" \
-            --query 'data."lifecycle-state"' --raw-output 2>&1 \
-            | sed 's/^/TARGET_GET=/' || echo 'TARGET_GET=not-an-instance-ocid'
+            --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_INSTANCE_GET=/'
+          echo '--- try: bastion get on TARGET ---'
+          oci bastion bastion get --bastion-id "$OCI_TARGET" \
+            --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/TARGET_BASTION_GET=/'
 
           echo '=== compartments ==='
           {
@@ -110,57 +115,59 @@ jobs:
 
           echo '=== all instances (per compartment) ==='
           while IFS=$'\t' read -r cid cname; do
-            echo "--- compartment: $cname ---"
-            oci compute instance list -c "$cid" --all --output json 2>/dev/null \
-              | jq -r '.[] | [.["display-name"], .["lifecycle-state"], .shape, .id] | @tsv' \
+            echo "--- compartment: ${cname:-root} ($cid) ---"
+            oci compute instance list -c "$cid" --output json 2>/dev/null \
+              | jq -r 'if type == "array" then .[] else empty end | [(.["display-name"] // "?"), (.["lifecycle-state"] // "?"), (.shape // "?"), (.id // "?")] | @tsv' \
               | while IFS=$'\t' read -r iname istate ishape iid; do
                   echo "INSTANCE name=$iname state=$istate shape=$ishape id=$iid"
                   oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
-                    | jq -r '.[] | "VNCIP " + (."public-ip" // "NULL") + " vnic=" + (.["display-name"] // "?")'
+                    | jq -r 'if type == "array" then .[] else empty end | "VNCIP " + ((."public-ip") // "NULL") + " vnic=" + ((.["display-name"]) // "?")'
                 done
           done < /tmp/comps.tsv
 
           echo '=== bastions ==='
           oci bastion bastion list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-            | jq -r '.[] | [.name, .id, ."lifecycle-state", (. | .["client-cidr-block-allow-list"] // [] | join(","))] | @tsv' \
+            | jq -r 'if type == "array" then .[] else empty end | [.name, .id, ."lifecycle-state", ((.["client-cidr-block-allow-list"] // []) | join(","))] | @tsv' \
             | sed 's/^/BASTION /'
           echo '=== bastion sessions ==='
           oci bastion session list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
-            | jq -r '.[] | [."display-name", ."lifecycle-state", ."bastion-id", .id] | @tsv' \
+            | jq -r 'if type == "array" then .[] else empty end | [(.["display-name"] // "?"), (."lifecycle-state" // "?"), (."bastion-id" // "?"), (.id // "?")] | @tsv' \
             | sed 's/^/SESSION /'
+          echo '=== inventory step done ==='
 
       - name: Identify target instance (public IP == VPS_HOST) and repair if stopped
         if: inputs.mode == 'repair' || inputs.mode == 'deploy'
         run: |
-          set -euo pipefail
+          set +e
           export PATH="$HOME/.local/bin:$PATH"
+          export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
+          export SUPPRESS_LABEL_WARNING=True
           echo "TARGET_IP=$VPS_HOST"
-          TID=''
           {
             echo "$OCI_TENANCY"
             oci iam compartment list -c "$OCI_TENANCY" --all --output json 2>/dev/null \
               | jq -r '.[].id'
           } | while read -r cid; do
-            oci compute instance list -c "$cid" --all --output json 2>/dev/null \
-              | jq -r '.[].id' \
+            oci compute instance list -c "$cid" --output json 2>/dev/null \
+              | jq -r 'if type == "array" then .[] else empty end | .id' \
               | while read -r iid; do
                 ip=$(oci compute instance list-vnics --instance-id "$iid" --output json 2>/dev/null \
-                  | jq -r '.[]."public-ip" // empty' | head -1)
+                  | jq -r 'if type == "array" then .[] else empty end | ."public-ip" // empty' | head -1)
                 if [ -n "$ip" ] && [ "$ip" = "$VPS_HOST" ]; then echo "FOUND_OCID=$iid"; fi
               done
           done | tee /tmp/found.txt
-          TID=$(grep '^FOUND_OCID=' /tmp/found.txt | head -1 | cut -d= -f2- || true)
+          TID=$(grep '^FOUND_OCID=' /tmp/found.txt | head -1 | cut -d= -f2-)
           if [ -z "$TID" ]; then
             echo 'TARGET_NOT_FOUND_IN_OCI: no instance with public IP matching VPS_HOST'
             exit 0
           fi
           echo "TARGET_INSTANCE=$TID"
-          state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)
+          state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
           echo "CURRENT_STATE=$state"
           if [ "$state" = STOPPING ] || [ "$state" = STARTING ]; then
             echo '--- waiting for state to settle ---'
             for i in $(seq 1 30); do
-              state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)
+              state=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)
               echo "state=$state ($i/30)"
               [ "$state" = RUNNING ] || [ "$state" = STOPPED ] && break
               sleep 20
@@ -172,7 +179,7 @@ jobs:
               --wait-for-state RUNNING --wait-interval-seconds 20 --max-wait-seconds 600 \
               --query 'data."lifecycle-state"' --raw-output 2>&1 | sed 's/^/START_RESULT=/'
           fi
-          echo "FINAL_STATE=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null || echo UNKNOWN)"
+          echo "FINAL_STATE=$(oci compute instance get --instance-id "$TID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null)"
 
       - name: Re-probe connectivity after repair
         if: inputs.mode == 'repair' || inputs.mode == 'deploy'
