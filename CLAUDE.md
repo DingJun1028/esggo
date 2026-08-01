@@ -283,7 +283,7 @@ not required for this file):
 | API envelope | 10 double-wraps across 7 routes | Fix `daily-report`, `user/*` routes |
 | Error message leaks | 21 sites across 18 routes | Replace with `jsonError('INTERNAL_ERROR', 'Internal server error')` |
 | Auth on mutators | 4 routes missing | Add auth to `cron`, `memory`, `rag/ingest`, `sonnar/crawl` |
-| Zod validation | 1 route | Expand to all POST routes with complex bodies |
+| Complex-body validation | 1 route — `omni/sync` uses manual type-guards (Zod itself is unused in `app/api`) | Expand to all POST routes with complex bodies |
 | Tests for new modules | 18/227 files in `src/` | Need ~200 more test files |
 | Package tests | 0/5 packages | Add tests to `errors`, `shared`, `ui`, `omni-agent` |
 | tsconfig.core.json scope | 3 directories | Broaden to `src/core`, `src/agents`, `src/lib` |
