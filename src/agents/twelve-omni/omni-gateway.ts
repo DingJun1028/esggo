@@ -101,10 +101,9 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
   async secureForward(event: IBusEvent): Promise<IBusEvent> {
     const locked = await this.hashLock(event);
 
-    // 凍結事件
+    // 凍結事件（內層事件與外層封裝皆不可變，確保呼叫端拿到的物件已凍結）
     Object.freeze(locked.event);
-
-    return locked as unknown as IBusEvent;
+    return Object.freeze(locked) as unknown as IBusEvent;
   }
 
   /**

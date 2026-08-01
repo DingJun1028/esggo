@@ -40,7 +40,8 @@ export async function GET() {
   // ── ESGSonar Gateway Check ──
   let sonnarStatus = 'unavailable';
   try {
-    const gatewayRes = await fetch('http://localhost:8642/health', {
+    const gatewayUrl = process.env.GATEWAY_URL || 'http://localhost:8642';
+    const gatewayRes = await fetch(`${gatewayUrl}/health`, {
       signal: AbortSignal.timeout(2000),
     });
     if (gatewayRes.ok) sonnarStatus = 'healthy';

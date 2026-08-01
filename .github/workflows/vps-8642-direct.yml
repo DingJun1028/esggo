@@ -32,7 +32,7 @@ jobs:
       - name: Run ufw + ss over SSH
         run: |
           set -o pipefail
-          ssh -o BatchMode=yes -o IdentitiesOnly=yes vps 'sudo ufw allow 8642/tcp' | tee /tmp/ufw.out || true
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes vps 'sudo ufw allow from 10.0.0.0/8 to any port 8642' | tee /tmp/ufw.out || true
           ssh -o BatchMode=yes -o IdentitiesOnly=yes vps 'ss -tlnp | grep 8642 || true' | tee /tmp/ss.out || true
       - name: Print output
         run: |

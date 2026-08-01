@@ -1,6 +1,6 @@
 ---
 name: build
-model: openrouter/deepseek/deepseek-v4-flash
+model: opencode/deepseek-v4-flash-free
 description: Primary coding agent for implementation tasks
 mode: primary
 tools:

@@ -1,49 +1,69 @@
-# Smart AI Router - GitHub Actions CI/CD Workflow
-# Location: .github/workflows/deploy.yml
+# .github/workflows/deploy.yml — CI/CD Pipeline with Security Scanning
+# Created by wing-ops (esggo-swarm) security review
+# NOTE: Live VPS uses HOST nginx (TLS terminator on 0.0.0.0:80/443) + vps/docker-compose.yml
+# containers. docker-compose.prod.yml's nginx service would CONFLICT with host nginx,
+# so deploy uses docker-compose.yml (esggo + redis + gateway) and reloads host nginx.
 
-name: Deploy Smart AI Router
+name: ESG-GO CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, production ]
+    branches: [main]
     paths:
-      - '.agents/skills/smart-ai-router/**'
-      - 'docker-compose.prod.yml'
-      - 'Dockerfile'
-      - 'pyproject.toml'
-      - 'tests/**'
-      - 'vps/**'
+      - "vps/**"
+      - "src/**"
+      - "app/**"
+      - "packages/**"
+      - "apps/**"
+      - "public/**"
+      - "prisma/**"
+      - "next.config.*"
+      - "pnpm-lock.yaml"
+      - "Dockerfile*"
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/smart-ai-router
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+  NODE_VERSION: '22'
+  PNPM_VERSION: '11.5.2'
 
 jobs:
-  # 0. Path filter: detect non-vps file changes
-  changes:
-    name: Detect Changed Paths
+  # ─── Security Scanning ─────────────────────────────────────────
+  security-scan:
+    name: Security Scan
     runs-on: ubuntu-latest
-    outputs:
-      app: ${{ steps.filter.outputs.app }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            app:
-              - '.agents/skills/smart-ai-router/**'
-              - 'docker-compose.prod.yml'
-              - 'Dockerfile'
-              - 'pyproject.toml'
-              - 'tests/**'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  # 1. Code quality checks
-  lint:
-    name: Lint & Type Check
+      - name: Run Trivy vulnerability scanner (filesystem)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+
+      - name: Run Hadolint on Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: 'Dockerfile*'
+          failure-threshold: warning
+
+      - name: Check for secrets in code
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+  # ─── Code Quality ─────────────────────────────────────────────
+  code-quality:
+    name: Code Quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,189 +104,96 @@ jobs:
             echo "TypeScript not configured, skipping..."
           fi
 
-  # 2. Python unit tests
-  test:
-    name: Python Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          python-version: "3.12"
-      
-      - name: Install build tools
-        run: |
-          set -e
-          python -m pip install --upgrade pip
-          pip install setuptools wheel
-      
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Install dependencies
-        id: install-deps
-        run: |
-          set -e
-          if [ -f setup.py ] || [ -f pyproject.toml ]; then
-            echo "Installing package in editable mode..."
-            pip install -e .
-          fi
-          
-          if [ -f requirements.txt ]; then
-            echo "Installing requirements..."
-            pip install -r requirements.txt
-          fi
-          
-          echo "Installing test dependencies..."
-          pip install pytest pytest-cov ruff mypy
-      
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run TypeScript type checking
+        run: pnpm typecheck
+
       - name: Run tests
-        run: |
-          set -e
-          # Smart AI Router is a TypeScript service (.agents/skills/smart-ai-router/).
-          # Scope Python checks to that dir so we don't ruff/pytest the whole monorepo.
-          SVC_DIR=".agents/skills/smart-ai-router"
-          echo "Running code quality checks (scoped to $SVC_DIR)..."
-          if [ -d "$SVC_DIR" ] && find "$SVC_DIR" -name '*.py' | grep -q .; then
-            ruff check "$SVC_DIR"
-          else
-            echo "No Python sources in $SVC_DIR, skipping ruff."
-          fi
+        run: pnpm test
 
-          echo "Running tests..."
-          if [ -d "$SVC_DIR/tests" ]; then
-            python -m pytest "$SVC_DIR/tests" -v
-          else
-            echo "No tests directory in $SVC_DIR, skipping tests..."
-          fi
-        env:
-          NODE_ENV: test
-
-  # 3. Build and push Docker image
-  build-and-push:
-    name: Build & Push Docker Image
-    needs: [test, changes]
+  # ─── Docker Build Test ───────────────────────────────────────
+  docker-build:
+    name: Docker Build Test
     runs-on: ubuntu-latest
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production') && needs.changes.outputs.app == 'true'
-    permissions:
-      contents: read
-      packages: write
+    needs: [security-scan, code-quality]
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check if Dockerfile exists
-        id: dockerfile_check
-        run: |
-          set -e
-          if [ -f ".agents/skills/smart-ai-router/Dockerfile" ]; then
-            echo "Found Dockerfile at .agents/skills/smart-ai-router/Dockerfile"
-            echo "dockerfile_path=.agents/skills/smart-ai-router/Dockerfile" >> $GITHUB_OUTPUT
-          elif [ -f "Dockerfile" ]; then
-            echo "Found Dockerfile at Dockerfile"
-            echo "dockerfile_path=Dockerfile" >> $GITHUB_OUTPUT
-          else
-            echo "No Dockerfile found in expected locations"
-            echo "dockerfile_path=" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Login to Container Registry
-        if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Extract metadata
-        if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
-      
-      - name: Build and push Docker image
-        if: ${{ steps.dockerfile_check.outputs.dockerfile_path != '' }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (ARM64)
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ${{ steps.dockerfile_check.outputs.dockerfile_path }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          file: vps/Dockerfile.arm64
+          platforms: linux/arm64
+          push: false
+          tags: esggo:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # 4. Deploy to production
+  # ─── Deploy to VPS ──────────────────────────────────────────
   deploy:
-    name: Deploy to Production
-    needs: [build-and-push, changes]
+    name: Deploy to VPS
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/production' && needs.changes.outputs.app == 'true'
+    needs: [security-scan, code-quality, docker-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to VPS
-        if: ${{ always() }}
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e
-            
-            # Try common deployment directories
-            DEPLOY_DIRS=("/opt/smart-ai-router" "$HOME/smart-ai-router" "$HOME/app" "/app" "$(pwd)")
-            DEPLOYED=false
-            
-            for dir in "${DEPLOY_DIRS[@]}"; do
-              if [ -d "$dir" ]; then
-                echo "Found deployment directory: $dir"
-                cd "$dir" || continue
-                DEPLOYED=true
-                break
-              fi
-            done
-            
-            if [ "$DEPLOYED" = false ]; then
-              echo "No deployment directory found, skipping deployment"
-              exit 0
-            fi
-            
-            # Pull image using SHA-based tag (not latest)
-            IMAGE_TAG="${GITHUB_SHA:-latest}"
-            echo "Pulling Docker image with tag: $IMAGE_TAG"
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG} || \
-              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            
-            # Use docker-compose if available
-            if [ -f "docker-compose.yml" ] || [ -f "docker-compose.prod.yml" ]; then
-              echo "Found docker-compose file, attempting to deploy..."
-              docker-compose pull
-              docker-compose up -d
-              echo "Deployment attempt completed"
-            else
-              echo "No docker-compose file found, skipping docker-compose commands"
-            fi
+            cd /opt/esggo
 
-  # 5. Notifications
-  notify:
-    name: Send Notifications
-    needs: [build-and-push, deploy]
-    runs-on: ubuntu-latest
-    if: always()
-    continue-on-error: true
-    steps:
-      - name: Check Slack webhook
-        id: slack-check
-        if: ${{ always() }}
+            # Pull latest changes
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Build and deploy the LIVE stack (docker-compose.yml = host nginx + containers).
+            # NOTE: do NOT use docker-compose.prod.yml here — its nginx service publishes
+            # 80/443 and would conflict with the host nginx that terminates TLS.
+            cd vps
+            docker compose -f docker-compose.yml build
+            docker compose -f docker-compose.yml up -d
+
+            # Reload host nginx in case conf/vhost changed
+            sudo nginx -t && sudo systemctl reload nginx
+
+            # Wait for health checks
+            sleep 30
+
+            # Verify services are running
+            docker compose -f docker-compose.yml ps
+
+            # Cleanup old images
+            docker image prune -f
+
+      - name: Notify deployment
+        if: success()
+        run: echo "✅ Deployment successful to ${{ secrets.VPS_HOST }}"
+
+      - name: Notify failure
+        if: failure()
         run: |
           if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
             echo "has_webhook=true" >> $GITHUB_OUTPUT
@@ -354,3 +281,4 @@ jobs:
             echo "::error::Connection string with embedded password found — use env vars instead — aborting."; exit 1
           fi
           echo "No secrets or unsafe patterns detected."
+

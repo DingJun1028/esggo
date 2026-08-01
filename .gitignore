@@ -25,6 +25,11 @@ yarn-error.log*
 .env.local.sample
 secrets/
 
+# VPS gateway runtime secrets (NEVER commit)
+vps/.env.gateway
+vps/.env.gateway.run
+vps/.env
+
 # real secret files (keep out of git; local-only)
 .env.secrets
 .env.secrets.*

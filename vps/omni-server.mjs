@@ -90,6 +90,8 @@ function reportAgentResult(agentId, resultId, result) {
   return cmd;
 }
 
+app.get('/health', (req, res) => res.status(200).json({ status: 'healthy' }));
+
 app.get('/status', (req, res) => {
   // Base health is public (monitoring). Agent topology is sensitive:
   // only return it when a valid gateway token is presented.
@@ -248,9 +250,11 @@ app.post('/invoke', requireAuth, (req, res) => {
   res.json({ summoned: true, ritual: rite });
 });
 
-// Bind to loopback only: all external traffic must go through nginx
-// (which terminates TLS and can add auth), preventing direct 0.0.0.0 exposure.
-const BIND_ADDR = process.env.GATEWAY_BIND_ADDR || '127.0.0.1';
+// Bind on all interfaces INSIDE the container so that nginx (docker network) can
+// reach the gateway via `omniagent-gateway:8642`. External exposure is controlled
+// at the host layer: docker-compose publishes only 127.0.0.1:8642, and OCI
+// security lists should NOT open 8642/tcp to 0.0.0.0/0 (see oci-launch-vps.yml).
+const BIND_ADDR = process.env.GATEWAY_BIND_ADDR || '0.0.0.0';
 app.listen(port, BIND_ADDR, () => {
-  console.log(`OmniAgent Gateway Server running on port ${port} (${BIND_ADDR})`);
+  console.log(`OmniAgent Gateway Server running on port ${port} (bind ${BIND_ADDR})`);
 });

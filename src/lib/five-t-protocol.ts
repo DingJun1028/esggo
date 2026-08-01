@@ -182,11 +182,24 @@ export class FiveTHashLock {
 
   /**
    * 驗證 Hash Lock
+   * 若提供 timestamp（由 generate 回傳），直接精確比對；
+   * 否則在 toleranceMs 時間窗內逐毫秒嘗試，確保任何在窗內建立的鎖皆可驗證。
    */
-  static verify(source: string, content: string, hash: string, toleranceMs: number = 5000): boolean {
+  static verify(
+    source: string,
+    content: string,
+    hash: string,
+    toleranceMs: number = 5000,
+    timestamp?: number
+  ): boolean {
+    // 精確時間戳優先（避免依賴取樣步進造成的驗證窗口缺口）
+    if (timestamp !== undefined && this.generate(source, content, timestamp) === hash) {
+      return true;
+    }
+
     const now = Date.now();
-    // Check within tolerance window
-    for (let offset = 0; offset <= toleranceMs; offset += 1000) {
+    // Check within tolerance window (step = 1ms so the window is fully covered)
+    for (let offset = 0; offset <= toleranceMs; offset += 1) {
       const testHash = this.generate(source, content, now - offset);
       if (testHash === hash) return true;
     }
