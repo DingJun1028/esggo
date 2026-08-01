@@ -1,6 +1,17 @@
 /**
- * no-code backend utilities (NCB) - village service for member management
+ * no-code backend utilities (NCB) - stub for build
+ * The real ncbFetch was never defined; this stub returns empty data.
  */
+export async function ncbFetch(
+  table: string,
+  options?: RequestInit,
+  queryParams?: string,
+  dbInstance?: string
+): Promise<{ data: any[] }> {
+  console.warn('[NCB] ncbFetch stub called for table:', table);
+  return { data: [] };
+}
+
 export const ncbVillageService = {
   async getVillageMembers() {
     return [

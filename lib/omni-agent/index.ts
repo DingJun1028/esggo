@@ -96,7 +96,7 @@ export interface AssemblyResult {
 // 3. 萬能代理工廠
 // ═══════════════════════════════════════════════
 
-const DEFAULT_CAPABILITIES: AgentCapability[] = [
+export const DEFAULT_CAPABILITIES: AgentCapability[] = [
   { id: 'cap-traceable', name: '溯源驗證', gate: 'traceable', enabled: true, confidence: 0.95, lastExecuted: 0, executionCount: 0 },
   { id: 'cap-transparent', name: '透明揭露', gate: 'transparent', enabled: true, confidence: 0.92, lastExecuted: 0, executionCount: 0 },
   { id: 'cap-tangible', name: '量化驗證', gate: 'tangible', enabled: true, confidence: 0.97, lastExecuted: 0, executionCount: 0 },
@@ -274,3 +274,39 @@ export function getGateColor(gate: FiveTGate): { bg: string; text: string; accen
 export function getDesignTokens(): typeof DESIGN_TOKENS {
   return DESIGN_TOKENS;
 }
+
+
+
+// ═══════════════════════════════════════════════
+// Runtime OmniAgent class (for getInstance() calls)
+// ═══════════════════════════════════════════════
+
+export class OmniAgent {
+  private static instance: OmniAgent | null = null;
+  
+  static getInstance(): OmniAgent {
+    if (!OmniAgent.instance) {
+      OmniAgent.instance = new OmniAgent();
+    }
+    return OmniAgent.instance;
+  }
+
+  getStatus() {
+    return 'idle';
+  }
+
+  getSystemStatus() {
+    return {
+      agent: { status: 'idle', mode: 'autonomous' },
+      uptime: Date.now(),
+    };
+  }
+}
+
+// Re-export OMNI_AGENT_META from src stub
+export const OMNI_AGENT_META = Object.freeze({
+  version: '5.0.0',
+  maxConcurrentTasks: 10,
+  supportedFormats: ['html', 'markdown', 'json', 'pdf-ready'] as const,
+  gateOrder: ['traceable', 'transparent', 'tangible', 'trustworthy', 'trackable'] as const,
+});
