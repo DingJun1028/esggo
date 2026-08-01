@@ -1,38 +1,104 @@
 {
-  "name": "berkeley-esg-learning-center",
+  "name": "esggo",
+  "version": "5.1.0",
   "private": true,
-  "version": "1.0.0",
-  "type": "module",
+  "packageManager": "pnpm@11.5.2",
+  "bin": {
+    "esggo": "./packages/cli/src/omni.mjs"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "prepare": "node scripts/setup-hooks.mjs",
+    "dev": "next dev",
+    "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
+    "start": "next start -H 127.0.0.1",
+    "lint": "ts-node scripts/celestial-gate.ts",
+    "lint:full": "eslint src/ --max-warnings 50",
+    "typecheck": "tsc -p tsconfig.core.json",
     "test": "vitest run",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "deploy:all": "pnpm build && firebase deploy",
-    "deploy:hosting": "pnpm build && firebase deploy --only hosting",
-    "deploy:rules": "firebase deploy --only firestore:rules",
-    "check:types-sync": "node scripts/check-types-sync.js"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check": "pnpm run typecheck && vitest run src/impl/__tests__/core.test.ts src/agents/twelve-omni/__tests__",
+    "turbo:dev": "next dev",
+    "turbo:build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
+    "turbo:start": "next start",
+    "turbo:lint": "eslint . --fix",
+    "oa:summon": "ts-node --transpile-only scripts/run-summon.ts",
+    "oa:summon:core": "ts-node --transpile-only scripts/run-summon.ts -- --core"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.7",
-    "firebase": "^12.16.0",
-    "lucide-react": "^0.395.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@esggo/errors": "workspace:*",
+    "@esggo/shared": "workspace:*",
+    "@esggo/ui": "workspace:*",
+    "@google/genai": "^2.10.0",
+    "@grpc/grpc-js": "^1.14.4",
+    "@grpc/proto-loader": "0.8.1",
+    "@notionhq/client": "^5.22.0",
+    "@notionhq/workers": "^0.4.0",
+    "@prisma/client": "^5.22.0",
+    "@tailwindcss/typography": "^0.5.20",
+    "@upstash/redis": "^1.38.0",
+    "firebase": "^12.15.0",
+    "firebase-admin": "^14.1.0",
+    "ioredis": "^5.11.1",
+    "isomorphic-dompurify": "^3.18.0",
+    "lucide-react": "^0.507.0",
+    "pdf-parse": "^1.1.4",
+    "pg": "^8.22.0",
+    "prisma": "^5.22.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "uuid": "^14.0.1",
+    "xss": "^1.0.15",
+    "zod": "^3.25.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^9.39.5",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "jsdom": "^29.1.1",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.4",
-    "vite": "^6.0.7",
-    "vitest": "^4.1.10"
+    "@next/eslint-plugin-next": "16.0.0",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/uuid": "~11.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9",
+    "eslint-config-next": "^16.0.0",
+    "next": "^16.0.0",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.1",
+    "turbo": "^2",
+    "typescript": "^5",
+    "typescript-eslint": "^8.63.0",
+    "vitest": "^4.1.9"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": "11.5.2"
+  },
+  "omnilules": {
+    "enabled": true,
+    "agents": [
+      "omni-agent",
+      "jules",
+      "antigravity",
+      "omninexus"
+    ],
+    "skills": [
+      "omni-sync-memory",
+      "omni-tag",
+      "omni-base",
+      "omni-seed",
+      "omni-agent",
+      "omni-write",
+      "omni-biz",
+      "omni-memory"
+    ],
+    "protocols": [
+      "5t-protocol"
+    ]
   }
 }
