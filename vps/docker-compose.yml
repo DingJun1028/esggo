@@ -1,9 +1,9 @@
-# vps/docker-compose.yml — 多服務編排
-# 使用方式：docker-compose up -d
-# Security hardening: resource limits, cap_drop, read_only, no-new-privileges
+# vps/docker-compose.yml — Unified Multi-Service Orchestration
+# Uses @esggo/shared/config for consistent configuration
+# Usage: docker-compose up -d
 
 services:
-  # Redis for async task state
+  # ── Redis (Async Task State + Cache) ──
   redis:
     image: redis:7-alpine
     container_name: esggo-redis
@@ -11,6 +11,7 @@ services:
       - "127.0.0.1:6379:6379"
     volumes:
       - esggo-redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     restart: unless-stopped
     networks:
       - esggo-net
@@ -19,9 +20,9 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
+      start_period: 5s
 
-
-  # AI Station (OmniAuto) - 影音生產線控制中樞
+  # ── AI Station (OmniAuto) ──
   aistation:
     image: dingjunhong1028/aistation:latest
     container_name: aistation-core
@@ -29,6 +30,9 @@ services:
       - "127.0.0.1:8000:8000"
     volumes:
       - aistation-storage:/app/storage
+    environment:
+      - NODE_ENV=production
+      - PYTHONUNBUFFERED=1
     restart: unless-stopped
     networks:
       - esggo-net
@@ -37,8 +41,9 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 10s
 
-  # Next.js 主應用
+  # ── Next.js Main Application ──
   esggo:
     build:
       context: /opt/esggo
@@ -47,23 +52,40 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     environment:
+      # ── App ──
       - NODE_ENV=production
       - PORT=3000
-      - GROQ_API_KEY=${GROQ_API_KEY:-}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-meta-llama/llama-3.3-70b-instruct:free}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      # ── Database ──
       - DATABASE_URL=${DATABASE_URL}
+      - DIRECT_URL=${DIRECT_URL:-}
+      - OMNI_DATABASE_URL=${OMNI_DATABASE_URL:-}
+      # ── Redis ──
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
-      - GATEWAY_URL=http://omniagent-gateway:8642
+      - REDIS_URL=redis://redis:6379
+      # ── Firebase ──
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-}
       - NEXT_PUBLIC_FIREBASE_PROJECT_ID=${NEXT_PUBLIC_FIREBASE_PROJECT_ID:-}
-      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - FIREBASE_SERVICE_ACCOUNT_JSON=${FIREBASE_SERVICE_ACCOUNT_JSON:-}
+      - NEXT_PUBLIC_FIREBASE_API_KEY=${NEXT_PUBLIC_FIREBASE_API_KEY:-}
+      # ── Supabase ──
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+      # ── AI Providers ──
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - FREE_TIER_ONLY=${FREE_TIER_ONLY:-true}
+      # ── Gateway ──
+      - GATEWAY_URL=http://omniagent-gateway:8642
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY:-}
+      # ── NCB ──
+      - NCB_APP_ID=${NCB_APP_ID:-}
+      - NCB_APP_KEY=${NCB_APP_KEY:-}
+      # ── Security ──
       - CORS_ORIGIN=${CORS_ORIGIN:-*}
     volumes:
       - esggo-data:/app/public/uploads
@@ -76,7 +98,7 @@ services:
     networks:
       - esggo-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "-s", "-o", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      test: ["CMD", "curl", "-f", "-s", "-o", "/dev/null", "http://127.0.0.1:3000/api/healthz"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -84,7 +106,7 @@ services:
     # Security hardening
     security_opt:
       - no-new-privileges:true
-      - "seccomp=unconfined"  # Allow dynamic resource usage
+      - "seccomp=unconfined"
     cap_drop:
       - ALL
     read_only: true
@@ -99,7 +121,7 @@ services:
           cpus: "1.0"
     stop_grace_period: 60s
 
-  # OmniAgent Gateway
+  # ── OmniAgent Gateway ──
   omniagent-gateway:
     build:
       context: /opt/esggo
@@ -110,9 +132,9 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8642
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - GATEWAY_API_KEY=${GATEWAY_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY:-}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
@@ -142,7 +164,7 @@ services:
           memory: 512M
           cpus: "1.0"
 
-  # Certbot 自動續約（僅背景續期，首次取得需手動初始化）
+  # ── Certbot (Auto-renewal) ──
   certbot:
     image: certbot/certbot
     container_name: esggo-certbot
@@ -168,3 +190,4 @@ volumes:
 networks:
   esggo-net:
     driver: bridge
+    name: esggo-net
