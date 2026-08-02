@@ -177,7 +177,7 @@ async function _connect(): Promise<RedisClientType | null> {
     };
 
     if (config.url) {
-      options.url = config.url;            // ioredis supports url in constructor
+      // URL is passed as positional arg to ioredis constructor below
     } else {
       options.host = config.host;
       options.port = config.port;
@@ -185,7 +185,10 @@ async function _connect(): Promise<RedisClientType | null> {
       if (config.password) options.password = config.password;
     }
 
-    const client = new Redis(options);
+    // ioredis requires the URL as a positional argument, not in options
+    const client = config.url
+      ? new Redis(config.url, options as any)
+      : new Redis(options as any);
 
     // Wire event handlers before connecting
     client.on('error', (err: unknown) => {
