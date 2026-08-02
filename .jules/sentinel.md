@@ -13,3 +13,7 @@
 **Vulnerability:** A hardcoded API key fallback (`omniagent_gold_2026`) was present in the gateway server's configuration and deployment scripts. This meant that if the environment variables weren't set explicitly, anyone knowing this default fallback key could authenticate to the server.
 **Learning:** Default API keys and secrets in code provide a false sense of ease-of-use while significantly compromising security. Fallbacks for authentication credentials should never exist.
 **Prevention:** Always require secrets to be injected at runtime via environment variables or secret managers, and throw a clear error (or log a warning and block requests) if they are missing.
+## 2026-07-03 - [Prevent Command Injection in shell execution wrappers]
+**Vulnerability:** The `sshExec` function constructed a shell command via string concatenation using `child_process.exec` (e.g. `` ssh ... "${command.replace(/"/g, '\\"')}" ``). This implementation is vulnerable to Local Command Injection if the input command contains unescaped shell metacharacters like `$()`, ``` `` ```, or `;`.
+**Learning:** Naive replacement of quotes (`"`) is insufficient to sanitize shell commands. When constructing processes dynamically, avoiding the local shell `/bin/sh` entirely eliminates the risk of local injection.
+**Prevention:** Use `child_process.execFile` instead of `child_process.exec`. `execFile` accepts an executable name and an array of arguments, bypassing the local shell evaluation of metacharacters entirely.
