@@ -2,8 +2,8 @@
 # Telegram alert relay for Alertmanager webhooks
 # Usage: ./telegram-alert.sh (runs as HTTP server on :9080)
 
-TOKEN="8306758508:AAGnNRDHDxdcJ3lL99Qeix2NMX4lAmZTtKg"
-CHAT_ID="6387287462"
+TOKEN="${TELEGRAM_BOT_TOKEN:?TELEGRAM_BOT_TOKEN must be set (bot token, see BotFather)}"
+CHAT_ID="${TELEGRAM_ALERT_CHAT_ID:?TELEGRAM_ALERT_CHAT_ID must be set}"
 
 while true; do
   echo -e "HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nOK" | \

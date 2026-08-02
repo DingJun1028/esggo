@@ -162,13 +162,13 @@ curl http://localhost:19999/api/v1/info | jq .
 即時通知您的手機，任何時間、任何地點收到系統狀態
 
 ### What
-Bot Token: 8306758508，透過 nc 監聽 9080 webhook 接收 Alertmanager POST
+Bot Token: 環境變數 `TELEGRAM_BOT_TOKEN`（BotFather 取得），透過 nc 監聽 9080 webhook 接收 Alertmanager POST
 
 ### How
 ```bash
 # 測試發送
-curl -X POST "https://api.telegram.org/bot8306758508:XXX/sendMessage" \
-  -d chat_id=6387287462 \
+curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+  -d chat_id=${TELEGRAM_ALERT_CHAT_ID} \
   -d text="✅ 服務運作正常"
 ```
 
