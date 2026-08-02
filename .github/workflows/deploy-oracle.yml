@@ -202,7 +202,7 @@ jobs:
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
-            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
@@ -258,7 +258,7 @@ jobs:
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
-            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
