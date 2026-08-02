@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ['googleapis-common', 'googleapis', 'gaxios'],
+  serverExternalPackages: ['googleapis-common', 'googleapis', 'gaxios', 'ioredis', 'pg'],
   typescript: {
     ignoreBuildErrors: true,
   },
