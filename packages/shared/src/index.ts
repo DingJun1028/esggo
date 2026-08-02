@@ -8,10 +8,10 @@ export * from './types/esg-charts';
 export * from './tokens/design-tokens';
 export * from './memory/types';
 
-// ── Unified Integration Modules ────────────────────────────────
+// ── Shared Config (edge-safe, no server deps) ──────────────────
 export * from './config';
-export * from './health';
-export * from './auth';
-export * from './redis';
-export * from './database';
+
+// NOTE: server-only modules (auth/redis/database/health) are NOT re-exported
+// here to keep the package importable from client components.
+// Import them via subpath exports: @esggo/shared/auth, /redis, /database, /health.
 

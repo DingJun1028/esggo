@@ -12,7 +12,7 @@ export {
   memoryFallback,
   safeParse,
   safeStringify,
-} from '../../lib/redis/client';
+} from '@lib/redis/client';
 
 import { getConfig } from './config';
 

@@ -44,8 +44,11 @@
     "@upstash/redis": "^1.38.0",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.1.0",
+    "framer-motion": "^12.43.0",
     "ioredis": "^5.11.1",
     "isomorphic-dompurify": "^3.18.0",
+    "jose": "^6.2.6",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.507.0",
     "pdf-parse": "^1.1.4",
     "pg": "^8.22.0",
@@ -67,6 +70,7 @@
     "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "^16.0.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "next": "^16.0.0",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.4.1",
@@ -74,8 +78,7 @@
     "turbo": "^2",
     "typescript": "^5",
     "typescript-eslint": "^8.63.0",
-    "vitest": "^4.1.9",
-    "eslint-plugin-react-hooks": "^7.1.1"
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=20",

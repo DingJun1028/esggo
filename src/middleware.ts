@@ -157,17 +157,42 @@ function cleanupRateLimitStore() {
   }
 }
 
-// ─── Token Verification ─────────────────────────────────────────────
+// ─── Token Verification (Edge-safe: Web Crypto + jose, no firebase-admin) ────
+
+const FIREBASE_X509_URL =
+  'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
+
+const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? 'esggo';
+
+let cachedKeys: Array<{ kid: string; pem: string }> | null = null;
+let keysFetchedAt = 0;
+
+async function getFirebaseKeys(): Promise<Array<{ kid: string; pem: string }>> {
+  const now = Date.now();
+  if (cachedKeys && now - keysFetchedAt < 3_600_000) return cachedKeys;
+  const res = await fetch(FIREBASE_X509_URL, { cache: 'no-store' });
+  if (!res.ok) return cachedKeys ?? [];
+  const certs: Record<string, string> = await res.json();
+  cachedKeys = Object.entries(certs).map(([kid, pem]) => ({ kid, pem }));
+  keysFetchedAt = now;
+  return cachedKeys;
+}
 
 async function verifyFirebaseToken(
   token: string
 ): Promise<{ uid: string; email?: string } | null> {
   try {
-    const { getAuth } = await import('firebase-admin/auth');
-    const { getAdminApp } = await import('./lib/firebase-admin');
-    const app = getAdminApp();
-    const decoded = await getAuth(app).verifyIdToken(token);
-    return { uid: decoded.uid, email: decoded.email };
+    const { jwtVerify, importX509, decodeProtectedHeader } = await import('jose');
+    const header = decodeProtectedHeader(token);
+    const keys = await getFirebaseKeys();
+    const key = header.kid ? keys.find((k) => k.kid === header.kid) : keys[0];
+    if (!key) return null;
+    const publicKey = await importX509(key.pem, 'RS256');
+    const { payload } = await jwtVerify(token, publicKey, {
+      issuer: `https://securetoken.google.com/${FIREBASE_PROJECT_ID}`,
+      audience: FIREBASE_PROJECT_ID,
+    });
+    return { uid: String(payload.sub ?? ''), email: payload.email as string | undefined };
   } catch {
     return null;
   }

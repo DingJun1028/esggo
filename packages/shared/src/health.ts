@@ -100,10 +100,10 @@ export async function runHealthChecks(): Promise<ServiceHealth> {
  */
 export async function checkRedis(): Promise<ComponentHealth> {
   try {
-    const { getRedis, isRedisReady } = await import('../../lib/redis/client');
+    const { getRedis, isRedisReady } = await import('@lib/redis/client');
     const redis = await getRedis();
     if (redis && await isRedisReady()) {
-      const health = await import('../../lib/redis/client').then(m => m.getRedisHealth());
+      const health = await import('@lib/redis/client').then(m => m.getRedisHealth());
       return {
         status: 'healthy',
         message: `Connected (${health.provider})`,
