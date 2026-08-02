@@ -93,13 +93,13 @@ nginx -t && nginx -s reload
 ## 五、Telegram 告警
 
 ### Bot 資訊
-- Token: 8306758508:AAGnNRDHDxdcJ3lL99Qeix2NMX4lAmZTtKg
-- Chat ID: 6387287462
+- Token: 從 BotFather 取得（設為環境變數 `TELEGRAM_BOT_TOKEN`）
+- Chat ID: 6387287462（設為環境變數 `TELEGRAM_ALERT_CHAT_ID`）
 
 ### 測試告警
 ```bash
-curl -X POST https://api.telegram.org/bot8306758508:AAGnNRDHDxdcJ3lL99Qeix2NMX4lAmZTtKg/sendMessage \
-  -d chat_id=6387287462 \
+curl -X POST https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage \
+  -d chat_id=${TELEGRAM_ALERT_CHAT_ID} \
   -d text="🚨 測試: ESGGO 告警系統運作中"
 ```
 
