@@ -31,8 +31,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
-# healthcheck 探活依賴 curl
-RUN apk add --no-cache curl
+# healthcheck 探活依賴 curl + Prisma 需要 OpenSSL 1.1 相容庫
+RUN apk add --no-cache curl openssl1.1-compat
 
 # 複製構建出的靜態資源與 .next
 COPY --from=builder /app/public ./public
