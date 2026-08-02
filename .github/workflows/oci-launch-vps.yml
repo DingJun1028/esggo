@@ -28,13 +28,13 @@ jobs:
         run: |
           mkdir -p ~/.oci
           cat > ~/.oci/config <<EOFCONF
-[DEFAULT]
-user=$OCI_USER
-tenancy=$OCI_TENANCY
-region=$OCI_REGION
-key_file=/tmp/oci_key.pem
-fingerprint=$OCI_FINGERPRINT
-EOFCONF
+          [DEFAULT]
+          user=$OCI_USER
+          tenancy=$OCI_TENANCY
+          region=$OCI_REGION
+          key_file=/tmp/oci_key.pem
+          fingerprint=$OCI_FINGERPRINT
+          EOFCONF
           printf '%s' "$OCI_KEY" > /tmp/oci_key.pem
           chmod 600 /tmp/oci_key.pem
           oci iam compartment list --query 'data[].{id:id,name:name}' --output table
@@ -42,10 +42,11 @@ EOFCONF
       - name: Find Ubuntu 24.04 image
         id: image
         run: |
-          IMAGE=$(oci compute image list \
+          SAN() { sed -e 's/\[//g' -e 's/\]//g' -e 's/"//g' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/,$//'; }
+          IMAGE=$(oci --raw-output compute image list \
             --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
             --query "data[?\"display-name\" != null && contains(\"display-name\", \"Ubuntu\") && contains(\"display-name\", \"24.04\")].id | [0]" \
-            --raw-output)
+            | SAN)
           echo "image_id=$IMAGE" >> $GITHUB_OUTPUT
 
       - name: Launch instance
@@ -68,14 +69,15 @@ EOFCONF
           echo "ip=$(echo $INSTANCE | jq -r '.ip')" >> $GITHUB_OUTPUT
           echo "instance=$(echo $INSTANCE | jq -r '.id')" >> $GITHUB_OUTPUT
 
-       - name: Open firewall ports
-         run: |
-           VNIC_ID=$(oci compute instance list-vnics \
-             --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
-             --instance-id ${{ steps.launch.outputs.instance }} \
-             --query 'data[0].id' --raw-output)
-           SUBNET_ID=$(oci network vnic get --vnic-id $VNIC_ID --query 'data.subnet-id' --raw-output)
-           NSG_ID=$(oci network subnet get --subnet-id $SUBNET_ID --query 'data.network-security-group-ids[0]' --raw-output)
+      - name: Open firewall ports
+        run: |
+          SAN() { sed -e 's/\[//g' -e 's/\]//g' -e 's/"//g' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/,$//'; }
+          VNIC_ID=$(oci --raw-output compute instance list-vnics \
+            --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
+            --instance-id ${{ steps.launch.outputs.instance }} \
+            --query 'data[0].id' | SAN)
+          SUBNET_ID=$(oci --raw-output network vnic get --vnic-id "$VNIC_ID" --query 'data.subnet-id' | SAN)
+          NSG_ID=$(oci --raw-output network subnet get --subnet-id "$SUBNET_ID" --query 'data.network-security-group-ids[0]' | SAN)
            oci network security-group add-security-rules --nsg-id $NSG_ID \
              --security-rules '[
                {
