@@ -247,7 +247,9 @@ type RedisModule = { new(opts: Record<string, unknown>): RedisClientType };
 
 async function _loadRedisModule(): Promise<RedisModule | null> {
   try {
-    const mod = await import('ioredis');
+    // Use require() instead of import() to avoid Turbopack/webpack chunk resolution issues
+    // ioredis is always available in node_modules
+    const mod = require('ioredis');
     return (mod.default || mod) as unknown as RedisModule;
   } catch {
     return null;
