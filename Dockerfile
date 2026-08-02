@@ -23,8 +23,8 @@ COPY --from=deps /app/node_modules ./node_modules
 # 手動執行 prisma generate（因為 --ignore-scripts 跳過了 postinstall）
 RUN npx prisma generate
 
-# 執行建置（使用 webpack 模式避免 Turbopack 在低記憶體 VPS 上 OOM）
-RUN npx next build --webpack
+# 執行建置（Turbopack 模式，需確保 serverExternalPackages 正確外部化 ioredis）
+RUN pnpm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
