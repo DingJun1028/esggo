@@ -39,7 +39,7 @@ function makeEvent() {
     uuid: '11111111-2222-4333-8444-555555555555',
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: { doc: 'evidence-1' },
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: 'evidence-1' },
     source_origin: 'test',
     topic: 'esg.verify',
     lifecycle_path: [{ stage: 'EMERGED', timestamp: Date.now(), node: 'test' }],
@@ -154,7 +154,7 @@ describe('SecureUtils.lockAndFreeze (HexLock freeze)', () => {
   });
 
   it('freezes top-level record so evidence object reference is read-only', () => {
-    const locked = SecureUtils.lockAndFreeze({ evidence: { original: true } }) as {
+    const locked = SecureUtils.lockAndFreeze({ evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', original: true } }) as {
       evidence: Record<string, unknown>;
     };
     // 頂層凍結：evidence 屬性本身不可重新指派
@@ -167,7 +167,7 @@ describe('SecureUtils.lockAndFreeze (HexLock freeze)', () => {
     // 已知設計特性：Object.freeze 為淺層凍結，巢狀 evidence 物件仍可被修改。
     // 由於 hash_lock 是內容繫結的 digest，巢狀竄改會使 verifyHashLock 失敗
     // （見下方 tamper-detection 測試）。
-    const locked = SecureUtils.lockAndFreeze({ evidence: { original: true } }) as {
+    const locked = SecureUtils.lockAndFreeze({ evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', original: true } }) as {
       evidence: Record<string, unknown>;
     };
     expect(Object.isFrozen(locked)).toBe(true);
@@ -192,13 +192,13 @@ describe('SecureUtils.lockAndFreeze (HexLock freeze)', () => {
   });
 
   it('verifyHashLock accepts an unmodified locked record', () => {
-    const record = { projectId: 'p-1', amount: 100, evidence: { doc: 'r' } };
+    const record = { projectId: 'p-1', amount: 100, evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: 'r' } };
     const locked = SecureUtils.lockAndFreeze(record);
     expect(SecureUtils.verifyHashLock(locked)).toBe(true);
   });
 
   it('verifyHashLock detects tampering inside nested evidence', () => {
-    const locked = SecureUtils.lockAndFreeze({ evidence: { carbon: 42 } }) as {
+    const locked = SecureUtils.lockAndFreeze({ evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', carbon: 42 } }) as {
       evidence: Record<string, unknown>;
     };
     expect(SecureUtils.verifyHashLock(locked)).toBe(true);

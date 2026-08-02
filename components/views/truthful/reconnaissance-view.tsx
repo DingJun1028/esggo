@@ -80,7 +80,7 @@ const MOCK_INTEL_DATA: IIntelNode5T[] = [
     uuid: `INTEL-S1-${Date.now() - 100000}`,
     version: "2.0.0",
     timestamp: Date.now() - 100000,
-    evidence: [{ source: "UNFCCC", type: "Resolution Draft" }],
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: [{ source: "UNFCCC", type: "Resolution Draft" }] },
     category: "S1",
     impact_level: 5,
     protocol_5T: {
@@ -108,7 +108,7 @@ const MOCK_INTEL_DATA: IIntelNode5T[] = [
     uuid: `INTEL-S2-${Date.now() - 200000}`,
     version: "2.0.0",
     timestamp: Date.now() - 200000,
-    evidence: [{ source: "ISSB", type: "Guideline Update" }],
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: [{ source: "ISSB", type: "Guideline Update" }] },
     category: "S2",
     impact_level: 4,
     protocol_5T: {
@@ -136,7 +136,7 @@ const MOCK_INTEL_DATA: IIntelNode5T[] = [
     uuid: `INTEL-S4-${Date.now() - 300000}`,
     version: "2.0.0",
     timestamp: Date.now() - 300000,
-    evidence: [{ source: "NGFS", type: "Scenario Analysis" }],
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: [{ source: "NGFS", type: "Scenario Analysis" }] },
     category: "S4",
     impact_level: 5,
     protocol_5T: {
@@ -164,7 +164,7 @@ const MOCK_INTEL_DATA: IIntelNode5T[] = [
     uuid: `INTEL-S5-${Date.now() - 400000}`,
     version: "2.0.0",
     timestamp: Date.now() - 400000,
-    evidence: [{ source: "SEMI", type: "Industry Standard" }],
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: [{ source: "SEMI", type: "Industry Standard" }] },
     category: "S5",
     impact_level: 3,
     protocol_5T: {
