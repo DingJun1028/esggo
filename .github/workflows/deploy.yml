@@ -53,7 +53,7 @@ jobs:
       - name: Run Hadolint on Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: 'Dockerfile*'
+          dockerfile: 'Dockerfile'
           failure-threshold: warning
 
       - name: Check for secrets in code
