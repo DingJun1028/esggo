@@ -130,7 +130,7 @@ export function createComponentCore<T extends Partial<IComponentCore>>(
     uuid,
     version: base.version ?? '1.0.0',
     timestamp,
-    evidence: base.evidence ?? {},
+    evidence: base.evidence ?? { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' },
     ...base,
   } as IComponentCore;
 }
