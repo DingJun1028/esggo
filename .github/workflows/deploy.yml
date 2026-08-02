@@ -20,6 +20,7 @@ on:
       - "next.config.*"
       - "pnpm-lock.yaml"
       - "Dockerfile*"
+      - ".github/workflows/deploy.yml"
   pull_request:
     branches: [main]
   workflow_dispatch:
