@@ -7,7 +7,7 @@ const nextConfig = {
   // Strict mode for React
   reactStrictMode: true,
   // Server-only packages (not bundled for client)
-  serverExternalPackages: ['firebase-admin', '@upstash/redis'],
+  serverExternalPackages: ['firebase-admin', '@upstash/redis', 'ioredis', 'pg'],
   // Experimental features
   experimental: {},
   // Security: disable x-powered-by header (defense-in-depth with middleware)
