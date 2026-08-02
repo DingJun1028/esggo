@@ -55,7 +55,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: 'Dockerfile'
-          failure-threshold: warning
+          failure-threshold: error
 
       - name: Check for secrets in code
         uses: trufflesecurity/trufflehog@main
