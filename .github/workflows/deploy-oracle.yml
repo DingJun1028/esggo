@@ -199,6 +199,10 @@ jobs:
           set -e
           ssh -o ProxyCommand="$PROXY" -o UserKnownHostsFile=/dev/null -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
+            export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
+            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
@@ -251,6 +255,10 @@ jobs:
           set -e
           ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
+            export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
+            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
