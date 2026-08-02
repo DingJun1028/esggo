@@ -22,6 +22,7 @@ on:
       - "Dockerfile*"
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: deploy-vps
