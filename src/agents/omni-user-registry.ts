@@ -390,7 +390,7 @@ export class OmniUserRegistry {
     });
 
     return scored
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.score - a.score || b.entry.createdAt - a.entry.createdAt || a.entry.id.localeCompare(b.entry.id))
       .slice(0, limit)
       .map(s => s.entry);
   }

@@ -154,7 +154,7 @@ config/
 dashboard/
 /data/
 dataconnect/
-esggo/
+esggo/node_modules/
 esggo-dashboard/
 esggo-funtions/
 esggo-omnimcp/
