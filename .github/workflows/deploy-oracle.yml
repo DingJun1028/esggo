@@ -1,32 +1,26 @@
+﻿# =============================================================================
+# ESG GO ??Oracle VPS Deploy Pipeline (REALITY-ALIGNED, 2026-07-11)
 # =============================================================================
-# ESG GO — Oracle VPS Deploy Pipeline (REALITY-ALIGNED, 2026-07-11)
-# =============================================================================
-# 觸發: push to main (paths below) 或手動 workflow_dispatch
-# 部署目標: Oracle Cloud Always Free ARM Ampere A1 (Ubuntu 24.04)
-# 真實部署方式: nginx + PM2 (fork mode)，非 Docker Compose
-# 網路: 公網 22 已對 GitHub Actions 開 (OCI Security List 22/tcp from 0.0.0.0/0, 2026-07-11)；
-#       80/443 原即開。部署走 direct 直連 (VPS_SSH_KEY) 或 bastion 跳板 (OCI_*)。
+# 閫貊: push to main (paths below) ????workflow_dispatch
+# ?函蔡?格?: Oracle Cloud Always Free ARM Ampere A1 (Ubuntu 24.04)
+# ?祕?函蔡?孵?: nginx + PM2 (fork mode)嚗? Docker Compose
+# 蝬脰楝: ?祉雯 22 撌脣? GitHub Actions ??(OCI Security List 22/tcp from 0.0.0.0/0, 2026-07-11)嚗?#       80/443 ??蝵脰粥 direct ?湧?(VPS_SSH_KEY) ??bastion 頝單 (OCI_*)??#
+# 銝車璅∪? (pre-check 靘? repo Secrets ?芸??豢?, direct ?芸?):
+#   direct  : 閮剖末 VPS_SSH_KEY + VPS_HOST ???湧?蝵?(?身, 撌脤? 22)
+#   bastion : ?身 OCI_* secrets 銝 VPS_SSH_KEY ????Actions ?抒 oci SDK ?遣 bastion session 頝單?函蔡
+#   skip    : ?抵??芾身 ??頝喲??函蔡 (銝?霈?push 霈?)
 #
-# 三種模式 (pre-check 依據 repo Secrets 自動選擇, direct 優先):
-#   direct  : 設好 VPS_SSH_KEY + VPS_HOST → 直連部署 (預設, 已開 22)
-#   bastion : 僅設 OCI_* secrets 且無 VPS_SSH_KEY → 在 Actions 內用 oci SDK 重建 bastion session 跳板部署
-#   skip    : 兩者皆未設 → 跳過部署 (不再讓 push 變紅)
-#
-# ⚠️ bastion 模式限制 (2026-07-11 實測): OCI Bastion 要求預先白名單「來源 CIDR」
-#   (client_cidr_block_allow_list)，而 GitHub Actions 出口 IP 是動態的 → session 建成功後
-#   連線立刻被 bastion 遠端關閉 (Connection closed by UNKNOWN port 65535 / Permission denied)。
-#   本地 vps-bastion.py 建 session 也同樣因 allow-list 連不上。故 bastion 模式在 GitHub Actions
-#   場景下「結構性不可行」——direct 模式才是 GitHub→VPS 自動部署的唯一可行路徑。
-#   bastion 代碼保留僅供「固定 IP 來源 (如本地/跳板機) 已加進 allow-list」時手動使用。
-#
-# 需在 GitHub 控制台 (Settings → Secrets and variables → Actions) 設定:
-#   選項 (direct, 預設已開 22):
-#     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (私鑰)
-#   選項 (bastion, 備用, 不需開公網端口):
+# ?? bastion 璅∪?? (2026-07-11 撖行葫): OCI Bastion 閬????賢??柴?皞?CIDR??#   (client_cidr_block_allow_list)嚗?GitHub Actions ?箏 IP ?臬??? ??session 撱箸???
+#   ???蝡鋡?bastion ?垢?? (Connection closed by UNKNOWN port 65535 / Permission denied)??#   ?砍 vps-bastion.py 撱?session 銋?璅?? allow-list ???銝? bastion 璅∪???GitHub Actions
+#   ?湔銝?瑽找??航??irect 璅∪?? GitHub?PS ?芸??函蔡?銝?航?頝臬???#   bastion 隞?Ⅳ靽????摰?IP 靘? (憒??頝單璈? 撌脣???allow-list????雿輻??#
+# ???GitHub ?批??(Settings ??Secrets and variables ??Actions) 閮剖?:
+#   ?賊? (direct, ?身撌脤? 22):
+#     VPS_HOST (161.118.248.180), VPS_USER (root), VPS_SSH_KEY (蝘)
+#   ?賊? (bastion, ?, 銝??蝬脩垢??:
 #     OCI_USER_OCID, OCI_TENANCY_OCID, OCI_REGION (e.g. ap-singapore-1),
-#     OCI_API_FINGERPRINT, OCI_API_KEY (PEM 私鑰全文),
+#     OCI_API_FINGERPRINT, OCI_API_KEY (PEM 蝘?冽?),
 #     OCI_BASTION_ID (ocid1.bastion...), OCI_TARGET_RESOURCE_ID (VPS compute instance OCID)
-#   兩者皆需 (應用程式 API key, 選填 — 若設則寫入 vps/.env):
+#   ?抵?? (?蝔? API key, ?詨‵ ???亥身?神??vps/.env):
 #     GROQ_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY, SUPABASE_*, GATEWAY_API_KEY, ...
 # =============================================================================
 
@@ -71,7 +65,7 @@ env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
-  # ─── 前置檢查：決定部署模式 ───────────────────────────────────
+  # ??? ?蔭瑼Ｘ嚗捱摰蝵脫芋撘????????????????????????????????????
   pre-check:
     name: Pre-deploy Check
     runs-on: ubuntu-latest
@@ -93,8 +87,8 @@ jobs:
           for s in $REQ; do
             [ -n "${!s}" ] || all_set=0
           done
-          # 手動 dispatch 選 bastion 且 OCI_* 全設 → 走 bastion (即使 VPS_* 也設著)
-          # push 事件 inputs.deploy_mode 為空 → 不會選 bastion, 走下方 direct
+          # ?? dispatch ??bastion 銝?OCI_* ?刻身 ??韏?bastion (?喃蝙 VPS_* 銋身??
+          # push 鈭辣 inputs.deploy_mode ?箇征 ??銝???bastion, 韏唬???direct
           if [ "${{ inputs.deploy_mode }}" = "bastion" ] && [ "$all_set" = "1" ]; then
             echo "mode=bastion" >> $GITHUB_OUTPUT
             echo "::notice::Bastion deploy mode (explicit deploy_mode=bastion, OCI secrets present)"
@@ -106,7 +100,7 @@ jobs:
             echo "::warning::No deploy secrets configured. Skipping auto-deploy. Set VPS_SSH_KEY+VPS_HOST for direct, or OCI_* for bastion."
           fi
 
-  # ─── 部署 ───────────────────────────────────────────────────
+  # ??? ?函蔡 ???????????????????????????????????????????????????
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
@@ -116,7 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ---- 選項 3: bastion 跳板 (oci Python SDK) ----
+      # ---- ?賊? 3: bastion 頝單 (oci Python SDK) ----
       - name: Configure OCI + create bastion session
         if: needs.pre-check.outputs.mode == 'bastion'
         id: bastion
@@ -152,9 +146,7 @@ jobs:
             "key_file": str(kp),
           }
           client = oci.bastion.BastionClient(cfg)
-          # 注意: oci 2.181.1 的 CreateSessionTargetResourceDetails 是基類(只有 session_type)，
-          # MANAGED_SSH 要用具體子類 CreateManagedSshSessionTargetResourceDetails（含 target_resource_id / target_resource_operating_system_user_name）
-          details = oci.bastion.models.CreateSessionDetails(
+          # 瘜冽?: oci 2.181.1 ??CreateSessionTargetResourceDetails ?臬憿??芣? session_type)嚗?          # MANAGED_SSH 閬?琿?摮? CreateManagedSshSessionTargetResourceDetails嚗 target_resource_id / target_resource_operating_system_user_name嚗?          details = oci.bastion.models.CreateSessionDetails(
             bastion_id=os.environ["OCI_BASTION_ID"],
             display_name="gha-deploy-" + time.strftime("%Y%m%d-%H%M%S"),
             session_ttl_in_seconds=3600,
@@ -168,7 +160,7 @@ jobs:
           try:
             resp = client.create_session(create_session_details=details)
             sid = resp.data.id
-            # oci 2.181.1 的 wait_until 不支援 create response；手寫輪詢 get_session 直到 ACTIVE
+            # oci 2.181.1 ??wait_until 銝??create response嚗?撖怨憚閰?get_session ?游 ACTIVE
             import time as _t
             deadline = _t.time() + 600
             while _t.time() < deadline:
@@ -202,7 +194,7 @@ jobs:
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
-            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
@@ -221,13 +213,12 @@ jobs:
             pnpm prisma migrate deploy 2>&1 | tail -8
             pnpm prisma generate 2>&1 | tail -2
             pnpm run build
-            # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
-            # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
+            # ?蔭 PM2 daemon 皜?畾? (dead/ghost) ?脩?閮?敺??啣???
+            # ?踹? VPS 銝?PM2 ?折???憯?(ghost id 17/18, pm2_env undefined) 撠?函蔡蝝?            pm2 kill 2>/dev/null || true
             sleep 2
             pm2 start ecosystem.config.cjs
             pm2 save
-            # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
+            # ??? ?函蔡敺摨瑟炎??(???: ?函蔡???摨? ???
             sleep 5
             GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
             WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://esggo.co || echo 000)
@@ -240,7 +231,7 @@ jobs:
             echo "[OK] deployed via bastion"
           VPS
 
-      # ---- 選項 2: 直連 ----
+      # ---- ?賊? 2: ?湧?----
       - name: Setup direct SSH key
         if: needs.pre-check.outputs.mode == 'direct'
         run: |
@@ -258,7 +249,7 @@ jobs:
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
-            command -v pm2 >/dev/null || { echo "[FAIL] pm2 not found"; exit 1; }
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
             if [ ! -d /var/www/esggo/.git ]; then
               echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
               if [ -e /var/www/esggo ]; then
@@ -275,13 +266,12 @@ jobs:
             git reset --hard origin/main
             pnpm install --frozen-lockfile
             pnpm run build
-            # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
-            # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
+            # ?蔭 PM2 daemon 皜?畾? (dead/ghost) ?脩?閮?敺??啣???
+            # ?踹? VPS 銝?PM2 ?折???憯?(ghost id 17/18, pm2_env undefined) 撠?函蔡蝝?            pm2 kill 2>/dev/null || true
             sleep 2
             pm2 start ecosystem.config.cjs
             pm2 save
-            # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
+            # ??? ?函蔡敺摨瑟炎??(???: ?函蔡???摨? ???
             sleep 5
             GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
             WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://esggo.co || echo 000)
@@ -299,7 +289,7 @@ jobs:
         run: |
           rm -f ~/.ssh/deploy_key ~/.ssh/bastion_key ~/.ssh/bastion_key.pub ~/.oci/key.pem ~/.ssh/known_hosts || true
 
-  # ─── 通知 ───────────────────────────────────────────────────
+  # ??? ? ???????????????????????????????????????????????????
   notify:
     name: Deploy Notification
     needs: [pre-check, deploy]
@@ -315,11 +305,12 @@ jobs:
           if [ "$R" = "success" ] || [ "$R" = "skipped" ]; then
             echo "[OK] ESG GO deployed to Oracle VPS (${{ needs.pre-check.outputs.mode }} mode)"
           else
-            MSG="[FAIL] Deploy $R (${{ needs.pre-check.outputs.mode }} mode) — run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            MSG="[FAIL] Deploy $R (${{ needs.pre-check.outputs.mode }} mode) ??run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             echo "$MSG"
-            # 主動推 Telegram (基礎設施集成閉環: 部署失敗→人收到告警)
+            # 銝餃???Telegram (?箇?閮剜???: ?函蔡憭望??犖?嗅?郎)
             curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
               -d chat_id="${TG_CHAT}" \
-              -d text="🚨 ESGGO CD $MSG" \
+              -d text="? ESGGO CD $MSG" \
               -d parse_mode="HTML" > /dev/null || echo "[warn] telegram notify failed"
           fi
+
