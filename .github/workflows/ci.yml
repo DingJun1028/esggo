@@ -137,6 +137,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: npx prisma generate
       - name: Build
         run: pnpm build
         env:
@@ -194,6 +196,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: npx prisma generate
       - name: Build (production)
         run: pnpm build
         env:
