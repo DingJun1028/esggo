@@ -5,7 +5,7 @@
 // Uses SQLite for local dev, PostgreSQL for production (free tier on Supabase/Neon)
 
 generator client {
-  binaryTargets = ["linux-musl-openssl-3.0.x", "linux-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
+  binaryTargets = ["linux-musl-openssl-3.0.x", "debian-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x", "windows"]
   provider = "prisma-client-js"
 }
 
