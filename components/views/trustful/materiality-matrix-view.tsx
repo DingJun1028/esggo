@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -142,9 +142,11 @@ export function MaterialityMatrixView() {
     fetchTopics();
   }, []);
 
-  const filteredTopics = activeCategory === "ALL" 
-    ? topics 
-    : topics.filter(t => t.category === activeCategory);
+  const filteredTopics = useMemo(() => {
+    return activeCategory === "ALL"
+      ? topics
+      : topics.filter(t => t.category === activeCategory);
+  }, [topics, activeCategory]);
 
   return (
     <div className="view-container animate-in fade-in duration-500">
