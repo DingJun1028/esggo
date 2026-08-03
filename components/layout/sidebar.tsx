@@ -52,9 +52,11 @@ export function Sidebar() {
         )}
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 hover:bg-primary/5 rounded-xl transition-colors"
+          className="p-2 hover:bg-primary/5 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+          aria-expanded={isSidebarOpen}
         >
-          <Menu className="w-5 h-5 text-text-muted hover:text-primary transition-colors" />
+          <Menu className="w-5 h-5 text-text-muted hover:text-primary transition-colors" aria-hidden="true" />
         </button>
 
       </div>
@@ -85,16 +87,20 @@ export function Sidebar() {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center gap-4 px-4 py-1.5 rounded-xl transition-all duration-200 ${
+                    className={`w-full flex items-center gap-4 px-4 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${
                       isActive
                         ? aiProxyMode 
                           ? "bg-proxy/10 text-proxy font-semibold border-l-2 border-proxy"
                           : "bg-primary/10 text-primary font-semibold border-l-2 border-primary"
                         : "text-text-muted hover:bg-primary/5 hover:text-text-main border-l-2 border-transparent"
                     }`}
+                    aria-label={!isSidebarOpen ? localizedLabel : undefined}
+                    title={!isSidebarOpen ? localizedLabel : undefined}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     <Icon
                       className={`w-5 h-5 flex-shrink-0 ${isActive ? (aiProxyMode ? "text-proxy" : "text-primary") : ""}`}
+                      aria-hidden="true"
                     />
 
                     {isSidebarOpen && (
