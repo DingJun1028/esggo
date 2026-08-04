@@ -26,3 +26,7 @@
 ## 2026-07-24 - Interactive Icon Buttons in Complex Views
 **Learning:** Icon-only buttons used for secondary interactions (like calendar navigation, editing controls, or modal dismissals) within complex data-dense views like `DashboardView` often lack both accessible names (`aria-label`) and explicit keyboard focus indicators (`focus-visible`).
 **Action:** When auditing or implementing dense dashboard components, ensure all icon-only buttons receive descriptive `aria-label` and `title` attributes. Additionally, always explicitly hide their inner SVG icons using `aria-hidden="true"` and apply high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-primary focus:outline-none`) to guarantee they are discoverable and usable by assistive technologies and keyboard navigators alike.
+
+## 2024-08-04 - Native Tooltips and Hidden SVGs on Icon Buttons
+**Learning:** Dismiss buttons in alert components (like `ErrorAlert`) frequently lack `title` attributes (for mouse users) and expose their internal SVGs to screen readers, causing redundant "Dismiss X" readouts. They also often lack `focus-visible` styling.
+**Action:** When creating or fixing icon-only buttons, always apply a `title` attribute for native tooltips, hide the internal SVG with `aria-hidden="true"`, and ensure robust keyboard focus rings (e.g., `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current`).
