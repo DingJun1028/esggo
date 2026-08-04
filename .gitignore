@@ -22,6 +22,7 @@ yarn-error.log*
 .env.secrets
 .env.example
 !vps/.env.example
+!apps/omni-blueprint-hub/.env.example
 .env.local.sample
 secrets/
 
