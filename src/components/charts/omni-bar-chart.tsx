@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { OmniBarChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
@@ -17,9 +17,6 @@ export function OmniBarChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  if (!data || data.length === 0) return <div>No data available</div>;
-
-  const maxValue = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
   const padding = { top: 40, right: 20, bottom: 40, left: 50 };
   const graphHeight = Number(height) - padding.top - padding.bottom;
   
@@ -27,8 +24,15 @@ export function OmniBarChart({
   const viewBoxWidth = 600;
   const graphWidth = viewBoxWidth - padding.left - padding.right;
   
-  const barWidth = Math.min((graphWidth / data.length) * 0.6, 40);
-  const barSpacing = (graphWidth - (barWidth * data.length)) / (data.length + 1);
+  const { maxValue, barWidth, barSpacing } = useMemo(() => {
+    if (!data || data.length === 0) return { maxValue: 1, barWidth: 0, barSpacing: 0 };
+    const maxVal = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
+    const bWidth = Math.min((graphWidth / data.length) * 0.6, 40);
+    const bSpacing = (graphWidth - (bWidth * data.length)) / (data.length + 1);
+    return { maxValue: maxVal, barWidth: bWidth, barSpacing: bSpacing };
+  }, [data, graphWidth]);
+
+  if (!data || data.length === 0) return <div>No data available</div>;
 
   const defaultColor = 'var(--accent-teal)';
 
