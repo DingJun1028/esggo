@@ -24,6 +24,7 @@
 | 001 | soul.md | v4.0 FAIR | `Codex/soul.md` | ✅ 最新 |
 | 002 | protocols.md | v4.0 | `Codex/protocols.md` | ✅ 同步 |
 | 003 | 歷史版本 | - | `Codex/archive/` | 📦 存檔 |
+| 004 | 果證印可 | 契約憑證 | `Codex/archive/fruition-certificate.md` | ✅ 54項通過 |
 
 ---
 
