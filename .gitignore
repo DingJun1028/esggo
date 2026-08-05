@@ -292,3 +292,8 @@ esggo-deploy.bundle
 
 # turbo task runner artifacts
 **/.turbo/
+
+# Omni-Sanctuary secret vault (only index commits, no plaintext)
+Omni-Sanctuary/Artifacts/keys/*.txt
+Omni-Sanctuary/Artifacts/keys/*.json
+Omni-Sanctuary/Artifacts/keys/*.env
