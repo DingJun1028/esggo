@@ -1,5 +1,6 @@
 // Omni-Blueprint Hub - Execution Demo (5T Verified)
-import { OmniBlueprintHub } from './hub-engine';
+import { OmniBlueprintHub } from './hub-engine.js';
+import { UnifiedBlueprintEntity } from './core-types.js';
 
 console.log('=== 啟動萬能藍圖中心 (Omni-Blueprint Hub) ===\n');
 const hub = new OmniBlueprintHub();
@@ -37,7 +38,7 @@ hub.pushBroadcastPayload(designatedProduct,
 console.log(' 主帳號 Email 翻譯已完成，即時廣播給所有連結訂閱者！');
 
 console.log('\n--- 單一資料表 (Unified Table) 狀態彙整 ---');
-console.table(hub.getUnifiedTable().map((row) => ({
+console.table(hub.getUnifiedTable().map((row: UnifiedBlueprintEntity) => ({
   ID: row.id,
   Type: row.entityType,
   BlueprintType: row.blueprintType,

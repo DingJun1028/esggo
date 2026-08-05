@@ -7,7 +7,7 @@ import {
   BlueprintProduct,
   BroadcastPayload,
   UnifiedBlueprintEntity
-} from './core-types';
+} from './core-types.js';
 
 export class OmniBlueprintHub {
   private singleDataTable: Map<string, UnifiedBlueprintEntity> = new Map();
