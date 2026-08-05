@@ -459,7 +459,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Send tracker notification
+      - name: Send GitHub Issue + Telegram
         uses: actions/github-script@v7
         with:
           script: |
@@ -481,29 +481,65 @@ jobs:
 
             const fixed = Object.values(results).some(r => r === 'success');
 
-            let body = '## OA-TWINS Auto-Repair Tracker\n\n';
-            body += '- Tracker: ' + trackerId + '\n';
-            body += '- CI Run: #' + runId + '\n';
-            body += '- Result: ' + conclusion + '\n';
-            body += '- Error Type: ' + errorType + '\n';
-            body += '- Repairable: ' + repairable + '\n';
-            body += '- Repaired: ' + (fixed ? 'Yes' : 'No') + '\n\n';
-            body += '### Repair Jobs\n';
+            // Build GitHub Issue body
+            let ghBody = '## OA-TWINS Auto-Repair Tracker\n\n';
+            ghBody += '- Tracker: ' + trackerId + '\n';
+            ghBody += '- CI Run: #' + runId + '\n';
+            ghBody += '- Result: ' + conclusion + '\n';
+            ghBody += '- Error Type: ' + errorType + '\n';
+            ghBody += '- Repairable: ' + repairable + '\n';
+            ghBody += '- Repaired: ' + (fixed ? 'Yes' : 'No') + '\n\n';
+            ghBody += '### Repair Jobs\n';
             for (const [name, status] of Object.entries(results)) {
-              body += '- ' + name + ': ' + status + '\n';
+              const icon = status === 'success' ? '✅' : status === 'failure' ? '❌' : '⏸️';
+              ghBody += '- ' + icon + ' ' + name + ': ' + status + '\n';
             }
-            if (detail) body += '\n### Error Detail\n' + detail + '\n';
-            body += '\n*Tracker v2.0*\n';
+            if (detail) ghBody += '\n### Error Detail\n' + detail + '\n';
+            ghBody += '\n*Tracker v2.1*\n';
+
+            // Build Telegram message (plain text)
+            let statusEmoji = fixed ? '✅ Auto-Repaired' : '❌ Manual Fix Needed';
+            let tgMsg = '🐝 OA-TWINS Auto-Repair\n' +
+              'CI Run: #' + runId + '\n' +
+              'Error: ' + errorType + '\n' +
+              'Status: ' + statusEmoji + '\n' +
+              'Repairable: ' + repairable + '\n' +
+              'Tracker: OA-TWINS-AUTO-REPAIR';
 
             if (conclusion === 'failure') {
+              // 1. Create GitHub Issue
               const labels = ['auto-repair', 'tracker', 'swarm'];
               if (fixed) labels.push('auto-fixed');
-
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: '[' + trackerId + '] Auto-Repair - CI #' + runId + ' (' + errorType + ')',
-                body: body,
+                body: ghBody,
                 labels: labels
               });
+              console.log('GitHub Issue created');
+
+              // 2. Send Telegram notification
+              const botToken = process.env.TELEGRAM_BOT_TOKEN;
+              const chatId = process.env.TELEGRAM_CHAT_ID;
+              if (botToken && chatId) {
+                const url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
+                const payload = {
+                  chat_id: chatId,
+                  text: tgMsg,
+                  parse_mode: 'HTML'
+                };
+                const resp = await fetch(url, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                const data = await resp.json();
+                console.log('Telegram response:', JSON.stringify(data));
+              } else {
+                console.log('Telegram secrets not set, skipping');
+              }
             }
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
