@@ -15,6 +15,7 @@
 | 005 | Google ADK | 整合 | `Artifacts/integrations/adk.json` | ✅ 啟用 |
 | 006 | LangChain 引擎 | 套件 | `Artifacts/integrations/langchain.json` | ✅ 啟用 |
 | 007 | 萬能即時翻譯 | 服務 | `Artifacts/integrations/translate.json` | ✅ 啟用 |
+| 008 | Auto-Repair Workflow | GitHub Actions | `.github/workflows/auto-repair.yml` | ✅ 啟用 |
 
 ## 📖 聖典清單
 
