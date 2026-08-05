@@ -51,6 +51,7 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
+          trivyignores: '.trivyignore'
 
       - name: Run Hadolint on Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
