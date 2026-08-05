@@ -25,7 +25,18 @@
 | 002 | protocols.md | v4.0 | `Codex/protocols.md` | ✅ 同步 |
 | 003 | 歷史版本 | - | `Codex/archive/` | 📦 存檔 |
 | 004 | 果證印可 | 契約憑證 | `Codex/archive/fruition-certificate.md` | ✅ 54項通過 |
+| 005 | 萬能藍圖中心聖典 | 定義 | `Codex/omni-blueprint-hub-canon.md` | ✅ 已鑄造 |
 
 ---
 
-*最後更新: 2026-08-05 | Hash Lock 已啟用*
+## ⚙️ 萬能藍圖產品 (Omni-Blueprint Products)
+
+| 編號 | 產品名稱 | 藍圖類型 | 路徑 | 狀態 |
+|------|----------|---------|------|------|
+| P01 | 核心型別 IComponentCore | 基礎 | `apps/omni-blueprint-hub/core-types.ts` | ✅ 實作 |
+| P02 | Hub 引擎 OmniBlueprintHub | 引擎 | `apps/omni-blueprint-hub/hub-engine.ts` | ✅ 實作 |
+| P03 | 執行驗證 Demo | 驗證 | `apps/omni-blueprint-hub/hub-demo.ts` | ✅ 通過 |
+
+---
+
+*最後更新: 2026-08-06 | Hash Lock 已啟用*
