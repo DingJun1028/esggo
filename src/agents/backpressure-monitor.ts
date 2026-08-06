@@ -34,7 +34,7 @@ export function monitorBackpressure(
   let eventCount = 0;
 
   // 訂閱指定 topic，收到事件即遞增計數
-  bus.subscribe(topic, async (event: IBusEvent) => {
+  bus.subscribe(topic, async (_event: IBusEvent) => {
     eventCount++;
     // 此處可根據需要額外處理 event，例如寫入黑板或記錄統計
   });
