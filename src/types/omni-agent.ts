@@ -13,9 +13,9 @@ export interface IComponentCore {
   readonly timestamp: number;
   /** 證據佐證庫 (用於零幻覺驗算，如 ISO‑14064‑1) */
     evidence: {
-    originCause?: string;
-    processTrace?: string[];
-    finalEffect?: string;
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
     [key: string]: any;
   };
   /** 防篡改雜湊值（SHA‑256、Keccak‑256 …） */

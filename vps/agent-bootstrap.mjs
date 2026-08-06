@@ -124,25 +124,35 @@ async function reportResult(commandId, result) {
 // ==========================================
 // Health check
 // ==========================================
-function collectHealth() {
+async function collectHealth() {
   const cpu = localExec("top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | sed 's/%us,//'");
   const mem = localExec("free -m | awk '/Mem:/ {printf \"%.1f\", $3/$2*100}'");
   const disk = localExec("df -h / | awk 'NR==2 {print $5}' | tr -d '%'");
   const load = localExec('cat /proc/loadavg').stdout.split(/\s+/);
 
   const services = {};
-  const check = (name, port, path = '/') => {
-    const r = localExec(
-      `curl -s -o /dev/null -w "%{http_code}" --max-time 3 http://localhost:${port}${path}`,
-    );
-    services[name] = {
-      status: r.stdout !== '000' ? 'running' : 'stopped',
-      health: r.stdout.startsWith('2') ? 'healthy' : 'unhealthy',
-      port,
-    };
+  const check = async (name, port, path = '/') => {
+    try {
+      const res = await fetch(`http://localhost:${port}${path}`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(3000)
+      });
+      const status = res.status;
+      services[name] = {
+        status: status !== 0 ? 'running' : 'stopped',
+        health: status >= 200 && status < 300 ? 'healthy' : 'unhealthy',
+        port,
+      };
+    } catch (e) {
+      services[name] = {
+        status: 'stopped',
+        health: 'unhealthy',
+        port,
+      };
+    }
   };
-  check('esggo-core', 3000, '/');
-  check('omniagent-gateway', 8642, '/status');
+  await check('esggo-core', 3000, '/');
+  await check('omniagent-gateway', 8642, '/status');
   const nginx = localExec('systemctl is-active nginx').stdout;
   services['nginx'] = {
     status: nginx === 'active' ? 'running' : 'stopped',
@@ -190,7 +200,7 @@ async function main() {
   await register();
 
   setInterval(async () => {
-    const system = collectHealth();
+    const system = await collectHealth();
     const pending = await heartbeat(system);
     if (pending.length) await executePending(pending);
   }, CONFIG.healthInterval);

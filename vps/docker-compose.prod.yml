@@ -57,7 +57,6 @@ services:
       - ./nginx-esggo-docker.conf:/etc/nginx/conf.d/default.conf:ro
       - ./certbot/conf:/etc/letsencrypt:ro
       - ./certbot/www:/var/www/certbot:ro
-      - nginx-cache:/var/cache/nginx
     depends_on:
       esggo:
         condition: service_healthy
@@ -140,7 +139,8 @@ services:
   # ─── OmniAgent Gateway (AI 代理閘道) ──────────────────────────
   omniagent-gateway:
     env_file:
-      - .env.gateway
+      - path: .env.gateway
+        required: false
     build:
       context: ..
       dockerfile: vps/Dockerfile.gateway

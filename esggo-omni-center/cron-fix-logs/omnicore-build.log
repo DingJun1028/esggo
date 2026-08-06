@@ -1,0 +1,5 @@
+▲ Next.js 16.2.10 (Turbopack)
+- Environments: .env.local, .env
+
+  Creating an optimized production build ...
+[ELIFECYCLE] Command failed with exit code 1.

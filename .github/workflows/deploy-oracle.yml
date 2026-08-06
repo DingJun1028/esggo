@@ -199,6 +199,20 @@ jobs:
           set -e
           ssh -o ProxyCommand="$PROXY" -o UserKnownHostsFile=/dev/null -i ~/.ssh/bastion_key root@10.0.0.119 bash -s <<'VPS'
             set -e
+            export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
+            if [ ! -d /var/www/esggo/.git ]; then
+              echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
+              if [ -e /var/www/esggo ]; then
+                mv /var/www/esggo /var/www/esggo.orphan.$(date +%s)
+              fi
+              git clone --branch main https://github.com/DingJun1028/esggo.git /var/www/esggo
+              for f in /var/www/esggo.orphan.*/.env*; do
+                [ -f "$f" ] && cp "$f" /var/www/esggo/ && echo "[bootstrap] restored $(basename "$f")"
+              done
+            fi
             cd /var/www/esggo
             git checkout -f main
             git fetch origin main
@@ -241,6 +255,20 @@ jobs:
           set -e
           ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
+            export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
+            command -v pm2 >/dev/null || { echo "[bootstrap] pm2 missing - installing"; npm install -g pm2@latest && command -v pm2 || { echo "[FAIL] pm2 install failed"; exit 1; }; }
+            if [ ! -d /var/www/esggo/.git ]; then
+              echo "[bootstrap] /var/www/esggo missing .git - re-cloning (public repo)"
+              if [ -e /var/www/esggo ]; then
+                mv /var/www/esggo /var/www/esggo.orphan.$(date +%s)
+              fi
+              git clone --branch main https://github.com/DingJun1028/esggo.git /var/www/esggo
+              for f in /var/www/esggo.orphan.*/.env*; do
+                [ -f "$f" ] && cp "$f" /var/www/esggo/ && echo "[bootstrap] restored $(basename "$f")"
+              done
+            fi
             cd /var/www/esggo
             git checkout -f main
             git fetch origin main
