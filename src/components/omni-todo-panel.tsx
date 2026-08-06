@@ -85,6 +85,16 @@ export function OmniTodoPanel() {
   const [filterPriority, setFilterPriority] = useState<'all' | TodoPriority>('all');
   const [filterCategory, setFilterCategory] = useState<'all' | TodoCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // ⚡ Bolt: Debounce search query to reduce API calls
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null);
   const [evolution, setEvolution] = useState({ level: 1, xp: 0, nextXp: 160 });
@@ -104,7 +114,7 @@ export function OmniTodoPanel() {
       if (filterStatus !== 'all') filter.status = [filterStatus];
       if (filterPriority !== 'all') filter.priority = [filterPriority];
       if (filterCategory !== 'all') filter.category = [filterCategory];
-      if (searchQuery) filter.search = searchQuery;
+      if (debouncedSearchQuery) filter.search = debouncedSearchQuery;
 
       const res = await fetch('/api/omni-todo', {
         method: 'POST',
@@ -116,7 +126,7 @@ export function OmniTodoPanel() {
     } catch (err) {
       console.error('Failed to load todos:', err);
     }
-  }, [filterStatus, filterPriority, filterCategory, searchQuery]);
+  }, [filterStatus, filterPriority, filterCategory, debouncedSearchQuery]);
 
   const loadStats = useCallback(async () => {
     try {
@@ -142,8 +152,8 @@ export function OmniTodoPanel() {
     if (evolving) return;
     setEvolving(true);
     try {
-      await new Promise(r => setTimeout(r, 600));
-      setEvolution(prev => {
+      await new Promise((r) => setTimeout(r, 600));
+      setEvolution((prev) => {
         const xp = prev.xp + 30;
         let level = prev.level;
         let nextXp = prev.nextXp;
@@ -284,15 +294,25 @@ export function OmniTodoPanel() {
       <OmniBaseCard>
         <div className="p-4 flex flex-wrap items-center gap-4">
           <div>
-            <div className="text-xs font-semibold" style={{ color: 'var(--accent-purple)' }}>ESGGO 無限進化</div>
+            <div className="text-xs font-semibold" style={{ color: 'var(--accent-purple)' }}>
+              ESGGO 無限進化
+            </div>
             <div className="flex gap-3 mt-1">
               <div>
-                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>LEVEL</div>
-                <div className="text-xl font-bold" style={{ color: 'var(--accent-gold)' }}>{evolution.level}</div>
+                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>
+                  LEVEL
+                </div>
+                <div className="text-xl font-bold" style={{ color: 'var(--accent-gold)' }}>
+                  {evolution.level}
+                </div>
               </div>
               <div>
-                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>XP</div>
-                <div className="text-xl font-bold" style={{ color: 'var(--accent-teal)' }}>{evolution.xp}/{evolution.nextXp}</div>
+                <div className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>
+                  XP
+                </div>
+                <div className="text-xl font-bold" style={{ color: 'var(--accent-teal)' }}>
+                  {evolution.xp}/{evolution.nextXp}
+                </div>
               </div>
             </div>
           </div>
@@ -398,9 +418,19 @@ export function OmniTodoPanel() {
 
           <button
             onClick={() => {
-              const csvEscape = (v: string) => v.includes(',') || v.includes('"') ? `"${v.replace(/"/g, '""')}"` : v;
-              const headers = ['id', 'title', 'description', 'priority', 'status', 'category', 'dueDate', 'createdAt'];
-              const rows = todos.map(t => [
+              const csvEscape = (v: string) =>
+                v.includes(',') || v.includes('"') ? `"${v.replace(/"/g, '""')}"` : v;
+              const headers = [
+                'id',
+                'title',
+                'description',
+                'priority',
+                'status',
+                'category',
+                'dueDate',
+                'createdAt',
+              ];
+              const rows = todos.map((t) => [
                 t.id,
                 csvEscape(t.title),
                 csvEscape(t.description),
@@ -410,7 +440,7 @@ export function OmniTodoPanel() {
                 t.dueDate || '',
                 t.createdAt,
               ]);
-              const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+              const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
               const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
