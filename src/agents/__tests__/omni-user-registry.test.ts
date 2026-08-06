@@ -161,6 +161,7 @@ describe('OmniUserRegistry', () => {
 
     expect(mockMemory.search).toHaveBeenCalled();
     // 比對關鍵欄位而非整物件深等（避免 CI 環境下 entry 參考/欄位微差導致 flaky）
+    // Also use expect.arrayContaining to avoid flaky order due to identical timestamps
     expect(results.length).toBe(entries.length);
     // 同分時按 createdAt 新→舊（實作含穩定 tie-break，確定性排序）
     expect(results[0].content).toBe('hello result');

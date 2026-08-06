@@ -85,21 +85,6 @@ export class OmniTime implements IOmniTime {
     // 記錄原始事件
     this._events.push(event);
 
-    // 創建影子事件
-    const _shadowEvent: IBusEvent = {
-      ...event,
-      uuid: shadowId,
-      version: 'shadow-test',
-      lifecycle_path: [
-        ...event.lifecycle_path,
-        {
-          stage: 'EMERGED' as LifecycleStage,
-          timestamp: Date.now(),
-          node: 'shadow-test',
-        },
-      ],
-    };
-
     const diverged = Math.random() > 0.7;
 
     return {
