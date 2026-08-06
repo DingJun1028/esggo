@@ -28,6 +28,7 @@
 | 004 | 果證印可 | 契約憑證 | `Codex/archive/fruition-certificate.md` | ✅ 54項通過 |
 | 005 | 萬能藍圖中心聖典 | 定義 | `Codex/omni-blueprint-hub-canon.md` | ✅ 已鑄造 |
 | 006 | TencentDB Memory 集成聖典 | M1 Canon | `Codex/tencentdb-memory-canon.md` | ✅ 已鑄造 |
+| 007 | OA-Team 雙蜂隊 60 畫像 | 角色聖典 | `Codex/oa-team-60-portrait.md` | ✅ 已鑄造 |
 
 ---
 
