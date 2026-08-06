@@ -2,118 +2,95 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>萬能語種橋樑 · 講者端</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>萬能語種橋樑 · 自動辨識版</title>
   <style>
-    /* RWD 版型：clamp 版距、flex 版欄、響應式字體 */
-    :root{
-      --bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--danger:#ff5d6c;--radius:clamp(8px,2vw,14px);--shadow:0 4px 12px rgba(0,0,0,.3);--gap:clamp(8px,2vw,16px)
-    }
+    :root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--danger:#ff5d6c;--radius:clamp(8px,2vw,14px)}
     html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e}
-    *,*::before,*::after{box-sizing:border-box}
+    *{box-sizing:border-box}
     body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
       background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
-      min-height:100vh;padding:clamp(12px,3vw,24px);display:flex;flex-direction:column;gap:var(--gap)}
+      min-height:100vh;display:flex;flex-direction:column;gap:12px;padding:12px}
     html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-    .wrap{max-width:100vw;flex:1;display:flex;flex-direction:column;gap:var(--gap)}
-    header{display:flex;align-items:center;gap:var(--gap);flex-wrap:wrap}
-    .logo{width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);border-radius:var(--radius);
-      background:linear-gradient(135deg,var(--accent),var(--accent) 70%,var(--danger) 100%);
-      display:grid;place-items:center;font-weight:800;color:#06121a;box-shadow:var(--shadow)}
-    h1{font-size:clamp(1.1rem,2.5vw,1.4rem);margin:0;line-height:1.2}
-    .sub{color:var(--muted);font-size:clamp(0.65rem,1.5vw,0.78rem);line-height:1.3}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-      padding:clamp(12px,2.5vw,16px);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:var(--gap)}
-    .panel.row{display:flex;flex-wrap:wrap;gap:var(--gap);align-items:center}
-    .panel .full{width:100%;flex:1}
-    label{font-size:clamp(0.62rem,1.4vw,0.75rem);color:var(--muted);display:block;margin-bottom:4px}
-    select,input{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
-      border-radius:clamp(6px,1vw,10px);padding:clamp(6px,8px,10px) clamp(10px,2vw,14px);
-      font-size:clamp(0.8rem,1.8vw,1rem);outline:none;width:100%;max-width:220px}
-    select:focus,input:focus{border-color:var(--accent)}
-    button{cursor:pointer;border:none;border-radius:clamp(6px,1vw,10px);
-      padding:clamp(8px,2vw,14px) clamp(10px,2vw,16px);font-size:clamp(0.78rem,1.6vw,0.92rem);font-weight:700;
-      color:#06121a;background:linear-gradient(135deg,var(--accent),var(--accent2));transition:.15s;box-shadow:var(--shadow);margin:auto}
-    button:active{transform:translateY(1px)}
-    .btn{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:clamp(6px,1vw,10px);
-      padding:clamp(4px,1vw,8px) clamp(6px,1.5vw,12px);font-size:clamp(0.6rem,1.3vw,0.74rem);transition:.15s;user-select:none;margin:0}
-    .btn:hover{border-color:var(--accent)}
-    .live{background:linear-gradient(135deg,#ff5d6c,#ff8a5c)}
-    .rec{background:linear-gradient(135deg,#36e0c0,#7c5cff)}
-    #transcript{flex:1;min-height:120px;max-height:40vh;overflow:auto;background:var(--panel2);
-      border:1px solid var(--line);border-radius:var(--radius);padding:clamp(8px,1.5vw,12px);
-      font-size:clamp(0.9rem,1.8vw,1.05rem);line-height:1.55;white-space:pre-wrap;word-break:break-word}
-    #transcript .me{color:var(--accent)}.status{font-size:clamp(0.7rem,1.4vw,0.8rem);color:var(--muted);min-height:1.2em}
-    .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);
-      border-radius:var(--radius);padding:clamp(3px,1vw,6px) clamp(4px,1vw,8px);font-size:clamp(0.5rem,1.2vw,0.7rem);color:var(--accent)}
-    #qrCode{margin-top:var(--gap);padding:clamp(10px,3vw,14px);background:var(--panel2);
-      border-radius:var(--radius);text-align:center}
-    #qrCode img{width:clamp(80px,12vw,120px);height:clamp(80px,12vw,120px);
-      border:1px solid var(--line);border-radius:6px}
-    #qrUrl{font-size:clamp(0.55rem,1.2vw,0.68rem);color:var(--muted);word-break:break-word;margin-top:4px}
-    @media (max-width:480px){
-      .panel.row{flex-direction:column;align-items:stretch}
-      select,input{max-width:100%}
-      button{width:100%}
-    }
-    @media (max-height:700px){.transcript{max-height:28vh}}
+    .wrap{max-width:560px;width:100%;background:var(--panel);border:1px solid var(--line);
+      border-radius:var(--radius);box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:12px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    select{flex:1;min-width:100px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+      border-radius:var(--radius);padding:6px 10px;font-size:1rem}
+    .transcript{min-height:140px;overflow:auto;background:var(--panel2);
+      border:1px solid var(--line);border-radius:var(--radius);padding:12px;font-size:1rem;line-height:1.5}
+    #transcript .me{color:var(--accent)}.status{font-size:0.8rem;color:var(--muted)}
+    .badge{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:4px 8px;font-size:0.7rem}
+    @media (max-width:480px){.row{flex-direction:column}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div class="logo">🈶</div>
-      <div>
-        <h1>萬能語種橋樑 · 講者端</h1>
-        <div class="sub">語音轉錄 + 多語即時翻譯 (RWD 中大屏全動態調整)</div>
-      </div>
-    </header>
-    <div class="panel row full">
-      <div class="full">
-        <select id="lang"><option value="en">英文</option><option value="zh-TW">中文(繁)</option>
-          <option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
-      </div>
-      <button id="start" class="live">🎙 開始收音</button>
-      <div class="status" id="status">Chrome/Edge 支援 Web Speech API。</div>
+    <h2>萬能語種橋樑 · 自動辨識</h2>
+    <div class="row">
+      <select id="lang"><option value="zh-TW">中文(繁)</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
+      <span class="badge" title="語言循環切換">🔄</span>
     </div>
-    <div class="panel">
-      <div class="badge">即時轉錄 → 多語翻譯</div>
-      <div id="transcript" aria-live="polite">（轉錄會顯示在這裡）</div>
-    </div>
-    <div id="qrCode" style="display:none">
-      <div>📱 觀眾掃碼加入房間：</div>
-      <img id="qrImg" src="" alt="QR Code">
-      <div id="qrUrl"></div>
-    </div>
+    <div class="status" id="status">開始自動辨識…請授權麥克風</div>
+    <div class="transcript" id="transcript" aria-live="polite">（即時轉錄+翻譯顯示於此）</div>
   </div>
-<button id="themeBtn" style="position:fixed;top:10px;right:10px;background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:6px 10px">🌓</button>
   <script>
-  const API=location.origin+'/translate';
-  let recog=null,listening=false,roomId='';
-  const $=s=>document.querySelector(s);
-  const applyTheme=()=>{ const t=document.documentElement.dataset.theme==='light'?'dark':'light';
-    document.documentElement.dataset.theme=t; $('#themeBtn').textContent=t==='light'?'🌙':'☀';
-    localStorage.setItem('obh-theme',t); };
-  $('#themeBtn').onclick=applyTheme;
-  const saved=localStorage.getItem('obh-theme')||'dark';document.documentElement.dataset.theme=saved;
-  function genRoomId(){
-    roomId='room_'+Math.random().toString(36).substr(2,9);
-    document.getElementById('qrCode').style.display='block';
-    const url=location.origin+'/stream?room='+roomId;
-    document.getElementById('qrUrl').textContent='📲 '+url;
-    $('#qrImg').src='https://qrco.de/b?'+encodeURIComponent(url).slice(0,200);
-  }
-  function append(t){ const p=document.createElement('div');p.className='me';p.textContent='▸ '+t;
-    $('#transcript').appendChild(p);$('#transcript').scrollTop=$('#transcript').scrollHeight;pushTranslate(t);}
-  function start(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('#status').textContent='請用 Chrome/Edge';return;}
-    recog=new SR();recog.lang=$('#lang').value;recog.continuous=true;recog.interimResults=true;
-    recog.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)append(e.results[i][0].transcript.trim());};
-    recog.onstart=()=>{listening=true;$('#start').textContent='⏹ 停止';$('#status').textContent='收音中… 點「生成房間」分享 QR Code給觀眾';};
-    recog.onend=()=>{if(listening)recog.start()};try{recog.start()}catch(e){$('#status').textContent=e.message}}
-  function stop(){listening=false;recog?.stop();$('#start').textContent='🎙 開始收音';$('#status').textContent='已停止。'}
-  $('#start').onclick=()=>listening?stop():start();
-  function pushTranslate(text){fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:['zh-TW','ja','es','fr']})})
-    .then(r=>r.json()).then(d=>console.log('翻譯:',d)).catch(e=>console.error(e));}
+    const LANGUAGES=['zh-TW','en','ja','es','fr'];
+    const $=s=>document.querySelector(s);
+    let recog=null,listening=false;
+    const API=location.origin+'/translate';
+    
+    // 語言循環切換
+    function swapLang(){
+      const curr=$('#lang').val();
+      const idx=LANGUAGES.findIndex(l=>l===curr);
+      const next=LANGUAGES[(idx+1)%LANGUAGES.length];
+      $('#lang').val(next).trigger('change');
+    }
+    document.querySelector('.badge').onclick=swapLang;
+    
+    // 自動啟動辨識
+    function autoStart(){
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+      if(!SR){$('#status').textContent='請用 Chrome/Edge 瀏覽器';return;}
+      recog=new SR();
+      recog.lang=$('#lang').value;
+      recog.continuous=true;
+      recog.interimResults=true;
+      recog.onresult=e=>{
+        for(let i=e.resultIndex;i<e.results.length;i++){
+          const t=e.results[i][0].transcript.trim();
+          if(e.results[i].isFinal && t){
+            const p=document.createElement('div');
+            p.className='me';p.textContent='▸ '+t;
+            $('#transcript').appendChild(p);
+            $('#transcript').scrollTop=$('#transcript').scrollHeight;
+            pushTranslate(t);
+          }
+        }
+      };
+      recog.onstart=()=>{listening=true;($('#status').textContent='辨識中…'+LANGUAGES.map(l=>l).join('|')};
+      recog.onerror=e=>{if(e.error==='not-allowed'){$('#status').textContent='請授權麥克風權限';}};
+      recog.onend(()=>{if(listening)setTimeout(()=>recog.start(),100)}); // 自動重啟
+      try{recog.start();}catch(e){$('#status').textContent=e.message}
+    }
+    
+    // 推送翻譯
+    function pushTranslate(text){
+      fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES})})
+        .then(r=>r.json())
+        .then(d=>{const out=$('#transcript');
+          if(d.translations){out.innerHTML+=Object.entries(d.translations).map(([c,t])=>'<span class="me">'+c+':</span>'+t).join('<br>');}
+          out.scrollTop=out.scrollHeight;
+        }).catch(e=>console.error(e));
+    }
+    
+    // 語言變更時重置辨識
+    $('#lang').onchange=()=>{if(recog){recog.lang=$('#lang').value;}};
+    
+    // 開即自動辨識
+    window.onload=autoStart;
   </script>
 </body>
 </html>
