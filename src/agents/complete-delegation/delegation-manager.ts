@@ -2,9 +2,9 @@
  * ==========================================
  * 完全代主自行 - 授權管理器
  * ==========================================
- * 
+ *
  * 管理完全授權的創建、驗證、終止
- * 
+ *
  * 「代理者在完全授權範圍內，自主、獨立、全面地代替主體行使職權與執行行動。」
  */
 
@@ -38,8 +38,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
 
   constructor(config?: { auditSink?: AuditSink; fullVolume?: boolean }) {
     // 全量留存預設開啟（設 AUDIT_FULL_VOLUME=false 停用，退回環形緩衝）
-    this._fullVolume =
-      config?.fullVolume ?? process.env.AUDIT_FULL_VOLUME !== 'false';
+    this._fullVolume = config?.fullVolume ?? process.env.AUDIT_FULL_VOLUME !== 'false';
     // 審計條目經統一日誌 sink 持久化（審計/事件同一份 JSONL、同一序號空間）
     const sink: AuditSink | undefined =
       config?.auditSink ??
@@ -118,7 +117,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
         agentId: params.agentId,
         permissions: params.permissions,
       },
-      'CompleteDelegationManager'
+      'CompleteDelegationManager',
     );
 
     return signedScope;
@@ -129,7 +128,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
    */
   async validateDelegation(
     delegationId: string,
-    requiredPermission: DelegationPermission
+    requiredPermission: DelegationPermission,
   ): Promise<boolean> {
     const scope = this._delegations.get(delegationId);
     if (!scope) {
@@ -143,16 +142,13 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
     }
 
     // 2. 檢查權限
-    if (
-      !scope.permissions.includes(requiredPermission) &&
-      !scope.permissions.includes('full')
-    ) {
+    if (!scope.permissions.includes(requiredPermission) && !scope.permissions.includes('full')) {
       return false;
     }
 
     // 3. 檢查限制
     for (const restriction of scope.restrictions) {
-      if (!await this.checkRestriction(restriction)) {
+      if (!(await this.checkRestriction(restriction))) {
         return false;
       }
     }
@@ -170,7 +166,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       DelegationEventNames.DELEGATION_VALIDATED,
       DelegationTopics.AUTHORIZATION,
       { delegationId, requiredPermission, valid },
-      'CompleteDelegationManager'
+      'CompleteDelegationManager',
     );
     return valid;
   }
@@ -178,9 +174,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 獲取授權
    */
-  async getDelegation(
-    delegationId: string
-  ): Promise<ICompleteDelegationScope | null> {
+  async getDelegation(delegationId: string): Promise<ICompleteDelegationScope | null> {
     return this._delegations.get(delegationId) ?? null;
   }
 
@@ -215,10 +209,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
    * 讀回統一日誌的事件條目（依 delegationId 過濾，可指定 sinceId 斷點續傳），
    * 供 SSE 訂閱端點連線時回放。
    */
-  async getFullEventTrail(
-    delegationId?: string,
-    sinceId?: number
-  ): Promise<BusEventRecord[]> {
+  async getFullEventTrail(delegationId?: string, sinceId?: number): Promise<BusEventRecord[]> {
     const all = await getDefaultJournal().readAll();
     return all
       .filter((e) => e.kind === 'event')
@@ -235,17 +226,14 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
             ts: e.ts,
             source: e.source ?? '',
             payload: e.payload ?? {},
-          }) as BusEventRecord
+          }) as BusEventRecord,
       );
   }
 
   /**
    * 終止授權
    */
-  async terminateDelegation(
-    delegationId: string,
-    reason: string
-  ): Promise<void> {
+  async terminateDelegation(delegationId: string, reason: string): Promise<void> {
     const scope = this._delegations.get(delegationId);
     if (!scope) {
       throw new Error(`Delegation not found: ${delegationId}`);
@@ -263,7 +251,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
       DelegationEventNames.DELEGATION_TERMINATED,
       DelegationTopics.AUTHORIZATION,
       { delegationId, reason },
-      'CompleteDelegationManager'
+      'CompleteDelegationManager',
     );
 
     // 2. 移除索引
@@ -277,9 +265,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 獲取活躍授權列表
    */
-  async getActiveDelegations(
-    principalId?: string
-  ): Promise<ICompleteDelegationScope[]> {
+  async getActiveDelegations(principalId?: string): Promise<ICompleteDelegationScope[]> {
     const now = Date.now();
     const activeDelegations: ICompleteDelegationScope[] = [];
 
@@ -309,9 +295,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 獲取代理者的授權列表
    */
-  async getAgentDelegations(
-    agentId: string
-  ): Promise<ICompleteDelegationScope[]> {
+  async getAgentDelegations(agentId: string): Promise<ICompleteDelegationScope[]> {
     const now = Date.now();
     const agentDelegations: ICompleteDelegationScope[] = [];
 
@@ -387,9 +371,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 創建授權簽章
    */
-  private async signDelegation(
-    scope: ICompleteDelegationScope
-  ): Promise<string> {
+  private async signDelegation(scope: ICompleteDelegationScope): Promise<string> {
     const data = JSON.stringify({
       delegationId: scope.delegationId,
       principalId: scope.principalId,
@@ -405,9 +387,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 驗證簽章
    */
-  private async verifySignature(
-    scope: ICompleteDelegationScope
-  ): Promise<boolean> {
+  private async verifySignature(scope: ICompleteDelegationScope): Promise<boolean> {
     const expectedSignature = await this.signDelegation({
       ...scope,
       signature: '',
@@ -419,9 +399,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 檢查限制條件
    */
-  private async checkRestriction(
-    restriction: DelegationRestriction
-  ): Promise<boolean> {
+  private async checkRestriction(restriction: DelegationRestriction): Promise<boolean> {
     // 基本限制檢查
     switch (restriction.type) {
       case 'scope':
@@ -444,22 +422,14 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 記錄終止
    */
-  private async recordTermination(
-    delegationId: string,
-    reason: string
-  ): Promise<void> {
-    console.log(
-      `[DelegationManager] 授權終止: ${delegationId}, 原因: ${reason}`
-    );
+  private async recordTermination(delegationId: string, reason: string): Promise<void> {
+    console.log(`[DelegationManager] 授權終止: ${delegationId}, 原因: ${reason}`);
   }
 
   /**
    * 添加到主體索引
    */
-  private addToPrincipalIndex(
-    principalId: string,
-    delegationId: string
-  ): void {
+  private addToPrincipalIndex(principalId: string, delegationId: string): void {
     const delegationIds = this._principalDelegations.get(principalId) ?? new Set();
     delegationIds.add(delegationId);
     this._principalDelegations.set(principalId, delegationIds);
@@ -468,10 +438,7 @@ export class CompleteDelegationManager implements ICompleteDelegationManager {
   /**
    * 從主體索引移除
    */
-  private removeFromPrincipalIndex(
-    principalId: string,
-    delegationId: string
-  ): void {
+  private removeFromPrincipalIndex(principalId: string, delegationId: string): void {
     const delegationIds = this._principalDelegations.get(principalId);
     if (delegationIds) {
       delegationIds.delete(delegationId);

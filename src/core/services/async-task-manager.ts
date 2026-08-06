@@ -26,7 +26,13 @@ import {
 // Types — kept for backward compatibility with existing API routes
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type TaskStatus = 'pending' | 'running' | 'processing' | 'completed' | 'failed' | 'cancelled';
+export type TaskStatus =
+  | 'pending'
+  | 'running'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
 
 export interface TaskProgress {
   readonly taskId: string;
@@ -75,12 +81,19 @@ const RESULT_TTL_MS = 3600000;
 /** Map a TaskState (Redis) to a TaskProgress (legacy API shape) */
 function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskProgress {
   const currentChapter = state.completedChapters.length;
-  const runningChapter = Object.entries(state.chapters).find(
-    ([, ch]) => ch.status === 'running'
-  );
+  const runningChapter = Object.entries(state.chapters).find(([, ch]) => ch.status === 'running');
   const wordsSoFar = Object.values(state.chapters).reduce((sum, ch) => sum + (ch.words || 0), 0);
   const chNum = runningChapter ? parseInt(runningChapter[0], 10) : currentChapter;
-  const gate = chNum <= 3 ? 'traceable' : chNum <= 5 ? 'transparent' : chNum <= 13 ? 'tangible' : chNum <= 24 ? 'trustworthy' : 'trackable';
+  const gate =
+    chNum <= 3
+      ? 'traceable'
+      : chNum <= 5
+        ? 'transparent'
+        : chNum <= 13
+          ? 'tangible'
+          : chNum <= 24
+            ? 'trustworthy'
+            : 'trackable';
   const chapterTitle = V5_CHAPTERS[chNum - 1]?.title ?? `第${chNum}章`;
 
   return {
@@ -94,14 +107,14 @@ function stateToProgress(state: TaskState, extra?: Partial<TaskProgress>): TaskP
     fiveTGate: gate,
     tagsCreated: state.completedChapters.length,
     decisionsCount: state.completedChapters.length * 3,
-    percent: state.totalChapters > 0
-      ? Math.round((state.completedChapters.length / state.totalChapters) * 100)
-      : 0,
+    percent:
+      state.totalChapters > 0
+        ? Math.round((state.completedChapters.length / state.totalChapters) * 100)
+        : 0,
     startedAt: state.createdAt,
     updatedAt: state.updatedAt,
-    completedAt: state.status === 'completed' || state.status === 'failed'
-      ? state.updatedAt
-      : undefined,
+    completedAt:
+      state.status === 'completed' || state.status === 'failed' ? state.updatedAt : undefined,
     error: state.error,
     result: state.result
       ? {
@@ -124,7 +137,14 @@ export function createTask(
   companyId: string,
   templateId?: string,
   noteIds?: string[],
-  customCompany?: { name: string; industry: string; employees: number; annualRevenue: string; scope1Tco2e: number; scope2Tco2e: number }
+  customCompany?: {
+    name: string;
+    industry: string;
+    employees: number;
+    annualRevenue: string;
+    scope1Tco2e: number;
+    scope2Tco2e: number;
+  },
 ): string {
   const taskId = `tsk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const now = new Date().toISOString();
@@ -135,10 +155,19 @@ export function createTask(
 
   // In-memory overlay (for immediate reads)
   const task: TaskProgress = {
-    taskId, status: 'pending', taskType: 'report_generation', currentChapter: 0, totalChapters,
-    chapterTitle: '', wordsSoFar: 0, fiveTGate: '', tagsCreated: 0,
+    taskId,
+    status: 'pending',
+    taskType: 'report_generation',
+    currentChapter: 0,
+    totalChapters,
+    chapterTitle: '',
+    wordsSoFar: 0,
+    fiveTGate: '',
+    tagsCreated: 0,
     decisionsCount: 0,
-    percent: 0, startedAt: now, updatedAt: now,
+    percent: 0,
+    startedAt: now,
+    updatedAt: now,
     templateId: templateId || 'gri',
     ...(noteIds && noteIds.length > 0 ? { noteIds } : {}),
     ...(customCompany ? { customCompany } : {}),
@@ -146,9 +175,14 @@ export function createTask(
   tasks.set(taskId, task);
 
   // Persist to Redis (non-blocking)
-  createTaskState(taskId, companyId, templateId || '', totalChapters, 'json').catch((err: unknown) => {
-    console.warn('[AsyncTask] Redis createTaskState failed:', err instanceof Error ? err.message : String(err));
-  });
+  createTaskState(taskId, companyId, templateId || '', totalChapters, 'json').catch(
+    (err: unknown) => {
+      console.warn(
+        '[AsyncTask] Redis createTaskState failed:',
+        err instanceof Error ? err.message : String(err),
+      );
+    },
+  );
 
   return taskId;
 }
@@ -163,7 +197,10 @@ export async function getTask(taskId: string): Promise<TaskProgress | null> {
     const state = await getTaskState(taskId);
     if (state) return stateToProgress(state);
   } catch (err: unknown) {
-    console.warn('[AsyncTask] Redis getTaskState failed:', err instanceof Error ? err.message : String(err));
+    console.warn(
+      '[AsyncTask] Redis getTaskState failed:',
+      err instanceof Error ? err.message : String(err),
+    );
   }
 
   return null;
@@ -179,7 +216,10 @@ export function cancelTask(taskId: string): boolean {
 
   taskCancelled.add(taskId);
   const timeout = taskTimeouts.get(taskId);
-  if (timeout) { clearTimeout(timeout); taskTimeouts.delete(taskId); }
+  if (timeout) {
+    clearTimeout(timeout);
+    taskTimeouts.delete(taskId);
+  }
 
   const updated: TaskProgress = {
     ...task,
@@ -274,7 +314,9 @@ export function startAsyncTask(
         const completedAt = new Date().toISOString();
         const durationMs = Date.now() - startTime;
 
-        const trinityHash = createHash('sha256').update(`${taskId}:${report?.totalWords ?? wordsSoFar}`).digest('hex');
+        const trinityHash = createHash('sha256')
+          .update(`${taskId}:${report?.totalWords ?? wordsSoFar}`)
+          .digest('hex');
 
         const result: TaskProgress = {
           ...current,
@@ -297,7 +339,6 @@ export function startAsyncTask(
 
         // Persist to Redis (non-blocking)
         completeTaskStateRedis(taskId, result).catch(() => {});
-
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Unknown error';
         const failed: TaskProgress = {
@@ -322,7 +363,16 @@ export function startAsyncTask(
     }
 
     const chNum = chapterIndex + 1;
-    const gate = chNum <= 3 ? 'traceable' : chNum <= 5 ? 'transparent' : chNum <= 13 ? 'tangible' : chNum <= 24 ? 'trustworthy' : 'trackable';
+    const gate =
+      chNum <= 3
+        ? 'traceable'
+        : chNum <= 5
+          ? 'transparent'
+          : chNum <= 13
+            ? 'tangible'
+            : chNum <= 24
+              ? 'trustworthy'
+              : 'trackable';
     const currentTitle = V5_CHAPTERS[chapterIndex]?.title ?? `第${chNum}章`;
 
     // Mark chapter as running in Redis
@@ -366,7 +416,7 @@ export function startAsyncTask(
       console.warn('Backend RAG Retrieval failed:', e);
     }
 
-    let finalPrompt = ragContext 
+    let finalPrompt = ragContext
       ? `參考以下真實數據：\n${ragContext}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`
       : `為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要，字數大約 300 字。`;
 
@@ -378,10 +428,10 @@ export function startAsyncTask(
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             tool: 'lhub_ask',
-            arguments: { task: 'summarize', context: ragContext }
-          })
-        }).then(r => r.json());
-        
+            arguments: { task: 'summarize', context: ragContext },
+          }),
+        }).then((r) => r.json());
+
         if (lhubRes.success) {
           finalPrompt = `根據 L-Hub 蜂羣摘要：\n${lhubRes.data}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要。`;
         }
@@ -390,83 +440,88 @@ export function startAsyncTask(
       }
     }
 
-    agnesApi.processRequest(finalPrompt).then((res: AgnesResponse) => {
-      const generatedText = res.success ? String(res.data.output ?? '') : `[Fallback] ${currentTitle} 內容生成中...`;
-      const chapterWords = generatedText.length;
-      wordsSoFar += chapterWords;
-      chapterIndex++;
+    agnesApi
+      .processRequest(finalPrompt)
+      .then((res: AgnesResponse) => {
+        const generatedText = res.success
+          ? String(res.data.output ?? '')
+          : `[Fallback] ${currentTitle} 內容生成中...`;
+        const chapterWords = generatedText.length;
+        wordsSoFar += chapterWords;
+        chapterIndex++;
 
-      const progress: TaskProgress = {
-        ...current,
-        status: 'running',
-        currentChapter: chapterIndex,
-        totalChapters,
-        chapterTitle: currentTitle,
-        wordsSoFar,
-        fiveTGate: gate,
-        tagsCreated: chapterIndex,
-        decisionsCount: chapterIndex * 3,
-        percent: Math.round((chapterIndex / totalChapters) * 100),
-        updatedAt: new Date().toISOString(),
-      };
-      tasks.set(taskId, progress);
-      onProgress?.(progress);
+        const progress: TaskProgress = {
+          ...current,
+          status: 'running',
+          currentChapter: chapterIndex,
+          totalChapters,
+          chapterTitle: currentTitle,
+          wordsSoFar,
+          fiveTGate: gate,
+          tagsCreated: chapterIndex,
+          decisionsCount: chapterIndex * 3,
+          percent: Math.round((chapterIndex / totalChapters) * 100),
+          updatedAt: new Date().toISOString(),
+        };
+        tasks.set(taskId, progress);
+        onProgress?.(progress);
 
-      // Persist chapter completion to Redis (non-blocking)
-      updateChapterProgress(taskId, chNum, {
-        status: 'completed',
-        words: chapterWords,
-        content: generatedText,
-      }).catch(() => {});
+        // Persist chapter completion to Redis (non-blocking)
+        updateChapterProgress(taskId, chNum, {
+          status: 'completed',
+          words: chapterWords,
+          content: generatedText,
+        }).catch(() => {});
 
-      // Update lightweight progress record for polling
-      setProgressInfo({
-        taskId,
-        status: 'running',
-        completed: chapterIndex,
-        total: totalChapters,
-        percentage: Math.round((chapterIndex / totalChapters) * 100),
-        currentChapter: currentTitle,
-        wordsSoFar,
-        updatedAt: new Date().toISOString(),
-      }).catch(() => {});
+        // Update lightweight progress record for polling
+        setProgressInfo({
+          taskId,
+          status: 'running',
+          completed: chapterIndex,
+          total: totalChapters,
+          percentage: Math.round((chapterIndex / totalChapters) * 100),
+          currentChapter: currentTitle,
+          wordsSoFar,
+          updatedAt: new Date().toISOString(),
+        }).catch(() => {});
 
-      // Yield to event loop
-      const delay = 50 + Math.random() * 50;
-      const timeout = setTimeout(processNextChapter, delay);
-      taskTimeouts.set(taskId, timeout);
-    }).catch((err: unknown) => {
-      console.warn('[V5 Task] AGNES API Failed, using fallback.', err);
-      const chapterWords = 500 + Math.floor(Math.random() * 200);
-      wordsSoFar += chapterWords;
-      chapterIndex++;
+        // Yield to event loop
+        const delay = 50 + Math.random() * 50;
+        const timeout = setTimeout(processNextChapter, delay);
+        taskTimeouts.set(taskId, timeout);
+      })
+      .catch((err: unknown) => {
+        console.warn('[V5 Task] AGNES API Failed, using fallback.', err);
+        const chapterWords = 500 + Math.floor(Math.random() * 200);
+        wordsSoFar += chapterWords;
+        chapterIndex++;
 
-      const progress: TaskProgress = {
-        ...current,
-        status: 'running',
-        currentChapter: chapterIndex,
-        totalChapters,
-        chapterTitle: currentTitle,
-        wordsSoFar,
-        fiveTGate: gate,
-        tagsCreated: chapterIndex,
-        decisionsCount: chapterIndex * 3,
-        percent: Math.round((chapterIndex / totalChapters) * 100),
-        updatedAt: new Date().toISOString(),
-      };
-      tasks.set(taskId, progress);
-      onProgress?.(progress);
+        const progress: TaskProgress = {
+          ...current,
+          status: 'running',
+          currentChapter: chapterIndex,
+          totalChapters,
+          chapterTitle: currentTitle,
+          wordsSoFar,
+          fiveTGate: gate,
+          tagsCreated: chapterIndex,
+          decisionsCount: chapterIndex * 3,
+          percent: Math.round((chapterIndex / totalChapters) * 100),
+          updatedAt: new Date().toISOString(),
+        };
+        tasks.set(taskId, progress);
+        onProgress?.(progress);
 
-      // Persist chapter completion to Redis
-      updateChapterProgress(taskId, chNum, {
-        status: 'completed',
-        words: chapterWords,
-      }).catch(() => {});
+        // Persist chapter completion to Redis
+        updateChapterProgress(taskId, chNum, {
+          status: 'completed',
+          words: chapterWords,
+        }).catch(() => {});
 
-      const delay = 50 + Math.random() * 50;
-      const timeout = setTimeout(processNextChapter, delay);
-      taskTimeouts.set(taskId, timeout);
-    });
+        const delay = 50 + Math.random() * 50;
+        const timeout = setTimeout(processNextChapter, delay);
+        taskTimeouts.set(taskId, timeout);
+      });
   }
 
   const initialTimeout = setTimeout(processNextChapter, 50);
@@ -480,7 +535,11 @@ export function startAsyncTask(
 async function updateTaskStateRedis(taskId: string, status: string): Promise<void> {
   const state = await getTaskState(taskId);
   if (state) {
-    await setTaskState({ ...state, status: status as TaskStatus, updatedAt: new Date().toISOString() });
+    await setTaskState({
+      ...state,
+      status: status as TaskStatus,
+      updatedAt: new Date().toISOString(),
+    });
   }
 }
 
@@ -492,13 +551,15 @@ async function completeTaskStateRedis(taskId: string, result: TaskProgress): Pro
     ...state,
     status: 'completed',
     updatedAt: new Date().toISOString(),
-    result: result.result ? {
-      totalWords: result.result.totalWords,
-      totalTags: result.result.totalTags,
-      trinityHash: result.result.trinityHash,
-      durationMs: result.result.durationMs,
-      companyId: result.result.companyId,
-    } : undefined,
+    result: result.result
+      ? {
+          totalWords: result.result.totalWords,
+          totalTags: result.result.totalTags,
+          trinityHash: result.result.trinityHash,
+          durationMs: result.result.durationMs,
+          companyId: result.result.companyId,
+        }
+      : undefined,
   });
 }
 
