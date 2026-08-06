@@ -296,3 +296,5 @@ prisma/prisma/
 Omni-Sanctuary/Artifacts/keys/*.txt
 Omni-Sanctuary/Artifacts/keys/*.json
 Omni-Sanctuary/Artifacts/keys/*.env
+tencentdb-memory/.env
+apps/tencentdb-memory/.env
