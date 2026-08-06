@@ -72,15 +72,12 @@ loadGatewayEnv();
 // Also strips markdown code fences that may wrap the final JSON/text.
 // Ported from universal-tag-service.ts splitThinking() for consistency.
 function stripGemma4Thinking(raw) {
-  if (typeof raw !== 'string') return raw ?? '';
-  return raw
-    .replace(
-      /<\|?channel>?\s*thought([\s\S]*?)(?:<channel\/>|<\/?channel>|<channel\|>|\|)/gi,
-      (_m, body) => body ?? '',
-    )
-    .replace(/```(?:json)?\s*([\s\S]*?)```/gi, '$1')
-    .replace(/<\|?channel>?/gi, '')
-    .trim();
+  if (typeof raw !== 'string') return raw;
+  const START = '<|channel>thought';
+  const END = '<channel|>';
+  if (!raw.includes(START)) return raw;
+  const lastEnd = raw.lastIndexOf(END);
+  return lastEnd === -1 ? raw.slice(raw.indexOf(START) + START.length) : raw.slice(lastEnd + END.length);
 }
 
 // ── Config ────────────────────────────────────────────────────
@@ -341,12 +338,12 @@ async function dispatchAI(task, skillId) {
   try {
     console.log(`[OmniGateway] Trying primary: ${primary.provider}/${primary.model}`);
     if (primary.provider === 'groq' && GROQ_API_KEY) {
-      const raw = await callGroq(prompt, ESG_SYSTEM_PROMPT, primary.model);
-      return { content: stripGemma4Thinking(raw), provider: 'Groq', model: primary.model, taskType, strategy: routing.strategy };
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, primary.model);
+      return { content, provider: 'Groq', model: primary.model, taskType, strategy: routing.strategy };
     }
     if (primary.provider === 'openrouter' && OPENROUTER_KEY) {
-      const raw = await callOpenRouter(primary.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
-      return { content: stripGemma4Thinking(raw), provider: 'OpenRouter', model: primary.model, taskType, strategy: routing.strategy };
+      const content = await callOpenRouter(primary.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: primary.model, taskType, strategy: routing.strategy };
     }
   } catch (e) {
     console.warn(`[OmniGateway] Primary ${primary.provider}/${primary.model} failed:`, e.message);
@@ -356,12 +353,12 @@ async function dispatchAI(task, skillId) {
   try {
     console.log(`[OmniGateway] Trying fallback1: ${fallback1.provider}/${fallback1.model}`);
     if (fallback1.provider === 'groq' && GROQ_API_KEY) {
-      const raw = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback1.model);
-      return { content: stripGemma4Thinking(raw), provider: 'Groq', model: fallback1.model, taskType, strategy: routing.strategy };
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback1.model);
+      return { content, provider: 'Groq', model: fallback1.model, taskType, strategy: routing.strategy };
     }
     if (fallback1.provider === 'openrouter' && OPENROUTER_KEY) {
-      const raw = await callOpenRouter(fallback1.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
-      return { content: stripGemma4Thinking(raw), provider: 'OpenRouter', model: fallback1.model, taskType, strategy: routing.strategy };
+      const content = await callOpenRouter(fallback1.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: fallback1.model, taskType, strategy: routing.strategy };
     }
   } catch (e) {
     console.warn(`[OmniGateway] Fallback1 ${fallback1.provider}/${fallback1.model} failed:`, e.message);
@@ -371,12 +368,12 @@ async function dispatchAI(task, skillId) {
   try {
     console.log(`[OmniGateway] Trying fallback2: ${fallback2.provider}/${fallback2.model}`);
     if (fallback2.provider === 'groq' && GROQ_API_KEY) {
-      const raw = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback2.model);
-      return { content: stripGemma4Thinking(raw), provider: 'Groq', model: fallback2.model, taskType, strategy: routing.strategy };
+      const content = await callGroq(prompt, ESG_SYSTEM_PROMPT, fallback2.model);
+      return { content, provider: 'Groq', model: fallback2.model, taskType, strategy: routing.strategy };
     }
     if (fallback2.provider === 'openrouter' && OPENROUTER_KEY) {
-      const raw = await callOpenRouter(fallback2.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
-      return { content: stripGemma4Thinking(raw), provider: 'OpenRouter', model: fallback2.model, taskType, strategy: routing.strategy };
+      const content = await callOpenRouter(fallback2.model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
+      return { content, provider: 'OpenRouter', model: fallback2.model, taskType, strategy: routing.strategy };
     }
   } catch (e) {
     console.warn(`[OmniGateway] Fallback2 ${fallback2.provider}/${fallback2.model} failed:`, e.message);
@@ -916,15 +913,15 @@ process.on('uncaughtException', (err) => {
   errorMetrics.uncaughtExceptions++;
   logError('UNCAUGHT_EXCEPTION', err);
   
-  // 嘗試通知 Telegram (bot is declared later, guard against TDZ)
-  try {
-    if (typeof bot !== 'undefined' && bot) {
+  // 嘗試通知 Telegram
+  if (bot) {
+    try {
       bot.sendMessage(
         process.env.TELEGRAM_CHAT_ID || '',
         `🚨 [OmniGateway] Uncaught Exception:\n${err.message}\n${err.stack?.slice(0, 300)}`
       ).catch(() => {});
-    }
-  } catch {}
+    } catch {}
+  }
   
   // 廣播到 WebSocket
   broadcastWS({ type: 'CRITICAL_ERROR', source: 'Process', payload: { error: err.message } });

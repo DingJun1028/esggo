@@ -140,7 +140,7 @@ export class InMemoryEventStore implements EventStore {
     endTime: number, 
     filters?: EventFilter
   ): Promise<TimeRiftEvent[]> {
-    let results: TimeRiftEvent[] = [];
+    const results: TimeRiftEvent[] = [];
     
     for (const event of this.events.values()) {
       if (event.timestamp >= startTime && event.timestamp <= endTime) {

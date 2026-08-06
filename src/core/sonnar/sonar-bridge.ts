@@ -7,6 +7,7 @@ import type { CrawlResultItem } from '../../crawlers/base-crawler';
 import type { CrawlResult } from '../../crawlers/base-crawler';
 import type { ChangeEvent } from '../../lib/engines/subscription-engine';
 import { subscriptionEngine } from '../../lib/engines/subscription-engine';
+import { generateHash } from './hash-lock';
 
 export interface BridgeResult {
   crawlSourceId: string;

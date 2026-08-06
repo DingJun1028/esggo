@@ -97,4 +97,14 @@ module.exports = [
       '@typescript-eslint/no-unused-vars': 'off',
     },
   },
+  // Declaration files (.d.ts): ambient type declarations legitimately use `any`
+  // and `require` — suppressing these keeps the warning gate meaningful for real code.
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 ];

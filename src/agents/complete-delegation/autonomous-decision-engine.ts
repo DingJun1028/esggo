@@ -337,7 +337,7 @@ export class AutonomousDecisionEngine implements IAutonomousDecisionEngine {
    */
   private calculateOptionScore(
     option: DecisionOption,
-    _constraints: DecisionConstraint[]
+    constraints: DecisionConstraint[]
   ): number {
     // 使用提供的評分作為基礎，如果沒有的話使用預設值
     let score = option.score ?? 0.5;

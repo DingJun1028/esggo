@@ -24,13 +24,14 @@ export function OmniPieChart({
 
   const total = data && data.length > 0 ? data.reduce((sum, d) => sum + d.value, 0) : 0;
 
+  const getCoordinatesForPercent = (percent: number) => {
+    const x = Math.cos(2 * Math.PI * percent) * radius;
+    const y = Math.sin(2 * Math.PI * percent) * radius;
+    return [x, y];
+  };
+
   // Pre-compute slice data to avoid mutating variables during render
   const sliceData = useMemo(() => {
-    const getCoordinatesForPercent = (percent: number) => {
-      const x = Math.cos(2 * Math.PI * percent) * radius;
-      const y = Math.sin(2 * Math.PI * percent) * radius;
-      return [x, y];
-    };
     if (!data || data.length === 0 || total === 0) return [];
     let cumulative = 0;
     return data.map((slice, i) => {
