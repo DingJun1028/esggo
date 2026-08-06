@@ -434,7 +434,7 @@ export function TabBar({ tabs, active, onChange }: TabBarProps) {
               : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
           }`}
         >
-          {tab.icon && <span>{tab.icon}</span>}
+          {tab.icon && <span aria-hidden="true">{tab.icon}</span>}
           <span>{tab.label}</span>
           {tab.count !== undefined && (
             <span
@@ -480,20 +480,23 @@ export function SearchInput({
 
   return (
     <div className="relative">
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" aria-hidden="true">🔍</span>
       <input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
+        aria-label={placeholder}
         className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#009EB0]/50 focus:border-[#009EB0] transition-all"
       />
       {value && (
         <button
           onClick={() => setValue('')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+          aria-label="清除搜尋"
+          title="清除搜尋"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#009EB0] rounded-md px-1"
         >
-          ✕
+          <span aria-hidden="true">✕</span>
         </button>
       )}
     </div>
