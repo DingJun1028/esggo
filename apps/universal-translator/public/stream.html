@@ -2,49 +2,60 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b0f17">
-  <title>萬能語種橋樑 · 觀眾端</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>語種橋樑 · 觀眾端</title>
   <style>
-    :root{ --bg:#0b0f17; --panel:#141b29; --panel2:#0e1623; --accent:#36e0c0; --accent2:#7c5cff;
-      --txt:#e8eef7; --muted:#8a97ad; --line:#1f2a3d; --radius:18px; --shadow:0 8px 30px rgba(0,0,0,.45); }
-    html[data-theme="light"]{ --bg:#eef2f7; --panel:#fff; --panel2:#f4f7fb; --txt:#16202e; --muted:#5b687e; --line:#dbe3ee; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
-      background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
-      min-height:100vh;padding:12px;transition:.3s}
-    html[data-theme="light"] body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-    .wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-    #transcript{flex:1;min-height:120px;max-height:36vh;overflow:auto;background:var(--panel2);
-      border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.02rem;line-height:1.55}
-    #transcript .me{color:var(--accent)}
-    .status{font-size:.76rem;color:var(--muted);min-height:1.1em}
-    .badge{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-size:.7rem;color:var(--accent)}
+    body{font-family:sans-serif;background:#0b0f17;color:#e8eef7;padding:16px}
+    .panel{background:#141b29;border:1px solid #3a465c;border-radius:8px;padding:12px;margin:12px 0}
+    #transcript{flex:1;min-height:120px;overflow:auto;background:#0e1623;border:1px solid #3a465c;border-radius:12px;padding:12px;font-size:1rem}
+    #transcript .me{color:#36e0c0}.status{color:#8a97ad}.badge{background:#0e1623;border:1px solid #3a465c;border-radius:8px;padding:3px 8px}
+    .room-info{margin-bottom:8px;background:#141b29;padding:8px;border-radius:8px}
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header><h1>萬能語種橋樑 · 觀眾端</h1></header>
   <div class="panel">
-    <div class="badge">即時語種橋樑</div>
+    <h1>語種橋樑 · 觀眾端</h1>
+    <p>掃描講者 QR Code 即可觀看即時翻譯</p>
+    <div class="room-info" id="roomInfo">房間: <span id="roomId">-</span></div>
+  </div>
+  <div class="panel">
+    <div class="badge">即時即時翻譯</div>
     <div id="transcript" aria-live="polite">（翻譯文字會顯示在這裡）</div>
   </div>
-  <div class="status" id="status"></div>
-</div>
-<script>
-const API = location.origin + '/translate';
-const $ = s => document.querySelector(s);
-let es = new EventSource('/stream');
-es.onopen = () => { $('#status').textContent = '已連線'; };
-es.onmessage = (e) => {
-  const d = JSON.parse(e.data);
-  const txt = d.translations?.['zh-TW'] || d.text;
-  const p = document.createElement('p');
-  p.textContent = txt;
-  $('#transcript').appendChild(p);
-};
-es.onerror = () => { $('#status').textContent = '連線斷線，正在重連…'; };
-</script>
+  <script>
+  const params = new URLSearchParams(location.search);
+  const src = params.get('src') || 'studio';
+  const room = params.get('room') || 'default';
+  document.getElementById('roomId').textContent = room;
+
+  // SSE 連線
+  const es = new EventSource('/stream?src=' + src + (room ? '&room=' + room : ''));
+  es.onopen = () => console.log('已連到:', src, room);
+  es.onerror = () => console.log('連線斷線，正在重連…');
+
+  // 接收翻譯結果
+  es.addEventListener('translation', e => {
+    const d = JSON.parse(e.data);
+    const out = document.getElementById('transcript');
+    // 支援來自 studio 的多語結果
+    if (d.translations) {
+      for (const [code, txt] of Object.entries(d.translations)) {
+        const p = document.createElement('p');
+        p.innerHTML = '<b>' + code + ':</b> ' + txt;
+        out.appendChild(p);
+      }
+    } else if (d.text) {
+      const p = document.createElement('p');
+      p.textContent = d.text;
+      out.appendChild(p);
+    }
+    out.scrollTop = out.scrollHeight;
+  });
+  es.addEventListener('heartbeat', () => console.log('心跳'));
+  es.addEventListener('room-status', e => {
+    const d = JSON.parse(e.data);
+    console.log('房間狀態:', d.broadcast ? '開播' : '待機');
+  });
+  </script>
 </body>
 </html>
