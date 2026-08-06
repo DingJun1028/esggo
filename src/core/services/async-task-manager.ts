@@ -346,21 +346,20 @@ export function startAsyncTask(
           // Always add generic keywords that might be in reports
           if (userKeywords.length === 0) userKeywords.push(currentTitle);
 
-          const scored = chunks.map((chunk: RagChunk) => {
-            const content = String(chunk.content || '').toLowerCase();
-            let score = 0;
-            for (const kw of userKeywords) {
-              if (content.includes(kw)) score++;
-            }
-            return { ...chunk, score };
-          });
-          
-          scored.sort((a: ScoredChunk, b: ScoredChunk) => b.score - a.score);
-          const topChunks = scored.slice(0, 3).filter((c: ScoredChunk) => c.score > 0 || scored.length <= 3);
-          
-          if (topChunks.length > 0) {
-            ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
+        const scored = chunks.map((chunk: RagChunk) => {
+          const content = String(chunk.content || '').toLowerCase();
+          let score = 0;
+          for (const kw of userKeywords) {
+            if (content.includes(kw)) score++;
           }
+          return { ...chunk, score };
+        });
+        
+        scored.sort((a: ScoredChunk, b: ScoredChunk) => b.score - a.score);
+        const topChunks = scored.slice(0, 3).filter((c: ScoredChunk) => c.score > 0 || scored.length <= 3);
+        
+        if (topChunks.length > 0) {
+          ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
         }
       }
     } catch (e) {
