@@ -12,6 +12,7 @@
 import { generateV5Report, getV5Companies, V5_CHAPTERS } from './report-generator-v5';
 import { agnesApi, type AgnesResponse } from '@/lib/agnes-api';
 import { createHash } from 'crypto';
+import { adminDb } from '@/lib/firebase-admin';
 import {
   createTaskState,
   getTaskState,
