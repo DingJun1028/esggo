@@ -45,8 +45,8 @@ async function sshExec(
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   const sshArgs = [
     "-o", "StrictHostKeyChecking=no",
-    "-o", `ConnectTimeout=10`,
-    "-o", `BatchMode=yes`,
+    "-o", "ConnectTimeout=10",
+    "-o", "BatchMode=yes",
     "-p", String(VPS_CONNECTION.port),
     "-i", VPS_CONNECTION.keyPath,
     `${VPS_CONNECTION.user}@${VPS_CONNECTION.host}`,
