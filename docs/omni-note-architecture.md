@@ -61,10 +61,11 @@ interface IComponentCore<T> {
   readonly uuid: string;        // 萬能永憶主體分發的唯一 ID
   readonly version: string;     // 語義化版本
   readonly timestamp: number;   // 刻印時間戳
-  readonly evidence: {
-    origin_id: string;          // 原始憑證 ID (如 PDF UUID)
-    origin_hash: string;        // SHA-256 指紋 (真/信)
-    extraction_method: 'OCR' | 'IoT' | 'Manual';
+  evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+    [key: string]: any;     // 允許動態屬性如 hash_lock 等
   };
   lifecycle_events: Array<any>; // 生命週期 Hook (Trackable)
   data: T;                      // 數據本體

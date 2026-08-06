@@ -79,7 +79,7 @@ export class OmniSingularity implements IOmniSingularity {
         name: "OmniSingularity",
         purpose: "the_one_and_only_origin",
         philosophy: "道生一，一生二，二生三，三生萬物",
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 
@@ -166,7 +166,7 @@ export class OmniSingularity implements IOmniSingularity {
         purpose: intent.purpose,
         manifestFrom: this.signature.uuid,
         manifestAt: Date.now(),
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     };
 

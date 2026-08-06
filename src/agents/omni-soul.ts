@@ -126,7 +126,7 @@ export class OmniSoul implements IOmniSoul {
         type: "omni-soul",
         name: this._config.name,
         purpose: "semantic_guidance_and_governance_alignment",
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 
