@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>萬能藍圖中心 (Omni-Blueprint Hub) ｜ 控制中樞</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 頂欄：單行原則 -->
+  <header class="topbar">
+    <h1><span class="spark">◆</span> 萬能藍圖中心 <span style="color:var(--txt-2);font-weight:400;font-size:12px;">Omni-Blueprint Hub</span></h1>
+    <div class="meta">
+      <span>版本 <b id="meta-version">v0.5.0</b></span>
+      <span>本地時鐘 <b id="meta-time">--:--:--</b></span>
+      <span>心核 <b>IComponentCore</b></span>
+    </div>
+  </header>
+
+  <!-- 便當盒網格 -->
+  <main class="bento">
+
+    <!-- 四大支柱 -->
+    <section class="tile span-2">
+      <h2>核心四大支柱 <span class="tag">4 Pillars</span></h2>
+      <div class="pillars">
+        <div class="pillar"><span class="ico">🧭</span><div><div class="t">簡單性</div><div class="d">三步極簡工作流 · #零儀式感</div></div></div>
+        <div class="pillar"><span class="ico">⚡</span><div><div class="t">快速性</div><div class="d">響應 &lt;300ms · 命中 &gt;98%</div></div></div>
+        <div class="pillar"><span class="ico">✅</span><div><div class="t">正確性</div><div class="d">零幻覺驗算 · #5TProtocol</div></div></div>
+        <div class="pillar"><span class="ico">♻️</span><div><div class="t">永續性</div><div class="d">自動熵減 · #熵減寶石</div></div></div>
+      </div>
+    </section>
+
+    <!-- 5T 協議 -->
+    <section class="tile">
+      <h2>5T 數據品質公約</h2>
+      <div class="protocol5t">
+        <span class="t5">Traceable</span>
+        <span class="t5">Trackable</span>
+        <span class="t5">Transparent</span>
+        <span class="t5">Tangible</span>
+        <span class="t5">Trustworthy</span>
+      </div>
+      <div class="note">所有元件寫入後即刻 Hash Lock 固化 ＋ Object.freeze()，符合「4 可 1 不可」狀態機。</div>
+    </section>
+
+    <!-- 藍圖產品卡 -->
+    <section class="tile span-2">
+      <h2>萬能藍圖產品 <span class="tag">Products</span></h2>
+      <div id="product-cards"></div>
+    </section>
+
+    <!-- 即時流 (LIVE) -->
+    <section class="tile">
+      <h2>即時轉播流 <span class="tag">Live</span></h2>
+      <div class="badge-row"><span class="badge">已推播 <b id="live-count">0</b></span><span class="badge">LIVE_BROADCAST</span></div>
+      <div class="stream" id="live-feed" style="margin-top:10px;"></div>
+    </section>
+
+    <!-- 單一資料表 -->
+    <section class="tile span-3">
+      <h2>單一資料表 (Single Data Table) <span class="tag">Unified</span></h2>
+      <div class="badge-row"><span class="badge">實體總數 <b id="table-count">0</b></span><span class="badge">BLUEPRINT + PRODUCT + BROADCAST_LOG</span></div>
+      <div class="table-wrap" style="margin-top:10px;">
+        <table class="single">
+          <thead><tr><th>ID</th><th>Type</th><th>BlueprintType</th><th>Host</th><th>HashLock</th></tr></thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
