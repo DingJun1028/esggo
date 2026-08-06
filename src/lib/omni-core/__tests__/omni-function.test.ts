@@ -115,8 +115,8 @@ describe('OmniFunctionLibrary (函數庫)', () => {
 
   it('內建函數：esggo.filterTasks / sortTasks', () => {
     const tasks: OmniTask[] = [
-      { id: 'T1', title: 'a', priority: 'low', status: 'pending', tags: [], createdAt: 1, updatedAt: 1 },
-      { id: 'T2', title: 'b', priority: 'high', status: 'pending', tags: [], createdAt: 2, updatedAt: 2 },
+      { id: 'T1', title: 'a', priority: 'low', status: 'pending', tags: [], createdAt: 1, updatedAt: 1, isFrozen: true },
+      { id: 'T2', title: 'b', priority: 'high', status: 'pending', tags: [], createdAt: 2, updatedAt: 2, isFrozen: true },
     ];
     const filter: OmniTaskFilter = { priority: 'high', due: 'all', status: 'all' };
     const filtered = omniFn.call('esggo.filterTasks', tasks, filter) as OmniTask[];
