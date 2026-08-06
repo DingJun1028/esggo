@@ -327,7 +327,7 @@ export function EmptyState({
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="mt-4 px-4 py-2 text-xs font-semibold bg-[#009EB0] text-white rounded-lg hover:bg-[#007d8f] transition-colors"
+          className="mt-4 px-4 py-2 text-xs font-semibold bg-[#009EB0] text-white rounded-lg hover:bg-[#007d8f] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
         >
           {actionLabel}
         </button>
