@@ -392,7 +392,10 @@ export function startAsyncTask(
         
         if (chunks.length > 0) {
           // Break currentTitle into keywords (at least 2 chars)
-          const userKeywords = currentTitle.toLowerCase().split(/[\\s、，。]/).filter(k => k.length > 1);
+          const userKeywords = currentTitle
+            .toLowerCase()
+            .split(/[\\s、，。]/)
+            .filter((k) => k.length > 1);
           // Always add generic keywords that might be in reports
           if (userKeywords.length === 0) userKeywords.push(currentTitle);
 
