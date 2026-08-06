@@ -5,6 +5,8 @@ compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "my-worker/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 [build]
 command = "npm --prefix my-worker install && npm --prefix my-worker run build"
@@ -13,5 +15,22 @@ command = "npm --prefix my-worker install && npm --prefix my-worker run build"
 ENVIRONMENT = "production"
 SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
+# KV 存儲免費模型列表
+# id 改由環境變數注入（避免佔位符硬錯）；部署前須 export FREE_MODELS_KV_ID / FREE_MODELS_KV_PREVIEW_ID
+# 注意：本 repo 目前缺 Workers 入口 src/index.ts 與 dist/ 構建產物，
+#       Workers Builds 仍會失敗，需另開 smart-ai-router 實作後才會轉綠。
+[[kv_namespaces]]
+binding = "FREE_MODELS_KV"
+id = "${FREE_MODELS_KV_ID}"
+preview_id = "${FREE_MODELS_KV_PREVIEW_ID}"
+
+# Secret 金鑰（需在 Cloudflare Dashboard 或 wrangler secret put 設定）
+# [secrets]
+# OPENROUTER_API_KEY = ""
+# GROQ_API_KEY = ""
+# HF_TOKEN = ""
+
+# 觀測/日誌
 [observability]
 enabled = true
+logpush = true
