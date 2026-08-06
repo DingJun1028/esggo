@@ -83,15 +83,13 @@ function HubChip() {
 export default {
   id: ID, // must match the folder name
   name: 'ESGGO Hub',
+  defaultEnabled: true,
   register(ctx) {
-    // Live tick channel (accelerator only; polling fallback below stays).
-    // ctx.socket is a no-op on OAuth remotes, so the 15s poll covers that case.
-    ctx.socket('/events', () => {
-      queryClient.invalidateQueries({ queryKey: STATUS_KEY })
-    })
+    // Polling fallback — ctx.socket is a no-op on OAuth remotes.
+    // React Query handles cache invalidation via refetchInterval.
 
-    // Shared query — polls the plugin's own backend every 15s.
-    // ctx.rest is scoped to /api/plugins/esggo-hub.
+    // Shared query hook — defined once, used by both HubPane and HubPage.
+    // Placed at register scope so both components share the same useQuery instance.
     function useHub() {
       return useQuery({
         queryKey: STATUS_KEY,
