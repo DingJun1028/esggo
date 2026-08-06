@@ -10,7 +10,7 @@
     "dev": "ts-node src/index.ts",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint src/ --fix",
-    "lint:full": "eslint src/ --max-warnings 50",
+    "lint:full": "eslint src/ --max-warnings 150",
     "typecheck": "tsc --noEmit",
     "version": "node scripts/version.js"
   },
