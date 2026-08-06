@@ -33,4 +33,3 @@ preview_id = "${FREE_MODELS_KV_PREVIEW_ID}"
 # 觀測/日誌
 [observability]
 enabled = true
-logpush = true

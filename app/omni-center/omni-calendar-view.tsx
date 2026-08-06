@@ -24,6 +24,12 @@ const liquidGlassCard = {
   borderRadius: '16px',
 };
 
+// ⚡ Bolt: Hoisted static variables and pure functions out of component to prevent redundant memory allocation per render
+const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+
 export function OmniCalendarView() {
   const [tasks, setTasks] = useState<OmniTask[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -37,9 +43,6 @@ export function OmniCalendarView() {
     });
     return () => unsubscribe();
   }, []);
-
-  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-  const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth(); 
@@ -111,9 +114,6 @@ export function OmniCalendarView() {
     }
     return cells;
   };
-
-  const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
