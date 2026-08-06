@@ -34,6 +34,9 @@ preview_id = "${FREE_MODELS_KV_PREVIEW_ID}"
 [build]
 command = "pnpm install && pnpm run build"
 
+[build]
+command = "npm run build"
+
 # 觀測/日誌
 [observability]
 enabled = true
