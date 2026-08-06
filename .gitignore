@@ -153,7 +153,6 @@ bin/
 cli/scratch/
 config/
 dashboard/
-/data/
 dataconnect/
 esggo/node_modules/
 esggo-dashboard/
@@ -164,7 +163,6 @@ inventory-tracker/
 my-agent/
 omnimcp/
 omniscope/
-prisma/dev.db
 prisma/node_modules/
 #packages/
 render_cli/
@@ -270,8 +268,7 @@ dist/
 .idea/
 .vscode/
 
-# Static reports (generated, not source)
-reports/
+# Static reports are now in data/reports/
 README.OMNICOMPONENT.md
 TECHNICAL_INTEGRITY.md
 UNIVERSAL_COMPONENT_MATRIX.md

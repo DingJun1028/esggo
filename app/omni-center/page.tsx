@@ -9,6 +9,7 @@ import { RagKnowledgeManager } from './rag-knowledge-manager';
 import { WuzuoNoteView } from './wuzuo-note-view';
 import { OmniCalendarView } from './omni-calendar-view';
 import { UniversalOmniConsole } from './universal-omni-console';
+import LearningCenter from './learning-center';
 import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
@@ -120,6 +121,7 @@ const radarPath = Object.values(SCORES).map((v,i)=>{
 }).join(' ')+' Z';
 
 const tabs: {id:Tab; label:string; icon:string}[] = [
+  {id:'learning', label:'學習中心',icon:'🎓'},
   {id:'dashboard',label:'萬能總攬',icon:'◎'},
   {id:'notes',    label:'萬能筆記',icon:'📝'},
   {id:'tasks',    label:'萬能任務',icon:'✅'},
@@ -133,7 +135,7 @@ const tabs: {id:Tab; label:string; icon:string}[] = [
 ];
 
 export default function OmniCenterPage() {
-  const [tab, setTab] = useState<Tab>('dashboard');
+  const [tab, setTab] = useState<Tab>('learning');
   const [notes, setNotes] = useState<NoteData[]>(DEMO_NOTES);
   const [zkpCount, setZkpCount] = useState<number>(0);
   const [pulse, setPulse] = useState(false);
@@ -478,6 +480,13 @@ export default function OmniCenterPage() {
       {tab === 'omniFn' && (
         <OmniBaseCard className="!p-4">
           <UniversalOmniConsole />
+        </OmniBaseCard>
+      )}
+
+      {/* Learning Center */}
+      {tab === 'learning' && (
+        <OmniBaseCard className="!p-4">
+          <LearningCenter />
         </OmniBaseCard>
       )}
     </div>
