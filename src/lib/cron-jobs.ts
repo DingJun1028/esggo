@@ -9,6 +9,12 @@
 
 import { prisma } from '@/lib/storage-service';
 
+const HAS_DATABASE_URL = Boolean(process.env.DATABASE_URL?.trim());
+
+if (!HAS_DATABASE_URL) {
+  console.warn('[Cron] DATABASE_URL is not set; skipping Prisma-dependent background jobs until a Postgres datasource is configured.');
+}
+
 // 雙向 Oracle 同步協調器 (全域全端全量終始矩陣)
 import { runBidirectionalSync, hydrateFromOracle } from '../core/tags/oracle-sync-matrix';
 
