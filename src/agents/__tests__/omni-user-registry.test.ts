@@ -13,7 +13,7 @@ function createMockMemory(): IOmniMemory {
     uuid: 'mock-memory',
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: {},
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' },
     store: vi.fn().mockResolvedValue('mock-id'),
     retrieve: vi.fn().mockResolvedValue(null),
     search: vi.fn().mockResolvedValue([]),
@@ -150,7 +150,11 @@ describe('OmniUserRegistry', () => {
 
   it('enhancedSearch() returns memory entries (mocked memory layer)', async () => {
     const registry = new OmniUserRegistry();
-    const entries = [makeEntry({ content: 'hello result' }), makeEntry({ content: 'another result' })];
+    const now = Date.now();
+    const entries = [
+      makeEntry({ content: 'hello result', createdAt: now - 60_000 }),
+      makeEntry({ content: 'another result', createdAt: now - 120_000 }),
+    ];
     vi.mocked(mockMemory.search).mockResolvedValue(entries);
 
     const results = await registry.enhancedSearch('user-1', 'hello');
@@ -158,6 +162,7 @@ describe('OmniUserRegistry', () => {
     expect(mockMemory.search).toHaveBeenCalled();
     // 比對關鍵欄位而非整物件深等（避免 CI 環境下 entry 參考/欄位微差導致 flaky）
     expect(results.length).toBe(entries.length);
+    // 同分時按 createdAt 新→舊（實作含穩定 tie-break，確定性排序）
     expect(results[0].content).toBe('hello result');
     expect(results[1].content).toBe('another result');
   });

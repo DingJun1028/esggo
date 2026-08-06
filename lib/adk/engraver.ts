@@ -40,7 +40,7 @@ export const engraveHashLock = <T>(
     timestamp,
     source_origin: source,
     payload,
-    evidence: [initialEvidence],
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', doc: [initialEvidence] },
     traceability_chain: [genesisLog],
   };
 

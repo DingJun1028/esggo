@@ -50,5 +50,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD curl -f -s -o /dev/null http://127.0.0.1:3000/api/healthz || exit 1
 
-# 啟動服務
-CMD ["pnpm", "start"]
+# 啟動服務（直接用 node 啟動避免 pnpm prepare hook 觸發）
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-H", "127.0.0.1"]

@@ -22,6 +22,7 @@ yarn-error.log*
 .env.secrets
 .env.example
 !vps/.env.example
+!apps/omni-blueprint-hub/.env.example
 .env.local.sample
 secrets/
 
@@ -154,7 +155,7 @@ config/
 dashboard/
 /data/
 dataconnect/
-esggo/
+esggo/node_modules/
 esggo-dashboard/
 esggo-funtions/
 esggo-omnimcp/
@@ -291,3 +292,8 @@ esggo-deploy.bundle
 
 # turbo task runner artifacts
 **/.turbo/
+
+# Omni-Sanctuary secret vault (only index commits, no plaintext)
+Omni-Sanctuary/Artifacts/keys/*.txt
+Omni-Sanctuary/Artifacts/keys/*.json
+Omni-Sanctuary/Artifacts/keys/*.env

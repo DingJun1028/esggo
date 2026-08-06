@@ -1,0 +1,96 @@
+# Auto-Repair Fix Actions
+# Maps each pattern ID to concrete shell commands
+
+fix_actions:
+  # ── Dependabot / pnpm audit overrides ──
+  DAB-001:
+    description: "Add patch-level override to pnpm-workspace.yaml"
+    commands:
+      - "cat pnpm-workspace.yaml"
+      - "pnpm audit --prod"
+      - "git add pnpm-workspace.yaml pnpm-lock.yaml"
+      - "git commit -m 'fix(deps): resolve Dependabot alerts via patch-level overrides'"
+      - "git push origin main"
+    verify:
+      - "pnpm audit --prod"
+      - "pnpm run test"
+
+  DAB-002:
+    description: "Create per-package Dependabot PR"
+    commands:
+      - "gh pr create --title 'fix(deps): upgrade {package}' --body 'Auto-generated Dependabot PR'"
+    verify:
+      - "gh pr list --state open"
+
+  # ── SSH Permission Fix ──
+  SSH-001:
+    description: "Fix SSH key permissions and reconnect"
+    commands:
+      - "chmod 600 ~/.ssh/esggo_vps_fix"
+      - "chmod 600 ~/.ssh/esggo_original"
+      - "ssh -i ~/.ssh/esggo_vps_fix -o StrictHostKeyChecking=no -o ConnectTimeout=10 dingjunhong1028@161.118.248.180 'echo SSH_OK'"
+    verify:
+      - "ssh -i ~/.ssh/esggo_vps_fix -o StrictHostKeyChecking=no -o ConnectTimeout=10 dingjunhong1028@161.118.248.180 'echo SSH_OK'"
+
+  SSH-002:
+    description: "Check VPS reachability"
+    commands:
+      - "ping -c 2 -W 3 161.118.248.180"
+      - "ssh -i ~/.ssh/esggo_vps_fix -o ConnectTimeout=10 dingjunhong1028@161.118.248.180 'echo SSH_OK'"
+
+  # ── Build Fixes ──
+  BLD-001:
+    description: "Regenerate Prisma client"
+    commands:
+      - "npx prisma generate"
+      - "pnpm rebuild @prisma/client"
+    verify:
+      - "pnpm run build"
+
+  BLD-002:
+    description: "Reinstall missing modules"
+    commands:
+      - "pnpm install"
+    verify:
+      - "pnpm run build"
+
+  # ── Lockfile Merge ──
+  LCK-001:
+    description: "Resolve lockfile merge conflict"
+    commands:
+      - "git checkout --theirs pnpm-lock.yaml"
+      - "pnpm install"
+    verify:
+      - "pnpm audit --prod"
+
+  # ── .env.example Dedup ──
+  ENV-001:
+    description: "Deduplicate .env.example blocks"
+    commands:
+      - "python3 scripts/dedup_env.py .env.example"
+    verify:
+      - "grep -c 'LANGFUSE' .env.example"
+
+  # ── Python Truncation ──
+  PYT-001:
+    description: "Write script to file then execute"
+    commands:
+      - "cat > /tmp/fix_script.py << 'EOF'\n# script content\nEOF\npython3 /tmp/fix_script.py"
+    verify:
+      - "echo 'Script executed successfully'"
+
+  # ── VPS PM2 ──
+  VPS-001:
+    description: "SSH to VPS and reload PM2"
+    commands:
+      - "ssh -i ~/.ssh/esggo_vps_fix -o StrictHostKeyChecking=no -o ConnectTimeout=10 dingjunhong1028@161.118.248.180 'cd /opt/esggo && pm2 reload ecosystem.config.js'"
+    verify:
+      - "ssh -i ~/.ssh/esggo_vps_fix -o StrictHostKeyChecking=no -o ConnectTimeout=10 dingjunhong1028@161.118.248.180 'pm2 list'"
+
+# ── Strategy Escalation ──
+escalation:
+  after_retries: 3
+  actions:
+    - "Create GitHub issue with error details"
+    - "Notify user via Telegram"
+    - "Escalate to manual intervention"

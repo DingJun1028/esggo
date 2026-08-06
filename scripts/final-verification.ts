@@ -28,7 +28,7 @@ async function finalVerification() {
   // Run the 9 magic effects again as a final smoke test
   console.log('\n=== Magic Effect Smoke Test ===');
   const chaos = await core.chaosHealing.triggerChaos({
-    uuid: 'evt-final', version: '1.0.0', timestamp: Date.now(), evidence: {},
+    uuid: 'evt-final', version: '1.0.0', timestamp: Date.now(), evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' },
     source_origin: 'verify', topic: 'final', lifecycle_path: [], payload: {},
   } as any);
   console.log('ChaosHealing   :', chaos.chaosId ? 'OK' : 'FAIL');

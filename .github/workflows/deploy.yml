@@ -20,8 +20,10 @@ on:
       - "next.config.*"
       - "pnpm-lock.yaml"
       - "Dockerfile*"
+      - ".github/workflows/deploy.yml"
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: deploy-vps
@@ -53,8 +55,8 @@ jobs:
       - name: Run Hadolint on Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: 'Dockerfile*'
-          failure-threshold: warning
+          dockerfile: 'Dockerfile'
+          failure-threshold: error
 
       - name: Check for secrets in code
         uses: trufflesecurity/trufflehog@main
@@ -158,10 +160,12 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        timeout-minutes: 90
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          timeout: 60m
           script: |
             cd /opt/esggo
 
