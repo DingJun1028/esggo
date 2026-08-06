@@ -423,6 +423,9 @@ const busEvents = [];
 
 // ── Express + HTTP Server ─────────────────────────────────────
 const app = express();
+
+// Trust first proxy (Cloudflare → VPS), required for express-rate-limit
+app.set('trust proxy', 1);
 const httpServer = createServer(app);
 
 // WebSocket setup
