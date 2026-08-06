@@ -52,7 +52,9 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
     try {
       const existingPair = await prisma.tagPair.findFirst({ where: { uuid } });
       if (existingPair) {
-        const meta = (existingPair.lifecycleHooks ? JSON.parse(existingPair.lifecycleHooks) : {}) as Record<string, unknown>;
+        const meta = (
+          existingPair.lifecycleHooks ? JSON.parse(existingPair.lifecycleHooks) : {}
+        ) as Record<string, unknown>;
         await prisma.tagPair.update({
           where: { id: existingPair.id },
           data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
@@ -118,7 +120,9 @@ export async function reconcileAll(): Promise<{
     if (e.uuid) terminalByUuid.set(e.uuid, Math.max(terminalByUuid.get(e.uuid) ?? 0, e.seq ?? 0));
   }
   // 合併所有出現過的 uuid
-  const allUuids = Array.from(new Set<string>([...Array.from(appByUuid.keys()), ...Array.from(terminalByUuid.keys())]));
+  const allUuids = Array.from(
+    new Set<string>([...Array.from(appByUuid.keys()), ...Array.from(terminalByUuid.keys())]),
+  );
   const entities = allUuids.map((uuid) => ({
     uuid,
     originSeq: appByUuid.get(uuid) ?? 0,
@@ -134,11 +138,17 @@ export async function reconcileAll(): Promise<{
 }
 
 // ── 4. push: 把 app 落後的實體補推 Oracle (app->oracle) ───────────────
-export async function pushBehindOracle(rows: SyncMatrixRow[]): Promise<{ pushed: number; failed: number }> {
+export async function pushBehindOracle(
+  rows: SyncMatrixRow[],
+): Promise<{ pushed: number; failed: number }> {
   let pushed = 0;
   let failed = 0;
   for (const r of rows) {
-    const res = await syncTagPairToOracle({ uuid: r.uuid, action: 'TRUST_GRANT', timestamp: Date.now() });
+    const res = await syncTagPairToOracle({
+      uuid: r.uuid,
+      action: 'TRUST_GRANT',
+      timestamp: Date.now(),
+    });
     if (res.ok) pushed++;
     else failed++;
   }
@@ -147,7 +157,9 @@ export async function pushBehindOracle(rows: SyncMatrixRow[]): Promise<{ pushed:
 
 // ── 5. pull: 把 Oracle 落後的實體補拉 app (oracle->app) ───────────────
 // 即 hydration 的子集: 只補拉 app 缺失的 uuid。
-export async function pullBehindApp(rows: SyncMatrixRow[]): Promise<{ pulled: number; failed: number }> {
+export async function pullBehindApp(
+  rows: SyncMatrixRow[],
+): Promise<{ pulled: number; failed: number }> {
   if (rows.length === 0) return { pulled: 0, failed: 0 };
   const res = await pullFromOracle(0);
   if (!res.ok) return { pulled: 0, failed: rows.length };
