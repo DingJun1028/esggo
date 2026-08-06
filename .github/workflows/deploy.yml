@@ -59,8 +59,11 @@ jobs:
           failure-threshold: error
 
       - name: Check for secrets in code
+        if: github.event_name == 'push'
         uses: trufflesecurity/trufflehog@main
         with:
+          base: ${{ github.event.before }}
+          head: ${{ github.event.after }}
           extra_args: --only-verified
 
   # ─── Code Quality ─────────────────────────────────────────────
