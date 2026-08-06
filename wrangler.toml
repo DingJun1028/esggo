@@ -11,6 +11,9 @@ not_found_handling = "single-page-application"
 [build]
 command = "npm --prefix my-worker install && npm --prefix my-worker run build"
 
+[build]
+command = "npx --yes pnpm install --frozen-lockfile"
+
 [vars]
 ENVIRONMENT = "production"
 SMART_ROUTER_VERSION = "2.0.0-beta.1"
