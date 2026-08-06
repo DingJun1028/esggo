@@ -260,7 +260,10 @@ export class OmniAgentGateway {
     taskType: string
   ): Promise<any> {
     // 1. 建立證據資料
-    const evidence: Record<string, any> = {
+    const evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any } = {
+      originCause: 'unknown',
+      processTrace: [],
+      finalEffect: 'unknown',
       model: model.id,
       promptLength: prompt.length,
       taskType,

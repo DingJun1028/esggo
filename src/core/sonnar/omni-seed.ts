@@ -50,8 +50,7 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
         fromStage: 'genesis' as SeedEvolutionStage,
         toStage: 'genesis' as SeedEvolutionStage,
         trigger: 'planted',
-        evidence: {
-          location: targetLocation,
+        evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', location: targetLocation,
           plantedAt: Date.now(),
         },
       },
@@ -78,7 +77,7 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
  * @returns 新創建的種子（dormant 狀態）
  */
 export function createOmniSeed(params?: {
-  evidence?: Record<string, unknown>;
+  evidence?: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any; };
   entropyControl?: number;
   hashLock?: string;
 }): IOmniSeed {

@@ -92,7 +92,7 @@ function createResult(
   status: TaskResultBase["status"],
   logs: string[],
   durationMs: number,
-  evidence?: Record<string, unknown>
+  evidence?: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any }
 ): TaskResultBase {
   const uuid = uuidv4();
   return {
@@ -235,6 +235,7 @@ export async function handleDeploy(params: DeployParams = {}): Promise<DeployRes
     logs.push(`[Deploy] ✅ 部署完成 (耗時: ${duration}ms)`);
 
     return createResult("success", logs, duration, {
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown',
       action: "deploy",
       target,
       services: target === "all" ? ["esggo-core", "omniagent-gateway"] : [target],
@@ -255,6 +256,7 @@ export async function handleDeploy(params: DeployParams = {}): Promise<DeployRes
     }
     
     return createResult("failed", logs, duration, {
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown',
       action: "deploy",
       target,
       error: String(error),
@@ -418,7 +420,7 @@ export async function handleHealthCheck(): Promise<HealthCheckResult> {
       logs,
       duration,
       {
-        action: "health_check",
+        originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "health_check",
         system,
         services,
         issues,
@@ -430,7 +432,7 @@ export async function handleHealthCheck(): Promise<HealthCheckResult> {
     logs.push(`[HealthCheck] ❌ 健康檢查失敗: ${error}`);
     
     return createResult("failed", logs, duration, {
-      action: "health_check",
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "health_check",
       error: String(error),
     }) as HealthCheckResult;
   }
@@ -517,7 +519,7 @@ export async function handleBackup(params: BackupParams = {}): Promise<BackupRes
     logs.push(`[Backup] ⏱️ 耗時: ${duration}ms`);
 
     return createResult("success", logs, duration, {
-      action: "backup",
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "backup",
       backupPath,
       sizeBytes,
       type,
@@ -528,7 +530,7 @@ export async function handleBackup(params: BackupParams = {}): Promise<BackupRes
     logs.push(`[Backup] ❌ 備份失敗: ${error}`);
     
     return createResult("failed", logs, duration, {
-      action: "backup",
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "backup",
       error: String(error),
     }) as BackupResult;
   }
@@ -606,7 +608,7 @@ export async function handleLogCleanup(params: LogCleanupParams = {}): Promise<L
     logs.push(`[LogCleanup] 📊 當前日誌大小: ${(totalLogSize / 1024 / 1024).toFixed(2)} MB`);
 
     return createResult("success", logs, duration, {
-      action: "log_cleanup",
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "log_cleanup",
       maxSizeMb,
       retainDays,
       currentLogSizeBytes: totalLogSize,
@@ -617,7 +619,7 @@ export async function handleLogCleanup(params: LogCleanupParams = {}): Promise<L
     logs.push(`[LogCleanup] ❌ 清理失敗: ${error}`);
     
     return createResult("failed", logs, duration, {
-      action: "log_cleanup",
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: "log_cleanup",
       error: String(error),
     }) as LogCleanupResult;
   }
@@ -649,7 +651,7 @@ export async function executeTask(
   const handler = taskHandlers[type];
   if (!handler) {
     return createResult("failed", [`Unknown task type: ${type}`], 0, {
-      action: type,
+      originCause: 'unknown', processTrace: [], finalEffect: 'unknown', action: type,
       error: `Unknown task type: ${type}`,
     });
   }
