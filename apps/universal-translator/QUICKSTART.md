@@ -1,72 +1,77 @@
-# 🌐 萬能即時翻譯 — 快速開始 (Quick Start)
+# 🐝 萬能語種橋樑 — 快速開始 (Quick Start)
 
-> OA-Team 雙蜂隊即時翻譯服務。LibreTranslate → MyMemory → 原文兜底，零付費 key 即可跑。
-
-## 前置
-
-- Node.js 18+
-- （選用）自建 LibreTranslate 實例
+> OA-Team 雙蜂隊共享翻譯服務。LibreTranslate → MyMemory → 原文兜底，零費用。
 
 ## 1. 安裝
 
 ```bash
 cd apps/universal-translator
 npm install
-cp .env.example .env      # 可留空，自動用 MyMemory 免費引擎
+cp .env.example .env  # 可留空，用 MyMemory 免費引擎
 ```
 
-## 2. 本機啟動
+## 2. 啟動服務
 
 ```bash
-npm start
-# 或 node server.mjs
+node server.mjs
+# 或 PM2 常駐
+pm2 start server.mjs --name universal-translator
 ```
 
-## 3. 驗證
+## 3. 測試 API
 
 ```bash
+# 健康檢查
 curl http://localhost:8788/health
-# {"status":"ok","version":"1.0.0",...}
+# => {"status":"ok","version":"1.1.0","stats":{...}}
 
+# 單語翻譯
 curl -X POST http://localhost:8788/translate \
   -H "Content-Type: application/json" \
   -d '{"text":"Hello, world","from":"en","to":"zh"}'
-# {"text":"你好世界","engine":"mymemory","cached":false,...}
-```
+# => {"text":"你好世界","engine":"mymemory","cached":false}
 
-多語平行翻譯（即時轉播場景）：
-
-```bash
+# 多語平行翻譯
 curl -X POST http://localhost:8788/translate \
   -H "Content-Type: application/json" \
-  -d '{"text":"Thank you","from":"en","targets":["zh","es","fr"]}'
+  -d '{"text":"Thank you","from":"en","targets":["zh","ja","es","fr"]}'
+# => {"translations":{"zh":"謝謝","ja":"ありがとう","es":"Gracias","fr":"Merci"},...}
 ```
 
-## 4. WebSocket 即時流
+## 4. 前端使用
 
-```js
-const ws = new WebSocket('ws://localhost:8788/ws');
-ws.onmessage = (e) => console.log(JSON.parse(e.data));
-ws.send(JSON.stringify({ text: 'Live caption', from: 'en', to: 'zh' }));
+### 講者端 (studio.html)
+
+1. 開 `public/studio.html`
+2. 選擇來源語言 → 按「開始收音」
+3. 說英文 → 瀏覽器列出轉錄 + 多語翻譯
+
+### 觀眾端 (stream.html)
+
+1. **VPS 部署後**：用 `https://translate.esggo.co` 觀眾
+2. **本機測試**：開 `public/stream.html` → 自動連到 `/stream` SSE 端點
+
+### 手動測試端點
+
+```bash
+# 觀眾端 (SSE)
+curl -N http://localhost:8788/stream
 ```
 
 ## 5. 生產部署 (VPS)
 
 ```bash
 bash deploy.sh
+# 會：rsync → npm install → pm2 重啟 → 健康檢查
 ```
-
-經 Cloudflare Tunnel 暴露於 `translate.esggo.co`（參考 M1 的 `memory.esggo.co` 模式）。
 
 ## API 一覽
 
-| 端點 | 方法 | 用途 |
-|------|------|------|
-| `/health` | GET | 健康檢查 + stats |
-| `/translate` | POST | 單語/多語翻譯 |
-| `/ws` | WS | 即時流翻譯 |
-
-回應含 5T 溯源標頭：`X-OA-Engine`、`X-OA-Cached`、`X-OA-Trace`。
+| 端點 | 方法 | 參數 | 用途 |
+|------|------|------|------|
+| `/health` | GET | - | 健康檢查 |
+| `/translate` | POST | `{text,from?,to?,targets?}` | 單語 / 多語翻譯 |
+| `/ws` | WS | `{text,from?,to?}` | WebSocket 即時通話 (若 ws 套件可用) |
 
 ---
-*源自 omni-blueprint-hub translate.mjs v2 引擎，封裝為獨立 OA-Team 服務。*
+*透過 TencentCloud TencentDB Agent Memory 共享記憶，完整集成於 OA-Team 雙蜂隊。*
