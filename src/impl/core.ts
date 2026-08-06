@@ -270,7 +270,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       model,
       messages: [
         { role: 'system', content: sysPrompt },
-        { role: 'user', content: userIntentStub },
+        { role: 'user', content: intent },
       ],
       temperature: 0.3,
       max_tokens: 400,
