@@ -180,7 +180,7 @@ async function getFirebaseKeys(): Promise<Array<{ kid: string; pem: string }>> {
 
 async function verifyFirebaseToken(
   token: string
-): Promise<{ uid: string; email?: string } | null> {
+): Promise<DecodedUser | null> {
   try {
     const { jwtVerify, importX509, decodeProtectedHeader } = await import('jose');
     const header = decodeProtectedHeader(token);
@@ -196,6 +196,14 @@ async function verifyFirebaseToken(
   } catch {
     return null;
   }
+}
+
+function getRoleFromClaims(claims: Record<string, unknown>): string | null {
+  const value = claims['role'];
+  if (value === 'student' || value === 'TA' || value === 'admin') {
+    return value;
+  }
+  return null;
 }
 
 // ─── Middleware Entry ────────────────────────────────────────────────
@@ -251,10 +259,13 @@ export async function middleware(request: NextRequest) {
       );
     }
 
+    const role = getRoleFromClaims(user.claims);
+
     // Inject user info into headers for downstream route handlers
     const response = NextResponse.next();
     response.headers.set('X-User-Id', user.uid);
     if (user.email) response.headers.set('X-User-Email', user.email);
+    if (role) response.headers.set('X-Auth-Role', role);
     response.headers.set('X-RateLimit-Remaining', String(remaining));
     return handleCors(request, applySecurityHeaders(response));
   }
