@@ -52,9 +52,11 @@ export function Sidebar() {
         )}
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 hover:bg-primary/5 rounded-xl transition-colors"
+          className="p-2 hover:bg-primary/5 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+          aria-label={isSidebarOpen ? "收起側邊欄" : "展開側邊欄"}
+          title={isSidebarOpen ? "收起側邊欄" : "展開側邊欄"}
         >
-          <Menu className="w-5 h-5 text-text-muted hover:text-primary transition-colors" />
+          <Menu className="w-5 h-5 text-text-muted hover:text-primary transition-colors" aria-hidden="true" />
         </button>
 
       </div>
