@@ -29,7 +29,7 @@ async function initializeSystem() {
   }
 
   // 5. Plant OmniSeed on the correct coordinate
-  const seed = createOmniSeed({ evidence: { purpose: 'system_init' } });
+  const seed = createOmniSeed({ evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',  purpose: 'system_init'  } });
   console.log('[OmniSeed] Created seed:', seed.uuid);
   
   // Plant seed at the core coordinate

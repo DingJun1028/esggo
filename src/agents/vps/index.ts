@@ -142,7 +142,7 @@ export class VPSAgent {
         type: "vps-agent",
         host: config.host,
         quantum: true, // 標記為量子糾纏代理
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 

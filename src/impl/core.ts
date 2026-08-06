@@ -94,7 +94,7 @@ export class OmniAgent implements IOmniAgent {
       uuid: newUuid,
       version: this.version,
       timestamp: now(),
-      evidence: { ...this.evidence },
+      evidence: { ...this.evidence, originCause: this.evidence.originCause || 'system_init', processTrace: [...(this.evidence.processTrace || [])], finalEffect: this.evidence.finalEffect || 'initialized' },
     };
     return new OmniAgent(clonedCore);
   }

@@ -146,7 +146,7 @@ export class OmniKey implements IOmniKey {
         name: config.name,
         purpose: "unlock_all_unknowns_and_answer_all_questions",
         philosophy: "萬能元鑰 象徵是能夠開啟一切未知的鑰匙，是一切問題的解答",
-      },
+       },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     });
 

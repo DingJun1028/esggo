@@ -27,7 +27,7 @@ CREATE TABLE omni_profile.component_vector (
   version     VARCHAR2(32),                    -- IComponentCore.version
   timestamp   NUMBER,                          -- IComponentCore.timestamp (epoch ms)
   embedding   VECTOR(1536),                    -- 知識向量
-  evidence    CLOB,                            -- IComponentCore.evidence (來源/證據)
+  evidence    CLOB,                            -- IComponentCore.evidence (觀因循果: originCause, processTrace, finalEffect)
   hash        VARCHAR2(128),                   -- hash-lock (內容指紋)
   frozen      NUMBER(1) DEFAULT 0,            -- freeze 旗標（凍結後不可改）
   created_at  TIMESTAMP DEFAULT SYSTIMESTAMP

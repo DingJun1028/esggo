@@ -163,7 +163,7 @@ describe('OmniAgentGateway ingress/egress', () => {
       stage: 'EMERGED',
       source_origin: 'tester',
       topic: 'ingress',
-      evidence: { hash: 'ok' },
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',  hash: 'ok'  },
       lifecycle_path: [],
       hashLock: 'lock-1',
     });
@@ -213,7 +213,7 @@ describe('OmniAgentGateway ingress/egress', () => {
       stage: 'EMERGED',
       source_origin: 'tester',
       topic: 'egress',
-      evidence: { hash: 'ok' },
+      evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',  hash: 'ok'  },
       lifecycle_path: [],
       hashLock: 'lock-2',
     });

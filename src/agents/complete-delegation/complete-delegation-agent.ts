@@ -77,7 +77,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
         finalEffect: 'unknown',
         delegationId: this.delegationScope.delegationId,
         principal: this.principal,
-      },
+       },
     };
   }
 
