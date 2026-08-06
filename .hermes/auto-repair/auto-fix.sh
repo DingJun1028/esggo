@@ -8,8 +8,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-AUTO_REPAIR_DIR="$REPO_ROOT/.hermes/auto-repair"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+AUTO_REPAIR_DIR="$SCRIPT_DIR"
 TRACKER="$AUTO_REPAIR_DIR/clone-tracker.py"
 ENGINE="$AUTO_REPAIR_DIR/repair-engine.py"
 TRACKER_LOG="$AUTO_REPAIR_DIR/tracker-log.jsonl"

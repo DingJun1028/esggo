@@ -139,10 +139,15 @@ def run_repair(error_output: str, task_id: str = None) -> dict:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python3 repair-engine.py <error_output_or_file>")
+        print("Usage: python3 repair-engine.py <error_output_or_file> [--task-id TASK_ID]")
         sys.exit(1)
 
     input_arg = sys.argv[1]
+    task_id = "REPAIR-" + datetime.now().strftime("%Y%m%d%H%M%S")
+    for i, arg in enumerate(sys.argv):
+        if arg == "--task-id" and i + 1 < len(sys.argv):
+            task_id = sys.argv[i + 1]
+            break
     if Path(input_arg).exists():
         error_text = Path(input_arg).read_text(encoding="utf-8")
     else:
