@@ -284,6 +284,8 @@ UNIVERSAL_COMPONENT_MATRIX.md
 !vps/omni/sql/
 !vps/omni/sql/*.sql
 esggo-deploy.bundle
+esggo-backup.bundle
+prisma/prisma/
 
 # 全量審計 sink 持久層（append-only JSONL，執行期產生）
 .audit/
