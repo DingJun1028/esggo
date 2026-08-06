@@ -342,6 +342,17 @@ export default {
       await cacheSet(env, rlKey, entries, rateLimitWindow);
     }
 
+    if (method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'access-control-allow-origin': '*',
+          'access-control-allow-methods': 'GET, POST, OPTIONS',
+          'access-control-allow-headers': 'content-type, authorization, x-omni-token',
+        },
+      });
+    }
+
     if (method !== 'GET' && method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
     if (pathname === '/status' || pathname === '/health') {
