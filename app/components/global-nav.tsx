@@ -62,6 +62,12 @@ const NAV = [
     icon: '👤',
     color: 'hover:text-accentBlue hover:bg-accentBlue/10',
   },
+  {
+    href: '/learning-center',
+    label: '學習中心',
+    icon: '🎓',
+    color: 'hover:text-accentGold hover:bg-accentGold/10',
+  },
 ];
 
 function toggleTheme() {

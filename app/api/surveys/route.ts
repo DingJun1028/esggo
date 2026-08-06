@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { adminDb } from '@/lib/firebase-admin';
 
 type SurveyRow = {
   id?: string;
@@ -20,9 +21,9 @@ type SurveyRow = {
 const memoryStore: SurveyRow[] = [];
 let memoryId = 1;
 
-function isMemoryBackend(): boolean {
+function isFirebaseBackend(): boolean {
   const backend = (process.env.SURVEY_BACKEND || '').trim().toLowerCase();
-  return backend === '' || backend === 'memory' || backend === 'local';
+  return backend === 'firebase';
 }
 
 function addMemoryRow(row: SurveyRow): SurveyRow {
@@ -33,6 +34,14 @@ function addMemoryRow(row: SurveyRow): SurveyRow {
 
 function getMemoryRows(): SurveyRow[] {
   return memoryStore.slice().sort((a, b) => (b.submittedAt || '').localeCompare(a.submittedAt || '')).slice(0, 200);
+}
+
+function asLoadableCollection(path: string) {
+  const ref = (adminDb as any).collection(path);
+  if (!ref) {
+    throw new Error('Survey storage is not configured');
+  }
+  return ref;
 }
 
 export async function POST(request: Request) {
@@ -68,10 +77,10 @@ export async function POST(request: Request) {
           question: payload.feedbacks?.question ?? null,
         },
         submittedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
-      if (!docRef) {
-        return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
-      }
+
       return NextResponse.json({ ok: true, id: docRef.id }, { status: 200 });
     }
 
@@ -90,6 +99,7 @@ export async function POST(request: Request) {
       },
       submittedAt: new Date().toISOString(),
     });
+
     return NextResponse.json({ ok: true, id: row.id }, { status: 200 });
   } catch (error) {
     console.error('[API] /api/surveys POST error:', error);
@@ -113,6 +123,7 @@ export async function GET() {
       const rows = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return NextResponse.json({ ok: true, rows }, { status: 200 });
     }
+
     return NextResponse.json({ ok: true, rows: getMemoryRows() }, { status: 200 });
   } catch (error) {
     console.error('[API] /api/surveys GET error:', error);
