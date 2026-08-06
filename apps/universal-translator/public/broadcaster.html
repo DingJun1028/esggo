@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>講者端 · 語種橋樑</title>
+  <style>
+    body{font-family:sans-serif;padding:16px;background:#0b0f17;color:#e8eef7}
+    input,select,button{padding:8px 12px;margin:4px 0;border-radius:6px;border:1px solid #3a465c}
+    button{background:#36e0c0;color:#06121a;font-weight:600}
+    #log{background:#141b29;color:#cbd5e1;padding:12px;border-radius:8px;min-height:100px}
+  </style>
+</head>
+<body>
+  <h1>講者端</h1>
+  <p><input id="text" placeholder="說點什麼..." style="width:100%"> <button onclick="send()">送出</button></p>
+  <div id="log"></div>
+  <script>
+  const API = location.origin + '/translate';
+  function log(m){ const el=document.getElementById('log'); el.innerHTML+=m+'<br>'; el.scrollTop=el.scrollHeight; }
+  async function send(){
+    const t = document.getElementById('text').value.trim();
+    if(!t) return;
+    log('<b>原文:</b> '+t);
+    const r = await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:t,from:'auto',targets:['zh-TW','ja','es','fr']})});
+    const d = await r.json();
+    log('<b>翻譯:</b> '+JSON.stringify(d.translations||d));
+    document.getElementById('text').value='';
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f17">
+  <title>萬能語種橋樑 · 講者端</title>
+  <style>
+    :root{ --bg:#0b0f17; --panel:#141b29; --panel2:#0e1623; --accent:#36e0c0; --accent2:#7c5cff;
+      --txt:#e8eef7; --muted:#8a97ad; --danger:#ff5d6c; --line:#1f2a3d; --radius:18px; --shadow:0 8px 30px rgba(0,0,0,.45); }
+    html[data-theme="light"]{ --bg:#eef2f7; --panel:#fff; --panel2:#f4f7fb; --txt:#16202e; --muted:#5b687e; --line:#dbe3ee; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
+      background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
+      min-height:100vh;padding:12px;transition:.3s}
+    html[data-theme="light"] body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
+    .wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+    header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;font-weight:800;color:#06121a;box-shadow:var(--shadow)}
+    h1{font-size:1.05rem;margin:0}.sub{color:var(--muted);font-size:.74rem}.conn{margin-left:auto;display:flex;align-items:center;gap:6px}
+    .dot{width:9px;height:9px;border-radius:50%;background:#3a465c;transition:.2s}.dot.on{background:var(--danger)}
+    #transcript{flex:1;min-height:120px;max-height:36vh;overflow:auto;background:var(--panel2);
+      border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.02rem;line-height:1.55}
+    #transcript .me{color:var(--accent)}.status{font-size:.76rem;color:var(--muted);min-height:1.1em}
+    .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-size:.7rem;color:var(--accent)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🈶</div><div><h1>萬能語種橋樑 · 講者端</h1><div class="sub">語音轉錄 + 多語即時翻譯</div></div>
+  </header>
+  <div class="panel" style="background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px">
+    <select id="lang">
+      <option value="en">英文</option><option value="zh-TW">中文(繁)</option>
+      <option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option>
+    </select>
+    <button id="start" class="live">🎙 開始收音</button>
+    <div class="status" id="status">Chrome/Edge 支援 Web Speech API。</div>
+  </div>
+  <div class="panel">
+    <div class="badge">即時轉錄 → 多語翻譯</div>
+    <div id="transcript" aria-live="polite">（轉錄會顯示在這裡）</div>
+  </div>
+</div>
+<script>
+const API = location.origin + '/translate';
+let recog=null, listening=false;
+const $ = s => document.querySelector(s);
+const startBtn=$('#start'), statusEl=$('#status'), box=$('#transcript');
+
+function append(t){ const p=document.createElement('div'); p.className='me'; p.textContent='▸ '+t; box.appendChild(p); pushTranslate(t); }
+function start(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ statusEl.textContent='請用 Chrome/Edge'; return; }
+  recog=new SR(); recog.lang=$('#lang').value; recog.continuous=true; recog.interimResults=true;
+  recog.onresult=(e)=>{ for(let i=e.resultIndex;i<e.results.length;i++) if(e.results[i].isFinal) append(e.results[i][0].transcript.trim()); };
+  recog.onstart=()=>{ listening=true; startBtn.textContent='⏹ 停止'; statusEl.textContent='收音中…'; };
+  recog.onend=()=>{ if(listening) recog.start(); };
+  recog.onerror=(e)=>{ if(e.error==='not-allowed') stop(); };
+  try{ recog.start(); }catch(e){ statusEl.textContent=e.message; }
+}
+function stop(){ listening=false; recog?.stop(); startBtn.textContent='🎙 開始收音'; statusEl.textContent='已停止。'; }
+startBtn.onclick=()=>listening?stop():start();
+
+function pushTranslate(text){
+  fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text,from:$('#lang').value,targets:['zh-TW','ja','es','fr']})})
+    .then(r=>r.json()).then(d=>console.log('翻譯:',d.translations||d)).catch(e=>console.error(e));
+}
+</script>
+</body>
+</html>
