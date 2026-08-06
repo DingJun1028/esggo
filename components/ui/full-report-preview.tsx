@@ -40,7 +40,7 @@ export const FullReportAuditPreview = ({ onClose }: { onClose: () => void }) => 
             </h2>
             <p className="text-slate-400 font-medium">全景路徑試作 - ADK 導覽小隊核定成果彙整</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+          <button onClick={onClose} aria-label="Close report" className="p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 focus:outline-none">
             <ShieldCheck className="w-8 h-8 text-slate-500" />
           </button>
         </div>

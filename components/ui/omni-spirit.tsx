@@ -121,13 +121,13 @@ export function OmniSpirit() {
               {responses.length === 0 ? (
                 <div className="space-y-2 text-sm">
                   <p className="text-slate-500 font-medium mb-3">歡迎喚醒 OmniOne 核心引擎。您可以嘗試以下指令：</p>
-                  <button onClick={() => handleActionClick("分析目前頁面數據並生成總結")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left">
+                  <button onClick={() => handleActionClick("分析目前頁面數據並生成總結")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left focus-visible:ring-2 focus-visible:ring-[#009E9D] focus:outline-none">
                      <span className="flex items-center gap-2 text-xs"><Search className="w-3.5 h-3.5" /> 頁面數據總結</span>
                   </button>
-                  <button onClick={() => handleActionClick("計算此章節可能的 5T 涵蓋率")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left">
+                  <button onClick={() => handleActionClick("計算此章節可能的 5T 涵蓋率")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left focus-visible:ring-2 focus-visible:ring-[#009E9D] focus:outline-none">
                      <span className="flex items-center gap-2 text-xs"><Command className="w-3.5 h-3.5" /> 計算 5T 涵蓋率</span>
                   </button>
-                  <button onClick={() => handleActionClick("開啟自主學習模式")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left">
+                  <button onClick={() => handleActionClick("開啟自主學習模式")} className="w-full flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 hover:bg-[#009E9D]/10 hover:border-[#009E9D]/30 rounded-lg text-slate-700 hover:text-[#009E9D] transition-all text-left focus-visible:ring-2 focus-visible:ring-[#009E9D] focus:outline-none">
                      <span className="flex items-center gap-2 text-xs"><Zap className="w-3.5 h-3.5 text-amber-500" /> 啟動自主模式</span>
                   </button>
                 </div>
