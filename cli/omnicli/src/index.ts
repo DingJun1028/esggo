@@ -15,8 +15,10 @@ program
     console.log(`[5T:Traceable] source_origin=omnicli command=${thisCommand.name()}`);
   });
 
-program
-  .command('gateway status')
+const gateway = program.command('gateway').description('Gateway 管理');
+
+gateway
+  .command('status')
   .description('查詢 OmniGateway 狀態（埠號/延遲/健康）')
   .option('--dry-run', '預演模式：不實際查詢，僅回報將執行動作')
   .action(async (opts) => {
@@ -29,8 +31,10 @@ program
     console.log('[BLOCKER] 需 Gateway 通線 + Bearer 鑑權');
   });
 
-program
-  .command('route list')
+const route = program.command('route').description('路由管理');
+
+route
+  .command('list')
   .description('列出 Gateway 路由規則')
   .option('--dry-run', '預演模式')
   .action(async (opts) => {
@@ -42,8 +46,10 @@ program
     console.log('[BLOCKER] 需 Gateway 通線 + Bearer 鑑權');
   });
 
-program
-  .command('auth check')
+const auth = program.command('auth').description('鑑權管理');
+
+auth
+  .command('check')
   .description('驗證 TDAI Bearer 鑑權有效性')
   .option('--dry-run', '預演模式')
   .action(async (opts) => {

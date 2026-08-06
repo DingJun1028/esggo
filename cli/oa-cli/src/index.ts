@@ -29,8 +29,10 @@ program
     console.log('[BLOCKER] 需 Gateway 通線 + Bearer 鑑權');
   });
 
-program
-  .command('agents list')
+const agents = program.command('agents').description('30 位代理管理');
+
+agents
+  .command('list')
   .description('列出 30 位代理（01-30）與所屬陣列')
   .option('--array <id>', '篩選陣列 1-5')
   .option('--dry-run', '預演模式')
@@ -43,8 +45,10 @@ program
     console.log('[BLOCKER] 需 Gateway 通線 + Hermes Agent 授權');
   });
 
-program
-  .command('task dispatch <prompt>')
+const task = program.command('task').description('任務派發與管理');
+
+task
+  .command('dispatch <prompt>')
   .description('派發任務到指定陣列（經 Hermes 路由）')
   .option('--array <id>', '目標陣列 1-5，預設由蜂王路由')
   .option('--dry-run', '預演模式')
