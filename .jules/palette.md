@@ -26,3 +26,7 @@
 ## 2026-07-24 - Interactive Icon Buttons in Complex Views
 **Learning:** Icon-only buttons used for secondary interactions (like calendar navigation, editing controls, or modal dismissals) within complex data-dense views like `DashboardView` often lack both accessible names (`aria-label`) and explicit keyboard focus indicators (`focus-visible`).
 **Action:** When auditing or implementing dense dashboard components, ensure all icon-only buttons receive descriptive `aria-label` and `title` attributes. Additionally, always explicitly hide their inner SVG icons using `aria-hidden="true"` and apply high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-primary focus:outline-none`) to guarantee they are discoverable and usable by assistive technologies and keyboard navigators alike.
+
+## 2024-07-31 - Mobile & Desktop Header Accessibility
+**Learning:** Core layout components like `mobile-header.tsx` and `header.tsx` contained multiple icon-only buttons (Menu, Notifications, Theme Switcher) that lacked explicit `aria-label` attributes and keyboard focus styling, making core navigation inaccessible to screen readers and keyboard users.
+**Action:** When implementing or auditing core layout headers, ensure all icon-only control buttons receive descriptive `aria-label` and `title` attributes. Furthermore, explicitly hide decorative inner SVGs with `aria-hidden="true"` and append `focus-visible:ring-2 focus-visible:ring-primary focus:outline-none` to guarantee clear focus state visibility during tab navigation.
