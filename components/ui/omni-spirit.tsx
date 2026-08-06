@@ -194,17 +194,20 @@ export function OmniSpirit() {
               />
               <button 
                 type="button" 
-                className="p-2 text-slate-400 hover:text-[#009E9D] hover:bg-[#009E9D]/10 rounded-lg transition-colors"
+                className="p-2 text-slate-400 hover:text-[#009E9D] hover:bg-[#009E9D]/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-[#009E9D]"
                 title="語音輸入"
+                aria-label="語音輸入"
               >
-                 <Mic className="w-4 h-4" />
+                 <Mic className="w-4 h-4" aria-hidden="true" />
               </button>
               <button 
                 type="submit" 
                 disabled={!query.trim() || isProcessing}
-                className="p-2 bg-[#009E9D] text-white rounded-lg hover:bg-[#00C2A8] transition-colors disabled:opacity-50"
+                className="p-2 bg-[#009E9D] text-white rounded-lg hover:bg-[#00C2A8] transition-colors disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-[#009E9D]"
+                title="送出指令"
+                aria-label="送出指令"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4" aria-hidden="true" />
               </button>
             </form>
           </motion.div>
