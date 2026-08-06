@@ -14,7 +14,7 @@ SSH="ssh -o ConnectTimeout=15 -i $KEY"
 SCP="scp -o ConnectTimeout=15 -i $KEY"
 PORT="${PORT:-8788}"
 
-FILES="server.mjs translate.mjs package.json .env.example"
+FILES="server.mjs translate.mjs package.json .env.example public/*.html"
 
 echo "◆ [1/4] 語法檢查"
 node --check server.mjs && node --check translate.mjs && echo "  ✓ 通過"
