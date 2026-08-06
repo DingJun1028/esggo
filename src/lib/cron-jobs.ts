@@ -1,6 +1,6 @@
 /**
  * ESGGO Cron Jobs — 自動化任務調度器
- * 
+ *
  * Jobs:
  * 1. daily-report-generator — 每日自動生成永續觀察者日報
  * 2. crawler-trigger — 每 6 小時執行 ESG 爬蟲
@@ -15,7 +15,11 @@ import { runBidirectionalSync, hydrateFromOracle } from '../core/tags/oracle-syn
 // ============================================================
 // Job: Daily Report Generator
 // ============================================================
-async function generateDailyReportJob(): Promise<{ success: boolean; message: string; reportDate: string }> {
+async function generateDailyReportJob(): Promise<{
+  success: boolean;
+  message: string;
+  reportDate: string;
+}> {
   console.log('[Cron] Starting daily report generation...');
   const startTime = Date.now();
 
@@ -129,7 +133,7 @@ async function checkUserAchievements(): Promise<{ checked: number; upgrades: num
         { name: 'seed', threshold: 0 },
       ];
 
-      const currentTier = tiers.find(t => user.totalPoints >= t.threshold);
+      const currentTier = tiers.find((t) => user.totalPoints >= t.threshold);
       if (currentTier && currentTier.name !== user.tier) {
         await prisma.userGrowth.update({
           where: { id: user.id },
@@ -233,9 +237,12 @@ export function initCronJobs(): () => void {
       if (now - job.lastRun >= job.schedule) {
         job.isRunning = true;
         job.lastRun = now;
-        job.task()
-          .catch(err => console.error(`[Cron] Job "${job.name}" error:`, err))
-          .finally(() => { job.isRunning = false; });
+        job
+          .task()
+          .catch((err) => console.error(`[Cron] Job "${job.name}" error:`, err))
+          .finally(() => {
+            job.isRunning = false;
+          });
       }
     }
   }, 60 * 1000);

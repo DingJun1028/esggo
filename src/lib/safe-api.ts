@@ -39,7 +39,7 @@ export async function safeFetch<T>(
     });
 
     if (!res.ok) {
-      const errorBody = await res.text().catch(() => "Unknown error");
+      const errorBody = await res.text().catch(() => 'Unknown error');
       return {
         data: null,
         error: `HTTP ${res.status}: ${res.statusText} — ${errorBody.slice(0, 200)}`,
@@ -50,10 +50,10 @@ export async function safeFetch<T>(
     const json: T = await res.json();
     return { data: json, error: null, status: res.status };
   } catch (err) {
-    if (err instanceof DOMException && err.name === "AbortError") {
+    if (err instanceof DOMException && err.name === 'AbortError') {
       return { data: null, error: `請求逾時 (${timeoutMs}ms)`, status: null };
     }
-    const message = err instanceof Error ? err.message : "網路連線失敗";
+    const message = err instanceof Error ? err.message : '網路連線失敗';
     return { data: null, error: message, status: null };
   } finally {
     clearTimeout(timeoutId);
@@ -68,8 +68,8 @@ export async function safePost<T>(
   options?: { timeout?: number },
 ): Promise<ApiResult<T>> {
   return safeFetch<T>(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
     timeout: options?.timeout,
   });
@@ -90,14 +90,14 @@ export function validateResponse<T>(
   if (!result.data) {
     return {
       data: null,
-      error: `${label ?? "API"} 回應為空`,
+      error: `${label ?? 'API'} 回應為空`,
       status: result.status,
     };
   }
   if (!validator(result.data)) {
     return {
       data: null,
-      error: `${label ?? "API"} 回應格式不正確`,
+      error: `${label ?? 'API'} 回應格式不正確`,
       status: result.status,
     };
   }
@@ -106,7 +106,7 @@ export function validateResponse<T>(
 
 // ─── HTML Sanitizer ────────────────────────────────────────────────
 
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from 'isomorphic-dompurify';
 
 /**
  * Basic HTML sanitizer for dangerouslySetInnerHTML.
@@ -116,17 +116,22 @@ export function sanitizeHtml(html: string): string {
 }
 
 // ─── Debug Logger ──────────────────────────────────────────────────
+// Re-exports structured logger from @lib/logger for backward compatibility.
+// Old usage: logger.info('module', 'message', data)
+// New usage: logger.info({ module }, 'message') or createModuleLogger('mod')
 
-const DEBUG = process.env.NODE_ENV === "development";
+import { logger as pinoLogger, createModuleLogger } from './logger';
 
 export const logger = {
   info: (module: string, message: string, data?: unknown) => {
-    if (DEBUG) console.log(`[ESGGO:${module}]`, message, data ?? "");
+    pinoLogger.info({ module, ...(data && typeof data === 'object' ? data : { data }) }, message);
   },
   warn: (module: string, message: string, data?: unknown) => {
-    console.warn(`[ESGGO:${module}]`, message, data ?? "");
+    pinoLogger.warn({ module, ...(data && typeof data === 'object' ? data : { data }) }, message);
   },
   error: (module: string, message: string, error?: unknown) => {
-    console.error(`[ESGGO:${module}]`, message, error ?? "");
+    pinoLogger.error({ module, err: error }, message);
   },
 };
+
+export { createModuleLogger };

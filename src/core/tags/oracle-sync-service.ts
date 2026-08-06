@@ -108,11 +108,10 @@ export async function syncTagPairToOracle(pair: {
     return { ok: false, reason: 'OMNI_DB_PWD not set — skipping Oracle sync' };
   }
   try {
-    const { stdout } = await execFileAsync(
-      PYTHON,
-      [SCRIPT, 'sync', JSON.stringify(pair)],
-      { env: { ...process.env }, timeout: 60000 },
-    );
+    const { stdout } = await execFileAsync(PYTHON, [SCRIPT, 'sync', JSON.stringify(pair)], {
+      env: { ...process.env },
+      timeout: 60000,
+    });
     const out = JSON.parse(stdout.trim());
     return { ok: !!out.ok, reason: out.ok ? undefined : out.error };
   } catch (e) {
