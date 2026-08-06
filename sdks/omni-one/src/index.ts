@@ -18,7 +18,7 @@ type CaseType = 'code_optimization'|'documentation'|'data_analysis'|'esg_report'
 type AwakeningLevel = 'dormant'|'awakening'|'active'|'transcendent';
 interface MemoryEntry { id:string; caseType:CaseType; input:string; output:string; confidence:number; timestamp:number; tags:string[]; relevanceScore?:number; }
 interface OmniOneState { level:AwakeningLevel; totalCasesProcessed:number; averageConfidence:number; memorySize:number; autonomousModeEnabled:boolean; lastProcessedAt?:number; }
-interface ProcessResult { caseId:string; caseType:CaseType; input:string; output:string; confidence:number; processingTimeMs:number; memoryHits:number; learningDelta:number; }
+interface ProcessResult { caseId:string; caseType:CaseType; input:string; output:string; confidence:number; processingTimeMs:number; memoryHits:number; learningDelta:number; readonly isFrozen: boolean; }
 
 // ═══════════════════════════════════════════════════════════════
 // SECTION 1: CaseHandler — 案件分類與路由
@@ -295,7 +295,7 @@ export class OmniOne {
     this._totalProcessed++;
     this.awakeningCore.updateLevel(this._totalProcessed);
 
-    return {
+    return Object.freeze({
       caseId,
       caseType,
       input,
@@ -304,7 +304,8 @@ export class OmniOne {
       processingTimeMs: Date.now() - startMs,
       memoryHits: memories.length,
       learningDelta,
-    };
+      isFrozen: true,
+    });
   }
 
   enableAutonomousMode(enable: boolean): void {
