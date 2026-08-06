@@ -75,21 +75,39 @@ const server = http.createServer(async (req, res) => {
   }
 
   res.writeHead(404, { 'content-type': 'application/json' });
-  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws | GET / (UI)' }));
+  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws | GET / (UI) | GET /stream (SSE)' }));
 });
 
-// WebSocket 即時流 (連入外部資料流即時翻譯)
-const wss = new WebSocketServer({ server, path: '/ws' });
-wss.on('connection', (ws) => {
-  ws.on('message', async (msg) => {
-    let p;
-    try { p = JSON.parse(msg.toString()); } catch { return ws.send(JSON.stringify({ error: 'bad json' })); }
-    const { text, from = 'auto', to = 'zh' } = p;
-    if (!text) return ws.send(JSON.stringify({ error: 'missing text' }));
-    const rec = await translateDetailed(text, from, to);
-    ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }));
-  });
+// SSE 端點：觀眾端串流 /stream?src=studio
+let sseClients = new Set();
+server.on('request', (req, res) => {
+  if (req.url === '/stream' && req.method === 'GET') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
+    });
+    const clientId = Date.now();
+    sseClients.add({ res, id: clientId });
+    req.on('close', () => sseClients.delete(sseClients.entries().next().value?.value || findClient(clientId)));
+    res.write(`id: ${clientId}\nevent: heartbeat\n\n`);
+  }
 });
+
+// WebSocket 即時流 (若 ws 套件可用)
+if (typeof WebSocketServer !== 'undefined') {
+  const wss = new WebSocketServer({ server, path: '/ws' });
+  wss.on('connection', (ws) => {
+    ws.on('message', async (msg) => {
+      let p; try { p = JSON.parse(msg.toString()); } catch { return; }
+      const { text, from = 'auto', to = 'zh' } = p;
+      if (!text) return;
+      const rec = await translateDetailed(text, from, to);
+      ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }));
+    });
+  });
+}
 
 server.listen(PORT, () => {
   console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws + UI)`);
