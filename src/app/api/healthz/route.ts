@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
           uuid: 'health-check',
           version: '1.0.0',
           timestamp: Date.now(),
-          evidence: { check: 'health' }
+          evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown', check: 'health' }
         }, { uiFeedback: false });
         if (!testContract.verification.isValid) {
           checks.gateway = 'degraded';
