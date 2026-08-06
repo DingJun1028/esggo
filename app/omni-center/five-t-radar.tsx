@@ -24,6 +24,9 @@ function radarPath(scores: FiveTData, maxR:number, cx:number, cy:number): string
   }).join(' ') + ' Z';
 }
 
+const CX = 120, CY = 120, MAX_R = 90;
+const gridLevels = [0.25, 0.5, 0.75, 1.0];
+
 interface Props { companyName?: string; zkpCount?: number; evidenceCount?: number; }
 
 const DEMO_COMPANIES = [
@@ -91,11 +94,44 @@ export function FiveTRadar({ companyName, zkpCount, evidenceCount }: Props) {
     requestAnimationFrame(animate);
   }, [selected, target, displayed]);
 
-  const CX = 120, CY = 120, MAX_R = 90;
-  const gridLevels = [0.25, 0.5, 0.75, 1.0];
+  const overallScore = useMemo(() => Object.values(displayed).reduce((s,v)=>s+v,0)/5, [displayed]);
+  const allPass = useMemo(() => Object.values(target).every(v=>v>=0.8), [target]);
 
-  const overallScore = Object.values(displayed).reduce((s,v)=>s+v,0)/5;
-  const allPass = Object.values(target).every(v=>v>=0.8);
+  const svgBackground = useMemo(() => (
+    <>
+      {/* Grid */}
+      {gridLevels.map(level=>(
+        <polygon key={level}
+          points={DIMS.map((_,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,level*MAX_R,CX,CY); return `${p.x},${p.y}`; }).join(' ')}
+          fill="none" stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>
+      ))}
+      {/* Axes */}
+      {DIMS.map((_,i)=>{
+        const a=(i/5)*Math.PI*2;
+        const p=polarPoint(a,MAX_R,CX,CY);
+        return <line key={i} x1={CX} y1={CY} x2={p.x} y2={p.y} stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>;
+      })}
+      {/* Labels */}
+      {DIMS.map((d,i)=>{
+        const a=(i/5)*Math.PI*2;
+        const p=polarPoint(a,MAX_R+16,CX,CY);
+        return <text key={d.key} x={p.x} y={p.y+4} textAnchor="middle" fill={d.color} fontSize={13} fontWeight={700}>{d.zh}</text>;
+      })}
+    </>
+  ), []);
+
+  const scorePolygonPath = useMemo(() => radarPath(displayed,MAX_R,CX,CY), [displayed]);
+
+  const scoreDots = useMemo(() => (
+    <>
+      {DIMS.map((d,i)=>{
+        const a=(i/5)*Math.PI*2;
+        const r=displayed[d.key]*MAX_R;
+        const p=polarPoint(a,r,CX,CY);
+        return <circle key={d.key} cx={p.x} cy={p.y} r={4} fill={d.color}/>;
+      })}
+    </>
+  ), [displayed]);
 
   return (
     <div>
@@ -116,33 +152,10 @@ export function FiveTRadar({ companyName, zkpCount, evidenceCount }: Props) {
       <div className="flex gap-4 items-start flex-wrap">
         {/* SVG Radar */}
         <svg width={240} height={240} className="shrink-0">
-          {/* Grid */}
-          {gridLevels.map(level=>(
-            <polygon key={level}
-              points={DIMS.map((_,i)=>{ const a=(i/5)*Math.PI*2; const p=polarPoint(a,level*MAX_R,CX,CY); return `${p.x},${p.y}`; }).join(' ')}
-              fill="none" stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>
-          ))}
-          {/* Axes */}
-          {DIMS.map((_,i)=>{
-            const a=(i/5)*Math.PI*2;
-            const p=polarPoint(a,MAX_R,CX,CY);
-            return <line key={i} x1={CX} y1={CY} x2={p.x} y2={p.y} stroke="var(--accent-teal)" strokeOpacity={0.2} strokeWidth={1}/>;
-          })}
+          {svgBackground}
           {/* Score polygon */}
-          <path d={radarPath(displayed,MAX_R,CX,CY)} fill="var(--accent-teal)" fillOpacity={0.15} stroke="var(--accent-teal)" strokeWidth={2}/>
-          {/* Labels */}
-          {DIMS.map((d,i)=>{
-            const a=(i/5)*Math.PI*2;
-            const p=polarPoint(a,MAX_R+16,CX,CY);
-            return <text key={d.key} x={p.x} y={p.y+4} textAnchor="middle" fill={d.color} fontSize={13} fontWeight={700}>{d.zh}</text>;
-          })}
-          {/* Score dots */}
-          {DIMS.map((d,i)=>{
-            const a=(i/5)*Math.PI*2;
-            const r=displayed[d.key]*MAX_R;
-            const p=polarPoint(a,r,CX,CY);
-            return <circle key={d.key} cx={p.x} cy={p.y} r={4} fill={d.color}/>;
-          })}
+          <path d={scorePolygonPath} fill="var(--accent-teal)" fillOpacity={0.15} stroke="var(--accent-teal)" strokeWidth={2}/>
+          {scoreDots}
         </svg>
 
         {/* Scores list */}
