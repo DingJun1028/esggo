@@ -55,7 +55,7 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
         const meta = (existingPair.lifecycleHooks ? JSON.parse(existingPair.lifecycleHooks) : {}) as Record<string, unknown>;
         await prisma.tagPair.update({
           where: { id: existingPair.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
         });
         matched++;
       }
@@ -167,9 +167,10 @@ export async function pullBehindApp(rows: SyncMatrixRow[]): Promise<{ pulled: nu
       if (existing) {
         // app 已有 -> 補標 oracleConfirmed (不覆寫既有資料)
         const meta = (existing.lifecycleHooks ? JSON.parse(existing.lifecycleHooks) : {}) as Record<string, unknown>;
+        const entryData = entry as { seq?: number };
         await prisma.tagPair.update({
           where: { id: existing.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
         });
         pulled++;
       } else {
