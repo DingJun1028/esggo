@@ -1,8 +1,8 @@
 # ESGGO 自動部署 (CD) 啟用指南
 
-> 配套 `deploy-oracle.yml`（已合併 main）。本檔說明如何在 GitHub 控制台啟用自動部署。
+> 配套 `deploy-oracle.yml`（已合併 main）。本檔說明如何在 GitHub 控制檯啟用自動部署。
 > 程式碼層三模式已就緒：**bastion**（推薦）/ **direct** / **skip**。設好對應 Secrets 後，push 到 main 即自動部署。
-> **重要：所有密鑰請在 GitHub 控制台 (Settings → Secrets and variables → Actions) 設定，勿貼在對話/issue（會像之前 Cloudflare/Notion token 一樣暴露）。**
+> **重要：所有密鑰請在 GitHub 控制檯 (Settings → Secrets and variables → Actions) 設定，勿貼在對話/issue（會像之前 Cloudflare/Notion token 一樣暴露）。**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ## 選項 A：bastion 模式（推薦，不開公網端口）
 
-### A1. 取得 OCI API 憑證（本機 `C:\Users\Administrator\.oci\config` 或 OCI 控制台）
+### A1. 取得 OCI API 憑證（本機 `C:\Users\Administrator\.oci\config` 或 OCI 控制檯）
 
 需要的欄位（從 `vps-bastion.py` 已知 region/bastion/target id）：
 
@@ -58,10 +58,10 @@ push 一個空改動（或 Actions 頁手動 Run workflow，deploy_mode 選 bast
 | `VPS_USER` | `root`（或留空，workflow 預設 root） |
 | `VPS_SSH_KEY` | VPS 私鑰（對應 `/root/.ssh/authorized_keys` 裡的 ed25519 公鑰） |
 
-### B2. OCI 控制台開 NSG 放行 GitHub Actions IP
+### B2. OCI 控制檯開 NSG 放行 GitHub Actions IP
 
 GitHub Actions 出口 IP 範圍見官方文檔 `github/houses` 的 `actions` 清單（會變動，建議用 `meta` API 動態取得或用 GitHub App）。
-在 OCI 控制台 → 網路 → 虛擬雲端網路 → 該 VPS 的子網 NSG → 加 Ingress 規則：
+在 OCI 控制檯 → 網路 → 虛擬雲端網路 → 該 VPS 的子網 NSG → 加 Ingress 規則：
 - 來源：GitHub Actions IP CIDR
 - 協定：TCP，埠：22（或 8042，依 sshd 聽的端口）
 - 動作：允許

@@ -33,7 +33,7 @@
 ## 阻塞點
 
 1. **Oracle ADB 免費配額滿（2/2）** → 「ORACLE 直連」短期不可行。
-   - 解法 A：釋放一個現有 ADB 實例（需 OCI 控制台操作，非程式碼）
+   - 解法 A：釋放一個現有 ADB 實例（需 OCI 控制檯操作，非程式碼）
    - 解法 B：短期用現有 Prisma PostgreSQL（Supabase）做標籤合成 + 信任帳本；Oracle 作為未來 RAG/向量增強（待配額）
    - 解法 C：用 Oracle Always Free 的新 VM（2 OCPU/12GB/200GB，README 有）跑 app，但 ADB 仍滿 → 只用 VM 不用 ADB
 

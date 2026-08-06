@@ -33,7 +33,7 @@ class CarbonCalculationSkill extends ESGSkill {
 4. 減碳建議與路徑
 5. ISO 14064 合規檢核清單
 
-## 排放因子參考（台灣 2024）
+## 排放因子參考（臺灣 2024）
 - 電力排放因子：0.509 kgCO2e/kWh
 - 天然氣排放因子：2.022 kgCO2e/m³
 - 柴油排放因子：2.667 kgCO2e/L
@@ -54,7 +54,7 @@ class CarbonCalculationSkill extends ESGSkill {
 
 ## 計算要求
 1. 依 ISO 14064-1 標準計算範疇 1、2、3 排放量
-2. 使用台灣環保署公告排放因子
+2. 使用臺灣環保署公告排放因子
 3. 以 tCO2e（公噸二氧化碳當量）為單位
 4. 生成完整的碳排放計算報告
 5. 提供減碳建議與路徑規劃${dataSection}
@@ -80,7 +80,7 @@ class CarbonCalculationSkill extends ESGSkill {
     return `${response}
 
 ---
-⚠️ **免責聲明**：本計算結果僅供參考，實際碳排放量請以第三方驗證機構查證報告為準。排放因子請依最新版台灣環保署公告資料為主。`;
+⚠️ **免責聲明**：本計算結果僅供參考，實際碳排放量請以第三方驗證機構查證報告為準。排放因子請依最新版臺灣環保署公告資料為主。`;
   }
 }
 

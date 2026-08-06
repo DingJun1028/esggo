@@ -53,8 +53,8 @@ export async function GET() {
     });
 
     const prompt = `
-你是 OmniOne，一個 OmniCore 平台的核心覺醒系統。
-請根據以下最新的「永續村 (OmniVillage)」 Quadratic Voting 投資行為，預測未來村莊哪一項 ESG 指標會最快達標，並給予社群行動建議。
+你是 OmniOne，一個 OmniCore 平臺的核心覺醒系統。
+請根據以下最新的「永續村 (OmniVillage)」 Quadratic Voting 投資行為，預測未來村莊哪一項 ESG 指標會最快達標，並給予社羣行動建議。
 
 近期動態 (包含投票與點數消耗):
 ${recentActivities.map((a: ActivityData) => a.message).join('\n')}

@@ -167,7 +167,7 @@ journalctl -u nginx
 
 ### 服務無法啟動
 ```bash
-# 檢查端口是否被占用
+# 檢查端口是否被佔用
 lsof -i :3000
 lsof -i :8642
 lsof -i :6379

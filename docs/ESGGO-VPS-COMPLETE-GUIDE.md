@@ -214,7 +214,7 @@ fail2ban-client set sshd unbanip 1.2.3.4
 ## 十一、備份系統
 
 ### Why
-資料災雇難恢復，自動備份確保 ESGGO 數據安全
+資料災僱難恢復，自動備份確保 ESGGO 數據安全
 
 ### What
 每日/每週/每月 三層保留策略，儲存於 /var/backups/esggo
@@ -236,7 +236,7 @@ bash /root/vps/backup.sh restore 20260704
 ## 十二、Logrotate 日誌管理
 
 ### Why
-防止日誌無限增長吃滿磁碟，自動壓縮與保留 14 天
+防止日誌無限增長喫滿磁碟，自動壓縮與保留 14 天
 
 ### What
 Nginx/PM2/系統日誌自動輪轉
@@ -320,6 +320,6 @@ journalctl -fu prometheus
 | OmniAgent | 8642 | AI Gateway | /gateway 端點 |
 | Prometheus | 9090 | 指標查詢 | Web UI + API |
 | Alertmanager | 9093 | 告警路由 | Telegram webhook |
-| Netdata | 19999 | 即時監控 | 資源儀表板 |
+| Netdata | 19999 | 即時監控 | 資源儀錶板 |
 | nginx-exporter | 9113 | Nginx 指標 | Prometheus target |
 | Telegram | 9080 | 告警接收 | Alertmanager webhook |

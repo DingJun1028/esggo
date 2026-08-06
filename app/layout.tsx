@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { I18nProvider } from './i18n/I18nProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import { AgnesProvider } from '@/components/AgnesProvider';
 import { GlobalNav } from './components/global-nav';
@@ -25,18 +26,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-primary text-textPrimary font-sans min-h-screen transition-colors duration-300">
         <ThemeProvider>
-          <AuthProvider>
-            <AgnesProvider>
-              <KeyboardShortcutProvider>
-                <GlobalNav />
-                <main>
-                  <OmniErrorBoundary>
-                    {children}
-                  </OmniErrorBoundary>
-                </main>
-              </KeyboardShortcutProvider>
-            </AgnesProvider>
-          </AuthProvider>
+          <I18nProvider>
+            <AuthProvider>
+              <AgnesProvider>
+                <KeyboardShortcutProvider>
+                  <GlobalNav />
+                  <main>
+                    <OmniErrorBoundary>
+                      {children}
+                    </OmniErrorBoundary>
+                  </main>
+                </KeyboardShortcutProvider>
+              </AgnesProvider>
+            </AuthProvider>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

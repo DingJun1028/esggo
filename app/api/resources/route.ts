@@ -56,13 +56,13 @@ export async function GET() {
       nameEn: 'OmniCore Center',
       icon: '◎',
       route: '/omni-center',
-      description: '8 分頁儀表板：Dashboard、Notes、Tasks、Calendar、Chat、5T Radar、RAG、ZKP Vault',
+      description: '8 分頁儀錶板：Dashboard、Notes、Tasks、Calendar、Chat、5T Radar、RAG、ZKP Vault',
       category: 'core',
       status: 'active',
       completeness: 62,
       apiEndpoints: ['/api/omni/plugins', '/api/rag/query', '/api/memory'],
       dependencies: ['Firebase', 'Upstash Redis'],
-      whw: { why: '統一控管所有 ESG 資料與 AI 功能的中央操控台', how: '8 個分頁模組透過 Firebase 即時同步 + EventBus 事件驅動', what: '儀表板、筆記、任務、日曆、AI 對話、5T 雷達、RAG 知識庫、ZKP 密庫' },
+      whw: { why: '統一控管所有 ESG 資料與 AI 功能的中央操控臺', how: '8 個分頁模組透過 Firebase 即時同步 + EventBus 事件驅動', what: '儀錶板、筆記、任務、日曆、AI 對話、5T 雷達、RAG 知識庫、ZKP 密庫' },
     },
     {
       id: 'sustain-write',
@@ -84,13 +84,13 @@ export async function GET() {
       nameEn: 'Sustain Center',
       icon: '🌱',
       route: '/sustain-center',
-      description: 'ESG 儀表板、碳排驗算、趨勢分析、信任帳本',
+      description: 'ESG 儀錶板、碳排驗算、趨勢分析、信任帳本',
       category: 'core',
       status: 'active',
       completeness: 70,
       apiEndpoints: ['/api/esg/assess', '/api/esg/skills'],
       dependencies: ['Firebase'],
-      whw: { why: '企業需要即時掌握 ESG 整體表現與碳排放數據', how: '互動式圖表 + AI 洞察引擎 + 信任帳本審計軌跡', what: '總覽儀表板、圖表分析、洞察網格、信任帳本、WebSocket 心跳' },
+      whw: { why: '企業需要即時掌握 ESG 整體表現與碳排放數據', how: '互動式圖表 + AI 洞察引擎 + 信任帳本審計軌跡', what: '總覽儀錶板、圖表分析、洞察網格、信任帳本、WebSocket 心跳' },
     },
     {
       id: 'village',
@@ -122,7 +122,7 @@ export async function GET() {
     },
     {
       id: 'omni-agent',
-      name: 'AI 代理主控台',
+      name: 'AI 代理主控臺',
       nameEn: 'OmniAgent Console',
       icon: '🤖',
       route: '/omni-agent',
@@ -174,7 +174,7 @@ export async function GET() {
       completeness: 68,
       apiEndpoints: ['/api/emm/metrics', '/api/emm/metrics/stream'],
       dependencies: ['Gateway'],
-      whw: { why: '平台穩定性需要即時監控系統資源與 AI 模型狀態', how: 'SSE 串流 + 外部閘道代理 + 6 卡片儀表板', what: 'CPU/記憶體監控、閘道狀態、AI 模型狀態、Telegram、Sonnar、Sparkline 圖表' },
+      whw: { why: '平臺穩定性需要即時監控系統資源與 AI 模型狀態', how: 'SSE 串流 + 外部閘道代理 + 6 卡片儀錶板', what: 'CPU/記憶體監控、閘道狀態、AI 模型狀態、Telegram、Sonnar、Sparkline 圖表' },
     },
     {
       id: 'profile',
@@ -216,7 +216,7 @@ export async function GET() {
       completeness: 68,
       apiEndpoints: ['/api/omni/plugins'],
       dependencies: ['EventBus'],
-      whw: { why: '平台需要可擴展的模組化架構，支援功能熱插拔', how: 'EventBus 事件總線 + 生命週期管理 + 4 個內建外掛', what: '外掛註冊、啟用/停用、熱重載、健康監控、EventBus 訂閱' },
+      whw: { why: '平臺需要可擴展的模組化架構，支援功能熱插拔', how: 'EventBus 事件總線 + 生命週期管理 + 4 個內建外掛', what: '外掛註冊、啟用/停用、熱重載、健康監控、EventBus 訂閱' },
     },
   ];
 

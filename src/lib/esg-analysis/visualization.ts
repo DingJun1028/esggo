@@ -125,7 +125,7 @@ export class ESGVisualizationEngine {
     return {
       id: 'pie-scores',
       type: 'pie',
-      title: 'ESG 分數占比',
+      title: 'ESG 分數佔比',
       data: {
         labels: ['環境 (E)', '社會 (S)', '治理 (G)'],
         datasets: [
@@ -156,7 +156,7 @@ export class ESGVisualizationEngine {
   }
 
   /**
-   * 生成儀表板配置
+   * 生成儀錶板配置
    */
   generateGaugeChart(score: number, label: string): VisualizationComponent {
     return {
@@ -240,11 +240,11 @@ export class ESGVisualizationEngine {
   }
 
   // ==========================================
-  // 儀表板生成
+  // 儀錶板生成
   // ==========================================
 
   /**
-   * 生成完整儀表板配置
+   * 生成完整儀錶板配置
    */
   generateDashboard(result: ESGAnalysisResult): ESGVisualizationConfig {
     const components: VisualizationComponent[] = [
@@ -258,7 +258,7 @@ export class ESGVisualizationEngine {
 
     return {
       type: 'dashboard',
-      title: 'ESG 分析儀表板',
+      title: 'ESG 分析儀錶板',
       description: `分析期間: ${result.period.start.toLocaleDateString()} - ${result.period.end.toLocaleDateString()}`,
       layout: {
         columns: 4,
@@ -349,7 +349,7 @@ export class ESGVisualizationEngine {
 
     <div class="grid grid-cols-3 gap-8 mb-8">
       <div class="glass rounded-xl p-6">
-        <h2 class="text-xl font-bold mb-4 text-green-400">分數占比</h2>
+        <h2 class="text-xl font-bold mb-4 text-green-400">分數佔比</h2>
         <canvas id="pieChart"></canvas>
       </div>
       <div class="glass rounded-xl p-6">

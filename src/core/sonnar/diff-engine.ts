@@ -131,7 +131,7 @@ function extractESGChanges(lines: string[], pillar: 'environmental' | 'social' |
   const keywords: Record<string, string[]> = {
     environmental: ['碳排放', '溫室氣體', '能源', '水資源', '廢棄物', '污染', '氣候', 'carbon', 'emission', 'energy', 'GHG'],
     social: ['勞工', '性別', '人權', '健康', '安全', '薪酬', '訓練', 'labor', 'human rights', 'diversity'],
-    governance: ['董事會', '薪酬', '貪腐', '風險', '稽核', '吹哨', 'board', 'compensation', 'audit', 'risk'],
+    governance: ['董事會', '薪酬', '貪腐', '風險', '稽覈', '吹哨', 'board', 'compensation', 'audit', 'risk'],
   };
   
   const hits: string[] = [];

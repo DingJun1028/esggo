@@ -20,7 +20,7 @@ import { IBusEvent } from "./bus-event";
  *   結果（如危險指數、建議行動等），可由外部模型或規則引擎實作。
  * - `selfHeal(issueId, context)`：針對指定的異常或安全事件自動執行修復流程，
  *   `context` 允許傳入額外資訊（如受影響服務、補救腳本路徑等）。
- * - `registerSecurityHook(stage, hook)`：在安全相關的生命周期階段註冊 Hook，
+ * - `registerSecurityHook(stage, hook)`：在安全相關的生命週期階段註冊 Hook，
  *   例如在 `EMERGED` 階段檢查事件完整性、在 `FROZEN` 階段執行清理。
  */
 export interface IOmniAgentGateway extends IComponentCore {
@@ -46,7 +46,7 @@ export interface IOmniAgentGateway extends IComponentCore {
   selfHeal(issueId: string, context?: Record<string, unknown>): Promise<void>;
 
   /**
-   * 在指定的安全生命周期階段註冊 Hook。
+   * 在指定的安全生命週期階段註冊 Hook。
    * @param stage 目標階段（使用與 OA 相同的 LifecycleStage）
    * @param hook   Hook 函式，會收到當前事件與預測/修復結果
    */

@@ -11,7 +11,7 @@ import * as path from "path";
 /**
  * 配置參數（可透過環境變數覆寫）
  *   - CELLULAR_DIVISION_ENABLED: 是否啟用細胞分裂（default: true）
- *   - LOAD_THRESHOLD: CPU 使用率阈值（%），超過則觸發增殖（default: 75）
+ *   - LOAD_THRESHOLD: CPU 使用率閾值（%），超過則觸發增殖（default: 75）
  *   - MAX_INSTANCES: 同時允許的最大實例數（default: 4）
  */
 const ENABLED = process.env.CELLULAR_DIVISION_ENABLED !== "false";
@@ -41,7 +41,7 @@ export async function monitorAndScale(): Promise<void> {
   const cpuPercent = getCpuLoadPercent();
   console.debug(`[CellularDivision] Current CPU load: ${cpuPercent}%`);
 
-  // 若負載超過阈值，嘗試使用 PM2 spawn 新實例（細胞分裂）
+  // 若負載超過閾值，嘗試使用 PM2 spawn 新實例（細胞分裂）
   if (cpuPercent > LOAD_THRESHOLD) {
     try {
       // 查看已經啟動的 PM2 實例數量

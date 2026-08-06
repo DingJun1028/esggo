@@ -18,7 +18,7 @@ export interface SourceConfig {
 const HOUR = 3600000;
 
 export const SOURCES: SourceConfig[] = [
-  // ─── 台灣 🇹🇼 ────
+  // ─── 臺灣 🇹🇼 ────
   { id: 'tw-fsc',     name: '金管會',         region: 'TW', category: 'regulator', url: 'https://www.fsc.gov.tw',        crawlIntervalMs: 4*HOUR,  enabled: true, description: '金融監督管理委員會法規/公告' },
   { id: 'tw-moenv',   name: '環境部',         region: 'TW', category: 'regulator', url: 'https://www.moenv.gov.tw',      crawlIntervalMs: 6*HOUR,  enabled: true, description: '環境法規/碳費/廢棄物' },
   { id: 'tw-moea',    name: '經濟部',         region: 'TW', category: 'regulator', url: 'https://www.moea.gov.tw',       crawlIntervalMs: 6*HOUR,  enabled: true, description: '產業政策/能源/貿易' },

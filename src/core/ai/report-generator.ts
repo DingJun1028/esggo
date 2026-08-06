@@ -167,21 +167,21 @@ const SECTION_PROMPTS: Record<ReportSection, { title: string; titleEn: string; p
 {dataContext}`,
   },
   opportunities: {
-    title: '永續機會與創新布局',
+    title: '永續機會與創新佈局',
     titleEn: 'Sustainability Opportunities & Innovation',
     prompt: `為 {company} 撰寫永續機會章節（300-450 字），包含：
-1. 綠色產品/服務營收占比目標
+1. 綠色產品/服務營收佔比目標
 2. 循環經濟商業模式
-3. 清潔技術投資布局
+3. 清潔技術投資佈局
 4. 永續金融工具（綠色債券/連結貸款）
 5. 市場擴張與品牌溢價機會
 量化機會規模（若可行）。
 {dataContext}`,
   },
   kpi_dashboard: {
-    title: '關鍵績效指標儀表板',
+    title: '關鍵績效指標儀錶板',
     titleEn: 'KPI Dashboard',
-    prompt: `為 {company} 整理 ESG KPI 儀表板（表格格式），包含：
+    prompt: `為 {company} 整理 ESG KPI 儀錶板（表格格式），包含：
 環境面：碳排放強度、能源使用效率、廢棄物回收率、水資源使用
 社會面：員工流動率、訓練時數、職災率、多元性指標
 治理面：獨立董事比例、女性董事比例、薪酬透明度、吹哨案數
@@ -207,7 +207,7 @@ const SECTION_PROMPTS: Record<ReportSection, { title: string; titleEn: string; p
     prompt: `為 {company} 撰寫供應鏈章節（300-450 字），包含：
 1. 供應商分級與風險評估
 2. 供應商行為準則簽署率
-3. 現場稽核覆蓋率與結果
+3. 現場稽覈覆蓋率與結果
 4. 關鍵供應商 ESG 風險（SPOF 分析）
 5. 在地採購與中小企業支持
 引用 RBA/Responsible Business Alliance 框架。

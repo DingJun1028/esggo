@@ -8,7 +8,7 @@ import type { CompanyProfile, QuestionBank, AnswerRecord, ChapterDefinition } fr
 export const companyProfiles: CompanyProfile[] = [
   {
     id: 'comp-001',
-    name: '台灣積體電路製造股份有限公司',
+    name: '臺灣積體電路製造股份有限公司',
     nameEn: 'Taiwan Semiconductor Manufacturing Company Limited',
     industry: '半導體製造業',
     industryEn: 'Semiconductor Manufacturing',
@@ -60,9 +60,9 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 210000000000,
     employees: 3200,
     foundedYear: 2004,
-    headquarters: '台北市內湖區',
+    headquarters: '臺北市內湖區',
     headquartersEn: 'Neihu District, Taipei City, Taiwan',
-    description: '台灣領先的B2C電商平台，提供多元商品與便捷的購物體驗。',
+    description: '臺灣領先的B2C電商平臺，提供多元商品與便捷的購物體驗。',
     descriptionEn: 'Taiwan\'s leading B2C e-commerce platform offering diverse products and convenient shopping experience.',
   },
   {
@@ -74,10 +74,10 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 2300000000000,
     employees: 28000,
     foundedYear: 1966,
-    headquarters: '台北市南港區',
+    headquarters: '臺北市南港區',
     headquartersEn: 'Nangang District, Taipei City, Taiwan',
     website: 'https://www.ctbcbank.com',
-    description: '台灣最大的商業銀行之一，提供全方位金融服務與數位金融創新。',
+    description: '臺灣最大的商業銀行之一，提供全方位金融服務與數位金融創新。',
     descriptionEn: 'One of Taiwan\'s largest commercial banks providing comprehensive financial services and digital innovation.',
   },
   {
@@ -89,21 +89,21 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 570000000000,
     employees: 90000,
     foundedYear: 1967,
-    headquarters: '台南市永康區',
+    headquarters: '臺南市永康區',
     headquartersEn: 'Yongkang District, Tainan City, Taiwan',
-    description: '台灣最大食品企業集團，涵蓋食品製造、零售、物流等多元事業版圖。',
+    description: '臺灣最大食品企業集團，涵蓋食品製造、零售、物流等多元事業版圖。',
     descriptionEn: 'Taiwan\'s largest food enterprise group covering food manufacturing, retail, and logistics.',
   },
   {
     id: 'comp-007',
-    name: '台達電子工業股份有限公司',
+    name: '臺達電子工業股份有限公司',
     nameEn: 'Delta Electronics, Inc.',
     industry: '電子零組件製造業',
     industryEn: 'Electronic Components Manufacturing',
     capital: 260000000000,
     employees: 85000,
     foundedYear: 1971,
-    headquarters: '台北市內湖區',
+    headquarters: '臺北市內湖區',
     headquartersEn: 'Neihu District, Taipei City, Taiwan',
     website: 'https://www.deltaww.com',
     description: '全球領先的電源管理與散熱解決方案供應商，積極推動節能環保技術。',
@@ -118,7 +118,7 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 263000000000,
     employees: 60000,
     foundedYear: 2008,
-    headquarters: '台北市士林區',
+    headquarters: '臺北市士林區',
     headquartersEn: 'Shilin District, Taipei City, Taiwan',
     description: '專業電子代工服務公司，為全球知名品牌提供設計、製造與組裝服務。',
     descriptionEn: 'Professional electronics design, manufacturing, and assembly services for global brands.',
@@ -132,9 +132,9 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 1600000000000,
     employees: 18000,
     foundedYear: 2002,
-    headquarters: '台北市信義區',
+    headquarters: '臺北市信義區',
     headquartersEn: 'Xinyi District, Taipei City, Taiwan',
-    description: '台灣主要金融控股公司，涵蓋銀行、保險、證券等多元金融業務。',
+    description: '臺灣主要金融控股公司，涵蓋銀行、保險、證券等多元金融業務。',
     descriptionEn: 'A major financial holding company in Taiwan covering banking, insurance, and securities.',
   },
   {
@@ -146,7 +146,7 @@ export const companyProfiles: CompanyProfile[] = [
     capital: 290000000000,
     employees: 80000,
     foundedYear: 2001,
-    headquarters: '台北市士林區',
+    headquarters: '臺北市士林區',
     headquartersEn: 'Shilin District, Taipei City, Taiwan',
     description: '專業資訊產品設計與製造服務公司，提供全方位的產品生命週期管理。',
     descriptionEn: 'Professional information product design and manufacturing services with full product lifecycle management.',
@@ -157,21 +157,21 @@ export const companyProfiles: CompanyProfile[] = [
 
 export const questionBank: QuestionBank[] = [
   // Chapter 1: 組織與報告邊界
-  { id: 'q1-01', chapter: 1, category: '組織概况', question: '請描述公司的主要業務與產品服務？', questionEn: 'Describe the company\'s main business and products/services?', answerType: 'text', required: true, order: 1 },
-  { id: 'q1-02', chapter: 1, category: '組織概况', question: '公司總部位於何處？主要營運據點分布？', questionEn: 'Where is the company headquartered? Main operating locations?', answerType: 'text', required: true, order: 2 },
+  { id: 'q1-01', chapter: 1, category: '組織概況', question: '請描述公司的主要業務與產品服務？', questionEn: 'Describe the company\'s main business and products/services?', answerType: 'text', required: true, order: 1 },
+  { id: 'q1-02', chapter: 1, category: '組織概況', question: '公司總部位於何處？主要營運據點分佈？', questionEn: 'Where is the company headquartered? Main operating locations?', answerType: 'text', required: true, order: 2 },
   { id: 'q1-03', chapter: 1, category: '報告邊界', question: '本報告涵蓋的期間為何？', questionEn: 'What period does this report cover?', answerType: 'text', required: true, order: 3 },
   { id: 'q1-04', chapter: 1, category: '報告邊界', question: '本報告涵蓋的組織範圍？', questionEn: 'What is the organizational scope of this report?', answerType: 'text', required: true, order: 4 },
-  { id: 'q1-05', chapter: 1, category: '組織概况', question: '員工人數與資本資訊？', questionEn: 'Employee count and capital information?', answerType: 'text', required: true, order: 5 },
+  { id: 'q1-05', chapter: 1, category: '組織概況', question: '員工人數與資本資訊？', questionEn: 'Employee count and capital information?', answerType: 'text', required: true, order: 5 },
 
   // Chapter 2: 治理與永續管理
   { id: 'q2-01', chapter: 2, category: '治理架構', question: '董事會結構與組成？', questionEn: 'Board structure and composition?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-102-18' },
   { id: 'q2-02', chapter: 2, category: '永續管理', question: '永續管理委員會或類似組織之設置情形？', questionEn: 'Sustainability committee or similar organization?', answerType: 'text', required: true, order: 2, griMapping: 'GRI-102-19' },
   { id: 'q2-03', chapter: 2, category: '永續管理', question: '永續發展目標與策略？', questionEn: 'Sustainability goals and strategies?', answerType: 'text', required: true, order: 3 },
-  { id: 'q2-04', chapter: 2, category: '治理架構', question: '高階主管薪酬與績效考核機制？', questionEn: 'Executive compensation and performance evaluation?', answerType: 'text', required: false, order: 4, griMapping: 'GRI-102-35' },
+  { id: 'q2-04', chapter: 2, category: '治理架構', question: '高階主管薪酬與績效考覈機制？', questionEn: 'Executive compensation and performance evaluation?', answerType: 'text', required: false, order: 4, griMapping: 'GRI-102-35' },
   { id: 'q2-05', chapter: 2, category: '風險管理', question: '風險管理架構與流程？', questionEn: 'Risk management framework and processes?', answerType: 'text', required: true, order: 5 },
 
   // Chapter 3: 重大性與利害關係人
-  { id: 'q3-01', chapter: 3, category: '利害關係人', question: '主要利害關係人群體識別？', questionEn: 'Key stakeholder identification?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-102-40' },
+  { id: 'q3-01', chapter: 3, category: '利害關係人', question: '主要利害關係人羣體識別？', questionEn: 'Key stakeholder identification?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-102-40' },
   { id: 'q3-02', chapter: 3, category: '重大性分析', question: '重大主題識別過程與結果？', questionEn: 'Material topic identification process and results?', answerType: 'text', required: true, order: 2, griMapping: 'GRI-102-46' },
   { id: 'q3-03', chapter: 3, category: '利害關係人', question: '利害關係人溝通機制與頻率？', questionEn: 'Stakeholder engagement mechanisms and frequency?', answerType: 'text', required: true, order: 3, griMapping: 'GRI-102-43' },
   { id: 'q3-04', chapter: 3, category: '重大性分析', question: '重大主題優先順序矩陣？', questionEn: 'Material topic priority matrix?', answerType: 'text', required: false, order: 4 },
@@ -211,9 +211,9 @@ export const questionBank: QuestionBank[] = [
 
   // Chapter 9: 供應鏈管理
   { id: 'q9-01', chapter: 9, category: '供應商管理', question: '供應商評估與篩選機制？', questionEn: 'Supplier evaluation and screening mechanisms?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-308-1' },
-  { id: 'q9-02', chapter: 9, category: '永續採購', question: '永續採購政策與占比？', questionEn: 'Sustainable procurement policy and ratio?', answerType: 'text', required: true, order: 2 },
+  { id: 'q9-02', chapter: 9, category: '永續採購', question: '永續採購政策與佔比？', questionEn: 'Sustainable procurement policy and ratio?', answerType: 'text', required: true, order: 2 },
   { id: 'q9-03', chapter: 9, category: '供應鏈風險', question: '供應鏈風險評估與管理？', questionEn: 'Supply chain risk assessment and management?', answerType: 'text', required: true, order: 3 },
-  { id: 'q9-04', chapter: 9, category: '供應商稽核', question: '供應商稽核頻率與結果？', questionEn: 'Supplier audit frequency and results?', answerType: 'text', required: false, order: 4, griMapping: 'GRI-308-2' },
+  { id: 'q9-04', chapter: 9, category: '供應商稽覈', question: '供應商稽覈頻率與結果？', questionEn: 'Supplier audit frequency and results?', answerType: 'text', required: false, order: 4, griMapping: 'GRI-308-2' },
 
   // Chapter 10: 產品責任與客戶
   { id: 'q10-01', chapter: 10, category: '產品品質', question: '產品品質管理與認證？', questionEn: 'Product quality management and certifications?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-416-1' },
@@ -227,8 +227,8 @@ export const questionBank: QuestionBank[] = [
   { id: 'q11-03', chapter: 11, category: '投資關係', question: '投資人關係與溝通？', questionEn: 'Investor relations and communication?', answerType: 'text', required: true, order: 3 },
   { id: 'q11-04', chapter: 11, category: '影響力', question: '社會影響力評估？', questionEn: 'Social impact assessment?', answerType: 'text', required: false, order: 4 },
 
-  // Chapter 12: 查核與資料治理
-  { id: 'q12-01', chapter: 12, category: '外部查核', question: '外部第三方查證情形？', questionEn: 'External third-party verification?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-102-56' },
+  // Chapter 12: 查覈與資料治理
+  { id: 'q12-01', chapter: 12, category: '外部查覈', question: '外部第三方查證情形？', questionEn: 'External third-party verification?', answerType: 'text', required: true, order: 1, griMapping: 'GRI-102-56' },
   { id: 'q12-02', chapter: 12, category: '資訊揭露', question: '資訊揭露品質與透明度？', questionEn: 'Information disclosure quality and transparency?', answerType: 'text', required: true, order: 2 },
   { id: 'q12-03', chapter: 12, category: '合規', question: '法規遵循情形？', questionEn: 'Regulatory compliance status?', answerType: 'text', required: true, order: 3 },
   { id: 'q12-04', chapter: 12, category: '資料治理', question: 'ESG資料治理與報告流程？', questionEn: 'ESG data governance and reporting processes?', answerType: 'text', required: true, order: 4 },
@@ -259,7 +259,7 @@ function generateMockAnswers(companyId: string): AnswerRecord[] {
         else answer = '本公司建立完整風險管理架構，由董事會監督，管理層執行，涵蓋策略、營運、財務及合規風險。';
         break;
       case 3:
-        if (q.id === 'q3-01') answer = '透過系統性分析，本公司識別出{{stakeholder_groups}}等{{stakeholder_count}}類主要利害關係人群體。';
+        if (q.id === 'q3-01') answer = '透過系統性分析，本公司識別出{{stakeholder_groups}}等{{stakeholder_count}}類主要利害關係人羣體。';
         else if (q.id === 'q3-02') answer = '本公司依GRI準則進行重大性分析，透過{{materiality_process}}流程，識別出{{material_topics}}項重大主題。';
         else if (q.id === 'q3-03') answer = '本公司透過多元管道與利害關係人溝通，包括{{engagement_channels}}，溝通頻率依需求調整。';
         else answer = '重大主題優先順序以利害關係人關注度及公司影響程度兩個構面進行評估，形成重大性矩陣。';
@@ -275,15 +275,15 @@ function generateMockAnswers(companyId: string): AnswerRecord[] {
         if (q.id === 'q5-01') answer = '本公司將氣候變遷視為重大風險與機會，制定{{climate_strategy}}氣候策略。';
         else if (q.id === 'q5-02') answer = '{{report_year}}年溫室氣體排放量：範疇一{{ghg_scope1}}公噸CO2e、範疇二{{ghg_scope2}}公噸CO2e、範疇三{{ghg_scope3}}公噸CO2e。';
         else if (q.id === 'q5-03') answer = '設定{{carbon_target}}年較基準年減碳{{carbon_reduction}}%之目標，並制定具體減碳路徑。';
-        else if (q.id === 'q5-04') answer = '{{report_year}}年總能耗為{{energy_total}}GJ，再生能源占比達{{renewable_ratio}}%。';
+        else if (q.id === 'q5-04') answer = '{{report_year}}年總能耗為{{energy_total}}GJ，再生能源佔比達{{renewable_ratio}}%。';
         else answer = '本公司依TCFD框架進行氣候風險評估，識別出{{climate_risks}}項主要風險。';
         break;
       case 6:
-        if (q.id === 'q6-01') answer = '本公司員工總數{{employees}}人，其中女性占比{{female_ratio}}%，管理層女性占比{{female_mgmt_ratio}}%。';
+        if (q.id === 'q6-01') answer = '本公司員工總數{{employees}}人，其中女性佔比{{female_ratio}}%，管理層女性佔比{{female_mgmt_ratio}}%。';
         else if (q.id === 'q6-02') answer = '{{report_year}}年每人平均訓練時數達{{training_hours}}小時，涵蓋{{training_programs}}等課程。';
         else if (q.id === 'q6-03') answer = '提供具競爭力的薪酬福利，包括{{benefits}}等福利措施。';
         else if (q.id === 'q6-04') answer = '{{report_year}}年員工流動率為{{turnover_rate}}%，敬業度調查得分{{engagement_score}}分。';
-        else answer = '本公司重視性別平等，女性員工占比{{female_ratio}}%，並持續推動職場平權。';
+        else answer = '本公司重視性別平等，女性員工佔比{{female_ratio}}%，並持續推動職場平權。';
         break;
       case 7:
         if (q.id === 'q7-01') answer = '本公司建立ISO 45001職業安全衛生管理系統，透過{{ohs_practices}}確保工作場所安全。';
@@ -299,9 +299,9 @@ function generateMockAnswers(companyId: string): AnswerRecord[] {
         break;
       case 9:
         if (q.id === 'q9-01') answer = '本公司建立供應商評估機制，涵蓋{{supplier_criteria}}等面向，{{report_year}}年評估家數達{{supplier_count}}家。';
-        else if (q.id === 'q9-02') answer = '永續採購政策要求供應商符合{{sustainable_procurement_criteria}}，{{report_year}}年永續採購占比達{{sustainable_procurement_ratio}}%。';
+        else if (q.id === 'q9-02') answer = '永續採購政策要求供應商符合{{sustainable_procurement_criteria}}，{{report_year}}年永續採購佔比達{{sustainable_procurement_ratio}}%。';
         else if (q.id === 'q9-03') answer = '定期進行供應鏈風險評估，識別{{supply_risks}}等風險因子，並制定緩解措施。';
-        else answer = '{{report_year}}年供應商稽核次數達{{audit_count}}次，稽核合格率為{{audit_pass_rate}}%。';
+        else answer = '{{report_year}}年供應商稽覈次數達{{audit_count}}次，稽覈合格率為{{audit_pass_rate}}%。';
         break;
       case 10:
         if (q.id === 'q10-01') answer = '產品品質管理通過{{quality_certifications}}認證，確保產品符合國際標準。';
@@ -319,7 +319,7 @@ function generateMockAnswers(companyId: string): AnswerRecord[] {
         if (q.id === 'q12-01') answer = '本報告經{{verifier}}第三方機構查證，採用{{verification_standard}}標準進行有限確信。';
         else if (q.id === 'q12-02') answer = '本公司重視資訊揭露品質，依GRI準則及當地法規編製報告，確保資訊透明可靠。';
         else if (q.id === 'q12-03') answer = '{{report_year}}年無重大違規事件，所有營運活動均符合相關法規要求。';
-        else answer = '建立ESG資料治理流程，由{{data_owner}}負責資料品質，定期進行內部查核。';
+        else answer = '建立ESG資料治理流程，由{{data_owner}}負責資料品質，定期進行內部查覈。';
         break;
       default:
         answer = '本公司持續推動相關作為，{{report_year}}年已有具體成果。';
@@ -417,7 +417,7 @@ export const chapterDefinitions: ChapterDefinition[] = [
     number: 9,
     title: '供應鏈管理',
     titleEn: 'Supply Chain Management',
-    description: '本章節說明供應商管理、永續採購、供應鏈風險及供應商稽核。',
+    description: '本章節說明供應商管理、永續採購、供應鏈風險及供應商稽覈。',
     descriptionEn: 'This chapter covers supplier management, sustainable procurement, supply chain risk, and supplier audits.',
     griStandards: ['GRI-308-1', 'GRI-308-2', 'GRI-414-1', 'GRI-414-2'],
     requiredAnswers: ['q9-01', 'q9-02', 'q9-03', 'q9-04'],
@@ -442,7 +442,7 @@ export const chapterDefinitions: ChapterDefinition[] = [
   },
   {
     number: 12,
-    title: '查核與資料治理',
+    title: '查覈與資料治理',
     titleEn: 'Verification & Data Governance',
     description: '本章節說明外部查證、資訊揭露、法規遵循及ESG資料治理。',
     descriptionEn: 'This chapter covers external verification, disclosure quality, regulatory compliance, and ESG data governance.',

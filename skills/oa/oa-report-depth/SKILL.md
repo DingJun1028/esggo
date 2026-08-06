@@ -14,7 +14,7 @@ metadata:
 
 ## Overview
 
-生成 28 萬字深度永續報告（v5 萬能系統版）。結合 answer-database 真實數據、專家模板、5T 協議、ZKP 封印。支援 28 章 × 28 萬字，符合台灣金管會、GRI 2021、IFRS S1/S2、TCFD、SASB。
+生成 28 萬字深度永續報告（v5 萬能系統版）。結合 answer-database 真實數據、專家模板、5T 協議、ZKP 封印。支援 28 章 × 28 萬字，符合臺灣金管會、GRI 2021、IFRS S1/S2、TCFD、SASB。
 
 ## When to Use
 

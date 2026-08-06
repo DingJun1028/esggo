@@ -207,7 +207,7 @@ function generateOrgProfile(company: CompanyData): string {
   return `## 組織概況
 
 ### 公司簡介
-${company.name}成立於${company.location || '台灣'}，主要從事${company.industry}相關業務。
+${company.name}成立於${company.location || '臺灣'}，主要從事${company.industry}相關業務。
 
 ### 組織結構
 本公司採用矩陣式管理結構，設有策略委員會、營運委員會及風控委員會，確保永續發展策略之有效執行。
@@ -249,7 +249,7 @@ function generateEnvironmentalSection(company: CompanyData): string {
 本公司致力於提升能源效率，推動再生能源使用。
 
 - **能源消耗總量**：${data?.energyConsumption?.toLocaleString() || 'N/A'} MWh
-- **再生能源占比**：${data?.renewableEnergy || 'N/A'}%
+- **再生能源佔比**：${data?.renewableEnergy || 'N/A'}%
 
 ### 溫室氣體排放
 依據 ISO 14064 準則進行碳盤查：
@@ -305,7 +305,7 @@ function generateTCFDStrategy(_company: CompanyData): string {
 - 綠色金融工具應用
 
 ### 情境分析
-本公司採用 1.5°C 及 2°C 情境進行氣候風險評估，評估不同升温路徑對營運的潛在影響。`;
+本公司採用 1.5°C 及 2°C 情境進行氣候風險評估，評估不同升溫路徑對營運的潛在影響。`;
 }
 
 function generateTCFDRiskManagement(_company: CompanyData): string {
@@ -338,7 +338,7 @@ function generateTCFDMetrics(company: CompanyData): string {
 ### 氣候相關 KPI
 - **能源強度**：持續監測中
 - **碳強度**：持續監測中
-- **再生能源占比**：${data?.renewableEnergy || 'N/A'}%
+- **再生能源佔比**：${data?.renewableEnergy || 'N/A'}%
 
 ### 減碳目標
 本公司設定至 2030 年較基準年減碳 30% 之目標，並朝淨零排放 2050 年目標努力。
@@ -382,7 +382,7 @@ function generateEnvironmentalKPIs(company: CompanyData): KPIMetric[] {
   const data = company.esgData;
   return [
     { name: '能源消耗', nameEn: 'Energy Consumption', value: data?.energyConsumption?.toLocaleString() || 'N/A', unit: 'MWh' },
-    { name: '再生能源占比', nameEn: 'Renewable Energy', value: data?.renewableEnergy?.toString() || 'N/A', unit: '%' },
+    { name: '再生能源佔比', nameEn: 'Renewable Energy', value: data?.renewableEnergy?.toString() || 'N/A', unit: '%' },
     { name: 'Scope 1 排放', nameEn: 'GHG Scope 1', value: data?.ghgScope1?.toLocaleString() || 'N/A', unit: 'tCO2e' },
     { name: 'Scope 2 排放', nameEn: 'GHG Scope 2', value: data?.ghgScope2?.toLocaleString() || 'N/A', unit: 'tCO2e' },
     { name: '取水量', nameEn: 'Water Withdrawal', value: data?.waterWithdrawal?.toLocaleString() || 'N/A', unit: 'm³' },

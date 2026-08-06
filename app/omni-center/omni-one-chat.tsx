@@ -232,6 +232,16 @@ export function OmniOneChat() {
       omni_jules_heal: "HEAL",
       swarm_orchestration: "SWARM",
       general: "GEN",
+      compliance_review: "CR",
+      gri_report_draft: "GRI",
+      evidence_ocr: "OCR",
+      email_archival: "MAIL",
+      tcfd_analysis: "TCFD",
+      sdg_mapping: "SDG",
+      materiality_matrix: "MTRX",
+      report_assembly: "RPRT",
+      omni_jules_heal: "HEAL",
+      swarm_orchestration: "SWRM",
     })[ct || "general"] || "GEN";
 
   const renderText = (t: string) => {

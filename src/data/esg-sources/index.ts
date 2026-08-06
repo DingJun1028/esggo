@@ -4,7 +4,7 @@
 export interface Source {
   id: string;
   name: string;
-  group: string;        // A~N 群組
+  group: string;        // A~N 羣組
   category: string;     // UN/智庫/標準/政策/市場/產業/風險/地緣/社創
   url: string;
   contentType: string;
@@ -122,7 +122,7 @@ export const SOCIAL_SOURCES: Source[] = [
   { id: 'skoll', name: 'Skoll Foundation', group: 'J', category: '社創網絡', url: 'https://skoll.org', contentType: '社會創業、系統變革', updateFrequency: 'Weekly', topics: ['社會創業', '系統變革'], regions: ['全球'], industries: ['全產業'] },
   { id: 'giin', name: 'GIIN', group: 'K', category: '影響力投資', url: 'https://thegiin.org/', contentType: '影響力投資市場', updateFrequency: 'Weekly', topics: ['影響力投資', '市場'], regions: ['全球'], industries: ['金融'] },
   { id: 'b-lab', name: 'B Lab / B Corporation', group: 'L', category: '認證', url: 'https://www.bcorporation.net/', contentType: 'B Corp 標準', updateFrequency: 'Daily/Weekly', topics: ['B Corp', '認證'], regions: ['全球'], industries: ['全產業'] },
-  { id: 'ssir', name: 'Stanford Social Innovation Review', group: 'M', category: '研究平台', url: 'https://ssir.org/', contentType: '社會創新研究', updateFrequency: 'Daily/Weekly', topics: ['社會創新', '研究'], regions: ['全球'], industries: ['全產業'] },
+  { id: 'ssir', name: 'Stanford Social Innovation Review', group: 'M', category: '研究平臺', url: 'https://ssir.org/', contentType: '社會創新研究', updateFrequency: 'Daily/Weekly', topics: ['社會創新', '研究'], regions: ['全球'], industries: ['全產業'] },
   { id: 'impactalpha', name: 'ImpactAlpha', group: 'K', category: '影響力投資', url: 'https://impactalpha.com/', contentType: '影響力投資、氣候金融', updateFrequency: 'Daily/Weekly', topics: ['影響力投資', '氣候金融'], regions: ['全球'], industries: ['金融'] },
   { id: 'pioneerspost', name: 'Pioneers Post', group: 'N', category: '社創媒體', url: 'https://www.pioneerspost.com/', contentType: '社會企業、影響力投資新聞', updateFrequency: 'Daily/Weekly', topics: ['社會企業', '影響力投資'], regions: ['全球'], industries: ['全產業'] },
 ];
@@ -134,7 +134,7 @@ export const ALL_SOURCES: Source[] = [
   ...SOCIAL_SOURCES,
 ];
 
-// 依群組取得來源
+// 依羣組取得來源
 export function getSourcesByGroup(group: string): Source[] {
   return ALL_SOURCES.filter(s => s.group === group);
 }

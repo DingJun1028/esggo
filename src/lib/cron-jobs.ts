@@ -77,7 +77,7 @@ async function generateDailyReportJob(): Promise<{ success: boolean; message: st
       data: {
         reportDate: todayStart,
         title: `永續觀察者日報 — ${todayStr}`,
-        summary: `${todayStr} 共收录 ${newAlerts} 則警示（近 7 日累計 ${recentAlerts.length} 則）。目前法規資料庫 ${totalRegulations} 筆、企業報告 ${totalReports} 份。`,
+        summary: `${todayStr} 共收錄 ${newAlerts} 則警示（近 7 日累計 ${recentAlerts.length} 則）。目前法規資料庫 ${totalRegulations} 筆、企業報告 ${totalReports} 份。`,
         highlights: JSON.stringify(highlights),
         tagStats: JSON.stringify(tagStats),
         sourceCount: topSources.length,

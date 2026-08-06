@@ -38,7 +38,7 @@
 ## ADR-006: Complete Autonomous Delegation (完全代主自行)
 **Status**: Accepted
 **Date**: 2026-07-06
-**Context**: ESG GO 平台需要一套完整的代理機制，允許代理者在完全授權範圍內自主執行任務，無需隨時請示主體。這對於 ESG 合規報告、智慧合約執行、AI 模型路由等場景至關重要。
+**Context**: ESG GO 平臺需要一套完整的代理機制，允許代理者在完全授權範圍內自主執行任務，無需隨時請示主體。這對於 ESG 合規報告、智慧合約執行、AI 模型路由等場景至關重要。
 **Decision**: 實作「完全代主自行」(Complete Autonomous Delegation) 架構，包含：
   1. **授權管理器** (CompleteDelegationManager) - 管理授權的創建、驗證、終止
   2. **自主決策引擎** (AutonomousDecisionEngine) - 實現自主決策邏輯

@@ -111,7 +111,7 @@ export const GRI_TEMPLATE: ReportTemplate = {
       required: true,
       fields: [
         { id: 'energy_consumption', name: '能源消耗', nameEn: 'Energy Consumption', type: 'number', required: true, unit: 'MWh' },
-        { id: 'renewable_energy', name: '再生能源占比', nameEn: 'Renewable Energy Ratio', type: 'number', required: true, unit: '%' },
+        { id: 'renewable_energy', name: '再生能源佔比', nameEn: 'Renewable Energy Ratio', type: 'number', required: true, unit: '%' },
         { id: 'ghg_scope1', name: 'Scope 1 排放', nameEn: 'GHG Scope 1', type: 'number', required: true, unit: 'tCO2e' },
         { id: 'ghg_scope2', name: 'Scope 2 排放', nameEn: 'GHG Scope 2', type: 'number', required: true, unit: 'tCO2e' },
         { id: 'ghg_scope3', name: 'Scope 3 排放', nameEn: 'GHG Scope 3', type: 'number', required: false, unit: 'tCO2e' },
@@ -243,12 +243,12 @@ export const CSRD_TEMPLATE: ReportTemplate = {
       id: 'CSRD-Social',
       title: '社會議題 (ESRS S1-S4)',
       titleEn: 'Social (ESRS S1-S4)',
-      description: '自有勞動力、供應鏈勞動力、受影響社群、消費者',
+      description: '自有勞動力、供應鏈勞動力、受影響社羣、消費者',
       required: true,
       fields: [
         { id: 'own_workforce', name: '自有勞動力 (S1)', nameEn: 'Own Workforce (S1)', type: 'textarea', required: true },
         { id: 'supply_chain_workers', name: '供應鏈勞動力 (S2)', nameEn: 'Value Chain Workers (S2)', type: 'textarea', required: true },
-        { id: 'affected_communities', name: '受影響社群 (S3)', nameEn: 'Affected Communities (S3)', type: 'textarea', required: true },
+        { id: 'affected_communities', name: '受影響社羣 (S3)', nameEn: 'Affected Communities (S3)', type: 'textarea', required: true },
         { id: 'consumers', name: '消費者 (S4)', nameEn: 'Consumers (S4)', type: 'textarea', required: true },
       ],
     },

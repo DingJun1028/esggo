@@ -285,7 +285,7 @@ export default function ESGAnalysisDemo() {
           </div>
         </div>
 
-        {/* 分數儀表板 */}
+        {/* 分數儀錶板 */}
         <div className="grid grid-cols-4 gap-6 mb-8">
           <div className="glass rounded-xl p-6 text-center">
             <div className="relative inline-block">

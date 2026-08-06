@@ -1,9 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
-// @esggo/errors — ESG GO 平台錯誤代碼統一 Package
+// @esggo/errors — ESG GO 平臺錯誤代碼統一 Package
 // 單一事實來源 (Single Source of Truth) for all error codes
 //
 // MECE 原則：所有錯誤代碼互斥 (Mutually Exclusive)，
-// 且完整覆蓋 (Collectively Exhaustive) 平台所有錯誤情境。
+// 且完整覆蓋 (Collectively Exhaustive) 平臺所有錯誤情境。
 // ═══════════════════════════════════════════════════════════════
 
 // ── HTTP Status Constants ──────────────────────────────────────

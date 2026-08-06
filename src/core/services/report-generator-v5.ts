@@ -82,10 +82,10 @@ function buildChapterContent(chNum: number, answers: AnswerRecord[], profile: Co
   if (answers.length > 0) {
     for (let i = 0; i < answers.length; i++) {
       const a = answers[i];
-      html += `<h3>${chNum}.${i+1} 揭露事项</h3>`;
+      html += `<h3>${chNum}.${i+1} 揭露事項</h3>`;
       html += `<p>${a.answer}</p>`;
       if (a.gri) html += `<p style="font-size:12px;color:#3B82F6">GRI: ${a.gri}</p>`;
-      if (a.direction) html += `<p style="font-size:12px;color:#64748b">报告方向: ${a.direction}</p>`;
+      if (a.direction) html += `<p style="font-size:12px;color:#64748b">報告方向: ${a.direction}</p>`;
     }
   } else {
     html += `<h3>${chNum}.1 管理策略</h3>`;
@@ -162,7 +162,7 @@ export function generateV5Report(companyId: string): V5GeneratedReport | null {
 
 export function reportV5ToHtml(report: V5GeneratedReport): string {
   const year = '2025';
-  let html = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>${report.companyName} ${year}年永续报告书 — ESGGO v5.0</title>`;
+  let html = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>${report.companyName} ${year}年永續報告書 — ESGGO v5.0</title>`;
   html += `<style>body{font-family:"Noto Sans TC",sans-serif;max-width:1200px;margin:0 auto;padding:20px;line-height:1.8;color:#1e293b}`;
   html += `h1{color:#009EB0;border-bottom:3px solid #009EB0;padding-bottom:12px}`;
   html += `h2{color:#009EB0;margin-top:50px;border-left:4px solid #D4AF37;padding-left:12px}`;

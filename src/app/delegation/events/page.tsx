@@ -40,7 +40,7 @@ export default function DelegationEventsPage() {
             委派事件總線 · 即時觀測
           </h1>
           <p className="text-gray-400 text-sm sm:text-base">
-            對齊平台不變量：全域・全端・全量・RWD・雙向同步。經 EventSource 訂閱委派生命週期事件。
+            對齊平臺不變量：全域・全端・全量・RWD・雙向同步。經 EventSource 訂閱委派生命週期事件。
           </p>
         </header>
 

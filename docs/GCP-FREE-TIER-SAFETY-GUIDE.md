@@ -77,7 +77,7 @@ Gemini API 的免費層有每分鐘請求數（RPM）與每日請求數（RPD）
 1. 在 GCP Console 進入 **APIs & Services > Credentials**。
 2. 點擊您提供給網關使用的 API Key。
 3. 在 **API Restrictions (API 限制)** 中：
-   - 勾選 **"Restrict key"** 并選擇僅允許呼叫 **"Generative Language API"**（確保此 Key 不能被用來調用其他昂貴付費 API）。
+   - 勾選 **"Restrict key"** 並選擇僅允許呼叫 **"Generative Language API"**（確保此 Key 不能被用來調用其他昂貴付費 API）。
 4. 進入 **Generative Language API** 的 Quotas 頁面：
    - 將 **"Requests per minute"** 限制為 **`15`** (免費層建議值)。
    - 將 **"Requests per day"** 限制為 **`1500`**。

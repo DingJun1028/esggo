@@ -30,7 +30,7 @@ const ACHIEVEMENTS = [
 
   // ─── Community ───
   { slug: 'first_comment', title: '發聲者', description: '發表第一則評論', icon: '💬', category: 'community', tierRequired: 'seed', xpReward: 10 },
-  { slug: 'community_contributor', title: '社群貢獻者', description: '獲得 10 個讚', icon: '👍', category: 'community', tierRequired: 'sprout', xpReward: 50 },
+  { slug: 'community_contributor', title: '社羣貢獻者', description: '獲得 10 個讚', icon: '👍', category: 'community', tierRequired: 'sprout', xpReward: 50 },
   { slug: 'esg_advocate', title: 'ESG 倡議者', description: '獲得 50 個讚', icon: '📣', category: 'community', tierRequired: 'bloom', xpReward: 200 },
 
   // ─── Tier Achievements ───
@@ -50,7 +50,7 @@ const DAILY_TASKS = [
 
 const WEEKLY_TASKS = [
   { slug: 'weekly_reports_3', title: '週報讀者', description: '閱讀 3 份報告', xpReward: 50, streakBonus: 20 },
-  { slug: 'weekly_comments_5', title: '社群互動', description: '發表 5 則評論', xpReward: 40, streakBonus: 15 },
+  { slug: 'weekly_comments_5', title: '社羣互動', description: '發表 5 則評論', xpReward: 40, streakBonus: 15 },
   { slug: 'weekly_subscribe_new', title: '拓展視野', description: '新增 1 個訂閱', xpReward: 30, streakBonus: 10 },
 ];
 

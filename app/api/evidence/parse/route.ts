@@ -34,7 +34,7 @@ const MOCK_EVIDENCES: Record<string, ParsedEvidence> = {
     extractedAt: Date.now(),
     fields: {
       date: '2025-06-15',
-      vendor: '台灣電力公司',
+      vendor: '臺灣電力公司',
       amount: '125,000',
       category: '電費',
       period: '2025年5月',

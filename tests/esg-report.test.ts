@@ -31,8 +31,8 @@ const mockGRIReport: GRIReport = {
     organizationalProfile: {
       name: 'ESG GO 公司',
       nature: '科技公司',
-      headquarters: '台北',
-      countriesOfOperation: ['台灣', '日本', '新加坡'],
+      headquarters: '臺北',
+      countriesOfOperation: ['臺灣', '日本', '新加坡'],
       ownershipStructure: '上市公司',
       markets: ['亞太地區', '全球'],
       stakeholderGroups: ['股東', '員工', '客戶', '供應商'],
@@ -90,7 +90,7 @@ const mockGRIReport: GRIReport = {
           code: 'GRI 405-1',
           title: '治理機構組成多元性',
           description: '治理機構成員的多元性指標',
-          data: ['性別', '年齡', '族群'],
+          data: ['性別', '年齡', '族羣'],
         },
       ],
     },
@@ -439,7 +439,7 @@ describe('GRI 報告內容', () => {
 
     expect(report.content).toContain('ESG GO 公司');
     expect(report.content).toContain('科技公司');
-    expect(report.content).toContain('台北');
+    expect(report.content).toContain('臺北');
   });
 
   it('should include material topics', async () => {

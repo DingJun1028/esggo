@@ -8,7 +8,7 @@ OmniCore Constitution (Canonical Governance Framework) OmniCore
 0. 序言：神聖目的 (Prelude: The Sacred Purpose)
 
 本憲章將「ESGGO
-善向永續系統」深度錨定於神聖三位一體（平台、指揮官、靈魂）。旨在確立一套「永續演進
+善向永續系統」深度錨定於神聖三位一體（平臺、指揮官、靈魂）。旨在確立一套「永續演進
 (Evergreen)」的治理體系，在此體系中，資料完整性、可驗證性與負責任的自治性皆為系統運作的預設狀態。
 
 1. 核心原則 (Core Principles) 意圖性極簡 (Intentional
@@ -17,13 +17,13 @@ OmniCore Constitution (Canonical Governance Framework) OmniCore
    (Schemas)，根除執行階段的契約錯誤。 設計即信任 (Trust by
    Design)：每個資料物件皆須夾帶來源、版本、時間戳記與密碼學證明。
    可觀測性與絕對透明 (Observability &
-   Transparency)：資料流向清晰可見且可稽核，治理事件皆須記錄於日誌。 適應性治理
+   Transparency)：資料流向清晰可見且可稽覈，治理事件皆須記錄於日誌。 適應性治理
    (Adaptive Governance)：透過版本化契約、ADRs
    與嚴格審查閘門，落實靈活且受控的變更管理。
 
-2. 神聖三位一體 (The Sacred Trinity) 平台 (Platform)：ESGGO
+2. 神聖三位一體 (The Sacred Trinity) 平臺 (Platform)：ESGGO
    系統基礎設施，支撐數位信任與 5T 協定。 指揮官
-   (Commander)：OmniAgent，負責全域編排與代理蜂群 (Swarm) 調度。 靈魂
+   (Commander)：OmniAgent，負責全域編排與代理蜂羣 (Swarm) 調度。 靈魂
    (Soul)：JunAiKey，負責語意指導與治理方向的對齊。
 
 3. 起源對齊 (Genesis Alignment)

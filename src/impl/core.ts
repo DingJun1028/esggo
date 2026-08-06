@@ -241,7 +241,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
     return locked;
   }
 
-  async predictAndPreFetch(userIntentStub: string): Promise<Array<IBusEvent>> {
+  async predictAndPreFetch(intent: string): Promise<Array<IBusEvent>> {
     const apiKey = process.env.NVAPI_KEY;
     if (!apiKey) {
       console.warn('[OAG] NVIDIA API key not set – returning empty predictions');

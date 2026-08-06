@@ -34,7 +34,7 @@ Cloudflare 邊緣 TLS 終結 → VPS:80 (nginx `omniagent-sub`) → `127.0.0.1:8
 | POST | `/stream`        | 是 | SSE 串流輸出 |
 | POST | `/omni-jules`    | 是 | OmniJules 自癒 |
 | POST | `/evolve`        | 是 | OmniAgent→OmniAgent 演化 pull |
-| POST | `/swarm/broadcast` | 是 | 蜂群任務事件中繼（廣播所有 WS client） |
+| POST | `/swarm/broadcast` | 是 | 蜂羣任務事件中繼（廣播所有 WS client） |
 | POST | `/sync` (AgentBus) | 是 | 狀態同步廣播 |
 
 ## 連線範例（裝置端）

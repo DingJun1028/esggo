@@ -1,6 +1,6 @@
 /**
  * 動態發現免費 AI 模型
- * 從 OpenRouter、Groq、Hugging Face 等平台獲取最新免費模型列表
+ * 從 OpenRouter、Groq、Hugging Face 等平臺獲取最新免費模型列表
  */
 
 export interface FreeModel {
@@ -197,7 +197,7 @@ export async function fetchHuggingFaceModels(): Promise<FreeModel[]> {
 }
 
 /**
- * 獲取所有平台的免費模型（整合來源）
+ * 獲取所有平臺的免費模型（整合來源）
  */
 export async function discoverAllFreeModels(): Promise<FreeModel[]> {
   const [openrouterModels, groqModels, huggingfaceModels] = await Promise.allSettled([

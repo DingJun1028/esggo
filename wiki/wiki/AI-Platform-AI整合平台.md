@@ -1,12 +1,12 @@
-# AI 整合平台 AI Platform
+# AI 整合平臺 AI Platform
 
 **路徑：** `/ai-platform`
 
 ## 功能定位
-AI 整合平台是平台智能能力、模型能力與技術中控展示中心。
+AI 整合平臺是平臺智能能力、模型能力與技術中控展示中心。
 
 ## 功能說明
-本頁展示 Gemini 2.0、Genkit 流程與 Blue.cc 任務同步能力，並承載平台 AI 模型應用與智能流程展示。
+本頁展示 Gemini 2.0、Genkit 流程與 Blue.cc 任務同步能力，並承載平臺 AI 模型應用與智能流程展示。
 
 ## 主要內容
 - Gemini 2.0 展示

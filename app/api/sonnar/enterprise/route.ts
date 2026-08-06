@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     industry: '未分類',
     employeeCount: Math.floor(Math.random() * 500) + 10,
     revenue: `NT$ ${(Math.random() * 100 + 1).toFixed(0)}M`,
-    headquarters: '台灣',
+    headquarters: '臺灣',
     sustainabilityGoals: [
       '淨零排放 2050',
       '綠色採購 30% 2027',

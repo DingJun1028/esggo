@@ -128,7 +128,7 @@ export class ESGReportEngine {
       // 利益相關者參與
       if (gd.stakeholderEngagement) {
         lines.push('【利益相關者參與】');
-        lines.push(`  利益相關者群體: ${gd.stakeholderEngagement.stakeholderGroups.join(', ')}`);
+        lines.push(`  利益相關者羣體: ${gd.stakeholderEngagement.stakeholderGroups.join(', ')}`);
         lines.push(`  參與方法: ${gd.stakeholderEngagement.engagementMethods.join(', ')}`);
         lines.push('');
       }
@@ -196,7 +196,7 @@ export class ESGReportEngine {
     if (data.industry) {
       lines.push('【業務資訊】');
       lines.push(`  部門: ${data.industry.sector}`);
-      lines.push(`  業務群組: ${data.industry.industryGroup}`);
+      lines.push(`  業務羣組: ${data.industry.industryGroup}`);
       lines.push(`  業務: ${data.industry.industry}`);
       lines.push(`  子業務: ${data.industry.subIndustry}`);
       lines.push('');

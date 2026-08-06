@@ -28,7 +28,7 @@ import { executeTask, TaskType, TaskResultBase } from "./handlers";
 
 /** 量子測量結果 */
 export type QuantumMeasurement = 
-  | "superposition"   // 叠加態：服務狀態未知
+  | "superposition"   // 疊加態：服務狀態未知
   | "entangled"       // 糾纏態：與遠端服務同步
   | "collapsed"       // 坍縮態：已確定服務狀態
   | "decohered";      // 退相干：連接斷開

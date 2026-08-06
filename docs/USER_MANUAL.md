@@ -1,14 +1,14 @@
 # ESG GO 使用手冊
 
 > **版本**：v5.0 | **最後更新**：2026-07-10  
-> **平台網址**：https://esggo.vercel.app  
+> **平臺網址**：https://esggo.vercel.app  
 > **技術支援**：https://github.com/DingJun1028/esggo
 
 ---
 
 ## 目錄
 
-1. [平台簡介](#1-平台簡介)
+1. [平臺簡介](#1-平臺簡介)
 2. [快速開始](#2-快速開始)
 3. [導覽列與頁面切換](#3-導覽列與頁面切換)
 4. [首頁](#4-首頁)
@@ -17,7 +17,7 @@
 7. [萬能永續中心（Sustain Center）](#7-萬能永續中心sustain-center)
 8. [村莊治理（Village Governance）](#8-村莊治理village-governance)
 9. [知識庫（OmniWiki）](#9-知識庫omniwiki)
-10. [AI 代理主控台（OmniAgent）](#10-ai-代理主控台omniagent)
+10. [AI 代理主控臺（OmniAgent）](#10-ai-代理主控臺omniagent)
 11. [每日永續觀察（Daily Observer）](#11-每日永續觀察daily-observer)
 12. [ESG Sonnar 資料雷達](#12-esg-sonnar-資料雷達)
 13. [EMM 環境監控 IDE](#13-emm-環境監控-ide)
@@ -30,9 +30,9 @@
 
 ---
 
-## 1. 平台簡介
+## 1. 平臺簡介
 
-**ESG GO** 是一個全端企業級 ESG（環境、社會、治理）資料治理平台。平台以 **5T 協議**（Traceable 可追溯、Transparent 透明、Tangible 可量化、Trustworthy 可信賴、Trackable 可追蹤）為核心架構，為企業提供從資料蒐集、分析、報告撰寫到合規驗證的一站式解決方案。
+**ESG GO** 是一個全端企業級 ESG（環境、社會、治理）資料治理平臺。平臺以 **5T 協議**（Traceable 可追溯、Transparent 透明、Tangible 可量化、Trustworthy 可信賴、Trackable 可追蹤）為核心架構，為企業提供從資料蒐集、分析、報告撰寫到合規驗證的一站式解決方案。
 
 ### 核心特色
 
@@ -74,8 +74,8 @@
 
 | 圖示 | 頁面 | 說明 |
 |------|------|------|
-| 🏠 | 首頁 | 平台首頁與模組入口 |
-| ◎ | 萬能中心 | OmniCore 8 分頁儀表板 |
+| 🏠 | 首頁 | 平臺首頁與模組入口 |
+| ◎ | 萬能中心 | OmniCore 8 分頁儀錶板 |
 | ✅ | OmniTodo | 統一任務管理 |
 | 📊 | ESG 報告 | Sustain Write v5 報告產生器 |
 | 🏡 | 村莊 | Village 二次方投票治理 |
@@ -101,9 +101,9 @@
 
 **路徑**：`/omni-center`
 
-OmniCore 萬能中心是平台的核心操控台，包含 8 個分頁：
+OmniCore 萬能中心是平臺的核心操控臺，包含 8 個分頁：
 
-### 5.1 Dashboard（儀表板）
+### 5.1 Dashboard（儀錶板）
 
 - 同心圓架構視覺化，展示 OmniEye、OmniCore、OmniPulse、OmniBone、OmniBrain、OmniHeart 六大核心
 - 5T 合規分數即時顯示
@@ -156,7 +156,7 @@ OmniCore 萬能中心是平台的核心操控台，包含 8 個分頁：
 
 **路徑**：`/sustain-write/v5`
 
-這是平台的核心功能之一，可自動生成符合國際標準的 ESG 報告。
+這是平臺的核心功能之一，可自動生成符合國際標準的 ESG 報告。
 
 ### 6.1 報告生成流程
 
@@ -208,12 +208,12 @@ OmniCore 萬能中心是平台的核心操控台，包含 8 個分頁：
 
 **路徑**：`/sustain-center`
 
-Sustain Center 是 ESG 資料的中央控管儀表板。
+Sustain Center 是 ESG 資料的中央控管儀錶板。
 
 ### 主要功能
 
-- **總覽儀表板**：總碳排放量、ESG 總分、已處理文件數
-- **圖表分析**：互動式圖表展示 ESG 趨勢、碳排分布、各維度得分
+- **總覽儀錶板**：總碳排放量、ESG 總分、已處理文件數
+- **圖表分析**：互動式圖表展示 ESG 趨勢、碳排分佈、各維度得分
 - **洞察網格**：AI 生成的 ESG 洞察與建議
 - **信任帳本**：所有資料變更的審計軌跡
 - **WebSocket 心跳監控**：即時系統健康狀態
@@ -281,11 +281,11 @@ Village 模組實現去中心化的 ESG 影響力治理。
 
 ---
 
-## 10. AI 代理主控台（OmniAgent）
+## 10. AI 代理主控臺（OmniAgent）
 
 **路徑**：`/omni-agent`
 
-OmniAgent 是平台的 AI 助理介面。
+OmniAgent 是平臺的 AI 助理介面。
 
 ### 10.1 聊天介面
 
@@ -339,7 +339,7 @@ OmniAgent 是平台的 AI 助理介面。
 
 **路徑**：`/sonnar`
 
-Sonnar 是平台的資料爬取與智慧分析引擎。
+Sonnar 是平臺的資料爬取與智慧分析引擎。
 
 ### 功能
 
@@ -381,7 +381,7 @@ EMM（Environment + Model Monitor）提供系統與 AI 模型的即時監控。
 
 **路徑**：`/profile`
 
-平台提供遊戲化的使用者成長機制。
+平臺提供遊戲化的使用者成長機制。
 
 ### 等級系統
 
@@ -396,7 +396,7 @@ EMM（Environment + Model Monitor）提供系統與 AI 模型的即時監控。
 ### 成長途徑
 
 - **每日任務**：完成 ESG 相關任務獲得經驗值
-- **成就系統**：達成特定里程碑解鎖成就
+- **成就係統**：達成特定里程碑解鎖成就
 - **排行榜**：與其他使用者比較成長進度
 - **任務進度**：追蹤個人 ESG 學習與實作進度
 
@@ -487,7 +487,7 @@ Registered → Loaded → Enabled → Disabled/Error
 
 ### Q：投票需要花費嗎？
 
-**A**：村莊治理的二次方投票需要消耗影響力點數。點數可透過參與平台活動獲得。
+**A**：村莊治理的二次方投票需要消耗影響力點數。點數可透過參與平臺活動獲得。
 
 ### Q：如何回報問題？
 
@@ -510,17 +510,17 @@ Registered → Loaded → Enabled → Disabled/Error
 | RAG | Retrieval-Augmented Generation | 檢索增強生成 |
 | OCR | Optical Character Recognition | 光學字元辨識 |
 | XP | Experience Points | 經驗值 |
-| OmniCore | — | 平台核心操控系統 |
+| OmniCore | — | 平臺核心操控系統 |
 | Sonnar | — | 資料爬取與雷達引擎 |
 | EMM | Environment + Model Monitor | 環境與模型監控系統 |
-| L-Hub | — | AI 模型路由蜂群 |
+| L-Hub | — | AI 模型路由蜂羣 |
 | CelestialFlow | — | 天體資料流架構 |
 
 ---
 
 ## 附錄：API 端點總覽
 
-平台提供完整的 REST API，以下列出主要端點：
+平臺提供完整的 REST API，以下列出主要端點：
 
 ### 報告相關
 
@@ -528,7 +528,7 @@ Registered → Loaded → Enabled → Disabled/Error
 |------|------|------|
 | `/api/sustain-write/v5` | GET/POST | 取得公司列表 / 生成 v5 報告 |
 | `/api/sustain-write/v5/async` | POST | 啟動非同步報告生成 |
-| `/api/sustain-write/v5/progress/[taskId]` | GET | 查询報告生成進度 |
+| `/api/sustain-write/v5/progress/[taskId]` | GET | 查詢報告生成進度 |
 | `/api/sustain-write/v5/download` | GET | 下載報告 |
 | `/api/sustain-write/v5/evidence` | GET | 取得證據卡片 |
 

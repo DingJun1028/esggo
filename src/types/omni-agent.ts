@@ -79,13 +79,13 @@ export interface IOmniAgent {
   onMartialLaw(reason: string): void;
 
   /**
-   * 監聽指定 Bus 主題的背壓（事件累積量），在超過阈值時觸發警告或自動增殖。
+   * 監聽指定 Bus 主題的背壓（事件累積量），在超過閾值時觸發警告或自動增殖。
    * @param topic 需要監控的 Bus 主題
-   * @param threshold 事件數量阈值
+   * @param threshold 事件數量閾值
    */
   monitorBackpressure(topic: string, threshold: number): void;
 
-  /** 代理目前所在的生命周期階段 */
+  /** 代理目前所在的生命週期階段 */
   readonly state: LifecycleStage;
 
   /** 代理的靜態設定（只讀） */
@@ -129,7 +129,7 @@ export interface IOmniAgent {
   execute(spec: ITaskSpec): Promise<ITaskResult>;
 
   /**
-   * 在指定的生命周期階段註冊 Hook。
+   * 在指定的生命週期階段註冊 Hook。
    * @param stage 目標階段
    * @param hook   Hook 函式，會收到當前任務規格、結果或錯誤
    */
@@ -143,7 +143,7 @@ export interface IOmniAgent {
   ): void;
 
   /**
-   * 取得最近一次執行的完整任務快照（含生命周期路徑）。
+   * 取得最近一次執行的完整任務快照（含生命週期路徑）。
    * @returns 按時間順序（舊 → 新）的快照陣列
    */
   getRecentFlow(): Promise<IFlowSnapshot[]>;

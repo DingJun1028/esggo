@@ -195,7 +195,7 @@ export default function DataExportPage() {
                 style={{ width: '100%', padding: '8px 12px', background: SC.bg, border: `1px solid ${SC.border}`, borderRadius: 8, color: SC.text, fontSize: 13 }}
               >
                 <option value="">全部區域</option>
-                <option value="tw">台灣</option>
+                <option value="tw">臺灣</option>
                 <option value="eu">歐盟</option>
                 <option value="us">美國</option>
                 <option value="ap">亞太</option>
