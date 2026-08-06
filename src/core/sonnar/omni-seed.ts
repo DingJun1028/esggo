@@ -58,6 +58,9 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
     ],
     evidence: {
       ...seed.evidence,
+      originCause: seed.evidence?.originCause ?? 'Seed Planted',
+      processTrace: [...(seed.evidence?.processTrace ?? []), 'plantOmniSeed'],
+      finalEffect: 'Seed Awakened',
       activation_log: "ChainLog::Activated_At_" + Date.now(),
       iso_verification: "[ISO-14064-1] 零幻覺驗證通過",
       planted_location: targetLocation,
