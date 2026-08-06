@@ -44,6 +44,7 @@
 | P06 | TencentDB Proxy | LLM 轉發 | `apps/tencentdb-memory/start-proxy.sh` | ✅ 運行 (8096) |
 | P07 | 萬能即時翻譯服務 | 翻譯引擎 | `apps/universal-translator/server.mjs` | ✅ 實作 (引擎驗證通過) |
 | P08 | Live esggo 即時轉播中心 | 直播中樞 | `apps/omni-blueprint-hub/{studio,stream,live-sync}.html` + `https://live.esggo.co` | ✅ 實例運行 |
+| P09 | 萬能語種橋樑服務 | 翻譯 API + UI | `apps/universal-translator/` + `https://translate.esggo.co` | ✅ 代碼完成，待 VPS 部署 |
 
 ---
 
