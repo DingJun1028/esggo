@@ -30,6 +30,9 @@ preview_id = "${FREE_MODELS_KV_PREVIEW_ID}"
 # GROQ_API_KEY = ""
 # HF_TOKEN = ""
 
+[build]
+command = "pnpm install && pnpm run build"
+
 # 觀測/日誌
 [observability]
 enabled = true
