@@ -17,8 +17,13 @@ export function MobileHeader() {
     <>
       <header className="fixed top-0 left-0 right-0 h-16 bg-bg-surface/80 backdrop-blur-xl border-b border-primary/20 flex items-center justify-between px-6 z-[80] md:hidden">
         <div className="flex items-center gap-3">
-          <button onClick={() => setIsMenuOpen(true)} className="p-2 -ml-2 text-text-muted hover:text-primary hover:bg-primary/10 rounded-xl transition-colors">
-            <Menu className="w-6 h-6" />
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="p-2 -ml-2 text-text-muted hover:text-primary hover:bg-primary/10 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+            aria-label="開啟選單 (Open Menu)"
+            title="開啟選單 (Open Menu)"
+          >
+            <Menu className="w-6 h-6" aria-hidden="true" />
           </button>
         </div>
         
@@ -29,7 +34,9 @@ export function MobileHeader() {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-            className="p-2 text-text-muted hover:text-primary text-xs font-bold hover:bg-primary/10 rounded-xl transition-colors"
+            className="p-2 text-text-muted hover:text-primary text-xs font-bold hover:bg-primary/10 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+            aria-label="切換語言 (Toggle Language)"
+            title="切換語言 (Toggle Language)"
           >
             {lang === "zh" ? "EN" : "中文"}
           </button>
@@ -37,9 +44,11 @@ export function MobileHeader() {
           <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-text-muted hover:text-primary relative hover:bg-primary/10 rounded-xl transition-colors group"
+              className="p-2 text-text-muted hover:text-primary relative hover:bg-primary/10 rounded-xl transition-colors group focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+              aria-label="通知 (Notifications)"
+              title="通知 (Notifications)"
             >
-              <Bell className="w-5 h-5 group-hover:text-primary transition-colors" />
+              <Bell className="w-5 h-5 group-hover:text-primary transition-colors" aria-hidden="true" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-status-lethal rounded-full shadow-[0_0_8px_var(--color-status-lethal)]" />
             </button>
 
@@ -150,9 +159,11 @@ export function MobileHeader() {
                 </span>
                 <button 
                   onClick={() => setIsMenuOpen(false)}
-                  className="ml-auto p-2 text-text-muted hover:text-primary rounded-full hover:bg-primary/10 transition-colors"
+                  className="ml-auto p-2 text-text-muted hover:text-primary rounded-full hover:bg-primary/10 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus:outline-none"
+                  aria-label="關閉選單 (Close Menu)"
+                  title="關閉選單 (Close Menu)"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
 
