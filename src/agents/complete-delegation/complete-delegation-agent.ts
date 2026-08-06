@@ -72,6 +72,9 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
       version: '1.0.0',
       timestamp: Date.now(),
       evidence: {
+        originCause: 'unknown',
+        processTrace: [],
+        finalEffect: 'unknown',
         delegationId: this.delegationScope.delegationId,
         principal: this.principal,
       },

@@ -136,6 +136,9 @@ export class VPSAgent {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
+        originCause: 'unknown',
+        processTrace: [],
+        finalEffect: 'unknown',
         type: "vps-agent",
         host: config.host,
         quantum: true, // 標記為量子糾纏代理

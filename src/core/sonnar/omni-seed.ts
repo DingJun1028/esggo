@@ -90,7 +90,12 @@ export function createOmniSeed(params?: {
     uuid,
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: params?.evidence ?? {},
+    evidence: {
+      originCause: 'unknown',
+      processTrace: [],
+      finalEffect: 'unknown',
+      ...(params?.evidence ?? {}),
+    },
     hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     hashLock: params?.hashLock ?? `0xHASHLOCK_${Date.now()}`,
     entropyControl: params?.entropyControl ?? 0.1,
