@@ -103,6 +103,17 @@
 
 ---
 
+## Live 轉播小隊（光之羽翼陣列延伸職能）
+
+OA-Team 雙蜂隊的「即時轉播」由 **Live esggo 即時轉播中心**（`https://live.esggo.co`，P08）承載，對齊 Omni-Blueprint Hub 雙藍圖：
+
+- **即時轉播 (LIVE_BROADCAST)**：連入外部資料流即時翻譯，蜂群經 `apps/universal-translator` 共享語言橋。
+- **指定轉播 (DESIGNATED_URL_BROADCAST)**：一台翻譯，全員共享專屬網址（studio.html 講者端 / stream.html 觀眾端 / live-sync.html 同步端）。
+
+跨陣列協作：光之羽翼(13-18/43-48) 主轉播編排，符文契約(07-12/37-42) 護 TLS/路由，萬能即時翻譯(P07) 供語言核心，5T 驗算(25-30/55-60) 守零幻覺轉錄。
+
+---
+
 ## 雙蜂共鳴協定
 
 - **同核不同位**：蜂王守本地（Windows / 開發者端），蜂后鎮 VPS（生產 / 公網）。兩隊共用同一 `IComponentCore` 編號法則與 5T 公約。

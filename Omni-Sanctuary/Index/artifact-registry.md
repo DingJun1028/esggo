@@ -14,7 +14,7 @@
 | 004 | Langfuse 追蹤器 | 觀察 | `Artifacts/integrations/langfuse.json` | ✅ 啟用 |
 | 005 | Google ADK | 整合 | `Artifacts/integrations/adk.json` | ✅ 啟用 |
 | 006 | LangChain 引擎 | 套件 | `Artifacts/integrations/langchain.json` | ✅ 啟用 |
-| 007 | 萬能即時翻譯 | 服務 | `Artifacts/integrations/translate.json` | ✅ 啟用 |
+| 007 | 萬能即時翻譯 | 服務 | `apps/universal-translator/` + `https://translate.esggo.co` | ✅ 實例運行 |
 | 008 | Auto-Repair Workflow | GitHub Actions | `.github/workflows/auto-repair.yml` | ✅ 啟用 |
 | 009 | TencentDB Agent Memory | 記憶後端 | `apps/tencentdb-memory/` + `https://memory.esggo.co` | ✅ 實例運行 |
 
@@ -42,6 +42,8 @@
 | P04 | TencentDB MemoryCore | 記憶核心 | `apps/tencentdb-memory/start-memory-core.sh` | ✅ 運行 (8420) |
 | P05 | TencentDB MemoryHub Panel | 管理 UI | `apps/tencentdb-memory/start-memory-hub.sh` | ✅ 運行 (8125) |
 | P06 | TencentDB Proxy | LLM 轉發 | `apps/tencentdb-memory/start-proxy.sh` | ✅ 運行 (8096) |
+| P07 | 萬能即時翻譯服務 | 翻譯引擎 | `apps/universal-translator/server.mjs` | ✅ 實作 (引擎驗證通過) |
+| P08 | Live esggo 即時轉播中心 | 直播中樞 | `apps/omni-blueprint-hub/{studio,stream,live-sync}.html` + `https://live.esggo.co` | ✅ 實例運行 |
 
 ---
 

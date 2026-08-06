@@ -1,0 +1,14 @@
+{
+  "name": "universal-translator",
+  "version": "1.0.0",
+  "description": "OA-Team 萬能即時翻譯服務 (LibreTranslate → MyMemory → 原文兜底)",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "health": "curl -sf http://localhost:8788/health"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
