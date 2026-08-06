@@ -1,16 +1,28 @@
 // ============================================================
-// 萬能即時翻譯 — 服務層 (HTTP + WebSocket)
+// 萬能即時翻譯 — 服務層 (HTTP + Optional WebSocket)
 // 複用 translate.mjs 引擎 (LibreTranslate → MyMemory → 原文兜底)
-// 優化: /health 健康檢查 | /translate REST | /ws 即時流 | 5T 溯源標頭
+// WebSocket: 若 ws 套件可用則啟用，否則僅保留 REST API
+//       : Akkadu 語音口譯模組 (dev/prod, /interpreter/*)
 // ============================================================
 import http from 'node:http';
-import { WebSocketServer } from 'ws';
+import fs from 'node:fs';
+import path from 'node:path';
 import { translateDetailed, translateToMany, stats, hashOf } from './translate.mjs';
+import { akkaduStatus } from './akkadu.mjs';
 
 const PORT = Number(process.env.PORT || 8788);
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
+const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
-// 5T 溯源標頭
+// --- ws 延遲載入 (若 ws 套件缺失，僅保留 HTTP) ---
+let WebSocketServer = null;
+try {
+  ({ WebSocketServer } = require('ws'));
+} catch (e) {
+  console.warn('[universal-translator] ws module not available, REST-only mode');
+}
+
+// 5T 溈源標頭
 function tHeader(res, rec) {
   res.setHeader('X-OA-Engine', rec.engine);
   res.setHeader('X-OA-Cached', String(rec.cached));
@@ -18,7 +30,7 @@ function tHeader(res, rec) {
 }
 
 const server = http.createServer(async (req, res) => {
-  // CORS (前端跨域呼叫)
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
@@ -28,7 +40,28 @@ const server = http.createServer(async (req, res) => {
   if (req.url === '/health' && req.method === 'GET') {
     return res
       .writeHead(200, { 'content-type': 'application/json' })
-      .end(JSON.stringify({ status: 'ok', version: APP_VERSION, stats }));
+      .end(JSON.stringify({ status: 'ok', version: APP_VERSION, stats, akkadu: akkaduStatus() }));
+  }
+
+  // Akkadu 口譯模組狀態
+  if (req.url === '/interpreter/status' && req.method === 'GET') {
+    return res
+      .writeHead(200, { 'content-type': 'application/json' })
+      .end(JSON.stringify({ ...akkaduStatus(), version: APP_VERSION }));
+  }
+
+  // 靜態前端頁面 (receiver / broadcaster)
+  if (req.method === 'GET') {
+    const page = req.url === '/' ? '/receiver.html'
+      : req.url.startsWith('/receiver') ? '/receiver.html'
+      : req.url.startsWith('/broadcaster') ? '/broadcaster.html'
+      : null;
+    if (page) {
+      const fp = path.join(PUBLIC_DIR, page);
+      if (fs.existsSync(fp)) {
+        return res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(fs.readFileSync(fp));
+      }
+    }
   }
 
   // 即時轉播 / 指定轉播 核心 API
@@ -57,22 +90,25 @@ const server = http.createServer(async (req, res) => {
   }
 
   res.writeHead(404, { 'content-type': 'application/json' });
-  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws' }));
+  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws (if ws installed)' }));
 });
 
-// WebSocket 即時流 (連入外部資料流即時翻譯)
-const wss = new WebSocketServer({ server, path: '/ws' });
-wss.on('connection', (ws) => {
-  ws.on('message', async (msg) => {
-    let p;
-    try { p = JSON.parse(msg.toString()); } catch { return ws.send(JSON.stringify({ error: 'bad json' })); }
-    const { text, from = 'auto', to = 'zh' } = p;
-    if (!text) return ws.send(JSON.stringify({ error: 'missing text' }));
-    const rec = await translateDetailed(text, from, to);
-    ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }));
+// WebSocket 即時流 (ws 套件可用時啟用)
+if (WebSocketServer) {
+  const wss = new WebSocketServer({ server, path: '/ws' });
+  wss.on('connection', (ws) => {
+    ws.on('message', async (msg) => {
+      let p;
+      try { p = JSON.parse(msg.toString()); } catch { return ws.send(JSON.stringify({ error: 'bad json' })); }
+      const { text, from = 'auto', to = 'zh' } = p;
+      if (!text) return ws.send(JSON.stringify({ error: 'missing text' }));
+      const rec = await translateDetailed(text, from, to);
+      ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }));
+    });
   });
-});
+}
 
 server.listen(PORT, () => {
-  console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws)`);
+  const mode = WebSocketServer ? 'HTTP+WS' : 'HTTP-only';
+  console.log(`[universal-translator] listening on :${PORT} (${mode})`);
 });
