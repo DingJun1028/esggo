@@ -30,8 +30,10 @@ program
     console.log('[HINT] 請先配置 Groq API key 至 gateway.json');
   });
 
-program
-  .command('data get <key>')
+const data = program.command('data').description('核心數據讀寫（含 Hash Lock）');
+
+data
+  .command('get <key>')
   .description('調動核心數據讀取')
   .option('--dry-run', '預演模式')
   .action(async (key, opts) => {
@@ -43,8 +45,8 @@ program
     console.log('[BLOCKER] 需 Gateway 通線 + Bearer 鑑權');
   });
 
-program
-  .command('data set <key> <value>')
+data
+  .command('set <key> <value>')
   .description('調控核心數據寫入（含 Hash Lock）')
   .option('--dry-run', '預演模式（強烈建議先跑）')
   .action(async (key, value, opts) => {
