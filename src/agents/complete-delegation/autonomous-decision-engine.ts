@@ -463,7 +463,7 @@ export class AuditLogger {
       this._logs.shift();
     }
 
-    // 控制台輸出
+    // 控制檯輸出
     console.log(`[AuditLogger] ${entry.type}:`, JSON.stringify(entry));
 
     // 轉送至外部 sink（若有）

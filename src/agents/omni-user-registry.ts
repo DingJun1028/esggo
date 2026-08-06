@@ -214,7 +214,7 @@ export class OmniUserRegistry {
 
     // 語言偏好檢測
     const languagePatterns: Record<string, string[]> = {
-      'zh-TW': ['繁體', '中文', '台灣', '你好'],
+      'zh-TW': ['繁體', '中文', '臺灣', '你好'],
       'en': ['hello', 'help', 'please', 'thanks'],
       'ja': ['こんにちは', 'ありがとう', 'すみません'],
     };

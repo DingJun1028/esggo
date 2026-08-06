@@ -5,15 +5,15 @@
 
 歡迎來到 **OmniHermes 系統 + ESG GO 系統** 官方 Wiki。
 
-本平台是一套結合 **ESG 治理、AI 智能協作、可信資料驗證、混合雲調度、永續報告撰寫與企業治理可視化** 的整合式數位平台。  
+本平臺是一套結合 **ESG 治理、AI 智能協作、可信資料驗證、混合雲調度、永續報告撰寫與企業治理可視化** 的整合式數位平臺。  
 系統以 **5T 誠信協議** 為治理骨幹，透過 **Omni-Agent、Supabase PostgreSQL、BlueCC Hybrid Control Plane、GRI/ISSB 對應邏輯與 ZKP 封印能力**，打造企業可持續、可追溯、可驗證的治理作業環境。
 
 ---
 
 ## Wiki 導覽
 
-### 平台核心介紹
-- [[平台總覽]]
+### 平臺核心介紹
+- [[平臺總覽]]
 - [[系統核心架構]]
 - [[5T-誠信協議]]
 - [[技術架構與資料設計]]
@@ -21,7 +21,7 @@
 - [[功能總覽]]
 
 ### 核心功能模組
-- [[控制台-Dashboard]]
+- [[控制檯-Dashboard]]
 - [[SustainWrite-永續撰寫]]
 - [[Digital-Twin-數位分身]]
 - [[Health-Check-企業健檢]]
@@ -54,7 +54,7 @@
 - [[Advisors-顧問專區]]
 - [[Agents-代理專區]]
 - [[Consulting-顧問服務]]
-- [[AI-Platform-AI整合平台]]
+- [[AI-Platform-AI整合平臺]]
 
 ### 系統管理
 - [[Tasks-任務中心]]
@@ -69,7 +69,7 @@
 
 ---
 
-## 平台版本資訊
+## 平臺版本資訊
 - **Version:** v8.5.1-Alpha
 - **Last Updated:** 2026-05-23
 - **Design System:** Berkeley Academy Design System v10.0

@@ -624,7 +624,7 @@ export default function SustainWriteV5Page() {
                     type="text"
                     value={customCompany.annualRevenue}
                     onChange={(e) => setCustomCompany(c => ({ ...c, annualRevenue: e.target.value }))}
-                    placeholder="例：新台幣5億元"
+                    placeholder="例：新臺幣5億元"
                     className="w-full border border-borderColor rounded-lg px-3 py-2 text-sm bg-secondary text-textPrimary focus:ring-2 focus:ring-accentTeal outline-none"
                   />
                 </div>
@@ -1126,12 +1126,12 @@ export default function SustainWriteV5Page() {
           </div>
         </div>
 
-        {/* 萬能函數控制台 */}
+        {/* 萬能函數控制檯 */}
         <div className="bg-secondary rounded-lg border border-borderColor p-6 shadow-sm">
           <div className="border-l-4 border-accentPurple pl-4 mb-4">
             <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
               <Wand2 size={18} className="text-accentPurple" />
-              萬能函數控制台 (Omni Function Console)
+              萬能函數控制檯 (Omni Function Console)
             </h2>
             <p className="text-sm text-textSecondary mt-1">
               直接呼叫 omni() 萬能函數與 omniFn 函數庫，亦可一鍵建立 5T 組件寫入 Vault

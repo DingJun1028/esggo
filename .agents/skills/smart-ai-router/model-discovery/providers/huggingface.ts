@@ -28,7 +28,7 @@ const SUPPORTED_PREFIXES = [
 
 /**
  * 獲取 Hugging Face 免費模型列表
- * 此實作會自動平台過濾標記為 free 的模型
+ * 此實作會自動平臺過濾標記為 free 的模型
  */
 export async function fetchHFFreeModels(
   token?: string

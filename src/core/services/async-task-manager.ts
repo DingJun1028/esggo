@@ -384,7 +384,7 @@ export function startAsyncTask(
         }).then(r => r.json());
         
         if (lhubRes.success) {
-          finalPrompt = `根據 L-Hub 蜂群摘要：\n${lhubRes.data}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要。`;
+          finalPrompt = `根據 L-Hub 蜂羣摘要：\n${lhubRes.data}\n\n請為永續報告書撰寫章節：${currentTitle}。請給出專業、合規的內容摘要。`;
         }
       } catch {
         // Fallback to original prompt

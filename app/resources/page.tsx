@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 // ═══════════════════════════════════════════════════════════════
-// System Platform Resources — 系統平台資源項目
+// System Platform Resources — 系統平臺資源項目
 // Solid Card Design System (Teal #009EB0 / Gold #D4AF37 / ZKP Blue #3B82F6)
 // ═══════════════════════════════════════════════════════════════
 

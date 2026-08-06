@@ -71,7 +71,7 @@ export const CHAPTER_DEFINITIONS: ChapterDefinition[] = [
     name: '經濟與誠信經營',
     title: '第四章：經濟與誠信經營',
     griMapping: ['GRI 2-27', 'GRI 201-1', 'GRI 201-2', 'GRI 201-3', 'GRI 201-4', 'GRI 203-1', 'GRI 203-2', 'GRI 205-1', 'GRI 205-2', 'GRI 205-3', 'GRI 206-1', 'GRI 207-1', 'GRI 207-2', 'GRI 207-3', 'GRI 207-4'],
-    description: '經濟績效、市場占有率、間接經濟衝擊、反貪腐與公平競爭',
+    description: '經濟績效、市場佔有率、間接經濟衝擊、反貪腐與公平競爭',
   },
   {
     code: 'C5',
@@ -124,8 +124,8 @@ export const CHAPTER_DEFINITIONS: ChapterDefinition[] = [
   },
   {
     code: 'C12',
-    name: '查核、佐證與資料治理',
-    title: '第十二章：查核、佐證與資料治理',
+    name: '查覈、佐證與資料治理',
+    title: '第十二章：查覈、佐證與資料治理',
     griMapping: ['GRI 1', 'GRI 2', 'ISAE 3000', 'AA1000'],
     description: '資料治理架構、確信範圍與結果、佐證文件管理與外部查證',
   },
@@ -157,7 +157,7 @@ export const REPORT_SECTION_TEMPLATES: ReportSectionTemplate[] = [
   {
     chapterCode: 'C4',
     sectionTitle: '經濟與誠信經營',
-    template: `## 經濟與誠信經營\n\n本章節依據 GRI 201、GRI 203、GRI 205、GRI 206、GRI 207 之要求，揭露公司經濟績效與誠信經營作為。\n\n### 經濟績效\n{{economicPerformance}}\n\n### 市場占有率\n{{marketPresence}}\n\n### 間接經濟衝擊\n{{indirectEconomicImpacts}}\n\n### 反貪腐與公平競爭\n{{antiCorruption}}`,
+    template: `## 經濟與誠信經營\n\n本章節依據 GRI 201、GRI 203、GRI 205、GRI 206、GRI 207 之要求，揭露公司經濟績效與誠信經營作為。\n\n### 經濟績效\n{{economicPerformance}}\n\n### 市場佔有率\n{{marketPresence}}\n\n### 間接經濟衝擊\n{{indirectEconomicImpacts}}\n\n### 反貪腐與公平競爭\n{{antiCorruption}}`,
     requiredFields: ['C4-01', 'C4-02', 'C4-03', 'C4-04', 'C4-05'],
   },
   {
@@ -204,8 +204,8 @@ export const REPORT_SECTION_TEMPLATES: ReportSectionTemplate[] = [
   },
   {
     chapterCode: 'C12',
-    sectionTitle: '查核、佐證與資料治理',
-    template: `## 查核、佐證與資料治理\n\n本章節依據 GRI 1、GRI 2 與 ISAE 3000 之要求，說明公司資料治理與外部查證機制。\n\n### 資料治理架構\n{{dataGovernance}}\n\n### 確信範圍與結果\n{{assuranceScope}}\n\n### 佐證文件管理\n{{evidenceManagement}}\n\n### 外部查證\n{{externalVerification}}`,
+    sectionTitle: '查覈、佐證與資料治理',
+    template: `## 查覈、佐證與資料治理\n\n本章節依據 GRI 1、GRI 2 與 ISAE 3000 之要求，說明公司資料治理與外部查證機制。\n\n### 資料治理架構\n{{dataGovernance}}\n\n### 確信範圍與結果\n{{assuranceScope}}\n\n### 佐證文件管理\n{{evidenceManagement}}\n\n### 外部查證\n{{externalVerification}}`,
     requiredFields: ['C12-01', 'C12-02', 'C12-03', 'C12-04'],
   },
 ];
@@ -287,7 +287,7 @@ export function assembleReport(companyName: string): AssembledReport {
   // Build data maturity summary
   const maturitySummary: Record<string, number> = {};
   for (const a of answers) {
-    const maturity = a.dataMaturity || 'C版專業可查核';
+    const maturity = a.dataMaturity || 'C版專業可查覈';
     maturitySummary[maturity] = (maturitySummary[maturity] || 0) + 1;
   }
 

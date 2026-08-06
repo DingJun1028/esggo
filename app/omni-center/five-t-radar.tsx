@@ -27,8 +27,8 @@ function radarPath(scores: FiveTData, maxR:number, cx:number, cy:number): string
 interface Props { companyName?: string; zkpCount?: number; evidenceCount?: number; }
 
 const DEMO_COMPANIES = [
-  { name:'台積電 TSMC',    scores:{ traceable:0.94, transparent:0.91, tangible:0.88, trustworthy:0.96, trackable:0.89 } },
-  { name:'台達電',          scores:{ traceable:0.87, transparent:0.85, tangible:0.90, trustworthy:0.88, trackable:0.83 } },
+  { name:'臺積電 TSMC',    scores:{ traceable:0.94, transparent:0.91, tangible:0.88, trustworthy:0.96, trackable:0.89 } },
+  { name:'臺達電',          scores:{ traceable:0.87, transparent:0.85, tangible:0.90, trustworthy:0.88, trackable:0.83 } },
   { name:'中鋼',            scores:{ traceable:0.79, transparent:0.82, tangible:0.75, trustworthy:0.84, trackable:0.78 } },
   { name:'鴻海',            scores:{ traceable:0.88, transparent:0.86, tangible:0.85, trustworthy:0.90, trackable:0.84 } },
 ];

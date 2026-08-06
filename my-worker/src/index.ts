@@ -50,13 +50,13 @@ worker.tool("getVillageVotingStatus", {
 			const response = await fetch(`${baseUrl}/api/village/vote?projectId=${projectId || ''}`);
 			
 			if (!response.ok) {
-				return `[模擬資料] Village 專案 ${projectId || '目前熱門提案'} 的投票狀態：已獲得 150 點二次方積分，社群參與度高。`;
+				return `[模擬資料] Village 專案 ${projectId || '目前熱門提案'} 的投票狀態：已獲得 150 點二次方積分，社羣參與度高。`;
 			}
 			
 			const data = await response.json();
 			return JSON.stringify(data);
 		} catch (e) {
-			return `[模擬資料] Village 專案 ${projectId || '目前熱門提案'} 的投票狀態：已獲得 150 點二次方積分，社群參與度高。`;
+			return `[模擬資料] Village 專案 ${projectId || '目前熱門提案'} 的投票狀態：已獲得 150 點二次方積分，社羣參與度高。`;
 		}
 	},
 });

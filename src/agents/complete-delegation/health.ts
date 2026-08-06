@@ -12,7 +12,7 @@
  * - 事件流活性（最近 N 秒內有事件流入）
  * - 告警存在性（critical 告警 → degraded / unhealthy）
  *
- * 對齊平台不變量：
+ * 對齊平臺不變量：
  * - 全量：journal 為 append-only JSONL，不截斷、不抽樣。
  * - 雙向同步：health checker 與 bus 訂閱者共享同一程序級 metrics 單例。
  */
@@ -202,7 +202,7 @@ function checkMetricsHealth(): {
       item: {
         name: 'metrics',
         status: 'healthy',
-        message: `Metrics 觀測器存活：已觀測 ${snapshot.total} 筆事件，${snapshot.activeDelegations} 個活跃授權`,
+        message: `Metrics 觀測器存活：已觀測 ${snapshot.total} 筆事件，${snapshot.activeDelegations} 個活躍授權`,
         metrics: {
           total: snapshot.total,
           activeDelegations: snapshot.activeDelegations,

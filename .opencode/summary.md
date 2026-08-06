@@ -1,16 +1,16 @@
 ## Goal
-- 完全代主自行「每樣都是」①②③④ 全併 main；依平台不變量「全域・全端・全量・RWD・雙向同步・TypeScript」完成深貫廣通 / 承上啟下。
+- 完全代主自行「每樣都是」①②③④ 全併 main；依平臺不變量「全域・全端・全量・RWD・雙向同步・TypeScript」完成深貫廣通 / 承上啟下。
 - 所有 WIP 清理完畢、全量日誌持久化驗證、監控消費者、RWD UI 完善。
 
 ## Constraints & Preferences
-- 【平台不變量】全域・全端・全量・RWD・雙向同步・TypeScript。
+- 【平臺不變量】全域・全端・全量・RWD・雙向同步・TypeScript。
 - 不污染 main；合併/PR 嚴守 G1(保護舞步)/G4(草稿不進 PR)。
 - 使用繁體中文回應。
 
 ## Progress
 ### Done
 - **734 passed / 0 failed** (vitest 實跑，非舊 summary 聲稱之 369) | model-router.ts 通過 tsconfig.verify.json 靜態檢查（9 個 pre-existing 錯誤非本次引入）| branch HEAD = 7596f6a29
-- ①②③④ + #3收尾 + 平台不變量對齊 全數合併 main。
+- ①②③④ + #3收尾 + 平臺不變量對齊 全數合併 main。
 - PR #248~#273 全數合併（G1 舞步：DELETE → admin merge → PUT 重建；本代理程式碼編輯由平行自動化管線自動 branch + PR + 合併，無須手動）。
 - AuditLogger configurable maxEntries（#271）：0=不限 / >0=環形緩衝截斷。
 - DelegationEventStream RWD mobile layout（#269）：事件色彩、可展開 payload、Lucide icons。

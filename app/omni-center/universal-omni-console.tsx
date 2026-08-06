@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * universal-omni-console.tsx — 萬能中心「萬能函數」控制台
+ * universal-omni-console.tsx — 萬能中心「萬能函數」控制檯
  *
  * 直接呼叫 src/lib/esggo 的 omni() 萬能函數與 omniFn 函數庫，
  * 讓使用者在 UI 上體驗：建立組件 / 筆記 / 任務、執行已註冊函數、分派 OmniOne 案例。
@@ -145,7 +145,7 @@ export function UniversalOmniConsole() {
         </div>
         <div>
           <h2 className="font-['Montserrat',sans-serif] text-base font-bold text-accentPurple">
-            萬能函數控制台
+            萬能函數控制檯
           </h2>
           <div className="text-xs text-textSecondary">
             呼叫 omni() · 當前函數庫共 {omniFn.count()} 個函數

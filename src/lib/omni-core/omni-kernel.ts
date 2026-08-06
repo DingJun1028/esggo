@@ -2,7 +2,7 @@
  * OmniKernel v1.0 — 萬能中心核心引擎
  *
  * 架構：
- * - OmniRegistry: 組件注冊表（UUID 索引）
+ * - OmniRegistry: 組件註冊表（UUID 索引）
  * - OmniEventBus: 中心事件總線（Observer Pattern）
  * - OmniLifecycleManager: 生命週期管理器
  * - OmniSyncGateway: 數據一次產生，全域自動對標
@@ -93,7 +93,7 @@ class OmniEventBusImpl {
 export const OmniEventBus = new OmniEventBusImpl();
 
 // ═══════════════════════════════════════════════════════════════
-// SECTION 2: OmniRegistry — 組件注冊中心
+// SECTION 2: OmniRegistry — 組件註冊中心
 // ═══════════════════════════════════════════════════════════════
 
 interface RegistryEntry {

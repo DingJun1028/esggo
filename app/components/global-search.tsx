@@ -18,19 +18,19 @@ interface SearchResult {
 }
 
 const STATIC_RESULTS: SearchResult[] = [
-  { id: 'omni-center', title: '萬能中心', description: '8 分頁儀表板', category: 'module', url: '/omni-center', icon: '◎' },
+  { id: 'omni-center', title: '萬能中心', description: '8 分頁儀錶板', category: 'module', url: '/omni-center', icon: '◎' },
   { id: 'sustain-write', title: 'ESG 報告產生器', description: 'GRI/TCFD/投資人報告', category: 'module', url: '/sustain-write/v5', icon: '📊' },
-  { id: 'sustain-center', title: '萬能永續中心', description: 'ESG 儀表板與碳排驗算', category: 'module', url: '/sustain-center', icon: '🌱' },
+  { id: 'sustain-center', title: '萬能永續中心', description: 'ESG 儀錶板與碳排驗算', category: 'module', url: '/sustain-center', icon: '🌱' },
   { id: 'village', title: '村莊治理', description: '二次方投票與影響力專案', category: 'module', url: '/village', icon: '🏡' },
   { id: 'wiki', title: '知識庫', description: 'ESG 法規查詢', category: 'module', url: '/wiki', icon: '📚' },
-  { id: 'omni-agent', title: 'AI 代理主控台', description: 'AI 聊天與子代理派遣', category: 'module', url: '/omni-agent', icon: '🤖' },
+  { id: 'omni-agent', title: 'AI 代理主控臺', description: 'AI 聊天與子代理派遣', category: 'module', url: '/omni-agent', icon: '🤖' },
   { id: 'daily', title: '每日永續觀察', description: 'ESG 每日摘要', category: 'module', url: '/daily', icon: '📅' },
   { id: 'sonnar', title: 'ESG Sonnar', description: '資料爬取與雷達訊號', category: 'module', url: '/sonnar', icon: '🔍' },
   { id: 'emm', title: 'EMM 環境監控', description: '系統指標與模型監控', category: 'module', url: '/emm', icon: '💻' },
   { id: 'profile', title: '使用者成長系統', description: 'XP、成就、排行榜', category: 'module', url: '/profile', icon: '👤' },
   { id: 'omni-todo', title: 'OmniTodo', description: '統一任務管理', category: 'module', url: '/omni-todo', icon: '✅' },
   { id: 'omni-base', title: 'OmniBase 外掛系統', description: '外掛管理與 EventBus', category: 'module', url: '/omni-base', icon: '🔌' },
-  { id: 'resources', title: '平台資源總覽', description: '模組、AI 模型、基礎設施', category: 'page', url: '/resources', icon: '📋' },
+  { id: 'resources', title: '平臺資源總覽', description: '模組、AI 模型、基礎設施', category: 'page', url: '/resources', icon: '📋' },
   { id: 'api-docs', title: 'API 路由文件', description: 'api-route_standard.md', category: 'api', url: '/api/health', icon: '🔗' },
 ];
 

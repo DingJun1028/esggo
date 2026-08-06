@@ -75,7 +75,7 @@ const SEVERITY_VARIANTS: Record<string, 'error' | 'warning' | 'blue' | 'muted'> 
 };
 
 const REGION_LABELS: Record<string, string> = {
-  TW: '🇹🇼 台灣',
+  TW: '🇹🇼 臺灣',
   EU: '🇪🇺 歐盟',
   INT: '🌍 國際',
   US: '🇺🇸 美國',
@@ -530,7 +530,7 @@ export default function SonnarDashboard() {
 
             {/* ─── Region Distribution Chart ─── */}
             <SolidCard>
-              <CardHeader title="來源區域分布" />
+              <CardHeader title="來源區域分佈" />
               <div
                 style={{
                   display: 'grid',

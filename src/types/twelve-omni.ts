@@ -879,7 +879,7 @@ export interface IOmniscientHive extends IComponentCore {
   /** 共享黑板 */
   contribute(key: string, value: unknown, providerUuid: string): void;
   getSharedKnowledge(key: string): unknown;
-  /** 群體決策 */
+  /** 羣體決策 */
   swarmDecision(options: string[]): Promise<string>;
   /** 知識圖譜 */
   knowledgeGraph(): Promise<KnowledgeGraph>;

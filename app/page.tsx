@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useAuth } from '@/components/AuthProvider';
 import LoginButton from '@/components/LoginButton';
 import { useEffect, useState } from 'react';
+import { HeroSection } from './components/HeroSection';
+
 
 const NAV_MODULES = [
   {

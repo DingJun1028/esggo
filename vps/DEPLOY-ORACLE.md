@@ -5,7 +5,7 @@
 
 ## 概覽
 
-本文件說明如何將 ESG GO 平台部署到 Oracle Cloud Always Free ARM Ampere A1 VPS。
+本文件說明如何將 ESG GO 平臺部署到 Oracle Cloud Always Free ARM Ampere A1 VPS。
 
 ### Oracle Always Free 資源
 
@@ -22,7 +22,7 @@
 
 ### 與其他免費層比較
 
-| 平台           | CPU     | RAM    | Storage  | Network     | 評分 |
+| 平臺           | CPU     | RAM    | Storage  | Network     | 評分 |
 | -------------- | ------- | ------ | -------- | ----------- | ---- |
 | **Oracle**     | 4 ARM   | 24 GB  | 200 GB   | 10 TB       | ⭐⭐⭐⭐⭐ |
 | GCP            | 1 x86   | 1 GB   | 30 GB    | 1 GB        | ⭐⭐   |
@@ -35,7 +35,7 @@
 
 ### 前置需求
 
-1. Oracle Cloud 帳戶（免費注册）
+1. Oracle Cloud 帳戶（免費註冊）
 2. 一個網域名稱（可用子域名）
 3. GitHub 帳戶（用於 CI/CD）
 

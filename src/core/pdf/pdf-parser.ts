@@ -83,7 +83,7 @@ const SOC_KEYWORDS: string[] = [
 ];
 
 const GOV_KEYWORDS: string[] = [
-  '董事會', '治理', '稽核', '吹哨', '誠信', '合規', '風險管理', '內控',
+  '董事會', '治理', '稽覈', '吹哨', '誠信', '合規', '風險管理', '內控',
   '審計', '薪酬', '股東', '透明度', '', 'governance', 'audit',
   'whistleblower', 'compliance', 'integrity', 'risk management',
   'internal control', 'transparency', 'disclosure', 'stakeholder',
@@ -95,7 +95,7 @@ const GEN_KEYWORDS: string[] = [
 ];
 
 const KNOWN_COMPANIES: string[] = [
-  '台積電', '鴻海', '聯發科', '台達電', '富邦媒', '中信金', '群光', '漢唐',
+  '臺積電', '鴻海', '聯發科', '臺達電', '富邦媒', '中信金', '羣光', '漢唐',
   'TSMC', 'Foxconn', 'MediaTek', 'Delta', 'Fubon', 'CTBC',
 ];
 

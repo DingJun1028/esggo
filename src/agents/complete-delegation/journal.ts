@@ -3,9 +3,9 @@
  * 完全代主自行 - 全量日誌 sink（統一持久化）
  * ==========================================
  *
- * 對齊平台不變量「全量」：將審計條目（audit）與委派事件（event）合併寫入同一份
+ * 對齊平臺不變量「全量」：將審計條目（audit）與委派事件（event）合併寫入同一份
  * append-only JSONL 日誌（預設 `.audit/delegation-journal.jsonl`），實現不抽樣、
- * 不截斷的全量留存，並以單調序號 `id` 作為 SSE `Last-Event-ID` 斷點續傳游標。
+ * 不截斷的全量留存，並以單調序號 `id` 作為 SSE `Last-Event-ID` 斷點續傳遊標。
  *
  * 說明：AuditLogger 的 AuditEntry 未匯出，此處採結構相容的本地介面；事件記錄
  * 相容 IBusEvent 抽取。審計與事件以 `kind` 區分，共用同一序號空間，確保續傳有序。
@@ -33,7 +33,7 @@ export interface BusEventRecord {
   payload: Record<string, unknown>;
 }
 
-/** 統一日誌記錄（discriminated by kind）；id 為單調序號（斷點續傳游標） */
+/** 統一日誌記錄（discriminated by kind）；id 為單調序號（斷點續傳遊標） */
 export interface JournalRecord {
   kind: 'audit' | 'event';
   id: number;
