@@ -29,6 +29,7 @@ preview_id = "${FREE_MODELS_KV_PREVIEW_ID}"
 # OPENROUTER_API_KEY = ""
 # GROQ_API_KEY = ""
 # HF_TOKEN = ""
+# CLOUDFLARE_API_TOKEN = ""
 
 [build]
 command = "pnpm install && pnpm run build"
