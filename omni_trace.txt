@@ -1,7 +1,0 @@
-### Execution Trace (OmniCore Matrix):
-- 🔍 Viewed: [package.json, C:/var/www/esggo/app/, C:/var/www/esggo/src/]
-- ⚡ Ran: [Python replace script, pnpm add -w pg]
-- 🛠️ Modified: [app/api/nexus/route.ts, app/api/omni-one/route.ts, app/api/rag/query/route.ts, app/api/resources/route.ts, app/api/village/trends/route.ts, app/components/ui/index.tsx, src/core/ai/model-router.ts, src/core/ai/skills/*.ts, src/core/services/report-templates.ts, src/lib/engines/intelligence-modules.ts, src/lib/omni-core/omni-note.ts, package.json]
-
-### Synthesis & Outcome:
-The OmniCore v5.1 Platform Transition is effectively finalized. All AI system prompts and platform configurations have been updated from "ESG GO" to "OmniCore" to ensure consistent branding and observability. The package.json version is incremented to 5.1.0. A missing dependency (`pg`) that caused Turbopack build failure was installed to fix compilation errors. The system is now fully aligned with the OmniCore v5.1 architecture.

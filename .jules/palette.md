@@ -1,32 +1,4 @@
-## 2024-07-25 - Focus Visible Styles for Interactive Elements
-**Learning:** Found that custom buttons and inputs (like `LoginButton`) often rely entirely on placeholder text without explicit `aria-label` attributes or visible focus states, which hurts both screen reader users and keyboard navigators.
-**Action:** Consistently added `aria-label` to form inputs lacking explicit labels and utilized Tailwind's `focus-visible:ring-2 focus-visible:outline-none` across all interactive elements (buttons, inputs) to ensure they are visually distinct when navigated via keyboard. Additionally, added explicit disabled states while waiting for async tasks to prevent multiple submissions.## 2024-06-30 - OmniAgent Tab Navigation Accessibility
-**Learning:** Custom tab implementations like the one in `app/omni-agent/page.tsx` often omit essential ARIA roles (`tablist`, `tab`), states (`aria-selected`), and explicit `focus-visible` styling, rendering them invisible to screen readers and difficult to navigate via keyboard. The interactive elements existed purely as styled `button`s without semantic relationship context.
-**Action:** Always add `role="tablist"` to the parent container, `role="tab"` to child buttons, calculate `aria-selected` based on the active state variable, and append explicit focus ring utilities (e.g., `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-current`) to all custom tab components in the design system.
 
-## 2024-08-15 - Focus Visibility on Hover-Revealed Elements
-**Learning:** Elements that are revealed on hover using `opacity-0 group-hover:opacity-100` (like action buttons in grid cards) become invisible focus traps for keyboard users unless they explicitly include `focus-within:opacity-100` on their wrapper/container.
-**Action:** Always ensure that hover-revealed interactive elements apply `focus-within:opacity-100` alongside `group-hover:opacity-100` so they become visible when navigating via keyboard (Tab). Additionally, these hidden elements must have context-aware `aria-label` attributes to prevent repetitive generic readouts by screen readers when focused blindly.
-
-## 2023-11-20 - Missing ARIA Labels on Internal Custom Controls
-**Learning:** Icon-only buttons used in custom interactive controls (like the QV +/- voting counter in `app/village/page.tsx`) frequently miss `aria-label`s. Furthermore, when these controls are placed inside containers with `overflow-hidden` (such as `rounded-lg` borders), default focus rings (like `focus-visible:ring-2`) get clipped and become invisible.
-**Action:** When adding accessible labels to custom counter controls, use context-specific descriptions like "減少票數" / "增加票數". To fix clipped focus rings within `overflow-hidden` containers, replace `ring` utilities with explicit `focus-visible:outline-none focus-visible:bg-[color] focus-visible:text-[color]` styles to safely mimic standard hover feedback during keyboard navigation.
-
-## 2025-07-05 - Global Navigation & Theme Toggles
-**Learning:** Icon-only buttons (like theme toggles) and complex interactive components (like global nav anchors) often lack keyboard accessibility (tab navigation styling) and screen reader support (`aria-label`) out of the box in this project's custom implementations.
-**Action:** Always ensure `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` is added to all interactive elements for accessible keyboard navigation, and ensure icon-only buttons include descriptive `aria-label` attributes for screen readers. Check both localized and globally used instances (e.g. `theme-toggle.tsx` and `global-nav.tsx`).
-## 2026-07-07 - Interactive Div Accessibility in OmniTodoPanel
-**Learning:** List item components in this application (like `TodoItemRow` in `omni-todo-panel.tsx`) often utilize standard `div` wrappers with an `onClick` handler. This completely hides the interactive element from keyboard navigation (Tab) and screen readers, making the list inaccessible.
-**Action:** When implementing or fixing interactive list rows or cards, explicitly add `role="button"`, `tabIndex={0}`, an accessible `aria-label` (using dynamic content like the title), an `onKeyDown` handler for 'Enter' and 'Space', and `focus-visible` styles to ensure full keyboard operability and visible focus states.
-
-## 2024-05-18 - Component-Specific Focus Rings and ARIA Roles
-**Learning:** Found missing `role="tab"` and `role="tablist"` attributes on custom tab navigation, missing `aria-label`s on icon buttons, and missing `focus-visible` styles in `app/omni-center/page.tsx`, rendering these elements inaccessible via keyboard and screen readers.
-**Action:** Applied `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current` to custom buttons. Implemented proper `role="tablist"`, `role="tab"`, and `aria-selected` for custom tabs. Added `aria-label` descriptions for icon-only components while hiding decorative inner elements with `aria-hidden="true"`.
-
-## 2026-07-24 - Interactive Icon Buttons in Complex Views
-**Learning:** Icon-only buttons used for secondary interactions (like calendar navigation, editing controls, or modal dismissals) within complex data-dense views like `DashboardView` often lack both accessible names (`aria-label`) and explicit keyboard focus indicators (`focus-visible`).
-**Action:** When auditing or implementing dense dashboard components, ensure all icon-only buttons receive descriptive `aria-label` and `title` attributes. Additionally, always explicitly hide their inner SVG icons using `aria-hidden="true"` and apply high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-primary focus:outline-none`) to guarantee they are discoverable and usable by assistive technologies and keyboard navigators alike.
-
-## 2024-07-31 - Mobile & Desktop Header Accessibility
-**Learning:** Core layout components like `mobile-header.tsx` and `header.tsx` contained multiple icon-only buttons (Menu, Notifications, Theme Switcher) that lacked explicit `aria-label` attributes and keyboard focus styling, making core navigation inaccessible to screen readers and keyboard users.
-**Action:** When implementing or auditing core layout headers, ensure all icon-only control buttons receive descriptive `aria-label` and `title` attributes. Furthermore, explicitly hide decorative inner SVGs with `aria-hidden="true"` and append `focus-visible:ring-2 focus-visible:ring-primary focus:outline-none` to guarantee clear focus state visibility during tab navigation.
+## 2024-05-18 - [Tab Navigation Accessibility]
+**Learning:** Custom tab navigation patterns need explicit roles (`tablist` and `tab`), an `aria-selected` state reflecting the active tab, and `focus-visible` styles to ensure full keyboard and screen reader accessibility. Relying solely on click handlers and hover states is insufficient for users navigating with keyboards or assistive tech.
+**Action:** Always include `role="tablist"` on the container and `role="tab"` + `aria-selected` + `focus-visible` styling on interactive tab items across the application.
