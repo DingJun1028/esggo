@@ -1,0 +1,30 @@
+{
+  "name": "esggo-cli",
+  "version": "0.1.0",
+  "description": "ESG-GO 萬能蜂群核心數據命令控制介面",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "esggo": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "eslint": "^9.10.0",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
