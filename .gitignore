@@ -298,3 +298,6 @@ Omni-Sanctuary/Artifacts/keys/*.json
 Omni-Sanctuary/Artifacts/keys/*.env
 tencentdb-memory/.env
 apps/tencentdb-memory/.env
+
+# CLI node_modules
+cli/*/node_modules/
