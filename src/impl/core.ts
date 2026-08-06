@@ -266,6 +266,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
       'You are a scheduling predictor. Given a user intent stub, return ONLY a JSON ' +
       'object of shape {"predictions":[{"title":string,"topic":string,"when":string}]} ' +
       'with 1-3 plausible upcoming events. No prose, no markdown.';
+    const userIntentStub = 'Plan a team sync next Tuesday at 10am.';
     const body = JSON.stringify({
       model,
       messages: [
