@@ -2,7 +2,7 @@
 const nextConfig = {
   // Type errors MUST be caught at build time — never ignore them
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // Strict mode for React
   reactStrictMode: true,
