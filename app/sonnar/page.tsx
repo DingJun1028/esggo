@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   SolidCard,
   CardHeader,
@@ -87,7 +87,7 @@ const TREND_ICONS: Record<string, string> = { up: '↑', down: '↓', stable: '�
 
 // ─── CSS Bar Chart (zero deps) ────────────────────────────────
 
-function BarChart({ data, maxVal, color }: { data: number[]; maxVal: number; color: string }) {
+const BarChart = React.memo(function BarChart({ data, maxVal, color }: { data: number[]; maxVal: number; color: string }) {
   return (
     <div className="flex items-end gap-1 h-20">
       {data.map((v, i) => (
@@ -103,11 +103,11 @@ function BarChart({ data, maxVal, color }: { data: number[]; maxVal: number; col
       ))}
     </div>
   );
-}
+});
 
 // ─── Timeline sparkline ───────────────────────────────────────
 
-function Sparkline({ data, color = 'text-teal-400' }: { data: number[]; color?: string }) {
+const Sparkline = React.memo(function Sparkline({ data, color = 'text-teal-400' }: { data: number[]; color?: string }) {
   const pts = useMemo(() => {
     if (data.length < 2) return null;
     const max = Math.max(...data);
@@ -128,7 +128,7 @@ function Sparkline({ data, color = 'text-teal-400' }: { data: number[]; color?: 
       />
     </svg>
   );
-}
+});
 
 // ─── Main Dashboard ───────────────────────────────────────────
 
