@@ -7,7 +7,15 @@
 // Free-tier compatible
 // ============================================================
 
-import pdfParse from 'pdf-parse';
+interface PDFParseOutput {
+  text: string;
+  numpages: number;
+  numrender: number;
+  info: Record<string, unknown>;
+  metadata: unknown;
+  version: string;
+}
+const pdfParse: (dataBuffer: Buffer) => Promise<PDFParseOutput> = require('pdf-parse');
 
 export type ESGCategory = 'environmental' | 'social' | 'governance' | 'general';
 

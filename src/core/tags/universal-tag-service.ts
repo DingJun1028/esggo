@@ -15,6 +15,8 @@ import { prisma } from '@/lib/storage-service';
 import { syncTagPairToOracle } from './oracle-sync-service';
 import { publishThought } from '../../lib/bus';
 
+const LOCAL_GEMMA_MODEL = process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision';
+
 // 5T: hashLock = SHA-256(uuid + timestamp + label) 不可逆封印
 function computeHashLock(uuid: string, timestamp: number, seed: string): string {
   return createHash('sha256').update(`${uuid}|${timestamp}|${seed}`).digest('hex');

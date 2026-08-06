@@ -63,7 +63,7 @@ export function AgnesProvider({ children }: { children: ReactNode }) {
       await new Promise(resolve => setTimeout(resolve, 500));
       setStatus('connected');
       setIsReady(true);
-    } catch {
+    } catch (_e) {
       setStatus('error');
       setIsReady(false);
     }

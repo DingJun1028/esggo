@@ -21,6 +21,7 @@ import { AuditLogger, type AuditSink } from './autonomous-decision-engine';
 import { publishDelegationEvent } from './events';
 import {
   getDefaultJournal,
+  type DelegationJournal,
   type AuditEntry,
   type BusEventRecord,
 } from './journal';

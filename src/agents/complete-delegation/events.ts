@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { secureForward } from '../../core/services/omni-gateway';
-import type { IBusEvent } from '../../lib/omni-agent-bus';
+import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';
 import { getDefaultJournal } from './journal';
 
 export async function publishDelegationEvent(
@@ -10,21 +10,23 @@ export async function publishDelegationEvent(
   source: string
 ): Promise<{ status: string; hashLock: string }> {
   const now = Date.now();
-  const event: IBusEvent = {
+  const event = {
     event: type,
+    payload: {
+      type,
+      topic,
+      source_origin: source,
+      timestamp: now,
+      ...payload,
+    },
     ts: now,
     uuid: randomUUID(),
-    version: '1.0.0',
-    payload,
-    source_origin: source,
-    topic,
-    lifecycle_path: [{ stage: 'EMERGED', timestamp: now, node: 'complete-delegation' }],
   };
 
   try {
     const { hashLock } = await secureForward(event);
     try {
-      const journalId = getDefaultJournal().append({
+      getDefaultJournal().append({
         kind: 'event',
         type,
         delegationId: (payload.delegationId as string) ?? '',
@@ -32,9 +34,8 @@ export async function publishDelegationEvent(
         hashLock,
         ts: now,
         source,
-        payload: { type, ...payload },
+        payload: { type, topic, source_origin: source, timestamp: now, ...payload },
       });
-      event.journalId = journalId;
     } catch {
       /* best-effort */
     }

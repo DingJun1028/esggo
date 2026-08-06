@@ -254,7 +254,7 @@ export class DelegationCacheManager {
   /**
    * 獲取相關快取鍵
    */
-  private getRelatedKeys(_prefix: string): string[] {
+  private getRelatedKeys(prefix: string): string[] {
     const keys: string[] = [];
     // 注意：這裡簡化實現，實際應該維護一個鍵索引
     return keys;

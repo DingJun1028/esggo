@@ -235,7 +235,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
   /**
    * 驗證授權
    */
-  private async validateAuthorization(_intent: string): Promise<void> {
+  private async validateAuthorization(intent: string): Promise<void> {
     const isValid = await this._manager.validateDelegation(
       this.delegationScope.delegationId,
       'execute'
@@ -252,8 +252,8 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
    * 生成可選方案
    */
   private async generateOptions(
-    _intent: string,
-    _context?: Record<string, unknown>
+    intent: string,
+    context?: Record<string, unknown>
   ): Promise<DecisionOption[]> {
     // 基本方案生成邏輯
     const options: DecisionOption[] = [
