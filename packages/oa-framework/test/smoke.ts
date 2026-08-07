@@ -16,13 +16,14 @@ async function main() {
   const task = { id: 't1', prompt: '為 ESG-GO 產出 5T 合規元件骨架' };
   const results = await oa.run(task);
 
-  console.log('\n=== 7 框架並行產出 (5T 鑄造) ===');
+  console.log('\n=== 7 框架並行產出 (5T 雙層鑄造: 欄位級 + 內容級 omni-gate) ===');
   let allPass = true;
   for (const r of results) {
     const v = verify5T(r);
     if (!v.pass) allPass = false;
+    const contentTag = v.contentPassed ? 'CONTENT_OK' : `CONTENT_FAIL:${v.failed.filter(f=>f.startsWith('content:')).join(',')}`;
     console.log(
-      `[${r.subFrame}] hash=${r.hashLock.slice(0, 12)}... 5T=${v.pass ? 'PASS' : 'FAIL:' + v.failed.join(',')}`
+      `[${r.subFrame}] hash=${r.hashLock.slice(0, 12)}... field=${v.pass && v.contentPassed ? 'PASS' : 'FAIL'} ${contentTag}`
     );
   }
 
