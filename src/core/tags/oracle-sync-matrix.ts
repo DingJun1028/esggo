@@ -57,7 +57,7 @@ export async function hydrateFromOracle(): Promise<HydrationResult> {
         ) as Record<string, unknown>;
         await prisma.tagPair.update({
           where: { id: existingPair.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
         });
         matched++;
       }
@@ -182,7 +182,7 @@ export async function pullBehindApp(
         const entryData = entry as { seq?: number };
         await prisma.tagPair.update({
           where: { id: existing.id },
-          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entryData.seq }) },
+          data: { lifecycleHooks: JSON.stringify({ ...meta, oracleConfirmed: true, oracleSeq: entry.seq }) },
         });
         pulled++;
       } else {

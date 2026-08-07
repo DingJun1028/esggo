@@ -51,9 +51,9 @@ describe('OmniGateway basic routes', () => {
     expect(res.status).toBe(405);
   });
 
-  it('OPTIONS returns 405 (no OPTIONS handler)', async () => {
+  it('OPTIONS returns 204 (CORS preflight)', async () => {
     const res = await worker.fetch(requestOf('/v1/chat/completions', { method: 'OPTIONS' }), baseEnv, { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as any);
-    expect(res.status).toBe(405);
+    expect(res.status).toBe(204);
   });
 
   it('AI Crawl Control blocks GPTBot with 403', async () => {

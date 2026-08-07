@@ -5,7 +5,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@lib/sustain-write';
 import { jsonResponse, jsonError } from '@lib/api-utils';
-import type { ReportChapter } from '@lib/sustain-write/omni-tag';
 
 interface CVersionReport {
   companyId: string;
@@ -13,7 +12,13 @@ interface CVersionReport {
   version: string;
   totalWords: number;
   fiveTStatus?: string;
-  chapters: ReportChapter[];
+  chapters: Array<{
+    id: string;
+    title: string;
+    fiveTGate: string;
+    content: string;
+    wordCount: number;
+  }>;
   generatedAt: string;
 }
 
@@ -47,6 +52,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const serializedChapters = report.chapters.map((ch) => ({
+      id: ch.id,
+      title: ch.title,
+      fiveTGate: ch.fiveTGate,
+      wordCount: ch.wordCount,
+      content: ch.content,
+    }));
+
     if (format === 'markdown') {
       return jsonResponse({
         success: true,
@@ -55,16 +68,10 @@ export async function POST(request: NextRequest) {
           companyName: report.companyName,
           totalWords: report.totalWords,
           fiveTStatus: report.fiveTStatus,
-          chapters: report.chapters.map((ch: ReportChapter) => ({
-            id: ch.id,
-            title: ch.title,
-            fiveTGate: ch.fiveTGate,
-            wordCount: ch.wordCount,
-            content: ch.content,
-          })),
+          chapters: serializedChapters,
           generatedAt: report.generatedAt,
         },
-        markdown: reportToMarkdown(report),
+        markdown: reportToMarkdown(report as any),
       });
     }
 
@@ -75,16 +82,10 @@ export async function POST(request: NextRequest) {
         companyName: report.companyName,
         totalWords: report.totalWords,
         fiveTStatus: report.fiveTStatus,
-        chapters: report.chapters.map((ch: ReportChapter) => ({
-          id: ch.id,
-          title: ch.title,
-          fiveTGate: ch.fiveTGate,
-          wordCount: ch.wordCount,
-          content: ch.content,
-        })),
+        chapters: serializedChapters,
         generatedAt: report.generatedAt,
       },
-      html: reportToHtml(report),
+      html: reportToHtml(report as any),
     });
   } catch (error) {
     return jsonError('INTERNAL_ERROR', (error as Error).message || '報告生成失敗', 500);

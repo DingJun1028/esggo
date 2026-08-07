@@ -185,9 +185,9 @@ async function _connect(): Promise<RedisClientType | null> {
       if (config.password) options.password = config.password;
     }
 
-    // ioredis requires the URL as a positional argument, not in options
+    // ioredis v5 takes an options object; include url when present
     const client = config.url
-      ? new Redis(config.url, options as any)
+      ? new Redis({ ...(options as any), url: config.url })
       : new Redis(options as any);
 
     // Wire event handlers before connecting

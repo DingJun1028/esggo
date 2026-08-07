@@ -124,6 +124,15 @@ export function createOmniAgent(
     totalReportsAssembled: 0,
     agentHash,
     startedAt: Date.now(),
+    getStatus() {
+      return this.status;
+    },
+    getSystemStatus() {
+      return {
+        agent: { status: this.status, mode: this.mode },
+        uptime: Date.now() - this.startedAt,
+      };
+    },
   });
 }
 

@@ -251,10 +251,10 @@ export async function listOmniNotes(): Promise<NoteData[]> {
 
     return rows.map((row: { id: string; title: string | null; content: string | null; tags: unknown; fiveTGate: string | null; createdAt: number | string }) => ({
       id: row.id,
-      title: row.title,
-      content: row.content,
+      title: row.title || '',
+      content: row.content || '',
       tags: Array.isArray(row.tags) ? row.tags : [],
-      fiveTGate: row.fiveTGate,
+      fiveTGate: row.fiveTGate ?? undefined,
       createdAt: typeof row.createdAt === 'number' ? row.createdAt : new Date(row.createdAt).getTime(),
     }));
   } catch {

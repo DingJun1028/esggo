@@ -9,6 +9,6 @@
     "health": "curl -sf http://localhost:8788/health"
   },
   "dependencies": {
-    "ws": "^8.18.0"
+    "ws": "^8.21.2"
   }
 }

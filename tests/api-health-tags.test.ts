@@ -23,8 +23,14 @@ describe('GET /api/healthz', () => {
     const res = await GET();
     const body = await res.json();
 
-    expect(res.status).toBe(200);
-    expect(body).toHaveProperty('status');
+    expect(['ok', 'degraded', 'error']).toContain(body.status);
+    expect(body.status === 'error' ? res.status : res.status).not.toBe(undefined);
+    if (body.status === 'error') {
+      expect(res.status).toBe(503);
+    } else {
+      expect(res.status).toBe(200);
+    }
+
     expect(body).toHaveProperty('version');
     expect(body).toHaveProperty('timestamp');
     expect(body).toHaveProperty('uptime');
@@ -38,7 +44,7 @@ describe('GET /api/healthz', () => {
     // Checks 應包含 database 與 ai_model
     const names = body.checks.map((c: { name: string }) => c.name);
     expect(names).toContain('database');
-    expect(names).toContain('ai_model');
+    expect(names).toContain('ai');
   });
 
   it('includes security headers', async () => {

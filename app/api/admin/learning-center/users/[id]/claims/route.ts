@@ -43,12 +43,13 @@ function jsonError(message: string, status: number) {
   return NextResponse.json({ ok: false, message }, { status });
 }
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const requester = await requireAdmin(request);
   if (!requester) return jsonError('Forbidden', 403);
+  const { id } = await params;
 
   try {
-    const userRecord = await getAdminAuth().getUser(params.id);
+    const userRecord = await getAdminAuth().getUser(id);
     const claims = (userRecord.customClaims ?? {}) as Record<string, unknown>;
 
     return NextResponse.json({
@@ -63,9 +64,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const requester = await requireAdmin(request);
   if (!requester) return jsonError('Forbidden', 403);
+  const { id } = await params;
 
   try {
     const payload = await request.json();
@@ -75,16 +77,16 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return jsonError('Invalid role. Must be student, TA, or admin', 400);
     }
 
-    await getAdminAuth().setCustomClaims(params.id, { role });
+    await getAdminAuth().setCustomUserClaims(id, { role });
 
     return NextResponse.json({
       ok: true,
-      uid: params.id,
+      uid: id,
       role,
       message: 'Custom claims updated',
     });
   } catch (error) {
-    console.error('[Admin] setCustomClaims error:', error);
+    console.error('[Admin] setCustomUserClaims error:', error);
     return jsonError('Failed to update claims', 500);
   }
 }

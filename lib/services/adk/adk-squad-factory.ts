@@ -1,27 +1,28 @@
 // @google/adk removed from build - using stubs
+
+type AnyObject = Record<string, unknown>;
+
 class InMemorySessionService {
-  private sessions: Map<string, any> = new Map();
-  async createSession(sessionId: string): Promise<any> {
-    this.sessions.set(sessionId, { id: sessionId, events: [] });
-    return this.sessions.get(sessionId);
+  private sessions = new Map<string, AnyObject>();
+
+  async createSession(sessionId: string): Promise<AnyObject> {
+    const session = { id: sessionId, events: [] } as AnyObject;
+    this.sessions.set(sessionId, session);
+    return session;
   }
-  async getSession(sessionId: string): Promise<any> {
-    return this.sessions.get(sessionId) || null;
+
+  async getSession(sessionId: string): Promise<AnyObject | null> {
+    return this.sessions.get(sessionId) ?? null;
   }
-  async appendEvent(request: any): Promise<any> { return request; }
+
+  async appendEvent(request: AnyObject): Promise<AnyObject> {
+    return request;
+  }
 }
 
-/**
- * ADK Squad Factory
- * Responsible for orchestrating the creation of Agents, Tools, and Runners 
- * according to the Phase 9 Advanced ADK patterns.
- */
 export class AdkSquadFactory {
   private static sessionService = new InMemorySessionService();
 
-  /**
-   * Creates a standardized Information One Agent.
-   */
   static createAgent(config: {
     name: string;
     description: string;
@@ -29,58 +30,47 @@ export class AdkSquadFactory {
     instruction: string;
     tools?: any[];
   }) {
-    return new LlmAgent({
+    return {
       name: config.name,
       description: config.description,
       model: config.model || 'gemini-2.5-flash',
       instruction: config.instruction,
       tools: config.tools || [],
-    });
+    };
   }
 
-  /**
-   * Bridges a defineRune config to an ADK compatible tool.
-   * Simulates MCP (Model Context Protocol) by allowing agents to call these functional Runes.
-   */
   static registerRuneAsTool(rune: any) {
     return {
       definition: {
         name: rune.name,
         description: rune.description,
         parameters: {
-          type: "object",
-          properties: Object.entries((rune.schema as any)._def.shape()).reduce(
-            (acc: any, [key, value]: any) => {
+          type: 'object',
+          properties: Object.entries(((rune.schema as AnyObject)._def as any)?.shape?.() ?? {}).reduce(
+            (acc: AnyObject, [key, value]: [string, any]) => {
               acc[key] = {
-                type: value._def.typeName.replace('Zod', '').toLowerCase(),
-                description: value.description || key
+                type: String(value._def?.typeName ?? 'string').replace('Zod', '').toLowerCase(),
+                description: value.description ?? key,
               };
               return acc;
-            }, {}
+            },
+            {} as AnyObject,
           ),
-          required: Object.keys((rune.schema as any)._def.shape())
-        }
+          required: Object.keys(((rune.schema as AnyObject)._def as any)?.shape?.() ?? {}),
+        },
       },
-      execute: async (args: any) => {
-        return await rune.execute({}, args);
-      }
+      execute: async (args: any) => rune.execute({}, args),
     };
   }
 
-  /**
-   * Creates a Runner to orchestrate agent execution.
-   */
   static createRunner(rootAgent: any, sessionService?: any) {
-    return new Runner({
+    return {
       agent: rootAgent,
-      sessionService: sessionService || this.sessionService,
-      appName: 'InfoOne-ESG-Swarm'
-    });
+      sessionService: sessionService ?? this.sessionService,
+      appName: 'InfoOne-ESG-Swarm',
+    };
   }
 
-  /**
-   * Get the global in-memory session service (for development).
-   */
   static getSessionService() {
     return this.sessionService;
   }

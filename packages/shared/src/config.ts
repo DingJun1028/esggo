@@ -178,7 +178,7 @@ export function getConfig(): EsggoConfig {
 
     otel: {
       endpoint: env('OTEL_EXPORTER_OTLP_ENDPOINT'),
-      serviceName: env('OTEL_SERVICE_NAME', 'omnicore'),
+      serviceName: env('OTEL_SERVICE_NAME', 'omnicore')!,
     },
   };
 
