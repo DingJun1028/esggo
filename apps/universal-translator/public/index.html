@@ -1,115 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌐 萬能即時翻譯 (Live)</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
-    h1 { font-size: 1.5rem; }
-    .bar { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
-    select, button { font-size: .95rem; padding: .45rem .7rem; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }
-    button { background: #2563eb; color: #fff; border: 0; cursor: pointer; }
-    button:hover { background: #1d4ed8; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .col { border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; }
-    textarea { width: 100%; height: 220px; border: 0; resize: none; font-size: 1rem; outline: none; background: transparent; }
-    .src { color: #334155; }
-    .dst { color: #2563eb; }
-    .meta { font-size: .8rem; color: #64748b; margin-top: .5rem; }
-    .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #cbd5e1; margin-right: 5px; }
-    .dot.on { background: #22c55e; }
-    .dot.off { background: #ef4444; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>🌐 萬能即時翻譯 (Live)</title>
+<style>
+:root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#2563eb;--accent-txt:#eaf1ff;--txt:#e8eef7;--muted:#8a97ad;--line:rgba(255,255,255,.1);--shadow:0 8px 30px rgba(0,0,0,.35);--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)}
+html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--accent:#2563eb;--accent-txt:#fff;--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.12);--shadow:0 8px 30px rgba(0,0,0,.08)}
+*{box-sizing:border-box}
+body{font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;max-width:780px;margin:2rem auto;padding:0 var(--gap);color:var(--txt);
+  background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);min-height:100vh}
+html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap)}
+h1{font-size:1.5rem;margin:0}
+h1 small{font-size:.8rem;color:var(--muted);font-weight:400}
+.bar{display:flex;gap:var(--gap);align-items:center;flex-wrap:wrap;margin:1rem 0}
+label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted)}
+select,button{font-size:.95rem;padding:.5rem .75rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--panel2);color:var(--txt)}
+select{min-width:110px}
+button{background:var(--accent);color:var(--accent-txt);border:0;cursor:pointer;transition:.15s}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.meta{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);margin-left:auto}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.dot.on{background:#22c55e}.dot.off{background:#ef4444}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.col{border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap);background:var(--panel);box-shadow:var(--shadow)}
+.col h3{margin:.2rem 0 .6rem;font-size:.95rem}
+textarea{width:100%;height:220px;border:0;resize:none;font-size:1rem;outline:none;background:transparent;color:var(--txt)}
+.dst{color:var(--accent)}
+.meta-foot{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+@media(max-width:560px){.row{grid-template-columns:1fr}.meta{width:100%;margin-left:0}}
+</style>
 </head>
 <body>
-  <h1>🌐 萬能即時翻譯 <span style="font-size:.8rem;color:#64748b;">(免費版 · LibreTranslate/MyMemory)</span></h1>
-  <div class="bar">
-    <label>來源
-      <select id="from">
-        <option value="auto">自動</option>
-        <option value="en">EN</option>
-        <option value="zh">ZH</option>
-        <option value="ja">JA</option>
-        <option value="ko">KO</option>
-        <option value="es">ES</option>
-        <option value="fr">FR</option>
-      </select>
-    </label>
-    <label>目標
-      <select id="to">
-        <option value="zh">ZH</option>
-        <option value="en">EN</option>
-        <option value="ja">JA</option>
-        <option value="ko">KO</option>
-        <option value="es">ES</option>
-        <option value="fr">FR</option>
-      </select>
-    </label>
-    <span class="meta"><span class="dot off" id="connDot"></span><span id="connText">未連線</span></span>
-    <button id="connect">連線即時流</button>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <h3>原文 (即時輸入)</h3>
-      <textarea id="src" class="src" placeholder="在此輸入或貼上要翻譯的文字，連線後即時翻譯…"></textarea>
-    </div>
-    <div class="col">
-      <h3>譯文</h3>
-      <textarea id="dst" class="dst" readonly placeholder="翻譯結果會即時出現在此…"></textarea>
-      <div class="meta" id="engine">引擎: —</div>
-    </div>
-  </div>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-    let ws = null;
-    function setConn(on) {
-      $('connDot').className = 'dot ' + (on ? 'on' : 'off');
-      $('connText').textContent = on ? '已連線 (WebSocket)' : '未連線';
-    }
-    $('connect').addEventListener('click', () => {
-      if (ws) { ws.close(); ws = null; setConn(false); $('connect').textContent = '連線即時流'; return; }
-      const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-      ws = new WebSocket(`${proto}://${location.host}/ws`);
-      ws.onopen = () => { setConn(true); $('connect').textContent = '斷開'; };
-      ws.onclose = () => { setConn(false); ws = null; $('connect').textContent = '連線即時流'; };
-      ws.onerror = () => { $('connText').textContent = '連線錯誤'; };
-      ws.onmessage = (e) => {
-        const d = JSON.parse(e.data);
-        if (d.error) { $('dst').value = '錯誤: ' + d.error; return; }
-        $('dst').value = d.text;
-        $('engine').textContent = '引擎: ' + d.engine + (d.cached ? ' (快取)' : '');
-      };
-    });
-
-    // 即時翻譯: 輸入停止 400ms 後發送 (debounce)
-    let timer = null;
-    $('src').addEventListener('input', () => {
-      if (!ws || ws.readyState !== 1) return;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        const text = $('src').value.trim();
-        if (!text) return;
-        ws.send(JSON.stringify({ text, from: $('from').value, to: $('to').value }));
-      }, 400);
-    });
-
-    // 未連線時改用 REST /translate 做基本翻譯
-    $('src').addEventListener('blur', async () => {
-      if (ws && ws.readyState === 1) return;
-      const text = $('src').value.trim();
-      if (!text) return;
-      const r = await fetch('/translate', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, from: $('from').value, to: $('to').value })
-      });
-      const d = await r.json();
-      $('dst').value = d.text || '';
-      $('engine').textContent = '引擎: ' + (d.engine || '?');
-    });
-  </script>
+<div class="topbar">
+<h1>🌐 萬能即時翻譯 <small>免費版 · LibreTranslate / MyMemory</small></h1>
+<button id="themeBtn" title="切換深色 / 淺色">🌙</button>
+</div>
+<div class="bar">
+<label>來源<select id="from"><option value="auto">自動</option><option value="en">EN</option><option value="zh">ZH</option><option value="zh-TW">ZH-TW</option><option value="ja">JA</option><option value="ko">KO</option><option value="es">ES</option><option value="fr">FR</option></select></label>
+<label>目標<select id="to"><option value="zh">ZH</option><option value="zh-TW">ZH-TW</option><option value="en">EN</option><option value="ja">JA</option><option value="ko">KO</option><option value="es">ES</option><option value="fr">FR</option></select></label>
+<span class="meta"><span class="dot off" id="connDot"></span><span id="connText">未連線</span></span>
+<button id="connect">連線即時流</button>
+</div>
+<div class="row">
+<div class="col"><h3>原文（即時輸入）</h3><textarea id="src" placeholder="在此輸入或貼上要翻譯的文字，連線後即時翻譯…"></textarea></div>
+<div class="col"><h3>譯文</h3><textarea id="dst" class="dst" readonly placeholder="翻譯結果會即時出現在此…"></textarea><div class="meta-foot" id="engine">引擎：—</div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let ws=null;
+function setConn(on){$('connDot').className='dot '+(on?'on':'off');$('connText').textContent=on?'已連線 (WebSocket)':'未連線';}
+$('connect').addEventListener('click',()=>{
+  if(ws){ws.close();ws=null;setConn(false);$('connect').textContent='連線即時流';return;}
+  const proto=location.protocol==='https:'?'wss':'ws';
+  ws=new WebSocket(`${proto}://${location.host}/ws`);
+  ws.onopen=()=>{setConn(true);$('connect').textContent='斷開';};
+  ws.onclose=()=>{setConn(false);ws=null;$('connect').textContent='連線即時流';};
+  ws.onerror=()=>{$('connText').textContent='連線錯誤';};
+  ws.onmessage=e=>{const d=JSON.parse(e.data);if(d.error){$('dst').value='錯誤：'+d.error;return;}$('dst').value=d.text;$('engine').textContent='引擎：'+d.engine+(d.cached?'（快取）':'');};
+});
+let timer=null;
+$('src').addEventListener('input',()=>{if(!ws||ws.readyState!==1)return;clearTimeout(timer);timer=setTimeout(()=>{const text=$('src').value.trim();if(!text)return;ws.send(JSON.stringify({text,from:$('from').value,to:$('to').value}));},400);});
+$('src').addEventListener('blur',async()=>{if(ws&&ws.readyState===1)return;const text=$('src').value.trim();if(!text)return;const r=await fetch('/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('from').value,to:$('to').value})});const d=await r.json();$('dst').value=d.text||'';$('engine').textContent='引擎：'+(d.engine||'?');});
+// 主題記憶
+const themeBtn=$('themeBtn');
+function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textContent=t==='light'?'☀️':'🌙';localStorage.setItem('ut-theme',t);}
+applyTheme(localStorage.getItem('ut-theme')||'dark');
+themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+</script>
 </body>
 </html>

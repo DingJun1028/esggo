@@ -37,9 +37,19 @@ const server = http.createServer(async (req, res) => {
 
   // 靜態前端 UI (免費版 Live 即時翻譯頁)
   if (req.method === 'GET') {
-    const page = req.url === '/' ? '/index.html'
-      : req.url.startsWith('/index') ? '/index.html'
-      : null;
+    // 路由: / → index.html; /studio, /studio.html, /stream, ... → public/<name>.html; 其他靜態檔
+    let page = null;
+    if (req.url === '/' || req.url.startsWith('/index')) {
+      page = '/index.html';
+    } else {
+      // 去掉 query string, 取 path
+      const urlPath = req.url.split('?')[0];
+      if (urlPath === '/studio' || urlPath === '/studio.html') page = '/studio.html';
+      else if (urlPath === '/stream' || urlPath === '/stream.html') page = '/stream.html';
+      else if (urlPath === '/broadcaster' || urlPath === '/broadcaster.html') page = '/broadcaster.html';
+      else if (urlPath === '/receiver' || urlPath === '/receiver.html') page = '/receiver.html';
+      else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) page = urlPath;
+    }
     if (page) {
       const fp = path.join(PUBLIC_DIR, page);
       if (fs.existsSync(fp)) {

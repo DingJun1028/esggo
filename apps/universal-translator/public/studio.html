@@ -1,96 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>萬能語種橋樑 · 自動辨識版</title>
-  <style>
-    :root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--danger:#ff5d6c;--radius:clamp(8px,2vw,14px)}
-    html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
-      background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
-      min-height:100vh;display:flex;flex-direction:column;gap:12px;padding:12px}
-    html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-    .wrap{max-width:560px;width:100%;background:var(--panel);border:1px solid var(--line);
-      border-radius:var(--radius);box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:12px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    select{flex:1;min-width:100px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
-      border-radius:var(--radius);padding:6px 10px;font-size:1rem}
-    .transcript{min-height:140px;overflow:auto;background:var(--panel2);
-      border:1px solid var(--line);border-radius:var(--radius);padding:12px;font-size:1rem;line-height:1.5}
-    #transcript .me{color:var(--accent)}.status{font-size:0.8rem;color:var(--muted)}
-    .badge{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:4px 8px;font-size:0.7rem}
-    @media (max-width:480px){.row{flex-direction:column}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>萬能語種橋樑 · 收音端</title>
+<style>
+:root{
+  --bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--danger:#ff5d6c;
+  --line:rgba(255,255,255,.08);--shadow:0 8px 30px rgba(0,0,0,.35);--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)
+}
+html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.1);--shadow:0 8px 30px rgba(0,0,0,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
+  min-height:100vh;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
+html[data-theme="light"] body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap)}
+.topbar h1{font-size:1.05rem;margin:0}
+.spacer{flex:1}
+.wrap{max-width:640px;width:100%;margin:0 auto;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--gap);display:flex;flex-direction:column;gap:var(--gap)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select{flex:1;min-width:120px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+  border-radius:var(--radius);padding:8px 10px;font-size:1rem}
+button{font-size:.95rem;padding:8px 12px;border-radius:var(--radius);border:1px solid var(--line);
+  background:var(--panel2);color:var(--txt);cursor:pointer;transition:.15s}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:#04130f;border-color:transparent;font-weight:600}
+button.primary:hover{filter:brightness(1.08)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.transcript{flex:1;min-height:200px;max-height:55vh;overflow:auto;background:var(--panel2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:12px;font-size:1rem;line-height:1.6}
+.utter{margin:0 0 12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.utter:last-child{border-bottom:0}
+.utter .src{color:var(--accent);font-weight:600}
+.utter .trs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:6px}
+.utter .trs span{font-size:.85rem;color:var(--muted)}
+.utter .trs b{color:var(--txt);font-weight:600;margin-right:4px}
+.status{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
+.dot.on{background:#22c55e}.dot.err{background:var(--danger)}
+.badge{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:6px 10px;font-size:1rem;cursor:pointer;user-select:none}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--danger);color:#fff;
+  padding:8px 14px;border-radius:var(--radius);font-size:.85rem;opacity:0;transition:.3s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+@media(max-width:480px){.row{flex-direction:column}.row select{width:100%}.utter .trs{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h2>萬能語種橋樑 · 自動辨識</h2>
-    <div class="row">
-      <select id="lang"><option value="zh-TW">中文(繁)</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
-      <span class="badge" title="語言循環切換">🔄</span>
-    </div>
-    <div class="status" id="status">開始自動辨識…請授權麥克風</div>
-    <div class="transcript" id="transcript" aria-live="polite">（即時轉錄+翻譯顯示於此）</div>
+<div class="topbar">
+  <h1>🌐 萬能語種橋樑 · 收音端</h1>
+  <div class="spacer"></div>
+  <button id="themeBtn" title="切換深色 / 淺色">🌙</button>
+</div>
+<div class="wrap">
+  <div class="row">
+    <select id="lang"><option value="zh-TW">中文(繁)</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
+    <span class="badge" id="swapLang" title="語言循環切換">🔄</span>
+    <button id="micBtn" class="primary">🎤 開始收音</button>
+    <button id="clearBtn">🗑 清除</button>
   </div>
-  <script>
-    const LANGUAGES=['zh-TW','en','ja','es','fr'];
-    const $=s=>document.querySelector(s);
-    let recog=null,listening=false;
-    const API=location.origin+'/translate';
-    
-    // 語言循環切換
-    function swapLang(){
-      const curr=$('#lang').val();
-      const idx=LANGUAGES.findIndex(l=>l===curr);
-      const next=LANGUAGES[(idx+1)%LANGUAGES.length];
-      $('#lang').val(next).trigger('change');
-    }
-    document.querySelector('.badge').onclick=swapLang;
-    
-    // 自動啟動辨識
-    function autoStart(){
-      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-      if(!SR){$('#status').textContent='請用 Chrome/Edge 瀏覽器';return;}
-      recog=new SR();
-      recog.lang=$('#lang').value;
-      recog.continuous=true;
-      recog.interimResults=true;
-      recog.onresult=e=>{
-        for(let i=e.resultIndex;i<e.results.length;i++){
-          const t=e.results[i][0].transcript.trim();
-          if(e.results[i].isFinal && t){
-            const p=document.createElement('div');
-            p.className='me';p.textContent='▸ '+t;
-            $('#transcript').appendChild(p);
-            $('#transcript').scrollTop=$('#transcript').scrollHeight;
-            pushTranslate(t);
-          }
-        }
-      };
-      recog.onstart=()=>{listening=true;($('#status').textContent='辨識中…'+LANGUAGES.map(l=>l).join('|')};
-      recog.onerror=e=>{if(e.error==='not-allowed'){$('#status').textContent='請授權麥克風權限';}};
-      recog.onend(()=>{if(listening)setTimeout(()=>recog.start(),100)}); // 自動重啟
-      try{recog.start();}catch(e){$('#status').textContent=e.message}
-    }
-    
-    // 推送翻譯
-    function pushTranslate(text){
-      fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES})})
-        .then(r=>r.json())
-        .then(d=>{const out=$('#transcript');
-          if(d.translations){out.innerHTML+=Object.entries(d.translations).map(([c,t])=>'<span class="me">'+c+':</span>'+t).join('<br>');}
-          out.scrollTop=out.scrollHeight;
-        }).catch(e=>console.error(e));
-    }
-    
-    // 語言變更時重置辨識
-    $('#lang').onchange=()=>{if(recog){recog.lang=$('#lang').value;}};
-    
-    // 開即自動辨識
-    window.onload=autoStart;
-  </script>
+  <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 點擊「開始收音」並授權麥克風</span></div>
+  <div class="transcript" id="transcript" aria-live="polite"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const LANGUAGES=['zh-TW','en','ja','es','fr'];
+const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
+const $=s=>document.querySelector(s);
+let recog=null,listening=false;
+const API=location.origin+'/translate';
+
+// 主題（記憶到 localStorage）
+const themeBtn=$('#themeBtn');
+function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textContent=t==='light'?'☀️':'🌙';localStorage.setItem('ut-theme',t);}
+applyTheme(localStorage.getItem('ut-theme')||'dark');
+themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+
+// 語言循環切換
+function swapLang(){const curr=$('#lang').value;const idx=LANGUAGES.findIndex(l=>l===curr);const next=LANGUAGES[(idx+1)%LANGUAGES.length];$('#lang').value=next;if(recog)recog.lang=next;setStatus();}
+$('#swapLang').onclick=swapLang;
+$('#lang').onchange=()=>{if(recog)recog.lang=$('#lang').value;setStatus();};
+
+// 狀態列
+function setStatus(){const l=LANG_NAME[$('#lang').value]||$('#lang').value;$('#status').textContent=listening?`🎧 收音中 · 來源 ${l} → 多語並列`:`待命 · 來源 ${l}`;}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+// 收音控制（手動啟停 + 自動重啟）
+const micBtn=$('#micBtn');
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('請用 Chrome / Edge 瀏覽器');return;}
+  recog=new SR();recog.lang=$('#lang').value;recog.continuous=true;recog.interimResults=true;
+  recog.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript.trim();if(e.results[i].isFinal&&t)addUtterance(t);}};
+  recog.onstart=()=>{listening=true;$('#dot').className='dot on';micBtn.textContent='⏹ 停止收音';micBtn.classList.remove('primary');setStatus();};
+  recog.onerror=e=>{if(e.error==='not-allowed'){toast('請授權麥克風權限');stopRec();}else if(e.error!=='no-speech'&&e.error!=='aborted'){toast('收音錯誤：'+e.error);}};
+  recog.onend=()=>{if(listening)setTimeout(()=>{try{recog.start();}catch(_){}},200);};
+  try{recog.start();}catch(e){toast(e.message);}
+}
+function stopRec(){listening=false;if(recog){try{recog.stop();}catch(_){}}micBtn.textContent='🎤 開始收音';micBtn.classList.add('primary');$('#dot').className='dot';setStatus();}
+micBtn.onclick=()=>listening?stopRec():startRec();
+
+// 轉錄 + 多語翻譯卡片
+function addUtterance(text){
+  const box=$('#transcript');
+  const el=document.createElement('div');el.className='utter';
+  const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
+  const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
+  box.appendChild(el);box.scrollTop=box.scrollHeight;
+  fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES})})
+    .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
+    .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
+    .catch(e=>{trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}</span>`;});
+}
+$('#clearBtn').onclick=()=>{$('#transcript').innerHTML='';};
+setStatus();
+</script>
 </body>
 </html>
