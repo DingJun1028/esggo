@@ -124,10 +124,11 @@ micBtn.onclick=()=>{if(sysActive){toast('請先停止電腦聲音');return;}micL
 const sysBtn=$('#sysBtn');
 async function loadWhisper(){
   if(whisper)return whisper;
-  $('#status').textContent='載入本地 Whisper 模型中（首次約 30-50MB，後續快取）…';
+  $('#status').textContent='載入本地 Whisper 模型中（base 版約 70-90MB，首次較慢，後續快取）…';
   try{
     const {pipeline}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0');
-    whisper=await pipeline('automatic-speech-recognition','onnx-community/whisper-tiny',{
+    // 改用 whisper-base：準確率較 tiny 顯著提升；q8 量化平衡速度/品質
+    whisper=await pipeline('automatic-speech-recognition','onnx-community/whisper-base',{
       dtype:{encoder_model:'q8',decoder_model:'q8',decoder_model_merged:'q8'}
     });
   }catch(e){toast('Whisper 載入失敗：'+e.message);throw e;}
@@ -152,14 +153,22 @@ async function startSystem(){
   srcNode.connect(node).connect(audioCtx.destination);
   sysActive=true;sysBtn.classList.remove('primary');sysBtn.textContent='⏹ 停止電腦';$('#dot').className='dot on';setStatus();
   let asr;try{asr=await loadWhisper();}catch(e){toast('Whisper 載入失敗：'+e.message);stopSystem();return;}
-  // 分段轉錄（每 ~4 秒送一次）
+  // 分段轉錄：每 ~2 秒送一次（加速文字出現），並用精準度參數減少幻覺
   let acc=[];let lastSend=0;
   node.port.onmessage=async e=>{
     acc.push(e.data);const now=Date.now();
-    if(now-lastSend>4000){lastSend=now;const all=concat(acc);acc=[];
-      if(all.length<8000)return;
-      try{const out=await asr(all.slice(0,30*16000),{chunk_length_s:30,stride_length_s:5,language:langToWhisper($('#lang').value)});
-        const txt=(out.text||'').trim();if(txt)addUtterance(txt);}catch(err){toast('轉錄錯誤：'+err.message);}}
+    if(now-lastSend>2000){lastSend=now;const all=concat(acc);acc=[];
+      if(all.length<4000)return; // 太短不送（減少碎句）
+      try{
+        const out=await asr(all.slice(0,30*16000),{
+          chunk_length_s:30,stride_length_s:5,
+          language:langToWhisper($('#lang').value),
+          condition_on_previous_text:false,  // 不依賴前句，減少累積幻覺
+          no_speech_threshold:0.6,           // 靜音判定閾值，過濾非語音
+          temperature:0.0                    // 貪婪解碼，提升穩定度
+        });
+        const txt=(out.text||'').trim();if(txt)addUtterance(txt);
+      }catch(err){toast('轉錄錯誤：'+err.message);}}
   };
   processorNode=node;
 }
