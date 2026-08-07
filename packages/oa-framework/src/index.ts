@@ -1,6 +1,6 @@
 /**
  * OA Framework — 萬能分身元框架入口
- * 整合: ADK + Genkit + Agent0 + CrewAI + Agent Reach + DeerFlow + 騰訊 Agent 記憶
+ * 整合: ADK + Genkit + Agent0 + CrewAI + Agent Reach + DeerFlow + 騰訊 Agent 記憶 + OpenMontage
  */
 import { OAOrchestrator } from './core/orchestrator.js';
 import { verify5T } from './core/t5.js';
@@ -13,8 +13,9 @@ import { CrewAIAdapter } from './adapters/crewai.js';
 import { AgentReachAdapter } from './adapters/agentreach.js';
 import { DeerFlowAdapter } from './adapters/deerflow.js';
 import { TencentMemAdapter } from './adapters/tencent-mem.js';
+import { OpenMontageAdapter } from './adapters/openmontage.js';
 
-/** 建立並註冊全部 7 個子框架適配器的 Orchestrator */
+/** 建立並註冊全部 8 個子框架適配器的 Orchestrator */
 export function createOAFrame(config: OAFrameConfig = {}): OAOrchestrator {
   const oa = new OAOrchestrator(config);
   oa.register(new ADKAdapter(config));
@@ -24,6 +25,7 @@ export function createOAFrame(config: OAFrameConfig = {}): OAOrchestrator {
   oa.register(new AgentReachAdapter(config));
   oa.register(new DeerFlowAdapter(config));
   oa.register(new TencentMemAdapter(config));
+  oa.register(new OpenMontageAdapter(config));
   return oa;
 }
 
@@ -31,5 +33,5 @@ export { OAOrchestrator, verify5T };
 export * from './core/types.js';
 export * from './core/omni-gate.js';
 export const OA_SUBFRAMES: SubFrameId[] = [
-  'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem',
+  'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem', 'openmontage',
 ];
