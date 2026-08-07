@@ -18,7 +18,6 @@ export class ADKAdapter implements ISubFrameAdapter {
 
   async bootstrap(): Promise<{ ok: boolean; endpoint?: string; error?: string }> {
     try {
-      // @ts-expect-error optional peer dep — 未安裝時 graceful 降級
       await import('@google/adk');
       return { ok: true };
     } catch {
@@ -28,7 +27,6 @@ export class ADKAdapter implements ISubFrameAdapter {
 
   async dispatch(task: OATask): Promise<{ output: string }> {
     try {
-      // @ts-expect-error optional peer dep
       const adk = await import('@google/adk');
       const LlmAgent = (adk as any).LlmAgent ?? (adk as any).Agent;
       if (!LlmAgent) return { output: `[ADK] ${task.prompt} (scaffold: LlmAgent export 未找到)` };
@@ -50,7 +48,6 @@ export class ADKAdapter implements ISubFrameAdapter {
 
   async health() {
     try {
-      // @ts-expect-error optional peer dep
       await import('@google/adk');
       return { status: 'ok' as const, detail: `model=${this.model}` };
     } catch {

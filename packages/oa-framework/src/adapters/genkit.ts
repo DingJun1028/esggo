@@ -20,10 +20,9 @@ export class GenkitAdapter implements ISubFrameAdapter {
 
   async bootstrap(): Promise<{ ok: boolean; endpoint?: string; error?: string }> {
     try {
-      // @ts-expect-error optional peer dep — 未安裝時 graceful 降級
       await import('genkit');
-      // @ts-expect-error optional peer dep
-      await import('@genkit-ai/google-genai');
+      const genkitMod = '@genkit-ai/google-genai';
+      await import(genkitMod as string);
       return { ok: true };
     } catch {
       return { ok: false, error: 'genkit 未安裝 (npm i genkit @genkit-ai/google-genai) — scaffold 模式' };
@@ -32,10 +31,10 @@ export class GenkitAdapter implements ISubFrameAdapter {
 
   async dispatch(task: OATask): Promise<{ output: string }> {
     try {
-      // @ts-expect-error optional peer dep
+      // optional peer dep 動態載入 (避免 tsc 靜態解析未安裝模組)
+      const genkitMod = '@genkit-ai/google-genai';
       const { genkit } = (await import('genkit')) as any;
-      // @ts-expect-error optional peer dep
-      const { googleAI } = (await import('@genkit-ai/google-genai')) as any;
+      const { googleAI } = (await import(genkitMod as string)) as any;
       const ai = genkit({ plugins: [googleAI()] });
       const { text } = await ai.generate({
         model: googleAI.model(this.model),
@@ -49,7 +48,6 @@ export class GenkitAdapter implements ISubFrameAdapter {
 
   async health() {
     try {
-      // @ts-expect-error optional peer dep
       await import('genkit');
       return { status: 'ok' as const, detail: `model=${this.model}` };
     } catch {
