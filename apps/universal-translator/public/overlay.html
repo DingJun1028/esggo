@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>雙語字幕浮層 · 疊加 Zoom</title>
+<style>
+:root{
+  --cap-bg:rgba(8,12,20,.72);--src:#fff;--trs:#7fe9d6;
+  --ui:#e8eef7;--accent:#36e0c0;--line:rgba(255,255,255,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;
+  font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif}
+/* 全屏透明層, 點擊穿透到下方 Zoom */
+#stage{position:fixed;inset:0;pointer-events:none;z-index:1}
+/* 字幕本體: 底部中央, 半透明 */
+#caption{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);
+  max-width:94vw;width:min(1100px,94vw);background:var(--cap-bg);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:16px;padding:12px 20px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);text-align:center;line-height:1.5;
+  opacity:0;transition:opacity .25s ease;pointer-events:none}
+#caption.show{opacity:1;animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+#caption .src{font-size:clamp(1.1rem,2.6vw,1.6rem);color:var(--src);font-weight:600;text-shadow:0 2px 6px #000}
+#caption .trs{font-size:clamp(.95rem,2.2vw,1.25rem);color:var(--trs);margin-top:3px;text-shadow:0 2px 6px #000}
+#caption .trs .lbl{color:#9fb0c7;font-size:.8em;margin-right:6px}
+/* 控制工具列: 平時隱藏, 滑鼠移入頂部或按 H 喚出 */
+#toolbar{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;gap:10px;
+  align-items:center;padding:8px 14px;background:rgba(10,14,22,.85);
+  border-bottom:1px solid var(--line);color:var(--ui);font-size:.85rem;
+  transform:translateY(-100%);transition:transform .2s ease;pointer-events:auto}
+#toolbar.show{transform:translateY(0)}
+#toolbar label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+#toolbar input[type=range]{width:110px}
+#toolbar button{background:#1c2740;color:var(--ui);border:1px solid var(--line);
+  border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.85rem}
+#toolbar button:hover{border-color:var(--accent)}
+#toolbar select{background:#1c2740;color:var(--ui);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+#hint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;
+  color:#9fb0c7;font-size:1rem;text-align:center;pointer-events:none;opacity:.8}
+#hint.hide{display:none}
+#status{position:fixed;bottom:8px;right:10px;z-index:10;color:#9fb0c7;font-size:.75rem;
+  background:rgba(10,14,22,.7);padding:3px 8px;border-radius:6px;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="caption">
+    <div class="src" id="capSrc"></div>
+    <div class="trs" id="capTrs"></div>
+  </div>
+</div>
+<div id="hint">等待字幕中…<br><small>移動滑鼠到視窗頂部或按 H 開工具列 · 字幕會自動疊加在 Zoom 上方</small></div>
+<div id="status">連線中…</div>
+
+<div id="toolbar">
+  <strong style="color:var(--accent)">🎬 字幕浮層</strong>
+  <label>目標語<select id="targ">
+    <option value="zh-TW">繁中</option><option value="en" selected>英文</option>
+    <option value="ja">日文</option><option value="es">西班牙</option><option value="fr">法文</option>
+  </select></label>
+  <label>透明度<input id="op" type="range" min="0" max="100" value="72"></label>
+  <label>字體<input id="fs" type="range" min="14" max="42" value="26"></label>
+  <label>位置<select id="pos">
+    <option value="bottom" selected>底部</option><option value="top">頂部</option>
+  </select></label>
+  <button id="alwaysBtn">📌 永遠置頂提示</button>
+  <button id="hideBtn">隱藏工具列 (H)</button>
+</div>
+
+<script type="module">
+const $=s=>document.querySelector(s);
+const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
+let room=new URLSearchParams(location.search).get('room')||'';
+let target='en', capTimer=null, toolbarTimer=null;
+
+// 全屏透明 (Chrome 可開啟「永遠置頂」或拖到 Zoom 上方)
+function showCaption(src,trs){
+  const cap=$('#caption');
+  $('#capSrc').textContent=src||'';
+  $('#capTrs').innerHTML = trs ? '<span class="lbl">'+(LANG_NAME[target]||target)+'</span>'+trs : '';
+  cap.classList.add('show');
+  $('#hint').classList.add('hide');
+  clearTimeout(capTimer);
+  capTimer=setTimeout(()=>cap.classList.remove('show'), 6500);
+}
+
+// 接收 SSE 字幕推送
+let esOk=false;
+function connect(){
+  const url=location.origin+'/stream'+(room?('?room='+encodeURIComponent(room)):'');
+  const sse=new EventSource(url);
+  sse.addEventListener('translation',e=>{
+    try{
+      const d=JSON.parse(e.data); esOk=true;
+      const src=d.text||'';
+      const trs = d.translations ? (d.translations[target]||d.translations['zh-TW']||Object.values(d.translations)[0]||'') : '';
+      if(src||trs) showCaption(src,trs);
+    }catch(_){}
+  });
+  sse.onopen=()=>{ $('#status').textContent='已連線 · 房間 '+(room||'全部')+' · 疊加 Zoom 中'; };
+  sse.onerror=()=>{ if(!esOk) $('#status').textContent='連線失敗, 請確認 studio 已開啟推播'; sse.close(); setTimeout(connect,3000); };
+}
+connect();
+
+// 控制列互動
+$('#targ').onchange=()=>target=$('#targ').value;
+$('#op').oninput=e=>{ document.documentElement.style.setProperty('--cap-bg','rgba(8,12,20,'+(e.target.value/100)+')'); };
+$('#fs').oninput=e=>{ document.documentElement.style.setProperty('--src','#fff'); $('#caption').style.fontSize=e.target.value+'px'; };
+$('#pos').onchange=e=>{ const c=$('#caption'); if(e.target.value==='top'){c.style.bottom='auto';c.style.top='8vh';}else{c.style.top='auto';c.style.bottom='7vh';} };
+
+// 工具列顯隱 (滑鼠頂部 or 按 H)
+function revealToolbar(){
+  $('#toolbar').classList.add('show');
+  clearTimeout(toolbarTimer);
+  toolbarTimer=setTimeout(()=>$('#toolbar').classList.remove('show'), 3000);
+}
+document.addEventListener('mousemove',e=>{ if(e.clientY<60) revealToolbar(); });
+document.addEventListener('keydown',e=>{
+  if(e.key==='h'||e.key==='H'){ const tb=$('#toolbar'); tb.classList.toggle('show'); }
+});
+$('#hideBtn').onclick=()=>$('#toolbar').classList.remove('show');
+$('#alwaysBtn').onclick=()=>{
+  $('#status').textContent='請在瀏覽器右鍵分頁 → 「永遠置頂」(Chrome) 或視窗置頂, 即可固定疊在 Zoom 上';
+  revealToolbar();
+};
+
+// 雙擊切換工具列
+document.addEventListener('dblclick',()=>{ const tb=$('#toolbar'); tb.classList.toggle('show'); });
+</script>
+</body>
+</html>
