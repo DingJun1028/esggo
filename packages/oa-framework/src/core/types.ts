@@ -13,7 +13,8 @@ export type SubFrameId =
   | 'agentreach' // Agent Reach (Panniantong/agent-reach, 本地聯網能力層)
   | 'deerflow'   // DeerFlow research flow
   | 'tencent-mem' // 騰訊 Agent 記憶 (TencentDB Agent Memory)
-  | 'openmontage'; // OpenMontage 本地 AI 影片生產 (Ollama+FFmpeg+HyperFrames) — UNVERIFIED: repo 404
+  | 'openmontage' // OpenMontage 本地 AI 影片生產 (Ollama+FFmpeg+HyperFrames) — UNVERIFIED: repo 404
+  | 'omniroute';  // OmniRoute 統一 AI 閘道 (237+ providers, localhost:20128/v1) — UNVERIFIED: repo 本輪無法核實
 
 /** 5T 協議狀態 (來自 soul.md) */
 export type T5State = {
