@@ -51,8 +51,8 @@ def transcribe(audio_bytes: bytes, lang_hint: str | None = None):
         f.write(audio_bytes)
         tmp = f.name
     try:
-        kwargs = dict(beam_size=5, best_of=5, temperature=0.0,
-                      condition_on_previous_text=False, no_speech_threshold=0.6)
+        kwargs = dict(beam_size=5, best_of=5, temperature=(0.0, 0.4, 0.6),
+                      condition_on_previous_text=False, no_speech_threshold=0.3)
         if lang_hint:
             mapped = _LANG_MAP.get(lang_hint.lower())
             if mapped:
