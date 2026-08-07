@@ -10,9 +10,10 @@ export type SubFrameId =
   | 'genkit'     // Google Genkit (Firebase)
   | 'agent0'     // Agent Zero organic framework
   | 'crewai'     // CrewAI multi-agent
-  | 'agentreach' // Agent Reach (spec TODO)
+  | 'agentreach' // Agent Reach (Panniantong/agent-reach, 本地聯網能力層)
   | 'deerflow'   // DeerFlow research flow
-  | 'tencent-mem'; // 騰訊 Agent 記憶 (TencentDB Agent Memory)
+  | 'tencent-mem' // 騰訊 Agent 記憶 (TencentDB Agent Memory)
+  | 'openmontage'; // OpenMontage 本地 AI 影片生產 (Ollama+FFmpeg+HyperFrames) — UNVERIFIED: repo 404
 
 /** 5T 協議狀態 (來自 soul.md) */
 export type T5State = {
