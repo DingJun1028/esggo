@@ -13,5 +13,8 @@
   "devDependencies": {
     "typescript": "^5.9.0",
     "tsx": "^4.19.0"
+  },
+  "dependencies": {
+    "@esggo/oa-framework": "workspace:*"
   }
 }
