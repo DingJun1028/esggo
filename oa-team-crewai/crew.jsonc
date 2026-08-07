@@ -1,0 +1,46 @@
+{
+  // OA-Team 30 萬能蜂群 — CrewAI JSON-first (對應 soul.md 30 Souls Matrix)
+  // 5 大陣列 × 6 代理；協作流：提純 → 契約 → 代行 → 熵減 → 驗算
+  "name": "oa_team_30_swarm",
+  "agents": [
+    "sage_01", "sage_02", "sage_03", "sage_04", "sage_05", "sage_06",
+    "rune_07", "rune_08", "rune_09", "rune_10", "rune_11", "rune_12",
+    "wing_13", "wing_14", "wing_15", "wing_16", "wing_17", "wing_18",
+    "forge_19", "forge_20", "forge_21", "forge_22", "forge_23", "forge_24",
+    "verify_25", "verify_26", "verify_27", "verify_28", "verify_29", "verify_30"
+  ],
+  "tasks": [
+    {
+      "name": "extract_essence",
+      "description": "【本質提純】由智庫聖所(01-06)召回長短期記憶、提純任務本質脈絡。任務：{task}",
+      "expected_output": "結構化的任務本質脈絡與相關記憶召回",
+      "agent": "sage_01"
+    },
+    {
+      "name": "forge_contract",
+      "description": "【符文契約】由符文契約小隊(07-12)鑄造雙向 TS 型別安全 API 介面與 ZKP 屏障",
+      "expected_output": "型別安全的 API 契約規格",
+      "agent": "rune_07"
+    },
+    {
+      "name": "dispatch_swarm",
+      "description": "【光之羽翼】由光之羽翼小隊(13-18)執行自主代行與前端組件渲染",
+      "expected_output": "渲染後的元件與執行日誌",
+      "agent": "wing_13"
+    },
+    {
+      "name": "entropy_forge",
+      "description": "【煉金熵減】由煉金熵減小隊(19-24)重構、優化熵值、CI/CD Pipeline",
+      "expected_output": "優化後的代碼與 entropy 報告",
+      "agent": "forge_19"
+    },
+    {
+      "name": "verify_5t",
+      "description": "【5T 驗算】由 5T 驗算小隊(25-30)執行零幻覺驗算與 Hash Lock 刻印",
+      "expected_output": "5T 合規驗證報告 + Hash Lock 憑證",
+      "agent": "verify_25"
+    }
+  ],
+  "process": "sequential",
+  "verbose": true
+}
