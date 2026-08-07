@@ -12,7 +12,7 @@
 | `crewai` | CrewAI 30 蜂群 | Python/uv (crewai-runtime) | `adapters/crewai.ts` |
 | `agentreach` | Agent Reach（最新技術） | **spec pending** — 待使用者提供文檔 | `adapters/agentreach.ts` |
 | `deerflow` | DeerFlow 研究流程 | Python FastAPI (esggo-deerflow) | `adapters/deerflow.ts` |
-| `tencent-mem` | 騰訊 Agent 記憶 (TencentDB Agent Memory) | Gateway `:8420` | `adapters/tencent-mem.ts` |
+| `tencent-mem` | 騰訊 Agent 記憶 (TencentDB Agent Memory) — **Team Memory** | MemoryCore `:8420` + Hub `:8125` + Proxy `:8096` | `adapters/tencent-mem.ts` |
 
 ## 架構
 
@@ -56,6 +56,13 @@ npx tsx test/smoke.ts  # 7 框架並行 + 5T 鑄造 → ALL_7_FRAMEWORKS_OK
 
 ## 待辦
 
+- [x] **騰訊 Agent 記憶** — 已升級為 Team Memory 適配器 (`memory.ts` + `tencent-mem.ts`)：
+  - 4 類資產 `MemoryAssetKind`: `chat_memory`(L0-L3) / `skill` / `wiki` / `codegraph`
+  - 真實 API：`/v3/tools/list` + `/v3/tools/call` (Knowledge OpenAPI) + `/api/assets` (資產庫)
+  - 部署：`git clone https://github.com/Tencent/TencentDB-Agent-Memory.git && cd deploy/global-images && cp .env.example .env && ./start-all.sh`
+  - 端點：core `:8420` / hub `:8125` / proxy `:8096`
+  - 對齊 OA-Team 30 蜂群：每個 Agent 可經 `saveAsset`+`callTool` 實作 Agent Loadout (綁定不同記憶資產)
+  - 當前 VPS `:8420` 未部署 → `health()` 回 `down` (graceful 降級, 不阻斷其他框架)
 - [ ] **Agent Reach**：使用者未提供文檔，`agentreach.ts` 為占位骨架（`health()` 回 `down`），待補協議細節後實作通道分發。
 - [ ] 各 adapter `dispatch` 目前為 scaffold（回傳標記字串），需注入真實 SDK 調用（@google/adk / genkit / Agent0 A2A / crewai-runtime / DeerFlow API / TencentDB gateway）。
 - [ ] 與 `omni-agent` 5T Gate 串接（將 `verify5T` 作為部署前閘門）。
