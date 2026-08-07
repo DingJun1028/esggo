@@ -44,15 +44,14 @@ export class AgentReachAdapter implements ISubFrameAdapter {
 
   constructor(private config: OAFrameConfig) {}
 
-  /** 啟動: 探測 agent-reach CLI 是否可用 */
+  /** 啟動: 探測 agent-reach CLI 是否可用 (真實: doctor 回 No channels installed 即 CLI 在) */
   async bootstrap(): Promise<{ ok: boolean; endpoint?: string; error?: string }> {
     try {
-      await execFileP(this.cli, ['--version'], { timeout: 5000 });
+      await execFileP(this.cli, ['doctor'], { timeout: 8000 });
       return { ok: true, endpoint: 'local-cli' };
     } catch {
       try {
-        // Python 模組形式亦可
-        await execFileP('python3', ['-m', 'agent_reach', '--version'], { timeout: 5000 });
+        await execFileP('python3', ['-m', 'agent_reach', 'doctor'], { timeout: 8000 });
         return { ok: true, endpoint: 'python-module' };
       } catch {
         return {
@@ -161,11 +160,11 @@ export class AgentReachAdapter implements ISubFrameAdapter {
 
   async health() {
     try {
-      await execFileP(this.cli, ['--version'], { timeout: 5000 });
-      return { status: 'ok' as const, detail: 'local-cli ready' };
+      await execFileP(this.cli, ['doctor'], { timeout: 8000 });
+      return { status: 'ok' as const, detail: 'local-cli ready (doctor ok)' };
     } catch {
       try {
-        await execFileP('python3', ['-m', 'agent_reach', '--version'], { timeout: 5000 });
+        await execFileP('python3', ['-m', 'agent_reach', 'doctor'], { timeout: 8000 });
         return { status: 'ok' as const, detail: 'python-module ready' };
       } catch {
         return { status: 'down' as const, detail: 'scaffold (pip install agent-reach)' };
