@@ -58,12 +58,22 @@ npx tsx test/smoke.ts  # 7 框架並行 + 5T 鑄造 → ALL_7_FRAMEWORKS_OK
 
 - [x] **ADK** — 真實連結 `new LlmAgent({name,model,instruction,tools})` + `run()` (dynamic import, 未裝 `@google/adk` 時 graceful 降級)
 - [x] **Genkit** — 真實連結 `genkit({plugins:[googleAI()]})` + `ai.generate()` (dynamic import, 未裝時 graceful 降級)
-- [x] **Agent Reach** — 升級為真實能力層適配器 (Panniantong/agent-reach):
-  - 13+ 渠道 `AgentReachChannel`: youtube/github/bilibili/twitter/reddit/xiaohongshu/facebook/instagram/xiaoyuzhou/exa/jina/rss
-  - `doctor()` 自我診斷 (探測各工具後端健康 + 修復處方)
-  - `dispatch` 依 prompt 關鍵字 MECE 路由渠道, 呼叫本地 `agent-reach <channel> search`
-  - 零 API 費用/金鑰, 對齊 ESG GO 去中心化模組化哲學
-  - 未安裝 CLI 時 health=down + scaffold (graceful 降級)
+- [x] **Agent Reach** — 對齊官方精確子命令 (Panniantong/agent-reach, Python `pip install agent-reach`):
+  - 本質: 路由器+體檢器, 實際執行委派上游 CLI (非自帶 search)
+  - 路由表 (來自 agent_reach/skill/SKILL.md):
+    - exa→`mcporter call exa.web_search_exa query=... numResults=5`
+    - jina→`curl -s "https://r.jina.ai/URL"`
+    - github→`gh search repos "..." --sort stars --limit 10`
+    - youtube→`yt-dlp --write-sub --write-auto-sub --skip-download -o /tmp/%(id)s "URL"`
+    - bilibili→`bili search "..." --type video -n 5`
+    - twitter→`twitter search "..." -n 10` (需 TWITTER_AUTH_TOKEN/CT0)
+    - reddit→`opencli reddit search "..." -f yaml` | `rdt search ...`
+    - xiaohongshu→`opencli xiaohongshu search "..." -f yaml`
+    - facebook/instagram→`opencli facebook|instagram ... -f yaml`
+    - v2ex→`curl -s "https://www.v2ex.com/api/topics/hot.json" -H "User-Agent: agent-reach/1.0"`
+    - linkedin/xiaoyuzhou/xueqiu/rss→參考官方 references/*.md, 先以 exa 兜底
+  - `doctor()`→`agent-reach doctor --json` (顯示每平台 active_backend)
+  - 未安裝時 health=down + scaffold (graceful 降級)
 - [x] **騰訊 Agent 記憶** — Team Memory 適配器 (`memory.ts` + `tencent-mem.ts`)：
   - 4 類資產 `MemoryAssetKind`: `chat_memory`(L0-L3) / `skill` / `wiki` / `codegraph`
   - 真實 API：`/v3/tools/list` + `/v3/tools/call` (Knowledge OpenAPI) + `/api/assets` (資產庫)
