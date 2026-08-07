@@ -23,6 +23,15 @@ function writeJson(res, obj, extraHeaders = {}) {
   res.end(JSON.stringify(obj));
 }
 
+// SSE 觀眾端客戶端集合與廣播（定義於 server 建立前，避免 TDZ；供 WS handler 與主 callback 共用）
+const sseClients = new Set();
+function broadcastTranslation(payload) {
+  const data = `event: translation\ndata: ${JSON.stringify(payload)}\n\n`;
+  for (const c of sseClients) {
+    try { c.res.write(data); } catch { sseClients.delete(c); }
+  }
+}
+
 const server = http.createServer(async (req, res) => {
   // CORS (前端跨域呼叫)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,9 +44,24 @@ const server = http.createServer(async (req, res) => {
     return writeJson(res, { status: 'ok', version: APP_VERSION, stats });
   }
 
+  // SSE 觀眾端串流（必須在主靜態路由之前攔截，否則會被當成 HTML 頁回傳）
+  if (req.url.startsWith('/stream') && req.method === 'GET') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
+    });
+    const client = { res, id: Date.now() + Math.random() };
+    sseClients.add(client);
+    res.write(`id: ${client.id}\nevent: heartbeat\n\n`);
+    req.on('close', () => { sseClients.delete(client); });
+    return; // 到此為止，不進靜態路由
+  }
+
   // 靜態前端 UI (免費版 Live 即時翻譯頁)
   if (req.method === 'GET') {
-    // 路由: / → index.html; /studio, /studio.html, /stream, ... → public/<name>.html; 其他靜態檔
+    // 路由: / → index.html; /studio, /studio.html, /stream.html, ... → public/<name>.html; 其他靜態檔
     let page = null;
     if (req.url === '/' || req.url.startsWith('/index')) {
       page = '/index.html';
@@ -45,7 +69,7 @@ const server = http.createServer(async (req, res) => {
       // 去掉 query string, 取 path
       const urlPath = req.url.split('?')[0];
       if (urlPath === '/studio' || urlPath === '/studio.html') page = '/studio.html';
-      else if (urlPath === '/stream' || urlPath === '/stream.html') page = '/stream.html';
+      else if (urlPath === '/stream.html') page = '/stream.html';
       else if (urlPath === '/broadcaster' || urlPath === '/broadcaster.html') page = '/broadcaster.html';
       else if (urlPath === '/receiver' || urlPath === '/receiver.html') page = '/receiver.html';
       else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) page = urlPath;
@@ -88,22 +112,8 @@ const server = http.createServer(async (req, res) => {
   res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws | GET / (UI) | GET /stream (SSE)' }));
 });
 
-// SSE 端點：觀眾端串流 /stream?src=studio
-let sseClients = new Set();
-server.on('request', (req, res) => {
-  if (req.url === '/stream' && req.method === 'GET') {
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*',
-    });
-    const clientId = Date.now();
-    sseClients.add({ res, id: clientId });
-    req.on('close', () => sseClients.delete(sseClients.entries().next().value?.value || findClient(clientId)));
-    res.write(`id: ${clientId}\nevent: heartbeat\n\n`);
-  }
-});
+// SSE 客戶端集合與廣播已於上方定義（server 建立前），此處不再重複
+
 
 // WebSocket 即時流 (若 ws 套件可用)
 if (typeof WebSocketServer !== 'undefined') {
@@ -111,10 +121,18 @@ if (typeof WebSocketServer !== 'undefined') {
   wss.on('connection', (ws) => {
     ws.on('message', async (msg) => {
       let p; try { p = JSON.parse(msg.toString()); } catch { return; }
-      const { text, from = 'auto', to = 'zh' } = p;
+      const { text, from = 'auto', to = 'zh', targets } = p;
       if (!text) return;
-      const rec = await translateDetailed(text, from, to);
-      ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }));
+      const trace = hashOf(text).slice(0, 16);
+      if (Array.isArray(targets) && targets.length) {
+        const r = await translateToMany(text, from, targets);
+        broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace });
+        ws.send(JSON.stringify({ text: Object.values(r.translations)[0] || '', engine: Object.values(r.engines)[0] || 'n/a', cached: false, version: APP_VERSION, trace }));
+      } else {
+        const rec = await translateDetailed(text, from, to);
+        broadcastTranslation({ text, translations: { [to]: rec.text }, engine: rec.engine, cached: rec.cached, trace });
+        ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION, trace }));
+      }
     });
   });
 }
