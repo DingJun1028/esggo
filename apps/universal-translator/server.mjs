@@ -43,7 +43,7 @@ const PUBLIC_DIR = path.join(process.cwd(), 'public');
  */
 function writeJson(res, obj, extraHeaders = {}) {
   res.writeHead(200, {
-    'content-type': 'application/json',
+    'content-type': 'application/json; charset=utf-8',
     ...extraHeaders,
   });
   res.end(JSON.stringify(obj));
@@ -64,6 +64,18 @@ function broadcastTranslation(payload) {
       c.res.write(data);
     } catch { sseClients.delete(c); }
   }
+}
+
+/**
+ * 以 Buffer 累積請求體再轉字串 (避免多 byte UTF-8 在 stream 分塊邊界被切斷導致亂碼，Cloudflare Tunnel 環境下必須)
+ * @param {import('node:http').IncomingMessage} req
+ * @returns {Promise<string>}
+ */
+async function readBody(req) {
+  /** @type {Buffer[]} */
+  const chunks = [];
+  for await (const c of req) chunks.push(/** @type {Buffer} */ (c));
+  return Buffer.concat(chunks).toString('utf-8');
 }
 
 // --- 共用：執行翻譯並廣播 SSE（REST /translate、/speak 與 WS /ws 共用，打通 studio→stream 即時轉播） ---
@@ -143,8 +155,8 @@ const server = http.createServer(async (req, res) => {
 
   // 即時轉播推播：studio 直接推播已轉錄文字 → 觀眾端 SSE 即時字幕（免觀眾端二次翻譯）
   if (url === '/speak' && req.method === 'POST') {
-    let body = '';
-    for await (const c of req) body += c;
+    let body;
+    try { body = await readBody(req); } catch { res.writeHead(400); return res.end('read fail'); }
     let p;
     try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
     const { text, from = 'auto', to = 'zh-TW', targets, room = '', speaker = 'studio' } = p;
@@ -158,8 +170,8 @@ const server = http.createServer(async (req, res) => {
 
   // 翻譯核心 API (單語 / 多語) — 同時廣播 SSE，打通 studio(REST)→stream(SSE) 即時轉播
   if (url === '/translate' && req.method === 'POST') {
-    let body = '';
-    for await (const c of req) body += c;
+    let body;
+    try { body = await readBody(req); } catch { res.writeHead(400); return res.end('read fail'); }
     let p;
     try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
 
