@@ -52,6 +52,8 @@ export interface OAFrameConfig {
   llmModel?: string;
   /** 騰訊 Agent 記憶 gateway (預設 127.0.0.1:8420) */
   memoryGateway?: string;
+  /** Agent0 docker 端點 (預設 http://127.0.0.1:50001) */
+  agent0Endpoint?: string;
   /** 是否啟用 5T 驗證攔截 */
   enforce5T?: boolean;
 }

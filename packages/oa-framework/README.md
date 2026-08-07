@@ -56,7 +56,10 @@ npx tsx test/smoke.ts  # 7 框架並行 + 5T 鑄造 → ALL_7_FRAMEWORKS_OK
 
 ## 待辦
 
-- [x] **騰訊 Agent 記憶** — 已升級為 Team Memory 適配器 (`memory.ts` + `tencent-mem.ts`)：
+- [x] **ADK** — 真實連結 `new LlmAgent({name,model,instruction,tools})` + `run()` (dynamic import, 未裝 `@google/adk` 時 graceful 降級)
+- [x] **Genkit** — 真實連結 `genkit({plugins:[googleAI()]})` + `ai.generate()` (dynamic import, 未裝時 graceful 降級)
+- [x] **Agent0** — 真實連結 `POST :50001/api/chat` (docker 未起時 graceful 降級)
+- [x] **騰訊 Agent 記憶** — Team Memory 適配器 (`memory.ts` + `tencent-mem.ts`)：
   - 4 類資產 `MemoryAssetKind`: `chat_memory`(L0-L3) / `skill` / `wiki` / `codegraph`
   - 真實 API：`/v3/tools/list` + `/v3/tools/call` (Knowledge OpenAPI) + `/api/assets` (資產庫)
   - 部署：`git clone https://github.com/Tencent/TencentDB-Agent-Memory.git && cd deploy/global-images && cp .env.example .env && ./start-all.sh`
