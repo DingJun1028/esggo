@@ -209,7 +209,7 @@ const server = http.createServer(async (req, res) => {
 
   // 伺服器端語音轉文字 (STT): 前端 MediaRecorder 分段錄音 → 此端點 → 呼叫本地 faster-whisper 微服務 → 回文字
   // 免費零 key: 不依賴瀏覽器 Web Speech API, 手機/平板/任意瀏覽器皆可用
-  if (url === '/transcribe' && req.method === 'POST') {
+  if (url.split('?')[0] === '/transcribe' && req.method === 'POST') {
     let audioBuf;
     try { audioBuf = await readBodyRaw(req); } catch { res.writeHead(400); return res.end('read fail'); }
     if (!audioBuf.length) { res.writeHead(400); return res.end(JSON.stringify({ error: 'empty audio' })); }
