@@ -126,6 +126,9 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
     <span class="eq"><i></i><i></i><i></i><i></i></span>
     <span id="startLabel">開始語音轉字幕</span>
   </button>
+  <div class="row" style="justify-content:center">
+    <button id="testBtn" class="btn" style="font-size:.82rem;padding:7px 14px">🎤 測試麥克風（錄 4 秒確認轉錄正常）</button>
+  </div>
   <div class="manual">
     <textarea id="manualInput" placeholder="或手動輸入文字直接推播字幕（免錄音）…  Enter 送出"></textarea>
     <button class="send" id="sendBtn">推播字幕</button>
@@ -200,6 +203,9 @@ async function startSys(){
 }
 
 function onText(text){
+  // 垃圾轉錄過濾: 純數字/符號/太短 不當字幕
+  const clean=text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
+  if(clean.length<2){ toast('轉錄內容無意義（請靠近麥克風或檢查音源）'); return; }
   const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
   const el=document.createElement('div');el.className='utter';
   const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
@@ -213,6 +219,14 @@ function onText(text){
     .catch(e=>trs.innerHTML=`<span style="color:var(--danger)">失敗：${e.message}</span>`);
 }
 
+// 字幕區顯示錯誤卡 (轉錄失敗可見, 非僅 toast)
+function showErrorCard(msg){
+  const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
+  const el=document.createElement('div');el.className='utter';
+  el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ ${msg}</div>`;
+  box.appendChild(el);box.scrollTop=box.scrollHeight;
+}
+
 async function start(){
   useSys=$('#sysChk').checked;
   stream=useSys?await startSys():await startMic();
@@ -224,16 +238,17 @@ async function start(){
   rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];
   rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
   rec.onstop=async()=>{
-    if(!chunks.length)return;
+    if(!chunks.length){ if(running)rec.start(4000); return; }
+    setStatus('🧠 轉錄中…','rec');
     const blob=new Blob(chunks,{type:mime});chunks=[];
     const buf=await blob.arrayBuffer();
     try{
       const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
       if(d.text&&d.text.trim())onText(d.text.trim());
-      else if(!r.ok)toast('轉錄失敗：'+(d.error||r.status));
-      else toast('未偵測到語音（請大聲說話或檢查音源）');
-    }catch(err){toast('轉錄錯誤：'+err.message);}
+      else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
+      else { const m='未偵測到語音（請大聲說話或檢查音源）'; toast(m); }
+    }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
   };
   rec.start(4000);
@@ -259,6 +274,36 @@ function sendManual(){
 }
 $('#sendBtn').onclick=sendManual;
 $('#manualInput').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendManual();} });
+
+// 測試麥克風: 錄 4 秒 → 轉錄 → 字幕區顯示原始結果 (不推播觀眾端), 用於診斷音源/STT
+let testing=false;
+$('#testBtn').onclick=async()=>{
+  if(testing||running)return;
+  testing=true;$('#testBtn').disabled=true;$('#testBtn').textContent='🎤 錄音中… 請說話';
+  let s=null;
+  try{
+    s=await navigator.mediaDevices.getUserMedia({audio:true});
+    const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
+    const rec2=new MediaRecorder(s,{mimeType:mime});const ch=[];
+    rec2.ondataavailable=e=>{if(e.data.size>0)ch.push(e.data);};
+    const done=new Promise(res=>rec2.onstop=res);
+    rec2.start();$('#testBtn').textContent='🎤 錄音中… (4秒)';
+    setTimeout(()=>rec2.stop(),4000);await done;
+    const buf=await new Blob(ch,{type:mime}).arrayBuffer();
+    $('#testBtn').textContent='🧠 轉錄中…';
+    const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    const d=await r.json();
+    const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
+    const el=document.createElement('div');el.className='utter';
+    if(d.text&&d.text.trim()){
+      const clean=d.text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
+      el.innerHTML=`<div class="src">🎤 測試結果：${d.text}</div>`+(clean.length<2?`<div style="color:var(--danger);font-size:.82rem">⚠️ 轉錄出現垃圾內容，麥克風可能距離太遠或環境太吵，建議靠近麥克風再試</div>`:`<div style="color:var(--accent);font-size:.82rem">✅ 麥克風與轉錄正常，可開始正式錄音</div>`);
+    }else if(!r.ok){ el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ 轉錄失敗 (${r.status})：${d.error||'服務異常'}</div>`; }
+    else { el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ 未偵測到語音，請對麥克風說話或檢查系統音設定</div>`; }
+    box.appendChild(el);box.scrollTop=box.scrollHeight;
+  }catch(e){ toast('測試失敗：'+e.message); }
+  finally{ if(s)s.getTracks().forEach(t=>t.stop()); testing=false;$('#testBtn').disabled=false;$('#testBtn').textContent='🎤 測試麥克風（錄 4 秒確認轉錄正常）'; }
+};
 setStatus('點下方按鈕開始，說話即出雙語字幕');
 </script>
 </body>
