@@ -143,21 +143,20 @@ const server = http.createServer(async (req, res) => {
     return; // 到此為止，不進靜態路由
   }
 
-  // 靜態前端 UI
+  // 靜態前端 UI + 資源 (html/js/css 同目錄白名單)
   if (req.method === 'GET') {
-    let page = null;
-    if (url === '/' || url.startsWith('/index')) {
-      page = '/index.html';
-    } else {
-      const urlPath = url.split('?')[0];
-      if (urlPath === '/studio' || urlPath === '/studio.html') page = '/studio.html';
-      else if (urlPath === '/stream.html') page = '/stream.html';
-      else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) page = urlPath;
-    }
-    if (page) {
-      const fp = path.join(PUBLIC_DIR, page);
+    const urlPath = url.split('?')[0];
+    let file = null, ctype = 'text/html; charset=utf-8';
+    if (urlPath === '/' || urlPath.startsWith('/index')) file = '/index.html';
+    else if (urlPath === '/studio' || urlPath === '/studio.html') file = '/studio.html';
+    else if (urlPath === '/stream' || urlPath === '/stream.html') file = '/stream.html';
+    else if (urlPath === '/overlay' || urlPath === '/overlay.html') file = '/overlay.html';
+    else if (/^\/(qrcode\.min\.js|esggo-shared\.d\.ts)$/.test(urlPath)) { file = urlPath; ctype = 'application/javascript; charset=utf-8'; }
+    else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) file = urlPath;
+    if (file) {
+      const fp = path.join(PUBLIC_DIR, file);
       if (fs.existsSync(fp)) {
-        return res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(fs.readFileSync(fp));
+        return res.writeHead(200, { 'content-type': ctype }).end(fs.readFileSync(fp));
       }
     }
   }
