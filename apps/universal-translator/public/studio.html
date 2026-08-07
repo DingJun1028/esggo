@@ -201,6 +201,7 @@ const qrBtn=$('#qrBtn'),qrBox=$('#qrBox');
 function genRoom(){return Math.random().toString(36).slice(2,8);}
 qrBtn.onclick=()=>{
   const room=genRoom();
+  setRoom(room); // 讓後續 /speak 推播帶上此 room
   const url=location.origin+'/stream.html?src=studio&room='+room;
   qrBox.style.display='flex';qrBox.innerHTML='';
   const p=document.createElement('div');
@@ -214,13 +215,16 @@ qrBtn.onclick=()=>{
 };
 
 // 轉錄 + 多語翻譯卡片（共用，含 glossary 套用）
+// 改用 POST /speak（而非 /translate）：studio 已轉錄文字直接推播 SSE，觀眾端 /stream 即時收字幕
+let currentRoom = '';
+function setRoom(r){ currentRoom = r; }
 function addUtterance(text){
   const box=$('#transcript');
   const el=document.createElement('div');el.className='utter';
   const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
   const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
   box.appendChild(el);box.scrollTop=box.scrollHeight;
-  fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES})})
+  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES,room:currentRoom,speaker:'studio'})})
     .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
     .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${applyGlossary(t)}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
     .catch(e=>{trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}</span>`;});
