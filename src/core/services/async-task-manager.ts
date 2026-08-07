@@ -416,7 +416,8 @@ export function startAsyncTask(
           ragContext = topChunks.map((c: ScoredChunk) => `[來源: ${c.source} (切片#${c.chunk_index})] ${c.content}`).join('\\n\\n');
         }
       }
-    } catch (e) {
+    }
+  } catch (e) {
       console.warn('Backend RAG Retrieval failed:', e);
     }
 

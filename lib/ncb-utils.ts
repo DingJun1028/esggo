@@ -7,7 +7,7 @@ export async function ncbFetch(
   options?: RequestInit,
   queryParams?: string,
   dbInstance?: string
-): Promise<{ data: any[] }> {
+): Promise<{ data: any }> {
   console.warn('[NCB] ncbFetch stub called for table:', table);
   return { data: [] };
 }

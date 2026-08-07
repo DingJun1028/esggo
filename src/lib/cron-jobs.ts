@@ -106,8 +106,8 @@ async function generateDailyReportJob(): Promise<{
           itemType: 'alert',
           title: item.title || '未命名警示',
           sourceName: item.sourceName || undefined,
-          severity: item.severity,
-          esgPillar: item.esgPillar || '',
+          severity: item.severity || undefined,
+          esgPillar: item.esgPillar || undefined,
         })),
       });
     }

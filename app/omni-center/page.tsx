@@ -14,7 +14,7 @@ import { useAgnesApi } from '../../src/components/AgnesProvider';
 import { Moon, Sun } from 'lucide-react';
 import { OmniBaseCard } from '@/components/omni-base-card';
 
-type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn' | 'evolution';
+type Tab = 'dashboard' | 'notes' | 'tasks' | 'chat' | 'fiveT' | 'rag' | 'zkp' | 'calendar' | 'omniFn' | 'evolution' | 'learning';
 
 const FIVE_T = [
   { key: 'traceable', zh: '真', color: 'var(--accent-blue)' },

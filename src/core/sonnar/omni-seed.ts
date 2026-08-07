@@ -55,7 +55,7 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
          },
       },
     ],
-    evidence: { originCause: 'system_init', processTrace: [], finalEffect: 'initialized',
+    evidence: {
       ...seed.evidence,
       originCause: seed.evidence?.originCause ?? 'Seed Planted',
       processTrace: [...(seed.evidence?.processTrace ?? []), 'plantOmniSeed'],

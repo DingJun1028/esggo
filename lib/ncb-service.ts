@@ -115,7 +115,7 @@ export const evidenceVaultApi = {
         method: "POST",
         body: JSON.stringify(record)
       });
-      return { data: result.data, error: null };
+      return { data: result.data as any, error: null };
     } catch (error) {
       return { data: null, error };
     }
@@ -139,7 +139,7 @@ export const userProfileApi = {
   get: async (userId: string): Promise<IApiResult<IUserProfile | null>> => {
     try {
       const result = await ncbFetch(`user_profiles/${userId}`, {}, "", NCB_DB_USER);
-      return { data: result.data, error: null };
+      return { data: result.data as any, error: null };
     } catch (error) {
       return { data: null, error };
     }
