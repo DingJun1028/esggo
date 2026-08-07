@@ -60,8 +60,28 @@ const r = await deployGate(bus, 'oa', taskResult, async (res) => { /* 落地部�
 `tryLoadForgeT5()` — 動態 import `@esggo/oa-framework` 的 `forgeT5`（優雅降級，未安裝回 null），
 讓總線直接吃 OA 框架鑄造的產出。
 
+## 跨包整合：OA Framework × OmniAgentBus（圓通）
+
+`oaToBusPipeline(bus, config, task, deploy)` — 讓 oa-framework 的 7 子框架產出流經總線 5T 部署閘門：
+
+```ts
+import { createBus, oaToBusPipeline } from '@esggo/omni-agent-bus';
+const bus = createBus(true);
+const r = await oaToBusPipeline(
+  bus,
+  { llmModel: 'gemini-2.5-flash', memoryGateway: 'http://127.0.0.1:8420' },
+  { id: 't1', prompt: 'ESG-GO 5T 元件' },
+  async (res) => { /* 落地部署 */ }
+);
+// r.available === false → @esggo/oa-framework 未 build, 優雅降級 (不假造產出)
+// r.available === true  → r.results 每個子框架都過 5T 閘門部署
+```
+
+`loadOAFramework()` 動態 import `@esggo/oa-framework`（workspace 未 build 時回 null），
+`oa-bridge` 全程優雅降級——未安裝不排除驗證，不假造 OA 產出。
+
 ## 驗證
 
 ```bash
-pnpm run test   # OMNI_AGENT_BUS_OK + DEPLOY_GATE_OK
+pnpm run test   # OMNI_AGENT_BUS_OK + DEPLOY_GATE_OK + OA_PIPELINE_GRACEFUL_OK
 ```
