@@ -240,11 +240,11 @@ function genRoom(){return Math.random().toString(36).slice(2,8);}
 qrBtn.onclick=()=>{
   const room=genRoom();
   setRoom(room); // 讓後續 /speak 推播帶上此 room
-  const url=location.origin+'/stream.html?src=studio&room='+room;
+  const url=location.origin+'/overlay.html?room='+room;
   qrBox.style.display='flex';qrBox.innerHTML='';
   const p=document.createElement('div');
-  const tip=document.createElement('div');tip.className='modehint';tip.style.maxWidth='180px';
-  tip.innerHTML='觀眾掃碼 → 即時字幕<br><code>'+url+'</code>';
+  const tip=document.createElement('div');tip.className='modehint';tip.style.maxWidth='200px';
+  tip.innerHTML='觀眾掃碼 → 半透明字幕浮層 (可疊在 Zoom 上)<br><code>'+url+'</code>';
   qrBox.appendChild(p);qrBox.appendChild(tip);
   // 優先嘗試 CDN QR 庫；失敗則顯示純連結
   import('https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js').then(()=>{
