@@ -27,10 +27,25 @@ async function withRetry(fn, label) {
   throw new Error(`${label}: ${lastErr?.message || lastErr}`);
 }
 
+// --- 引擎 0: Google Translate 非官方 gtx endpoint (免費, 零 key, 支援 auto 偵測) ---
+// 注: 非官方 endpoint, TOS 灰區, 但零付費/零私鑰, 符合「只用免費」硬約束。作為最穩定主鏈。
+// Google 原生支援 auto 偵測與 zh-TW, 故此處不經 normalizeLang（直接送原始 from/to, zh-TW 也送 zh-TW）
+async function viaGoogleGtx(text, from, to) {
+  const sl = from || 'auto';
+  const tl = to || 'zh-CN';
+  const u = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(text)}`;
+  const r = await fetch(u, { signal: AbortSignal.timeout(TIMEOUT_MS), headers: { 'User-Agent': 'Mozilla/5.0' } });
+  if (!r.ok) throw new Error('gtx HTTP ' + r.status);
+  const d = await r.json();
+  const out = (d[0] || []).map(x => x[0]).join('');
+  if (!out) throw new Error('gtx empty');
+  return out;
+}
+
 // --- 引擎 1: LibreTranslate (自建, env LIBRETRANSLATE_URL) ---
 async function viaLibre(text, from, to) {
   const base = process.env.LIBRETRANSLATE_URL;
-  const body = { q: text, source: from, target: to, format: 'text' };
+  const body = { q: text, source: normalizeLang(from), target: normalizeLang(to), format: 'text' };
   if (process.env.LIBRETRANSLATE_KEY) body.api_key = process.env.LIBRETRANSLATE_KEY;
   const r = await fetch(base, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -45,7 +60,7 @@ async function viaLibre(text, from, to) {
 // --- 引擎 2: MyMemory (免費, 零 key) — 加 email 參數提升配額與品質 ---
 // 註：MyMemory 不支援 auto 來源語言（會回 INVALID SOURCE），故 from 必須為具體語碼
 async function viaMyMemory(text, from, to) {
-  const lp = `${from}|${to}`;
+  const lp = `${normalizeLang(from)}|${normalizeLang(to)}`;
   // email 參數為 MyMemory 官方免費提升方案（仍免費），提升配額與回傳品質
   const email = process.env.MYMEMORY_EMAIL ? `&de=${encodeURIComponent(process.env.MYMEMORY_EMAIL)}` : '';
   const u = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(lp)}${email}`;
@@ -88,17 +103,33 @@ function postProcess(text) {
   return t;
 }
 
+// --- 語碼規範化（修復繁中語音翻譯）：MyMemory / LibreTranslate 不支援 zh-TW / auto ---
+// MyMemory 實測: zh-TW → 回原文未翻 (失敗); zh-CN → 正常。auto → INVALID SOURCE。
+// 故將 zh-TW→zh-CN、zh-Hant→zh-CN、auto→en（en 為最穩定假設來源，避免 INVALID SOURCE）。
+function normalizeLang(l) {
+  if (!l) return 'en';
+  const s = String(l).toLowerCase().trim();
+  if (s === 'auto' || s === 'detect' || s === 'a') return 'en';
+  if (s === 'zh-tw' || s === 'zh-hant' || s === 'zht' || s === 'chinese(traditional)') return 'zh-CN';
+  if (s === 'zh' || s === 'zh-cn' || s === 'zh-hans' || s === 'zhs') return 'zh-CN';
+  if (s === 'zh-hk') return 'zh-CN';
+  return s;
+}
+
 function engineChain() {
-  const chain = [];
+  const chain = [['google-gtx', viaGoogleGtx]]; // 最穩定免費主鏈 (零 key, 支援 auto/zh-TW)
   if (process.env.LIBRETRANSLATE_URL) chain.push(['libretranslate', viaLibre]);
-  chain.push(['mymemory', viaMyMemory]);
+  chain.push(['mymemory', viaMyMemory]); // 後備 (crowd 層品質不穩，作兜底前最後一搏)
   return chain;
 }
 
 /** @returns {Promise<{text:string, engine:string, cached:boolean}>} */
 export async function translateDetailed(text, from, to) {
-  if (!text || from === to) return { text, engine: 'passthrough', cached: false };
-  const k = cacheKey(text, from, to);
+  // 規範化來源/目標語碼（修復繁中 / auto 翻譯失敗）
+  const nFrom = normalizeLang(from);
+  const nTo = normalizeLang(to);
+  if (!text || nFrom === nTo) return { text, engine: 'passthrough', cached: false };
+  const k = cacheKey(text, nFrom, nTo);
   const hit = cacheGet(k);
   if (hit) { stats.cacheHits++; return { ...hit, cached: true }; }
 
@@ -122,8 +153,14 @@ export async function translateText(text, from, to) {
 
 /** 平行翻譯多語 (原序列 await → Promise.all，延遲從 N×RTT 降為 1×RTT) */
 export async function translateToMany(text, from, targets) {
+  // 規範化 targets（zh-TW→zh-CN 等），並對相同規範後語碼去重（保留原始展示名）
+  const normMap = new Map();
+  for (const t of targets) {
+    const n = normalizeLang(t);
+    if (!normMap.has(n)) normMap.set(n, t); // 首見的原始碼作為展示 key
+  }
   const results = await Promise.all(
-    targets.map(async (t) => [t, await translateDetailed(text, from, t)])
+    [...normMap.keys()].map(async (n) => [normMap.get(n), await translateDetailed(text, from, n)])
   );
   const out = {};
   const engines = {};
