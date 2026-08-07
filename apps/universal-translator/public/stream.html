@@ -12,35 +12,40 @@ body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei
   background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
   min-height:100vh;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
 html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-/* 右下角懸浮字幕：會議不遮擾 */
-.subtitle-box{position:fixed;bottom:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);
-  background:rgba(20,27,41,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid var(--line);border-radius:var(--radius);padding:clamp(12px,3vw,16px);
-  box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:90vw;max-height:35vh;overflow:auto;
-  font-size:clamp(.75rem,1.6vw,.95rem);line-height:1.55;z-index:999}
+/* 彈出式半透明雙語字幕浮層（影片字幕風格） */
+.subtitle-box{position:fixed;left:50%;bottom:clamp(20px,5vh,60px);transform:translateX(-50%);
+  width:min(92vw,860px);
+  background:rgba(8,12,20,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:var(--radius);padding:clamp(10px,2.4vw,18px) clamp(14px,3vw,26px);
+  box-shadow:0 6px 30px rgba(0,0,0,.45);z-index:999;
+  font-size:clamp(.95rem,2.2vw,1.35rem);line-height:1.5;text-align:center;
+  transition:opacity .25s,transform .25s;max-height:42vh;overflow:hidden}
+.subtitle-box.hidden{opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none}
 .subtitle-box.empty{color:var(--muted)}
-.subtitle-box .me{color:var(--accent)}
-.subtitle-box .cap{margin:0 0 4px;padding:3px 0;border-bottom:1px solid var(--line)}
-.subtitle-box .cap:last-child{border-bottom:0}
-.subtitle-box .cap .lang{font-size:.62rem;color:var(--muted);margin-right:6px}
-.subtitle-box .cap.fresh{color:var(--accent);font-weight:600}
-.subtitle-box .cap.old{opacity:.45}
-.subtitle-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;font-size:.7rem;color:var(--muted)}
+.subtitle-box .cap{margin:0 0 10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.subtitle-box .cap:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.subtitle-box .cap.fresh .zh{color:#fff;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.subtitle-box .cap.fresh .en{color:var(--accent);font-size:.82em;margin-top:3px;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.subtitle-box .cap.old{opacity:.4}
+.subtitle-box .cap.old .zh,.subtitle-box .cap.old .en{color:var(--txt)}
+.subtitle-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:.7rem;color:var(--muted)}
 .subtitle-box-head button{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:.85rem;padding:0;line-height:1}
 .subtitle-box.collapsed .body{display:none}
+.subtitle-row{display:flex;flex-direction:column;gap:2px}
 .room-badge{position:fixed;top:clamp(12px,3vw,24px);right:clamp(12px,3vw,24px);
   background:var(--panel2);color:var(--txt);border:1px solid var(--line);
   border-radius:var(--radius);padding:clamp(4px,1vw,8px) clamp(6px,1.5vw,10px);
   font-size:clamp(.55rem,1.2vw,.68rem);z-index:999}
-.restore-tab{position:fixed;bottom:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);
+.restore-tab{position:fixed;left:50%;bottom:clamp(20px,5vh,60px);transform:translateX(-50%);
   background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:var(--radius);
-  padding:6px 10px;font-size:.75rem;cursor:pointer;z-index:999;display:none}
-@media(max-width:480px){.subtitle-box{max-width:calc(100vw - 24px);bottom:12px;left:12px;right:12px}.restore-tab{bottom:12px;left:12px;right:12px;text-align:center}}
+  padding:6px 14px;font-size:.8rem;cursor:pointer;z-index:999;display:none}
+@media(max-width:480px){.subtitle-box{width:calc(100vw - 16px);bottom:12px}.restore-tab{bottom:12px}}
+
 </style>
 </head>
 <body>
 <div id="subtitleBox" class="subtitle-box empty">
-  <div class="subtitle-box-head"><span>即時字幕</span><button id="collapseBtn" title="收合 / 展開">▾</button></div>
+  <div class="subtitle-box-head"><span>即時雙語字幕</span><span><button id="hideBtn" title="隱藏字幕">✕</button> <button id="collapseBtn" title="收合 / 展開">▾</button></span></div>
   <div class="body" id="subtitleBody">等待播放中…</div>
 </div>
 <button class="restore-tab" id="restoreTab">字幕 ▾</button>
@@ -52,29 +57,36 @@ document.getElementById('roomBadge').textContent='room: '+room;
 const box=document.getElementById('subtitleBox');
 const body=document.getElementById('subtitleBody');
 const collapseBtn=document.getElementById('collapseBtn');
+const hideBtn=document.getElementById('hideBtn');
 const restoreTab=document.getElementById('restoreTab');
 function setCollapsed(c){box.classList.toggle('collapsed',c);collapseBtn.textContent=c?'▸':'▾';restoreTab.style.display=c?'block':'none';}
 collapseBtn.onclick=()=>setCollapsed(!box.classList.contains('collapsed'));
+hideBtn.onclick=()=>{box.classList.add('hidden');restoreTab.style.display='block';};
 restoreTab.onclick=()=>setCollapsed(false);
 const es=new EventSource('/stream?src='+src+(room?'&room='+room:''));
 es.onopen=()=>{box.classList.remove('empty');body.textContent='已連線…'};
 es.onerror=()=>{body.textContent='連線斷線，重試中…'};
 const MAX_CAPS=6;
-function pushCaption(lines){
+function pushCaption(zh,en){
   // 移除舊高亮
   [...body.querySelectorAll('.cap.fresh')].forEach(c=>{c.classList.remove('fresh');c.classList.add('old');});
   const cap=document.createElement('div');cap.className='cap fresh';
-  cap.innerHTML=lines.map(l=>l).join('<br>');
+  // 雙語同屏：中文（繁）一行、英文一行
+  const zhTxt=zh||'—';
+  const enTxt=en||'';
+  cap.innerHTML='<div class="subtitle-row"><div class="zh">'+zhTxt+'</div>'+(enTxt?'<div class="en">'+enTxt+'</div>':'')+'</div>';
   body.appendChild(cap);
-  // 限制最多 MAX_CAPS 句，超出移除最舊
   const caps=body.querySelectorAll('.cap');
   if(caps.length>MAX_CAPS)caps[0].remove();
   body.scrollTop=body.scrollHeight;
 }
-es.addEventListener('translation',e=>{const d=JSON.parse(e.data);const lines=[];
-  if(d.translations){for(const[code,txt]of Object.entries(d.translations))lines.push('<span class="lang">'+code+':</span> '+txt);}
-  else if(d.text)lines.push(d.text);
-  pushCaption(lines);});
+es.addEventListener('translation',e=>{const d=JSON.parse(e.data);
+  let zh=null,en=null;
+  if(d.translations){zh=d.translations['zh-TW']||d.translations['zh']||null;en=d.translations['en']||null;}
+  else if(d.text){zh=d.text;}
+  // 若只有原文無翻譯，嘗試直接用原文（英語系來源時顯示英文）
+  if(!zh&&!en&&d.text){en=d.text;}
+  pushCaption(zh,en);});
 </script>
 </body>
 </html>
