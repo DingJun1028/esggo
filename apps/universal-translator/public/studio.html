@@ -62,7 +62,7 @@ details.gl textarea{width:100%;min-height:70px;margin-top:8px;background:var(--p
   <div class="status"><span class="dot" id="dot"></span><span id="status">點下方按鈕開始，說話即出雙語字幕</span></div>
   <button id="startBtn" class="btn primary">▶ 開始語音轉字幕</button>
   <div class="row">
-    <button id="qrBtn" class="btn">🔳 觀眾端 QR（半透明浮層）</button>
+    <button id="qrBtn" class="btn">🔳 重新生成 QR</button>
     <div id="qrBox" class="qrbox" style="display:none"></div>
     <button id="clearBtn" class="btn">🗑 清除</button>
   </div>
@@ -165,15 +165,16 @@ function applyGlossary(text){const raw=$('#glossary').value||'';let t=text;for(c
 
 let currentRoom='';
 function setRoom(r){currentRoom=r;}
-$('#qrBtn').onclick=()=>{
-  const room=Math.random().toString(36).slice(2,8);setRoom(room);
-  const url=location.origin+'/overlay.html?room='+room;
+function showQR(){
+  if(!currentRoom){currentRoom=Math.random().toString(36).slice(2,8);}
+  const url=location.origin+'/overlay.html?room='+currentRoom;
   const box=$('#qrBox');box.style.display='flex';box.innerHTML='';
   const p=document.createElement('div');const tip=document.createElement('div');tip.style.maxWidth='200px';tip.style.fontSize='.75rem';tip.style.color='var(--muted)';
   tip.innerHTML='觀眾掃碼 → 半透明字幕浮層(可疊Zoom)<br><code style="word-break:break-all">'+url+'</code>';
   box.appendChild(p);box.appendChild(tip);
   import('https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js').then(()=>{try{new QRCode(p,{text:url,width:128,height:128,colorDark:'#000',colorLight:'#fff'});}catch(e){p.innerHTML='<code>'+url+'</code>';}}).catch(()=>{p.innerHTML='<code style="word-break:break-all">'+url+'</code>';});
-};
+}
+$('#qrBtn').onclick=()=>showQR();
 
 // 開始/停止
 async function start(){
@@ -184,7 +185,8 @@ async function start(){
   else if(mode==='browser')ok=startBrowser();
   if(!ok){stop();return;}
   if(mode!=='browser')startRecorder();
-  setStatus(mode==='browser'?'🌐 瀏覽器收音中…':'🎙 收音中… 說話即出字幕');
+  showQR(); // 開始即生成觀眾端 QR (疊 Zoom 浮層)
+  setStatus(mode==='browser'?'🌐 瀏覽器收音中…':'🎙 收音中… 說話即出字幕 (右側 QR 給觀眾掃碼)');
 }
 function stop(){
   running=false;$('#startBtn').textContent='▶ 開始語音轉字幕';$('#startBtn').classList.add('primary');$('#dot').className='dot';
