@@ -143,6 +143,10 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
     </div>
   </div>
   <div class="transcript" id="transcript"><div class="empty">尚無字幕 · 開始後語音會即時轉為雙語文字</div></div>
+  <details class="gl">
+    <summary>🐞 除錯資訊（轉錄異常時展開看 STT 原始回應）</summary>
+    <div id="debug" style="font-size:.75rem;color:var(--muted);white-space:pre-wrap;word-break:break-all;max-height:140px;overflow:auto;margin-top:6px">— 尚無記錄 —</div>
+  </details>
   <div class="row">
     <button id="clearBtn" class="btn">🗑 清除字幕</button>
     <button id="openOverlayBtn" class="btn">🎬 預覽浮層</button>
@@ -164,6 +168,7 @@ themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'
 
 function setStatus(s,dot){$('#status').textContent=s;if(dot)$('#dot').className='dot '+(dot==='on'?'on':dot==='err'?'err':dot==='rec'?'rec':'');}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+function dbg(msg){const d=$('#debug');if(d){const ts=new Date().toLocaleTimeString();d.textContent+=`\n[${ts}] ${msg}`;d.scrollTop=d.scrollHeight;}}
 
 // 語言 chips
 const active=new Set(['en','zh-TW']);
@@ -245,9 +250,10 @@ async function start(){
     try{
       const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
+      dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
       if(d.text&&d.text.trim())onText(d.text.trim());
       else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
-      else { const m='未偵測到語音（請大聲說話或檢查音源）'; toast(m); }
+      else { const m='未偵測到語音（請大聲說話 / 系統音模式請勾選「分享音訊」）'; toast(m); showErrorCard(m); }
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
   };
@@ -293,6 +299,7 @@ $('#testBtn').onclick=async()=>{
     $('#testBtn').textContent='🧠 轉錄中…';
     const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     const d=await r.json();
+    dbg(`[測試] transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
     const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
     const el=document.createElement('div');el.className='utter';
     if(d.text&&d.text.trim()){
