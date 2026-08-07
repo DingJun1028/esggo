@@ -10,6 +10,17 @@ import path from 'node:path';
 import { WebSocketServer } from 'ws';
 import { translateDetailed, translateToMany, stats, hashOf } from './translate.mjs';
 
+// 讀取 .env（零依賴實作，優先於 process.env 已存在值）
+try {
+  const envPath = path.join(process.cwd(), '.env');
+  if (fs.existsSync(envPath)) {
+    for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+      const i = line.indexOf('=');
+      if (i > 0) { const k = line.slice(0, i).trim(), v = line.slice(i + 1).trim(); if (k && process.env[k] === undefined) process.env[k] = v; }
+    }
+  }
+} catch { /* 忽略 .env 讀取錯誤，維持預設 */ }
+
 const PORT = Number(process.env.PORT || 8788);
 const APP_VERSION = '1.2.0';           // 免費版: 移除 Akkadu, 加即時 UI
 const PUBLIC_DIR = path.join(process.cwd(), 'public');

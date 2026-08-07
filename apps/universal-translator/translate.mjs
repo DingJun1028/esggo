@@ -43,6 +43,7 @@ async function viaLibre(text, from, to) {
 }
 
 // --- 引擎 2: MyMemory (免費, 零 key) — 加 email 參數提升配額與品質 ---
+// 註：MyMemory 不支援 auto 來源語言（會回 INVALID SOURCE），故 from 必須為具體語碼
 async function viaMyMemory(text, from, to) {
   const lp = `${from}|${to}`;
   // email 參數為 MyMemory 官方免費提升方案（仍免費），提升配額與回傳品質
