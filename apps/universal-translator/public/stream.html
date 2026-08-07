@@ -1,46 +1,62 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>語種橋樑 · 觀眾端</title>
-  <style>
-    :root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)}
-    html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
-      background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
-      min-height:100vh;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
-    html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-    /* 右下角懸浮字幕：會議不遮擾 */
-    .subtitle-box{position:fixed;bottom:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);
-      background:rgba(20,27,41,0.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-      border:1px solid var(--line);border-radius:var(--radius);padding:clamp(12px,3vw,16px);
-      box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:90vw;max-height:35vh;overflow:auto;
-      font-size:clamp(0.75rem,1.6vw,0.95rem);line-height:1.55;z-index:999}
-    .subtitle-box.empty{color:var(--muted)}.subtitle-box .me{color:var(--accent)}
-    /* 房間標籤 */
-    .room-badge{position:fixed;top:clamp(12px,3vw,24px);right:clamp(12px,3vw,24px);
-      background:var(--panel2);color:var(--txt);border:1px solid var(--line);
-      border-radius:var(--radius);padding:clamp(4px,1vw,8px) clamp(6px,1.5vw,10px);
-      font-size:clamp(0.55rem,1.2vw,0.68rem);z-index:999}
-    @media (max-width:480px){.subtitle-box{max-width:calc(100vw - 48px);bottom:12px;left:12px;right:12px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>語種橋樑 · 觀眾端</title>
+<style>
+:root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;--line:rgba(255,255,255,.1);--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)}
+html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.12)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);color:var(--txt);
+  min-height:100vh;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
+html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
+/* 右下角懸浮字幕：會議不遮擾 */
+.subtitle-box{position:fixed;bottom:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);
+  background:rgba(20,27,41,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:var(--radius);padding:clamp(12px,3vw,16px);
+  box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:90vw;max-height:35vh;overflow:auto;
+  font-size:clamp(.75rem,1.6vw,.95rem);line-height:1.55;z-index:999}
+.subtitle-box.empty{color:var(--muted)}
+.subtitle-box .me{color:var(--accent)}
+.subtitle-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;font-size:.7rem;color:var(--muted)}
+.subtitle-box-head button{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:.85rem;padding:0;line-height:1}
+.subtitle-box.collapsed .body{display:none}
+.room-badge{position:fixed;top:clamp(12px,3vw,24px);right:clamp(12px,3vw,24px);
+  background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+  border-radius:var(--radius);padding:clamp(4px,1vw,8px) clamp(6px,1.5vw,10px);
+  font-size:clamp(.55rem,1.2vw,.68rem);z-index:999}
+.restore-tab{position:fixed;bottom:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);
+  background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:var(--radius);
+  padding:6px 10px;font-size:.75rem;cursor:pointer;z-index:999;display:none}
+@media(max-width:480px){.subtitle-box{max-width:calc(100vw - 24px);bottom:12px;left:12px;right:12px}.restore-tab{bottom:12px;left:12px;right:12px;text-align:center}}
+</style>
 </head>
 <body>
-  <div id="subtitleBox" class="subtitle-box empty">等待播放中…</div>
-  <div id="roomBadge" class="room-badge">room: -</div>
-  <script>
-    const params=new URLSearchParams(location.search);
-    const src=params.get('src')||'studio';const room=params.get('room')||'default';
-    document.getElementById('roomBadge').textContent='room: '+room;
-    const box=document.getElementById('subtitleBox');
-    const es=new EventSource('/stream?src='+src+(room?'&room='+room:''));
-    es.onopen=()=>{box.classList.remove('empty');box.textContent='已連線…'};
-    es.onerror=()=>{box.textContent='連線斷線…'};
-    es.addEventListener('translation',e=>{const d=JSON.parse(e.data);const lines=[];
-      if(d.translations){for(const[code,txt]of Object.entries(d.translations))lines.push('<b>'+code+':</b> '+txt);}
-      else if(d.text)lines.push(d.text);box.innerHTML=lines.join('<br>')||'--';});
-  </script>
+<div id="subtitleBox" class="subtitle-box empty">
+  <div class="subtitle-box-head"><span>即時字幕</span><button id="collapseBtn" title="收合 / 展開">▾</button></div>
+  <div class="body" id="subtitleBody">等待播放中…</div>
+</div>
+<button class="restore-tab" id="restoreTab">字幕 ▾</button>
+<div id="roomBadge" class="room-badge">room: -</div>
+<script>
+const params=new URLSearchParams(location.search);
+const src=params.get('src')||'studio';const room=params.get('room')||'default';
+document.getElementById('roomBadge').textContent='room: '+room;
+const box=document.getElementById('subtitleBox');
+const body=document.getElementById('subtitleBody');
+const collapseBtn=document.getElementById('collapseBtn');
+const restoreTab=document.getElementById('restoreTab');
+function setCollapsed(c){box.classList.toggle('collapsed',c);collapseBtn.textContent=c?'▸':'▾';restoreTab.style.display=c?'block':'none';}
+collapseBtn.onclick=()=>setCollapsed(!box.classList.contains('collapsed'));
+restoreTab.onclick=()=>setCollapsed(false);
+const es=new EventSource('/stream?src='+src+(room?'&room='+room:''));
+es.onopen=()=>{box.classList.remove('empty');body.textContent='已連線…'};
+es.onerror=()=>{body.textContent='連線斷線，重試中…'};
+es.addEventListener('translation',e=>{const d=JSON.parse(e.data);const lines=[];
+  if(d.translations){for(const[code,txt]of Object.entries(d.translations))lines.push('<b>'+code+':</b> '+txt);}
+  else if(d.text)lines.push(d.text);body.innerHTML=lines.join('<br>')||'--';});
+</script>
 </body>
 </html>
