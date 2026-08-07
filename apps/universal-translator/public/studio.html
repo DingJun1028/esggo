@@ -72,12 +72,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
         <option value="fr">法文</option>
       </select>
     </label>
-    <button id="micBtn" class="primary">🎤 麥克風</button>
+    <button id="micBtn">🎤 麥克風</button>
     <button id="sysBtn">🎙 電腦聲音</button>
-    <button id="srvBtn">☁ 伺服器轉錄</button>
+    <button id="srvBtn" class="primary">☁ 開始語音轉字幕</button>
     <button id="clearBtn">🗑 清除</button>
   </div>
-  <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
+  <div class="status"><span class="dot" id="dot"></span><span id="status">點「☁ 開始語音轉字幕」並允許麥克風 → 說話即出雙語字幕（英文↔繁中）</span></div>
   <div class="modehint" id="modehint">語音自動偵測語言 → 文字字幕，並自動雙向翻譯（英文↔繁中 預設都出，可於「翻譯成」增減）。麥克風：瀏覽器辨識。電腦聲音：擷取系統音。☁ 伺服器轉錄：麥克風→伺服器 Whisper（跨平台）。</div>
   <details class="glossary">
     <summary>📖 詞彙表（提升字幕精確度 · 選用）</summary>
@@ -114,7 +114,7 @@ $('#lang').onchange=()=>{if(recog)recog.lang=$('#lang').value;setStatus();};
 function setStatus(){const l=LANG_NAME[$('#lang').value]||$('#lang').value;
   if(sysActive)$('#status').textContent='🎙 電腦聲音收音中 · 來源 '+l;
   else if(micListening)$('#status').textContent='🎧 麥克風收音中 · 來源 '+l;
-  else $('#status').textContent='待命 · 來源 '+l;}
+  else $('#status').textContent='點「☁ 開始語音轉字幕」並允許麥克風 → 說話即出雙語字幕';}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
 // ===== 麥克風模式（Web Speech API）=====
@@ -186,7 +186,7 @@ async function startServerSTT(){
   if(micListening){toast('請先停止麥克風');return;}
   if(sysActive){toast('請先停止電腦聲音');return;}
   try{ srvStream=await navigator.mediaDevices.getUserMedia({audio:true}); }
-  catch(e){ toast('麥克風權限被拒：'+e.message); return; }
+  catch(e){ toast('⚠️ 請允許麥克風權限（網址列左側圖示）→ 再點一次「開始語音轉字幕」'); return; }
   const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus'
             : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
             : 'audio/ogg';
