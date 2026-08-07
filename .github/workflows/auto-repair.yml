@@ -543,3 +543,31 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      # -- Email notification (GitHub 報錯通知信)
+      # 收到 CI 失敗即發報錯通知信; SMTP_* secrets 未設則自動跳過 (不阻塞)
+      - name: Send repair notification email
+        if: github.event.workflow_run.conclusion == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        continue-on-error: true
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "[OA-TWINS Auto-Repair] CI #${{ github.event.workflow_run.id }} failed (${{ needs.analyze.outputs.error_type }})"
+          to: ${{ secrets.NOTIFY_EMAIL_TO }}
+          from: OA-TWINS Auto-Repair <${{ secrets.SMTP_USER }}>
+          body: |
+            OA-TWINS 萬能分身自動修復追蹤通知
+
+            CI Run: #${{ github.event.workflow_run.id }}
+            Error Type: ${{ needs.analyze.outputs.error_type }}
+            Repairable: ${{ needs.analyze.outputs.repairable }}
+            Tracker: OA-TWINS-AUTO-REPAIR
+
+            本信件由 GitHub Actions 在 CI 失敗瞬間自動發出。
+            萬能分身 (OA-TWINS) 已對此報錯建立 tracking issue 並嘗試自動修復。
+            詳情見倉庫 Auto-Repair Issue 與 Telegram tracker。
+
+            -- ESG-GO OA Framework 自動修復管線 v2.2
