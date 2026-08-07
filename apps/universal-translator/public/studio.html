@@ -66,7 +66,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <label style="font-size:.85rem;color:var(--muted)">翻譯成
       <select id="targets" multiple size="1" style="min-width:auto;flex:none">
         <option value="en" selected>英文</option>
-        <option value="zh-TW">繁中</option>
+        <option value="zh-TW" selected>繁中</option>
         <option value="ja">日文</option>
         <option value="es">西班牙</option>
         <option value="fr">法文</option>
@@ -78,7 +78,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <button id="clearBtn">🗑 清除</button>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
-  <div class="modehint" id="modehint">麥克風：用瀏覽器語音辨識（Chrome/Edge）。電腦聲音：擷取分頁/系統音 → 伺服器 Whisper 免費轉錄。☁ 伺服器轉錄：麥克風→伺服器 STT（跨平台）。右側「翻譯成」可勾選要輸出的目標語（預設英文）。</div>
+  <div class="modehint" id="modehint">語音自動偵測語言 → 文字字幕，並自動雙向翻譯（英文↔繁中 預設都出，可於「翻譯成」增減）。麥克風：瀏覽器辨識。電腦聲音：擷取系統音。☁ 伺服器轉錄：麥克風→伺服器 Whisper（跨平台）。</div>
   <details class="glossary">
     <summary>📖 詞彙表（提升字幕精確度 · 選用）</summary>
     <textarea id="glossary" placeholder="每行一組：原文=譯文&#10;例：ESGGO=ESG-GO&#10;OA-Team=OA 團隊"></textarea>
@@ -163,10 +163,10 @@ async function startSystem(){
     const blob=new Blob(sysChunks,{type:mime}); sysChunks=[];
     const buf=await blob.arrayBuffer();
     try{
-      const r=await fetch(API.replace('/translate','/transcribe')+'?lang='+encodeURIComponent($('#lang').value),
+      const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',
         {method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
-      if(d.text&&d.text.trim()) addUtterance(d.text.trim());
+      if(d.text&&d.text.trim()) addUtterance(d.text.trim(), d.language);
       else if(!r.ok) toast('轉錄失敗：'+(d.error||r.status));
     }catch(err){ toast('轉錄錯誤：'+err.message); }
     if(sysActive) sysRec.start(); // 持續錄下一段
@@ -198,10 +198,10 @@ async function startServerSTT(){
     const blob=new Blob(srvChunks,{type:mime}); srvChunks=[];
     const buf=await blob.arrayBuffer();
     try{
-      const r=await fetch(API.replace('/translate','/transcribe')+'?lang='+encodeURIComponent($('#lang').value),
+      const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',
         {method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
-      if(d.text&&d.text.trim()) addUtterance(d.text.trim());
+      if(d.text&&d.text.trim()) addUtterance(d.text.trim(), d.language);
       else if(!r.ok) toast('轉錄失敗：'+(d.error||r.status));
     }catch(err){ toast('轉錄錯誤：'+err.message); }
     if(srvActive) srvRec.start(); // 持續錄下一段
@@ -256,16 +256,18 @@ qrBtn.onclick=()=>{
 // 改用 POST /speak（而非 /translate）：studio 已轉錄文字直接推播 SSE，觀眾端 /stream 即時收字幕
 let currentRoom = '';
 function setRoom(r){ currentRoom = r; }
-function addUtterance(text){
+function addUtterance(text, detectedLang){
   const box=$('#transcript');
   const el=document.createElement('div');el.className='utter';
   const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
   const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
   box.appendChild(el);box.scrollTop=box.scrollHeight;
-  // 讀取使用者選的目標語 (multiple select), 預設 [en]
+  // 源語: STT 自動偵測優先, 否則用下拉
+  const fromLang = (detectedLang && detectedLang!=='unknown') ? detectedLang : $('#lang').value;
+  // 讀取使用者選的目標語 (multiple select), 保證雙向(en+zh-TW)
   const selTargets=Array.from($('#targets').selectedOptions).map(o=>o.value);
-  const targets = selTargets.length ? selTargets : ['en'];
-  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets,room:currentRoom,speaker:'studio'})})
+  const targets = selTargets.length ? selTargets : ['en','zh-TW'];
+  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:fromLang,targets,room:currentRoom,speaker:'studio'})})
     .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
     .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${applyGlossary(t)}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
     .catch(e=>{trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}</span>`;});
