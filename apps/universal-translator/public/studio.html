@@ -44,6 +44,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--danger);color:#fff;
   padding:8px 14px;border-radius:var(--radius);font-size:.85rem;opacity:0;transition:.3s;pointer-events:none;z-index:50}
 .toast.show{opacity:1}
+.modehint{font-size:.75rem;color:var(--muted)}
 @media(max-width:480px){.row{flex-direction:column}.row select{width:100%}.utter .trs{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -57,51 +58,101 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="row">
     <select id="lang"><option value="zh-TW">中文(繁)</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
     <span class="badge" id="swapLang" title="語言循環切換">🔄</span>
-    <button id="micBtn" class="primary">🎤 開始收音</button>
+    <button id="micBtn" class="primary">🎤 麥克風</button>
+    <button id="sysBtn">🎙 電腦聲音</button>
     <button id="clearBtn">🗑 清除</button>
   </div>
-  <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 點擊「開始收音」並授權麥克風</span></div>
+  <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
+  <div class="modehint" id="modehint">麥克風：用瀏覽器語音辨識（Chrome/Edge）。電腦聲音：擷取分頁/系統音 → 本地 Whisper 免費轉錄。</div>
   <div class="transcript" id="transcript" aria-live="polite"></div>
 </div>
 <div class="toast" id="toast"></div>
-<script>
+<script type="module">
 const LANGUAGES=['zh-TW','en','ja','es','fr'];
 const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
 const $=s=>document.querySelector(s);
-let recog=null,listening=false;
+let recog=null,micListening=false,sysActive=false,whisper=null,sysStream=null,audioCtx=null,analyser=null,processorNode=null;
 const API=location.origin+'/translate';
 
-// 主題（記憶到 localStorage）
+// 主題記憶
 const themeBtn=$('#themeBtn');
 function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textContent=t==='light'?'☀️':'🌙';localStorage.setItem('ut-theme',t);}
 applyTheme(localStorage.getItem('ut-theme')||'dark');
 themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
 
-// 語言循環切換
+// 語言切換
 function swapLang(){const curr=$('#lang').value;const idx=LANGUAGES.findIndex(l=>l===curr);const next=LANGUAGES[(idx+1)%LANGUAGES.length];$('#lang').value=next;if(recog)recog.lang=next;setStatus();}
 $('#swapLang').onclick=swapLang;
 $('#lang').onchange=()=>{if(recog)recog.lang=$('#lang').value;setStatus();};
 
-// 狀態列
-function setStatus(){const l=LANG_NAME[$('#lang').value]||$('#lang').value;$('#status').textContent=listening?`🎧 收音中 · 來源 ${l} → 多語並列`:`待命 · 來源 ${l}`;}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function setStatus(){const l=LANG_NAME[$('#lang').value]||$('#lang').value;
+  if(sysActive)$('#status').textContent='🎙 電腦聲音收音中 · 來源 '+l;
+  else if(micListening)$('#status').textContent='🎧 麥克風收音中 · 來源 '+l;
+  else $('#status').textContent='待命 · 來源 '+l;}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
-// 收音控制（手動啟停 + 自動重啟）
+// ===== 麥克風模式（Web Speech API）=====
 const micBtn=$('#micBtn');
-function startRec(){
+function startMic(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){toast('請用 Chrome / Edge 瀏覽器');return;}
+  if(!SR){toast('麥克風模式請用 Chrome / Edge');return;}
   recog=new SR();recog.lang=$('#lang').value;recog.continuous=true;recog.interimResults=true;
   recog.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript.trim();if(e.results[i].isFinal&&t)addUtterance(t);}};
-  recog.onstart=()=>{listening=true;$('#dot').className='dot on';micBtn.textContent='⏹ 停止收音';micBtn.classList.remove('primary');setStatus();};
-  recog.onerror=e=>{if(e.error==='not-allowed'){toast('請授權麥克風權限');stopRec();}else if(e.error!=='no-speech'&&e.error!=='aborted'){toast('收音錯誤：'+e.error);}};
-  recog.onend=()=>{if(listening)setTimeout(()=>{try{recog.start();}catch(_){}},200);};
+  recog.onstart=()=>{micListening=true;$('#dot').className='dot on';micBtn.classList.remove('primary');setStatus();};
+  recog.onerror=e=>{if(e.error==='not-allowed'){toast('請授權麥克風權限');stopMic();}else if(e.error!=='no-speech'&&e.error!=='aborted'){toast('收音錯誤：'+e.error);}};
+  recog.onend=()=>{if(micListening)setTimeout(()=>{try{recog.start();}catch(_){}},200);};
   try{recog.start();}catch(e){toast(e.message);}
 }
-function stopRec(){listening=false;if(recog){try{recog.stop();}catch(_){}}micBtn.textContent='🎤 開始收音';micBtn.classList.add('primary');$('#dot').className='dot';setStatus();}
-micBtn.onclick=()=>listening?stopRec():startRec();
+function stopMic(){micListening=false;if(recog){try{recog.stop();}catch(_){}}micBtn.classList.add('primary');if(!sysActive)$('#dot').className='dot';setStatus();}
+micBtn.onclick=()=>{if(sysActive){toast('請先停止電腦聲音');return;}micListening?stopMic():startMic();};
 
-// 轉錄 + 多語翻譯卡片
+// ===== 電腦聲音模式（getDisplayMedia + 本地 Whisper）=====
+const sysBtn=$('#sysBtn');
+async function loadWhisper(){
+  if(whisper)return whisper;
+  $('#status').textContent='載入本地 Whisper 模型中（首次約 30-50MB，後續快取）…';
+  const {pipeline}=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+  whisper=await pipeline('automatic-speech-recognition','Xenova/whisper-tiny');
+  return whisper;
+}
+async function startSystem(){
+  if(micListening){toast('請先停止麥克風');return;}
+  try{
+    sysStream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+  }catch(e){toast('擷取螢幕/聲音被取消：'+e.message);return;}
+  const aTrack=sysStream.getAudioTracks()[0];
+  if(!aTrack){toast('未選取「分享聲音」，請重新選並勾選分享音訊');sysStream.getTracks().forEach(t=>t.stop());sysStream=null;return;}
+  // 取掉 video track（只留 audio）
+  sysStream.getVideoTracks().forEach(t=>t.stop());
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  const srcNode=audioCtx.createMediaStreamSource(new MediaStream([aTrack]));
+  await audioCtx.audioWorklet.addModule('data:text/javascript,'+encodeURIComponent(`
+    class Rec extends AudioWorkletProcessor{constructor(){super();this.buf=[];this.sending=false;}
+    process(inputs){const inp=inputs[0][0];if(inp){this.buf.push(new Float32Array(inp));if(this.buf.length>=25){const chunk=this.buf;this.buf=[];let len=0;chunk.forEach(c=>len+=c.length);const all=new Float32Array(len);let o=0;chunk.forEach(c=>{all.set(c,o);o+=c.length;});this.port.postMessage(all);}}return true;}};
+    registerProcessor('rec',Rec);`));
+  const node=new AudioWorkletNode(audioCtx,'rec');
+  srcNode.connect(node).connect(audioCtx.destination);
+  sysActive=true;sysBtn.classList.remove('primary');sysBtn.textContent='⏹ 停止電腦';$('#dot').className='dot on';setStatus();
+  let asr;try{asr=await loadWhisper();}catch(e){toast('Whisper 載入失敗：'+e.message);stopSystem();return;}
+  // 分段轉錄（每 ~4 秒送一次）
+  let acc=[];let lastSend=0;
+  node.port.onmessage=async e=>{
+    acc.push(e.data);const now=Date.now();
+    if(now-lastSend>4000){lastSend=now;const all=concat(acc);acc=[];
+      if(all.length<8000)return;
+      try{const out=await asr(all.slice(0,30*16000),{chunk_length_s:30,stride_length_s:5,language:langToWhisper($('#lang').value)});
+        const txt=(out.text||'').trim();if(txt)addUtterance(txt);}catch(err){toast('轉錄錯誤：'+err.message);}}
+  };
+  processorNode=node;
+}
+function concat(arrs){let len=0;arrs.forEach(a=>len+=a.length);const out=new Float32Array(len);let o=0;arrs.forEach(a=>{out.set(a,o);o+=a.length;});return out;}
+function langToWhisper(l){const m={'zh-TW':'chinese','zh':'chinese','en':'english','ja':'japanese','es':'spanish','fr':'french'};return m[l]||'auto';}
+function stopSystem(){sysActive=false;if(sysStream){sysStream.getTracks().forEach(t=>t.stop());sysStream=null;}
+  if(audioCtx){try{audioCtx.close();}catch(_){}}audioCtx=null;processorNode=null;
+  sysBtn.textContent='🎙 電腦聲音';sysBtn.classList.remove('primary');$('#dot').className='dot';setStatus();}
+sysBtn.onclick=()=>sysActive?stopSystem():startSystem();
+
+// 轉錄 + 多語翻譯卡片（共用）
 function addUtterance(text){
   const box=$('#transcript');
   const el=document.createElement('div');el.className='utter';
