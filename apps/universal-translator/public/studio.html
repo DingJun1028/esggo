@@ -65,6 +65,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <span class="badge" id="swapLang" title="語言循環切換">🔄</span>
     <button id="micBtn" class="primary">🎤 麥克風</button>
     <button id="sysBtn">🎙 電腦聲音</button>
+    <button id="srvBtn">☁ 伺服器轉錄</button>
     <button id="clearBtn">🗑 清除</button>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
@@ -87,7 +88,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 const LANGUAGES=['zh-TW','en','ja','es','fr'];
 const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
 const $=s=>document.querySelector(s);
-let recog=null,micListening=false,sysActive=false,whisper=null,sysStream=null,audioCtx=null,analyser=null,processorNode=null;
+let recog=null,micListening=false,sysActive=false,sysStream=null,audioCtx=null,analyser=null,processorNode=null;
 const API=location.origin+'/translate';
 
 // 主題記憶
@@ -122,64 +123,90 @@ function startMic(){
 function stopMic(){micListening=false;if(recog){try{recog.stop();}catch(_){}}micBtn.classList.add('primary');if(!sysActive)$('#dot').className='dot';setStatus();}
 micBtn.onclick=()=>{if(sysActive){toast('請先停止電腦聲音');return;}micListening?stopMic():startMic();};
 
-// ===== 電腦聲音模式（getDisplayMedia + 本地 Whisper）=====
+// ===== 電腦聲音模式（系統音/Zoom 對方/電腦放音 → 伺服器 STT → 字幕）=====
+// 擷取「你聽到的聲音」(loopback/system audio): 桌機用 getDisplayMedia 選「分享系統音」; 手機無此能力則降級麥克風
+// 轉錄走伺服器端 faster-whisper (/transcribe), 跨平台、中文穩定、免費零 key
 const sysBtn=$('#sysBtn');
-async function loadWhisper(){
-  if(whisper)return whisper;
-  $('#status').textContent='載入本地 Whisper 模型中（base 版約 70-90MB，首次較慢，後續快取）…';
-  try{
-    const {pipeline}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0');
-    // 改用 whisper-base：準確率較 tiny 顯著提升；q8 量化平衡速度/品質
-    whisper=await pipeline('automatic-speech-recognition','onnx-community/whisper-base',{
-      dtype:{encoder_model:'q8',decoder_model:'q8',decoder_model_merged:'q8'}
-    });
-  }catch(e){toast('Whisper 載入失敗：'+e.message);throw e;}
-  return whisper;
-}
+let sysRec=null, sysChunks=[];
 async function startSystem(){
   if(micListening){toast('請先停止麥克風');return;}
+  if(srvActive){toast('請先停止伺服器轉錄');return;}
+  let stream;
   try{
-    sysStream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
-  }catch(e){toast('擷取螢幕/聲音被取消：'+e.message);return;}
-  const aTrack=sysStream.getAudioTracks()[0];
-  if(!aTrack){toast('未選取「分享聲音」，請重新選並勾選分享音訊');sysStream.getTracks().forEach(t=>t.stop());sysStream=null;return;}
-  // 取掉 video track（只留 audio）
-  sysStream.getVideoTracks().forEach(t=>t.stop());
-  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-  const srcNode=audioCtx.createMediaStreamSource(new MediaStream([aTrack]));
-  await audioCtx.audioWorklet.addModule('data:text/javascript,'+encodeURIComponent(`
-    class Rec extends AudioWorkletProcessor{constructor(){super();this.buf=[];this.sending=false;}
-    process(inputs){const inp=inputs[0][0];if(inp){this.buf.push(new Float32Array(inp));if(this.buf.length>=25){const chunk=this.buf;this.buf=[];let len=0;chunk.forEach(c=>len+=c.length);const all=new Float32Array(len);let o=0;chunk.forEach(c=>{all.set(c,o);o+=c.length;});this.port.postMessage(all);}}return true;}};
-    registerProcessor('rec',Rec);`));
-  const node=new AudioWorkletNode(audioCtx,'rec');
-  srcNode.connect(node).connect(audioCtx.destination);
-  sysActive=true;sysBtn.classList.remove('primary');sysBtn.textContent='⏹ 停止電腦';$('#dot').className='dot on';setStatus();
-  let asr;try{asr=await loadWhisper();}catch(e){toast('Whisper 載入失敗：'+e.message);stopSystem();return;}
-  // 分段轉錄：每 ~2 秒送一次（加速文字出現），並用精準度參數減少幻覺
-  let acc=[];let lastSend=0;
-  node.port.onmessage=async e=>{
-    acc.push(e.data);const now=Date.now();
-    if(now-lastSend>2000){lastSend=now;const all=concat(acc);acc=[];
-      if(all.length<4000)return; // 太短不送（減少碎句）
-      try{
-        const out=await asr(all.slice(0,30*16000),{
-          chunk_length_s:30,stride_length_s:5,
-          language:langToWhisper($('#lang').value),
-          condition_on_previous_text:false,  // 不依賴前句，減少累積幻覺
-          no_speech_threshold:0.6,           // 靜音判定閾值，過濾非語音
-          temperature:0.0                    // 貪婪解碼，提升穩定度
-        });
-        const txt=(out.text||'').trim();if(txt)addUtterance(txt);
-      }catch(err){toast('轉錄錯誤：'+err.message);}}
+    // 嘗試系統音 (Chrome/Edge 會出現「分享系統音」勾選框; Zoom 對方+電腦放音都會被納入)
+    stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+  }catch(e){
+    // 使用者取消或不支援 → 降級麥克風對著聲源
+    try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); toast('無法擷取系統音，改用麥克風'); }
+    catch(e2){ toast('無法取得音訊：'+e2.message); return; }
+  }
+  const aTrack=stream.getAudioTracks()[0];
+  if(!aTrack){ toast('請在分享視窗勾選「分享音訊/系統音」'); stream.getTracks().forEach(t=>t.stop()); return; }
+  // 不要 video (僅音訊轉錄)
+  stream.getVideoTracks().forEach(t=>t.stop());
+  const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus'
+            : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg';
+  sysRec=new MediaRecorder(new MediaStream([aTrack]),{mimeType:mime});
+  sysChunks=[];
+  sysRec.ondataavailable=e=>{ if(e.data.size>0) sysChunks.push(e.data); };
+  sysRec.onstop=async()=>{
+    if(!sysChunks.length) return;
+    const blob=new Blob(sysChunks,{type:mime}); sysChunks=[];
+    const buf=await blob.arrayBuffer();
+    try{
+      const r=await fetch(API.replace('/translate','/transcribe')+'?lang='+encodeURIComponent($('#lang').value),
+        {method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const d=await r.json();
+      if(d.text&&d.text.trim()) addUtterance(d.text.trim());
+      else if(!r.ok) toast('轉錄失敗：'+(d.error||r.status));
+    }catch(err){ toast('轉錄錯誤：'+err.message); }
+    if(sysActive) sysRec.start(); // 持續錄下一段
   };
-  processorNode=node;
+  sysRec.start(4000); // 每 4 秒切一段送伺服器
+  sysActive=true;sysBtn.classList.remove('primary');sysBtn.textContent='⏹ 停止電腦';$('#dot').className='dot on';setStatus();
 }
-function concat(arrs){let len=0;arrs.forEach(a=>len+=a.length);const out=new Float32Array(len);let o=0;arrs.forEach(a=>{out.set(a,o);o+=a.length;});return out;}
-function langToWhisper(l){const m={'zh-TW':'chinese','zh':'chinese','en':'english','ja':'japanese','es':'spanish','fr':'french'};return m[l]||'auto';}
-function stopSystem(){sysActive=false;if(sysStream){sysStream.getTracks().forEach(t=>t.stop());sysStream=null;}
-  if(audioCtx){try{audioCtx.close();}catch(_){}}audioCtx=null;processorNode=null;
-  sysBtn.textContent='🎙 電腦聲音';sysBtn.classList.remove('primary');$('#dot').className='dot';setStatus();}
+function stopSystem(){sysActive=false;if(sysRec&&sysRec.state!=='inactive'){try{sysRec.stop();}catch(_){}}sysBtn.textContent='🎙 電腦聲音';sysBtn.classList.add('primary');$('#dot').className='dot';setStatus();}
 sysBtn.onclick=()=>sysActive?stopSystem():startSystem();
+
+// ===== 伺服器端轉錄模式（MediaRecorder → /transcribe → /speak）=====
+// 優勢: 跨平台(手機/平板/任意瀏覽器), 不依賴 Web Speech API, 中文穩定
+const srvBtn=$('#srvBtn');
+let srvActive=false, srvStream=null, srvRec=null, srvChunks=[], srvTimer=null;
+const SRV_CHUNK_MS=4000; // 每 4 秒送一次轉錄, 接近即時
+async function startServerSTT(){
+  if(micListening){toast('請先停止麥克風');return;}
+  if(sysActive){toast('請先停止電腦聲音');return;}
+  try{ srvStream=await navigator.mediaDevices.getUserMedia({audio:true}); }
+  catch(e){ toast('麥克風權限被拒：'+e.message); return; }
+  const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus'
+            : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
+            : 'audio/ogg';
+  srvRec=new MediaRecorder(srvStream,{mimeType:mime});
+  srvChunks=[];
+  srvRec.ondataavailable=e=>{ if(e.data.size>0) srvChunks.push(e.data); };
+  srvRec.onstop=async()=>{
+    if(!srvChunks.length) return;
+    const blob=new Blob(srvChunks,{type:mime}); srvChunks=[];
+    const buf=await blob.arrayBuffer();
+    try{
+      const r=await fetch(API.replace('/translate','/transcribe')+'?lang='+encodeURIComponent($('#lang').value),
+        {method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const d=await r.json();
+      if(d.text&&d.text.trim()) addUtterance(d.text.trim());
+      else if(!r.ok) toast('轉錄失敗：'+(d.error||r.status));
+    }catch(err){ toast('轉錄錯誤：'+err.message); }
+    if(srvActive) srvRec.start(); // 持續錄下一段
+  };
+  srvRec.start();
+  srvActive=true; srvBtn.classList.remove('primary'); srvBtn.textContent='⏹ 停止伺服器'; $('#dot').className='dot on'; setStatus();
+}
+function stopServerSTT(){
+  srvActive=false;
+  if(srvRec&&srvRec.state!=='inactive'){ try{srvRec.stop();}catch(_){} }
+  if(srvStream){ srvStream.getTracks().forEach(t=>t.stop()); srvStream=null; }
+  srvBtn.textContent='☁ 伺服器轉錄'; srvBtn.classList.add('primary'); $('#dot').className='dot'; setStatus();
+}
+srvBtn.onclick=()=>srvActive?stopServerSTT():startServerSTT();
 
 // ===== 詞彙表（glossary）解析與套用 =====
 function parseGlossary(){
