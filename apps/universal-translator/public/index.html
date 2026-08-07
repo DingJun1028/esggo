@@ -1,74 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh" data-theme="dark">
+<html lang="zh-Hant" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>🌐 萬能即時翻譯 (Live)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>萬能語音轉字幕 · 平台</title>
 <style>
-:root{--bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#2563eb;--accent-txt:#eaf1ff;--txt:#e8eef7;--muted:#8a97ad;--line:rgba(255,255,255,.1);--shadow:0 8px 30px rgba(0,0,0,.35);--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)}
-html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--accent:#2563eb;--accent-txt:#fff;--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.12);--shadow:0 8px 30px rgba(0,0,0,.08)}
-*{box-sizing:border-box}
-body{font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;max-width:780px;margin:2rem auto;padding:0 var(--gap);color:var(--txt);
-  background:radial-gradient(1200px 600px at 80% -10%,#1c2740 0%,var(--bg) 55%);min-height:100vh}
-html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%,#dbe6f5 0%,var(--bg) 55%)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap)}
-h1{font-size:1.5rem;margin:0}
-h1 small{font-size:.8rem;color:var(--muted);font-weight:400}
-.bar{display:flex;gap:var(--gap);align-items:center;flex-wrap:wrap;margin:1rem 0}
-label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted)}
-select,button{font-size:.95rem;padding:.5rem .75rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--panel2);color:var(--txt)}
-select{min-width:110px}
-button{background:var(--accent);color:var(--accent-txt);border:0;cursor:pointer;transition:.15s}
-button:hover{filter:brightness(1.08)}
-button:disabled{opacity:.5;cursor:not-allowed}
-.meta{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);margin-left:auto}
-.dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
-.dot.on{background:#22c55e}.dot.off{background:#ef4444}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.col{border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap);background:var(--panel);box-shadow:var(--shadow)}
-.col h3{margin:.2rem 0 .6rem;font-size:.95rem}
-textarea{width:100%;height:220px;border:0;resize:none;font-size:1rem;outline:none;background:transparent;color:var(--txt)}
-.dst{color:var(--accent)}
-.meta-foot{font-size:.8rem;color:var(--muted);margin-top:.5rem}
-@media(max-width:560px){.row{grid-template-columns:1fr}.meta{width:100%;margin-left:0}}
+:root{
+  --bg:#070b12;--panel:rgba(20,27,41,.72);--panel2:rgba(14,22,35,.6);
+  --accent:#36e0c0;--accent2:#5b8cff;--txt:#eaf1fb;--muted:#8a97ad;
+  --line:rgba(255,255,255,.09);--radius:18px;--gap:clamp(12px,2.6vw,18px);
+  --font:"Segoe UI",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:var(--gap);
+  background:
+    radial-gradient(900px 500px at 85% -5%,rgba(91,140,255,.18),transparent 60%),
+    radial-gradient(700px 500px at 10% 110%,rgba(54,224,192,.16),transparent 55%),
+    var(--bg);background-attachment:fixed}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:var(--gap)}
+.topbar{display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:clamp(1.3rem,3.5vw,1.8rem);margin:0;font-weight:800;letter-spacing:.3px;
+  background:linear-gradient(90deg,#fff,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.topbar .sub{font-size:.85rem;color:var(--muted);margin-top:4px}
+.ico-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1.1rem;display:grid;place-items:center;transition:.2s;backdrop-filter:blur(10px)}
+.ico-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.status-pill{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;backdrop-filter:blur(8px)}
+.status-pill .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--gap)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;
+  box-shadow:0 18px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:12px;
+  text-decoration:none;color:inherit;transition:.2s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 24px 60px rgba(54,224,192,.18)}
+.card .ico{font-size:2rem}
+.card h2{margin:0;font-size:1.15rem;font-weight:700}
+.card p{margin:0;font-size:.86rem;color:var(--muted);line-height:1.55}
+.card .go{margin-top:auto;font-size:.85rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:6px}
+.card .badge{position:absolute;top:14px;right:14px;font-size:.68rem;padding:3px 9px;border-radius:999px;background:rgba(54,224,192,.15);color:var(--accent);border:1px solid rgba(54,224,192,.3)}
+.feat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;backdrop-filter:blur(14px);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.feat .item{display:flex;flex-direction:column;gap:4px}
+.feat .item b{font-size:.95rem;color:var(--txt)}
+.feat .item span{font-size:.78rem;color:var(--muted);line-height:1.45}
+.foot{font-size:.78rem;color:var(--muted);text-align:center;line-height:1.6}
+.foot code{color:var(--accent);background:var(--panel2);padding:2px 7px;border-radius:6px}
 </style>
 </head>
 <body>
-<div class="topbar">
-<h1>🌐 萬能即時翻譯 <small>免費版 · Google gtx / MyMemory (零 key)</small></h1>
-<button id="themeBtn" title="切換深色 / 淺色">🌙</button>
-</div>
-<div class="bar">
-<label>來源<select id="from"><option value="auto">自動</option><option value="en">EN</option><option value="zh">ZH</option><option value="zh-TW">ZH-TW</option><option value="ja">JA</option><option value="ko">KO</option><option value="es">ES</option><option value="fr">FR</option></select></label>
-<label>目標<select id="to"><option value="zh">ZH</option><option value="zh-TW">ZH-TW</option><option value="en">EN</option><option value="ja">JA</option><option value="ko">KO</option><option value="es">ES</option><option value="fr">FR</option></select></label>
-<span class="meta"><span class="dot off" id="connDot"></span><span id="connText">未連線</span></span>
-<button id="connect">連線即時流</button>
-</div>
-<div class="row">
-<div class="col"><h3>原文（即時輸入）</h3><textarea id="src" placeholder="在此輸入或貼上要翻譯的文字，連線後即時翻譯…"></textarea></div>
-<div class="col"><h3>譯文</h3><textarea id="dst" class="dst" readonly placeholder="翻譯結果會即時出現在此…"></textarea><div class="meta-foot" id="engine">引擎：—</div></div>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>🎙 萬能語音轉字幕</h1>
+      <div class="sub">免費 · 零 key · 即時雙語字幕 · 可疊 Zoom</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="status-pill"><span class="dot"></span><span id="health">檢查中…</span></span>
+      <button class="ico-btn" id="themeBtn" title="深色/淺色">🌙</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="/studio">
+      <span class="badge">主控端</span>
+      <div class="ico">🎤</div>
+      <h2>收音端 · 語音轉字幕</h2>
+      <p>點開始即語音轉文字 + 雙語翻譯，自動生成觀眾 QR。支援麥克風 / 電腦系統音（Zoom 聲音）。</p>
+      <div class="go">進入 ▶</div>
+    </a>
+    <a class="card" href="/overlay.html">
+      <span class="badge">浮層</span>
+      <div class="ico">🎬</div>
+      <h2>半透明字幕浮層</h2>
+      <p>掃 QR 或開此頁，字幕半透明懸浮，可疊在 Zoom 上方。點擊穿透不擋操作，可調透明度/字體/位置。</p>
+      <div class="go">開啟浮層 ▶</div>
+    </a>
+    <a class="card" href="/stream.html">
+      <div class="ico">📺</div>
+      <h2>觀眾端字幕頁</h2>
+      <p>不使用浮層時的傳統字幕頁，雙語同步滾動顯示，適合手機 / 平板觀看。</p>
+      <div class="go">進入 ▶</div>
+    </a>
+  </div>
+
+  <div class="feat">
+    <div class="item"><b>🆓 完全免費</b><span>Google gtx / MyMemory 翻譯 + faster-whisper 轉錄，零 API key</span></div>
+    <div class="item"><b>🌐 雙向翻譯</b><span>英文 ↔ 繁中 預設雙出，可加日/西/法等 7 語</span></div>
+    <div class="item"><b>⚡ 即時同步</b><span>SSE 推播，說話後 1–2 秒出字幕</span></div>
+    <div class="item"><b>🪟 疊加 Zoom</b><span>浮層置頂，不擋會議操作</span></div>
+  </div>
+
+  <div class="foot">
+    直接開 <code>/studio</code> 開始 · 觀眾掃碼進 <code>/overlay.html</code><br>
+    所有處理在本平台完成 · 語音不上傳第三方付費服務
+  </div>
 </div>
 <script>
-const $=id=>document.getElementById(id);
-let ws=null;
-function setConn(on){$('connDot').className='dot '+(on?'on':'off');$('connText').textContent=on?'已連線 (WebSocket)':'未連線';}
-$('connect').addEventListener('click',()=>{
-  if(ws){ws.close();ws=null;setConn(false);$('connect').textContent='連線即時流';return;}
-  const proto=location.protocol==='https:'?'wss':'ws';
-  ws=new WebSocket(`${proto}://${location.host}/ws`);
-  ws.onopen=()=>{setConn(true);$('connect').textContent='斷開';};
-  ws.onclose=()=>{setConn(false);ws=null;$('connect').textContent='連線即時流';};
-  ws.onerror=()=>{$('connText').textContent='連線錯誤';};
-  ws.onmessage=e=>{const d=JSON.parse(e.data);if(d.error){$('dst').value='錯誤：'+d.error;return;}$('dst').value=d.text;$('engine').textContent='引擎：'+d.engine+(d.cached?'（快取）':'');};
-});
-let timer=null;
-$('src').addEventListener('input',()=>{if(!ws||ws.readyState!==1)return;clearTimeout(timer);timer=setTimeout(()=>{const text=$('src').value.trim();if(!text)return;ws.send(JSON.stringify({text,from:$('from').value,to:$('to').value}));},400);});
-$('src').addEventListener('blur',async()=>{if(ws&&ws.readyState===1)return;const text=$('src').value.trim();if(!text)return;const r=await fetch('/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('from').value,to:$('to').value})});const d=await r.json();$('dst').value=d.text||'';$('engine').textContent='引擎：'+(d.engine||'?');});
-// 主題記憶
-const themeBtn=$('themeBtn');
+const themeBtn=document.getElementById('themeBtn');
 function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textContent=t==='light'?'☀️':'🌙';localStorage.setItem('ut-theme',t);}
 applyTheme(localStorage.getItem('ut-theme')||'dark');
 themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+// 健康檢查
+fetch('/health').then(r=>r.json()).then(d=>{document.getElementById('health').textContent='服務正常 · v'+d.version;})
+  .catch(()=>{document.getElementById('health').textContent='服務離線';});
 </script>
 </body>
 </html>

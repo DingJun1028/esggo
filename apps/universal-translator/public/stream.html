@@ -3,132 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>萬能即時翻譯 · 觀眾端字幕</title>
+<title>萬能語音轉字幕 · 觀眾端</title>
 <style>
 :root{
-  --bg:#0b0f17;--panel:#141b29;--panel2:#0e1623;--accent:#36e0c0;--txt:#e8eef7;--muted:#8a97ad;
-  --line:rgba(255,255,255,.08);--shadow:0 8px 30px rgba(0,0,0,.35);--radius:clamp(8px,2vw,14px);--gap:clamp(8px,2vw,12px)
+  --bg:#070b12;--panel:rgba(20,27,41,.72);--panel2:rgba(14,22,35,.6);
+  --accent:#36e0c0;--accent2:#5b8cff;--txt:#eaf1fb;--muted:#8a97ad;
+  --line:rgba(255,255,255,.09);--radius:18px;--gap:clamp(12px,2.6vw,18px);
+  --font:"Segoe UI",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
 }
-html[data-theme="light"]{--bg:#eef2f7;--panel:#fff;--panel2:#f4f7fb;--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.1);--shadow:0 8px 30px rgba(0,0,0,.08)}
 *{box-sizing:border-box}
-body{margin:0;font-family:"Segoe UI",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-.wrap{max-width:720px;margin:0 auto;padding:var(--gap);display:flex;flex-direction:column;gap:var(--gap);min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap)}
-.topbar h1{font-size:1.05rem;margin:0}
-.spacer{flex:1}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-select{flex:1;min-width:120px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;font-size:1rem}
-button{font-size:.95rem;padding:8px 12px;border-radius:var(--radius);border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;transition:.15s}
-button:hover{border-color:var(--accent)}
-button.primary{background:var(--accent);color:#04130f;border-color:transparent;font-weight:600}
-.status{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+html[data-theme="light"]{--bg:#eef2f7;--panel:rgba(255,255,255,.85);--panel2:rgba(244,247,251,.9);--txt:#16202e;--muted:#5b687e;--line:rgba(0,0,0,.1)}
+body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:var(--gap);
+  background:radial-gradient(900px 500px at 85% -5%,rgba(91,140,255,.16),transparent 60%),var(--bg);background-attachment:fixed}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:var(--gap);min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:1.1rem;margin:0;font-weight:700}
+.ico-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1.05rem;display:grid;place-items:center;transition:.2s}
+.ico-btn:hover{border-color:var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;font-size:.85rem;font-weight:600;transition:.18s;user-select:none}
+.chip.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04130f;border-color:transparent}
+.status{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:8px}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
-.dot.on{background:#22c55e}.dot.err{background:#ff5d6c}
-.modehint{font-size:.75rem;color:var(--muted)}
-.preview{flex:1;min-height:160px;background:var(--panel2);border:1px dashed var(--line);border-radius:var(--radius);padding:12px;font-size:.95rem;line-height:1.7;color:var(--muted)}
-.preview b{color:var(--txt)}
-/* 浮層字幕（影片字幕風格，半透明） */
-.caption{position:fixed;left:50%;bottom:6vh;transform:translateX(-50%);max-width:92vw;width:min(900px,92vw);
-  background:rgba(8,12,20,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  border:1px solid var(--line);border-radius:14px;padding:10px 16px;box-shadow:0 8px 30px rgba(0,0,0,.4);
-  pointer-events:none;z-index:9999;display:none;text-align:center;line-height:1.5}
-.caption.show{display:block;animation:pop .25s ease}
-@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.caption .src{font-size:clamp(1rem,2.4vw,1.4rem);color:#fff;font-weight:600}
-.caption .trs{font-size:clamp(.9rem,2vw,1.15rem);color:#7fe9d6;margin-top:2px}
-.caption .trs .lbl{color:#9fb0c7;font-size:.8em;margin-right:6px}
-.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#ff5d6c;color:#fff;padding:8px 14px;border-radius:var(--radius);font-size:.85rem;opacity:0;transition:.3s;pointer-events:none;z-index:50}
+.dot.on{background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.preview{flex:1;min-height:200px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.preview::-webkit-scrollbar{width:6px}.preview::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.utter{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.utter .src{color:var(--accent);font-weight:700;font-size:1.02rem;line-height:1.45}
+.utter .trs{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px}
+.utter .trs span{font-size:.83rem;color:var(--muted)}
+.utter .trs b{color:var(--txt);font-weight:700;margin-right:5px}
+.empty{color:var(--muted);text-align:center;padding:30px 10px;opacity:.7}
+/* 浮層 */
+.caption{position:fixed;left:50%;bottom:6vh;transform:translateX(-50%);max-width:94vw;width:min(1000px,94vw);
+  background:linear-gradient(135deg,rgba(12,18,30,.72),rgba(8,12,20,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px 22px;text-align:center;line-height:1.5;
+  pointer-events:none;z-index:9999;opacity:0;transition:opacity .3s ease;box-shadow:0 16px 50px rgba(0,0,0,.5)}
+.caption.show{opacity:1;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.caption .src{font-size:clamp(1.1rem,2.6vw,1.55rem);color:#fff;font-weight:700;text-shadow:0 2px 6px #000}
+.caption .trs{margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center}
+.caption .trs .pair{font-size:clamp(.92rem,2.1vw,1.2rem);color:var(--accent)}
+.caption .trs .lbl{color:#9fb0c7;font-size:.78em;margin-right:6px;text-transform:uppercase}
+.btn{font-size:.9rem;padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04130f;border:0;font-weight:700}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#ff5d6c;color:#fff;padding:9px 15px;border-radius:11px;font-size:.85rem;opacity:0;transition:.3s;pointer-events:none;z-index:60}
 .toast.show{opacity:1}
-@media(max-width:480px){.row{flex-direction:column}.row select{width:100%}.caption{bottom:3vh}}
+@media(max-width:480px){.topbar h1{font-size:.95rem}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
-    <h1>🌐 萬能即時翻譯 · 觀眾端</h1>
-    <div class="spacer"></div>
-    <button id="themeBtn" title="切換深色 / 淺色">🌙</button>
+    <h1>📺 觀眾端字幕</h1>
+    <button class="ico-btn" id="themeBtn" title="深色/淺色">🌙</button>
   </div>
   <div class="row">
-    <select id="targ"><option value="zh-TW">繁中</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
-    <button id="floatBtn" class="primary">🎬 顯示字幕浮層</button>
+    <div class="chips" id="chips"></div>
+    <button id="floatBtn" class="btn primary">🎬 顯示字幕浮層</button>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">連線中…</span></div>
-  <div class="modehint" id="modehint">來自收音端（/studio）的即時轉播會經 SSE 推播至此。點「顯示字幕浮層」可像影片字幕般懸浮顯示。</div>
-  <div class="preview" id="preview">（等待字幕…）</div>
+  <div class="preview" id="preview"><div class="empty">等待字幕… 來自收音端的即時雙語字幕會出現在此</div></div>
 </div>
-<div class="caption" id="caption">
-  <div class="src" id="capSrc"></div>
-  <div class="trs" id="capTrs"></div>
-</div>
+<div class="caption" id="caption"><div class="src" id="capSrc"></div><div class="trs" id="capTrs"></div></div>
 <div class="toast" id="toast"></div>
 <script type="module">
+/// <reference path="./types/generated/esggo-shared.d.ts" />
+const LANGS=[['en','英文'],['zh-TW','繁中'],['ja','日文'],['es','西班牙'],['fr','法文'],['ko','韓文'],['de','德文']];
+const LANG_NAME=Object.fromEntries(LANGS);
 const $=s=>document.querySelector(s);
-const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
 let room=new URLSearchParams(location.search).get('room')||'';
-let sse=null,target='zh-TW',esOk=false,pollTimer=null;
+let sse=null,esOk=false,floatOn=false,capTimer=null;
 
-// 主題記憶
+// 主題
 const themeBtn=$('#themeBtn');
 function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textContent=t==='light'?'☀️':'🌙';localStorage.setItem('ut-theme',t);}
 applyTheme(localStorage.getItem('ut-theme')||'dark');
 themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
 
-// 目標語
-$('#targ').onchange=()=>{target=$('#targ').value;};
+// 多目標語 chips
+const targets=new Set(['en','zh-TW']);
+const chipsBox=$('#chips');
+LANGS.forEach(([code,name])=>{
+  const c=document.createElement('div');c.className='chip'+(targets.has(code)?' on':'');c.textContent=name;
+  c.onclick=()=>{ if(targets.has(code)){if(targets.size>1)targets.delete(code);else return;}else targets.add(code);c.classList.toggle('on'); };
+  chipsBox.appendChild(c);
+});
 
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
-function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'err');$('#status').textContent=msg;}
-function showCaption(src,trs){
-  const cap=$('#caption');
-  $('#capSrc').textContent=src;
-  $('#capTrs').innerHTML='<span class="lbl">'+(LANG_NAME[target]||target)+'</span>'+(trs||'');
-  cap.classList.add('show');
-  // 自動隱藏（避免字幕堆疊）
-  clearTimeout(showCaption._t);
-  showCaption._t=setTimeout(()=>cap.classList.remove('show'),6000);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'');$('#status').textContent=msg;}
+
+function showCaption(src,translations){
+  $('#capSrc').textContent=src||'';
+  $('#capTrs').innerHTML=Array.from(targets).map(t=>{
+    const txt=translations?translations[t]:'';return txt?`<span class="pair"><span class="lbl">${LANG_NAME[t]||t}</span>${txt}</span>`:'';
+  }).filter(Boolean).join('');
+  const cap=$('#caption');cap.classList.add('show');clearTimeout(capTimer);capTimer=setTimeout(()=>cap.classList.remove('show'),6500);
 }
-function appendPreview(src,trsHtml){
-  const p=$('#preview');
-  if(p.textContent.startsWith('（等待'))p.textContent='';
-  const d=document.createElement('div');d.style.margin='0 0 10px';
-  d.innerHTML='<b>'+src+'</b><div style="color:var(--muted);font-size:.9em">'+trsHtml+'</div>';
+function appendPreview(src,translations){
+  const p=$('#preview');const e=p.querySelector('.empty');if(e)e.remove();
+  const d=document.createElement('div');d.className='utter';
+  const trsHtml=Object.entries(translations||{}).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');
+  d.innerHTML=`<div class="src">▸ ${src}</div><div class="trs">${trsHtml}</div>`;
   p.appendChild(d);p.scrollTop=p.scrollHeight;
 }
 
-// 字幕浮層開關
-let floatOn=false;
-$('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('primary',!floatOn);$('#floatBtn').textContent=floatOn?'🙈 隱藏字幕浮層':'🎬 顯示字幕浮層';if(!floatOn)$('#caption').classList.remove('show');};
+$('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('primary',!floatOn);
+  $('#floatBtn').textContent=floatOn?'🙈 隱藏浮層':'🎬 顯示字幕浮層';if(!floatOn)$('#caption').classList.remove('show');};
 
-// 接收翻譯推送（SSE event: translation）
 function onTranslation(d){
-  const src=d.text||'';
-  const trs=d.translations? (d.translations[target]||d.translations['zh-TW']||Object.values(d.translations)[0]||'') : (d.text||'');
-  const trsHtml=Object.entries(d.translations||{}).map(([c,t])=>'<span style="margin-right:10px">'+(LANG_NAME[c]||c)+': '+t+'</span>').join('');
-  appendPreview(src,trsHtml);
-  if(floatOn)showCaption(src,trs);
+  const src=d.text||'';const tr=d.translations||{};
+  appendPreview(src,tr);
+  if(floatOn)showCaption(src,tr);
 }
-
-// 連線 SSE（優先）；失敗降級為 REST 輪詢 /translate
 function connect(){
   try{
     const url=location.origin+'/stream'+(room?('?room='+encodeURIComponent(room)):'');
     sse=new EventSource(url);
     sse.addEventListener('translation',e=>{try{onTranslation(JSON.parse(e.data));esOk=true;}catch(_){}});
-    sse.onopen=()=>{setStatus(true,'已連線 (SSE) · 房間 '+(room||'全部'));startPolling(false);};
-    sse.onerror=()=>{if(!esOk){setStatus(false,'SSE 連線失敗，切換 REST 輪詢…');startPolling(true);}sse.close();sse=null;};
-  }catch(e){setStatus(false,'SSE 錯誤：'+e.message);startPolling(true);}
-}
-// REST 降級：向 /translate 探詢（僅占位，實際字幕由 studio /speak 推播；此路做 heartBeat 顯示）
-let lastProbe=0;
-function startPolling(enable){
-  clearInterval(pollTimer);
-  if(!enable)return;
-  pollTimer=setInterval(async()=>{
-    try{
-      const r=await fetch('/health');if(r.ok)setStatus(true,'已連線 (REST 降級) · 房間 '+(room||'全部'));
-    }catch(_){setStatus(false,'服務離線');}
-  },5000);
+    sse.onopen=()=>setStatus(true,'已連線 (SSE) · 房間 '+(room||'全部'));
+    sse.onerror=()=>{if(!esOk)setStatus(false,'SSE 失敗，3 秒後重連…');sse.close();sse=null;setTimeout(connect,3000);};
+  }catch(e){setStatus(false,'錯誤：'+e.message);setTimeout(connect,3000);}
 }
 connect();
 </script>
