@@ -1,6 +1,6 @@
 // ============================================================
 // 萬能即時翻譯 — 服務層 (HTTP + WebSocket + SSE) · 純免費版
-// 引擎: LibreTranslate(自建) → MyMemory(免費) → 原文兜底 (零付費 key)
+// 引擎: Google gtx(免費,零key) → LibreTranslate(自建) → MyMemory(免費) → 原文兜底 (零付費 key)
 // 端點:
 //   GET  /health           健康檢查
 //   GET  /                 Live 即時翻譯 UI
@@ -10,6 +10,9 @@
 //   POST /speak           即時轉播推播 (studio 已轉錄文字 → SSE 字幕)
 //   WS   /ws              即時流 (輸入即翻譯並廣播)
 // 5T 溯源標頭: X-OA-Engine / X-OA-Cached / X-OA-Trace
+// 雙向 TS 終始矩陣: 領域型別契約見 ../../shared/types.ts (canonical) → types/generated/esggo-shared.d.ts (generated)
+// @ts-check
+/// <reference path="./types/generated/esggo-shared.d.ts" />
 // ============================================================
 import http from 'node:http';
 import fs from 'node:fs';
@@ -33,6 +36,11 @@ const APP_VERSION = '1.3.0';           // 加強版: REST/WS/SSE 全鏈轉播 + 
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 // 5T 溯源標頭 (在 writeHead 中內聯注入, 避免 writeHead 後 setHeader 衝突)
+/**
+ * @param {import('node:http').ServerResponse} res
+ * @param {any} obj
+ * @param {Record<string, string>} [extraHeaders]
+ */
 function writeJson(res, obj, extraHeaders = {}) {
   res.writeHead(200, {
     'content-type': 'application/json',
@@ -44,6 +52,9 @@ function writeJson(res, obj, extraHeaders = {}) {
 // SSE 觀眾端客戶端集合與廣播
 // 每個 SSE 客戶端帶 room 訂閱（?room=xxx）；broadcast 時按 room 過濾（room 空 = 接收全部）
 const sseClients = new Set();
+/**
+ * @param {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} payload
+ */
 function broadcastTranslation(payload) {
   const data = `event: translation\ndata: ${JSON.stringify(payload)}\n\n`;
   for (const c of sseClients) {
@@ -56,22 +67,32 @@ function broadcastTranslation(payload) {
 }
 
 // --- 共用：執行翻譯並廣播 SSE（REST /translate、/speak 與 WS /ws 共用，打通 studio→stream 即時轉播） ---
-async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker }) {
+/**
+ * @param {import('./types/generated/esggo-shared.d.ts').ISpeakPayload} p
+ * @returns {Promise<(import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent & { version?: string }) | null>}
+ */
+async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker = 'studio' }) {
   if (!text) return null;
   const trace = hashOf(text).slice(0, 16);
   if (Array.isArray(targets) && targets.length) {
-    const r = await translateToMany(text, from, targets);
+    const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
+    /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
     const out = { text, translations: r.translations, engines: r.engines, trace, room: room || '', speaker: speaker || 'studio' };
     broadcastTranslation(out);
     return { ...out, engine: Object.values(r.engines)[0] || 'n/a', cached: false };
   }
-  const rec = await translateDetailed(text, from, to);
-  const out = { text, translations: { [to]: rec.text }, engine: rec.engine, cached: rec.cached, trace, room: room || '', speaker: speaker || 'studio' };
+  const rec = await translateDetailed(text, String(from), String(to));
+  /** @type {Record<string, string>} */
+  const tr = { [/** @type {string} */ (to)]: rec.text };
+  /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
+  const out = { text, translations: tr, engine: rec.engine, cached: rec.cached, trace, room: room || '', speaker: speaker || 'studio' };
   broadcastTranslation(out);
   return { ...out, text: rec.text };
 }
 
 const server = http.createServer(async (req, res) => {
+  /** @type {string} */
+  const url = req.url || '';
   // CORS (前端跨域呼叫)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -79,14 +100,14 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
   // 健康檢查
-  if (req.url === '/health' && req.method === 'GET') {
+  if (url === '/health' && req.method === 'GET') {
     return writeJson(res, { status: 'ok', version: APP_VERSION, stats });
   }
 
   // SSE 觀眾端串流（必須在主靜態路由之前攔截，否則會被當成 HTML 頁回傳）
-  if (req.url.startsWith('/stream') && req.method === 'GET') {
+  if (url.startsWith('/stream') && req.method === 'GET') {
     // 解析 query: ?src=studio&room=xxx（room 用於多房間隔離）
-    const q = new URL(req.url, 'http://localhost').searchParams;
+    const q = new URL(url, 'http://localhost').searchParams;
     const room = q.get('room') || '';
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
@@ -104,10 +125,10 @@ const server = http.createServer(async (req, res) => {
   // 靜態前端 UI
   if (req.method === 'GET') {
     let page = null;
-    if (req.url === '/' || req.url.startsWith('/index')) {
+    if (url === '/' || url.startsWith('/index')) {
       page = '/index.html';
     } else {
-      const urlPath = req.url.split('?')[0];
+      const urlPath = url.split('?')[0];
       if (urlPath === '/studio' || urlPath === '/studio.html') page = '/studio.html';
       else if (urlPath === '/stream.html') page = '/stream.html';
       else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) page = urlPath;
@@ -121,22 +142,22 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 即時轉播推播：studio 直接推播已轉錄文字 → 觀眾端 SSE 即時字幕（免觀眾端二次翻譯）
-  if (req.url === '/speak' && req.method === 'POST') {
+  if (url === '/speak' && req.method === 'POST') {
     let body = '';
     for await (const c of req) body += c;
     let p;
     try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
     const { text, from = 'auto', to = 'zh-TW', targets, room = '', speaker = 'studio' } = p;
     if (!text) { res.writeHead(400); return res.end('missing text'); }
-    const rec = await doTranslateAndBroadcast({ text, from, to, targets, room, speaker });
+    const rec = await doTranslateAndBroadcast({ text, from: String(from), to: String(to), targets, room, speaker });
     if (!rec) { res.writeHead(400); return res.end('missing text'); }
     return writeJson(res, { ok: true, ...rec, version: APP_VERSION }, {
-      'X-OA-Engine': rec.engine, 'X-OA-Trace': rec.trace,
+      'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Trace': String(rec.trace || ''),
     });
   }
 
   // 翻譯核心 API (單語 / 多語) — 同時廣播 SSE，打通 studio(REST)→stream(SSE) 即時轉播
-  if (req.url === '/translate' && req.method === 'POST') {
+  if (url === '/translate' && req.method === 'POST') {
     let body = '';
     for await (const c of req) body += c;
     let p;
@@ -147,19 +168,21 @@ const server = http.createServer(async (req, res) => {
 
     // 多語平行翻譯 (即時轉播場景)
     if (Array.isArray(targets) && targets.length) {
-      const r = await translateToMany(text, from, targets);
+      const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
       const firstEngine = Object.values(r.engines)[0] || 'n/a';
       broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
       return writeJson(res, { ...r, version: APP_VERSION }, {
-        'X-OA-Engine': firstEngine, 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
+        'X-OA-Engine': String(firstEngine), 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
       });
     }
 
     // 單語翻譯
-    const rec = await translateDetailed(text, from, to);
-    broadcastTranslation({ text, translations: { [to]: rec.text }, engine: rec.engine, cached: rec.cached, trace: hashOf(rec.text).slice(0, 16), room, speaker: 'rest' });
+    const rec = await translateDetailed(text, String(from), String(to));
+    /** @type {Record<string, string>} */
+    const tr = { [String(to)]: rec.text };
+    broadcastTranslation({ text, translations: tr, engine: rec.engine, cached: rec.cached, trace: hashOf(rec.text).slice(0, 16), room, speaker: 'rest' });
     return writeJson(res, { text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }, {
-      'X-OA-Engine': rec.engine, 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
+      'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
     });
   }
 
@@ -170,8 +193,8 @@ const server = http.createServer(async (req, res) => {
 // WebSocket 即時流 (若 ws 套件可用)
 if (typeof WebSocketServer !== 'undefined') {
   const wss = new WebSocketServer({ server, path: '/ws' });
-  wss.on('connection', (ws) => {
-    ws.on('message', async (msg) => {
+  wss.on('connection', (/** @type {any} */ ws) => {
+    ws.on('message', async (/** @type {any} */ msg) => {
       let p; try { p = JSON.parse(msg.toString()); } catch { return; }
       const { text, from = 'auto', to = 'zh', targets, room = '' } = p;
       if (!text) return;
