@@ -1,0 +1,74 @@
+/**
+ * OA Framework — 萬能分身元框架核心型別
+ * 整合: ADK + Genkit + Agent0 + CrewAI + Agent Reach + DeerFlow + 騰訊 Agent 記憶
+ * 對齊 soul.md IComponentCore 與 omni-agent 5T 驗證
+ */
+
+/** 子框架識別碼 */
+export type SubFrameId =
+  | 'adk'        // Google Agent Development Kit (TS)
+  | 'genkit'     // Google Genkit (Firebase)
+  | 'agent0'     // Agent Zero organic framework
+  | 'crewai'     // CrewAI multi-agent
+  | 'agentreach' // Agent Reach (spec TODO)
+  | 'deerflow'   // DeerFlow research flow
+  | 'tencent-mem'; // 騰訊 Agent 記憶 (TencentDB Agent Memory)
+
+/** 5T 協議狀態 (來自 soul.md) */
+export type T5State = {
+  traceable: boolean;   // 可溯源
+  trackable: boolean;   // 可追蹤
+  tangible: boolean;    // 可感知
+  transparent: boolean; // 可透明
+  trustworthy: boolean; // 不可篡改 (Hash Lock)
+};
+
+/** 萬能永憶主體唯一識別 (soul.md IComponentCore) */
+export interface IComponentCore {
+  readonly uuid: string;
+  readonly version: string;
+  readonly timestamp: number;
+  evidence: Record<string, unknown>;
+}
+
+/** 子框架統一適配器介面 */
+export interface ISubFrameAdapter {
+  readonly id: SubFrameId;
+  readonly label: string;
+  readonly runtime: 'ts' | 'python' | 'docker';
+  /** 啟動此子框架實例 */
+  bootstrap(config: OAFrameConfig): Promise<{ ok: boolean; endpoint?: string; error?: string }>;
+  /** 提交一個任務給此框架 (回傳中間產出, 由 Orchestrator 經 forgeT5 鑄造 5T) */
+  dispatch(task: OATask): Promise<{ output: string }>;
+  /** 健康檢查 */
+  health(): Promise<{ status: 'ok' | 'down'; detail?: string }>;
+}
+
+/** OA 元框架配置 */
+export interface OAFrameConfig {
+  /** 預設 LLM 端點 (OpenAI-compatible) */
+  llmBaseUrl?: string;
+  llmApiKey?: string;
+  llmModel?: string;
+  /** 騰訊 Agent 記憶 gateway (預設 127.0.0.1:8420) */
+  memoryGateway?: string;
+  /** 是否啟用 5T 驗證攔截 */
+  enforce5T?: boolean;
+}
+
+/** 一個 OA 任務 */
+export interface OATask {
+  id: string;
+  prompt: string;
+  /** 指定子框架 (不指定則由 Orchestrator 路由) */
+  routeTo?: SubFrameId[];
+  requireT5?: boolean;
+}
+
+/** 任務結果 (帶 5T 狀態與 Hash Lock) */
+export interface OATaskResult extends IComponentCore {
+  subFrame: SubFrameId;
+  output: string;
+  t5: T5State;
+  hashLock: string;
+}
