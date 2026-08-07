@@ -29,6 +29,7 @@ export function createOAFrame(config: OAFrameConfig = {}): OAOrchestrator {
 
 export { OAOrchestrator, verify5T };
 export * from './core/types.js';
+export * from './core/omni-gate.js';
 export const OA_SUBFRAMES: SubFrameId[] = [
   'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem',
 ];

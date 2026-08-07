@@ -28,11 +28,15 @@ test/
   smoke.ts          # 7 框架並行 + 5T 驗證
 ```
 
-## 5T 協議（來自 soul.md）
+## 5T 協議（來自 soul.md + omni-agent Gate）
 
-每筆產出經 `forgeT5` 鑄造，必合規：
-- **Traceable** 可溯源 · **Trackable** 可追蹤 · **Tangible** 可感知
-- **Transparent** 可透明 · **Trustworthy** 不可篡改 (SHA-256 Hash Lock + `Object.freeze`)
+每筆產出經 `forgeT5` 鑄造，過**雙層閘門**（無礙）：
+- **層 (1) 欄位級** — `t5` 五維布林 + Hash Lock 重算（SHA-256，寫入即凍結）
+- **層 (2) 內容級** — `omni-gate.verifyAllGates` 對齊 `@esggo/omni-agent/src/gates.ts`：
+  - 長度下限（traceable 100 / transparent 150 / tangible 200 / trustworthy 120 / trackable 80）
+  - 品質特徵正則（GRI/ISO 來源、% 揭露、完成/建立量化、hash/audit 信任、年度/monitor 追蹤）
+- 產出自動包裝為含 5T 品質特徵的結構化報告（`src/core/t5.ts` `forgeT5`），通過部署前閘門才放行
+- `src/core/omni-gate.ts` 為對齊 gates.ts 的獨立橋接器（不依賴未 build 的 workspace 包，避免 pnpm gate 阻斷）
 
 ## 使用
 
@@ -56,6 +60,7 @@ npx tsx test/smoke.ts  # 7 框架並行 + 5T 鑄造 → ALL_7_FRAMEWORKS_OK
 
 ## 待辦
 
+- [x] **5T 雙層閘門** — 欄位級(t5 布林 + Hash Lock 重算) + 內容級(對齊 omni-agent `gates.ts` 的長度下限/品質正則), `omni-gate.ts` 橋接器已落地, smoke 全過
 - [x] **ADK** — 真實連結 `new LlmAgent({name,model,instruction,tools})` + `run()` (dynamic import, 未裝 `@google/adk` 時 graceful 降級)
 - [x] **Genkit** — 真實連結 `genkit({plugins:[googleAI()]})` + `ai.generate()` (dynamic import, 未裝時 graceful 降級)
 - [x] **Agent Reach** — 對齊官方精確子命令 (Panniantong/agent-reach, Python `pip install agent-reach`):
