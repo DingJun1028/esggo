@@ -67,15 +67,24 @@ function broadcastTranslation(payload) {
 }
 
 /**
+ * 以 Buffer 累積請求體 (原始 bytes, 用於音訊上傳)
+ * @param {import('node:http').IncomingMessage} req
+ * @returns {Promise<Buffer>}
+ */
+async function readBodyRaw(req) {
+  /** @type {Buffer[]} */
+  const chunks = [];
+  for await (const c of req) chunks.push(/** @type {Buffer} */ (c));
+  return Buffer.concat(chunks);
+}
+
+/**
  * 以 Buffer 累積請求體再轉字串 (避免多 byte UTF-8 在 stream 分塊邊界被切斷導致亂碼，Cloudflare Tunnel 環境下必須)
  * @param {import('node:http').IncomingMessage} req
  * @returns {Promise<string>}
  */
 async function readBody(req) {
-  /** @type {Buffer[]} */
-  const chunks = [];
-  for await (const c of req) chunks.push(/** @type {Buffer} */ (c));
-  return Buffer.concat(chunks).toString('utf-8');
+  return (await readBodyRaw(req)).toString('utf-8');
 }
 
 // --- 共用：執行翻譯並廣播 SSE（REST /translate、/speak 與 WS /ws 共用，打通 studio→stream 即時轉播） ---
@@ -196,6 +205,30 @@ const server = http.createServer(async (req, res) => {
     return writeJson(res, { text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }, {
       'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
     });
+  }
+
+  // 伺服器端語音轉文字 (STT): 前端 MediaRecorder 分段錄音 → 此端點 → 呼叫本地 faster-whisper 微服務 → 回文字
+  // 免費零 key: 不依賴瀏覽器 Web Speech API, 手機/平板/任意瀏覽器皆可用
+  if (url === '/transcribe' && req.method === 'POST') {
+    let audioBuf;
+    try { audioBuf = await readBodyRaw(req); } catch { res.writeHead(400); return res.end('read fail'); }
+    if (!audioBuf.length) { res.writeHead(400); return res.end(JSON.stringify({ error: 'empty audio' })); }
+    const q = new URL(url, 'http://localhost').searchParams;
+    const lang = q.get('lang') || '';
+    try {
+      const sttRes = await fetch(`http://127.0.0.1:8790/transcribe?lang=${encodeURIComponent(lang)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        body: new Uint8Array(audioBuf),
+        signal: AbortSignal.timeout(Number(process.env.STT_TIMEOUT_MS || 30000)),
+      });
+      const sttJson = await sttRes.json();
+      if (!sttRes.ok) { res.writeHead(sttRes.status); return res.end(JSON.stringify(sttJson)); }
+      return writeJson(res, { text: sttJson.text || '', language: sttJson.language || 'unknown' });
+    } catch (/** @type {any} */ e) {
+      res.writeHead(502);
+      return res.end(JSON.stringify({ error: 'STT service unavailable: ' + (e.message || e) }));
+    }
   }
 
   res.writeHead(404, { 'content-type': 'application/json' });
