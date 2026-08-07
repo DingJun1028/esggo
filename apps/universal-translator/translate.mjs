@@ -1,7 +1,7 @@
 // ============================================================
 // 萬能即時翻譯引擎 v2 — 可插拔 / 零依賴 / 最佳實踐化
-// 引擎優先序: LibreTranslate(自建) → MyMemory(免費) → 原文兜底
-// 強化: 平行翻譯、指數退避重試、逾時、LRU 快取、engine 標記(5T 可溯源)
+// 引擎優先序: LibreTranslate(若 VPS 自建可用, env LIBRETRANSLATE_URL) → MyMemory(免費, 加 email 提升品質) → 原文兜底
+// 強化: 平行翻譯、指數退避重試、逾時、LRU 快取、engine 標記(5T 可溯源)、postProcess 後處理(品質/精準度)
 // ============================================================
 import crypto from 'node:crypto';
 
@@ -42,15 +42,49 @@ async function viaLibre(text, from, to) {
   return d.translatedText;
 }
 
-// --- 引擎 2: MyMemory (免費, 零 key) ---
+// --- 引擎 2: MyMemory (免費, 零 key) — 加 email 參數提升配額與品質 ---
 async function viaMyMemory(text, from, to) {
   const lp = `${from}|${to}`;
-  const u = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(lp)}`;
+  // email 參數為 MyMemory 官方免費提升方案（仍免費），提升配額與回傳品質
+  const email = process.env.MYMEMORY_EMAIL ? `&de=${encodeURIComponent(process.env.MYMEMORY_EMAIL)}` : '';
+  const u = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(lp)}${email}`;
   const r = await fetch(u, { signal: AbortSignal.timeout(TIMEOUT_MS), headers: { 'User-Agent': 'OmniBlueprintHub/0.6' } });
   if (!r.ok) throw new Error('mymemory HTTP ' + r.status);
   const d = await r.json();
   if (Number(d.responseStatus) !== 200) throw new Error(d.responseDetails || 'mymemory fail');
-  return d.responseData.translatedText;
+  return postProcess(d.responseData.translatedText);
+}
+
+// --- 後處理：提升翻譯「品質感」與精準度（純免費，零外部依賴） ---
+const GLOSSARY = parseGlossaryEnv();
+function parseGlossaryEnv() {
+  const raw = process.env.GLOSSARY || '';
+  const map = {};
+  for (const line of raw.split('|')) {
+    const i = line.indexOf('=');
+    if (i > 0) { const k = line.slice(0, i).trim(), v = line.slice(i + 1).trim(); if (k) map[k] = v; }
+  }
+  return map;
+}
+function applyGlossary(text) {
+  let t = text;
+  for (const [k, v] of Object.entries(GLOSSARY)) {
+    if (k) t = t.split(k).join(v); // 全域術語強制替換（跨語種一致）
+  }
+  return t;
+}
+function postProcess(text) {
+  if (!text) return text;
+  let t = text;
+  // 1) 去除 MyMemory 常見亂碼標記
+  t = t.replace(/\*/g, '').replace(/\[[^\]]*\]/g, '').trim();
+  // 2) 合併多餘空白
+  t = t.replace(/\s{2,}/g, ' ').trim();
+  // 3) 中英混排時確保標點後有空格（提升可讀性）
+  t = t.replace(/([，。！？；、])([a-zA-Z0-9])/g, '$1 $2');
+  // 4) 術語表強制套用
+  t = applyGlossary(t);
+  return t;
 }
 
 function engineChain() {
