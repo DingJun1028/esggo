@@ -82,6 +82,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </div>
 <div class="toast" id="toast"></div>
 <script type="module">
+/// <reference path="./types/generated/esggo-shared.d.ts" />
+// 雙向 TS 終始矩陣: studio 推播 ISpeakPayload → SSE 觀眾端收 ISseTranslationEvent
 const LANGUAGES=['zh-TW','en','ja','es','fr'];
 const LANG_NAME={'zh-TW':'繁中','en':'英','ja':'日','es':'西','fr':'法'};
 const $=s=>document.querySelector(s);
