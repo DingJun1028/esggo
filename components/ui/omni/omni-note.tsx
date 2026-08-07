@@ -120,8 +120,8 @@ export const OmniNote: React.FC<OmniNoteProps> = ({ contextId, className, onClos
           {syncStatus === 'syncing' && <Loader2 className="w-3 h-3 animate-spin text-accent" />}
           {syncStatus === 'synced' && <span className="text-[10px] text-status-optimal font-bold">SAVED</span>}
           {onClose && (
-            <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-md transition-colors">
-              <X className="w-4 h-4 text-text-muted" />
+            <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" aria-label="關閉筆記" title="關閉筆記">
+              <X className="w-4 h-4 text-text-muted" aria-hidden="true" />
             </button>
           )}
         </div>
