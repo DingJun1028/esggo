@@ -35,7 +35,7 @@ export async function loadOAFramework(): Promise<OAFrameworkModule | null> {
 export async function oaToBusPipeline(
   bus: OmniAgentBus,
   config: Record<string, unknown>,
-  task: { id: string; prompt: string },
+  task: { id: string; prompt: string; routeTo?: string[] },
   deploy: (r: OATaskResult) => void | Promise<void>
 ): Promise<{ available: boolean; results?: DeployResult[]; reason?: string }> {
   const oa = await loadOAFramework();
@@ -43,7 +43,7 @@ export async function oaToBusPipeline(
     return { available: false, reason: '@esggo/oa-framework 未安裝 (workspace 未 build) — graceful' };
   }
   const frame = oa.createOAFrame(config);
-  const produced = await frame.run(task);
+  const produced = await frame.run(task as any);
   const results: DeployResult[] = [];
   for (const r of produced) {
     results.push(await deployGate(bus, 'oa', r, deploy));
