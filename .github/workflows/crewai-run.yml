@@ -6,12 +6,18 @@ on:
       - 'oa-team-crewai/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   crewai-run:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: oa-team-crewai
+    env:
+      # CREWAI_API_KEY 由 GitHub Secrets 注入 (user stored via gh secret set)
+      CREWAI_API_KEY: ${{ secrets.CREWAI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -20,9 +26,9 @@ jobs:
 
       - name: Run OA-Team 30 Swarm (via uv run)
         env:
-          # CREWAI_API_KEY 由 GitHub Secrets 注入 (user stored via gh secret set)
           OPENAI_API_KEY: ${{ secrets.CREWAI_API_KEY }}
           OPENAI_MODEL_NAME: gpt-4o-mini
         run: |
           export PATH="$HOME/.local/bin:$PATH"
+          echo "DEBUG: CREWAI_API_KEY length = ${#CREWAI_API_KEY}"
           uv run --python 3.13 --with 'crewai[litellm]' python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
