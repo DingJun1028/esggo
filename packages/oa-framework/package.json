@@ -7,19 +7,18 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
-  },
-  "dependencies": {
-    "@esggo/shared": "workspace:*",
-    "@esggo/errors": "workspace:*"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx test/smoke.ts"
   },
   "peerDependencies": {
     "@google/adk": "*",
-    "genkit": "*"
+    "genkit": "*",
+    "@genkit-ai/google-genai": "*"
   },
   "peerDependenciesMeta": {
     "@google/adk": { "optional": true },
-    "genkit": { "optional": true }
+    "genkit": { "optional": true },
+    "@genkit-ai/google-genai": { "optional": true }
   },
   "license": "MIT"
 }
