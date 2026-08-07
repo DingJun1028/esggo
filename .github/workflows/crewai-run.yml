@@ -15,25 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Install CrewAI (with LiteLLM)
-        run: |
-          uv tool install crewai --python 3.13
-          uv tool install 'crewai[litellm]' --python 3.13
-
-      - name: Run OA-Team 30 Swarm
+      - name: Run OA-Team 30 Swarm (via uv run)
         env:
-          # CREWAI_API_KEY 由 GitHub Secrets 注入 (用戶已透過 gh secret set 存入)
+          # CREWAI_API_KEY 由 GitHub Secrets 注入 (user stored via gh secret set)
           OPENAI_API_KEY: ${{ secrets.CREWAI_API_KEY }}
-          # CrewAI 預設走 OpenAI; AMP key 作為 OPENAI_API_KEY 使用
           OPENAI_MODEL_NAME: gpt-4o-mini
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
+          uv run --python 3.13 --with 'crewai[litellm]' python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
