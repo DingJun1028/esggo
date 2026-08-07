@@ -1,13 +1,16 @@
 /**
- * Agent Reach Adapter — Panniantong/agent-reach
+ * Agent Reach Adapter — Panniantong/agent-reach (Python 套件, pip install agent-reach)
  * 定位: AI Agent 的本地端「聯網能力層」(Capability Layer), 零 API 費用/金鑰
- * 核心: 透過本地 CLI + 上游開源爬蟲 (yt-dlp/gh/bili-cli...) 直連網際網路
- * 能力: 13+ 渠道觸及 / agent-reach doctor 自我診斷 / 原生 Agent Skill 整合
+ * 本質: 路由器 + 體檢器 — 實際執行委派給上游開源 CLI
+ *   網頁搜尋→mcporter(exa) / 網頁閱讀→curl+jina / GitHub→gh / YouTube→yt-dlp /
+ *   B站→bili / Twitter→twitter / Reddit→opencli reddit|rdt /
+ *   小紅書→opencli xiaohongshu / Facebook→opencli facebook / Instagram→opencli instagram /
+ *   V2EX→curl / 小宇宙→(video.md) / 雪球→(finance.md)
+ * 自診: agent-reach doctor --json (顯示每平台當前 active_backend)
+ * 安裝: pip install agent-reach && agent-reach install --env=auto
  *
+ * 精確命令來源: 官方 agent_reach/skill/SKILL.md (llms.txt 路由表)
  * 設計哲學對齊 ESG GO: 去中心化模組化(MECE) + 高透明度可追溯 + 5T 合規
- *
- * 注意: CLI 精確子命令以官方 README 為準。本適配器以 graceful 降級方式
- *       呼叫 `agent-reach` 進程; 未安裝時 health=down + scaffold 輸出。
  */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -15,20 +18,23 @@ import type { ISubFrameAdapter, OAFrameConfig, OATask, SubFrameId } from '../cor
 
 const execFileP = promisify(execFile);
 
-/** Agent-Reach 支援的觸達渠道 (用戶提供規格) */
+/** Agent-Reach 支援的觸達渠道 (官方 15 平台) */
 export type AgentReachChannel =
-  | 'youtube'      // 字幕/內容提取 (yt-dlp)
-  | 'github'       // 倉庫檢視/管理 (gh)
-  | 'bilibili'     // 無登入搜尋 (bili-cli)
-  | 'twitter'      // X / Twitter
-  | 'reddit'       // Reddit
-  | 'xiaohongshu'  // 小紅書
-  | 'facebook'     // Facebook
-  | 'instagram'    // Instagram
-  | 'xiaoyuzhou'   // 小宇宙播客
-  | 'exa'          // 網頁語意搜尋
-  | 'jina'         // Jina Reader 內容解析
-  | 'rss';         // RSS 訂閱解析
+  | 'youtube'      // 字幕 (yt-dlp)
+  | 'github'       // (gh)
+  | 'bilibili'     // (bili)
+  | 'twitter'      // (twitter-cli, 需 TWITTER_AUTH_TOKEN/CT0)
+  | 'reddit'       // (opencli reddit | rdt)
+  | 'xiaohongshu'  // (opencli xiaohongshu)
+  | 'facebook'     // (opencli facebook)
+  | 'instagram'    // (opencli instagram)
+  | 'linkedin'     // (career.md)
+  | 'v2ex'         // (curl api)
+  | 'xiaoyuzhou'   // 小宇宙播客 (video.md)
+  | 'xueqiu'       // 雪球 (finance.md)
+  | 'exa'          // Exa 語意搜尋 (mcporter)
+  | 'jina'         // Jina Reader 網頁閱讀 (curl)
+  | 'rss';         // RSS (web.md)
 
 export class AgentReachAdapter implements ISubFrameAdapter {
   readonly id: SubFrameId = 'agentreach';
@@ -44,64 +50,112 @@ export class AgentReachAdapter implements ISubFrameAdapter {
       await execFileP(this.cli, ['--version'], { timeout: 5000 });
       return { ok: true, endpoint: 'local-cli' };
     } catch {
-      return {
-        ok: false,
-        endpoint: 'local-cli',
-        error: 'agent-reach CLI 未安裝 (見 Panniantong/agent-reach) — scaffold 模式',
-      };
+      try {
+        // Python 模組形式亦可
+        await execFileP('python3', ['-m', 'agent_reach', '--version'], { timeout: 5000 });
+        return { ok: true, endpoint: 'python-module' };
+      } catch {
+        return {
+          ok: false,
+          endpoint: 'local-cli',
+          error: 'agent-reach 未安裝 (pip install agent-reach) — scaffold 模式',
+        };
+      }
     }
   }
 
-  /** 自我診斷: agent-reach doctor (用戶規格: 探測各工具後端健康 + 修復處方) */
+  /** 自我診斷: agent-reach doctor --json (顯示每平台 active_backend) */
   async doctor(): Promise<{ ok: boolean; report?: string }> {
     try {
-      const { stdout } = await execFileP(this.cli, ['doctor'], { timeout: 15000 });
-      return { ok: true, report: stdout };
+      const { stdout } = await execFileP(this.cli, ['doctor', '--json'], { timeout: 20000, encoding: 'utf8' });
+      return { ok: true, report: String(stdout) };
     } catch (e: any) {
       return { ok: false, report: e?.message ?? 'doctor failed' };
     }
   }
 
   /**
-   * 提交聯網任務 — 路由到對應渠道 CLI。
-   * 精確子命令以官方 README 為準 (本輪無網路額度驗證, 留 @ts-ignore 動態組合)。
-   * 預設 fallback: 將 prompt 視為搜尋意圖, 交給 exa/jina 語意搜尋。
+   * 提交聯網任務 — 依官方路由表委派對應上游 CLI 真實命令。
+   * 命令模板來自 agent_reach/skill/SKILL.md, 不自行發明。
    */
   async dispatch(task: OATask): Promise<{ output: string }> {
+    const diag = await this.doctor().catch(() => ({ ok: false }));
+    const channel = this.route(task.prompt);
+    const q = task.prompt.replace(/["`$\\]/g, ' ').trim();
     try {
-      // 嘗試 doctor 自診以確保聯網眼睛不瞎
-      const diag = await this.doctor();
-      const channel: AgentReachChannel = this.route(task.prompt);
-      const { stdout, stderr } = await execFileP(
-        this.cli,
-        [channel, 'search', task.prompt],
-        { timeout: 30000 }
-      );
-      const body = stdout.trim() || stderr.trim();
+      const { cmd, args, shell } = this.buildCommand(channel, q, task.prompt);
+      const opts: any = { timeout: 60000, encoding: 'utf8' };
+      const { stdout, stderr } = shell
+        ? await execFileP('bash', ['-lc', `${cmd} ${args}`], opts)
+        : await execFileP(cmd, args.split(' ').filter(Boolean), opts);
+      const body = (String(stdout) || String(stderr) || '').trim();
       return {
         output: `[AgentReach:${channel}] ${body || '(no output)'} | doctor=${diag.ok ? 'ok' : 'degraded'}`,
       };
     } catch (e: any) {
       return {
-        output: `[AgentReach] ${task.prompt} (scaffold: ${e?.message ?? 'cli unreachable'})`,
+        output: `[AgentReach:${channel}] (scaffold: ${e?.message ?? 'cli unreachable'})`,
       };
     }
   }
 
-  /** 依 prompt 關鍵字路由渠道 (MECE 模組化路由) */
+  /** 依官方路由表建構真實上游 CLI 命令 */
+  private buildCommand(
+    ch: AgentReachChannel,
+    q: string,
+    rawPrompt: string
+  ): { cmd: string; args: string; shell?: boolean } {
+    const urlMatch = rawPrompt.match(/https?:\/\/[^\s"'<>]+/);
+    const url = urlMatch ? urlMatch[0] : '';
+    switch (ch) {
+      case 'exa':
+        return { cmd: 'mcporter', args: `call exa.web_search_exa query="${q}" numResults=5`, shell: true };
+      case 'jina':
+        return { cmd: 'curl', args: `-s "https://r.jina.ai/${url || q}"`, shell: true };
+      case 'github':
+        return { cmd: 'gh', args: `search repos "${q}" --sort stars --limit 10` };
+      case 'youtube':
+        return { cmd: 'yt-dlp', args: `--write-sub --write-auto-sub --skip-download -o "/tmp/%(id)s" "${url || q}"`, shell: true };
+      case 'bilibili':
+        return { cmd: 'bili', args: `search "${q}" --type video -n 5` };
+      case 'twitter':
+        return { cmd: 'twitter', args: `search "${q}" -n 10` };
+      case 'reddit':
+        return { cmd: 'opencli', args: `reddit search "${q}" -f yaml` };
+      case 'xiaohongshu':
+        return { cmd: 'opencli', args: `xiaohongshu search "${q}" -f yaml` };
+      case 'facebook':
+        return { cmd: 'opencli', args: `facebook search "${q}" -f yaml` };
+      case 'instagram':
+        return { cmd: 'opencli', args: `instagram search "${q}" -f yaml` };
+      case 'v2ex':
+        return { cmd: 'curl', args: `-s "https://www.v2ex.com/api/topics/hot.json" -H "User-Agent: agent-reach/1.0"`, shell: true };
+      case 'linkedin':
+      case 'xiaoyuzhou':
+      case 'xueqiu':
+      case 'rss':
+        // 複雜場景見官方 references/*.md; 先以 Exa 語意搜尋兜底
+        return { cmd: 'mcporter', args: `call exa.web_search_exa query="${q}" numResults=5`, shell: true };
+    }
+  }
+
+  /** 依 prompt 關鍵字路由渠道 (MECE 模組化路由, 對齊官方路由表) */
   private route(prompt: string): AgentReachChannel {
     const p = prompt.toLowerCase();
-    if (p.includes('youtube') || p.includes('影片')) return 'youtube';
-    if (p.includes('github') || p.includes('repo')) return 'github';
+    if (p.includes('youtube') || p.includes('影片') || /youtu\.be|youtube\.com/.test(prompt)) return 'youtube';
+    if (p.includes('github') || p.includes('repo') || p.includes('代碼搜尋')) return 'github';
     if (p.includes('bilibili') || p.includes('b站')) return 'bilibili';
     if (p.includes('twitter') || p.includes('x ')) return 'twitter';
     if (p.includes('reddit')) return 'reddit';
-    if (p.includes('小紅書') || p.includes('xiaohongshu')) return 'xiaohongshu';
+    if (p.includes('小紅書') || p.includes('xiaohongshu') || p.includes('xhs')) return 'xiaohongshu';
     if (p.includes('facebook')) return 'facebook';
     if (p.includes('instagram')) return 'instagram';
-    if (p.includes('小宇宙') || p.includes('podcast')) return 'xiaoyuzhou';
+    if (p.includes('linkedin') || p.includes('領英') || p.includes('招聘') || p.includes('職位')) return 'linkedin';
+    if (p.includes('v2ex')) return 'v2ex';
+    if (p.includes('小宇宙') || p.includes('podcast') || p.includes('播客')) return 'xiaoyuzhou';
+    if (p.includes('雪球') || p.includes('股票')) return 'xueqiu';
     if (p.includes('rss')) return 'rss';
-    if (p.includes('jina') || p.includes('reader')) return 'jina';
+    if (p.includes('jina') || (p.includes('http') && p.includes('讀'))) return 'jina';
     return 'exa'; // 預設語意搜尋
   }
 
@@ -110,7 +164,12 @@ export class AgentReachAdapter implements ISubFrameAdapter {
       await execFileP(this.cli, ['--version'], { timeout: 5000 });
       return { status: 'ok' as const, detail: 'local-cli ready' };
     } catch {
-      return { status: 'down' as const, detail: 'scaffold (agent-reach CLI 未安裝)' };
+      try {
+        await execFileP('python3', ['-m', 'agent_reach', '--version'], { timeout: 5000 });
+        return { status: 'ok' as const, detail: 'python-module ready' };
+      } catch {
+        return { status: 'down' as const, detail: 'scaffold (pip install agent-reach)' };
+      }
     }
   }
 }
