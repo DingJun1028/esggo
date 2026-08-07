@@ -45,6 +45,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
   padding:8px 14px;border-radius:var(--radius);font-size:.85rem;opacity:0;transition:.3s;pointer-events:none;z-index:50}
 .toast.show{opacity:1}
 .modehint{font-size:.75rem;color:var(--muted)}
+.glossary{border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;background:var(--panel2)}
+.glossary summary{cursor:pointer;font-size:.9rem}
+.glossary textarea{width:100%;min-height:70px;margin-top:8px;background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:var(--radius);padding:8px;font-size:.85rem;resize:vertical;font-family:inherit}
+.qrbox{display:flex;align-items:center;gap:8px}
+.qrbox img,.qrbox canvas{border-radius:8px;background:#fff;padding:4px}
 @media(max-width:480px){.row{flex-direction:column}.row select{width:100%}.utter .trs{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -64,6 +69,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
   <div class="modehint" id="modehint">麥克風：用瀏覽器語音辨識（Chrome/Edge）。電腦聲音：擷取分頁/系統音 → 本地 Whisper 免費轉錄。</div>
+  <details class="glossary">
+    <summary>📖 詞彙表（提升字幕精確度 · 選用）</summary>
+    <textarea id="glossary" placeholder="每行一組：原文=譯文&#10;例：ESGGO=ESG-GO&#10;OA-Team=OA 團隊"></textarea>
+    <div class="modehint">翻譯後會自動將「原文」替換為「譯文」（跨語種統一術語）。</div>
+  </details>
+  <div class="row">
+    <button id="qrBtn">🔳 產生觀眾端 QR</button>
+    <div id="qrBox" class="qrbox" style="display:none"></div>
+  </div>
   <div class="transcript" id="transcript" aria-live="polite"></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -156,7 +170,41 @@ function stopSystem(){sysActive=false;if(sysStream){sysStream.getTracks().forEac
   sysBtn.textContent='🎙 電腦聲音';sysBtn.classList.remove('primary');$('#dot').className='dot';setStatus();}
 sysBtn.onclick=()=>sysActive?stopSystem():startSystem();
 
-// 轉錄 + 多語翻譯卡片（共用）
+// ===== 詞彙表（glossary）解析與套用 =====
+function parseGlossary(){
+  const raw=$('#glossary').value||'';
+  const map=[];
+  for(const line of raw.split('\n')){
+    const i=line.indexOf('=');
+    if(i>0){const k=line.slice(0,i).trim(),v=line.slice(i+1).trim();if(k)map.push([k,v]);}
+  }
+  return map;
+}
+function applyGlossary(text){
+  const g=parseGlossary();
+  let t=text;
+  for(const [k,v] of g){ if(k){const re=new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');t=t.replace(re,v);} }
+  return t;
+}
+
+// ===== QR 分發（觀眾端）=====
+const qrBtn=$('#qrBtn'),qrBox=$('#qrBox');
+function genRoom(){return Math.random().toString(36).slice(2,8);}
+qrBtn.onclick=()=>{
+  const room=genRoom();
+  const url=location.origin+'/stream.html?src=studio&room='+room;
+  qrBox.style.display='flex';qrBox.innerHTML='';
+  const p=document.createElement('div');
+  const tip=document.createElement('div');tip.className='modehint';tip.style.maxWidth='180px';
+  tip.innerHTML='觀眾掃碼 → 即時字幕<br><code>'+url+'</code>';
+  qrBox.appendChild(p);qrBox.appendChild(tip);
+  // 優先嘗試 CDN QR 庫；失敗則顯示純連結
+  import('https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js').then(()=>{
+    try{new QRCode(p,{text:url,width:128,height:128,colorDark:'#000',colorLight:'#fff'});}catch(e){p.innerHTML='<code>'+url+'</code>';}
+  }).catch(()=>{p.innerHTML='<code style="word-break:break-all">'+url+'</code>';});
+};
+
+// 轉錄 + 多語翻譯卡片（共用，含 glossary 套用）
 function addUtterance(text){
   const box=$('#transcript');
   const el=document.createElement('div');el.className='utter';
@@ -165,7 +213,7 @@ function addUtterance(text){
   box.appendChild(el);box.scrollTop=box.scrollHeight;
   fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES})})
     .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
-    .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
+    .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${applyGlossary(t)}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
     .catch(e=>{trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}</span>`;});
 }
 $('#clearBtn').onclick=()=>{$('#transcript').innerHTML='';};

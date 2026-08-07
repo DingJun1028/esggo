@@ -20,6 +20,11 @@ html[data-theme="light"]body{background:radial-gradient(1200px 600px at 80% -10%
   font-size:clamp(.75rem,1.6vw,.95rem);line-height:1.55;z-index:999}
 .subtitle-box.empty{color:var(--muted)}
 .subtitle-box .me{color:var(--accent)}
+.subtitle-box .cap{margin:0 0 4px;padding:3px 0;border-bottom:1px solid var(--line)}
+.subtitle-box .cap:last-child{border-bottom:0}
+.subtitle-box .cap .lang{font-size:.62rem;color:var(--muted);margin-right:6px}
+.subtitle-box .cap.fresh{color:var(--accent);font-weight:600}
+.subtitle-box .cap.old{opacity:.45}
 .subtitle-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;font-size:.7rem;color:var(--muted)}
 .subtitle-box-head button{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:.85rem;padding:0;line-height:1}
 .subtitle-box.collapsed .body{display:none}
@@ -54,9 +59,22 @@ restoreTab.onclick=()=>setCollapsed(false);
 const es=new EventSource('/stream?src='+src+(room?'&room='+room:''));
 es.onopen=()=>{box.classList.remove('empty');body.textContent='已連線…'};
 es.onerror=()=>{body.textContent='連線斷線，重試中…'};
+const MAX_CAPS=6;
+function pushCaption(lines){
+  // 移除舊高亮
+  [...body.querySelectorAll('.cap.fresh')].forEach(c=>{c.classList.remove('fresh');c.classList.add('old');});
+  const cap=document.createElement('div');cap.className='cap fresh';
+  cap.innerHTML=lines.map(l=>l).join('<br>');
+  body.appendChild(cap);
+  // 限制最多 MAX_CAPS 句，超出移除最舊
+  const caps=body.querySelectorAll('.cap');
+  if(caps.length>MAX_CAPS)caps[0].remove();
+  body.scrollTop=body.scrollHeight;
+}
 es.addEventListener('translation',e=>{const d=JSON.parse(e.data);const lines=[];
-  if(d.translations){for(const[code,txt]of Object.entries(d.translations))lines.push('<b>'+code+':</b> '+txt);}
-  else if(d.text)lines.push(d.text);body.innerHTML=lines.join('<br>')||'--';});
+  if(d.translations){for(const[code,txt]of Object.entries(d.translations))lines.push('<span class="lang">'+code+':</span> '+txt);}
+  else if(d.text)lines.push(d.text);
+  pushCaption(lines);});
 </script>
 </body>
 </html>
