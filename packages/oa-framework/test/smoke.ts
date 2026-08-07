@@ -13,10 +13,10 @@ async function main() {
   console.log('=== OA 元框架啟動 ===');
   console.log('已註冊子框架:', OA_SUBFRAMES.length, '個');
 
-  const task = { id: 't1', prompt: '為 ESG-GO 產出 5T 合規元件骨架', routeTo: ['adk','genkit','agent0','crewai','deerflow','tencent-mem','openmontage'] };
+  const task = { id: 't1', prompt: '為 ESG-GO 產出 5T 合規元件骨架', routeTo: ['adk','genkit','agent0','crewai','deerflow','tencent-mem','openmontage','omniroute','turbovec'] };
   const results = await oa.run(task);
 
-  console.log('=== 8 框架並行產出 (5T 雙層鑄造: 欄位級 + 內容級 omni-gate) ===');
+  console.log('=== 10 框架並行產出 (5T 雙層鑄造: 欄位級 + 內容級 omni-gate) ===');
   let allPass = true;
   for (const r of results) {
     const v = verify5T(r);
@@ -33,7 +33,7 @@ async function main() {
     console.log(`  ${id}: ${h.status}`);
   }
 
-  console.log(`\nRESULT: ${results.length === 7 && allPass ? 'ALL_FRAMEWORKS_OK' : (results.length === 8 && allPass ? 'ALL_8_FRAMEWORKS_OK' : 'INCOMPLETE')}`);
+  console.log(`\nRESULT: ${results.length === 9 && allPass ? 'ALL_9_ROUTED_OK' : (results.length === 10 && allPass ? 'ALL_10_FRAMEWORKS_OK' : 'INCOMPLETE')}`);
 }
 
 main().catch((e) => {
