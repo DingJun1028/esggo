@@ -82,7 +82,7 @@ function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'err');$('#status
 function showCaption(src,trs){
   const cap=$('#caption');
   $('#capSrc').textContent=src;
-  $('#capTrs').innerHTML='<span class="lbl">'+LANG_NAME[target]||target+'</span>'+(trs||'');
+  $('#capTrs').innerHTML='<span class="lbl">'+(LANG_NAME[target]||target)+'</span>'+(trs||'');
   cap.classList.add('show');
   // 自動隱藏（避免字幕堆疊）
   clearTimeout(showCaption._t);
@@ -104,7 +104,7 @@ $('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('pr
 function onTranslation(d){
   const src=d.text||'';
   const trs=d.translations? (d.translations[target]||d.translations['zh-TW']||Object.values(d.translations)[0]||'') : (d.text||'');
-  const trsHtml=Object.entries(d.translations||{}).map(([c,t])=>'<span style="margin-right:10px">'+LANG_NAME[c]||c+': '+t+'</span>').join('');
+  const trsHtml=Object.entries(d.translations||{}).map(([c,t])=>'<span style="margin-right:10px">'+(LANG_NAME[c]||c)+': '+t+'</span>').join('');
   appendPreview(src,trsHtml);
   if(floatOn)showCaption(src,trs);
 }

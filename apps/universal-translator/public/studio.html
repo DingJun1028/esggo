@@ -63,13 +63,22 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="row">
     <select id="lang"><option value="zh-TW">中文(繁)</option><option value="en">英文</option><option value="ja">日文</option><option value="es">西班牙文</option><option value="fr">法文</option></select>
     <span class="badge" id="swapLang" title="語言循環切換">🔄</span>
+    <label style="font-size:.85rem;color:var(--muted)">翻譯成
+      <select id="targets" multiple size="1" style="min-width:auto;flex:none">
+        <option value="en" selected>英文</option>
+        <option value="zh-TW">繁中</option>
+        <option value="ja">日文</option>
+        <option value="es">西班牙</option>
+        <option value="fr">法文</option>
+      </select>
+    </label>
     <button id="micBtn" class="primary">🎤 麥克風</button>
     <button id="sysBtn">🎙 電腦聲音</button>
     <button id="srvBtn">☁ 伺服器轉錄</button>
     <button id="clearBtn">🗑 清除</button>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">尚未開始 · 選擇「麥克風」或「電腦聲音」並授權</span></div>
-  <div class="modehint" id="modehint">麥克風：用瀏覽器語音辨識（Chrome/Edge）。電腦聲音：擷取分頁/系統音 → 本地 Whisper 免費轉錄。</div>
+  <div class="modehint" id="modehint">麥克風：用瀏覽器語音辨識（Chrome/Edge）。電腦聲音：擷取分頁/系統音 → 伺服器 Whisper 免費轉錄。☁ 伺服器轉錄：麥克風→伺服器 STT（跨平台）。右側「翻譯成」可勾選要輸出的目標語（預設英文）。</div>
   <details class="glossary">
     <summary>📖 詞彙表（提升字幕精確度 · 選用）</summary>
     <textarea id="glossary" placeholder="每行一組：原文=譯文&#10;例：ESGGO=ESG-GO&#10;OA-Team=OA 團隊"></textarea>
@@ -253,7 +262,10 @@ function addUtterance(text){
   const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
   const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
   box.appendChild(el);box.scrollTop=box.scrollHeight;
-  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets:LANGUAGES,room:currentRoom,speaker:'studio'})})
+  // 讀取使用者選的目標語 (multiple select), 預設 [en]
+  const selTargets=Array.from($('#targets').selectedOptions).map(o=>o.value);
+  const targets = selTargets.length ? selTargets : ['en'];
+  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:$('#lang').value,targets,room:currentRoom,speaker:'studio'})})
     .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
     .then(d=>{if(d.translations){trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${applyGlossary(t)}</span>`).join('');}else{trs.textContent='（無翻譯結果）';}})
     .catch(e=>{trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}</span>`;});
