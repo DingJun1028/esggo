@@ -68,7 +68,8 @@ export class OmniAgentBus {
       topic, source, timestamp: Date.now(), payload,
     };
     // 5T Gate: 若 payload 是 OATaskResult, 過內容級閘門
-    if (this.gateEnabled && this.isTaskResult(payload)) {
+    // 豁免: .rejected 結尾的主題是閘門下游 (已在 deployGate 判定), 不再二次攔截
+    if (this.gateEnabled && !topic.endsWith('.rejected') && this.isTaskResult(payload)) {
       const g = bus5TGate(payload);
       msg.passedGate = g.pass;
       if (!g.pass) {
