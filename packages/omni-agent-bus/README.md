@@ -42,12 +42,26 @@ test/
   smoke.ts   # 過閘廣播 + 未過閘轉 rejected
 ```
 
+## 實體部署閘門 (Deploy Gate)
+
+`deployGate(bus, source, result, deploy)` — 讓 OA 產出「部署前」必過 5T 總線閘門（無礙）：
+
+- 合規 → 發佈到 `<source>.deploy` 主題 + 執行 `deploy` 回調（落地）
+- 不合規 → 發佈到 `<source>.rejected` 主題 + 不部署，回傳失敗原因
+- `.rejected` 主題豁免二次閘門（已是閘門下游）
+
+```ts
+import { createBus, deployGate } from '@esggo/omni-agent-bus';
+const bus = createBus(true);
+const r = await deployGate(bus, 'oa', taskResult, async (res) => { /* 落地部署 */ });
+// r.deployed === true/false; r.reason 含 5T 失敗維度
+```
+
+`tryLoadForgeT5()` — 動態 import `@esggo/oa-framework` 的 `forgeT5`（優雅降級，未安裝回 null），
+讓總線直接吃 OA 框架鑄造的產出。
+
 ## 驗證
 
 ```bash
-npx tsc -p tsconfig.json --noEmit --skipLibCheck   # TSC_EXIT=0
-npx tsx test/smoke.ts                               # OMNI_AGENT_BUS_OK
+pnpm run test   # OMNI_AGENT_BUS_OK + DEPLOY_GATE_OK
 ```
-
-> 注：`pnpm run test` 會被 monorepo 的 workspace deps-status gate 擋（其他包未 build），
-> 非本包問題；用 `npx` 直接跑即可。
