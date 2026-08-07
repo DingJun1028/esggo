@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "tsx test/smoke.ts && tsx test/deploy-gate.smoke.ts"
+    "test": "tsx test/smoke.ts && tsx test/deploy-gate.smoke.ts && tsx test/oa-bridge.smoke.ts"
   },
   "devDependencies": {
     "typescript": "^5.9.0",
