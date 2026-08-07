@@ -8,11 +8,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-# Add infra/scripts to path to import generate_answer_db
-SCRIPTS_ROOT = PROJECT_ROOT / "infra" / "scripts"
-if str(SCRIPTS_ROOT) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_ROOT))
-
 from generate_answer_db import escape_ts_string  # noqa: E402
 from scripts.build_full_db import esc as esc_double  # noqa: E402
 from scripts.generate_esg_data import sanitize_ts_string  # noqa: E402
