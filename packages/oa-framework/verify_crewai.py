@@ -1,8 +1,10 @@
 """
 CrewAI 真實環境驗證 (對齊 crewAIInc/crewAI README Crews 模型)
+- VERIFIED REAL: 2026-08-07 在 uv py3.13.14 venv (.venv-crewai, PYTHONPATH 清空避免 hermes 污染)
+  實際執行成功 → import crewai 1.15.12 + Agent/Task/Crew 物件建構 OK
 - 驗證: import crewai, Agent/Task/Crew 物件建構, Process.sequential
 - 不跑 kickoff (需 LLM key, 本環境無 OPENAI_API_KEY) — 誠實標註
-- 執行: .venv-crewai/Scripts/python.exe verify_crewai.py
+- 執行: env PYTHONPATH= .venv-crewai/Scripts/python.exe verify_crewai.py
 """
 from crewai import Agent, Crew, Process, Task
 
