@@ -84,7 +84,7 @@ export class OmniAgent implements IOmniAgent {
       uuid: uuidv4(),
       version: this.version,
       timestamp: Date.now(),
-      evidence: {},
+      evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' },
       hash: "",
       taskId: spec.uuid,
       status: "success",

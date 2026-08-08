@@ -110,15 +110,19 @@ export const OmniCalendar: React.FC = () => {
           <div className="flex gap-2">
             <button 
               onClick={() => setCurrentDate(new Date(year, month - 1, 1))} 
-              className="p-3 hover:bg-white/10 rounded-xl text-text-muted transition-all border border-transparent hover:border-white/10"
+              className="p-3 hover:bg-white/10 rounded-xl text-text-muted transition-all border border-transparent hover:border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="上一個月"
+              title="上一個月"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5" aria-hidden="true" />
             </button>
             <button 
               onClick={() => setCurrentDate(new Date(year, month + 1, 1))} 
-              className="p-3 hover:bg-white/10 rounded-xl text-text-muted transition-all border border-transparent hover:border-white/10"
+              className="p-3 hover:bg-white/10 rounded-xl text-text-muted transition-all border border-transparent hover:border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="下一個月"
+              title="下一個月"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
