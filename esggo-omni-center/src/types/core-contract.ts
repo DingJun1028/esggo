@@ -12,9 +12,9 @@ export interface IComponentCore {
   readonly timestamp: number;
   /** 證據庫，存放驗算、簽章等額外資訊 */
     evidence: {
-    originCause?: string;
-    processTrace?: string[];
-    finalEffect?: string;
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
     [key: string]: any;
   };
 }
