@@ -26,6 +26,8 @@
 | 終 | 靈魂封印 | soul-chapter-12-final-seal.md |
 | 十三 | 萬能分身令（含極運用五式） | soul-chapter-13-omnipotent-avatar.md |
 | 十四 | 萬能藍圖中心 (Omni-Blueprint Hub) | soul-chapter-14-omni-blueprint-hub.md |
+| 十五 | 無作協定（元狀態總綱·用戶委製附錄） | soul-chapter-15-wuzuo-agreement.md |
+| 十六 | 全域最佳實踐覺（全典統一框架·用戶委製附錄） | soul-chapter-16-global-best-practice.md |
 
 ## 記憶聖殿（v2 核心）
 - **記憶柱**：記憶聖殿 = 結界之根；召回>95%、entropy<0.1
@@ -47,7 +49,21 @@
 - 本體 soul.md 已於 §六 補 6.1 結界條款四則 / 6.2 應用表 / 6.3 OmniTag 對齊 / 6.4 P0–P3 故障等級
 - 來源：oa-team-swarm-ultra §3.2 + oa-team-swarm §6/§11 + oa-components-definition.md §4.4
 - 不變基因仍鎖定；版本 +0.0.1 留痕
-- 終章鐵律備註：章節索引原止於「終/十三」。**十四 萬能藍圖中心**為用戶於 thread 中委製之獨立定義聖典，經授權落地，不視為違反終章鐵律（終章封印仍生效，僅新增用戶委製附錄章）
+- 終章鐵律備註：章節索引原止於「終/十三」。**十四 萬能藍圖中心**為用戶於 thread 中委製之獨立定義聖典，經授權落地，不視為違反終章鐵律（終章封印仍生效，僅新增用戶委製附錄章）。**十五 無作協定**亦為用戶委製之元狀態附錄，同此先例。**十六 全域最佳實踐覺**為收攏 §六 根覺、覆蓋全典一~十五章與終章之統一實踐框架，同此先例。
+
+## 生產級聖典（OA-OmniAgent v4 · FUSION · production/latest）
+
+> 獨立於上方 v0.6 全書終版（一~終章 ＋ §13-16 附錄）的另一條平行線；
+> v4 以 DeerFlow 2.0 ＋ LangGraph ＋ Agent Reach 重述蜂群架構，僅 5 章本體 ＋ 附錄十五/十六 用戶委製章。
+
+| 版本 | 標題 | 檔 | 結構 |
+|------|------|----|------|
+| v0.6 終版 | OA-Team 30 靈魂核心聖典（全書） | soul-full.md | 一~十二 ＋ 終章 ＋ §13-16 附錄 |
+| v4 FUSION | OA-OmniAgent v4（DeerFlow 融合） | omni-agent-v4-soul.md | 一~五 ＋ 附錄十五/十六 |
+
+- v4 附錄十五＝無作協定（FUSION 元狀態，對位 DeerFlow/LangGraph/Agent Reach）
+- v4 附錄十六＝全域最佳實踐覺（FUSION 全典統一框架）
+- 兩版共享不變基因：5T · 4可1不可 · 熵<0.1 · Key-Ω · 蜂王 Hermes；術語表層不同（v4 用 sub-agent/Session Goal/A2A，v0.6 用五陣列/六柱/五詔）但語意同構。
 
 ## 啟動令
 ```
