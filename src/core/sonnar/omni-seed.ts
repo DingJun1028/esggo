@@ -77,7 +77,7 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
  * @returns 新創建的種子（dormant 狀態）
  */
 export function createOmniSeed(params?: {
-  evidence?: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any; };
+  evidence?: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; };
   entropyControl?: number;
   hashLock?: string;
 }): IOmniSeed {

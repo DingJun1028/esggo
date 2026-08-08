@@ -13,7 +13,7 @@ export interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;
   };
 }
 
@@ -80,16 +80,16 @@ export class OmniCoreEcosystem {
   private bus!: IOmniAgentBus;
   private agents: Map<string, IOmniAgent> = new Map();
 
-  private static hasEvidence(obj: unknown): obj is { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any; } } {
+  private static hasEvidence(obj: unknown): obj is { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; } } {
     return typeof obj === 'object' && obj !== null && 'evidence' in obj;
   }
 
   // 核心禁區：鎖定數據並防止篡改的具體執行常式
   public static lockAndFreeze<T extends object>(obj: T): T {
     if (!OmniCoreEcosystem.hasEvidence(obj)) {
-      (obj as { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any; } }).evidence = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+      (obj as { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; } }).evidence = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
     }
-    (obj as { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any; } }).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    (obj as { evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */; } }).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     return Object.freeze(obj);
   }
 }

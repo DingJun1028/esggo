@@ -6,7 +6,7 @@ declare module 'pg' {
   export type PoolClient = {
     query(text: string, params?: any[]): Promise<{ rows: any[]; rowCount: number | null }>;
     release(): void;
-    [key: string]: any;
+    [key: string]: any  ;
   };
 
   export class Pool {

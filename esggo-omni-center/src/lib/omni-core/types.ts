@@ -74,7 +74,7 @@ export interface IComponentCore<T = unknown> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;
   };
   readonly lifecycle_events: ReadonlyArray<ComponentLifecycleEntry>;
   readonly data: T;

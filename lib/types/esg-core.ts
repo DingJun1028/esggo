@@ -42,7 +42,7 @@ export interface IComponentCore<T = Record<string, any>> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;
   };
   readonly traceability_chain: ITraceableLog[];
 }

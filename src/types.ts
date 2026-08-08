@@ -6,7 +6,7 @@ export interface IComponentCore<T> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
+    [key: string]: any /* eslint-disable-line @typescript-eslint/no-explicit-any */;
   };            // 證據左證庫 (溯源至源頭的 [ISO-14064-1] 等驗算日誌)
   lifecycle_events: Array<any>; // ⽣命週期 Hook (Trackable)
   data: T; // 數據本體
