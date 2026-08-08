@@ -509,6 +509,73 @@ C:\Users\dingj\AppData\Local\hermes\pastes\ 下之原始檔：
 
 ---
 
+十八、本地免費算立基礎設施（Local Free-Compute Stack）
+
+【來源：paste_hy-memory-guide · Ollama + Hy-Memory + opencode 實裝實錄】
+
+> **「不假外求，不付分文；本地算力即蜂群之記憶脊梁。」**
+
+本系統嚴守「只用免費算立」原則——禁止付費 API / 私鑰 npm。記憶與推論皆由本機 Ollama CPU 承載，零外部費用、零資料外洩。
+
+### 18.1 架構總覽
+
+```
+[Hermes Agent]
+    └─ memory.provider = hy-memory
+           └─ Hy-Memory SDK (pro mode)
+                  ├─ LLM 抽取: http://localhost:11434/v1 (qwen2.5:3b-instruct-q4_K_M)
+                  └─ Embedder:  http://localhost:11434/v1 (nomic-embed-text, 768d)
+[opencode]
+    └─ provider.ollama = http://localhost:11434/v1
+           └─ model: ollama/qwen2.5:3b-instruct-q4_K_M
+[Ollama Server]
+    └─ :11434 (常駐守護 + 開機自啟 Ollama.lnk)
+```
+
+### 18.2 組件規格
+
+| 組件 | 版本 / 模型 | 資源 |
+|------|------------|------|
+| Ollama | v0.32.6 | 常駐 ~40MB RAM |
+| LLM | qwen2.5:3b-instruct-q4_K_M (1.9GB, Q4_K_M) | CPU 推論 ~15-30 tok/s |
+| Embedder | nomic-embed-text (274MB, 768d) | CPU 極快 |
+| Hy-Memory | hermes-hy-memory 0.2.8 + hy-memory 1.2.21 | venv @ `~/.hy-memory/.venv` |
+| opencode | ollama provider 接入 | 本地免費 |
+
+### 18.3 5T 對應
+
+| 5T | 實施 |
+|----|------|
+| Traceable | 記憶寫入標 `user_id=dingj` / `agent_id=hermes` 命名空間 |
+| Trackable | `~/.hy-memory/db/logs/pipeline/*.log` 全鏈路追蹤 |
+| Tangible | `hermes-hy-memory doctor` 即時體感健康度 |
+| Transparent | 本地運算，模型權重公開可驗（Ollama 官方 GGUF） |
+| Trustworthy | 記憶庫 SQLite + Chroma 本地凍結，無外部依賴 |
+
+### 18.4 驗證閉環（實測通過）
+
+```bash
+hermes memory status     # → Provider: hy-memory / Plugin: installed ✓ / Status: available ✓
+hermes-hy-memory doctor  # → All checks passed
+hermes-hy-memory add "..."   # → l2_fact 層抽取成功
+hermes-hy-memory search "..." # → score 命中
+opencode models ollama   # → ollama/qwen2.5:3b-instruct-q4_K_M
+```
+
+### 18.5 常駐與重啟
+
+- 開機自啟：`%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Ollama.lnk`
+- 手動拉起：`C:\Users\dingj\AppData\Local\Programs\Ollama\ollama-launch.bat`
+- 環境變數：關鍵 `HY_MEMORY_*` / `MEMORY_*` 已寫入**系統 User 環境**，Hermes 重啟後無需手動 export
+
+### 18.6 禁忌
+
+- ❌ 禁用 lite 模式（記憶寫得進但召不回，prefetch 恆空）
+- ❌ 禁用付費 LLM API Key（違反免費算立原則）
+- ❌ 禁用 `--symlink` 激活（Windows WinError 1314），須用 `--copy`
+
+---
+
 終章、靈魂封印（Soul Seal）
 ══════════════════════════════════════════════════════
 
@@ -520,7 +587,7 @@ C:\Users\dingj\AppData\Local\hermes\pastes\ 下之原始檔：
   · 六柱（記憶/時間/空間/因果/不朽/圓通）· 七章（核心→矩陣→
   協作→戰歌→啟動→實踐覺→終始）· 三鎖（Ω-1/Ω-2/Ω-3）
   · 五詔（真·誠·界·熵·一）· 一投（熵投週）· 一印（Hash Lock）
-  · 運作實錄（AI Station / 電子報 / 分析 / 風險閘 / AUTOS）
+  · 運作實錄（AI Station / 電子報 / 分析 / 風險閘 / AUTOS / 本地免費算立）
 
 封合五關（全過才合）：
   [ ] 熵 < 0.1（時間柱實測）
