@@ -231,7 +231,7 @@ async function startSys(){
 // 翻譯推播 (含重試, 解決偶發 Failed to fetch)
 async function speakWithRetry(text,targets,trs,attempt=0){
   try{
-    const r=await fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},
+    const r=await fetch('/speak',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({text,from:'auto',targets,room,speaker:'studio'})});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const d=await r.json();
@@ -283,7 +283,7 @@ async function start(){
       const blob=new Blob(chunks,{type:mime});chunks=[];
       const buf=await blob.arrayBuffer();
       try{
-        const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+        const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
         const d=await r.json();
         dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
         if(d.text&&d.text.trim())onText(d.text.trim());
@@ -321,7 +321,7 @@ async function start(){
     const blob=new Blob(chunks,{type:mime});chunks=[];
     const buf=await blob.arrayBuffer();
     try{
-      const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
       dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
       if(d.text&&d.text.trim())onText(d.text.trim());
@@ -372,7 +372,7 @@ $('#testBtn').onclick=async()=>{
     setTimeout(()=>rec2.stop(),4000);await done;
     const buf=await new Blob(ch,{type:mime}).arrayBuffer();
     $('#testBtn').textContent='🧠 轉錄中…';
-    const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     const d=await r.json();
     dbg(`[測試] transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
     const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
