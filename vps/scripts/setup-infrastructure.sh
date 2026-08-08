@@ -379,7 +379,7 @@ create_deployment_scripts() {
     log_info "创建部署脚本..."
     
     # 创建主部署脚本
-    cat > "${HOME}/.esggo/scripts/deploy-infrastructure.sh" << 'EOF'
+    cat > "${HOME}/.esggo/scripts/deploy-infrastructure.sh" << 'DEPLOY_EOF'
 #!/bin/bash
 
 # 基础设施部署脚本
@@ -775,7 +775,7 @@ function main() {
 
 # 执行主函数
 main "$@"
-EOF
+DEPLOY_EOF
 
     chmod +x "${HOME}/.esggo/scripts/deploy-infrastructure.sh"
     
@@ -786,7 +786,7 @@ EOF
 create_security_compliance_script() {
     log_info "创建安全合规性脚本..."
     
-    cat > "${HOME}/.esggo/scripts/security-compliance-check.sh" << 'EOF'
+    cat > "${HOME}/.esggo/scripts/security-compliance-check.sh" << 'COMPLIANCE_EOF'
 #!/bin/bash
 
 # 安全合规性检查脚本
@@ -997,7 +997,7 @@ function main() {
 
 # 执行主函数
 main "$@"
-EOF
+COMPLIANCE_EOF
 
     chmod +x "${HOME}/.esggo/scripts/security-compliance-check.sh"
     
@@ -1048,17 +1048,6 @@ print_usage() {
     echo "  • GKE/EKS/AKS Kubernetes 集群"
     echo "  • 监控和日志系统"
     echo "  • 安全策略和合规性"
-}
-
-# 执行主函数
-main() {
-    print_usage
-}
-
-main "$@"
-EOF
-
-    log_success "安全合规性脚本创建完成"
 }
 
 # 执行主函数
