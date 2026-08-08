@@ -207,6 +207,21 @@ async function startSys(){
   }catch(e){const m=await startMic();if(m)toast('系統音失敗，改用麥克風');return m;}
 }
 
+// 翻譯推播 (含重試, 解決偶發 Failed to fetch)
+async function speakWithRetry(text,targets,trs,attempt=0){
+  try{
+    const r=await fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text,from:'auto',targets,room,speaker:'studio'})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.translations) trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');
+    else trs.textContent='（無翻譯）';
+  }catch(e){
+    if(attempt<2){ await new Promise(r=>setTimeout(r,1000)); return speakWithRetry(text,targets,trs,attempt+1); }
+    trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}（原文已顯示）</span>`;
+  }
+}
+
 function onText(text){
   // 垃圾轉錄過濾: 純數字/符號/太短 不當字幕
   const clean=text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
@@ -217,11 +232,7 @@ function onText(text){
   const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
   box.appendChild(el);box.scrollTop=box.scrollHeight;
   const targets=Array.from(active);
-  fetch(API.replace('/translate','/speak'),{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text,from:'auto',targets,room,speaker:'studio'})})
-    .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
-    .then(d=>{ if(d.translations) trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join(''); else trs.textContent='（無翻譯）'; })
-    .catch(e=>trs.innerHTML=`<span style="color:var(--danger)">失敗：${e.message}</span>`);
+  speakWithRetry(text,targets,trs);
 }
 
 // 字幕區顯示錯誤卡 (轉錄失敗可見, 非僅 toast)
