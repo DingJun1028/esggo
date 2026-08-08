@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * OmniBase v6.0 — Production-Grade Tag Mechanism System
  *

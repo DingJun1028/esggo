@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { IWuZuoMiaoDe, InputData } from './interfaces';
 import { randomUUID, createHash } from 'node:crypto';

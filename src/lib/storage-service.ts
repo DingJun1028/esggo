@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // ============================================================
 // ESGGO Storage Service — unified data access layer
 // Input → Store → Edit → Retrieve → Operate

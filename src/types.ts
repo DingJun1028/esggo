@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IComponentCore<T> {
   readonly uuid: string;      // 萬能永憶主體唯一識別碼
   readonly version: string;   // 語義化版本控制 (e.g., '1.0.0')

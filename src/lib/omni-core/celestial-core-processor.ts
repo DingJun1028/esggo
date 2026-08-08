@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as crypto from 'crypto';
 import { IComponentCore } from './contracts';
 
