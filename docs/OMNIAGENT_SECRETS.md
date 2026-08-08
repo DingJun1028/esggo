@@ -7,6 +7,12 @@
 - OCI Config: ~/.oci/config
 - AWS Config: ~/.aws/credentials  
 - rclone config: ~/.config/rclone/rclone.conf
+- Tailscale: 安全連網層（裝置互聯/網段管理）
+  - Auth Key (`TAILSCALE_AUTH_KEY`): 免互動將裝置加入 Tailscale 網段
+  - API Token (`TAILSCALE_API_TOKEN`): 呼叫 Tailscale API（裝置/策略/網段）
+  - 實際儲存: 本倉 `.env`（gitignore，不入版控）；用後建議至 Tailscale 後台撤銷重發
+  - 對應靈魂: 萬能安全蜂(27) + 萬能外交蜂(23)
+  - 用途: VPS(161.118.248.180) 經 auth key 加入 Tailscale，實現 OA-Team 跨節點安全通道
 
 ### Tier 2: Application Credentials
 - Telegram: Bot Token + Chat ID
