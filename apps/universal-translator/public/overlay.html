@@ -85,7 +85,7 @@ let room=new URLSearchParams(location.search).get('room')||'';
 let srcLang='zh',dstLang='en';           // 預設 中文→英文 (借鏡 Akkadu 互換)
 let targets=new Set(['en','zh-TW']);     // 顯示雙語
 let running=false, rec=null, chunks=[], stream=null;
-const API=location.origin;
+const API=''; // 相對路徑 (避開 Cloudflare Tunnel 對絕對域名 fetch 的偶發攔截)
 
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 // 簡易關鍵詞高亮 (數字/常用強調詞)
