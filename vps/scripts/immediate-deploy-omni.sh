@@ -168,7 +168,7 @@ EOF
 # 显示部署摘要
 function show_deployment_summary() {
     log ""
-    log "" ======== 🎯 ESGGO部署摘要 ========"
+    log "======== 🎯 ESGGO部署摘要 ========"
     log "📅 部署时间: $(date '+%Y-%m-%d %H:%M:%S')"
     log "🖥️  应用目录: $APP_DIR"
     log "📋 监控目录: $LOG_DIR"
