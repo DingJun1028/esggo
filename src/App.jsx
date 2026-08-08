@@ -72,15 +72,16 @@ const renderFiles = (files) => (
   </div>
 );
 
+const Field = ({ label, value }) => value ? (
+  <div className="mb-2">
+    <div className="text-xs font-bold text-slate-400 mb-0.5">{label}</div>
+    <div className="text-sm text-slate-700 whitespace-pre-wrap break-words">{value}</div>
+  </div>
+) : null;
+
 const DetailPanel = ({ t, item }) => {
   const d = item.data || {};
   const atts = d.attachments || [];
-  const Field = ({ label, value }) => value ? (
-    <div className="mb-2">
-      <div className="text-xs font-bold text-slate-400 mb-0.5">{label}</div>
-      <div className="text-sm text-slate-700 whitespace-pre-wrap break-words">{value}</div>
-    </div>
-  ) : null;
   return (
     <div className="text-sm">
       {item.type === 'upload' && (<>
@@ -393,7 +394,7 @@ export default function App() {
     } finally { if (submitBtn) { submitBtn.innerText = originalText; submitBtn.disabled = false; } }
   };
 
-  const LayoutShell = ({ children }) => (
+  const layoutShell = (children) => (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
       <nav className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap justify-between items-center gap-2 sm:gap-4 sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-4">
@@ -442,8 +443,8 @@ export default function App() {
     </div>
   );
 
-  return (
-    <LayoutShell>
+  return layoutShell(
+    <>
       {authMessage && (<div className="max-w-5xl mx-auto mb-4"><div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-4">{authMessage}</div></div>)}
       {error && (<div className="max-w-5xl mx-auto mb-6"><div className="bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl p-4 whitespace-pre-wrap font-mono">{error?.message}{'\n'}{error?.stack}</div></div>)}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-1">
@@ -570,6 +571,6 @@ export default function App() {
           </form>
         </div>
       )}
-    </LayoutShell>
+    </>
   );
 }
