@@ -46,6 +46,13 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 .check{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);cursor:pointer;user-select:none}
 .check input{width:17px;height:17px;accent-color:var(--accent)}
 
+/* 音量條 (診斷系統音是否抓到) */
+.meter{position:relative;height:22px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;overflow:hidden;backdrop-filter:blur(8px)}
+.meter-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .08s linear}
+.meter.live .meter-fill{box-shadow:0 0 12px rgba(54,224,192,.5)}
+.meter-tip{position:absolute;inset:0;display:grid;place-items:center;font-size:.72rem;color:var(--muted);pointer-events:none}
+.meter.live .meter-tip{display:none}
+
 /* 狀態 */
 .status{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:9px;min-height:22px}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;transition:.2s}
@@ -120,6 +127,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
     <div class="chips" id="chips"></div>
   </div>
   <label class="check"><input type="checkbox" id="sysChk"> 🖥 用系統音（電腦 / Zoom 聲音）</label>
+  <div class="meter" id="meter"><div class="meter-fill" id="meterFill"></div><span class="meter-tip" id="meterTip">音量表（開始後顯示系統音強弱）</span></div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">點下方按鈕開始，說話即出雙語字幕</span></div>
   <button id="startBtn" class="start-btn">
     <span class="play-ico">▶</span>
@@ -230,6 +238,34 @@ async function startSys(){
   }catch(e){const m=await startMic();if(m)toast('系統音失敗，改用麥克風');return m;}
 }
 
+// 即時音量條 (診斷系統音/麥克風是否真的抓到聲音)
+let audioCtx=null, analyser=null, meterRAF=0;
+function startMeter(stream,probeOnly=false){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const src=audioCtx.createMediaStreamSource(stream);
+    analyser=audioCtx.createAnalyser();analyser.fftSize=256;
+    src.connect(analyser);
+    const data=new Uint8Array(analyser.frequencyBinCount);
+    const fill=$('#meterFill'), meter=$('#meter'), tip=$('#meterTip');
+    meter.classList.add('live');tip.textContent='偵測聲音中…';
+    const loop=()=>{
+      analyser.getByteTimeDomainData(data);
+      let peak=0; for(const v of data){const d=Math.abs(v-128); if(d>peak)peak=d;}
+      const vol=Math.min(100,Math.round(peak/128*100*1.6));
+      fill.style.width=vol+'%';
+      if(probeOnly&&vol>3){ /* 有聲音, 足夠診斷, 不持續佔用 */ }
+      meterRAF=requestAnimationFrame(loop);
+    };
+    loop();
+  }catch(e){ console.warn('meter init failed',e); }
+}
+function stopMeter(){
+  if(meterRAF)cancelAnimationFrame(meterRAF);meterRAF=0;
+  const meter=$('#meter');if(meter)meter.classList.remove('live');
+  const fill=$('#meterFill');if(fill)fill.style.width='0%';
+}
+
 // 翻譯推播 (含重試, 解決偶發 Failed to fetch)
 async function speakWithRetry(text,targets,trs,attempt=0){
   try{
@@ -276,6 +312,7 @@ async function start(){
   if(useSys){
     stream=await startSys();
     if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
+    startMeter(stream);
     // 用純 audio-only stream 錄音 (display stream 的 video 保持活著以保住 audio track)
     const audioOnly=new MediaStream(stream.getAudioTracks());
     const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
@@ -308,10 +345,13 @@ async function start(){
   // 麥克風模式: 優先 Web Speech API (Chrome 原生, 免費零key, 準確率高)
   if(SR){
     try{
+      const ms=await startMic(); // 取麥克風僅供音量條診斷 (Web Speech 不吃 stream)
+      if(ms)startMeter(ms,true); // true=僅偵測音量
       recognition=initSR();
       usingSR=true;
       recognition.start();
       setStatus('🎙 語音辨識中 (Chrome 原生)… 說話即出雙語字幕','rec');
+      if(ms)ms.getTracks().forEach(t=>t.stop()); // 音量條偵測完即釋放麥克風
       return;
     }catch(e){ toast('Web Speech 啟動失敗, 改用伺服器轉錄: '+e.message); }
   }
@@ -342,6 +382,7 @@ async function start(){
 }
 function stop(){
   running=false;usingSR=false;
+  stopMeter();
   $('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';
   $('#dot').className='dot';
   if(recognition){try{recognition.stop();}catch(_){}recognition=null;}
