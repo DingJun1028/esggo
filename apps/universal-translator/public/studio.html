@@ -257,8 +257,10 @@ async function start(){
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
   };
+  let round=0;
   rec.start(4000);
-  setStatus(useSys?'🖥 系統音收音中…':'🎙 收音中… 說話即出字幕','rec');
+  const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent=(useSys?'🖥 系統音':'🎙 麥克風')+'收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
+  setStatus(useSys?'🖥 系統音收音中… 說話即出字幕':'🎙 收音中… 說話即出字幕','rec');
 }
 function stop(){
   running=false;
