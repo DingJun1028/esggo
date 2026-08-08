@@ -26,12 +26,6 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!user) return;
-    loadSurveys();
-    loadResources();
-  }, [user]);
-
   const loadSurveys = async () => {
     setLoading(true);
     setError('');
@@ -54,6 +48,12 @@ export default function AdminPage() {
       if (data?.ok) setResources(data.rows ?? []);
     } catch {}
   };
+
+  useEffect(() => {
+    if (!user) return;
+    loadSurveys();
+    loadResources();
+  }, [user]);
 
   const deleteSurvey = async (id?: string) => {
     if (!id) return;

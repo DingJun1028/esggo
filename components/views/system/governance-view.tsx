@@ -92,7 +92,7 @@ export function GovernanceView() {
 
   useEffect(() => {
     if (activeTab === "treasury") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+
       setIsTxLoading(true);
       // Simulate API call
       const timer = setTimeout(() => {

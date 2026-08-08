@@ -2434,7 +2434,7 @@ const generatedText = response.text; // Extracted string`}
                           {block.type === 'image' && (
                             <div className="w-full flex flex-col items-center">
                               {block.title && <h4 className="text-center font-bold mb-4 text-slate-800">{block.title}</h4>}
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              { }
                               <img 
                                 src={block.content || "https://picsum.photos/seed/esg/800/400"} 
                                 alt={block.title || "Report Image"} 

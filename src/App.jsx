@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
 import {
-  useFirebase, initAuth, subscribeSubmissions, addSubmission, deleteSubmission,
+  useFirebase, initAuth, subscribeSubmissions, addSubmission,
   uploadFiles, signInWithGoogle, signOut
 } from './db';
 import { getKnowledgeEntries } from './repositories/rag.repository';
 import { refreshRoleFromClaims, setupProfileIfMissing } from './repositories/auth.repository';
 import { getUserProfile, upsertUserProfile } from './repositories/profile.repository';
 import {
-  BookOpen, Upload, PlayCircle, CalendarCheck, MessageCircleQuestion,
+  BookOpen, Upload, PlayCircle,
   Smile, Database, ShieldCheck, ArrowLeft, Send, ChevronDown, FileText,
-  Globe, Search, Trash2, Filter, X, Users, LogIn, LogOut,
+  Search, Trash2, Filter,Users, LogIn, LogOut,
   User, Download
 } from 'lucide-react';
 import translations from './i18n/translations';
@@ -33,7 +33,7 @@ const CardAction = ({ onClick, icon, title }) => (
   </div>
 );
 
-class ErrorBoundary extends Component {
+export class ErrorBoundaryComponent extends Component {
   constructor(props) {
     super(props);
     this.state = { error: null };
@@ -42,7 +42,7 @@ class ErrorBoundary extends Component {
     return { error };
   }
   componentDidCatch(error, info) {
-    console.error('[ErrorBoundary]', error, info.componentStack);
+    console.error('[_ErrorBoundaryComponent]', error, info.componentStack);
   }
   render() {
     const { error } = this.state;
@@ -110,7 +110,7 @@ const DetailPanel = ({ t, item }) => {
   );
 };
 
-const AttachmentUploader = ({ value = [], onChange, t }) => {
+export const AttachmentUploader = ({ value = [], onChange, t }) => {
   const [error, setError] = useState('');
   const handleFiles = (fileList) => {
     const files = Array.from(fileList);
@@ -267,8 +267,8 @@ export default function App() {
   const [replayView, setReplayView] = useState('list');
   const [replayVideos, setReplayVideos] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [knowledgeEntries, setKnowledgeEntries] = useState([]);
-  const [knowledgeQuery, setKnowledgeQuery] = useState('');
+
+
   const [authMessage, setAuthMessage] = useState('');
   const [profileSetup, setProfileSetup] = useState(false);
   const [profileForm, setProfileForm] = useState({ displayName: '', email: '', org: '' });
@@ -352,7 +352,7 @@ export default function App() {
     return () => { cancelled = true; };
   }, [view]);
 
-  const trySwitchRole = async (next) => {
+  export const trySwitchRole = async (next) => {
     if (next === 'student') { setRole('student'); setView('home'); return; }
     try {
       if (!user || user.isLocal || user.isAnonymous) {

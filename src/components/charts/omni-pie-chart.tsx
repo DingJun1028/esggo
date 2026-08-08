@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { OmniPieChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
@@ -24,11 +24,11 @@ export function OmniPieChart({
 
   const total = data && data.length > 0 ? data.reduce((sum, d) => sum + d.value, 0) : 0;
 
-  const getCoordinatesForPercent = (percent: number) => {
+  const getCoordinatesForPercent = useCallback((percent: number) => {
     const x = Math.cos(2 * Math.PI * percent) * radius;
     const y = Math.sin(2 * Math.PI * percent) * radius;
     return [x, y];
-  };
+  }, [radius]);
 
   // Pre-compute slice data to avoid mutating variables during render
   const sliceData = useMemo(() => {
@@ -49,7 +49,7 @@ export function OmniPieChart({
       ].join(' ');
       return { slice, i, slicePercent, pathData };
     });
-  }, [data, total, radius]);
+  }, [data, total, radius, getCoordinatesForPercent]);
 
   if (!data || data.length === 0) return <div>No data available</div>;
 

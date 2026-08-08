@@ -212,7 +212,9 @@ export default function EMMIDEDashboard() {
     };
   }, []);
 
-  connectSSERef.current = connectSSE;
+  useEffect(() => {
+    connectSSERef.current = connectSSE;
+  });
 
   useEffect(() => {
     fetchMetrics();
