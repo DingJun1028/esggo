@@ -280,6 +280,16 @@ function startSR(){
 }
 
 // ---------- 錄音迴圈 (系統音/麥克風備援 whisper) ----------
+// 系統音靜音自動降級: 連續 N 輪轉錄空 → 自動改麥克風 (解決「抓不到系統音」)
+let silentRounds=0;
+function autoFallbackToMic(){
+  if(mode!=='sys'||!running)return;
+  toast('系統音連續靜音，已自動切換到「🎤 麥克風」模式（若仍無字幕請允許麥克風權限）');
+  setMode('mic');
+  if(rec&&rec.state!=='inactive'){try{rec.stop();}catch(_){}}
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  start();
+}
 function startRecording(audioStream,label){
   const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
   rec=new MediaRecorder(audioStream,{mimeType:mime});chunks=[];
@@ -290,8 +300,14 @@ function startRecording(audioStream,label){
     const buf=await new Blob(chunks,{type:mime}).arrayBuffer();chunks=[];
     try{
       const d=await transcribeRetry(buf);
-      if(d.text&&d.text.trim()){ const td=await translateRetry(d.text.trim(),Array.from(targets)); onTranscript(d.text.trim(),td.translations||{}); }
-      else toast('未偵測到語音，請靠近聲源');
+      if(d.text&&d.text.trim()){
+        silentRounds=0;
+        const td=await translateRetry(d.text.trim(),Array.from(targets)); onTranscript(d.text.trim(),td.translations||{});
+      }else{
+        silentRounds++;
+        if(mode==='sys'&&silentRounds>=2){ silentRounds=0; autoFallbackToMic(); return; }
+        toast('未偵測到語音，請靠近聲源');
+      }
     }catch(err){ toast('轉錄錯誤: '+err.message); }
     if(running)rec.start(4000);
   };
