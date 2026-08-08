@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -144,14 +144,18 @@ export function HelpFaqView() {
     setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const filteredData = FAQ_DATA.map(category => ({
-    ...category,
-    items: category.items.filter(
-      item => 
-        item.q.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        item.a.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(category => category.items.length > 0);
+  // ⚡ Bolt Optimization: Memoize filtering to prevent O(N) recalculations on unrelated state changes
+  // Impact: Reduces CPU cycles during render phase by caching the filtered subset
+  const filteredData = useMemo(() => {
+    return FAQ_DATA.map(category => ({
+      ...category,
+      items: category.items.filter(
+        item =>
+          item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.a.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    })).filter(category => category.items.length > 0);
+  }, [searchQuery]);
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto w-full pb-12">

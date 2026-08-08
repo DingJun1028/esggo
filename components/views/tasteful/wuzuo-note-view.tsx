@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -139,18 +139,22 @@ export function OmniNoteView() {
     handleUpdateEntry(selectedEntry.id, { tags: newTags });
   };
 
-  const filteredEntries = entries.filter(entry => {
-    const matchesSearch = entry.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          entry.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = selectedTag ? entry.tags.includes(selectedTag) : true;
-    
-    let matchesType = true;
-    if (activeFilter === "notes") matchesType = !entry.isTask && !entry.date;
-    if (activeFilter === "calendar") matchesType = !!entry.date;
-    if (activeFilter === "tasks") matchesType = entry.isTask;
+  // ⚡ Bolt Optimization: Memoize filtering to prevent O(N) recalculations on unrelated state changes
+  // Impact: Reduces CPU cycles during render phase by caching the filtered subset
+  const filteredEntries = useMemo(() => {
+    return entries.filter(entry => {
+      const matchesSearch = entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            entry.content.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesTag = selectedTag ? entry.tags.includes(selectedTag) : true;
 
-    return matchesSearch && matchesTag && matchesType;
-  });
+      let matchesType = true;
+      if (activeFilter === "notes") matchesType = !entry.isTask && !entry.date;
+      if (activeFilter === "calendar") matchesType = !!entry.date;
+      if (activeFilter === "tasks") matchesType = entry.isTask;
+
+      return matchesSearch && matchesTag && matchesType;
+    });
+  }, [entries, searchQuery, selectedTag, activeFilter]);
 
   return (
     <div className="space-y-6 h-full flex flex-col">

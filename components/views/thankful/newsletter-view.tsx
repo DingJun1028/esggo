@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -144,14 +144,17 @@ export function NewsletterView() {
     fetchData();
   }, []);
 
-  const allNewsletters = [...NEWSLETTERS, ...dbNewsletters];
-
-  const filteredNewsletters = allNewsletters.filter(item => {
-    const matchesCategory = activeCategory === "all" || item.category === activeCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (item.subtitle && item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  // ⚡ Bolt Optimization: Memoize filtering to prevent O(N) recalculations on unrelated state changes
+  // Impact: Reduces CPU cycles during render phase by caching the filtered subset
+  const filteredNewsletters = useMemo(() => {
+    const allNewsletters = [...NEWSLETTERS, ...dbNewsletters];
+    return allNewsletters.filter(item => {
+      const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (item.subtitle && item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchesCategory && matchesSearch;
+    });
+  }, [dbNewsletters, activeCategory, searchQuery]);
 
   if (selectedArticle) {
     return (
