@@ -230,6 +230,12 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // favicon: 回 204 避免瀏覽器 console 404 雜訊 (非功能需求)
+  if (url.split('?')[0] === '/favicon.ico') {
+    res.writeHead(204, { 'Cache-Control': 'no-cache' });
+    return res.end();
+  }
+
   res.writeHead(404, { 'content-type': 'application/json' });
   res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | POST /speak {text,from,to|targets[],room} | GET /health | WS /ws | GET / (UI) | GET /stream?room=xxx (SSE)' }));
 });
