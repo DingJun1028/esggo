@@ -117,4 +117,22 @@ Jules 透過連接外部工具，取得與你相同的上下文：自主偵測 b
 | 加密儲存 API key | 本機 `.env`（gitignore）+ 1Password/agentmail | 萬能安全蜂(27) |
 | scoped access 最小權限 | 5T 驗算闡門禁（EntropyForge） | 萬能質控蜂(30) |
 
+---
+
+## 待續章節索引（接納框架 · D）
+
+> 使用者陸續貼上的 Jules Docs 章節，依序接於此處，保持 §17 對齊。
+
+| 章節 | 狀態 | 對應 OmniJules 落點 |
+|------|------|---------------------|
+| REST API Quickstart | ✅ 已入庫（本檔上段） | tools/omni-jules-bridge.* |
+| Integrations (Render) | ✅ 已入庫 + 腳本 | tools/render-integration.sh · §17.7 |
+| Supabase 整合 key | ✅ 已接受（session env 注入） | tools/omni-jules-bridge.py supabase |
+| Changelog | 🔄 待貼 | 本檔續章 + bridge 指令擴充 |
+| Jules Tools (CLI) | 🔄 待貼 | 本檔續章 + bridge 指令擴充 |
+| Guides | 🔄 待貼 | 本檔續章 |
+| Examples | 🔄 待貼 | 本檔續章 |
+
+**接納規範**：每貼一章，於本索引標 ✅、於本檔補對應章節、必要時擴充 bridge 指令；
+始終遵守 §17.0 硬約束（不接付費 Jules 本體、等功零金）。
 詳見 `omni-jules-bridge.*` 之 `integrations` 指令。
