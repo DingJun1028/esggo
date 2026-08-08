@@ -57,6 +57,9 @@ importers:
       '@upstash/redis':
         specifier: ^1.38.0
         version: 1.38.0
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
       firebase:
         specifier: ^12.15.0
         version: 12.15.0
@@ -102,6 +105,9 @@ importers:
       react-markdown:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.2.17)(react@19.2.7)
+      tsx:
+        specifier: ^4.23.8
+        version: 4.23.8
       uuid:
         specifier: '>=11.1.1'
         version: 14.0.1
