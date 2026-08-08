@@ -26,17 +26,17 @@
   "dependencies": {
     "@esggo/shared": "workspace:*",
     "@esggo/errors": "workspace:*",
-    "zod": "^3.25.0",
-    "typescript": "^5.0.0"
+    "zod": "^3.25.76",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.62.1",
-    "eslint": "^9.0.0",
+    "eslint": "^9.39.4",
     "typescript": "^5.0.0",
     "vitest": "^4.1.9",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.2"
   },
   "engines": {
     "node": ">=20"

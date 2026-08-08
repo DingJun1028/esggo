@@ -132,6 +132,10 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
     <div class="row" style="margin-top:4px">
       <label class="check"><input type="checkbox" id="sysChk"> 🖥 用系統音（電腦 / Zoom 聲音）</label>
     </div>
+    <div class="row" id="deviceRow" style="margin-top:6px;display:none">
+      <select id="deviceSel" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font-size:.85rem;font-family:var(--font)"></select>
+      <button id="deviceRefresh" class="copy-btn" style="margin-top:0">🔄</button>
+    </div>
     <div class="meter" id="meter" style="margin-top:8px"><div class="meter-fill" id="meterFill"></div><span class="meter-tip" id="meterTip">音量（開始後顯示系統音強弱）</span></div>
     <button class="start-btn" id="startBtn" style="margin-top:10px"><span id="startIco">▶</span><span id="startLabel">開始語音轉字幕</span></button>
     <div class="row" style="margin-top:8px">
@@ -282,14 +286,35 @@ function setMode(m){ mode=m;useSys=(m==='sys');
   $('#meterTip').textContent=(m==='sys'?'系統音：Windows 請分享「整個螢幕」並勾「分享音訊」，勿選 Zoom 視窗':'麥克風：直接收音');
   updateBadge(); }
 
-// 系統音
+// 系統音裝置列舉 (loopback 優先: 立體聲混音/Stereo Mix/What U Hear)
+async function listDevices(){
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.enumerateDevices){return [];}
+    const devs=await navigator.mediaDevices.enumerateDevices();
+    const ins=devs.filter(d=>d.kind==='audioinput');
+    const kw=/(stereo mix|立體聲混音|what u hear|what you hear|loopback|mix|wave|數位|digital)/i;
+    return ins.map(d=>({id:d.deviceId,label:d.label||'麥克風/輸入',loopback:kw.test(d.label||'')}))
+      .sort((a,b)=>(b.loopback?1:0)-(a.loopback?1:0));
+  }catch(e){ return []; }
+}
 async function startSys(){
+  const devId=$('#deviceSel').value;
+  // 若有選定 loopback 裝置 → 直接用 getUserMedia 抓系統音 (不走 getDisplayMedia, 最穩)
+  if(devId){
+    try{
+      const s=await navigator.mediaDevices.getUserMedia({audio:{deviceId:{exact:devId},echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+      const a=s.getAudioTracks();
+      if(!a.length){ s.getTracks().forEach(t=>t.stop()); toast('選定裝置無音訊軌道，改用螢幕分享'); }
+      else { setDiag('dShare','ok');setDiag('dAudio','ok'); startMeter(s); startRecording(s,'系統音(loopback)'); return s; }
+    }catch(e){ toast('裝置擷取失敗，改用螢幕分享: '+e.message); }
+  }
+  // 回退: getDisplayMedia (整個螢幕+分享音訊)
   try{
     const s=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
     const a=s.getAudioTracks();
     if(!a.length){ s.getTracks().forEach(t=>t.stop());
       setDiag('dShare','ok');setDiag('dAudio','err','沒抓到音訊軌道');
-      $('#dMsg').innerHTML='❗ Windows 抓系統音秘訣：<br>1) 選「<b>整個螢幕</b>」或「<b>Chrome 分頁</b>」<br>2) 勾選「<b>分享音訊</b>」<br>3) 勿選「應用程式視窗」(Zoom視窗) — Windows 抓不到<br>仍抓不到請改用「🎤 麥克風」';
+      $('#dMsg').innerHTML='❗ Windows 抓系統音秘訣：<br>1) 選「<b>整個螢幕</b>」或「<b>Chrome 分頁</b>」<br>2) 勾選「<b>分享音訊</b>」<br>3) 勿選「應用程式視窗」(Zoom視窗) — Windows 抓不到<br>若清單有「立體聲混音」請先選它再開始<br>仍抓不到請改用「🎤 麥克風」';
       openDiag(); toast('沒抓到系統音：選「整個螢幕」並勾「分享音訊」'); return null; }
     setDiag('dShare','ok');setDiag('dAudio','ok');
     startMeter(s); startRecording(new MediaStream(a),'系統音'); return s;
@@ -377,10 +402,19 @@ showQR();
 $('#copyBtn').onclick=()=>{navigator.clipboard.writeText(location.origin+'/overlay.html?room='+room).then(()=>toast('已複製觀眾端連結')).catch(()=>toast('複製失敗'));};
 
 // 控制
+function refreshDevices(){
+  listDevices().then(devs=>{
+    const sel=$('#deviceSel'); sel.innerHTML='';
+    if(!devs.length){ const o=document.createElement('option');o.value='';o.textContent='（無可用裝置，請用螢幕分享）';sel.appendChild(o); return; }
+    devs.forEach(d=>{ const o=document.createElement('option');o.value=d.id;o.textContent=(d.loopback?'🔁 ':'🎤 ')+d.label;sel.appendChild(o); });
+    const loop=devs.find(d=>d.loopback); if(loop)sel.value=loop.id;
+  }).catch(()=>{});
+}
+$('#sysChk').onchange=e=>{ setMode(e.target.checked?'sys':'mic'); $('#deviceRow').style.display=e.target.checked?'flex':'none'; if(e.target.checked)refreshDevices(); };
+$('#deviceRefresh').onclick=()=>refreshDevices();
 $('#startBtn').onclick=start;
-$('#pickSys').onclick=()=>{ setMode('sys'); if(running)stop(); };
-$('#pickMic').onclick=()=>{ setMode('mic'); if(running)stop(); };
-$('#sysChk').onchange=e=>setMode(e.target.checked?'sys':'mic');
+$('#pickSys').onclick=()=>{ setMode('sys'); $('#sysChk').checked=true; $('#deviceRow').style.display='flex'; refreshDevices(); if(running)stop(); };
+$('#pickMic').onclick=()=>{ setMode('mic'); $('#sysChk').checked=false; $('#deviceRow').style.display='none'; if(running)stop(); };
 $('#langToggle').onclick=()=>{ const a=srcLang,b=dstLang; setLang(b,a); toast('語言互換: '+(LANG_NAME[a]||a)+' ⇄ '+(LANG_NAME[b]||b)); };
 $('#manualSend').onclick=sendManual;
 $('#manualInput').addEventListener('keydown',e=>{ if(e.key==='Enter')sendManual(); });
