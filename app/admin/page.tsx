@@ -26,12 +26,6 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!user) return;
-    loadSurveys();
-    loadResources();
-  }, [user]);
-
   const loadSurveys = async () => {
     setLoading(true);
     setError('');
@@ -40,7 +34,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (data?.ok) setSurveys(data.rows ?? []);
       else setError(data?.message || 'Failed to load surveys');
-    } catch (e) {
+    } catch {
       setError('Network error');
     } finally {
       setLoading(false);
@@ -54,6 +48,12 @@ export default function AdminPage() {
       if (data?.ok) setResources(data.rows ?? []);
     } catch {}
   };
+
+  useEffect(() => {
+    if (!user) return;
+    loadSurveys();
+    loadResources();
+  }, [user]);
 
   const deleteSurvey = async (id?: string) => {
     if (!id) return;
@@ -125,7 +125,7 @@ export default function AdminPage() {
     );
   }
 
-  const avg = (key: string) => {
+  const _avg = (key: string) => {
     const vals = surveys.flatMap((s) => (s.ratings?.[key] ? [s.ratings[key]] : []));
     if (!vals.length) return '—';
     return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2);
