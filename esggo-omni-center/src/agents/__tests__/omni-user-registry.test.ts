@@ -13,7 +13,7 @@ function createMockMemory(): IOmniMemory {
     uuid: 'mock-memory',
     version: '1.0.0',
     timestamp: Date.now(),
-    evidence: {},
+    evidence: { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' },
     store: vi.fn().mockResolvedValue('mock-id'),
     retrieve: vi.fn().mockResolvedValue(null),
     search: vi.fn().mockResolvedValue([]),
