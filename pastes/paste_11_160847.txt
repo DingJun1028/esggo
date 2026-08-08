@@ -1,0 +1,34 @@
+:${timestamp}`)
+      .digest('hex');
+
+    const streamItem = {
+      id: logId,
+      originText: originEmailText,
+      translatedText: translations,
+      sourceOrigin, // 5T: Traceable 可溯源
+      hash: payloadHash, // 5T: Trustworthy 不可篡改
+      timestamp // 5T: Trackable 可追蹤
+    };
+
+    // 更新產品內部的動態流
+    product.payloadStream.unshift(streamItem);
+
+    // 寫入單一資料表紀錄
+    this.saveToSingleTable({
+      id: logId,
+      entityType: 'BROADCAST_LOG',
+      blueprintType: product.broadcastUrl ? 'DESIGNATED_URL_BROADCAST' : 'LIVE_BROADCAST',
+      hostEmail: product.productName,
+      payload: { ...streamItem, productId: product.uuid },
+      hashLock: payloadHash,
+      createdAt: timestamp
+    });
+
+    return product;
+  }
+
+  /**
+   * 鎖定固化產品數據 (Trustworthy - Hash Lock & Object.freeze)
+   */
+  public freezeProduct(product: BlueprintProduct): Readonly<BlueprintProduct> {
+    pr
