@@ -574,6 +574,66 @@ opencode models ollama   # → ollama/qwen2.5:3b-instruct-q4_K_M
 - ❌ 禁用付費 LLM API Key（違反免費算立原則）
 - ❌ 禁用 `--symlink` 激活（Windows WinError 1314），須用 `--copy`
 
+第十九章、DeerFlow 2.5 × ESGGO 整合（OA-TWINS 雙向同步）
+
+> 「萬能蜂后（OA-VPS）與萬能蜂王（OA-LOCAL）經 OmniAgentBus 相連；
+> DeerFlow 2.5 的記憶，即 OC 萬能心核的鏡像分身。」
+
+## 19.1 版本定位
+
+- DeerFlow 2.5 = 本地 `C:\Project\esggo-deerflow`（bytedance 2.1.0 基底）＋ ESGGO 深度整合後的自稱版本
+- 分支：`feat/ollama-vision-local`（已啟 Ollama 視覺推理，本地 CPU qwen2.5:3b / qwen3-vl:2b）
+- 整合痕跡：`backend/app/gateway/routers/memory.py`、mem0 後端、5T / AI-native 測試已落地
+
+## 19.2 OA-TWINS 雙向同步架構
+
+```
+DeerFlow 2.5 (Docker container)
+   │  write: create_fact / update_fact / clear_memory
+   ▼
+app/gateway/oab_sync.py  (OAB RWED client + SSE subscriber)
+   │  PUT /sync/{key}  (DeerFlow → OAB)
+   │  DELETE /sync/{key} (clear → OAB)
+   │  SSE /sync/stream (OAB → DeerFlow, filtered by prefix)
+   ▼
+OmniGateway 萬能閘門 (OA-VPS, gateway.esggo.co:8421)
+   │  syncStore (OC 萬能心核 RAM/Disk 緩衝)
+   ▼
+OA-LOCAL 萬能蜂王 (Hermes + CLI)  ← 經 OAB 鏡像
+```
+
+## 19.3 記憶隔離原則（對齊 AI-native Memory 論文）
+
+- OAB key 命名空間：`deerflow:{user_id}:*`
+- 每用戶記憶獨立分桶，不混流 OC 全域空間（論文 §3：every agent/person has its own LPM）
+- 寫入方向：DeerFlow memory → OAB（fire-and-forget，不阻塞主請求）
+- 訂閱方向：OAB SSE → DeerFlow（僅接收 `deerflow:` 前綴事件，回寫 MemoryManager）
+
+## 19.4 實作模組
+
+| 檔案 | 角色 |
+|------|------|
+| `backend/app/gateway/oab_sync.py` | OAB 客戶端：`oab_put` / `oab_delete` / `start_oab_bridge` / `_sse_listener` |
+| `backend/app/gateway/routers/memory.py` | create_fact / update_fact / clear_memory 廣播 hook |
+| `backend/app/gateway/app.py` | lifespan 啟動時拉起 SSE 訂閱 |
+
+## 19.5 驗證狀態
+
+- ✅ 靜態：ruff lint + py_compile 全綠（commit 91712701）
+- ✅ OAB RWED 協議：本機 curl 驗證 PUT/GET/DELETE 全過
+- ⏸️ 容器內活體：待 Docker Desktop 引擎啟動後 `docker compose up` 驗證
+
+## 19.6 對齊矩陣
+
+| OA 實體 | DeerFlow 2.5 對應 |
+|---------|------------------|
+| OC 萬能心核 | OAB syncStore（鏡像） |
+| OA-VPS 萬能蜂后 | OmniGateway gateway.esggo.co |
+| OA-LOCAL 萬能蜂王 | DeerFlow gateway container (127.0.0.1:2026) |
+| OAB 萬能代理總線 | oab_sync.py RWED + SSE |
+| OA-TWINS 萬能雙生 | DeerFlow ↔ OmniGateway 記憶鏡像 |
+
+---
 ---
 
 終章、靈魂封印（Soul Seal）
