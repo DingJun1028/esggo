@@ -37,10 +37,11 @@ export function ErrorAlert({ title, message, onDismiss, variant = 'error' }: Err
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="flex-shrink-0 hover:opacity-70 transition-opacity"
+            className="flex-shrink-0 hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded-sm"
             aria-label="Dismiss"
+            title="Dismiss"
           >
-            <X size={16} />
+            <X size={16} aria-hidden="true" />
           </button>
         )}
       </div>
