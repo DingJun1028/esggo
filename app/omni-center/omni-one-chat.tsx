@@ -82,7 +82,7 @@ const RESPONSES: Partial<Record<CaseType, string[]>> = {
     "C4 模型完成：Context → Container → Component → Code，ADR-001 已記錄。",
   ],
   bug_fix: [
-    "**Jules 9步協議**執行完畢：\n觀果 → 立願 → 尋因 → 修因 → 造緣 → 結果 → 驗因 → 證果 → 傳法\n根因已定位並修復，回歸測試通過。",
+    "**OmniJules 9步協議**執行完畢：\n觀果 → 立願 → 尋因 → 修因 → 造緣 → 結果 → 驗因 → 證果 → 傳法\n根因已定位並修復，回歸測試通過。",
     "Stack Trace 分析完成。根因：`undefined` 解引用在第 42 行。修復：加入 optional chaining `?.` 防護。",
   ],
   general: [

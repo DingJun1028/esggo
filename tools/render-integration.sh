@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ============================================================================
-# render-integration.sh — Jules "Render Integration" 免費自託管等價 (soul.md §17.7)
+# render-integration.sh — OmniJules "Render Integration" 免費自託管等價 (soul.md §17.7)
 # ----------------------------------------------------------------------------
-# Jules: 連接 Render → 自動偵測 build 失敗 → 分析 log → 推修復進 Jules 的 PR。
+# OmniJules: 連接 Render → 自動偵測 build 失敗 → 分析 log → 推修復進 OmniJules 的 PR。
 # 本典等價：Render deploy-hook / failure webhook → 觸發 OA-TWINS Auto-Repair
 #           (.github/workflows/auto-repair.yml) → 免費自動修復 + 開 PR。
 #
@@ -11,7 +11,7 @@
 #   trigger-repair   手動觸發 OA-TWINS Auto-Repair (DRY-RUN 預設)
 #   status           顯示目前整合狀態
 #
-# 安全：不接 Google Jules 本體；不寫任何憑證；預設 DRY-RUN。
+# 安全：不接 OmniJules 本體；不寫任何憑證；預設 DRY-RUN。
 # ============================================================================
 set -euo pipefail
 
@@ -21,7 +21,7 @@ AUTO_REPAIR_WF="auto-repair.yml"
 
 usage() {
   cat <<EOF
-render-integration.sh — Jules Render 整合免費等價 (soul.md §17.7)
+render-integration.sh — OmniJules Render 整合免費等價 (soul.md §17.7)
 用法:
   $0 receive-webhook   # 從 stdin 讀 Render deploy 事件 JSON，失敗則轉發 auto-repair
   $0 trigger-repair [branch]   # 手動觸發 OA-TWINS Auto-Repair (DRY-RUN 預設)
@@ -86,7 +86,7 @@ cmd_trigger_repair() {
 
 cmd_status() {
   echo "【免費自託管 · Render 整合狀態】(soul.md §17.7)"
-  echo "  對應 Jules 能力: Render build-failure 自動偵測與修復"
+  echo "  對應 OmniJules 能力: Render build-failure 自動偵測與修復"
   echo "  實作: OA-TWINS Auto-Repair (${AUTO_REPAIR_WF})"
   echo "  負責靈魂: 萬能維護蜂(28) + 萬能編碼蜂(07)"
   echo "  模式: DRY-RUN (OMNIJULES_EXECUTE=1 才真觸發 gh)"

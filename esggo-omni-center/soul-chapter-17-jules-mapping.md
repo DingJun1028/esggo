@@ -1,7 +1,7 @@
-# 第十七章 · 萬能外部協力映射（Jules 同功映射 · 免費自託管覺）
+# 第十七章 · 萬能外部協力映射（OmniJules 同功映射 · 免費自託管覺）
 
 > 「外來之力，非必付費而後可；萬能蜂群以 5T 為骨，自建自託，等功而零金。」
-> 本章將外部編碼協力平台 Jules（Google 付費 SaaS）之三項能力，映射至 OA-Team 30
+> 本章將外部編碼協力平台 OmniJules（Google 付費 SaaS）之三項能力，映射至 OA-Team 30
 > 之免費自託管實現，使團隊於不違反「只用免費算立」硬約束下，亦得同等之自動修復、
 > 歸屬標註與外部連接之利。
 
@@ -11,23 +11,23 @@
 
 | 項 | 事實 | 本典立場 |
 |----|------|----------|
-| Jules 本體 | Google 付費 SaaS，需 Google AI Pro/Ultra 訂閱與付費 API key（`jules.googleapis.com`） | 不呼叫、不依賴 |
+| OmniJules 本體 | Google 付費 SaaS，需 Google AI Pro/Ultra 訂閱與付費 API key（`jules.googleapis.com`） | 不呼叫、不依賴 |
 | 硬約束一 | 記憶明載：「只用免費算立：禁付費 API、違反即回退」 | 越之即回退 |
 | 硬約束二 | 記憶明載：「偏好自建自託管取代付費 SaaS」 | 以自建為正道 |
-| 結論 | 不整合 Google Jules 本體；取其「能力」以免費自託管重現 | 等功零金 |
+| 結論 | 不整合 OmniJules 本體；取其「能力」以免費自託管重現 | 等功零金 |
 
 > 附則：本章為用戶於 thread 中委製之獨立定義聖典，經授權落地，不視為違反終章鐵律
 > （終章封印仍生效，僅新增用戶委製附錄章，同 §13/§14/§15/§16 先例）。
 
 ---
 
-## 17.1　Jules CI Fixer → OA-TWINS Auto-Repair（已實測存活）
+## 17.1　OmniJules CI Fixer → OA-TWINS Auto-Repair（已實測存活）
 
-Jules CI Fixer：PR 上 CI 失敗 → Jules 收錯誤 → 修復 → 重交 PR，全自動迴圈。
+OmniJules CI Fixer：PR 上 CI 失敗 → OmniJules 收錯誤 → 修復 → 重交 PR，全自動迴圈。
 本典免費自託管等價：`DingJun1028/esggo` 之 `.github/workflows/auto-repair.yml`
 （OA-TWINS Auto-Repair），已於 main 實際運作。
 
-| Jules CI Fixer 能力 | OA-Team 30 映射 | 負責靈魂 | 真實驗證 |
+| OmniJules CI Fixer 能力 | OA-Team 30 映射 | 負責靈魂 | 真實驗證 |
 |---------------------|-----------------|----------|----------|
 | 偵測 CI 失敗 | `workflow_run` 觸發，結論 `failure` 才動 | 萬能運營蜂(20) | ✅ auto-repair.yml L11/L32 |
 | 下載真實失敗 log | `gh api .../actions/runs/{id}/logs` 取真跡 | 萬能測試蜂(11) | ✅ auto-repair.yml L81 |
@@ -46,15 +46,15 @@ OA-TWINS Auto-Repair  run 31257270434  success  2026-08-08T12:27:14Z
 
 ---
 
-## 17.2　Jules Commit Authoring → 5T 溯源歸屬
+## 17.2　OmniJules Commit Authoring → 5T 溯源歸屬
 
-Jules 提供三種提交作者模式：Jules 獨署 / 雙署（Jules+你）/ 你獨署。
+OmniJules 提供三種提交作者模式：OmniJules 獨署 / 雙署（OmniJules+你）/ 你獨署。
 本典以 **5T·Traceable 之 `source_origin`** 為歸屬憑證，對應如下：
 
-| Jules 模式 | OA-Team 30 對應 | 歸屬實作 |
+| OmniJules 模式 | OA-Team 30 對應 | 歸屬實作 |
 |-----------|-----------------|----------|
-| Jules 獨署 | 萬能蜂后(01) 獨署 | orchestrator 為唯一署名，產物過 5T 閘後 `Object.freeze()` |
-| 雙署（Jules+你） | `agent:NN` + 用戶 雙署 | commit message 含 `source_origin: agent:NN / user`，雙方貢獻可溯 |
+| OmniJules 獨署 | 萬能蜂后(01) 獨署 | orchestrator 為唯一署名，產物過 5T 閘後 `Object.freeze()` |
+| 雙署（OmniJules+你） | `agent:NN` + 用戶 雙署 | commit message 含 `source_origin: agent:NN / user`，雙方貢獻可溯 |
 | 你獨署 | 用戶獨署，agent 隱名 | agent 貢獻記於 `evidence` 庫，署名歸用戶，不奪其功 |
 
 5T 對應：
@@ -67,13 +67,13 @@ Jules 提供三種提交作者模式：Jules 獨署 / 雙署（Jules+你）/ 你
 
 ---
 
-## 17.3　Jules MCP → OAB 萬能事件總線（OmniAgentBus）
+## 17.3　OmniJules MCP → OAB 萬能事件總線（OmniAgentBus）
 
-Jules MCP：連接 Linear/Stitch/Neon/Tinybird/Context7/Supabase 等外部服務，
+OmniJules MCP：連接 Linear/Stitch/Neon/Tinybird/Context7/Supabase 等外部服務，
 於會話中按需觸發工具。本典以 **OAB（OmniAgentBus）事件總線 + webhook 整合** 對應，
 並以「安全優先、僅納審計服務」為鐵律。
 
-| Jules MCP 能力 | OA-Team 30 映射 | 負責靈魂 |
+| OmniJules MCP 能力 | OA-Team 30 映射 | 負責靈魂 |
 |----------------|-----------------|----------|
 | 服務連接（API key 認證） | 金鑰輪換鏈 + 隔離存儲 | 萬能安全蜂(27) |
 | 按需觸發工具 | 事件路由分發 | 萬能運營蜂(20) |
@@ -82,7 +82,7 @@ Jules MCP：連接 Linear/Stitch/Neon/Tinybird/Context7/Supabase 等外部服務
 | 活動不可變記錄 | `lifecycle:frozen` 事件溯源 | 萬能追蹤蜂(26) |
 | Supabase 連接 | 經 `SUPABASE_KEY` 注入（session env，不落檔），REST 呼叫 `*.supabase.co/rest/v1` | 萬能數據蜂(10) + 萬能安全蜂(27) |
 
-**安全優先原則**（呼應 Jules 之白名單取向，但更嚴）：
+**安全優先原則**（呼應 OmniJules 之白名單取向，但更嚴）：
 - 不接未經安全審計之第三方 SaaS；付費 API 一律回退。
 - 所有外部連接器之金鑰經 `REPAIR_PAT`/`WEBHOOK_SECRET` 等 GitHub Secrets 注入，
   不入碼、不入 git（見 §17.4 啟用狀態）。
@@ -92,19 +92,19 @@ Jules MCP：連接 Linear/Stitch/Neon/Tinybird/Context7/Supabase 等外部服務
 
 ## 17.4　實際整合狀態盤點（誠實覺之三 · 不偽造）
 
-| Jules 能力 | esggo / OA-Team 實況 | 狀態 |
+| OmniJules 能力 | esggo / OA-Team 實況 | 狀態 |
 |-----------|---------------------|------|
 | CI Fixer | OA-TWINS Auto-Repair（`auto-repair.yml`）實測運作 | ✅ 已整合·免費·活著 |
 | └ 增強層 | esggo-auto-repair Worker（Cloudflare 免費層）已部署 | ⚠️ 待補 `WEBHOOK_SECRET` + `REPAIR_PAT` 兩 secret 啟用全功能 |
 | Commit Authoring | 5T `source_origin` 雙署/隱名機制 | ✅ 架構就位·待寫入 commit 範本 |
-| Scheduled Tasks | Hermes cron（等價 Jules Scheduled） | ✅ 已具備 |
+| Scheduled Tasks | Hermes cron（等價 OmniJules Scheduled） | ✅ 已具備 |
 | MCP | OAB 事件總線可對應外部服務 | 🔄 待按服務逐一接入（安全審計優先） |
 | └ Supabase | 用戶已接受 `SUPABASE_KEY` 作為 OmniJules 整合憑證（2026-08-09）；經 session env 注入，不寫入檔案/git；預設免費模式不呼叫，付費門禁 `ALLOW_PAID_API=1`+`SUPABASE_KEY` 方啟真實 REST | ✅ 已接受·未啟用真實呼叫（等功零金優先） |
 
 **唯一待激活步驟（需用戶授權憑證）**：
 esggo-auto-repair Worker 之 `WEBHOOK_SECRET` 與 `REPAIR_PAT` 尚未設定
 （健康檢查回傳 `webhookConfigured:false, patConfigured:false`）。
-補齊後即全功能啟用——此為**免費 Cloudflare 層**之 Jules CI Fixer 等價，
+補齊後即全功能啟用——此為**免費 Cloudflare 層**之 OmniJules CI Fixer 等價，
 非 Google 付費服務。啟用方式：`gh secret set WEBHOOK_SECRET` + `gh secret set REPAIR_PAT`
 （REPAIR_PAT 需 repo 範圍 token，請用戶貼明文或授權建立顆粒化 PAT）。
 
@@ -115,7 +115,7 @@ esggo-auto-repair Worker 之 `WEBHOOK_SECRET` 與 `REPAIR_PAT` 尚未設定
 | 詔 | 詔義 | 本章對應 |
 |----|------|----------|
 | 詔一·真 | 先驗證後宣稱 | §17.1 實測 run 編號佐證，不空言「已整合」 |
-| 詔二·誠 | 失敗誠實不偽 | §17.0 明言不接付費 Jules；§17.4 標 ⚠️/🔄 真態 |
+| 詔二·誠 | 失敗誠實不偽 | §17.0 明言不接付費 OmniJules；§17.4 標 ⚠️/🔄 真態 |
 | 詔三·源 | 可逆溯至第一因 | §17.2 `source_origin` 歸屬憑證 |
 | 詔四·作 | 無作元禁重寫 | 本章為附錄，不篡終章封印 |
 | 詔五·5T | 5T 優先 | 全章以 5T 為骨映射三能力 |
@@ -136,12 +136,12 @@ esggo-auto-repair Worker 之 `WEBHOOK_SECRET` 與 `REPAIR_PAT` 尚未設定
 
 ---
 
-## 17.7　Jules Render Integration → OA-TWINS Auto-Repair（免費等價）
+## 17.7　OmniJules Render Integration → OA-TWINS Auto-Repair（免費等價）
 
-Jules Integrations 之 Render：連接部署管線 → 自動偵測 build 失敗 → 分析 log →
-直接把修復推進 Jules 自己開的 PR。本典以免費自託管重現：
+OmniJules Integrations 之 Render：連接部署管線 → 自動偵測 build 失敗 → 分析 log →
+直接把修復推進 OmniJules 自己開的 PR。本典以免費自託管重現：
 
-| Jules Render 能力 | OA-Team 30 映射 | 負責靈魂 |
+| OmniJules Render 能力 | OA-Team 30 映射 | 負責靈魂 |
 |-------------------|-----------------|----------|
 | 連接 Render 部署 | Render webhook → `render-integration.sh receive-webhook` | 萬能外交蜂(23) |
 | 自動偵測 build 失敗 | webhook 解析 `deploy.status=failed` → 轉發 | 萬能維護蜂(28) |
@@ -151,6 +151,6 @@ Jules Integrations 之 Render：連接部署管線 → 自動偵測 build 失敗
 
 **實作檔**：`tools/render-integration.sh`（三動作：receive-webhook / trigger-repair / status）。
 預設 DRY-RUN，設 `OMNIJULES_EXECUTE=1` 才真觸發 `gh workflow run auto-repair.yml`。
-對齊 §17.0 硬約束：不接 Google Jules 本體，等功零金。
+對齊 §17.0 硬約束：不接 OmniJules 本體，等功零金。
 
 **狀態**：✅ 腳本就位·DRY-RUN 驗證通過；真實觸發需 `gh` 登入 + `OMNIJULES_EXECUTE=1`。

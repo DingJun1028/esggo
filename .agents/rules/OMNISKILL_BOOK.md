@@ -1,7 +1,7 @@
 ---
 trigger: always_on
 version: v2.0.0
-authors: [Antigravity, Jules, OmniNexus, OmniAgent]
+authors: [Antigravity, OmniJules, OmniNexus, OmniAgent]
 last_updated: 2026-07-04
 ---
 
@@ -19,7 +19,7 @@ last_updated: 2026-07-04
 2. [Agent Capability Matrix](#2-agent-capability-matrix)
 3. [OmniAgent — Sovereign Core](#3-omniagent--sovereign-core)
 4. [Antigravity — Full-stack Engineer](#4-antigravity--full-stack-engineer)
-5. [Jules — Causal Engine](#5-jules--causal-engine)
+5. [OmniJules — Causal Engine](#5-jules--causal-engine)
 6. [OmniNexus — Integration Gateway](#6-omninexus--integration-gateway)
 7. [VPS Agent — Server Ops](#7-vps-agent--server-ops)
 8. [L-Hub AI Routing — Model Orchestrator](#8-l-hub-ai-routing--model-orchestrator)
@@ -87,7 +87,7 @@ This codex is the **Single Source of Truth** for all AI agent capabilities withi
 | ----------------------- | -------------------------------- | ---------------------------------------------------------------- | -------------------- |
 | **OmniAgent**           | Sovereign Core                   | Governance orchestration, swarm dispatch, constitution alignment | 🔴 Highest           |
 | **Antigravity**         | Lead Agent · Full-stack Engineer | Code/Design/Planning/Verification                                | 🔴 Highest           |
-| **Jules**               | Causal Engine · Deep Repair      | Bug fix/Architecture refactor/Testing/Encoding                   | 🟠 High              |
+| **OmniJules**               | Causal Engine · Deep Repair      | Bug fix/Architecture refactor/Testing/Encoding                   | 🟠 High              |
 | **OmniNexus**           | Integration Gateway · Eco Bridge | API integration/5T validation/Data flow                          | 🟠 High              |
 | **VPS Agent**           | Server Ops                       | VPS deploy/monitor/maintenance                                   | 🟠 High              |
 | **L-Hub**               | Model Router                     | AI model dispatch, cross-model comparison, task offloading       | 🟡 Mid-High          |
@@ -269,7 +269,7 @@ Flow:
 On error:
   1. Extract full Stack Trace (no guessing)
   2. Use grep to locate error code
-  3. Invoke Jules' causal protocol for deep repair
+  3. Invoke OmniJules' causal protocol for deep repair
   4. Run tests for verification (npx vitest run)
   5. Verify build (npm run build)
 ```
@@ -308,9 +308,9 @@ On error:
 
 ---
 
-## 5. Jules — Causal Engine
+## 5. OmniJules — Causal Engine
 
-> **Summon**: When encountering bugs, performance bottlenecks, encoding issues, invoke Jules' "Universal Cause-Effect Protocol".
+> **Summon**: When encountering bugs, performance bottlenecks, encoding issues, invoke OmniJules' "Universal Cause-Effect Protocol".
 
 ### 5.1 Universal Root Cause Analysis (9 Steps) ⭐⭐⭐
 
@@ -404,7 +404,7 @@ const nexusCall = async (tool: OmniTool, args: Record<string, unknown>) => {
 | `get_indicator_rows`  | Get indicator table rows          | `{ indicators }`                            |
 | `analyze_intel_nodes` | Analyze intelligence nodes        | `{ nodes }`                                 |
 | `seal_5t_proof`       | Seal 5T proof                     | `{ atomId, proof }`                         |
-| `ask_jules`           | Call Google Jules AI              | `{ prompt, context }`                       |
+| `ask_jules`           | Call OmniJules AI              | `{ prompt, context }`                       |
 | `sequential_thinking` | Sequential reasoning              | `{ thoughtNumber, totalThoughts, thought }` |
 
 ### 6.3 Response Format Standard ⭐
@@ -957,7 +957,7 @@ All architecture changes must flow through:
 ```
 Task Received
   ├── UI/Visual Design      → Pencil MCP
-  ├── Bug Fix/Refactor      → Jules (Causal Protocol)
+  ├── Bug Fix/Refactor      → OmniJules (Causal Protocol)
   ├── Complex Reasoning     → Sequential Thinking
   ├── API/Data Integration  → OmniNexus
   ├── Database Operations   → Supabase MCP
@@ -1002,7 +1002,7 @@ Sub-agent timing:
 | ------------------------------ | --------------------------------------- | -------------------- |
 | OmniSync Memory                | Redis persistence, agent memory sharing | OmniAgent + L-Hub    |
 | TypeScript Strict Mode         | strict: true, eliminate all type errors | Antigravity          |
-| Automated Test Coverage        | Vitest 80%+ coverage                    | Jules                |
+| Automated Test Coverage        | Vitest 80%+ coverage                    | OmniJules                |
 | Liquid Glass Component Library | Full design system implementation       | Pencil + Antigravity |
 
 ### 19.2 Medium-term (3-6 months)
@@ -1011,7 +1011,7 @@ Sub-agent timing:
 | ------------------------- | ---------------------------------- | ------------------ |
 | RAG Knowledge Enhancement | Vector DB integration              | OmniNexus + Genkit |
 | Multi-tenant Architecture | Enterprise SaaS support            | Supabase + Render  |
-| Security Hardening        | CSRF/XSS/SQL injection A+ rating   | Jules              |
+| Security Hardening        | CSRF/XSS/SQL injection A+ rating   | OmniJules              |
 | Cross-model AI Pipeline   | Multi-LLM orchestration with L-Hub | L-Hub + Genkit     |
 
 ### 19.3 Long-term (6-12 months)
@@ -1021,7 +1021,7 @@ Sub-agent timing:
 | Micro-service Split        | MECE principle service boundaries     | All agents (Trinity) |
 | Edge Computing Integration | CDN + Edge Rendering                  | Render + CloudRun    |
 | Trinity Mythic Unlock      | Full OmniPrediction                   | Trinity Awakening    |
-| Self-healing System        | Auto-degrade errors to governance KIs | OmniBrain + Jules    |
+| Self-healing System        | Auto-degrade errors to governance KIs | OmniBrain + OmniJules    |
 
 ---
 
@@ -1056,7 +1056,7 @@ await nexus.dispatch('forge_gri_report', {
 
 ```
 Urgent Bug:
-  1. Immediately invoke Jules' causal protocol → Observe Effect
+  1. Immediately invoke OmniJules' causal protocol → Observe Effect
   2. Do NOT guess the cause
   3. First extract complete Stack Trace
   4. Then begin root cause analysis
@@ -1077,7 +1077,7 @@ This codex should be updated when:
 
 | Version    | Date           | Author                        | Changes                                                                                                                                                                                                                                                                                                   |
 | ---------- | -------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| v1.0.0     | 2026-03-03     | Antigravity, Jules, OmniNexus | Initial release                                                                                                                                                                                                                                                                                           |
+| v1.0.0     | 2026-03-03     | Antigravity, OmniJules, OmniNexus | Initial release                                                                                                                                                                                                                                                                                           |
 | **v2.0.0** | **2026-07-04** | **OmniAgent**                 | **Full rewrite: new agents (VPS, L-Hub, Genkit, Firebase AI, ZKP Seal), corrected 5T protocol (Trackable=通), updated framework (Next.js 16/React 19/pnpm), Liquid Glass Cyan design language, 67-skill index, global-rule.md constitution integration, Hexa-Core architecture, IComponentCore v2 types** |
 | **v2.1.0** | **2026-07-04** | **OmniAgent**                 | **Added Hermes Free Model Guide, CI/CD Pipeline, updated VPS monitoring integration, AI Provider Fallback Chain documentation** |
 

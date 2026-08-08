@@ -2,7 +2,7 @@
 # ============================================================================
 # omni_jules_bridge.py — OmniJules 萬能外部協力橋接器 (Python 版)
 # ----------------------------------------------------------------------------
-# 將 Google Jules REST API 之能力，以「免費自託管」為預設實作提供給 OmniJules
+# 將 OmniJules REST API 之能力，以「免費自託管」為預設實作提供給 OmniJules
 # (OA-Team 30)。依 soul.md §17：不呼叫付費 jules.googleapis.com，
 # 除非顯式 ALLOW_PAID_API=1 + 已設 JULES_API_KEY（違反免費硬約束，需自負）。
 #
@@ -48,8 +48,8 @@ def _run(cmd: list[str]) -> str:
         return f"（指令失敗：{exc}；此為免費等價示範）"
 
 
-class JulesAPIClient:
-    """Jules REST API 形狀的客戶端。免費模式走自託管，付費模式才呼叫 Google。"""
+class OmniJulesAPIClient:
+    """OmniJules REST API 形狀的客戶端。免費模式走自託管，付費模式才呼叫 Google。"""
 
     def __init__(self, cfg: BridgeConfig) -> None:
         self.cfg = cfg
@@ -93,11 +93,11 @@ class JulesAPIClient:
         if self.cfg.paid_allowed:
             _warn_paid()
             return (
-                "【付費】Jules Integrations 為 web UI 操作（Render 等），無直接 REST 端點；\n"
+                "【付費】OmniJules Integrations 為 web UI 操作（Render 等），無直接 REST 端點；\n"
                 "  請於 https://jules.google.com/settings#integrations 手動連接。"
             )
         return (
-            "【免費自託管】整合層等價（對齊 Jules Integrations 運作方式）:\n"
+            "【免費自託管】整合層等價（對齊 OmniJules Integrations 運作方式）:\n"
             "  ── Render / CI build-failure 偵測 ──\n"
             "    OA-TWINS Auto-Repair 監看 gh run（失敗即修） → 萬能維護蜂(28)\n"
             "  ── 自主觸發（webhook 甦醒）──\n"
@@ -182,7 +182,7 @@ class JulesAPIClient:
 def selftest() -> None:
     print("=== OmniJules Bridge 自檢 (FREE 模式，不呼叫付費) ===")
     cfg = BridgeConfig(mode="free")
-    client = JulesAPIClient(cfg)
+    client = OmniJulesAPIClient(cfg)
     print(client.list_sources())
     print()
     print(client.create_session("selftest probe", "main"))
@@ -198,7 +198,7 @@ def selftest() -> None:
 
 def usage() -> None:
     print(
-        "OmniJules Bridge — Jules API 免費自託管橋接器 (soul.md §17)\n"
+        "OmniJules Bridge — OmniJules API 免費自託管橋接器 (soul.md §17)\n"
         "用法:\n"
         "  python3 omni_jules_bridge.py list-sources\n"
         "  python3 omni_jules_bridge.py create-session [prompt] [branch]\n"
@@ -218,7 +218,7 @@ def main(argv: list[str]) -> int:
         usage()
         return 0
     cmd, *args = argv
-    client = JulesAPIClient(BridgeConfig())
+    client = OmniJulesAPIClient(BridgeConfig())
     dispatch = {
         "list-sources": lambda: client.list_sources(),
         "create-session": lambda: client.create_session(*(args or ["Create a boba app!", "main"])),
