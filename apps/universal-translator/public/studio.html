@@ -224,7 +224,9 @@ async function startMic(){ try{return await navigator.mediaDevices.getUserMedia(
 async function startSys(){
   try{const s=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});const a=s.getAudioTracks()[0];
     if(!a){toast('請在分享視窗勾選「分享音訊」');s.getTracks().forEach(t=>t.stop());return null;}
-    s.getVideoTracks().forEach(t=>t.stop());return s;
+    // 不停 video track: Chrome 停 video 會讓 display audio 一併失效, 導致錄不到聲音
+    // 原 display stream 的 video 保持活著, audio track 才不會死
+    return s;
   }catch(e){const m=await startMic();if(m)toast('系統音失敗，改用麥克風');return m;}
 }
 
@@ -274,14 +276,18 @@ async function start(){
   if(useSys){
     stream=await startSys();
     if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
+    // 用純 audio-only stream 錄音 (display stream 的 video 保持活著以保住 audio track)
+    const audioOnly=new MediaStream(stream.getAudioTracks());
     const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
-    rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];
+    rec=new MediaRecorder(audioOnly,{mimeType:mime});chunks=[];
     rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
     rec.onstop=async()=>{
+      dbg(`rec.onstop chunks=${chunks.length} bytes=${chunks.reduce((a,c)=>a+c.size,0)}`);
       if(!chunks.length){ if(running)rec.start(4000); return; }
       setStatus('🧠 轉錄中…','rec');
       const blob=new Blob(chunks,{type:mime});chunks=[];
       const buf=await blob.arrayBuffer();
+      dbg(`POST /transcribe bytes=${buf.byteLength}`);
       try{
         const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
         const d=await r.json();
