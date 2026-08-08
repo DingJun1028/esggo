@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+
+
 export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;

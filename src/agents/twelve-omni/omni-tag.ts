@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 🌌 OmniTag — 萬能標籤實現

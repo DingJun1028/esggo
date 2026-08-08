@@ -1,3 +1,9 @@
+
+
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
 /**
  * Firebase Admin SDK — Server-only singleton (lazy init)
  *

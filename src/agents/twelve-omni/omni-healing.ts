@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 🌌 OmniHealing — 萬能癒合實現

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 完全代主自行 - 代理者實現

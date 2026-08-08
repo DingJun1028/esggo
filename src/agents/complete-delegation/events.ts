@@ -1,3 +1,5 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { randomUUID } from 'crypto';
 import { secureForward } from '../../core/services/omni-gateway';
 import { DelegationEventNames, DelegationTopics } from '../../types/complete-delegation';

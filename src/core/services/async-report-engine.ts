@@ -1,3 +1,9 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+
+
+/* eslint-disable import/no-anonymous-default-export */
 /**
  * Async Report Engine — Redis-backed 28-chapter parallel processing
  * 

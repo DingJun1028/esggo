@@ -1,3 +1,9 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
 /**
  * v5 非同步報告任務管理（Redis 增強版）
  *

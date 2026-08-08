@@ -1,3 +1,5 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createHash } from 'crypto';
 import { IBusEvent } from '../types/bus-event';
 

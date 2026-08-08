@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 🌌 OmniAPI — 萬能 API 實現

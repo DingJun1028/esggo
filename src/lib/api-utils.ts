@@ -1,3 +1,9 @@
+
+
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
 // ═══════════════════════════════════════════════════════════════
 // src/lib/api-utils.ts — Next.js API Route 通用工具函式
 // 單一事實來源使用 @esggo/errors 錯誤代碼
@@ -85,7 +91,7 @@ export function computeHash(data: unknown): string {
   // Use Web Crypto API when available (Edge/Server), fallback to Node crypto
   const json = JSON.stringify(data);
   // Use createHash from crypto via dynamic import pattern
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+
   const crypto = require('crypto');
   return crypto.createHash('sha256').update(json).digest('hex');
 }

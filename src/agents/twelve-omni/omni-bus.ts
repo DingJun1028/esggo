@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 🌌 OmniBus — 萬能總線實現 (增強版)

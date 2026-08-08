@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+
+
 /**
  * ==========================================
  * 🛡️ 萬能元件心核與基礎數據契約

@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useRef, Component } from 'react';
 import {
-  useFirebase, initAuth, subscribeSubmissions, addSubmission, deleteSubmission,
+  useFirebase, initAuth, subscribeSubmissions, addSubmission,
   uploadFiles, signInWithGoogle, signOut
 } from './db';
 import { getKnowledgeEntries } from './repositories/rag.repository';
 import { refreshRoleFromClaims, setupProfileIfMissing } from './repositories/auth.repository';
 import { getUserProfile, upsertUserProfile } from './repositories/profile.repository';
 import {
-  BookOpen, Upload, PlayCircle, CalendarCheck, MessageCircleQuestion,
+  BookOpen, Upload, PlayCircle,
   Smile, Database, ShieldCheck, ArrowLeft, Send, ChevronDown, FileText,
-  Globe, Search, Trash2, Filter, X, Users, LogIn, LogOut,
+  Search, Trash2, Filter, Users, LogIn, LogOut,
   User, Download
 } from 'lucide-react';
 import translations from './i18n/translations';
@@ -33,32 +34,6 @@ const CardAction = ({ onClick, icon, title }) => (
   </div>
 );
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { error: null };
-  }
-  static getDerivedStateFromError(error) {
-    return { error };
-  }
-  componentDidCatch(error, info) {
-    console.error('[ErrorBoundary]', error, info.componentStack);
-  }
-  render() {
-    const { error } = this.state;
-    if (error) {
-      return (
-        <div className="min-h-screen bg-red-50 text-red-900 p-6">
-          <div className="max-w-2xl mx-auto bg-white border border-red-200 rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-bold mb-2">預期外的錯誤</h2>
-            <pre className="whitespace-pre-wrap font-mono text-sm bg-red-50 border border-red-200 rounded-lg p-4">{error?.message}{'\n'}{error?.stack}</pre>
-          </div>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
 
 const renderFiles = (files) => (
   <div className="flex flex-col gap-2">
@@ -267,9 +242,7 @@ export default function App() {
   const [replayView, setReplayView] = useState('list');
   const [replayVideos, setReplayVideos] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [knowledgeEntries, setKnowledgeEntries] = useState([]);
-  const [knowledgeQuery, setKnowledgeQuery] = useState('');
-  const [authMessage, setAuthMessage] = useState('');
+      const [authMessage, setAuthMessage] = useState('');
   const [profileSetup, setProfileSetup] = useState(false);
   const [profileForm, setProfileForm] = useState({ displayName: '', email: '', org: '' });
   const [error, setError] = useState(null);

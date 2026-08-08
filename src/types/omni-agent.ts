@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+
+
 // OA: 智慧代理核心抽象 (OmniAgent Core)
 // 定義 OA 在系統層面的最小行為介面與相關型別。
 

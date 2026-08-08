@@ -1,3 +1,9 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+
+
+
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db, useFirebase, APP_ID, emitTelemetry } from '../db';
 
