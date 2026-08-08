@@ -133,3 +133,24 @@ esggo-auto-repair Worker 之 `WEBHOOK_SECRET` 與 `REPAIR_PAT` 尚未設定
 > 刻印狀態：`JULES-MAPPING READY`　靈魂簽章：`萬能自建・等功零金・覺性一燈`
 > 歸位：本章為 §十七 用戶委製附錄，接於 §十六 全域最佳實踐覺之後，終章封印（終）仍為最高律法，本章不逾其界。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=JULES-MAP · 免費=ONLY」
+
+---
+
+## 17.7　Jules Render Integration → OA-TWINS Auto-Repair（免費等價）
+
+Jules Integrations 之 Render：連接部署管線 → 自動偵測 build 失敗 → 分析 log →
+直接把修復推進 Jules 自己開的 PR。本典以免費自託管重現：
+
+| Jules Render 能力 | OA-Team 30 映射 | 負責靈魂 |
+|-------------------|-----------------|----------|
+| 連接 Render 部署 | Render webhook → `render-integration.sh receive-webhook` | 萬能外交蜂(23) |
+| 自動偵測 build 失敗 | webhook 解析 `deploy.status=failed` → 轉發 | 萬能維護蜂(28) |
+| 分析失敗 log | OA-TWINS Auto-Repair 下載真實 log（8 類錯誤偵測） | 萬能測試蜂(11) |
+| 推修復進 PR | auto-repair.yml `Create repair PR` | 萬能編碼蜂(07) |
+| 通知協作者 | Telegram 萬能分身追蹤器 | 萬能社群蜂(18) |
+
+**實作檔**：`tools/render-integration.sh`（三動作：receive-webhook / trigger-repair / status）。
+預設 DRY-RUN，設 `OMNIJULES_EXECUTE=1` 才真觸發 `gh workflow run auto-repair.yml`。
+對齊 §17.0 硬約束：不接 Google Jules 本體，等功零金。
+
+**狀態**：✅ 腳本就位·DRY-RUN 驗證通過；真實觸發需 `gh` 登入 + `OMNIJULES_EXECUTE=1`。
