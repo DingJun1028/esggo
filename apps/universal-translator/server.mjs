@@ -156,7 +156,7 @@ const server = http.createServer(async (req, res) => {
     if (file) {
       const fp = path.join(PUBLIC_DIR, file);
       if (fs.existsSync(fp)) {
-        return res.writeHead(200, { 'content-type': ctype }).end(fs.readFileSync(fp));
+        return res.writeHead(200, { 'content-type': ctype, 'Cache-Control': 'no-cache, no-store, must-revalidate' }).end(fs.readFileSync(fp));
       }
     }
   }
