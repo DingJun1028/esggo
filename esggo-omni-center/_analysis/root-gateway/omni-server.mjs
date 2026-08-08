@@ -49,7 +49,11 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const GROQ_API_KEY   = process.env.GROQ_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY;
+if (!GATEWAY_KEY) {
+  console.error('[OmniGateway] CRITICAL: GATEWAY_API_KEY or GATEWAY_KEY environment variable is required. Starting without it would compromise security. Exiting.');
+  process.exit(1);
+}
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
