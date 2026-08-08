@@ -9,7 +9,7 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [build]
-command = "npx --yes pnpm install --frozen-lockfile"
+command = ""
 
 [vars]
 ENVIRONMENT = "production"
