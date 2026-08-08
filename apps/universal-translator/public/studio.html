@@ -172,11 +172,13 @@ function dbg(msg){const d=$('#debug');if(d){const ts=new Date().toLocaleTimeStri
 
 // 語言 chips
 const active=new Set(['en','zh-TW']);
+const SR_LANG={'zh':'zh-TW','zh-TW':'zh-TW','en':'en-US','ja':'ja-JP','es':'es-ES','fr':'fr-FR','ko':'ko-KR','de':'de-DE'};
+const primaryLang=()=>{ const first=[...active][0]||'zh-TW'; return SR_LANG[first]||'zh-TW'; };
 const chipsBox=$('#chips');
 LANGS.forEach(([code,name])=>{
   const c=document.createElement('div');c.className='chip'+(active.has(code)?' on':'');c.textContent=name;c.dataset.code=code;
   c.onclick=()=>{ if(active.has(code)){ if(active.size>1)active.delete(code); else return; } else active.add(code);
-    c.classList.toggle('on'); };
+    c.classList.toggle('on'); if(recognition)recognition.lang=primaryLang(); };
   chipsBox.appendChild(c);
 });
 
@@ -185,6 +187,25 @@ const params=new URLSearchParams(location.search);
 let room=params.get('room')||'';
 if(!room){room=Math.random().toString(36).slice(2,8);const u=new URL(location);u.searchParams.set('room',room);history.replaceState(null,'',u);}
 $('#roomCode').textContent='房間: '+room;
+
+// === Web Speech API (Chrome 原生, 免費零key, 麥克風模式主要路徑) ===
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition=null, usingSR=false;
+function initSR(){
+  if(!SR) return null;
+  const r=new SR();
+  r.continuous=true; r.interimResults=true; r.lang=primaryLang();
+  r.onresult=ev=>{
+    let final='';
+    for(let i=ev.resultIndex;i<ev.results.length;i++){
+      if(ev.results[i].isFinal) final+=ev.results[i][0].transcript;
+    }
+    if(final.trim()) onText(final.trim());
+  };
+  r.onerror=e=>{ if(e.error==='not-allowed'||e.error==='service-not-allowed'){ toast('語音辨識權限被拒, 改用伺服器轉錄'); } };
+  r.onend=()=>{ if(usingSR&&running){ try{r.start();}catch(_){} } };
+  return r;
+}
 
 // QR (同源)
 function showQR(){
@@ -245,11 +266,52 @@ function showErrorCard(msg){
 
 async function start(){
   useSys=$('#sysChk').checked;
-  stream=useSys?await startSys():await startMic();
-  if(!stream)return;
   running=true;
   $('#startBtn').classList.add('recording');$('#startLabel').textContent='停止錄音';
   $('#dot').className='dot rec';
+
+  // 系統音模式: 必須用伺服器 whisper (getDisplayMedia 擷取)
+  if(useSys){
+    stream=await startSys();
+    if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
+    const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
+    rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];
+    rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+    rec.onstop=async()=>{
+      if(!chunks.length){ if(running)rec.start(4000); return; }
+      setStatus('🧠 轉錄中…','rec');
+      const blob=new Blob(chunks,{type:mime});chunks=[];
+      const buf=await blob.arrayBuffer();
+      try{
+        const r=await fetch(API.replace('/translate','/transcribe')+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+        const d=await r.json();
+        dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+        if(d.text&&d.text.trim())onText(d.text.trim());
+        else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
+        else { const m='未偵測到語音（系統音模式請在分享時勾選「分享音訊」）'; toast(m); showErrorCard(m); }
+      }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
+      if(running)rec.start(4000);
+    };
+    let round=0;
+    rec.start(4000);
+    const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent='🖥 系統音收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
+    setStatus('🖥 系統音收音中… 說話即出字幕','rec');
+    return;
+  }
+
+  // 麥克風模式: 優先 Web Speech API (Chrome 原生, 免費零key, 準確率高)
+  if(SR){
+    try{
+      recognition=initSR();
+      usingSR=true;
+      recognition.start();
+      setStatus('🎙 語音辨識中 (Chrome 原生)… 說話即出雙語字幕','rec');
+      return;
+    }catch(e){ toast('Web Speech 啟動失敗, 改用伺服器轉錄: '+e.message); }
+  }
+  // 備援: 伺服器 whisper (麥克風)
+  stream=await startMic();
+  if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
   const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
   rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];
   rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
@@ -263,20 +325,20 @@ async function start(){
       const d=await r.json();
       dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
       if(d.text&&d.text.trim())onText(d.text.trim());
-      else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
-      else { const m='未偵測到語音（請大聲說話 / 系統音模式請勾選「分享音訊」）'; toast(m); showErrorCard(m); }
+      else { const m='未偵測到語音，請靠近麥克風'; toast(m); showErrorCard(m); }
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
   };
   let round=0;
   rec.start(4000);
-  const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent=(useSys?'🖥 系統音':'🎙 麥克風')+'收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
-  setStatus(useSys?'🖥 系統音收音中… 說話即出字幕':'🎙 收音中… 說話即出字幕','rec');
+  const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent='🎙 麥克風收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
+  setStatus('🎙 收音中… 說話即出字幕','rec');
 }
 function stop(){
-  running=false;
+  running=false;usingSR=false;
   $('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';
   $('#dot').className='dot';
+  if(recognition){try{recognition.stop();}catch(_){}recognition=null;}
   if(rec&&rec.state!=='inactive'){try{rec.stop();}catch(_){}}
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
   setStatus('已停止');
