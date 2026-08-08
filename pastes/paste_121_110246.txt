@@ -1,0 +1,7 @@
+運維模式 7.4.1 多環境 Cookie 管理 程式碼 config/  cookies.prod.txt # 生產環境（只讀掛載）  cookies.staging.txt # 測試環境  cookies.local.txt # 本機開發（gitignore）  cookie-rotate.sh # 每週一 03:00 自動輪換 + 健康檢查 7.4.2 熔斷與降級策略 程式碼  python
+
+agent_reach/resilience.py
+CIRCUIT_BREAKER = { "twitter": {"failure_threshold": 3, "timeout": 300, "fallback": "bird"}, "youtube": {"failure_threshold": 5, "timeout": 180, "fallback": "invidious"}, "bilibili": {"failure_threshold": 2, "timeout": 600, "fallback": "cache"}, "xiaohongshu": {"failure_threshold": 3, "timeout": 300, "fallback": "cache"}, }
+
+熔斷觸發  自動切換 fallback backend  記錄證據鏈  通知 5T 小隊
+7.4.3 資料品質分級（輸出即分級） 等級 定義 處置 L1 可信 Hash Lock + 5T 驗算通過 + 來源可溯源 直接入向量庫、供決策引用 L2 待驗 有來源但未完整 5T 進入「待驗佇列」，由 5T 小隊 24h 內審核 L3 噪音 無來源 / 幻覺風險 / 重複度 > 80% 自動隔離、標記 entropy_tag=noise、下週煉金清理 7.5 部署拓撲標準圖（VPS + 本機 + 雲） 程式碼   OA-Team 30 Swarm
