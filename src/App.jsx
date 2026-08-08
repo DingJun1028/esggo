@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
 import {
-  useFirebase, initAuth, subscribeSubmissions, addSubmission, deleteSubmission,
+  useFirebase, initAuth, subscribeSubmissions, addSubmission,
   uploadFiles, signInWithGoogle, signOut
 } from './db';
 import { getKnowledgeEntries } from './repositories/rag.repository';
 import { refreshRoleFromClaims, setupProfileIfMissing } from './repositories/auth.repository';
 import { getUserProfile, upsertUserProfile } from './repositories/profile.repository';
 import {
-  BookOpen, Upload, PlayCircle, CalendarCheck, MessageCircleQuestion,
+  BookOpen, Upload, PlayCircle,
   Smile, Database, ShieldCheck, ArrowLeft, Send, ChevronDown, FileText,
-  Globe, Search, Trash2, Filter, X, Users, LogIn, LogOut,
+  Search, Trash2, Filter, Users, LogIn, LogOut,
   User, Download
 } from 'lucide-react';
 import translations from './i18n/translations';
