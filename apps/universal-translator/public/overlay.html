@@ -106,6 +106,22 @@ function showCaption(src,translations){
 }
 let capTimer=null;
 
+// ---------- 重試封裝 (解決偶發 Failed to fetch) ----------
+async function transcribeRetry(buf,attempt=0){
+  try{
+    const r=await fetch(API+'/transcribe?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return transcribeRetry(buf,attempt+1);} throw e; }
+}
+async function translateRetry(text,targets,attempt=0){
+  try{
+    const r=await fetch(API+'/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:'auto',targets})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return translateRetry(text,targets,attempt+1);} throw e; }
+}
+
 // ---------- SSE 觀眾端 (接收 studio 推播) ----------
 let esOk=false;
 function connect(){
@@ -133,16 +149,12 @@ async function startMic(){
       $('#status').textContent='🧠 轉錄中…';
       const buf=await new Blob(chunks,{type:mime}).arrayBuffer();chunks=[];
       try{
-        const r=await fetch(API+'/transcribe?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
-        const d=await r.json();
+        const d=await transcribeRetry(buf);
         if(d.text&&d.text.trim()){
-          // 一體模式: 直接本地翻譯並顯示 (不推播觀眾端)
-          const tr=await fetch(API+'/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:d.text.trim(),from:'auto',targets:Array.from(targets)})});
-          const td=await tr.json();
+          const td=await translateRetry(d.text.trim(),Array.from(targets));
           showCaption(d.text.trim(),td.translations||{});
-        }else if(!r.ok){ toast('轉錄失敗 ('+r.status+')'); }
-        else{ toast('未偵測到語音, 請靠近麥克風'); }
-      }catch(err){ toast('轉錄錯誤: '+err.message); }
+        }else{ toast('未偵測到語音, 請靠近麥克風'); }
+        }catch(err){ toast('轉錄錯誤: '+err.message); }
       if(running)rec.start(4000);
     };
     rec.start(4000);
