@@ -38,3 +38,14 @@ describe('esggo-cli', () => {
     expect(stdout).toContain('Hash Lock');
   });
 });
+
+describe('esggo-cli --live gateway fallback', () => {
+  it('status --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['status', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+  it('data get --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['data', 'get', 'entropy', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+});
