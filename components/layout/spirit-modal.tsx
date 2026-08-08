@@ -466,44 +466,52 @@ export function SpiritModal() {
                 <div className="flex bg-black/20 rounded-full p-1">
                   <button
                     onClick={() => setActiveTab("chat")}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-white/50 focus:outline-none ${
                       activeTab === "chat" ? "bg-white text-[#009E9D]" : "text-white hover:bg-white/10"
                     }`}
+                    aria-label="智能對話"
+                    title="智能對話"
                   >
-                    <MessageSquare className="w-4 h-4" />
+                    <MessageSquare className="w-4 h-4" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => setActiveTab("overview")}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-white/50 focus:outline-none ${
                       activeTab === "overview" ? "bg-white text-[#009E9D]" : "text-white hover:bg-white/10"
                     }`}
+                    aria-label="儀表板"
+                    title="儀表板"
                   >
-                    <LayoutDashboard className="w-4 h-4" />
+                    <LayoutDashboard className="w-4 h-4" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => setActiveTab("cards")}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-white/50 focus:outline-none ${
                       activeTab === "cards" ? "bg-white text-[#009E9D]" : "text-white hover:bg-white/10"
                     }`}
+                    aria-label="永續卡牌與知識王挑戰"
                     title="永續卡牌與知識王挑戰"
                   >
-                    <Gamepad2 className="w-4 h-4" />
+                    <Gamepad2 className="w-4 h-4" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => setActiveTab("integration")}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-white/50 focus:outline-none ${
                       activeTab === "integration" ? "bg-white text-[#009E9D]" : "text-white hover:bg-white/10"
                     }`}
+                    aria-label="深貫廣通整合矩陣"
                     title="深貫廣通整合矩陣"
                   >
-                    <Network className="w-4 h-4" />
+                    <Network className="w-4 h-4" aria-hidden="true" />
                   </button>
                 </div>
                 <button
                   onClick={() => setIsSpiritOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50 focus:outline-none"
+                  aria-label="關閉"
+                  title="關閉"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
             </div>
