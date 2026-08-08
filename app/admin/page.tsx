@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/components/AuthProvider';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { signOut } from '@/lib/auth';
 
 type ResourceItem = { id?: string; title: string; category?: string; url?: string };
@@ -26,13 +26,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!user) return;
-    loadSurveys();
-    loadResources();
-  }, [user]);
-
-  const loadSurveys = async () => {
+  const loadSurveys = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -45,15 +39,21 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadResources = async () => {
+  const loadResources = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/resources');
       const data = await res.json();
       if (data?.ok) setResources(data.rows ?? []);
     } catch {}
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    loadSurveys();
+    loadResources();
+  }, [user, loadSurveys, loadResources]);
 
   const deleteSurvey = async (id?: string) => {
     if (!id) return;
@@ -140,13 +140,13 @@ export default function AdminPage() {
             <p style={{ margin: 0, color: '#64748b', fontSize: 13.5 }}>{user.displayName || user.email}</p>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
-            <button onClick={() => signOut()} style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', color: '#0f172a', cursor: 'pointer', fontWeight: 600 }}>登出</button>
+            <button onClick={() => signOut()} style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', color: '#0f172a', cursor: 'pointer', fontWeight: 600 }}>Sign out</button>
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
-          <button onClick={() => setTab('surveys')} style={{ padding: '10px 14px', borderRadius: 10, border: tab === 'surveys' ? '1px solid #003262' : '1px solid #e2e8f0', background: tab === 'surveys' ? '#003262' : '#fff', color: tab === 'surveys' ? '#fff' : '#0f172a', cursor: 'pointer', fontWeight: 700 }}>問卷</button>
-          <button onClick={() => setTab('resources')} style={{ padding: '10px 14px', borderRadius: 10, border: tab === 'resources' ? '1px solid #003262' : '1px solid #e2e8f0', background: tab === 'resources' ? '#003262' : '#fff', color: tab === 'resources' ? '#fff' : '#0f172a', cursor: 'pointer', fontWeight: 700 }}>資源</button>
+          <button onClick={() => setTab('surveys')} style={{ padding: '10px 14px', borderRadius: 10, border: tab === 'surveys' ? '1px solid #003262' : '1px solid #e2e8f0', background: tab === 'surveys' ? '#eef2ff' : '#fff', cursor: 'pointer', fontWeight: 600 }}>Surveys</button>
+          <button onClick={() => setTab('resources')} style={{ padding: '10px 14px', borderRadius: 10, border: tab === 'resources' ? '1px solid #003262' : '1px solid #e2e8f0', background: tab === 'resources' ? '#eef2ff' : '#fff', cursor: 'pointer', fontWeight: 600 }}>Resources</button>
         </div>
 
         {error ? <div style={{ background: '#fee2e2', border: '1px solid #fecaca', color: '#991b1b', padding: '12px 14px', borderRadius: 12, marginBottom: 14 }}>{error}</div> : null}
@@ -194,12 +194,12 @@ export default function AdminPage() {
                           <td style={{ padding: '10px 8px' }}>{s.instructor}</td>
                           <td style={{ padding: '10px 8px' }}>{s.studentName || '—'}</td>
                           <td style={{ padding: '10px 8px' }}>{mean}</td>
-                          <td style={{ padding: '10px 8px', maxWidth: 260, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#475569' }} title={[s.feedbacks?.valuable, s.feedbacks?.improvement, s.feedbacks?.question].filter(Boolean).join(' | ') || ''}>
+                          <td style={{ padding: '10px 8px', maxWidth: 260, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#475569' }} title={[s.feedbacks?.valuable, s.feedbacks?.improvement, s.feedbacks?.question].filter(Boolean).join(' | ') || '—'}>
                             {[s.feedbacks?.valuable, s.feedbacks?.improvement, s.feedbacks?.question].filter(Boolean).join(' | ') || '—'}
                           </td>
                           <td style={{ padding: '10px 8px', color: '#64748b' }}>{s.submittedAt ? new Date(s.submittedAt).toLocaleString() : '—'}</td>
                           <td style={{ padding: '10px 8px' }}>
-                            <button onClick={() => deleteSurvey(s.id)} style={{ background: 'transparent', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 8, padding: '6px 10px', cursor: 'pointer' }}>刪除</button>
+                            <button onClick={() => deleteSurvey(s.id)} style={{ background: 'transparent', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 8, padding: '6px 10px', cursor: 'pointer' }}>Delete</button>
                           </td>
                         </tr>
                       );
@@ -237,7 +237,7 @@ export default function AdminPage() {
                           {r.url ? <a href={r.url} target="_blank" rel="noopener" style={{ color: '#003262' }}>Link</a> : '—'}
                         </td>
                         <td style={{ padding: '10px 8px' }}>
-                          <button onClick={() => deleteResource(r.id)} style={{ background: 'transparent', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 8, padding: '6px 10px', cursor: 'pointer' }}>刪除</button>
+                          <button onClick={() => deleteResource(r.id)} style={{ background: 'transparent', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 8, padding: '6px 10px', cursor: 'pointer' }}>Delete</button>
                         </td>
                       </tr>
                     ))}
