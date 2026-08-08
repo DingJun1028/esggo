@@ -2,7 +2,7 @@
 # ============================================================================
 # omni-jules-bridge.sh — OmniJules 萬能外部協力橋接器
 # ----------------------------------------------------------------------------
-# 將 Google Jules REST API 之能力，以「免費自託管」為預設實作提供給 OmniJules
+# 將 OmniJules REST API 之能力，以「免費自託管」為預設實作提供給 OmniJules
 # (OA-Team 30)。依 soul.md §17 決議：不呼叫付費 jules.googleapis.com，
 # 除非顯式 ALLOW_PAID_API=1 + 已設 JULES_API_KEY（違反免費硬約束，需自負）。
 #
@@ -101,10 +101,10 @@ cmd_send_message() {
 cmd_integrations() {
   if paid_allowed; then
     warn_paid
-    echo "【付費】Jules Integrations 為 web UI 操作（Render 等），無直接 REST 端點；"
+    echo "【付費】OmniJules Integrations 為 web UI 操作（Render 等），無直接 REST 端點；"
     echo "  請於 https://jules.google.com/settings#integrations 手動連接。"
   else
-    echo "【免費自託管】整合層等價（對齊 Jules Integrations 運作方式）:"
+    echo "【免費自託管】整合層等價（對齊 OmniJules Integrations 運作方式）:"
     echo "  ── Render / CI build-failure 偵測 ──"
     echo "    OA-TWINS Auto-Repair 監看 gh run（失敗即修） → 萬能維護蜂(28)"
     echo "  ── 自主觸發（webhook 甦醒）──"
@@ -152,7 +152,7 @@ selftest() {
 
 usage() {
   cat <<EOF
-OmniJules Bridge — Jules API 免費自託管橋接器 (soul.md §17)
+OmniJules Bridge — OmniJules API 免費自託管橋接器 (soul.md §17)
 用法:
   $0 list-sources
   $0 create-session [prompt] [branch]

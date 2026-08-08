@@ -1,18 +1,18 @@
-# Jules REST API 參考（存檔版 · 供 OmniJules 取用）
+# OmniJules REST API 參考（存檔版 · 供 OmniJules 取用）
 
-> 來源：使用者於終端機貼上的 Google Jules REST API Quickstart（alpha 版）。
-> 本典立場：依 soul.md §17，不整合 Google Jules 本體（付費 SaaS）；
+> 來源：使用者於終端機貼上的 OmniJules REST API Quickstart（alpha 版）。
+> 本典立場：依 soul.md §17，不整合 OmniJules 本體（付費 SaaS）；
 > 下列端點僅作「能力映射」參考，實作走免費自託管（見 omni-jules-bridge.*）。
 
 ## Authentication
 
 - API key 經 `X-Goog-Api-Key` header 傳遞。
-- 在 Jules web app → Settings 產生（最多 3 把）。
+- 在 OmniJules web app → Settings 產生（最多 3 把）。
 - 金鑰公開暴露會被自動停用。
 
 ## 核心資源
 
-- **Source**：輸入源（如 GitHub repo）。須先安裝 Jules GitHub App。
+- **Source**：輸入源（如 GitHub repo）。須先安裝 OmniJules GitHub App。
 - **Session**：連續工作單元（類似 chat session），由 prompt + source 發起。
 - **Activity**：Session 內單次工作（生成計畫、訊息、進度更新）。
 
@@ -77,7 +77,7 @@ Body: { "prompt": "Can you make the app corgi themed?" }
 
 ## 免費自託管等價（OA-Team 30 · OmniJules）
 
-| Jules 端點 | OmniJules 免費實作 | 負責靈魂 |
+| OmniJules 端點 | OmniJules 免費實作 | 負責靈魂 |
 |-----------|-------------------|----------|
 | list sources | `gh repo list` / 本組織授權 repo | 萬能外交蜂(23) |
 | create session | 觸發 `auto-repair.yml`（OA-TWINS Auto-Repair） | 萬能編碼蜂(07) |
@@ -87,30 +87,30 @@ Body: { "prompt": "Can you make the app corgi themed?" }
 
 詳見 soul.md §17「萬能外部協力映射」。
 
-## Integrations（Jules 整合 · 摘錄）
+## Integrations（OmniJules 整合 · 摘錄）
 
-> 來源：使用者於終端機貼上的 Jules Docs → Integrations 頁面（Render / 部署與 CI/CD）。
+> 來源：使用者於終端機貼上的 OmniJules Docs → Integrations 頁面（Render / 部署與 CI/CD）。
 
 ### 核心概念
-Jules 透過連接外部工具，取得與你相同的上下文：自主偵測 bug、讀取 build log、理解專案需求，無需人工輸入。
+OmniJules 透過連接外部工具，取得與你相同的上下文：自主偵測 bug、讀取 build log、理解專案需求，無需人工輸入。
 
 ### 部署與 CI/CD
-連接部署管線，讓 Jules 自動偵測 build 失敗並提出修復。例如 **Render**：
+連接部署管線，讓 OmniJules 自動偵測 build 失敗並提出修復。例如 **Render**：
 - 自動取得 build log 並修復部署失敗。
-- Jules 監看失敗的 build、分析 log、直接把修復推進 Jules 自己開的 PR。
+- OmniJules 監看失敗的 build、分析 log、直接把修復推進 OmniJules 自己開的 PR。
 
 ### 整合運作方式（How Integrations Work）
-連接一個整合時，Jules 使用 scoped access 與工具互動：
-1. **預設唯讀**：除非另有指定，Jules 只請求讀取 log / 狀態所需的最小權限。
-2. **自主觸發**：整合讓 Jules 能因外部事件（如失敗 webhook）自動甦醒，不必等人下 prompt。
+連接一個整合時，OmniJules 使用 scoped access 與工具互動：
+1. **預設唯讀**：除非另有指定，OmniJules 只請求讀取 log / 狀態所需的最小權限。
+2. **自主觸發**：整合讓 OmniJules 能因外部事件（如失敗 webhook）自動甦醒，不必等人下 prompt。
 3. **安全儲存**：API key 加密保存，絕不顯示於聊天介面或跨 session 共用。
 
 > 對齊點：上述「自主觸發」「加密儲存」「scoped access」與 OA-Team 30 的 OAB 事件總線、
-> 5T Trustworthy（Hash Lock + Object.freeze）、以及 §17 外部協力映射完全一致——只是 Jules 走 Google 付費 SaaS。
+> 5T Trustworthy（Hash Lock + Object.freeze）、以及 §17 外部協力映射完全一致——只是 OmniJules 走 Google 付費 SaaS。
 
 ## 免費自託管等價（整合層 · OmniJules）
 
-| Jules 整合能力 | OmniJules 免費實作 | 負責靈魂 |
+| OmniJules 整合能力 | OmniJules 免費實作 | 負責靈魂 |
 |---------------|-------------------|----------|
 | Render build-failure 偵測 | OA-TWINS Auto-Repair 監看 `gh run`（失敗即修） | 萬能維護蜂(28) |
 | 自主觸發（webhook 甦醒） | OAB 萬能事件總線（OmniTag 訂閱） | 萬能運營蜂(20) |
@@ -121,7 +121,7 @@ Jules 透過連接外部工具，取得與你相同的上下文：自主偵測 b
 
 ## 待續章節索引（接納框架 · D）
 
-> 使用者陸續貼上的 Jules Docs 章節，依序接於此處，保持 §17 對齊。
+> 使用者陸續貼上的 OmniJules Docs 章節，依序接於此處，保持 §17 對齊。
 
 | 章節 | 狀態 | 對應 OmniJules 落點 |
 |------|------|---------------------|
@@ -129,10 +129,10 @@ Jules 透過連接外部工具，取得與你相同的上下文：自主偵測 b
 | Integrations (Render) | ✅ 已入庫 + 腳本 | tools/render-integration.sh · §17.7 |
 | Supabase 整合 key | ✅ 已接受（session env 注入） | tools/omni-jules-bridge.py supabase |
 | Changelog | 🔄 待貼 | 本檔續章 + bridge 指令擴充 |
-| Jules Tools (CLI) | 🔄 待貼 | 本檔續章 + bridge 指令擴充 |
+| OmniJules Tools (CLI) | 🔄 待貼 | 本檔續章 + bridge 指令擴充 |
 | Guides | 🔄 待貼 | 本檔續章 |
 | Examples | 🔄 待貼 | 本檔續章 |
 
 **接納規範**：每貼一章，於本索引標 ✅、於本檔補對應章節、必要時擴充 bridge 指令；
-始終遵守 §17.0 硬約束（不接付費 Jules 本體、等功零金）。
+始終遵守 §17.0 硬約束（不接付費 OmniJules 本體、等功零金）。
 詳見 `omni-jules-bridge.*` 之 `integrations` 指令。

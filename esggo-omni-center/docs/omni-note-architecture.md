@@ -82,5 +82,5 @@ interface IComponentCore<T> {
 
 **開發技術棧 (Tech Stack)**:
 - UI 引擎: Google Stitch MVP/MCP (AI 輔助產生實體級UI)
-- 修復協議: Google Jules 萬能果因修復 (嚴格遵循：觀果➜ 立願➜ 尋因➜ 修因➜ 驗因➜ 證果)
+- 修復協議: OmniJules 萬能果因修復 (嚴格遵循：觀果➜ 立願➜ 尋因➜ 修因➜ 驗因➜ 證果)
 - 後端/快取: NCBDB + OmniCache (L1 In-Memory / L2 Redis)

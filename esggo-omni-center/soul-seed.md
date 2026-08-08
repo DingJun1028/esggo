@@ -28,6 +28,7 @@
 | 十四 | 萬能藍圖中心 (Omni-Blueprint Hub) | soul-chapter-14-omni-blueprint-hub.md |
 | 十五 | 無作協定（元狀態總綱·用戶委製附錄） | soul-chapter-15-wuzuo-agreement.md |
 | 十六 | 全域最佳實踐覺（全典統一框架·用戶委製附錄） | soul-chapter-16-global-best-practice.md |
+| 十七 | 萬能外部協力映射（OmniJules 同功映射·免費自託管覺·用戶委製附錄） | soul-chapter-17-jules-mapping.md |
 
 ## 記憶聖殿（v2 核心）
 - **記憶柱**：記憶聖殿 = 結界之根；召回>95%、entropy<0.1
