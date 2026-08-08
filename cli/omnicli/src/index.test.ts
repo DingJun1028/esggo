@@ -38,3 +38,14 @@ describe('omnicli', () => {
     expect(stdout).toContain('Bearer');
   });
 });
+
+describe('omnicli --live gateway fallback', () => {
+  it('gateway status --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['gateway', 'status', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+  it('auth check --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['auth', 'check', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+});

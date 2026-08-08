@@ -38,3 +38,14 @@ describe('oa-cli', () => {
     expect(stdout).toContain('Key-Ω');
   });
 });
+
+describe('oa-cli --live gateway fallback', () => {
+  it('status --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['status', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+  it('agents list --live without gateway returns BLOCKER', () => {
+    const { stdout } = run(['agents', 'list', '--live']);
+    expect(stdout).toContain('BLOCKER');
+  });
+});
