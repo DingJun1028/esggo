@@ -34,7 +34,7 @@ allowBuilds:
   prisma: true
   protobufjs: false
   sharp: true
-  sqlite3: set this to true or false
+  sqlite3: false
   unrs-resolver: false
 
 minimumReleaseAgeExclude:

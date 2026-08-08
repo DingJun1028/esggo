@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -372,19 +372,23 @@ export function DashboardView({ mode = "default" }: { mode?: string }) {
   }
 
   // Filter content based on mode
-  const filteredFeed = PROPHETIC_FEED.filter(item => {
-    if (mode === "qa") return item.tags?.includes("trust") || item.type === "insight";
-    if (mode === "sme") return item.tags?.includes("sme") || item.tags?.includes("carbon");
-    if (mode === "social") return item.tags?.includes("social") || item.tags?.includes("stakeholder");
-    return true;
-  });
+  const filteredFeed = useMemo(() => {
+    return PROPHETIC_FEED.filter(item => {
+      if (mode === "qa") return item.tags?.includes("trust") || item.type === "insight";
+      if (mode === "sme") return item.tags?.includes("sme") || item.tags?.includes("carbon");
+      if (mode === "social") return item.tags?.includes("social") || item.tags?.includes("stakeholder");
+      return true;
+    });
+  }, [mode]);
 
-  const filteredTasks = tasks.filter(task => {
-    if (mode === "qa") return task.category === "Verification";
-    if (mode === "sme") return task.category === "Implementation" || task.category === "Strategy";
-    if (mode === "social") return task.category === "Engagement";
-    return true;
-  });
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      if (mode === "qa") return task.category === "Verification";
+      if (mode === "sme") return task.category === "Implementation" || task.category === "Strategy";
+      if (mode === "social") return task.category === "Engagement";
+      return true;
+    });
+  }, [tasks, mode]);
 
   return (
     <div className="view-container">

@@ -214,3 +214,75 @@ export interface IApiResult<T> {
   data: T;
   error?: any;
 }
+
+// --- Universal Translator (萬能即時翻譯) Domain Types ---
+// canonical 源: esggo/shared/types.ts → 經 scripts/export-shared-types.js
+// 生成各 consumer 的 types/generated/esggo-shared.d.ts (雙向 TS 終始矩陣)
+
+/** 翻譯引擎識別 (5T 可溯源 X-OA-Engine) */
+export enum TranslateEngine {
+  GOOGLE_GTX = 'google-gtx',
+  LIBRETRANSLATE = 'libretranslate',
+  MYMEMORY = 'mymemory',
+  PASSTHROUGH = 'passthrough',
+  FALLBACK_ORIGIN = 'fallback-origin',
+}
+
+/** 支援語碼 (zh-TW 為繁中展示名, 內部規範為 zh-CN) */
+export type LanguageCode =
+  | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
+  | 'en' | 'ja' | 'ko' | 'es' | 'fr';
+
+/** /translate 單語請求 */
+export interface ITranslateRequest {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  /** 多語平行翻譯目標 (即時轉播場景) */
+  targets?: LanguageCode[];
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+}
+
+/** /translate 單語回應 */
+export interface ITranslateResult {
+  text: string;
+  /** 引擎識別字串 (對齊 TranslateEngine 枚舉值, 但以 string 寬鬆容許運行期動態引擎) */
+  engine: string;
+  cached: boolean;
+  version?: string;
+}
+
+/** /speak 即時轉播推播請求 (studio → SSE) */
+export interface ISpeakPayload {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string, 引擎層再做規範化) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  targets?: LanguageCode[];
+  room?: string;
+  speaker?: string;
+}
+
+/** SSE /stream 推播事件 (觀眾端雙語浮層字幕) */
+export interface ISseTranslationEvent {
+  text: string;
+  translations: Partial<Record<LanguageCode, string>>;
+  engines?: Partial<Record<LanguageCode, string>>;
+  /** 單語場景的引擎識別字串 (對齊 TranslateEngine) */
+  engine?: string;
+  cached?: boolean;
+  trace?: string;
+  room?: string;
+  speaker?: string;
+}
+
+/** 全域全端全量雙向 TS 架構終始矩陣錨點 (全 consumer 共享同一份契約) */
+export interface IOmniTypeMatrix {
+  canonical: 'esggo/shared/types.ts';
+  generator: 'scripts/export-shared-types.js';
+  consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}

@@ -1,8 +1,18 @@
 // ============================================================
-// 萬能即時翻譯 — 服務層 (HTTP + WebSocket) · 純免費版
-// 引擎: LibreTranslate(自建) → MyMemory(免費) → 原文兜底 (零付費 key)
-// 端點: /health | /translate (單語/多語) | /ws (即時流) | 靜態 UI (/)
+// 萬能即時翻譯 — 服務層 (HTTP + WebSocket + SSE) · 純免費版
+// 引擎: Google gtx(免費,零key) → LibreTranslate(自建) → MyMemory(免費) → 原文兜底 (零付費 key)
+// 端點:
+//   GET  /health           健康檢查
+//   GET  /                 Live 即時翻譯 UI
+//   GET  /studio          收音端 (麥克風 / 電腦聲音 → 多語翻譯)
+//   GET  /stream?room=xxx 觀眾端 (SSE 雙語浮層字幕)
+//   POST /translate       單語 / 多語翻譯 (回 JSON，並廣播 SSE)
+//   POST /speak           即時轉播推播 (studio 已轉錄文字 → SSE 字幕)
+//   WS   /ws              即時流 (輸入即翻譯並廣播)
 // 5T 溯源標頭: X-OA-Engine / X-OA-Cached / X-OA-Trace
+// 雙向 TS 終始矩陣: 領域型別契約見 ../../shared/types.ts (canonical) → types/generated/esggo-shared.d.ts (generated)
+// @ts-check
+/// <reference path="./types/generated/esggo-shared.d.ts" />
 // ============================================================
 import http from 'node:http';
 import fs from 'node:fs';
@@ -22,28 +32,88 @@ try {
 } catch { /* 忽略 .env 讀取錯誤，維持預設 */ }
 
 const PORT = Number(process.env.PORT || 8788);
-const APP_VERSION = '1.2.0';           // 免費版: 移除 Akkadu, 加即時 UI
+const APP_VERSION = '1.3.0';           // 加強版: REST/WS/SSE 全鏈轉播 + 語碼規範化
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 // 5T 溯源標頭 (在 writeHead 中內聯注入, 避免 writeHead 後 setHeader 衝突)
+/**
+ * @param {import('node:http').ServerResponse} res
+ * @param {any} obj
+ * @param {Record<string, string>} [extraHeaders]
+ */
 function writeJson(res, obj, extraHeaders = {}) {
   res.writeHead(200, {
-    'content-type': 'application/json',
+    'content-type': 'application/json; charset=utf-8',
     ...extraHeaders,
   });
   res.end(JSON.stringify(obj));
 }
 
-// SSE 觀眾端客戶端集合與廣播（定義於 server 建立前，避免 TDZ；供 WS handler 與主 callback 共用）
+// SSE 觀眾端客戶端集合與廣播
+// 每個 SSE 客戶端帶 room 訂閱（?room=xxx）；broadcast 時按 room 過濾（room 空 = 接收全部）
 const sseClients = new Set();
+/**
+ * @param {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} payload
+ */
 function broadcastTranslation(payload) {
   const data = `event: translation\ndata: ${JSON.stringify(payload)}\n\n`;
   for (const c of sseClients) {
-    try { c.res.write(data); } catch { sseClients.delete(c); }
+    try {
+      // room 過濾：客戶端指定 room 時，只收相同 room 的轉播
+      if (c.room && payload.room && c.room !== payload.room) continue;
+      c.res.write(data);
+    } catch { sseClients.delete(c); }
   }
 }
 
+/**
+ * 以 Buffer 累積請求體 (原始 bytes, 用於音訊上傳)
+ * @param {import('node:http').IncomingMessage} req
+ * @returns {Promise<Buffer>}
+ */
+async function readBodyRaw(req) {
+  /** @type {Buffer[]} */
+  const chunks = [];
+  for await (const c of req) chunks.push(/** @type {Buffer} */ (c));
+  return Buffer.concat(chunks);
+}
+
+/**
+ * 以 Buffer 累積請求體再轉字串 (避免多 byte UTF-8 在 stream 分塊邊界被切斷導致亂碼，Cloudflare Tunnel 環境下必須)
+ * @param {import('node:http').IncomingMessage} req
+ * @returns {Promise<string>}
+ */
+async function readBody(req) {
+  return (await readBodyRaw(req)).toString('utf-8');
+}
+
+// --- 共用：執行翻譯並廣播 SSE（REST /translate、/speak 與 WS /ws 共用，打通 studio→stream 即時轉播） ---
+/**
+ * @param {import('./types/generated/esggo-shared.d.ts').ISpeakPayload} p
+ * @returns {Promise<(import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent & { version?: string }) | null>}
+ */
+async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker = 'studio' }) {
+  if (!text) return null;
+  const trace = hashOf(text).slice(0, 16);
+  if (Array.isArray(targets) && targets.length) {
+    const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
+    /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
+    const out = { text, translations: r.translations, engines: r.engines, trace, room: room || '', speaker: speaker || 'studio' };
+    broadcastTranslation(out);
+    return { ...out, engine: Object.values(r.engines)[0] || 'n/a', cached: false };
+  }
+  const rec = await translateDetailed(text, String(from), String(to));
+  /** @type {Record<string, string>} */
+  const tr = { [/** @type {string} */ (to)]: rec.text };
+  /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
+  const out = { text, translations: tr, engine: rec.engine, cached: rec.cached, trace, room: room || '', speaker: speaker || 'studio' };
+  broadcastTranslation(out);
+  return { ...out, text: rec.text };
+}
+
 const server = http.createServer(async (req, res) => {
+  /** @type {string} */
+  const url = req.url || '';
   // CORS (前端跨域呼叫)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -51,103 +121,139 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
   // 健康檢查
-  if (req.url === '/health' && req.method === 'GET') {
+  if (url === '/health' && req.method === 'GET') {
     return writeJson(res, { status: 'ok', version: APP_VERSION, stats });
   }
 
   // SSE 觀眾端串流（必須在主靜態路由之前攔截，否則會被當成 HTML 頁回傳）
-  if (req.url.startsWith('/stream') && req.method === 'GET') {
+  if (url.startsWith('/stream') && req.method === 'GET') {
+    // 解析 query: ?src=studio&room=xxx（room 用於多房間隔離）
+    const q = new URL(url, 'http://localhost').searchParams;
+    const room = q.get('room') || '';
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
       'Access-Control-Allow-Origin': '*',
     });
-    const client = { res, id: Date.now() + Math.random() };
+    const client = { res, id: Date.now() + Math.random(), room };
     sseClients.add(client);
-    res.write(`id: ${client.id}\nevent: heartbeat\n\n`);
+    res.write(`id: ${client.id}\nevent: heartbeat\ndata: {"room":"${room}"}\n\n`);
     req.on('close', () => { sseClients.delete(client); });
     return; // 到此為止，不進靜態路由
   }
 
-  // 靜態前端 UI (免費版 Live 即時翻譯頁)
+  // 靜態前端 UI + 資源 (html/js/css 同目錄白名單)
   if (req.method === 'GET') {
-    // 路由: / → index.html; /studio, /studio.html, /stream.html, ... → public/<name>.html; 其他靜態檔
-    let page = null;
-    if (req.url === '/' || req.url.startsWith('/index')) {
-      page = '/index.html';
-    } else {
-      // 去掉 query string, 取 path
-      const urlPath = req.url.split('?')[0];
-      if (urlPath === '/studio' || urlPath === '/studio.html') page = '/studio.html';
-      else if (urlPath === '/stream.html') page = '/stream.html';
-      else if (urlPath === '/broadcaster' || urlPath === '/broadcaster.html') page = '/broadcaster.html';
-      else if (urlPath === '/receiver' || urlPath === '/receiver.html') page = '/receiver.html';
-      else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) page = urlPath;
-    }
-    if (page) {
-      const fp = path.join(PUBLIC_DIR, page);
+    const urlPath = url.split('?')[0];
+    let file = null, ctype = 'text/html; charset=utf-8';
+    if (urlPath === '/' || urlPath.startsWith('/index')) file = '/index.html';
+    else if (urlPath === '/studio' || urlPath === '/studio.html') file = '/studio.html';
+    else if (urlPath === '/stream' || urlPath === '/stream.html') file = '/stream.html';
+    else if (urlPath === '/overlay' || urlPath === '/overlay.html') file = '/overlay.html';
+    else if (/^\/(qrcode\.min\.js|esggo-shared\.d\.ts)$/.test(urlPath)) { file = urlPath; ctype = 'application/javascript; charset=utf-8'; }
+    else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) file = urlPath;
+    if (file) {
+      const fp = path.join(PUBLIC_DIR, file);
       if (fs.existsSync(fp)) {
-        return res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(fs.readFileSync(fp));
+        return res.writeHead(200, { 'content-type': ctype, 'Cache-Control': 'no-cache, no-store, must-revalidate' }).end(fs.readFileSync(fp));
       }
     }
   }
 
-  // 即時轉播 / 指定轉播 核心 API
-  if (req.url === '/translate' && req.method === 'POST') {
-    let body = '';
-    for await (const c of req) body += c;
+  // 即時轉播推播：studio 直接推播已轉錄文字 → 觀眾端 SSE 即時字幕（免觀眾端二次翻譯）
+  if (url === '/speak' && req.method === 'POST') {
+    let body;
+    try { body = await readBody(req); } catch { res.writeHead(400); return res.end('read fail'); }
+    let p;
+    try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
+    const { text, from = 'auto', to = 'zh-TW', targets, room = '', speaker = 'studio' } = p;
+    if (!text) { res.writeHead(400); return res.end('missing text'); }
+    const rec = await doTranslateAndBroadcast({ text, from: String(from), to: String(to), targets, room, speaker });
+    if (!rec) { res.writeHead(400); return res.end('missing text'); }
+    return writeJson(res, { ok: true, ...rec, version: APP_VERSION }, {
+      'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Trace': String(rec.trace || ''),
+    });
+  }
+
+  // 翻譯核心 API (單語 / 多語) — 同時廣播 SSE，打通 studio(REST)→stream(SSE) 即時轉播
+  if (url === '/translate' && req.method === 'POST') {
+    let body;
+    try { body = await readBody(req); } catch { res.writeHead(400); return res.end('read fail'); }
     let p;
     try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
 
-    const { text, from = 'auto', to = 'zh', targets } = p;
+    const { text, from = 'auto', to = 'zh', targets, room = '' } = p;
     if (!text) { res.writeHead(400); return res.end('missing text'); }
 
     // 多語平行翻譯 (即時轉播場景)
     if (Array.isArray(targets) && targets.length) {
-      const r = await translateToMany(text, from, targets);
+      const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
       const firstEngine = Object.values(r.engines)[0] || 'n/a';
+      broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
       return writeJson(res, { ...r, version: APP_VERSION }, {
-        'X-OA-Engine': firstEngine, 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
+        'X-OA-Engine': String(firstEngine), 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
       });
     }
 
     // 單語翻譯
-    const rec = await translateDetailed(text, from, to);
+    const rec = await translateDetailed(text, String(from), String(to));
+    /** @type {Record<string, string>} */
+    const tr = { [String(to)]: rec.text };
+    broadcastTranslation({ text, translations: tr, engine: rec.engine, cached: rec.cached, trace: hashOf(rec.text).slice(0, 16), room, speaker: 'rest' });
     return writeJson(res, { text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }, {
-      'X-OA-Engine': rec.engine, 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
+      'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
     });
   }
 
+  // 伺服器端語音轉文字 (STT): 前端 MediaRecorder 分段錄音 → 此端點 → 呼叫本地 faster-whisper 微服務 → 回文字
+  // 免費零 key: 不依賴瀏覽器 Web Speech API, 手機/平板/任意瀏覽器皆可用
+  if (url.split('?')[0] === '/transcribe' && req.method === 'POST') {
+    let audioBuf;
+    try { audioBuf = await readBodyRaw(req); } catch { res.writeHead(400); return res.end('read fail'); }
+    if (!audioBuf.length) { res.writeHead(400); return res.end(JSON.stringify({ error: 'empty audio' })); }
+    const q = new URL(url, 'http://localhost').searchParams;
+    const lang = q.get('lang') || '';
+    try {
+      const sttRes = await fetch(`http://127.0.0.1:${process.env.STT_PORT || 8791}/transcribe?lang=${encodeURIComponent(lang)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        body: new Uint8Array(audioBuf),
+        signal: AbortSignal.timeout(Number(process.env.STT_TIMEOUT_MS || 30000)),
+      });
+      const sttJson = await sttRes.json();
+      if (!sttRes.ok) { res.writeHead(sttRes.status); return res.end(JSON.stringify(sttJson)); }
+      return writeJson(res, { text: sttJson.text || '', language: sttJson.language || 'unknown' });
+    } catch (/** @type {any} */ e) {
+      res.writeHead(502);
+      return res.end(JSON.stringify({ error: 'STT service unavailable: ' + (e.message || e) }));
+    }
+  }
+
+  // favicon: 回 204 避免瀏覽器 console 404 雜訊 (非功能需求)
+  if (url.split('?')[0] === '/favicon.ico') {
+    res.writeHead(204, { 'Cache-Control': 'no-cache' });
+    return res.end();
+  }
+
   res.writeHead(404, { 'content-type': 'application/json' });
-  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | GET /health | WS /ws | GET / (UI) | GET /stream (SSE)' }));
+  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | POST /speak {text,from,to|targets[],room} | GET /health | WS /ws | GET / (UI) | GET /stream?room=xxx (SSE)' }));
 });
-
-// SSE 客戶端集合與廣播已於上方定義（server 建立前），此處不再重複
-
 
 // WebSocket 即時流 (若 ws 套件可用)
 if (typeof WebSocketServer !== 'undefined') {
   const wss = new WebSocketServer({ server, path: '/ws' });
-  wss.on('connection', (ws) => {
-    ws.on('message', async (msg) => {
+  wss.on('connection', (/** @type {any} */ ws) => {
+    ws.on('message', async (/** @type {any} */ msg) => {
       let p; try { p = JSON.parse(msg.toString()); } catch { return; }
-      const { text, from = 'auto', to = 'zh', targets } = p;
+      const { text, from = 'auto', to = 'zh', targets, room = '' } = p;
       if (!text) return;
-      const trace = hashOf(text).slice(0, 16);
-      if (Array.isArray(targets) && targets.length) {
-        const r = await translateToMany(text, from, targets);
-        broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace });
-        ws.send(JSON.stringify({ text: Object.values(r.translations)[0] || '', engine: Object.values(r.engines)[0] || 'n/a', cached: false, version: APP_VERSION, trace }));
-      } else {
-        const rec = await translateDetailed(text, from, to);
-        broadcastTranslation({ text, translations: { [to]: rec.text }, engine: rec.engine, cached: rec.cached, trace });
-        ws.send(JSON.stringify({ text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION, trace }));
-      }
+      const rec = await doTranslateAndBroadcast({ text, from, to, targets, room });
+      if (rec) ws.send(JSON.stringify({ ...rec, version: APP_VERSION }));
     });
   });
 }
 
 server.listen(PORT, () => {
-  console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws + UI)`);
+  console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws + SSE /stream + UI)`);
 });
