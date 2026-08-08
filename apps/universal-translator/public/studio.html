@@ -266,13 +266,14 @@ function stopMeter(){
   const fill=$('#meterFill');if(fill)fill.style.width='0%';
 }
 
-// 翻譯推播 (含重試, 解決偶發 Failed to fetch)
+// 翻譯推播 (含重試, 解決偶發 Failed to fetch / 非 JSON 回應)
 async function speakWithRetry(text,targets,trs,attempt=0){
   try{
     const r=await fetch('/speak',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({text,from:'auto',targets,room,speaker:'studio'})});
     if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();
+    const txt=await r.text();
+    let d; try{ d=JSON.parse(txt); }catch(_){ throw new Error('服務回傳非預期格式（網路/逾時），請重試'); }
     if(d.translations) trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');
     else trs.textContent='（無翻譯）';
   }catch(e){
