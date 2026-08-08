@@ -336,24 +336,34 @@ export class OASummon {
 
     console.log(`  🔗 Stage 4: 糾纏 — 建立量子糾纏連接並實際探活...`);
     let connected = false;
-    for (const url of candidates) {
-      try {
-        const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
-        if (res.ok) {
-          const body = await res.json().catch(() => ({}));
-          this._gatewayUrl = url;
-          connected = true;
-          console.log(`     ✅ 量子糾纏通道已建立 → ${url} (HTTP ${res.status})`);
-          console.log(`     📡 閘道: ${body.gateway_name ?? 'unknown'} v${body.version ?? '?'} · status=${body.status ?? '?'}`);
-          const warn = this._checkGatewayHealth(body);
-          if (warn) this._warnings.push(warn);
-          break;
-        } else {
-          console.log(`     ⚠ ${url} 回應 HTTP ${res.status}`);
-        }
-      } catch (e) {
-        console.log(`     ⚠ ${url} 連線失敗: ${e instanceof Error ? e.message : String(e)}`);
-      }
+
+    try {
+      const firstSuccess = await Promise.any(
+        candidates.map(async (url) => {
+          try {
+            const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+            if (res.ok) {
+              const body = await res.json().catch(() => ({}));
+              return { url, res, body };
+            } else {
+              console.log(`     ⚠ ${url} 回應 HTTP ${res.status}`);
+              throw new Error(`HTTP ${res.status}`);
+            }
+          } catch (e) {
+            console.log(`     ⚠ ${url} 連線失敗: ${e instanceof Error ? e.message : String(e)}`);
+            throw e;
+          }
+        })
+      );
+
+      this._gatewayUrl = firstSuccess.url;
+      connected = true;
+      console.log(`     ✅ 量子糾纏通道已建立 → ${firstSuccess.url} (HTTP ${firstSuccess.res.status})`);
+      console.log(`     📡 閘道: ${firstSuccess.body.gateway_name ?? 'unknown'} v${firstSuccess.body.version ?? '?'} · status=${firstSuccess.body.status ?? '?'}`);
+      const warn = this._checkGatewayHealth(firstSuccess.body);
+      if (warn) this._warnings.push(warn);
+    } catch {
+      // Promise.any throws AggregateError when all promises fail
     }
 
     if (!connected) {
