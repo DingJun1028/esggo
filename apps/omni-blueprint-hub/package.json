@@ -4,7 +4,9 @@
   "version": "0.6.0",
   "type": "module",
   "description": "萬能藍圖中心 (Omni-Blueprint Hub) — 自託管即時多語翻譯轉播中樞 · 5T + IComponentCore + 單一資料表 + RWD",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node monitor-server.mjs",
     "dev": "node --watch monitor-server.mjs",
