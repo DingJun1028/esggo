@@ -25,7 +25,7 @@ require_vars \
 MEMORY_CORE_GATEWAY_API_KEY="${MEMORY_CORE_GATEWAY_API_KEY:-local}"
 
 CONTAINER=tdai-proxy
-NETWORK=tdai-memory-stack
+NETWORK=host
 
 if ! $DOCKER network inspect "$NETWORK" >/dev/null 2>&1; then
   info "创建 docker 网络 $NETWORK"
@@ -143,8 +143,6 @@ YAML
 info "启动 proxy (image=$PROXY_IMAGE, port=$PROXY_PORT)"
 $DOCKER run -d --name "$CONTAINER" \
   --network "$NETWORK" \
-  --network-alias proxy \
-  --add-host=host.docker.internal:host-gateway \
   -p "${PROXY_PORT}:8096" \
   -v "$CONFIG_FILE:/data/config.yaml:ro" \
   "$PROXY_IMAGE" >/dev/null
