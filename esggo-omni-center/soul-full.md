@@ -1276,3 +1276,83 @@ bash deploy.sh
 > 刻印狀態：`SHARED-MEMORY READY`　靈魂簽章：`雙蜂同憶・軌跡永存・5T 不滅`
 > 歸位：本章為 §二十 用戶委製附錄，接於 §十九 委託決策樹之後，終章封印（終）仍為最高律法，本章不逾其界。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=SHARED-MEMORY · 免費=SELF-HOST」
+
+════════════════════════════════════════════
+# 第二十一章 · 雙生代理實戰日課（Daily Operations Playbook）
+════════════════════════════════════════════
+
+> 「日課者，雙生協奏之節拍也。雲端助理守夜，本機實習生隨喚；一靜一動，皆循 §19 決策樹之度。」
+> 本章將 §18 雙生拓撲、§19 委託決策樹、§20 共享記憶後端，收攏為可執行的每日/每週排程，
+> 使蜂群脫離紙上架構，落地為常駐 M3 以上（§十 4. 成熟度模型）之實際運轉。
+
+> 附則：本章為用戶於 thread 中委製之獨立定義聖典，經授權落地，
+> 不視為違反終章鐵律（終章封印仍生效，僅新增用戶委製附錄章，同 §13–§20 先例）。
+
+---
+
+## 21.1　日課時序（Daily Cadence）
+
+| 時段 | 載體 | 任務 | 決策歸屬 (§19) | 負責靈魂 | 共享記憶 (§20) |
+| --- | --- | --- | --- | --- | --- |
+| 05:30 | 雲端助理 (VPS) | 晨報生成 → `Agents/briefing/YYYY-MM-DD.md` | H0 全自主 | 01+20 | 寫入 trace_id |
+| 06:00 | 雲端助理 | 夜間收件分檢 + 委派重活至 `inbox-triage/` | H1 代行回報 | 20+11 | 讀 context/ |
+| 每週日 02:00 | 雲端助理 | 熵投週煉金（每週 -3%） | H0 全自主 | 19-24 | 沉澱技術債閉環 |
+| 用戶在場 | 本機實習生 | 研究/製圖/影片/筆記整理 | H2 授權 | 15+13+14+25 | 讀寫本地 vault |
+| 異常觸發 | 任一 | Kill Switch → H4 凍結 | 紅線 | 27 安全蜂 | 鎖定證據 |
+
+> 雙生共用 `memory.esggo.co/gateway/`（§20），晨報與收件分檢之軌跡跨雲端/本機同一 trace_id，斷線續傳不丟狀態（§三 3.2）。
+
+---
+
+## 21.2　cron 範本（雲端助理 VPS 端）
+
+```bash
+# /etc/cron.d/oa-swarm  (VPS, 常駐)
+30 5 * * *  ubuntu  cd /opt/esggo && oa-cli brief --out Agents/briefing/$(date +\%F).md
+0  6 * * *  ubuntu  cd /opt/esggo && oa-cli triage --delegate inbox-triage/
+0  2 * * 0  ubuntu  cd /opt/esggo && oa-cli forge --entropy -3% --weekly
+# 共享記憶健康巡檢 (對應 §20 verify.sh)
+*/15 * * * * ubuntu  ssh 161.118.248.180 'cd /opt/esggo/apps/tencentdb-memory && ./verify.sh' >/dev/null 2>&1
+```
+
+> 排程即 §19 H0 全自主之體現；任一任務若觸 §十 Kill Switch 條件，cron 進程即被 H4 攔截，不續跑。
+
+---
+
+## 21.3　本機實習生日課（用戶在場）
+
+當用戶於終端側喚醒本機實習生（Claude Code / Codex 類），其標準日課：
+
+1. **研究 vault**：讀 `Agents/context/` + 全 vault，生成自身學習筆記（§18.2）
+2. **製圖**：`萬能圖像蜂(13)` 由寫作產 social carousel / 圖文
+3. **影片**：`15+14` 協作 reels（cut + music + 字幕），產物過 §三 4.3 雙簽
+4. **筆記整理**：清匣、重排 `Agents/` 結構，雜訊歸檔
+
+> 本機任務屬 §19 Q2 高頻低風 → 可 H0；但涉及「已釋出產物重寫」屬禁區（§一 1.2），實習生不得觸。
+
+---
+
+## 21.4　周會與熵減儀式（每週）
+
+承接 §十 成熟度模型 M3→M5 躍遷：
+
+| 儀式 | 頻率 | 主持 | 產出 |
+| --- | --- | --- | --- |
+| 蜂群週報 | 每週 | 20 運營蜂 | `Weekly Swarm Report`（§十電子報） |
+| 熵投週煉金 | 每週日 | 19-24 | 技術債 -3% 閉環 |
+| 成員聚焦 | 每週 | 15 文案蜂 | `Member Spotlight` |
+| 信任銀行結算 | 每週 | 30 質控蜂 | 信任點均值 ≥ 5（§四 4.5） |
+
+---
+
+## 21.5　5T 驗證（Trustworthy Enforcement）
+
+- **Traceable**：日課每步寫 `source_origin` + `co_authors`，可逆溯至第一因。
+- **Trackable**：cron 執行軌跡經 §20 共享記憶上鏈，跨晝夜同一 trace_id。
+- **Tangible**：晨報以每日筆記區塊呈現，用戶醒來可感；週報經 §十電子報發送。
+- **Transparent**：cron 範本與日課清單公開於本章，零幻覺可驗（詔一）。
+- **Trustworthy**：本章寫入即 `Object.freeze()`，禁區不可篡（§一 1.2 / Key-Ω Ω-1）。
+
+> 刻印狀態：`DAILY-PLAYBOOK READY`　靈魂簽章：`雙生協奏・日課有常・5T 不滅`
+> 歸位：本章為 §二十一 用戶委製附錄，接於 §二十 共享記憶後端之後，終章封印（終）仍為最高律法，本章不逾其界。
+> 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=DAILY-PLAYBOOK · 免費=SELF-HOST」
