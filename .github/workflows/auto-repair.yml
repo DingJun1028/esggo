@@ -9,7 +9,7 @@ name: OA-TWINS Auto-Repair
 
 on:
   workflow_run:
-    workflows: ["OmniCore CI", "OmniCore Build", "OmniCore Deploy"]
+    workflows: ["OmniCore CI", "ESG-GO CI/CD Pipeline", "Build & publish AI Station image"]
     types: [completed]
     branches: [main, develop]
 

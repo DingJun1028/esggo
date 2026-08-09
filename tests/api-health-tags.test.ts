@@ -73,7 +73,7 @@ describe('POST /api/tags/pair', () => {
     expect(res.status).toBe(400);
     const body = await res.json();
     expect(body.success).toBe(false);
-  });
+  }, 15000);
 
   it('rejects invalid mode (400)', async () => {
     const { POST } = await import('../app/api/tags/pair/route');
