@@ -1,6 +1,7 @@
 packages:
   - 'apps/*'
   - 'apps/*/functions'
+  - 'cli/*'
   - 'packages/*'
   - '.'
 
