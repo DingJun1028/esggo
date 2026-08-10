@@ -25,7 +25,7 @@ except Exception as e:
     print(f"[STT] faster-whisper 載入失敗: {e}", file=sys.stderr)
     sys.exit(1)
 
-MODEL_SIZE = os.environ.get("STT_MODEL", "base")  # base | small | medium
+MODEL_SIZE = os.environ.get("STT_MODEL", "small")  # 🆕 base→small: 準確率顯著提升, CPU int8 仍近即時
 DEVICE = os.environ.get("STT_DEVICE", "cpu")
 COMPUTE_TYPE = os.environ.get("STT_COMPUTE", "int8")  # int8 最快, float32 最準
 
@@ -51,8 +51,19 @@ def transcribe(audio_bytes: bytes, lang_hint: str | None = None):
         f.write(audio_bytes)
         tmp = f.name
     try:
-        kwargs = dict(beam_size=5, best_of=5, temperature=(0.0, 0.4, 0.6),
-                      condition_on_previous_text=False, no_speech_threshold=0.3)
+        kwargs = dict(beam_size=5, best_of=5,
+                      temperature=(0.0, 0.4, 0.6),
+                      condition_on_previous_text=False,
+                      no_speech_threshold=0.3,
+                      # 🆕 最新最佳實踐: VAD 濾靜音段, 降幻覺 + 提速 (Silero VAD, faster-whisper 內建)
+                      vad_filter=True,
+                      vad_parameters=dict(
+                          threshold=0.5,          # 語音機率閾值
+                          min_speech_duration_ms=250,
+                          max_speech_duration_s=30,
+                          min_silence_duration_ms=1000,  # 靜默 1s 即切段, 避免拖尾幻覺
+                          speech_pad_ms=300,
+                      ))
         if lang_hint:
             mapped = _LANG_MAP.get(lang_hint.lower())
             if mapped:

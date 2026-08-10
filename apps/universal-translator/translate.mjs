@@ -7,6 +7,7 @@
 /// <reference path="./types/generated/esggo-shared.d.ts" />
 // ============================================================
 import crypto from 'node:crypto';
+import { ollamaEnabled, viaOllama } from './translate_ollama.mjs';
 
 const CACHE = new Map();
 const CACHE_MAX = Number(process.env.TRANSLATE_CACHE_MAX || 1000);
@@ -183,9 +184,12 @@ function normalizeLang(/** @type {string} */ l) {
  */
 function engineChain() {
   /** @type {Array<[string, (text: string, from?: string, to?: string) => Promise<string>]>} */
-  const chain = [['google-gtx', viaGoogleGtx]]; // 最穩定免費主鏈 (零 key, 支援 auto/zh-TW)
+  const chain = [];
+  // 🆕 鏈首: 自託管 Ollama LLM (qwen2.5:3b) 語境感知翻譯 — 免費算立, 品質超 gtx 碎句
+  if (ollamaEnabled()) chain.push([`ollama:${process.env.OLLAMA_MODEL || 'qwen2.5:3b-instruct-q4_K_M'}`, viaOllama]);
+  chain.push(['google-gtx', viaGoogleGtx]); // 後備免費主鏈 (零 key, 支援 auto/zh-TW)
   if (process.env.LIBRETRANSLATE_URL) chain.push(['libretranslate', viaLibre]);
-  chain.push(['mymemory', viaMyMemory]); // 後備 (crowd 層品質不穩，作兜底前最後一搏)
+  chain.push(['mymemory', viaMyMemory]); // 最終兜底 (crowd 層品質不穩)
   return chain;
 }
 
