@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
@@ -160,9 +160,13 @@ export function EsgMetricsView() {
     }
   };
 
-  const filteredMetrics = selectedCategory 
-    ? metrics.filter(m => m.category === selectedCategory)
-    : metrics;
+  // ⚡ Bolt Optimization: Memoize the filtering operation to prevent O(N) recalculations on every render (e.g. animation frames, hover states)
+  // Impact: Reduces main thread blocking during frequent UI interactions
+  const filteredMetrics = useMemo(() => {
+    return selectedCategory
+      ? metrics.filter(m => m.category === selectedCategory)
+      : metrics;
+  }, [selectedCategory, metrics]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -174,19 +178,23 @@ export function EsgMetricsView() {
     }
   };
 
-  const chartData = ["E", "S", "G"].map(cat => {
-    const catMetrics = metrics.filter(m => m.category === cat);
-    const achieved = catMetrics.filter(m => m.status === 'ACHIEVED' || m.status === 'ON_TRACK').length;
-    const total = catMetrics.length;
-    return {
-      name: cat,
-      fullName: CATEGORY_NAMES[cat],
-      achieved,
-      total,
-      completionRate: total > 0 ? Math.round((achieved / total) * 100) : 0,
-      color: CATEGORY_COLORS[cat]
-    };
-  });
+  // ⚡ Bolt Optimization: Memoize charting data calculation to avoid array mapping and deep filtering on every render
+  // Impact: Caches the resulting complex objects so the BarChart doesn't unnecessarly receive new object references, preventing deeper re-renders.
+  const chartData = useMemo(() => {
+    return ["E", "S", "G"].map(cat => {
+      const catMetrics = metrics.filter(m => m.category === cat);
+      const achieved = catMetrics.filter(m => m.status === 'ACHIEVED' || m.status === 'ON_TRACK').length;
+      const total = catMetrics.length;
+      return {
+        name: cat,
+        fullName: CATEGORY_NAMES[cat],
+        achieved,
+        total,
+        completionRate: total > 0 ? Math.round((achieved / total) * 100) : 0,
+        color: CATEGORY_COLORS[cat]
+      };
+    });
+  }, [metrics]);
 
   return (
     <div className="view-container animate-in fade-in duration-500">
