@@ -169,7 +169,7 @@ const server = http.createServer(async (req, res) => {
         heap_total_mb: Math.round(mem.heapTotal / 1024 / 1024),
       },
       sse_clients: sseClients.size,
-      stt_port: STT_PORT,
+      stt_port: Number(process.env.STT_PORT || 8791),
     });
   }
 
