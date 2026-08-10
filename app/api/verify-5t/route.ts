@@ -8,7 +8,8 @@
 //   認證: 無 (純計算服務, 不讀寫持久化; 與 /api/hashlock 同級)
 //   POST { 5T 欄位 } -> { pass, status, score, hashLock }
 //     欄位對齊 aistation gate5t.verify_5t 的 artifact 契約:
-//       source_origin (str) | lifecycle_hooks (list) | ui_feedback (any)
+//       source_origin (str) | sources (str[] 多源, >=4 過 traceable 權威閘)
+//       lifecycle_hooks (list) | ui_feedback (any)
 //       transparent_audit (bool) | frozen (bool)
 // ============================================================================
 import { NextResponse } from 'next/server';
@@ -32,8 +33,14 @@ export async function POST(request: Request) {
     }
 
     // 映射 aistation 欄位 -> esggo FiveTScore (單一真相源計算)
+    // sources: 多源陣列 (aistation 補 sources 欄位; 舊版僅 source_origin 單源)
+    const srcList: string[] = Array.isArray(body.sources)
+      ? body.sources.filter((s): s is string => typeof s === "string")
+      : body.source_origin
+        ? [body.source_origin]
+        : [];
     const score = calculateFiveTScore({
-      sources: body.source_origin ? [body.source_origin] : [],
+      sources: srcList,
       algorithmVerified: Boolean(body.transparent_audit),
       metricsProgress: body.ui_feedback ? 1.0 : 0.5,
       hashLocked: Boolean(body.frozen),
