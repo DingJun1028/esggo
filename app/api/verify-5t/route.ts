@@ -19,6 +19,7 @@ export const dynamic = 'force-dynamic';
 
 interface VerifyBody {
   source_origin?: string;
+  sources?: unknown;
   lifecycle_hooks?: unknown[];
   ui_feedback?: unknown;
   transparent_audit?: boolean;
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
     // 映射 aistation 欄位 -> esggo FiveTScore (單一真相源計算)
     // sources: 多源陣列 (aistation 補 sources 欄位; 舊版僅 source_origin 單源)
     const srcList: string[] = Array.isArray(body.sources)
-      ? body.sources.filter((s): s is string => typeof s === "string")
+      ? (body.sources as unknown[]).filter((s): s is string => typeof s === "string")
       : body.source_origin
         ? [body.source_origin]
         : [];
