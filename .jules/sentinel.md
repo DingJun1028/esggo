@@ -25,3 +25,7 @@
 **Vulnerability:** Type declarations out of sync between `shared/types.ts` and `apps/learning-center/types/generated/esggo-shared.d.ts` resulted in CI failing.
 **Learning:** In a codebase leveraging a "universal translator" type pattern across consumers, any updates to the master `shared/types.ts` must be propagated to consumer generated types, otherwise validation scripts like `check-types-sync.js` will fail in CI pipelines, blocking builds.
 **Prevention:** Always run type export scripts (e.g. `node scripts/export-shared-types.js`) or verification checks (`node scripts/check-types-sync.js`) locally after modifying shared types to ensure they are synchronized before committing.
+## 2026-08-10 - [Cloudflare Worker Build Failures in pnpm Monorepo]
+**Vulnerability:** Cloudflare Worker CI builds were failing because the worker's `wrangler.toml` lacked a specific build command. In a pnpm monorepo, Cloudflare's default fallback to `npm install` fails when it encounters `workspace:*` dependencies in the lockfile or package configurations.
+**Learning:** Cloudflare Workers running in a pnpm monorepo environment require explicit package manager configuration during the build phase to resolve workspace dependencies properly.
+**Prevention:** Always include a `[build]` block in `wrangler.toml` with `command = "npx --yes pnpm install --frozen-lockfile"` for any Cloudflare Worker deployed from a pnpm monorepo. The `--yes` flag ensures the process does not hang on interactive prompts in CI.
