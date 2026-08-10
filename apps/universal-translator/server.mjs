@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { WebSocketServer } from 'ws';
 import { translateDetailed, translateToMany, stats, hashOf } from './translate.mjs';
+import { speechToSubtitle } from './stt_client.mjs';
 
 // 讀取 .env（零依賴實作，優先於 process.env 已存在值）
 try {
@@ -183,7 +184,7 @@ const server = http.createServer(async (req, res) => {
     let p;
     try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end('bad json'); }
 
-    const { text, from = 'auto', to = 'zh', targets, room = '' } = p;
+    const { text, from = 'auto', to = 'zh-TW', targets, room = '' } = p;
     if (!text) { res.writeHead(400); return res.end('missing text'); }
 
     // 多語平行翻譯 (即時轉播場景)
@@ -204,6 +205,24 @@ const server = http.createServer(async (req, res) => {
     return writeJson(res, { text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }, {
       'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
     });
+  }
+
+  // 語音轉雙語字幕 (STT → 即時雙向翻譯) — 終始矩陣 ISpeechToSubtitleResult
+  // 鎖定繁中↔英文: detected=zh-TW|en, 對向自動互譯, 5T 溯源
+  if (url.split('?')[0] === '/speech-to-subtitle' && req.method === 'POST') {
+    let audioBuf;
+    try { audioBuf = await readBodyRaw(req); } catch { res.writeHead(400); return res.end('read fail'); }
+    if (!audioBuf.length) { res.writeHead(400); return res.end(JSON.stringify({ error: 'empty audio' })); }
+    const q = new URL(url, 'http://localhost').searchParams;
+    const rawLang = q.get('lang');
+    const langHint = rawLang === 'zh-TW' || rawLang === 'en' ? rawLang : '';
+    try {
+      const r = await speechToSubtitle(audioBuf, langHint);
+      return writeJson(res, r, { 'X-OA-Engine': String(r.engine || 'n/a'), 'X-OA-Trace': String(r.trace || '') });
+    } catch (/** @type {any} */ e) {
+      res.writeHead(502);
+      return res.end(JSON.stringify({ error: 'speech-to-subtitle failed: ' + (e.message || e) }));
+    }
   }
 
   // 伺服器端語音轉文字 (STT): 前端 MediaRecorder 分段錄音 → 此端點 → 呼叫本地 faster-whisper 微服務 → 回文字
@@ -246,7 +265,7 @@ if (typeof WebSocketServer !== 'undefined') {
   wss.on('connection', (/** @type {any} */ ws) => {
     ws.on('message', async (/** @type {any} */ msg) => {
       let p; try { p = JSON.parse(msg.toString()); } catch { return; }
-      const { text, from = 'auto', to = 'zh', targets, room = '' } = p;
+      const { text, from = 'auto', to = 'zh-TW', targets, room = '' } = p;
       if (!text) return;
       const rec = await doTranslateAndBroadcast({ text, from, to, targets, room });
       if (rec) ws.send(JSON.stringify({ ...rec, version: APP_VERSION }));
