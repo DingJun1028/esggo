@@ -49,7 +49,7 @@ CONSTITUTION = {
 # --------------------------------------------------------------------------- #
 class ImmutableEvent:
     """寫入即不可變的事件。"""
-    __slots__ = ("id", "source", "sourceId", "type", "event", "timestamp", "tags", "payload")
+    __slots__ = ("id", "source", "sourceId", "eventType", "timestamp", "tags", "payload")
 
     def __init__(self, source: str, event_type: str, tags: List[str], payload: Dict[str, Any],
                  source_id: Optional[str] = None):
@@ -95,6 +95,9 @@ class OmniAgentBus:
     def _matches(tags: List[str], topic: str) -> bool:
         if topic == "*":
             return True
+        if topic == "platform:":
+            # 匹配任意 platform:* 子類
+            return any(t.startswith("platform:") for t in tags)
         if topic.startswith("platform:"):
             want = topic.split(":", 1)[1]
             return any(t.startswith("platform:") and t.split(":", 1)[1] == want for t in tags)
@@ -177,7 +180,7 @@ async def _self_test(bus: OmniAgentBus):
 
 
 async def _amain(args):
-    bus = OmniAgentBus(bus_id=args.bus, instance_id=args.instance)
+    bus = OmniAgentBus(bus_id=args.bus, instance_id=args.instance, store_dir=args.store)
     if args.self_test:
         await _self_test(bus)
         return

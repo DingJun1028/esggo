@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>萬能語音轉字幕</title>
+<title>Zoom 會議即時雙語字幕</title>
 <script src="./qrcode.min.js"></script>
 <style>
 :root{
@@ -118,7 +118,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 </head>
 <body>
 <div class="topbar">
-  <h1>🎙 萬能語音轉字幕</h1>
+  <h1>🖥 Zoom 會議即時雙語字幕</h1>
   <button class="ico-btn" id="themeBtn" title="深色/淺色">🌙</button>
 </div>
 <div class="wrap">
@@ -126,16 +126,15 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
     <span>翻譯成（可多選）</span>
     <div class="chips" id="chips"></div>
   </div>
-  <label class="check"><input type="checkbox" id="sysChk"> 🖥 用系統音（電腦 / Zoom 聲音）</label>
-  <div class="meter" id="meter"><div class="meter-fill" id="meterFill"></div><span class="meter-tip" id="meterTip">音量表（開始後顯示系統音強弱）</span></div>
+  <div class="meter" id="meter"><div class="meter-fill" id="meterFill"></div><span class="meter-tip" id="meterTip">音量表（開始後顯示 Zoom 會議聲音強弱）</span></div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">點下方按鈕開始，說話即出雙語字幕</span></div>
   <button id="startBtn" class="start-btn">
     <span class="play-ico">▶</span>
     <span class="eq"><i></i><i></i><i></i><i></i></span>
-    <span id="startLabel">開始語音轉字幕</span>
+    <span id="startLabel">開始會議轉譯</span>
   </button>
   <div class="row" style="justify-content:center">
-    <button id="testBtn" class="btn" style="font-size:.82rem;padding:7px 14px">🎤 測試麥克風（錄 4 秒確認轉錄正常）</button>
+    <button id="testBtn" class="btn" style="font-size:.82rem;padding:7px 14px">🖥 測試系統音（錄 4 秒確認 Zoom 聲音有被擷取）</button>
   </div>
   <div class="manual">
     <textarea id="manualInput" placeholder="或手動輸入文字直接推播字幕（免錄音）…  Enter 送出"></textarea>
@@ -150,7 +149,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
       <button class="copy-btn" id="copyBtn">📋 複製連結</button>
     </div>
   </div>
-  <div class="transcript" id="transcript"><div class="empty">尚無字幕 · 開始後語音會即時轉為雙語文字</div></div>
+  <div class="transcript" id="transcript"><div class="empty">尚無字幕 · 開始後 Zoom 會議聲音即時轉為繁中↔英文 雙語字幕</div></div>
   <details class="gl">
     <summary>🐞 除錯資訊（轉錄異常時展開看 STT 原始回應）</summary>
     <div id="debug" style="font-size:.75rem;color:var(--muted);white-space:pre-wrap;word-break:break-all;max-height:140px;overflow:auto;margin-top:6px">— 尚無記錄 —</div>
@@ -178,15 +177,13 @@ function setStatus(s,dot){$('#status').textContent=s;if(dot)$('#dot').className=
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 function dbg(msg){const d=$('#debug');if(d){const ts=new Date().toLocaleTimeString();d.textContent+=`\n[${ts}] ${msg}`;d.scrollTop=d.scrollHeight;}}
 
-// 語言 chips
+// 語言 chips（預設繁中↔英文；用戶仍可在會議中切換目標）
 const active=new Set(['en','zh-TW']);
-const SR_LANG={'zh':'zh-TW','zh-TW':'zh-TW','en':'en-US','ja':'ja-JP','es':'es-ES','fr':'fr-FR','ko':'ko-KR','de':'de-DE'};
-const primaryLang=()=>{ const first=[...active][0]||'zh-TW'; return SR_LANG[first]||'zh-TW'; };
 const chipsBox=$('#chips');
 LANGS.forEach(([code,name])=>{
   const c=document.createElement('div');c.className='chip'+(active.has(code)?' on':'');c.textContent=name;c.dataset.code=code;
   c.onclick=()=>{ if(active.has(code)){ if(active.size>1)active.delete(code); else return; } else active.add(code);
-    c.classList.toggle('on'); if(recognition)recognition.lang=primaryLang(); };
+  c.classList.toggle('on'); };
   chipsBox.appendChild(c);
 });
 
@@ -196,24 +193,8 @@ let room=params.get('room')||'';
 if(!room){room=Math.random().toString(36).slice(2,8);const u=new URL(location);u.searchParams.set('room',room);history.replaceState(null,'',u);}
 $('#roomCode').textContent='房間: '+room;
 
-// === Web Speech API (Chrome 原生, 免費零key, 麥克風模式主要路徑) ===
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+// 電腦收音 (系統音) 模式：僅擷取 Zoom 等電腦播放聲音，不含麥克風
 let recognition=null, usingSR=false;
-function initSR(){
-  if(!SR) return null;
-  const r=new SR();
-  r.continuous=true; r.interimResults=true; r.lang=primaryLang();
-  r.onresult=ev=>{
-    let final='';
-    for(let i=ev.resultIndex;i<ev.results.length;i++){
-      if(ev.results[i].isFinal) final+=ev.results[i][0].transcript;
-    }
-    if(final.trim()) onText(final.trim());
-  };
-  r.onerror=e=>{ if(e.error==='not-allowed'||e.error==='service-not-allowed'){ toast('語音辨識權限被拒, 改用伺服器轉錄'); } };
-  r.onend=()=>{ if(usingSR&&running){ try{r.start();}catch(_){} } };
-  return r;
-}
 
 // QR (同源)
 function showQR(){
@@ -227,15 +208,15 @@ showQR();
 $('#copyBtn').onclick=()=>{navigator.clipboard.writeText(location.origin+'/overlay.html?room='+room).then(()=>toast('已複製觀眾端連結')).catch(()=>toast('複製失敗'));};
 
 // 錄音狀態
-let running=false,stream=null,rec=null,chunks=[],useSys=false;
-async function startMic(){ try{return await navigator.mediaDevices.getUserMedia({audio:true});}catch(e){toast('⚠️ 請允許麥克風權限（網址列圖示）→ 再點開始');return null;} }
+let running=false,stream=null,rec=null,chunks=[],useSys=false,sliceTimer=0;
+// (本版僅支援電腦系統音收音，已移除麥克風輸入)
 async function startSys(){
   try{const s=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});const a=s.getAudioTracks()[0];
     if(!a){toast('請在分享視窗勾選「分享音訊」');s.getTracks().forEach(t=>t.stop());return null;}
     // 不停 video track: Chrome 停 video 會讓 display audio 一併失效, 導致錄不到聲音
     // 原 display stream 的 video 保持活著, audio track 才不會死
     return s;
-  }catch(e){const m=await startMic();if(m)toast('系統音失敗，改用麥克風');return m;}
+  }catch(e){ toast('請允許擷取畫面，並在分享 Zoom 視窗時勾選「分享音訊」，才能擷取會議聲音'); return null; }
 }
 
 // 即時音量條 (診斷系統音/麥克風是否真的抓到聲音)
@@ -267,47 +248,38 @@ function stopMeter(){
 }
 
 // 翻譯推播 (含重試, 解決偶發 Failed to fetch / 非 JSON 回應)
-async function speakWithRetry(text,targets,trs,attempt=0){
+// from: 偵測到的來源語 (zh-TW / en / auto) — 由 onText 依語音自動判定
+async function speakWithRetry(text,from,targets,trs,attempt=0){
   try{
     const r=await fetch('/speak',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text,from:'auto',targets,room,speaker:'studio'})});
+      body:JSON.stringify({text,from,targets,room,speaker:'studio'})});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const txt=await r.text();
     let d; try{ d=JSON.parse(txt); }catch(_){ throw new Error('服務回傳非預期格式（網路/逾時），請重試'); }
     if(d.translations) trs.innerHTML=Object.entries(d.translations).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');
     else trs.textContent='（無翻譯）';
   }catch(e){
-    if(attempt<2){ await new Promise(r=>setTimeout(r,1000)); return speakWithRetry(text,targets,trs,attempt+1); }
+    if(attempt<2){ await new Promise(r=>setTimeout(r,1000)); return speakWithRetry(text,from,targets,trs,attempt+1); }
     trs.innerHTML=`<span style="color:var(--danger)">翻譯失敗：${e.message}（原文已顯示）</span>`;
   }
 }
 
-function onText(text){
+function onText(text, detectedLang){
   // 垃圾轉錄過濾: 純數字/符號/太短 不當字幕
   const clean=text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
-  if(clean.length<2){ toast('轉錄內容無意義（請靠近麥克風或檢查音源）'); return; }
+  if(clean.length<2){ return; }
+  const dl=(detectedLang||'').toLowerCase();
+  // 自動雙向: 繁中↔英文 (講什麼就翻成另一種，精準不混淆)
+  let targets, from;
+  if(dl.startsWith('zh')){ targets=['en']; from='zh-TW'; }
+  else if(dl.startsWith('en')){ targets=['zh-TW']; from='en'; }
+  else { targets=Array.from(active); from='auto'; } // 未知語言: 依用戶選的目標
   const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
   const el=document.createElement('div');el.className='utter';
   const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
   const trs=document.createElement('div');trs.className='trs';trs.textContent='翻譯中…';el.appendChild(trs);
   box.appendChild(el);box.scrollTop=box.scrollHeight;
-  const targets=Array.from(active);
-  speakWithRetry(text,targets,trs);
-}
-
-// 雙語即時字幕: 直接顯示原始 + 對向翻譯 (來自 /speech-to-subtitle), 並廣播 SSE
-function onBilingual(srcText,detected,translation,target,trace){
-  const clean=srcText.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
-  if(clean.length<2){ toast('轉錄內容無意義（請靠近麥克風或檢查音源）'); return; }
-  const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
-  const el=document.createElement('div');el.className='utter';
-  const src=document.createElement('div');src.className='src';
-  src.textContent='▸ ['+(detected==='en'?'EN':'中')+'] '+srcText;el.appendChild(src);
-  const trs=document.createElement('div');trs.className='trs';
-  trs.textContent='['+(target==='en'?'EN':'中')+'] '+(translation||'…');el.appendChild(trs);
-  box.appendChild(el);box.scrollTop=box.scrollHeight;
-  fetch('/speak',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text:srcText,from:detected,to:target,room,speaker:'studio'})}).catch(()=>{});
+  speakWithRetry(text,from,targets,trs);
 }
 
 // 字幕區顯示錯誤卡 (轉錄失敗可見, 非僅 toast)
@@ -319,97 +291,57 @@ function showErrorCard(msg){
 }
 
 async function start(){
-  useSys=$('#sysChk').checked;
   running=true;
-  $('#startBtn').classList.add('recording');$('#startLabel').textContent='停止錄音';
+  $('#startBtn').classList.add('recording');$('#startLabel').textContent='停止轉譯';
   $('#dot').className='dot rec';
-
-  // 系統音模式: 必須用伺服器 whisper (getDisplayMedia 擷取)
-  if(useSys){
-    stream=await startSys();
-    if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
-    startMeter(stream);
-    // 用純 audio-only stream 錄音 (display stream 的 video 保持活著以保住 audio track)
-    const audioOnly=new MediaStream(stream.getAudioTracks());
-    const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
-    rec=new MediaRecorder(audioOnly,{mimeType:mime});chunks=[];
-    rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
-    rec.onstop=async()=>{
-      dbg(`rec.onstop chunks=${chunks.length} bytes=${chunks.reduce((a,c)=>a+c.size,0)}`);
-      if(!chunks.length){ if(running)rec.start(4000); return; }
-      setStatus('🧠 轉錄中…','rec');
-      const blob=new Blob(chunks,{type:mime});chunks=[];
-      const buf=await blob.arrayBuffer();
-      dbg(`POST /speech-to-subtitle bytes=${buf.byteLength}`);
-      try{
-        const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
-        const d=await r.json();
-        dbg(`speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
-        if(d.text&&d.text.trim()){
-          onBilingual(d.text.trim(), d.detected||'zh-TW', d.translation||'', d.target||'en', d.trace||'');
-        }
-        else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
-        else { const m='未偵測到語音（系統音模式請在分享時勾選「分享音訊」）'; toast(m); showErrorCard(m); }
-      }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
-      if(running)rec.start(4000);
-    };
-    let round=0;
-    rec.start(4000);
-    const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent='🖥 系統音收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
-    setStatus('🖥 系統音收音中… 說話即出字幕','rec');
-    return;
-  }
-
-  // 麥克風模式: 優先 Web Speech API (Chrome 原生, 免費零key, 準確率高)
-  if(SR){
-    try{
-      const ms=await startMic(); // 取麥克風僅供音量條診斷 (Web Speech 不吃 stream)
-      if(ms)startMeter(ms,true); // true=僅偵測音量
-      recognition=initSR();
-      usingSR=true;
-      recognition.start();
-      setStatus('🎙 語音辨識中 (Chrome 原生)… 說話即出雙語字幕','rec');
-      if(ms)ms.getTracks().forEach(t=>t.stop()); // 音量條偵測完即釋放麥克風
-      return;
-    }catch(e){ toast('Web Speech 啟動失敗, 改用伺服器轉錄: '+e.message); }
-  }
-  // 備援: 伺服器 whisper (麥克風)
-  stream=await startMic();
-  if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';return;}
+  // 電腦收音 (系統音) 模式：擷取 Zoom 線上會議聲音 → 伺服器 whisper 即時轉錄 → 繁中↔英文 雙語字幕
+  stream=await startSys();
+  if(!stream){running=false;$('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始會議轉譯';return;}
+  startMeter(stream);
+  // 用純 audio-only stream 錄音 (display stream 的 video 保持活著以保住 audio track)
+  const audioOnly=new MediaStream(stream.getAudioTracks());
   const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
-  rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];
-  rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+  rec=new MediaRecorder(audioOnly,{mimeType:mime});chunks=[];
+  rec.ondataavailable=e=>{ if(e.data&&e.data.size>0)chunks.push(e.data); };
   rec.onstop=async()=>{
     if(!chunks.length){ if(running)rec.start(4000); return; }
-    setStatus('🧠 轉錄中…','rec');
     const blob=new Blob(chunks,{type:mime});chunks=[];
     const buf=await blob.arrayBuffer();
+    if(buf.byteLength===0){ if(running)rec.start(4000); return; }
+    setStatus('🧠 轉錄中…','rec');
+    dbg(`POST /transcribe bytes=${buf.byteLength}`);
     try{
-      const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
-      dbg(`speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
-      if(d.text&&d.text.trim())onBilingual(d.text.trim(),d.detected||'zh-TW',d.translation||'',d.target||'en',d.trace||'');
-      else { const m='未偵測到語音，請靠近麥克風'; toast(m); showErrorCard(m); }
+      dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+      if(d.text&&d.text.trim())onText(d.text.trim(), d.language);
+      else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
+      else { const m='未偵測到會議聲音（請在分享 Zoom 視窗時勾選「分享音訊」）'; toast(m); showErrorCard(m); }
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
   };
+  const processSlice=()=>{ // 每 3 秒切一段 → 觸發 onstop 即時轉錄，達成「及時不延遲」
+    if(rec&&rec.state==='recording'){ try{rec.stop();}catch(_){} }
+  };
   let round=0;
   rec.start(4000);
-  const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent='🎙 麥克風收音中 · 第'+round+'輪 (每4秒轉錄)';}else clearInterval(recClock); },4000);
-  setStatus('🎙 收音中… 說話即出字幕','rec');
+  sliceTimer=setInterval(processSlice,3000);
+  const recClock=setInterval(()=>{ if(running){round++;$('#status').textContent='🖥 擷取 Zoom 會議中 · 第'+round+'輪 (每3秒轉譯)';}else clearInterval(recClock); },3000);
+  setStatus('🖥 擷取 Zoom 會議聲音中… 即時轉為繁中↔英文 雙語字幕','rec');
 }
 function stop(){
   running=false;usingSR=false;
   stopMeter();
-  $('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始語音轉字幕';
+  $('#startBtn').classList.remove('recording');$('#startLabel').textContent='開始會議轉譯';
   $('#dot').className='dot';
   if(recognition){try{recognition.stop();}catch(_){}recognition=null;}
+  if(sliceTimer){clearInterval(sliceTimer);sliceTimer=0;}
   if(rec&&rec.state!=='inactive'){try{rec.stop();}catch(_){}}
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
   setStatus('已停止');
 }
 $('#startBtn').onclick=()=>running?stop():start();
-$('#clearBtn').onclick=()=>{const box=$('#transcript');box.innerHTML='<div class="empty">尚無字幕 · 開始後語音會即時轉為雙語文字</div>';};
+$('#clearBtn').onclick=()=>{const box=$('#transcript');box.innerHTML='<div class="empty">尚無字幕 · 開始後 Zoom 會議聲音即時轉為繁中↔英文 雙語字幕</div>';};
 $('#openOverlayBtn').onclick=()=>window.open(location.origin+'/overlay.html?room='+room,'_blank');
 // 手動輸入推播（免錄音，直接出雙語字幕）
 function sendManual(){
@@ -425,33 +357,36 @@ $('#manualInput').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKe
 let testing=false;
 $('#testBtn').onclick=async()=>{
   if(testing||running)return;
-  testing=true;$('#testBtn').disabled=true;$('#testBtn').textContent='🎤 錄音中… 請說話';
+  testing=true;$('#testBtn').disabled=true;$('#testBtn').textContent='🖥 擷取中… 請分享 Zoom 視窗並勾選「分享音訊」';
   let s=null;
   try{
-    s=await navigator.mediaDevices.getUserMedia({audio:true});
+    s=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+    const a=s.getAudioTracks()[0];
+    if(!a){ toast('未擷取到聲音，請在分享時勾選「分享音訊」'); s.getTracks().forEach(t=>t.stop()); return; }
+    const audioOnly=new MediaStream(s.getAudioTracks());
     const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'audio/ogg';
-    const rec2=new MediaRecorder(s,{mimeType:mime});const ch=[];
+    const rec2=new MediaRecorder(audioOnly,{mimeType:mime});const ch=[];
     rec2.ondataavailable=e=>{if(e.data.size>0)ch.push(e.data);};
     const done=new Promise(res=>rec2.onstop=res);
-    rec2.start();$('#testBtn').textContent='🎤 錄音中… (4秒)';
+    rec2.start();$('#testBtn').textContent='🖥 擷取中… (4秒)';
     setTimeout(()=>rec2.stop(),4000);await done;
     const buf=await new Blob(ch,{type:mime}).arrayBuffer();
     $('#testBtn').textContent='🧠 轉錄中…';
-    const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     const d=await r.json();
-    dbg(`[測試] speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+    dbg(`[測試] transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
     const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
     const el=document.createElement('div');el.className='utter';
     if(d.text&&d.text.trim()){
       const clean=d.text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
-      el.innerHTML=`<div class="src">🎤 測試結果：${d.text}</div>`+(clean.length<2?`<div style="color:var(--danger);font-size:.82rem">⚠️ 轉錄出現垃圾內容，麥克風可能距離太遠或環境太吵，建議靠近麥克風再試</div>`:`<div style="color:var(--accent);font-size:.82rem">✅ 麥克風與轉錄正常，可開始正式錄音</div>`);
+      el.innerHTML=`<div class="src">🖥 測試結果：${d.text}</div>`+(clean.length<2?`<div style="color:var(--danger);font-size:.82rem">⚠️ 未擷取到 Zoom 會議聲音，請確認分享時有勾選「分享音訊」且會議正在播放聲音</div>`:`<div style="color:var(--accent);font-size:.82rem">✅ 系統音擷取與轉錄正常，可開始正式會議轉譯</div>`);
     }else if(!r.ok){ el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ 轉錄失敗 (${r.status})：${d.error||'服務異常'}</div>`; }
-    else { el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ 未偵測到語音，請對麥克風說話或檢查系統音設定</div>`; }
+    else { el.innerHTML=`<div class="src" style="color:var(--danger)">⚠️ 未偵測到語音，請確認 Zoom 會議聲音有被擷取</div>`; }
     box.appendChild(el);box.scrollTop=box.scrollHeight;
   }catch(e){ toast('測試失敗：'+e.message); }
-  finally{ if(s)s.getTracks().forEach(t=>t.stop()); testing=false;$('#testBtn').disabled=false;$('#testBtn').textContent='🎤 測試麥克風（錄 4 秒確認轉錄正常）'; }
+  finally{ if(s)s.getTracks().forEach(t=>t.stop()); testing=false;$('#testBtn').disabled=false;$('#testBtn').textContent='🖥 測試系統音（錄 4 秒確認 Zoom 聲音有被擷取）'; }
 };
-setStatus('點下方按鈕開始，說話即出雙語字幕');
+setStatus('點下方按鈕開始，Zoom 會議聲音即時轉為繁中↔英文 雙語字幕');
 </script>
 </body>
 </html>

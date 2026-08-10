@@ -1,10 +1,12 @@
 // ============================================================
 // 萬能即時翻譯 — 服務層 (HTTP + WebSocket + SSE) · 純免費版
 // 引擎: Google gtx(免費,零key) → LibreTranslate(自建) → MyMemory(免費) → 原文兜底 (零付費 key)
+//       [可選] Ollama+Gemma (設 OLLAMA_MODEL 時啟用, 插於引擎鏈最前端)
 // 端點:
 //   GET  /health           健康檢查
 //   GET  /                 Live 即時翻譯 UI
-//   GET  /studio          收音端 (麥克風 / 電腦聲音 → 多語翻譯)
+//   GET  /studio          收音端 (系統音 → 多語翻譯)
+//   GET  /float           一體式半透明懸浮影音字幕 (Zoom 系統音+影像+雙語字幕)
 //   GET  /stream?room=xxx 觀眾端 (SSE 雙語浮層字幕)
 //   POST /translate       單語 / 多語翻譯 (回 JSON，並廣播 SSE)
 //   POST /speak           即時轉播推播 (studio 已轉錄文字 → SSE 字幕)
@@ -33,7 +35,7 @@ try {
 } catch { /* 忽略 .env 讀取錯誤，維持預設 */ }
 
 const PORT = Number(process.env.PORT || 8788);
-const APP_VERSION = '1.3.0';           // 加強版: REST/WS/SSE 全鏈轉播 + 語碼規範化
+const APP_VERSION = '1.5.0';           // Zoom 會議即時雙語字幕版: 僅系統音收音 / 繁中↔英文 / Ollama+Gemma 可選 / 一體式懸浮浮窗
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 // 5T 溯源標頭 (在 writeHead 中內聯注入, 避免 writeHead 後 setHeader 衝突)
@@ -152,6 +154,7 @@ const server = http.createServer(async (req, res) => {
     else if (urlPath === '/studio' || urlPath === '/studio.html') file = '/studio.html';
     else if (urlPath === '/stream' || urlPath === '/stream.html') file = '/stream.html';
     else if (urlPath === '/overlay' || urlPath === '/overlay.html') file = '/overlay.html';
+    else if (urlPath === '/float' || urlPath === '/float.html') file = '/float.html';
     else if (/^\/(qrcode\.min\.js|esggo-shared\.d\.ts)$/.test(urlPath)) { file = urlPath; ctype = 'application/javascript; charset=utf-8'; }
     else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) file = urlPath;
     if (file) {
@@ -234,7 +237,7 @@ const server = http.createServer(async (req, res) => {
     const q = new URL(url, 'http://localhost').searchParams;
     const lang = q.get('lang') || '';
     try {
-      const sttRes = await fetch(`http://127.0.0.1:${process.env.STT_PORT || 8791}/transcribe?lang=${encodeURIComponent(lang)}`, {
+      const sttRes = await fetch(`http://127.0.0.1:${process.env.STT_PORT || 8790}/transcribe?lang=${encodeURIComponent(lang)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/octet-stream' },
         body: new Uint8Array(audioBuf),
@@ -256,7 +259,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   res.writeHead(404, { 'content-type': 'application/json' });
-  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | POST /speak {text,from,to|targets[],room} | GET /health | WS /ws | GET / (UI) | GET /stream?room=xxx (SSE)' }));
+  res.end(JSON.stringify({ usage: 'POST /translate {text,from,to|targets[]} | POST /speak {text,from,to|targets[],room} | GET /health | WS /ws | GET / (UI) | GET /stream?room=xxx (SSE) | GET /float (一體式懸浮浮窗)' }));
 });
 
 // WebSocket 即時流 (若 ws 套件可用)
@@ -274,5 +277,5 @@ if (typeof WebSocketServer !== 'undefined') {
 }
 
 server.listen(PORT, () => {
-  console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws + SSE /stream + UI)`);
+  console.log(`[universal-translator] listening on :${PORT} (HTTP + WS /ws + SSE /stream + UI + /float)`);
 });

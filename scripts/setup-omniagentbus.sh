@@ -1,45 +1,31 @@
 #!/usr/bin/env bash
+# setup-omniagentbus.sh — OA-TWINS OAB (OmniAgentBus) 部署器 (VPS 實體化)
+# 修正版: 2026-08-09 破除 Windows 路徑幻影, 改用 VPS 真實路徑
 set -euo pipefail
 
-# 1. Ensure OmniAgentBus file exists (basic stub if missing)
-BUS_FILE="C:/var/www/esggo/lib/agents/omni-agent-bus.ts"
-if [ ! -f "$BUS_FILE" ]; then
-  echo "🛠️ Creating minimal OmniAgentBus stub at $BUS_FILE"
-  mkdir -p "$(dirname "$BUS_FILE")"
-  cat > "$BUS_FILE" <<'EOF'
-export class OmniAgentBus {
-  private static instance: OmniAgentBus;
-  private listeners: Record<string, ((payload:any)=>void)[]> = {};
+VPS_BUS_DIR="/opt/esggo/oa-twins/oab"
+LOCAL_BUS_SRC="$LOCALAPPDATA/hermes/scripts"   # 備援: 若本機有 broker.py
+SRC="${1:-$LOCAL_BUS_SRC}"
 
-  private constructor() {}
-  static getInstance() {
-    if (!OmniAgentBus.instance) OmniAgentBus.instance = new OmniAgentBus();
-    return OmniAgentBus.instance;
-  }
+echo "=== [1] 準備 VPS 目錄 ==="
+ssh -o ConnectTimeout=20 esggo-vps "mkdir -p $VPS_BUS_DIR && echo 'dir ready'"
 
-  publish(event:string, payload:any) {
-    (this.listeners[event]||[]).forEach(cb=>cb(payload));
-    console.log(`[OmniAgentBus] publish ${event}`, payload);
-  }
-
-  subscribe(event:string, cb:(payload:any)=>void) {
-    this.listeners[event] = this.listeners[event] || [];
-    this.listeners[event].push(cb);
-    return () => {
-      this.listeners[event] = this.listeners[event].filter(fn=>fn!==cb);
-    };
-  }
-}
-EOF
+echo "=== [2] 上傳 broker.py ==="
+if [ -f "$SRC/broker.py" ]; then
+  scp -o ConnectTimeout=20 "$SRC/broker.py" "esggo-vps:$VPS_BUS_DIR/broker.py" && echo "broker.py uploaded"
+else
+  echo "本機無 broker.py, 改從 esggo-learning-center 複製"
+  scp -o ConnectTimeout=20 "C:/Project/esggo-learning-center/oa-twins/oab/broker.py" "esggo-vps:$VPS_BUS_DIR/broker.py" && echo "broker.py uploaded (from learning-center)"
 fi
 
-# 2. Insert Bus startup into start-orchestrator.sh if not already present
-START_SCRIPT="C:/var/www/esggo/scripts/start-orchestrator.sh"
-if ! grep -q "omni-agent-bus.ts" "$START_SCRIPT"; then
-  echo "🔧 Adding OmniAgentBus background start to $START_SCRIPT"
-  # Insert before the final echo line (line containing 'Orchestrator 已完成啟動')
-  sed -i "/✅ Orchestrator 已完成啟動與復原/a \\
-# Start OmniAgentBus in background\nhermes -p orchestrator exec \"node lib/agents/omni-agent-bus.ts\" &" "$START_SCRIPT"
-fi
+echo "=== [3] VPS self-test ==="
+ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && python3 broker.py --bus vps --self-test 2>&1 | head -6"
 
-echo "✅ setup-omniagentbus 完成，請再次執行 bash scripts/start-orchestrator.sh"
+echo "=== [4] 啟動 OAB broker (background, heartbeat) ==="
+ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && nohup python3 broker.py --bus vps --store /opt/esggo/oa-twins/oab/journal --heartbeat > /opt/esggo/oa-twins/oab/oab.log 2>&1 & echo 'OAB VPS started PID \$!'"
+
+echo "=== [5] 健康檢查 (journal 增長) ==="
+sleep 12
+ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && echo 'journal lines:'; wc -l oab.oab.jsonl 2>/dev/null || echo 'no journal yet'; echo '--- log tail ---'; tail -3 oab.log 2>/dev/null"
+
+echo "✅ OAB broker 部署完成 (VPS $VPS_BUS_DIR)"
