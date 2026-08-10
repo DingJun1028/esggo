@@ -36,6 +36,22 @@ try {
 
 const PORT = Number(process.env.PORT || 8788);
 const APP_VERSION = '1.5.0';           // Zoom 會議即時雙語字幕版: 僅系統音收音 / 繁中↔英文 / Ollama+Gemma 可選 / 一體式懸浮浮窗
+
+// ── 生產級安全配置 ──────────────────────────────────────────
+// 請求體上限: 音訊 10MB / JSON 1MB (防 DoS 內存耗盡)
+const MAX_AUDIO_BYTES = Number(process.env.MAX_AUDIO_BYTES || 10 * 1024 * 1024);
+const MAX_JSON_BYTES = Number(process.env.MAX_JSON_BYTES || 1024 * 1024);
+// CORS 白名單 (生產級: 不開放 *, 限定自有域名)
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://translate.esggo.co,https://esggo.co,https://*.esggo.co')
+  .split(',').map(s => s.trim()).filter(Boolean);
+// 安全標頭 (CSP / X-Frame-Options / HSTS 等)
+const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()',
+  'Content-Security-Policy': "default-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'",
+};
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 // 5T 溯源標頭 (在 writeHead 中內聯注入, 避免 writeHead 後 setHeader 衝突)
@@ -74,10 +90,18 @@ function broadcastTranslation(payload) {
  * @param {import('node:http').IncomingMessage} req
  * @returns {Promise<Buffer>}
  */
-async function readBodyRaw(req) {
+async function readBodyRaw(req, maxBytes = MAX_AUDIO_BYTES) {
   /** @type {Buffer[]} */
   const chunks = [];
-  for await (const c of req) chunks.push(/** @type {Buffer} */ (c));
+  let total = 0;
+  for await (const c of req) {
+    total += c.length;
+    if (total > maxBytes) {
+      req.destroy();
+      throw new Error('PAYLOAD_TOO_LARGE');
+    }
+    chunks.push(/** @type {Buffer} */ (c));
+  }
   return Buffer.concat(chunks);
 }
 
@@ -117,10 +141,13 @@ async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker 
 const server = http.createServer(async (req, res) => {
   /** @type {string} */
   const url = req.url || '';
-  // CORS (前端跨域呼叫)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // CORS (生產級: 白名單來源, 非 *)
+  const origin = req.headers.origin;
+  const allowOrigin = origin && ALLOWED_ORIGINS.some(o => o === '*' || o === origin || (o.startsWith('*.') && origin.endsWith(o.slice(1)))) ? (origin || '*') : (ALLOWED_ORIGINS[0] || '*');
+  res.setHeader('Access-Control-Allow-Origin', allowOrigin);
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-OA-Trace');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) res.setHeader(k, v);
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
   // 健康檢查

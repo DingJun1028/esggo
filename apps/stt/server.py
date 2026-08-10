@@ -14,10 +14,12 @@
 import io
 import os
 import tempfile
+import time
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 import uvicorn
 
+START_TIME = time.time()
 try:
     from faster_whisper import WhisperModel
 except ImportError:
@@ -42,6 +44,16 @@ def get_model():
 @app.get("/health")
 async def health():
     return {"status": "ok", "model": MODEL_SIZE, "device": DEVICE}
+
+@app.get("/metrics")
+async def metrics():
+    return {
+        "service": "stt-whisper",
+        "model": MODEL_SIZE,
+        "device": DEVICE,
+        "status": "ok",
+        "uptime": time.time() - START_TIME,
+    }
 
 @app.post("/transcribe")
 async def transcribe(req: Request, lang: str = ""):
