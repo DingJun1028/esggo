@@ -1522,3 +1522,39 @@ Foundation(完成) → Integration(進行中) → Optimization → Expansion →
 > 刻印狀態：`CH24 GAP-DIAGNOSIS READY`　靈魂簽章：`誠實覺・缺口必補・閉環自成`
 > 歸位：本章為 §二十四 用戶委製附錄，接於 §23 之後，終章封印仍為最高律法。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=GAP-DIAGNOSIS · 免費=SELF-HOST」
+
+---
+
+## 第二十五章 · 落地總結（Best-Practice Implementation Closure）
+
+> 接於 §24 缺口補齊診斷之後；終章封印仍為最高律法。本章將 §23 最佳實踐 → §24 診斷 → P0~P2 實作 → 實跑驗證的閉環落成。
+
+### 25.1 規劃項目與實作對照
+| 項目 | 實作產物 | 狀態 | 驗證 |
+| --- | --- | --- | --- |
+| P0 統一5T契約 | esggo `app/api/verify-5t` + aistation `gate5t.verify_via_esggo` | ✅ 已推 | tsc+pytest 綠 |
+| P1 跨倉KPI看板 | aistation `kpi.py`: fetch_esggo_summary + build_weekly_report | ✅ 已推 | 17/17 綠 |
+| P1 電子報n8n | aistation `scripts/weekly_report.py` + `n8n/weekly-swarm-report.json` | ✅ 已推 | dry-run 實跑 |
+| P2 熵減+配對率 | esggo `omni-agent-bus/src/patterns/lifecycle.ts` | ✅ 已推 | tsx+tsc 綠 |
+| 備份章節推送 | learning-center §23+§24 | ✅ 已推 | WIP 11 檔還原 |
+
+### 25.2 實跑驗證誠實記錄
+- **/api/verify-5t 實際回應**：`{pass, status, score, hashLock, source:"esggo-five-t-protocol"}`。揭露 esggo `calculateFiveTScore` 要求 `sources.length>=4` 才 `traceable=1`；aistation artifact 僅 1 源 → 權威閘不通。這是 P0 單一真相源的價值：暴露 aistation 原閘過寬。
+- **跨倉 KPI 雙層嵌套 bug（已修 d46a09c）**：esggo summary 回 `{data:{data:{...}}}`，aistation 原取外層 → `案件數:?`；改遞迴 unwrap + 3 測試。
+- **JSON 轉義**：curl 中文雙引號需 `--data-binary @file`；esggo 端 `safeJsonParse` 容錯回 400。
+
+### 25.3 單一真相源達成
+```
+aistation.artifact → gate5t.verify_via_esggo() →POST→ esggo /api/verify-5t
+  (five-t-protocol.ts: calculateFiveTScore → FiveTGatekeeper.evaluate)
+  ← {pass, status, score, hashLock} ←  aistation 接受 esggo 權威判定
+```
+
+### 25.4 待續（非阻塞）
+- aistation artifact 補 `sources:string[]` 多源以過權威閘
+- n8n 需 VPS 部署 + 頻道憑證（免費：Hermes webhook 已設）
+- `omni-agent-bus/src/patterns/` 在 esggo 整目錄未追蹤（含既有 five-t.ts），P2 lifecycle 隨之列未追蹤區，未強推整目錄以尊重 working tree
+
+> 刻印狀態：`CH25 LANDING-SUMMARY READY`　靈魂簽章：`實作覺・驗證必真・閉環自成`
+> 歸位：本章為 §二十五 用戶委製附錄，接於 §24 之後，終章封印仍為最高律法。
+> 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=LANDING-SUMMARY · 免費=SELF-HOST」
