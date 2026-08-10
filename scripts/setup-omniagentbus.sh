@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # setup-omniagentbus.sh — OA-TWINS OAB (OmniAgentBus) 部署器 (VPS 實體化)
 # 修正版: 2026-08-09 破除 Windows 路徑幻影, 改用 VPS 真實路徑
+# 修正版: 2026-08-10 改用 pm2 管理 broker (nohup daemon 會讓 asyncio heartbeat 停滯)
 set -euo pipefail
 
 VPS_BUS_DIR="/opt/esggo/oa-twins/oab"
@@ -8,7 +9,7 @@ LOCAL_BUS_SRC="$LOCALAPPDATA/hermes/scripts"   # 備援: 若本機有 broker.py
 SRC="${1:-$LOCAL_BUS_SRC}"
 
 echo "=== [1] 準備 VPS 目錄 ==="
-ssh -o ConnectTimeout=20 esggo-vps "mkdir -p $VPS_BUS_DIR && echo 'dir ready'"
+ssh -o ConnectTimeout=20 esggo-vps "mkdir -p $VPS_BUS_DIR/journal && echo 'dir ready'"
 
 echo "=== [2] 上傳 broker.py ==="
 if [ -f "$SRC/broker.py" ]; then
@@ -21,11 +22,14 @@ fi
 echo "=== [3] VPS self-test ==="
 ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && python3 broker.py --bus vps --self-test 2>&1 | head -6"
 
-echo "=== [4] 啟動 OAB broker (background, heartbeat) ==="
-ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && nohup python3 broker.py --bus vps --store /opt/esggo/oa-twins/oab/journal --heartbeat > /opt/esggo/oa-twins/oab/oab.log 2>&1 & echo 'OAB VPS started PID \$!'"
+echo "=== [4] 啟動 OAB broker (pm2 常駐, heartbeat) ==="
+# 先移除舊實例 (避免重複)
+ssh -o ConnectTimeout=20 esggo-vps "pm2 delete oab-broker 2>/dev/null; cd $VPS_BUS_DIR && pm2 start broker.py --name oab-broker --interpreter python3 -- --bus vps --store /opt/esggo/oa-twins/oab/journal --heartbeat 2>&1 | tail -4"
+# 持久化 (VPS 重啟自動恢復)
+ssh -o ConnectTimeout=20 esggo-vps "pm2 save 2>&1 | tail -2"
 
 echo "=== [5] 健康檢查 (journal 增長) ==="
-sleep 12
-ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && echo 'journal lines:'; wc -l oab.oab.jsonl 2>/dev/null || echo 'no journal yet'; echo '--- log tail ---'; tail -3 oab.log 2>/dev/null"
+sleep 15
+ssh -o ConnectTimeout=20 esggo-vps "cd $VPS_BUS_DIR && echo 'journal lines:'; wc -l journal/vps.oab.jsonl 2>/dev/null || echo 'NO JOURNAL'; echo '--- pm2 status ---'; pm2 list 2>&1 | grep oab-broker | head -1"
 
-echo "✅ OAB broker 部署完成 (VPS $VPS_BUS_DIR)"
+echo "✅ OAB broker 部署完成 (VPS $VPS_BUS_DIR, 由 pm2 常駐)"
