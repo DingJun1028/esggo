@@ -18,6 +18,7 @@ ESG-GO 自動化工作區域，承載 OA-Team 雙蜂隊（蜂王 OA-LOCAL + 蜂�
 | L2 推理 | `stt-whisper` | 8791 | 本地 faster-whisper（零 key，免費算立） | 無 |
 | L3 應用 | `universal-translator` | 8788 | 萬能即時雙語字幕（[README](apps/stt/README.md)） | 8791 |
 | L3 應用 | `omniagent-gateway` | 8642 | Omni 閘道（需 `apps/gateway/.env` 的 `GATEWAY_API_KEY`） | 獨立 |
+| L3 應用 | `deerflow` | 2026 | DeerFlow 多智能體（Docker Compose，domain `deerflow.esggo.co`） | 獨立（Docker） |
 | L4 主站 | `esggo-core` | 3000 | Next.js 主站（需 `pnpm build`） | 獨立 |
 
 **運維約定**
