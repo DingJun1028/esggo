@@ -216,6 +216,7 @@ export interface IApiResult<T> {
 }
 
 // --- Universal Translator (萬能即時翻譯) Domain Types ---
+// 架構: 萬能即時翻譯 全域全端全量全面 雙向同步 TypeScript 繁中英碼 終始矩陣架構
 // canonical 源: esggo/shared/types.ts → 經 scripts/export-shared-types.js
 // 生成各 consumer 的 types/generated/esggo-shared.d.ts (雙向 TS 終始矩陣)
 

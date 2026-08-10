@@ -295,6 +295,21 @@ function onText(text){
   speakWithRetry(text,targets,trs);
 }
 
+// 雙語即時字幕: 直接顯示原始 + 對向翻譯 (來自 /speech-to-subtitle), 並廣播 SSE
+function onBilingual(srcText,detected,translation,target,trace){
+  const clean=srcText.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
+  if(clean.length<2){ toast('轉錄內容無意義（請靠近麥克風或檢查音源）'); return; }
+  const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
+  const el=document.createElement('div');el.className='utter';
+  const src=document.createElement('div');src.className='src';
+  src.textContent='▸ ['+(detected==='en'?'EN':'中')+'] '+srcText;el.appendChild(src);
+  const trs=document.createElement('div');trs.className='trs';
+  trs.textContent='['+(target==='en'?'EN':'中')+'] '+(translation||'…');el.appendChild(trs);
+  box.appendChild(el);box.scrollTop=box.scrollHeight;
+  fetch('/speak',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text:srcText,from:detected,to:target,room,speaker:'studio'})}).catch(()=>{});
+}
+
 // 字幕區顯示錯誤卡 (轉錄失敗可見, 非僅 toast)
 function showErrorCard(msg){
   const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
@@ -325,12 +340,14 @@ async function start(){
       setStatus('🧠 轉錄中…','rec');
       const blob=new Blob(chunks,{type:mime});chunks=[];
       const buf=await blob.arrayBuffer();
-      dbg(`POST /transcribe bytes=${buf.byteLength}`);
+      dbg(`POST /speech-to-subtitle bytes=${buf.byteLength}`);
       try{
-        const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+        const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
         const d=await r.json();
-        dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
-        if(d.text&&d.text.trim())onText(d.text.trim());
+        dbg(`speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+        if(d.text&&d.text.trim()){
+          onBilingual(d.text.trim(), d.detected||'zh-TW', d.translation||'', d.target||'en', d.trace||'');
+        }
         else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
         else { const m='未偵測到語音（系統音模式請在分享時勾選「分享音訊」）'; toast(m); showErrorCard(m); }
       }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }

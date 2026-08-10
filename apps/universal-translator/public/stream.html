@@ -73,11 +73,11 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 <div class="toast" id="toast"></div>
 <script type="module">
 /// <reference path="./types/generated/esggo-shared.d.ts" />
-const LANGS=[['en','英文'],['zh-TW','繁中'],['ja','日文'],['es','西班牙'],['fr','法文'],['ko','韓文'],['de','德文']];
+const LANGS=[['en','英文'],['zh-TW','繁中']];
 const LANG_NAME=Object.fromEntries(LANGS);
 const $=s=>document.querySelector(s);
 let room=new URLSearchParams(location.search).get('room')||'';
-let sse=null,esOk=false,floatOn=false,capTimer=null;
+let sse=null,esOk=false,floatOn=false,capTimer=null,currentFrom='zh-TW';
 
 // 主題
 const themeBtn=$('#themeBtn');
@@ -99,9 +99,13 @@ function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'');$('#status').
 
 function showCaption(src,translations){
   $('#capSrc').textContent=src||'';
-  $('#capTrs').innerHTML=Array.from(targets).map(t=>{
-    const txt=translations?translations[t]:'';return txt?`<span class="pair"><span class="lbl">${LANG_NAME[t]||t}</span>${txt}</span>`:'';
+  const pairs=Array.from(targets).map(t=>{
+    const txt=translations?translations[t]:'';
+    if(!txt)return '';
+    const isSrc=(t===currentFrom);
+    return `<span class="pair ${isSrc?'src-pair':''}"><span class="lbl">${LANG_NAME[t]||t}</span>${txt}</span>`;
   }).filter(Boolean).join('');
+  $('#capTrs').innerHTML=pairs;
   const cap=$('#caption');cap.classList.add('show');clearTimeout(capTimer);capTimer=setTimeout(()=>cap.classList.remove('show'),6500);
 }
 function appendPreview(src,translations){
@@ -117,6 +121,7 @@ $('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('pr
 
 function onTranslation(d){
   const src=d.text||'';const tr=d.translations||{};
+  currentFrom=(d.from)||(Object.keys(tr).find(k=>k!==(d.to||'en'))||'zh-TW');
   appendPreview(src,tr);
   if(floatOn)showCaption(src,tr);
 }
