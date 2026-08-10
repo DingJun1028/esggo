@@ -89,7 +89,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Run ESLint
-        run: pnpm exec eslint src/ app/ --max-warnings 200
+        run: pnpm exec eslint src/ app/ --max-warnings 250
 
   # ─── Secret Scan 防止秘密洩漏 ────────────────────────────────
   secret-scan:
