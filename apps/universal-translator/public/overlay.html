@@ -182,13 +182,13 @@ function showCaption(src,translations){
 let capTimer=null;
 
 // ---------- 重試封裝 ----------
-async function transcribeRetry(buf,attempt=0){
+async function speechToSubRetry(buf,attempt=0){
   try{
-    const r=await fetch('/transcribe?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    const r=await fetch('/speech-to-subtitle?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const txt=await r.text();
     try{ return JSON.parse(txt); }catch(_){ throw new Error('服務回傳非預期格式（可能網路/逾時），請重試'); }
-  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return transcribeRetry(buf,attempt+1);} throw e; }
+  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return speechToSubRetry(buf,attempt+1);} throw e; }
 }
 async function translateRetry(text,tg,attempt=0){
   try{
@@ -307,10 +307,10 @@ function startRecording(audioStream,label){
     $('#status').textContent='🧠 轉錄中…';
     const buf=await new Blob(chunks,{type:mime}).arrayBuffer();chunks=[];
     try{
-      const d=await transcribeRetry(buf);
+      const d=await speechToSubRetry(buf);
       if(d.text&&d.text.trim()){
         silentRounds=0;
-        const td=await translateRetry(d.text.trim(),Array.from(targets)); onTranscript(d.text.trim(),td.translations||{});
+        const tr={}; tr[d.target||'en']=d.translation||''; onTranscript(d.text.trim(),tr);
       }else{
         silentRounds++;
         if(mode==='sys'&&silentRounds>=2){ silentRounds=0; autoFallbackToMic(); return; }
