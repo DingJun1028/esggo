@@ -28,31 +28,33 @@ curl -s -m90 -X POST http://localhost:8787/generate \
   -d '{"prompt":"用一句話說明 ESG 永續發展的重要性","max_tokens":128}' | head -c 500
 echo ""
 
-echo "====== [3/6] 安裝 speech-to-speech ======"
-pip install "speech-to-speech[kokoro]" 2>&1 | tail -3 || pip install speech-to-speech 2>&1 | tail -3
+echo "====== [3/6] 安裝 speech-to-speech + pocket-tts ======"
+pip install speech-to-speech 2>&1 | tail -3
+pip install pocket-tts 2>&1 | tail -2
 
-echo "====== [4/6] 啟動 s2s (LLM 直接用 transformers 載 gemma4:e2b, 不走 Ollama 省 RAM) ======"
-# RAM 保護: VPS 2.8G 可用, s2s 全管線需 ~2.6G, 與 Ollama 常駐衝突
-# 方案: s2s 用 --llm_backend transformers 直接載模型 (不依賴 Ollama 常駐), 釋放 Ollama 佔用
+echo "====== [4/6] 啟動 s2s (LLM 指本機 Ollama, TTS=pocket CPU) ======"
+# 本機驗證結論 (2026-08-10):
+#  - s2s 0.2.12 CLI 用 --ws_host/--ws_port (無 serve 子命令, 無 --host/--port)
+#  - --llm_backend transformers 不接受 Ollama tag (需 HF repo id) -> 改用 chat-completions 指 Ollama /v1
+#  - TTS: qwen3 需 CUDA(本機/VPS 皆無 GPU), kokoro 依賴衝突 -> 用 pocket (純 torch CPU)
+#  - VPS 用 gemma4:e2b 經 Ollama /v1/chat/completions
 FREE_MEM=$(free -m | awk 'NR==2{print $7}')
 echo "可用 RAM: ${FREE_MEM}MB"
-if [ "$FREE_MEM" -lt 2500 ]; then
-  echo "WARN: 可用 RAM < 2.5G, s2s 全管線可能 OOM。先停 Ollama 釋放空間"
-  pkill -9 ollama 2>/dev/null || true
-  sleep 3
-fi
-nohup speech-to-speech serve \
-  --host 0.0.0.0 --port 8765 \
+OLLAMA_MODEL=${OLLAMA_MODEL:-gemma4:e2b}
+nohup speech-to-speech \
+  --ws_host 0.0.0.0 --ws_port 8765 \
   --stt parakeet-tdt \
-  --llm_backend transformers \
-  --model_name "gemma4:e2b" \
-  --tts kokoro \
+  --llm_backend chat-completions \
+  --model_name "$OLLAMA_MODEL" \
+  --responses_api_base_url "http://localhost:11434/v1" \
+  --responses_api_api_key "ollama" \
+  --tts pocket \
   --enable_live_transcription \
   > /tmp/s2s.log 2>&1 &
 disown
-sleep 20
-echo "--- s2s health (port check) ---"
-curl -s -m5 -o /dev/null -w "s2s_http=%{http_code}\n" http://localhost:8765/v1/realtime || echo "S2S_NOT_UP_YET"
+sleep 30
+echo "--- s2s health (WS connect check) ---"
+curl -s -o /dev/null -w "s2s_http=%{http_code}\n" http://localhost:8765/v1/realtime || echo "S2S_NOT_UP_YET"
 
 echo "====== [5/6] HUB 加 /voice/bridge 端點 ======"
 # 用 python patch monitor-server.mjs（在 /speak 區塊後插入 /voice/bridge）
