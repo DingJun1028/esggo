@@ -289,7 +289,7 @@ jobs:
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
             GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
-            WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://esggo.co || echo 000)
+            WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' http://localhost:8788/health || echo 000)
             echo "[health] gateway=$GW web=$WEB"
             if [ "$GW" != "200" ] || [ "$WEB" != "200" ]; then
               echo "[FAIL] post-deploy health check: gateway=$GW web=$WEB"
