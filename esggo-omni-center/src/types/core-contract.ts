@@ -11,10 +11,10 @@ export interface IComponentCore {
   /** 時間戳（毫秒） */
   readonly timestamp: number;
   /** 證據庫，存放驗算、簽章等額外資訊 */
-    evidence: {
-    originCause?: string;
-    processTrace?: string[];
-    finalEffect?: string;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
     [key: string]: any;
   };
 }

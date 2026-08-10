@@ -12,7 +12,7 @@ export interface IComponentCore {
   /** 刻印時間戳 (Unix Epoch, ms) */
   readonly timestamp: number;
   /** 證據佐證庫 (用於零幻覺驗算，如 ISO‑14064‑1) */
-    evidence: {
+  evidence: {
     originCause: string;
     processTrace: string[];
     finalEffect: string;

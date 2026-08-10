@@ -12,7 +12,7 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-    evidence: {
+  evidence: {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
