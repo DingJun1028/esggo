@@ -10,7 +10,7 @@
 //   POST /speak           即時轉播推播 (studio 已轉錄文字 → SSE 字幕)
 //   WS   /ws              即時流 (輸入即翻譯並廣播)
 // 5T 溯源標頭: X-OA-Engine / X-OA-Cached / X-OA-Trace
-// 雙向 TS 終始矩陣: 領域型別契約見 ../../shared/types.ts (canonical) → types/generated/esggo-shared.d.ts (generated)
+// 萬能即時翻譯 全域全端全量全面 雙向同步 TypeScript 繁中英碼 終始矩陣架構: 領域型別契約見 ../../shared/types.ts (canonical) → types/generated/esggo-shared.d.ts (generated)
 // @ts-check
 /// <reference path="./types/generated/esggo-shared.d.ts" />
 // ============================================================
