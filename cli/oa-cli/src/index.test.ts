@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const src = join(__dirname, 'index.ts');
-const tsxBin = process.platform === 'win32' ? 'tsx.cmd' : 'tsx';
+const tsxBin = process.platform === 'win32' ? 'pnpm exec tsx.cmd' : 'pnpm exec tsx';
 
 function run(args: string[]): { stdout: string; stderr: string; status: number } {
   const result = spawnSync(tsxBin, [src, ...args], { encoding: 'utf-8', shell: true });
