@@ -155,6 +155,24 @@ const server = http.createServer(async (req, res) => {
     return writeJson(res, { status: 'ok', version: APP_VERSION, stats });
   }
 
+  // 指標端點 (生產級監控: Prometheus 相容結構)
+  if (url === '/metrics' && req.method === 'GET') {
+    const mem = process.memoryUsage();
+    return writeJson(res, {
+      service: 'universal-translator',
+      version: APP_VERSION,
+      uptime_seconds: Math.floor(process.uptime()),
+      stats,
+      memory: {
+        rss_mb: Math.round(mem.rss / 1024 / 1024),
+        heap_used_mb: Math.round(mem.heapUsed / 1024 / 1024),
+        heap_total_mb: Math.round(mem.heapTotal / 1024 / 1024),
+      },
+      sse_clients: sseClients.size,
+      stt_port: STT_PORT,
+    });
+  }
+
   // SSE 觀眾端串流（必須在主靜態路由之前攔截，否則會被當成 HTML 頁回傳）
   if (url.startsWith('/stream') && req.method === 'GET') {
     // 解析 query: ?src=studio&room=xxx（room 用於多房間隔離）

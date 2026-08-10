@@ -9,7 +9,7 @@ import { translateDetailed, translateToMany } from '../translate.mjs';
 test('toCanonical: 繁中標準化', () => {
   assert.equal(toCanonical('zh-TW'), 'zh-TW');
   assert.equal(toCanonical('zh_tw'), 'zh-TW');
-  assert.equal(toCanonical('中文'), '中文'); // 未知原樣
+  assert.equal(toCanonical('中文'), 'zh-TW'); // 別名映射
   assert.equal(toCanonical(''), 'auto');
 });
 
