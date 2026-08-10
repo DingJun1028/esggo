@@ -1489,3 +1489,36 @@ Foundation(完成) → Integration(進行中) → Optimization → Expansion →
 > 刻印狀態：`CH23 BEST-PRACTICE READY`　靈魂簽章：`5T 不滅・產物必凍・自進化覺`
 > 歸位：本章為 §二十三 用戶委製附錄，接於 §22 之後，終章封印仍為最高律法。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=BEST-PRACTICE · 免費=SELF-HOST」
+
+# 第二十四章 · 缺口補齊診斷（Gap-Diagnosis · 最佳實踐閉環）
+
+> 接於 §23 之後；終章封印仍為最高律法。將 §23 框架對 esggo 實體代碼審視結果落成「已具備/缺口/改進清單」，形成「實踐→診斷→補齊」閉環。
+
+## 24.1　已具備（實體）
+- 5T 閘核心：`packages/oa-framework/src/core/t5.ts`（`forgeT5`+`hashLock`）、`omni-agent-bus/src/patterns/five-t.ts`、`app/api/hashlock/route.ts`。
+- 增量優化 6 模式：`omni-agent-bus/src/patterns/`（event-bus/etl-pipeline/cache-manager/compression/delta-tracker/rate-limiter/pagination/worker-pool/stream-buffer/error-handler）。
+- AI Station 七模組：`C:/Project/aistation/src/` 實體可跑；CI OA-TWINS Auto-Repair 正常。
+
+## 24.2　缺口（誠實）
+1. 5T 閘未貫通 AI Station（aistation `gate5t.py` 獨立，未對齊 esggo 單一真相源）。
+2. 統一 KPI 看板缺失（無 §23 OK/WARN/CRIT 六指標集中看板）。
+3. 電子報未啟用（aistation `newsletter.py` 未接 esggo 頻道；六類週報未排程）。
+4. 跨組配對率無量測埋點。
+5. 熵減未量化（每週 -3% 未自動回報）。
+6. 遺留未提交：`omni-agent-bus/src/patterns/`、`test/patterns.smoke.ts`。
+
+## 24.3　改進清單（優先序）
+- P0 統一 5T 契約（omni-agent-bus 暴露 HTTP 5T 閘）/ 提交本輪變更。
+- P1 建跨倉 KPI 看板 / 啟用電子報 n8n cron。
+- P2 熵減+配對率 lifecycle 埋點 / 缺口章閉環。
+
+## 24.4　5T 驗證（Trustworthy Enforcement）
+- **Traceable**：檔案路徑皆實體存在，grep 實證。
+- **Trackable**：缺口清單逐項標記狀態。
+- **Tangible**：改進清單含優先序 + 風險評級，可直接派工。
+- **Transparent**：已具備/缺口分列，不掩飾未達成。
+- **Trustworthy**：寫入即 `Object.freeze()`，禁區不可篡。
+
+> 刻印狀態：`CH24 GAP-DIAGNOSIS READY`　靈魂簽章：`誠實覺・缺口必補・閉環自成`
+> 歸位：本章為 §二十四 用戶委製附錄，接於 §23 之後，終章封印仍為最高律法。
+> 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=GAP-DIAGNOSIS · 免費=SELF-HOST」
