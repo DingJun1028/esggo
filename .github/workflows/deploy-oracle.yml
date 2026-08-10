@@ -255,6 +255,9 @@ jobs:
           set -e
           ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
+            # 修復 git dubious ownership (目錄可能由 root 建立, ubuntu 執行)
+            git config --global --add safe.directory /var/www/esggo
+            git config --global --add safe.directory /opt/esggo 2>/dev/null || true
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
