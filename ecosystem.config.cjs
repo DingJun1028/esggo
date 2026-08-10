@@ -55,7 +55,7 @@ module.exports = {
       name: 'stt-whisper',
       cwd: '/var/www/esggo/apps/stt',
       script: 'server.py',
-      interpreter: 'python3',
+      interpreter: '/var/www/esggo/apps/stt/.venv/bin/python3',
       env: { NODE_ENV: 'production', STT_PORT: '8791', WHISPER_MODEL: 'base', WHISPER_DEVICE: 'cpu', WHISPER_COMPUTE: 'int8' },
       instances: 1,
       exec_mode: 'fork',
