@@ -278,6 +278,7 @@ jobs:
             git checkout -f main
             git fetch origin main
             git reset --hard origin/main
+            export CI=true
             pnpm install --frozen-lockfile
             pnpm run build
             # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
