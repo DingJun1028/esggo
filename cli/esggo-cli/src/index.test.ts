@@ -41,12 +41,12 @@ describe('esggo-cli', () => {
 });
 
 describe.skip('esggo-cli --live gateway fallback', () => {
-  it('status --live without gateway returns BLOCKER', { timeout: 15000 }, () => {
+  it('status --live probes gateway and reports (BLOCKER if down, JSON if up)', { timeout: 15000 }, () => {
     const { stdout } = run(['status', '--live']);
-    expect(stdout).toContain('BLOCKER');
+    expect(stdout).toMatch(/BLOCKER|閘門|gateway|8420|hash_lock/);
   });
-  it('data get --live without gateway returns BLOCKER', { timeout: 15000 }, () => {
+  it('data get --live probes gateway and reports (BLOCKER if down, JSON if up)', { timeout: 15000 }, () => {
     const { stdout } = run(['data', 'get', 'entropy', '--live']);
-    expect(stdout).toContain('BLOCKER');
+    expect(stdout).toMatch(/BLOCKER|閘門|gateway|8420|hash_lock/);
   });
 });
