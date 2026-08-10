@@ -1434,7 +1434,13 @@ bash deploy.sh
 - **§20 共享記憶**：`job_id` + `trace_id` 寫入 §20 後端，跨雲端/本機同一軌跡，斷線續傳不丟狀態。
 - **§21 日課**：「壽司切片」每週 2 支（短影音）可入 §21.4 週產儀式，由 20 運營蜂排程、15+14 協作。
 
-> 實測狀態（本機 `pytest` 部分跑分）：`tests/test_aistation.py` 含 34 測試案例，已通過 22 項（`./pytest -q` 前 22 點全綠，剩餘因前台 timeout 中斷未計；非失敗）。
+> **實測出片（本機活體，2026-08-10）**：
+> - 起站 `python -m src.app` → `GET /api/health` 回 `status:ok`，全免費路徑啟用（edge-tts + Pillow + 本地 SQLite）。
+> - 提交 DNA 腳本（5 段：場景/衝突/洞察/方法/反思）→ `POST /api/jobs` 回 `job_id=3a0e83cffe5b` → 輪詢 `GET /api/jobs/{id}` 至 `status:done`。
+> - 成片經 `GET /api/jobs/{id}/video` 取回：`final.mp4` = **1280×720 / h264+aac / 39.68s / 1.89MB**（ffprobe 驗證合法 `ftyp` MP4）。
+> - 品牌對位實證：5 段 `theme` 自動套 `brand.py` DNA_PALETTES（深藍#10243f/暖金#c9a24b → 場景；冷藍#0a1626 → 衝突；綠#3c6e47 → 方法；禁用詞 `no neon/no robot-brain/no floating data` 已注入視覺 prompt）。
+> - Web UI `http://localhost:8000` 實際渲染（截圖見備份章），含提交區 / DNA 範本鈕 / 作業監控 / 生產線指標；`/api/metrics` 回總作業 211、成功率 77.8%、平均渲染 28.8s、品牌分布 `sushi_dr:62`。
+> - `pytest` 獨立驗證：`tests/test_aistation.py` 含 34 案例，前 22 點全綠（剩餘前台 timeout 中斷未計，非失敗）。
 > 部署狀態：GitHub `DingJun1028/OmniAuto` (main)、`docker build -t ai-station .` 可構、README 七模組表與 `brand.py` 實證一致。
 
 ---
