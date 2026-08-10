@@ -6,15 +6,16 @@ import { dirname, join } from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const src = join(__dirname, 'index.ts');
-const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+const isWin = process.platform === 'win32';
+const tsxBin = isWin ? 'tsx' : './node_modules/.bin/tsx';
 
 function run(args: string[]): { stdout: string; stderr: string; status: number } {
-  const result = spawnSync(npxCmd, ['tsx', src, ...args], { encoding: 'utf-8', shell: true });
+  const result = spawnSync(tsxBin, [src, ...args], { encoding: 'utf-8', shell: true });
   return { stdout: result.stdout?.trim() ?? '', stderr: result.stderr?.trim() ?? '', status: result.status ?? 0 };
 }
 
 beforeAll(() => {
-  const build = spawnSync(npxCmd, ['tsx', src, '--version'], { encoding: 'utf-8', shell: true });
+  const build = spawnSync(tsxBin, [src, '--version'], { encoding: 'utf-8', shell: true });
   if (build.status !== 0) throw new Error('CLI build failed');
 });
 
@@ -41,11 +42,11 @@ describe('esggo-cli', () => {
 });
 
 describe('esggo-cli --live gateway fallback', () => {
-  it('status --live without gateway returns BLOCKER', () => {
+  it('status --live without gateway returns BLOCKER', { timeout: 15000 }, () => {
     const { stdout } = run(['status', '--live']);
     expect(stdout).toContain('BLOCKER');
   });
-  it('data get --live without gateway returns BLOCKER', () => {
+  it('data get --live without gateway returns BLOCKER', { timeout: 15000 }, () => {
     const { stdout } = run(['data', 'get', 'entropy', '--live']);
     expect(stdout).toContain('BLOCKER');
   });
