@@ -216,9 +216,9 @@ export interface IApiResult<T> {
 }
 
 // --- Universal Translator (萬能即時翻譯) Domain Types ---
-// 架構: 萬能即時翻譯 全域全端全量全面 雙向同步 TypeScript 繁中英碼 終始矩陣架構
 // canonical 源: esggo/shared/types.ts → 經 scripts/export-shared-types.js
 // 生成各 consumer 的 types/generated/esggo-shared.d.ts (雙向 TS 終始矩陣)
+// 語言碼矩陣: esggo/shared/lang-matrix.mjs → 經 scripts/sync-lang-matrix.mjs (執行期與型別雙向同步)
 
 /** 翻譯引擎識別 (5T 可溯源 X-OA-Engine) */
 export enum TranslateEngine {
@@ -230,36 +230,10 @@ export enum TranslateEngine {
   FALLBACK_ORIGIN = 'fallback-origin',
 }
 
-/**
- * 支援語碼 — 終始矩陣嚴格收斂為「繁中 ↔ 英文」雙向 (即時翻譯核心場景)
- * auto: 自動偵測; zh-TW: 繁中展示名 (內部規範 zh-CN); en: 英文
- */
+/** 支援語碼 (zh-TW 為繁中展示名, 內部規範為 zh-CN; 完整 union 見 lang-matrix) */
 export type LanguageCode =
   | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
-  | 'en';
-
-/** 即時翻譯雙向矩陣 — 語言對 (Bidirectional Pair) 鎖定繁中↔英文 */
-export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
-
-/** 語音轉字幕請求 (STT → 即時雙語字幕) */
-export interface ISpeechToSubtitleRequest {
-  /** 音訊位元組 (webm/ogg/wav/mp3/flac/m4a) 由 multipart 帶入, 此處僅描述契約 */
-  languageHint?: 'zh-TW' | 'en'; // 鎖定雙向, 禁其他
-  room?: string;
-  speaker?: string;
-}
-
-/** 語音轉字幕回應 (即時浮層雙語字幕) */
-export interface ISpeechToSubtitleResult {
-  text: string;                 // 原始辨識文字
-  detected: 'zh-TW' | 'en';    // STT 偵測語 (鎖定雙向)
-  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
-  translation: string;
-  target: 'zh-TW' | 'en';
-  engine: string;               // 5T 溯源
-  cached: boolean;
-  trace?: string;
-}
+  | 'en' | 'ja' | 'ko' | 'es' | 'fr';
 
 /** /translate 單語請求 */
 export interface ITranslateRequest {
@@ -268,7 +242,7 @@ export interface ITranslateRequest {
   from?: string;
   /** 目標語碼 (運行期允許任意 string) */
   to?: string;
-  /** 雙向即時翻譯: 強鎖 ['zh-TW','en'] (忽略其他) */
+  /** 多語平行翻譯目標 (即時轉播場景) */
   targets?: LanguageCode[];
   /** 房間隔離 (SSE 多房間) */
   room?: string;
