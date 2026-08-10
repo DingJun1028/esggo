@@ -385,10 +385,10 @@ async function start(){
     const blob=new Blob(chunks,{type:mime});chunks=[];
     const buf=await blob.arrayBuffer();
     try{
-      const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
-      dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
-      if(d.text&&d.text.trim())onText(d.text.trim());
+      dbg(`speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+      if(d.text&&d.text.trim())onBilingual(d.text.trim(),d.detected||'zh-TW',d.translation||'',d.target||'en',d.trace||'');
       else { const m='未偵測到語音，請靠近麥克風'; toast(m); showErrorCard(m); }
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
     if(running)rec.start(4000);
@@ -437,9 +437,9 @@ $('#testBtn').onclick=async()=>{
     setTimeout(()=>rec2.stop(),4000);await done;
     const buf=await new Blob(ch,{type:mime}).arrayBuffer();
     $('#testBtn').textContent='🧠 轉錄中…';
-    const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+    const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     const d=await r.json();
-    dbg(`[測試] transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+    dbg(`[測試] speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
     const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
     const el=document.createElement('div');el.className='utter';
     if(d.text&&d.text.trim()){
