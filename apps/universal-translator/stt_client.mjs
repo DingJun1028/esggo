@@ -48,8 +48,17 @@ export async function speechToSubtitle(audioBuf, langHint) {
     body: new Uint8Array(audioBuf),
     signal: AbortSignal.timeout(Number(process.env.STT_TIMEOUT_MS || 30000)),
   });
+  if (!sttRes.ok) {
+    let detail = '';
+    try { detail = (await sttRes.json()).error || ''; } catch { /* ignore */ }
+    const msg = detail || `STT HTTP ${sttRes.status}`;
+    // 區分「服務未啟動」(502/ECONNREFUSED) vs 其他
+    if (sttRes.status === 502 || sttRes.status === 503 || /ECONNREFUSED|fetch failed/i.test(msg)) {
+      throw new Error('STT_UNAVAILABLE:本地 faster-whisper (8791) 未啟動 — 請部署 apps/stt');
+    }
+    throw new Error('STT ' + msg);
+  }
   const sttJson = await sttRes.json();
-  if (!sttRes.ok) throw new Error('STT ' + (sttJson.error || sttRes.status));
 
   const text = sttJson.text || '';
   const detected = normDetected(sttJson.language || hint || 'en');
