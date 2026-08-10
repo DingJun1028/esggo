@@ -205,3 +205,64 @@ export interface IApiResult<T> {
   data: T;
   error?: any;
 }
+
+export enum TranslateEngine {
+  GOOGLE_GTX = 'google-gtx',
+  LIBRETRANSLATE = 'libretranslate',
+  MYMEMORY = 'mymemory',
+  OLLAMA = 'ollama',
+  PASSTHROUGH = 'passthrough',
+  FALLBACK_ORIGIN = 'fallback-origin',
+}
+
+export type LanguageCode =
+  | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
+
+export interface ITranslateRequest {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  /** 多語平行翻譯目標 (即時轉播場景) */
+  targets?: LanguageCode[];
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+}
+
+export interface ITranslateResult {
+  text: string;
+  /** 引擎識別字串 (對齊 TranslateEngine 枚舉值, 但以 string 寬鬆容許運行期動態引擎) */
+  engine: string;
+  cached: boolean;
+  version?: string;
+}
+
+export interface ISpeakPayload {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string, 引擎層再做規範化) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  targets?: LanguageCode[];
+  room?: string;
+  speaker?: string;
+}
+
+export interface ISseTranslationEvent {
+  text: string;
+  translations: Partial<Record<LanguageCode, string>>;
+  engines?: Partial<Record<LanguageCode, string>>;
+  /** 單語場景的引擎識別字串 (對齊 TranslateEngine) */
+  engine?: string;
+  cached?: boolean;
+  trace?: string;
+  room?: string;
+  speaker?: string;
+}
+
+export interface IOmniTypeMatrix {
+  canonical: 'esggo/shared/types.ts';
+  generator: 'scripts/export-shared-types.js';
+  consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
