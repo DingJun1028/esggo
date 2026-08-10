@@ -162,6 +162,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Pin VPS host key (MITM protection)
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_HOST_KEY }}" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         timeout-minutes: 90
