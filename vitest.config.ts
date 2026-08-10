@@ -18,6 +18,10 @@ export default defineConfig({
       // 由它自己的 node_modules 解析依賴；被根 vitest 抓取時 firebase ESM 出口解析失敗。
       // 於其目錄執行 `pnpm install && pnpm test` 驗證。
       'esggo-omni-center/**',
+      // 萬能即時翻譯 UT 測試以 Node 內建 test runner (node:test) 撰寫，非 vitest 套件；
+      // 被根 vitest 抓取時會報 "No test suite found in file"。
+      // 該套件由 ci.yml 的 "UT API Tests (node --test)" job 執行，覆蓋率不減。
+      'apps/universal-translator/test/**',
     ],
   },
   resolve: {
