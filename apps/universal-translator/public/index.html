@@ -237,13 +237,13 @@ function showCaption(src,translations){
   clearTimeout(capTimer); capTimer=setTimeout(()=>{},100);
 }
 
-// 翻譯/轉錄 重試 (防非JSON回應)
-async function transcribeRetry(buf,attempt=0){
-  try{ const r=await fetch('/transcribe?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+// 語音轉雙語字幕 (終始矩陣 /speech-to-subtitle: 一次拿原始+對向翻譯, 省一跳)
+async function speechToSubRetry(buf,attempt=0){
+  try{ const r=await fetch('/speech-to-subtitle?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const txt=await r.text();
     try{ return JSON.parse(txt); }catch(_){ throw new Error('服務回傳非預期格式（網路/逾時），請重試'); }
-  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return transcribeRetry(buf,attempt+1);} throw e; }
+  }catch(e){ if(attempt<2){await new Promise(r=>setTimeout(r,1000));return speechToSubRetry(buf,attempt+1);} throw e; }
 }
 async function translateRetry(text,tg,attempt=0){
   try{ const r=await fetch('/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,from:'auto',targets:tg})});
@@ -339,8 +339,8 @@ function startRecording(audioStream,label){
   rec.onstop=async()=>{
     if(!chunks.length){ if(running)rec.start(4000); return; }
     const buf=await new Blob(chunks,{type:mime}).arrayBuffer();chunks=[];
-    try{ const d=await transcribeRetry(buf);
-      if(d.text&&d.text.trim()){ silentRounds=0; const td=await translateRetry(d.text.trim(),Array.from(active)); onTranscript(d.text.trim(),td.translations||{}); }
+    try{ const d=await speechToSubRetry(buf);
+      if(d.text&&d.text.trim()){ silentRounds=0; const tr={}; tr[d.target||'en']=d.translation||''; onTranscript(d.text.trim(),tr); }
       else { silentRounds++; if(mode==='sys'&&silentRounds>=2){silentRounds=0;autoFallbackToMic();return;} toast('未偵測到語音，請靠近聲源'); }
     }catch(err){ toast('轉錄錯誤: '+err.message); }
     if(running)rec.start(4000);
