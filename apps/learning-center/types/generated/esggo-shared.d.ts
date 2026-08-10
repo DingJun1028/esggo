@@ -218,33 +218,13 @@ export enum TranslateEngine {
 export type LanguageCode =
   | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
 
-export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
-
-export interface ISpeechToSubtitleRequest {
-  /** 音訊位元組 (webm/ogg/wav/mp3/flac/m4a) 由 multipart 帶入, 此處僅描述契約 */
-  languageHint?: 'zh-TW' | 'en'; // 鎖定雙向, 禁其他
-  room?: string;
-  speaker?: string;
-}
-
-export interface ISpeechToSubtitleResult {
-  text: string;                 // 原始辨識文字
-  detected: 'zh-TW' | 'en';    // STT 偵測語 (鎖定雙向)
-  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
-  translation: string;
-  target: 'zh-TW' | 'en';
-  engine: string;               // 5T 溯源
-  cached: boolean;
-  trace?: string;
-}
-
 export interface ITranslateRequest {
   text: string;
   /** 來源語碼 (運行期允許任意 string) */
   from?: string;
   /** 目標語碼 (運行期允許任意 string) */
   to?: string;
-  /** 雙向即時翻譯: 強鎖 ['zh-TW','en'] (忽略其他) */
+  /** 多語平行翻譯目標 (即時轉播場景) */
   targets?: LanguageCode[];
   /** 房間隔離 (SSE 多房間) */
   room?: string;

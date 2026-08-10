@@ -42,9 +42,6 @@ const map = [
   // --- Universal Translator (萬能即時翻譯) Domain — 雙向 TS 矩陣新納入 ---
   ['TranslateEngine', 'enum'],
   ['LanguageCode', 'type'],
-  ['BilingualPair', 'type'],
-  ['ISpeechToSubtitleRequest', 'interface'],
-  ['ISpeechToSubtitleResult', 'interface'],
   ['ITranslateRequest', 'interface'],
   ['ITranslateResult', 'interface'],
   ['ISpeakPayload', 'interface'],
