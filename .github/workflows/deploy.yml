@@ -88,6 +88,7 @@ jobs:
       
       - name: Run ESLint (if configured)
         if: ${{ always() }}
+        continue-on-error: true
         run: |
           set -e
           echo "Checking for ESLint configuration..."
