@@ -288,10 +288,15 @@ jobs:
             pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
-            sleep 5
-            GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
-            WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' http://localhost:8788/health || echo 000)
-            echo "[health] gateway=$GW web=$WEB"
+            # 輪詢等待: 服務剛起可能未 ready, 重試至 200 或上限 (最佳實踐: 避免競態)
+            GW=000; WEB=000
+            for i in $(seq 1 12); do
+              sleep 5
+              GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
+              WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' http://localhost:8788/health || echo 000)
+              echo "[health #$i] gateway=$GW web=$WEB"
+              if [ "$GW" = "200" ] && [ "$WEB" = "200" ]; then break; fi
+            done
             if [ "$GW" != "200" ] || [ "$WEB" != "200" ]; then
               echo "[FAIL] post-deploy health check: gateway=$GW web=$WEB"
               exit 1
