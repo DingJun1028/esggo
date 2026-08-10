@@ -20,17 +20,17 @@ export function ollamaEnabled() {
 
 /**
  * 語系名稱對映 (給 prompt 用的自然語言, 避免譯碼歧義)
+ * 終始矩陣收斂: 鎖定繁中↔英文雙向
  * @param {string} l
+ * @returns {string}
  */
 function langName(l) {
   const s = String(l || '').toLowerCase();
+  /** @type {Record<string, string>} */
   const map = {
     'zh': 'Traditional Chinese (繁體中文)', 'zh-tw': 'Traditional Chinese (繁體中文)',
     'zh-hant': 'Traditional Chinese (繁體中文)', 'zh-cn': 'Simplified Chinese (簡體中文)',
-    'zh-hans': 'Simplified Chinese (簡體中文)', 'en': 'English', 'ja': 'Japanese (日本語)',
-    'ko': 'Korean (한국어)', 'fr': 'French', 'de': 'German', 'es': 'Spanish',
-    'pt': 'Portuguese', 'ru': 'Russian', 'it': 'Italian', 'vi': 'Vietnamese (Tiếng Việt)',
-    'th': 'Thai (ไทย)', 'id': 'Indonesian', 'ms': 'Malay', 'ar': 'Arabic',
+    'zh-hans': 'Simplified Chinese (簡體中文)', 'en': 'English',
   };
   return map[s] || s;
 }
