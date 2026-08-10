@@ -223,9 +223,8 @@ jobs:
             pnpm run build
             # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
-            sleep 2
-            pm2 start ecosystem.config.cjs
+            # 不 kill 其他服務 (避免主站 esggo-core 重啟), 只 update/start 目標
+            pm2 start ecosystem.config.cjs --update-env 2>/dev/null || pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
@@ -283,9 +282,8 @@ jobs:
             pnpm run build
             # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
-            sleep 2
-            pm2 start ecosystem.config.cjs
+            # 不 kill 其他服務 (避免主站 esggo-core 重啟), 只 update/start 目標
+            pm2 start ecosystem.config.cjs --update-env 2>/dev/null || pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             # 輪詢等待: 服務剛起可能未 ready, 重試至 200 或上限 (最佳實踐: 避免競態)
