@@ -282,6 +282,18 @@ function onText(text, detectedLang){
   speakWithRetry(text,from,targets,trs);
 }
 
+// /speech-to-subtitle 回傳結構 ({text, detected, translation, target}) 直接渲染雙語字幕
+// 減少一次請求 (STT+翻譯一次完成), 5T 溯源: trace 已在服務端生成
+function onSubtitle(text, detected, translation, target){
+  const clean=text.replace(/[\s\d.,，。、()（）\-_=+*#@!?]/g,'');
+  if(clean.length<2){ return; }
+  const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
+  const el=document.createElement('div');el.className='utter';
+  const src=document.createElement('div');src.className='src';src.textContent='▸ '+text;el.appendChild(src);
+  const trs=document.createElement('div');trs.className='trs';trs.textContent=translation||'翻譯中…';el.appendChild(trs);
+  box.appendChild(el);box.scrollTop=box.scrollHeight;
+}
+
 // 字幕區顯示錯誤卡 (轉錄失敗可見, 非僅 toast)
 function showErrorCard(msg){
   const box=$('#transcript');const empty=box.querySelector('.empty');if(empty)empty.remove();
@@ -309,12 +321,12 @@ async function start(){
     const buf=await blob.arrayBuffer();
     if(buf.byteLength===0){ if(running)rec.start(4000); return; }
     setStatus('🧠 轉錄中…','rec');
-    dbg(`POST /transcribe bytes=${buf.byteLength}`);
+    dbg(`POST /speech-to-subtitle bytes=${buf.byteLength}`);
     try{
-      const r=await fetch('/transcribe'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
+      const r=await fetch('/speech-to-subtitle'+'?lang=auto',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:buf});
       const d=await r.json();
-      dbg(`transcribe HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
-      if(d.text&&d.text.trim())onText(d.text.trim(), d.language);
+      dbg(`speech-to-subtitle HTTP=${r.status} → ${JSON.stringify(d).slice(0,160)}`);
+      if(d.text&&d.text.trim())onSubtitle(d.text.trim(), d.detected, d.translation, d.target);
       else if(!r.ok){ const m='轉錄失敗 ('+r.status+')：'+(d.error||'服務異常'); toast(m); showErrorCard(m); }
       else { const m='未偵測到會議聲音（請在分享 Zoom 視窗時勾選「分享音訊」）'; toast(m); showErrorCard(m); }
     }catch(err){ const m='轉錄錯誤：'+err.message; toast(m); showErrorCard(m); }
