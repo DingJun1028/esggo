@@ -272,6 +272,8 @@ jobs:
                 [ -f "$f" ] && cp "$f" /var/www/esggo/ && echo "[bootstrap] restored $(basename "$f")"
               done
             fi
+            # 修復目錄擁有者 (root 建目錄 → ubuntu 需寫入權做 git reset)
+            sudo chown -R "$(whoami)" /var/www/esggo 2>/dev/null || chown -R "$(whoami)" /var/www/esggo 2>/dev/null || true
             cd /var/www/esggo
             git checkout -f main
             git fetch origin main
