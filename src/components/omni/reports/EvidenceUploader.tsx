@@ -21,17 +21,21 @@ export default function EvidenceUploader({
       if (!file) return;
 
       setStatus('uploading');
-      // 模擬 S3/R2 上傳與 Hash Lock 封裝 (免費算立：本地生成簽章 URL)
-      setTimeout(() => {
-        try {
-          const mockUrl = `https://omni-vault.s3.universe.com/evidence-${Date.now()}-${encodeURIComponent(file.name)}`;
-          setEvidenceUrl(mockUrl);
-          setStatus('success');
-          onUploadComplete(mockUrl);
-        } catch {
-          setStatus('error');
+      try {
+        // 真實上傳至 Evidence Vault (MinIO S3 相容, 免費算立自託)
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch('/api/evidence-upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'upload failed');
         }
-      }, 1200);
+        setEvidenceUrl(data.url);
+        setStatus('success');
+        onUploadComplete(data.url);
+      } catch {
+        setStatus('error');
+      }
     },
     [onUploadComplete]
   );
