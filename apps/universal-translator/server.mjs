@@ -35,7 +35,10 @@ try {
 } catch { /* 忽略 .env 讀取錯誤，維持預設 */ }
 
 const PORT = Number(process.env.PORT || 8788);
-const APP_VERSION = '1.5.0';           // Zoom 會議即時雙語字幕版: 僅系統音收音 / 繁中↔英文 / Ollama+Gemma 可選 / 一體式懸浮浮窗
+const APP_NAME = '萬能即時翻譯';
+const APP_VERSION = '1.6.0';           // v1.6: 整合 Gemini 3.5 Live Translate 技術 (可選雲端增強, 預設關閉維持純免費)
+// Gemini 3.5 Live Translate 技術整合: 可選雲端增強層 (需 GEMINI_API_KEY), 預設關閉維持純免費零 key 運作.
+const GEMINI_INTEGRATED = true;
 
 // ── 生產級安全配置 ──────────────────────────────────────────
 // 請求體上限: 音訊 10MB / JSON 1MB (防 DoS 內存耗盡)
@@ -153,6 +156,21 @@ const server = http.createServer(async (req, res) => {
   // 健康檢查
   if (url === '/health' && req.method === 'GET') {
     return writeJson(res, { status: 'ok', version: APP_VERSION, stats });
+  }
+
+  // Gemini 3.5 Live Translate 技術狀態 — 供 UI 顯示「可選增強」徽章
+  if (url === '/gemini-live-3-5/status' && req.method === 'GET') {
+    return writeJson(res, {
+      name: 'Gemini 3.5 Live Translate',
+      integrated: GEMINI_INTEGRATED,
+      enabled: !!process.env.GEMINI_API_KEY,
+      engine: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+      mode: process.env.GEMINI_API_KEY
+        ? 'cloud-enhanced (opt-in, graceful fallback to free chain)'
+        : 'off — running free/zero-key chain',
+      subtitle: '繁中 ↔ 英文 雙向及時字幕',
+      ts: Date.now(),
+    });
   }
 
   // 指標端點 (生產級監控: Prometheus 相容結構)
