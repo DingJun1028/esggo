@@ -25,3 +25,11 @@ sonar integrate hermes        # 掛載 secret-detect hook + MCP server + Vortex 
 ## 免費算立替代
 未配置 Sonar 組織時，本專案以 `node --test test/*.test.mjs` + `tsc` 作為同等品質閘門（CI `ut-tests` job）。
 Sonar 為**選用增強**，不影響既有零依賴驗證鏈。
+
+## 自託 SonarQube CE（VPS，已實證 2026-08-11）
+- VPS Docker: `/opt/sonarqube/docker-compose.yml`（postgres + sonarqube:community，對外 :19000）
+- 啟動: `ssh ubuntu@161.118.248.180 "cd /opt/sonarqube && docker compose up -d"`
+- token: `/opt/sonarqube/ut-token.txt`（權限 600）
+- 掃描: `npx sonarqube-scanner -Dsonar.host.url=http://localhost:19000 -Dsonar.token=<token> -Dsonar.projectKey=universal-translator -Dsonar.sources=server.mjs,translate.mjs,stt_client.mjs`
+- 結果: ANALYSIS SUCCESSFUL（3 檔，JS/TS 分析 + CPD + 依賴分析全過）
+- **限制**: agentic 自動修復為 SonarCloud/Enterprise 付費功能，CE 版不含。依「只用免費算立」不啟用雲端 agentic；CI 以 `sonar-smoke` job（免費本地煙測）作永久守門。
