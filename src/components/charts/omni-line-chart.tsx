@@ -25,9 +25,9 @@ export function OmniLineChart({
 
   const defaultColor = 'var(--accent-teal)';
 
-  const { minValue, valueRange, points, pathD, areaD } = useMemo(() => {
+  const { points, pathD, areaD, gridLines } = useMemo(() => {
     if (!data || data.length === 0) {
-      return { minValue: 0, valueRange: 1, points: [], pathD: '', areaD: '' };
+      return { points: [], pathD: '', areaD: '', gridLines: [] };
     }
     const stepX = data.length > 1 ? graphWidth / (data.length - 1) : 0;
     const maxVal = Math.max(...data.map(d => d.value), 1);
@@ -46,7 +46,13 @@ export function OmniLineChart({
 
     const aD = `${pD} L ${pts[pts.length - 1].x} ${padding.top + graphHeight} L ${pts[0].x} ${padding.top + graphHeight} Z`;
 
-    return { minValue: minVal, valueRange: valRange, points: pts, pathD: pD, areaD: aD };
+    const gLines = [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+      const y = padding.top + graphHeight * (1 - ratio);
+      const val = (minVal + valRange * ratio).toFixed(1);
+      return { ratio, y, val };
+    });
+
+    return { points: pts, pathD: pD, areaD: aD, gridLines: gLines };
   }, [data, padding.left, padding.top, graphWidth, graphHeight, smooth]);
 
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -74,16 +80,12 @@ export function OmniLineChart({
             setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
           }}
         >
-          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = padding.top + graphHeight * (1 - ratio);
-            const val = (minValue + valueRange * ratio).toFixed(1);
-            return (
-              <g key={`grid-${ratio}`}>
-                <line x1={padding.left} y1={y} x2={viewBoxWidth - padding.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
-                <text x={padding.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
-              </g>
-            );
-          })}
+          {gridLines.map(({ ratio, y, val }) => (
+            <g key={`grid-${ratio}`}>
+              <line x1={padding.left} y1={y} x2={viewBoxWidth - padding.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
+              <text x={padding.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
+            </g>
+          ))}
 
           {yAxisLabel && (
             <text x={10} y={padding.top - 15} fontSize="10" className="fill-textSecondary font-bold">{yAxisLabel}</text>

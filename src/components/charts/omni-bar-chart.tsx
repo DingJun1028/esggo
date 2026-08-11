@@ -24,17 +24,31 @@ export function OmniBarChart({
   const viewBoxWidth = 600;
   const graphWidth = viewBoxWidth - padding.left - padding.right;
   
-  const { maxValue, barWidth, barSpacing } = useMemo(() => {
-    if (!data || data.length === 0) return { maxValue: 1, barWidth: 0, barSpacing: 0 };
+  const defaultColor = 'var(--accent-teal)';
+
+  const { barWidth, gridLines, barData } = useMemo(() => {
+    if (!data || data.length === 0) return { barWidth: 0, gridLines: [], barData: [] };
     const maxVal = Math.max(...data.map(d => d.value), 1); // Avoid division by zero
     const bWidth = Math.min((graphWidth / data.length) * 0.6, 40);
     const bSpacing = (graphWidth - (bWidth * data.length)) / (data.length + 1);
-    return { maxValue: maxVal, barWidth: bWidth, barSpacing: bSpacing };
-  }, [data, graphWidth]);
+
+    const lines = [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+      const y = padding.top + graphHeight * (1 - ratio);
+      const val = (maxVal * ratio).toFixed(1);
+      return { ratio, y, val };
+    });
+
+    const bars = data.map((point, index) => {
+      const x = padding.left + bSpacing + (index * (bWidth + bSpacing));
+      const barHeight = (point.value / maxVal) * graphHeight;
+      const y = padding.top + graphHeight - barHeight;
+      return { point, index, x, y, barHeight };
+    });
+
+    return { barWidth: bWidth, gridLines: lines, barData: bars };
+  }, [data, graphWidth, graphHeight, padding.top, padding.left]);
 
   if (!data || data.length === 0) return <div>No data available</div>;
-
-  const defaultColor = 'var(--accent-teal)';
 
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
@@ -64,32 +78,28 @@ export function OmniBarChart({
           }}
         >
           {/* Grid Lines & Y-Axis Labels */}
-          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = padding.top + graphHeight * (1 - ratio);
-            const val = (maxValue * ratio).toFixed(1);
-            return (
-              <g key={`grid-${ratio}`}>
-                <line 
-                  x1={padding.left} 
-                  y1={y} 
-                  x2={viewBoxWidth - padding.right} 
-                  y2={y} 
-                  stroke="currentColor" 
-                  className="text-borderColor/30" 
-                  strokeDasharray="4,4" 
-                />
-                <text 
-                  x={padding.left - 10} 
-                  y={y + 4} 
-                  textAnchor="end" 
-                  fontSize="10" 
-                  className="fill-textSecondary"
-                >
-                  {val}
-                </text>
-              </g>
-            );
-          })}
+          {gridLines.map(({ ratio, y, val }) => (
+            <g key={`grid-${ratio}`}>
+              <line
+                x1={padding.left}
+                y1={y}
+                x2={viewBoxWidth - padding.right}
+                y2={y}
+                stroke="currentColor"
+                className="text-borderColor/30"
+                strokeDasharray="4,4"
+              />
+              <text
+                x={padding.left - 10}
+                y={y + 4}
+                textAnchor="end"
+                fontSize="10"
+                className="fill-textSecondary"
+              >
+                {val}
+              </text>
+            </g>
+          ))}
 
           {yAxisLabel && (
             <text 
@@ -103,13 +113,8 @@ export function OmniBarChart({
           )}
 
           {/* Bars */}
-          {data.map((point, index) => {
-            const x = padding.left + barSpacing + (index * (barWidth + barSpacing));
-            const barHeight = (point.value / maxValue) * graphHeight;
-            const y = padding.top + graphHeight - barHeight;
-            
+          {barData.map(({ point, index, x, y, barHeight }) => {
             const isHovered = hoveredPoint?.label === point.label;
-            
             return (
               <g key={`bar-${index}`}>
                 <rect
