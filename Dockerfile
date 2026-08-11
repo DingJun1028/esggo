@@ -7,8 +7,8 @@ RUN corepack enable pnpm
 
 # 複製 package.json 與 lock 檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-# 安裝所有相依套件
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# 安裝所有相依套件（不用 frozen-lockfile 以容許 prisma 升版後 lock 自動更新）
+RUN pnpm install --ignore-scripts --no-frozen-lockfile
 
 FROM node:22-alpine AS builder
 WORKDIR /app
@@ -31,10 +31,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
-# Prisma 5.22 engine 仍 link libssl.so.1.1 (Alpine3.24 原生無, 從 v3.19 臨時 repo 裝)
-RUN echo "https://mirror.alpinelinux.org/alpine/v3.19/main" >> /etc/apk/repositories \
-  && apk add --no-cache openssl1.1-compat \
-  && sed -i '/v3.19\/main/d' /etc/apk/repositories
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
 
