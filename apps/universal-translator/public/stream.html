@@ -36,6 +36,8 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .utter .src{color:var(--accent);font-weight:700;font-size:1.02rem;line-height:1.45}
 .utter .trs{margin-top:6px;font-size:.92rem;color:var(--txt)}
+.utter .ctx{margin-top:4px;font-size:.8rem;color:var(--muted);opacity:.75;font-style:italic}
+.ctx{color:var(--muted);font-size:.82rem;opacity:.78;font-style:italic;margin-top:4px}
 .empty{color:var(--muted);text-align:center;padding:30px 10px;opacity:.7}
 .caption{position:fixed;left:50%;bottom:6vh;transform:translateX(-50%);max-width:94vw;width:min(1000px,94vw);
   background:linear-gradient(135deg,rgba(12,18,30,.72),rgba(8,12,20,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
@@ -66,7 +68,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
   <div class="status"><span class="dot" id="dot"></span><span id="status">連線中…</span></div>
   <div class="preview" id="preview"><div class="empty">等待字幕… 來自會議收音端的即時繁中 ↔ 英文 雙語字幕會出現在此</div></div>
 </div>
-<div class="caption" id="caption"><div class="src" id="capSrc"></div><div class="trs" id="capTrs"></div></div>
+<div class="caption" id="caption"><div class="src" id="capSrc"></div><div class="trs" id="capTrs"></div><div class="ctx" id="capCtx"></div></div>
 <div class="toast" id="toast"></div>
 <script type="module">
 /// <reference path="./types/generated/esggo-shared.d.ts" />
@@ -93,15 +95,17 @@ $('#swapBtn').onclick=()=>{toLang=fromLang();refreshSwapUI();toast('觀看方向
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
 function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'');$('#status').textContent=msg;}
 
-function showCaption(src,trs){
+function showCaption(src,trs,ctx){
   $('#capSrc').textContent=src||'';
   $('#capTrs').textContent=trs||'';
+  const ce=$('#capCtx'); if(ce) ce.textContent=(ctx&&ctx.length)?'前文：'+ctx.map(c=>c.src||c.text||'').join(' / '):'';
   const cap=$('#caption');cap.classList.add('show');clearTimeout(capTimer);capTimer=setTimeout(()=>cap.classList.remove('show'),6500);
 }
-function appendPreview(src,trs){
+function appendPreview(src,trs,ctx){
   const p=$('#preview');const e=p.querySelector('.empty');if(e)e.remove();
   const d=document.createElement('div');d.className='utter';
-  d.innerHTML=`<div class="src">▸ ${src}</div><div class="trs">${trs||''}</div>`;
+  const ctxLine=(ctx&&ctx.length)?`<div class="ctx">前文：${ctx.map(c=>c.src||c.text||'').join(' / ')}</div>`:'';
+  d.innerHTML=`<div class="src">▸ ${src}</div>${ctxLine}<div class="trs">${trs||''}</div>`;
   p.appendChild(d);p.scrollTop=p.scrollHeight;
 }
 
@@ -111,8 +115,9 @@ $('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('pr
 function onTranslation(d){
   const src=d.text||'';
   const tr=(d.translations&&toLang&&d.translations[toLang])||'';
-  appendPreview(src,tr);
-  if(floatOn)showCaption(src,tr);
+  const ctx=d.context||[];
+  appendPreview(src,tr,ctx);
+  if(floatOn)showCaption(src,tr,ctx);
 }
 function connect(){
   try{
