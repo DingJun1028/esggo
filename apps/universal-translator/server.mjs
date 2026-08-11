@@ -214,8 +214,8 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  // SSE 觀眾端串流（必須在主靜態路由之前攔截，否則會被當成 HTML 頁回傳）
-  if (url.startsWith('/stream') && req.method === 'GET') {
+  // SSE 觀眾端串流（精確匹配 /stream 或 /stream?room=...，避免遮蔽 /stream.html 靜態頁）
+  if ((url === '/stream' || url.startsWith('/stream?')) && req.method === 'GET') {
     // 解析 query: ?src=studio&room=xxx（room 用於多房間隔離）
     const q = new URL(url, 'http://localhost').searchParams;
     const room = q.get('room') || '';
