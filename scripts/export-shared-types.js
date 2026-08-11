@@ -46,6 +46,10 @@ const map = [
   ['ITranslateResult', 'interface'],
   ['ISpeakPayload', 'interface'],
   ['ISseTranslationEvent', 'interface'],
+  // --- STT → 雙語字幕 Domain (終始矩陣: 消費端 stt_client.mjs 依賴) ---
+  ['BilingualPair', 'type'],
+  ['ISpeechToSubtitleRequest', 'interface'],
+  ['ISpeechToSubtitleResult', 'interface'],
   ['IOmniTypeMatrix', 'interface'],
 ];
 
