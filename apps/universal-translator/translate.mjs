@@ -85,14 +85,16 @@ async function viaOllama(text, from, to) {
 // 預設關閉: 未設 GEMINI_API_KEY 時不進入引擎鏈, 維持純免費零 key 運作. 設了 key 但失敗 → 優雅回落免費鏈.
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 10000);
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'; // 3.5 Live 正式模型以 GEMINI_MODEL 覆寫
-async function viaGeminiLive35(text, from, to) {
+async function viaGeminiLive35(text, from, to, ctxHint) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY not configured');
   // 語碼映射沿用 google-gtx 規範 (zh-TW→zh-TW, en→en, auto→auto)
   const sl = toEngineLang('google-gtx', toCanonical(from));
   const tl = toEngineLang('google-gtx', toCanonical(to));
-  const sys = `You are Gemini 3.5 Live Translate, a professional real-time speech translation engine. ` +
+  let sys = `You are Gemini 3.5 Live Translate, a professional real-time speech translation engine. ` +
     `Translate the following ${sl} text into ${tl}. Output ONLY the direct translation: no quotes, no explanations, no extra text. Preserve tone, meaning and natural phrasing.`;
+  // 脈絡增強: 注入近期前文, 提升代詞指代/時態連貫 (僅 Gemini 引擎支援; 免費鏈誠實降級)
+  if (ctxHint) sys += '\n\n' + ctxHint;
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(key)}`;
   const r = await fetch(url, {
     method: 'POST',
@@ -194,7 +196,7 @@ function engineChain() {
 }
 
 // from='auto' 不預判同語 (否則繁中→英文 被誤判 en→en 跳過); 快取鍵用原始 from/to 保留 zh-TW/zh-CN 區別
-export async function translateDetailed(text, from, to) {
+export async function translateDetailed(text, from, to, ctxHint) {
   if (!text) return { text, engine: 'passthrough', cached: false };
   const cFrom = toCanonical(from); // 僅用於同語短路判斷
   const cTo = toCanonical(to);
@@ -205,7 +207,8 @@ export async function translateDetailed(text, from, to) {
   stats.calls++;
   for (const [name, fn] of engineChain()) {
     try {
-      const out = await withRetry(() => fn(text, from, to), name);
+      // 脈絡增強僅注入 Gemini 引擎; 免費鏈忽略 ctxHint (誠實降級)
+      const out = await withRetry(() => fn(text, from, to, name === 'gemini-live-3.5' ? ctxHint : undefined), name);
       const rec = { text: out, engine: name };
       stats.byEngine[name] = (stats.byEngine[name] || 0) + 1;
       cacheSet(CACHE, k, rec);

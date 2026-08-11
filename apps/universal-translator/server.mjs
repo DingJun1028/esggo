@@ -23,6 +23,7 @@ import { WebSocketServer } from 'ws';
 import { translateDetailed, translateToMany, stats, hashOf } from './translate.mjs';
 import { speechToSubtitle } from './stt_client.mjs';
 import { s2sStatus, isS2SEnabled } from './s2s_gemini_live.mjs';
+import { recordUtterance, getContext, buildContextHint, resetRoom, contextStatus, isContextEnabled } from './context_buffer.mjs';
 
 // 讀取 .env（零依賴實作，優先於 process.env 已存在值）
 try {
@@ -37,7 +38,7 @@ try {
 
 const PORT = Number(process.env.PORT || 8788);
 const APP_NAME = '萬能即時翻譯';
-const APP_VERSION = '1.6.0';           // v1.6: 整合 Gemini 3.5 Live Translate 技術 (可選雲端增強, 預設關閉維持純免費)
+const APP_VERSION = '1.7.0';           // v1.7: 跨句脈絡記憶 (context awareness) + Gemini 前文注入增強
 // Gemini 3.5 Live Translate 技術整合: 可選雲端增強層 (需 GEMINI_API_KEY), 預設關閉維持純免費零 key 運作.
 const GEMINI_INTEGRATED = true;
 
@@ -126,18 +127,24 @@ async function readBody(req) {
 async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker = 'studio' }) {
   if (!text) return null;
   const trace = hashOf(text).slice(0, 16);
+  // 脈絡增強: 取回近期前文 (供 Gemini 引擎注入, 提升連貫)
+  const ctxHint = buildContextHint({ room });
   if (Array.isArray(targets) && targets.length) {
     const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
     /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
     const out = { text, translations: r.translations, engines: r.engines, trace, room: room || '', speaker: speaker || 'studio' };
     broadcastTranslation(out);
+    recordUtterance({ room, src: text, tgt: r.translations[targets[0]] || '', from, to: targets[0] });
     return { ...out, engine: Object.values(r.engines)[0] || 'n/a', cached: false };
   }
-  const rec = await translateDetailed(text, String(from), String(to));
+  const rec = await translateDetailed(text, String(from), String(to), ctxHint);
   /** @type {Record<string, string>} */
   const tr = { [/** @type {string} */ (to)]: rec.text };
+  // 脈絡: 記錄本句 + 把近期前文附帶於 payload (供 UI 顯示「前文」, 誠實降級: 免費鏈不影響輸出)
+  const ctx = getContext({ room });
+  recordUtterance({ room, src: text, tgt: rec.text, from, to });
   /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
-  const out = { text, translations: tr, engine: rec.engine, cached: rec.cached, trace, room: room || '', speaker: speaker || 'studio' };
+  const out = { text, translations: tr, engine: rec.engine, cached: rec.cached, trace, room: room || '', speaker: speaker || 'studio', context: ctx.length ? ctx.slice(-3) : undefined };
   broadcastTranslation(out);
   return { ...out, text: rec.text };
 }
@@ -177,6 +184,16 @@ const server = http.createServer(async (req, res) => {
   // 語音對語音同傳升級路徑狀態 (可選, 需 GEMINI_API_KEY + GEMINI_LIVE_S2S=1)
   if (url === '/s2s/status' && req.method === 'GET') {
     return writeJson(res, s2sStatus());
+  }
+
+  // 跨句脈絡記憶狀態 (context awareness)
+  if (url === '/context/status' && req.method === 'GET') {
+    return writeJson(res, contextStatus());
+  }
+  if (url === '/context/reset' && req.method === 'POST') {
+    const q = new URL(url, 'http://localhost').searchParams;
+    resetRoom(q.get('room') || '');
+    return writeJson(res, { ok: true, status: contextStatus() });
   }
 
   // 指標端點 (生產級監控: Prometheus 相容結構)
@@ -263,6 +280,7 @@ const server = http.createServer(async (req, res) => {
     if (Array.isArray(targets) && targets.length) {
       const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
       const firstEngine = Object.values(r.engines)[0] || 'n/a';
+      recordUtterance({ room, src: text, tgt: r.translations[targets[0]] || '', from, to: targets[0] });
       broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
       return writeJson(res, { ...r, version: APP_VERSION }, {
         'X-OA-Engine': String(firstEngine), 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
@@ -270,10 +288,13 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 單語翻譯
-    const rec = await translateDetailed(text, String(from), String(to));
+    const ctxHint = buildContextHint({ room });
+    const rec = await translateDetailed(text, String(from), String(to), ctxHint);
     /** @type {Record<string, string>} */
     const tr = { [String(to)]: rec.text };
-    broadcastTranslation({ text, translations: tr, engine: rec.engine, cached: rec.cached, trace: hashOf(rec.text).slice(0, 16), room, speaker: 'rest' });
+    const ctx = getContext({ room });
+    recordUtterance({ room, src: text, tgt: rec.text, from, to });
+    broadcastTranslation({ text, translations: tr, engine: rec.engine, cached: rec.cached, trace: hashOf(rec.text).slice(0, 16), room, speaker: 'rest', context: ctx.length ? ctx.slice(-3) : undefined });
     return writeJson(res, { text: rec.text, engine: rec.engine, cached: rec.cached, version: APP_VERSION }, {
       'X-OA-Engine': String(rec.engine || 'n/a'), 'X-OA-Cached': String(rec.cached), 'X-OA-Trace': hashOf(rec.text).slice(0, 16),
     });
