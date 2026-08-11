@@ -7,8 +7,8 @@ RUN corepack enable pnpm
 
 # 複製 package.json 與 lock 檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-# 安裝所有相依套件（不用 frozen-lockfile 以容許 prisma 升版後 lock 自動更新）
-RUN pnpm install --ignore-scripts --no-frozen-lockfile
+# 安裝所有相依套件
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM node:22-alpine AS builder
 WORKDIR /app
