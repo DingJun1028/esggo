@@ -30,9 +30,9 @@ FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
+# Prisma 5.22 engine 需 libssl.so.1.1 (Alpine 3.20+ 已移除, 用 compat 包)
+RUN apk add --no-cache openssl1.1-compat curl
 RUN corepack enable pnpm
-# healthcheck 探活依賴 curl
-RUN apk add --no-cache curl
 
 # 複製構建出的靜態資源與 .next
 COPY --from=builder /app/public ./public
