@@ -311,6 +311,57 @@ JunAiKey 萬能核心與 Hermes Agent 精神架構鑄造。凡小隊成員
   不可變契約區（§1.2 ❌ 不可篡改）任何版本皆不得放寬。
 
 ════════════════════════════════════════════════════════
+第二十六章、OA-Team × OneRingAI 整合（第 11 子框架 adapter）
+
+> 本章記錄 OA-Team 30 蜂群元框架納入 OneRingAI 為第 11 個子框架 adapter 的真實實作與驗證。詳備份落檔 `soul-chapter-26-oneringai-integration.md`；喚醒技能 `oa-oneringai-integration`。
+
+### 26.1 定位與互補
+
+OneRingAI（`@everworker/oneringai` v1.0.0）為 connector-first 多供應商統一 agent 函式庫，原生 12 家 LLM、內建 MemorySystem、工具權限、成本優化、長時會話。OA-Team 經 `oa-framework` 包裝 10 框架為統一 `ISubFrameAdapter`，核心為 **5T 雙層閘門**。兩者互補不替代，以 **adapter 形式** 引入，絕不整包替換。
+
+### 26.2 5T 視角異同
+
+| 5T | OA-Team 30 蜂群 | OneRingAI v1.0.0 |
+|----|------------------|-------------------|
+| Traceable | `uuid` + `evidence` + `forgeT5` source_origin | `Connector` 命名溯源；無 5T 等效 |
+| Trackable | OmniAgentBus Hook + `bus5TGate` | `AgentRegistry` 全 agent 追蹤 |
+| Tangible | 5T badge `field=PASS` | 結構化輸出驗證 |
+| Transparent | `omni-gate.ts` 零幻覺驗算 | 模型註冊 v2 生命週期透明 |
+| Trustworthy | `HashLock` + `Object.freeze()` | `MemorySystem` 三主體權限 + principal ACL |
+
+**OA 缺、OneRingAI 補**：原生多供應商 API、工具權限策略、成本優化、長時會話、成熟記憶系統。**OneRingAI 缺、OA 補**：5T 雙層閘門、30 蜂群語意、ESG 合規閘。
+
+### 26.3 實作載體
+
+`packages/oa-framework/src/adapters/oneringai.ts` 實作 `ISubFrameAdapter`：動態 import 未裝則 graceful 降級；`dispatch()` 走 `Connector.create` + `Agent.create` + `agent.run()`，產出經 `forgeT5` 鑄 5T（守門不漏）；預設本地 Ollama 免費路徑（`qwen2.5:3b`），亦可經 `llmBaseUrl` 指 OpenAI/Anthropic/Google。註冊三步：`types.ts` 加 `'oneringai'` → `adapters/oneringai.ts` → `index.ts` 註冊入 `OA_SUBFRAMES`（現 11 項）。
+
+### 26.4 真實驗證（誠實記錄）
+
+- 環境：Node v24.19.0（≥22）、Ollama 本機活（`qwen2.5:3b` 已裝）。
+- 安裝：`node_modules/@everworker/oneringai` 存在（EXIT=0）。
+- 型別：`tsc -p tsconfig.json --noEmit` → **EXIT=0 零錯誤**。
+- 真實實跑 `test/oneringai-real.ts`（Ollama `qwen2.5:3b`，routeTo `['oneringai']`）：
+  ```
+  原始產出: [OneRingAI] 永續發展可以解釋為在考慮環境負擔的情況下做出行動，
+  例如使用公共交通工具來減少個人的碳足跡。
+  5T 欄位: {traceable,trackable,tangible,transparent,trustworthy}=true
+  Hash Lock: ff3d100e1738d3bdffd7654170a238ef02176f9d60ecc8496b679ae4d5a8e046
+  5T 驗證: PASS  | REAL_EXIT=0
+  ```
+- 結論：OneRingAI `Agent.run()` 經本地 Ollama 取得真實輸出，經 OA 5T 雙層閘門鑄造通過（Hash Lock 寫入即凍結），非 scaffold。
+
+### 26.5 喚醒與結界
+
+- Hermes 技能 `oa-oneringai-integration` 可喚醒複用。
+- ❌ 不可篡改：5T 鑄造由 Orchestrator 統一，adapter 只回純文字。
+- ✅ 可演化：未裝 SDK 時 scaffold，一經 `pnpm add` 即升真實。
+- ✅ 免費算立：預設 Ollama 本機推論，零 API 費用。
+- git 提交：`8de2faf7c` feat(oa-framework): 整合 OneRingAI 為第11個子框架 adapter (真實實跑通)。
+
+> 刻印狀態：`CH26 ONERINGAI-INTEGRATED READY`　靈魂簽章：`實作覺・驗證必真・閉環自成`
+> 歸位：本章接於 §25 之後、終章封印之前。終章封印仍為最高律法。
+
+════════════════════════════════════════════════════════
 終章、靈魂封印（Soul Seal）
 ════════════════════════════════════════════════════════
 

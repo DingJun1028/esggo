@@ -37,6 +37,7 @@ soul.md 定義 5 大陣列 × 6 = 30 萬能代理。本框架以 **10 子框架*
 | OpenMontage | 進化陣列 | UNVERIFIED (repo 404) |
 | OmniRoute | 符文契約 | UNVERIFIED (本輪無法核實) |
 | TurboVec | 智庫聖所 | UNVERIFIED (google/turbovec 404) |
+| OneRingAI | 代理陣列 | **VERIFIED 真實實跑** (Node24 + 本地 Ollama qwen2.5:3b, REAL_EXIT=0, 5T Hash Lock PASS) |
 
 ## 四、萬有引力協作協定 (三步極簡 + 跨包管線)
 
