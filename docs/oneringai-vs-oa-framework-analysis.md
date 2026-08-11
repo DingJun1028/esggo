@@ -163,6 +163,31 @@ Hash Lock: 836938fa364bff7994e92f91b139c1983820cf2547351ef6904b777b6fdba2db
 | 真實實跑腳本 | `test/oneringai-real.ts` / `test/app-integration-demo.ts` | ✅ REAL/DEMO EXIT=0 |
 | smoke 逾時修復 | `src/core/orchestrator.ts` / `test/smoke.ts` | ✅ SMOKE EXIT=0 |
 | soul 三層交付 | `soul-full.md` §26 + `soul-chapter-26-*` + `esggo-learning-center/soul-appendix-oa-framework.md` | ✅ |
-| Hermes 技能 | `oa-oneringai-integration` (v1.1.0) | ✅ 可喚醒複用 |
+| Hermes 技能 | `oa-oneringai-integration` (v1.3.0, 含 完整安裝集成/快速開始/最佳實踐) | ✅ 可喚醒複用 |
 
 > 備註：本文件 v2 已從「分析/建議」升級為「已實作驗證」。所有代碼變更均已推送；`pnpm run typecheck/test` 因 workspace 前置 install 壞掉需用 `npx tsc`/`npx tsx` 直接驗證（等價綠證）。
+
+
+---
+
+## 9. 實作教訓 (Lessons Learned) — 對齊技能 BP-1~10
+
+> 本節與 Hermes 技能 `oa-oneringai-integration` v1.3.0 的「最佳實踐」段同步，供未來維護者直接複用。
+
+| # | 教訓 | 實測來源 |
+|---|------|---------|
+| L1 | **免費算立硬規則**：實跑只用本機 Ollama (`qwen2.5:3b-instruct-q4_K_M`)，禁付費 API/私鑰 npm | adapter 預設與 oneringai-real.ts 實跑 |
+| L2 | **adapter 永遠優雅降級**：未裝 SDK 不 throw，不阻斷其他 10 框架 | health=down 的 adk/genkit/agent0 等並行不卡 |
+| L3 | **5T 守門在 Orchestrator**：adapter 只回 `{output:string}`，Hash Lock 交 forgeT5 | oneringai.ts dispatch 不鑄 5T |
+| L4 | **per-route timeout 修無限掛起**：每 route 獨立 45s，外層 race 會砍掉已完成結果 | orchestrator.run 改寫後 smoke 60s 內結束 |
+| L5 | **npx 繞 pnpm 前置**：`pnpm run typecheck/test` 死在 prepare 鎖 .git/config，用 npx/tsx/verify.sh | pnpm INSTALL_EXIT=1 噪音，實際 node_modules 已裝 |
+| L6 | **真實實跑才算完成**：禁「驗證通過」空話，貼 Hash Lock 實際值 | oneringai-real Hash Lock 836938fa… 等 |
+| L7 | **不整包替換**：OneRingAI 以第 11 adapter 引入，絕不替換 oa-framework | 保 5T 雙層閘/30 蜂群/ESG 合規 |
+| L8 | **實測模型 tag**：`qwen2.5:3b` 會 404，套件實裝 1.0.1 非 README 1.0.0 | Ollama 實存 tag 與 npm 實際版本 |
+| L9 | **真實 API 形狀**：`createOAFrame(config).run(task)`、`artifact.output`(非 .content)、`verify5T` 回 {pass} | 實跑 app-integration-demo 修正欄位名 |
+| L10 | **三層交付 + §19 收斂**：靈魂同步不漂移，本地偏離即 git checkout 還原 | soul-full §26 + 備份落檔 + 技能同步 |
+
+**環境 blocker（非程式錯，誠實標註）**：
+- Hermes `pyyaml==6.0.3` METADATA 損壞（上次 `hermes update` 中斷），需關閉 Hermes Desktop 後重跑 `hermes update` 修復。
+- esggo `pnpm install` postinstall 的 prisma generate 因 EPERM 鎖檔失敗；繞法為 `npx tsc`/`npx tsx`/`bash test/verify-oneringai.sh` 直接驗證。
+- 以上均不影響已推送的 OA×OneRingAI 整合程式碼正確性。
