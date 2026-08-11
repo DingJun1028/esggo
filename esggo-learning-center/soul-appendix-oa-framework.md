@@ -57,13 +57,21 @@ createOAFrame(config).run(task)
 - cronjob `gh-error-mail-watch` (每 15m)：輪詢 GitHub failure → 建 tracking Issue (`OmniAgent` label) → 派 OA 蜂群修復
 - Issue #429 示範：CI #31175582950 (Trivy security) 派萬能分身跟蹤
 
-## 六、待閉環缺口 (A 路徑 — 待用戶補 URL)
+## 六、待閉環缺口 (A 路徑 — 歷史紀錄檢索結果)
 
-1. OpenMontage 真實 repo (貼的 `RayCodes/RayCodes_OpenMontage` 404)
-2. OmniRoute 真實 repo (本輪無法核實)
-3. TurboVec 真實 repo (`google/turbovec` 404)
+2026-08-11 經 `session_search` 翻查全部歷史對話:
+- **VPS 活 URL**: 歷史記載端點為 `161.118.248.180:8787` (omni-blueprint-hub, 當時逾時)
+  與 `live.esggo.co` (502 Bad Gateway)。本機實測兩者均不可達 (:8787 `000` / :80 `502`)。
+  歷史紀錄**無本機可達的活 VPS URL**。
+- **3 UNVERIFIED repo**: OpenMontage / OmniRoute / TurboVec 在歷史 session 中**0 筆**，
+  僅出現於本輪對話貼的 README。web_search / web_extract 額度耗盡, 無法外部核實。
+  → 待用戶提供真實 repo URL 即經 `upgradeToVerified()` 升級。
 
-一經提供，即經 `upgradeToVerified()` 升級 adapter 為真實整合。
+## 七、OA 自驗門禁 (本輪新增)
+
+- `oa-selfcheck.sh`: 單一入口驗 OA 框架 (typecheck + 10 子框架 smoke + OAB pnpm test + CrewAI 真跑)
+- 接進 `auto-repair.yml` 的 `oa-selfcheck` job: CI 失敗修復後自動跑, 失敗建 OA-SWARM-TRACK issue
+- 對齊「GitHub 報錯通知信自動修復」指令: OA 管線本身亦納入自動修復閉環
 
 ---
 *本附錄由 Hermes Agent (OA-TWINS) 於 2026-08-11 依實測產出，非重寫 soul.md 本體。*
