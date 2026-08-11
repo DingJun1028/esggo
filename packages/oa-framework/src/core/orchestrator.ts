@@ -20,21 +20,38 @@ export class OAOrchestrator {
     return Array.from(this.adapters.keys());
   }
 
-  /** 執行任務 — 多框架並行 dispatch + 5T 鑄造 */
-  async run(task: OATask): Promise<OATaskResult[]> {
+  /** 執行任務 — 多框架並行 dispatch + 5T 鑄造 (每 route 獨立 timeout, 不互相等) */
+  async run(task: OATask, perRouteTimeoutMs = 45_000): Promise<OATaskResult[]> {
     const routes = this.resolveRoute(task);
     const results = await Promise.all(
       routes.map(async (id) => {
         const adapter = this.adapters.get(id);
         if (!adapter) throw new Error(`adapter ${id} not registered`);
-        const r = await adapter.dispatch(task);
-        return forgeT5({
-          subFrame: id,
-          output: r.output,
-          uuid: `${id}-${task.id}`,
-          version: '0.5.0',
-          evidence: { taskId: task.id },
-        });
+        const dispatchWithTimeout = Promise.race([
+          adapter.dispatch(task),
+          new Promise<{ output: string }>((_, reject) =>
+            setTimeout(() => reject(new Error(`dispatch timeout ${id}`)), perRouteTimeoutMs)
+          ),
+        ]);
+        try {
+          const r = await dispatchWithTimeout;
+          return forgeT5({
+            subFrame: id,
+            output: r.output,
+            uuid: `${id}-${task.id}`,
+            version: '0.5.0',
+            evidence: { taskId: task.id },
+          });
+        } catch (e: any) {
+          // 單一 route 逾時/失敗不阻斷其他 — 回 scaffold 錯誤, 5T 仍鑄造 (failed 標記)
+          return forgeT5({
+            subFrame: id,
+            output: `【${id} dispatch 失敗】${e.message} — 依 §19 不可寫入未驗證產出`,
+            uuid: `${id}-${task.id}`,
+            version: '0.5.0',
+            evidence: { taskId: task.id, error: e.message },
+          });
+        }
       })
     );
     return results;
