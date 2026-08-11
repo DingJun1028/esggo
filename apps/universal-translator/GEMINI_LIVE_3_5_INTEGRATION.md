@@ -61,3 +61,20 @@ GEMINI_MODEL=gemini-2.5-flash   # 可改為 3.5 Live 正式模型名
 - 狀態端點：`GET /s2s/status`（回報 enabled / available / 所需變數）
 - 實際音訊媒體層（麥克風/揚聲器或 LiveKit track）需搭配 Pipecat/LiveKit/Agora 等即時媒體框架，參考 Gemini Cookbook "Live API dubbing / simultaneous translation" 範例
 - 遵循「免費算立」紅線：不引入付費私鑰 npm；僅用 Node 內建 WebSocket + 環境變數金鑰
+
+---
+
+## 跨句脈絡記憶 (Context Awareness) — v1.7.0
+
+檔案：`context_buffer.mjs` + `translate.mjs` (translateDetailed 第四參 ctxHint) + `server.mjs` (doTranslateAndBroadcast / /translate 雙分支)
+
+### 解決的痛點
+即時字幕原本「逐句孤立翻譯」，導致代詞指代（他/她/它）、時態（昨天/今天）、話題連貫斷裂。脈絡模組維護每個 room 的近期 (原文→譯文) 滑動視窗。
+
+### 行為
+- 每句翻譯後記錄 {src, tgt, from, to} 至 room 緩衝（上限 12 句, TTL 10 分鐘, 純記憶體 LRU, 零依賴）
+- SSE 廣播 payload 附帶 `context`（最近 3 句前文），供觀眾端 UI 顯示「前文」
+- `GEMINI_API_KEY` 啟用時：前文作為 system-instruction 注入 Gemini 引擎，提升代詞/時態連貫
+- 免費鏈（google-gtx 等）：`context` 仍隨 payload 提供，但不影響輸譯輸出（誠實降級）
+- 端點：`GET /context/status`、`POST /context/reset?room=xxx`
+- 開關：`CONTEXT_AWARE=1`（預設開啟）
