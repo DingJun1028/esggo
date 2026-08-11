@@ -31,13 +31,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 # Prisma 5.22 engine 需 libssl.so.1.1 (Alpine3.20+ 已移除原生包)
-# 從 Alpine3.19 的 openssl1.1-compat 提取 .so 手動安裝
-RUN apk add --no-cache curl wget
-RUN wget -q -O /tmp/openssl1.1.apk https://mirror.alpinelinux.org/alpine/v3.19/main/x86_64/openssl1.1-compat-1.1.1w-r1.apk 2>/dev/null \
-  && tar -xzf /tmp/openssl1.1.apk -C /tmp 2>/dev/null \
-  && cp /tmp/usr/lib/libssl.so.1.1 /usr/lib/ 2>/dev/null \
-  && cp /tmp/usr/lib/libcrypto.so.1.1 /usr/lib/ 2>/dev/null \
-  && rm -f /tmp/openssl1.1.apk || echo "openssl1.1 fetch failed, app may need alternative"
+# 臨時加 Alpine3.19 repo 裝 openssl1.1-compat
+RUN echo "https://mirror.alpinelinux.org/alpine/v3.19/main" >> /etc/apk/repositories \
+  && apk add --no-cache openssl1.1-compat curl \
+  && sed -i '/v3.19\/main/d' /etc/apk/repositories || true
 RUN corepack enable pnpm
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
