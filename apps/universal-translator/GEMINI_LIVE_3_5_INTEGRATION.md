@@ -78,3 +78,17 @@ GEMINI_MODEL=gemini-2.5-flash   # 可改為 3.5 Live 正式模型名
 - 免費鏈（google-gtx 等）：`context` 仍隨 payload 提供，但不影響輸譯輸出（誠實降級）
 - 端點：`GET /context/status`、`POST /context/reset?room=xxx`
 - 開關：`CONTEXT_AWARE=1`（預設開啟）
+
+---
+
+## 依賴安全狀態 (2026-08-12 核查)
+
+- **本專案 (apps/universal-translator, 根 pnpm workspace)**: `pnpm audit --prod` = No known vulnerabilities found (0 漏洞)。
+- GitHub Dependabot 剩餘 80 項警示, 分布於**非本交付範圍**的子專案:
+  - rules-tutorial/functions ×46 (教學子專案, 獨立 package-lock)
+  - esggo-omni-center/apps/learning-center ×11 + apps/learning-center ×11 + esggo-omni-center ×7 (獨立 pnpm-lock)
+  - cli/{omnicli,oa-cli,esggo-cli} ×3 (獨立 package.json)
+  - oa-team-crewai/uv.lock ×1
+  - **根 pnpm-lock.yaml 僅剩 #1428 sharp <0.35.0** (AGENTS.md #7 排除: next devDep 傳遞依賴, 0 處用 next/image, next@16 鎖 ^0.34.5; pnpm audit --prod=0)。
+- #1428 需在具 `security_events:write` 權限的 token 下手動 dismiss (reason=not_used); 本環境 gh token 缺此 scope, 故留待授權後結案。
+- 結論: 本交付物 (universal-translator) 生產依賴零漏洞, 剩餘警示均屬其他子專案, 不影響本產品安全態勢。
