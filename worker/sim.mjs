@@ -15,12 +15,12 @@ function audit(required){
   const missing = Object.keys(required).filter(k=>!process.env[required[k].env]);
   return { ok: missing.length===0, have, missing };
 }
-function gatewayKey(){ return process.env.OMNI_KEY || process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || ; }
+function gatewayKey(){ return process.env.OMNI_KEY || process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || ""; }
 function modelRouter(key){
   const free = !!(process.env.OPENROUTER_API_KEY || process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY);
-  return { key, fallback: free ? openrouter : local, score: 0.8, cached: false, state:warm };
+  return { key, fallback: free ? "openrouter" : "local", score: 0.8, cached: false, state: "warm" };
 }
 function simulateLLM(prompt, provider){
-  return ;
+  return "";
 }
 export { LRU, cache, setCache, get, audit, gatewayKey, modelRouter, simulateLLM };
