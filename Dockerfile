@@ -3,7 +3,7 @@ WORKDIR /app
 # 升級系統套件以修復已知的 Alpine 漏洞
 RUN apk upgrade --no-cache
 # 啟用 corepack 以支援 pnpm
-RUN corepack enable pnpm
+RUN npm install -g pnpm@11.5.2
 
 # 複製 package.json 與 lock 檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
@@ -13,7 +13,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts --config.verify-deps-before-
 FROM node:22-alpine3.19 AS builder
 WORKDIR /app
 RUN apk upgrade --no-cache
-RUN corepack enable pnpm
+RUN npm install -g pnpm@11.5.2
 
 # 複製所有原始碼
 COPY . .
@@ -30,7 +30,7 @@ FROM node:22-alpine3.19 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
-RUN corepack enable pnpm
+RUN npm install -g pnpm@11.5.2
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
 
