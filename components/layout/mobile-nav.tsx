@@ -23,7 +23,9 @@ export function MobileNav() {
               <div key="center" className="flex items-center justify-center">
                 <button
                   onClick={() => setIsSpiritOpen(true)}
-                  className="flex items-center justify-center transform transition-transform active:scale-95"
+                  className="flex items-center justify-center transform transition-transform active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded-full"
+                  aria-label="打開精靈 (Open Spirit)"
+                  title="打開精靈 (Open Spirit)"
                 >
                   <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center group">
                     <div className="absolute inset-0 bg-bg-surface rounded-full border border-primary/20 group-hover:border-primary/40 transition-colors" />
@@ -43,13 +45,15 @@ export function MobileNav() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
+              className={`flex flex-col items-center justify-center w-full h-full transition-colors rounded-xl focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${
                 isActive ? "text-primary" : "text-text-muted hover:text-text-main"
               }`}
+              aria-current={isActive ? "page" : undefined}
             >
               <Icon
                 className={`w-5 h-5 mb-1 ${isActive ? "text-primary" : ""}`}
                 strokeWidth={isActive ? 2.5 : 2}
+                aria-hidden="true"
               />
               <span className={`text-[10px] font-medium ${isActive ? "font-bold" : ""}`}>
                 {item.label.en}
