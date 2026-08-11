@@ -23,8 +23,8 @@ COPY --from=deps /app/node_modules ./node_modules
 # 手動執行 prisma generate（因為 --ignore-scripts 跳過了 postinstall）
 RUN npx prisma generate
 
-# 執行建置（Turbopack 模式，需確保 serverExternalPackages 正確外部化 ioredis）
-RUN pnpm run build
+# 執行建置（用 npx next build 繞過 pnpm 11 deps-status-check 鎖定，與本機驗證一致）
+RUN npx next build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
