@@ -282,6 +282,41 @@ export interface ISseTranslationEvent {
   speaker?: string;
 }
 
+// --- STT → 雙語字幕契約 (語音轉字幕場景, 鎖定繁中↔英文雙向) ---
+// 消費端 apps/universal-translator/stt_client.mjs 依賴 ISpeechToSubtitleResult
+// 終始矩陣: 任一端需求 → 回饋 canonical → 重跑 scripts/export-shared-types.js → 全端同步
+
+/** 雙語配對 (鎖定 zh-TW↔en, 禁其他) */
+export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
+
+/** /transcribe 請求契約 (音訊由 multipart 帶入, 此處僅描述 metadata) */
+export interface ISpeechToSubtitleRequest {
+  /** 語言提示 (鎖定雙向, 禁其他) */
+  languageHint?: 'zh-TW' | 'en';
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+  /** 講者標籤 (5T 溯源) */
+  speaker?: string;
+}
+
+/** STT 辨識 + 即時雙向翻譯的合併結果 (stt_client.mjs 產出) */
+export interface ISpeechToSubtitleResult {
+  /** 原始辨識文字 */
+  text: string;
+  /** STT 偵測語 (鎖定雙向) */
+  detected: 'zh-TW' | 'en';
+  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  translation: string;
+  /** 翻譯目標語 */
+  target: 'zh-TW' | 'en';
+  /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
+  engine: string;
+  /** 是否命中快取 */
+  cached: boolean;
+  /** 溯源追蹤碼 */
+  trace?: string;
+}
+
 /** 全域全端全量雙向 TS 架構終始矩陣錨點 (全 consumer 共享同一份契約) */
 export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';

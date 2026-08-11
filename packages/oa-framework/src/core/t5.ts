@@ -48,7 +48,12 @@ export function forgeT5(opts: {
     uuid: opts.uuid,
     version: opts.version,
     timestamp,
-    evidence: opts.evidence ?? {},
+    evidence: {
+      originCause: `OA-Team 子框架 ${opts.subFrame} 產出鑄造`,
+      processTrace: ['forgeT5', opts.subFrame, '5T 雙層閘門'],
+      finalEffect: '5T 合規元件已建立並經 Hash Lock 封印',
+      ...(opts.evidence ?? {}),
+    },
   };
   const t5: T5State = {
     traceable: true,
