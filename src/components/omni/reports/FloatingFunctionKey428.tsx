@@ -29,11 +29,31 @@ export default function FloatingFunctionKey428() {
     if (!isThothOpen) setIsExpanded((v) => !v);
   };
 
-  const handleSummonThoth = () => {
+  const handleSummonThoth = async () => {
     setIsExpanded(false);
     setIsThothOpen(true);
     setInsightData(null);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/agentic-twin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uuid: 'mod-env-carbon-0001',
+          reportType: 'ISO-14064',
+          previousYearUsage: 1000,
+          currentYearUsage: 4950,
+          gridEmissionFactor: 0.495,
+          evidence: ['https://omni-vault.s3.universe.com/iso-14064-proof.pdf'],
+        }),
+      });
+      const json = await res.json();
+      if (json.success && json.insight) {
+        setInsightData(json.insight);
+      } else {
+        throw new Error(json.error || 'API 未回傳洞察');
+      }
+    } catch {
+      // 降級：API 不可達時回退本地快取洞察（免費算立、不阻塞 UI）
       setInsightData({
         status: 'OPTIMIZED',
         title: '✨ 雙棲代理戰略報告',
@@ -45,7 +65,7 @@ export default function FloatingFunctionKey428() {
           '啟動低碳轉型路徑模擬，預測 2030 目標達成率。',
         ],
       });
-    }, 1800);
+    }
   };
 
   return (
