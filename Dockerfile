@@ -1,4 +1,4 @@
-FROM node:22-alpine AS deps
+FROM node:22-alpine3.19 AS deps
 WORKDIR /app
 # 升級系統套件以修復已知的 Alpine 漏洞
 RUN apk upgrade --no-cache
@@ -8,9 +8,9 @@ RUN corepack enable pnpm
 # 複製 package.json 與 lock 檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 # 安裝所有相依套件
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts --config.verify-deps-before-run=false
 
-FROM node:22-alpine AS builder
+FROM node:22-alpine3.19 AS builder
 WORKDIR /app
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
@@ -26,15 +26,10 @@ RUN npx prisma generate
 # 執行建置（用 npx next build 繞過 pnpm 11 deps-status-check 鎖定，與本機驗證一致）
 RUN npx next build
 
-FROM node:22-alpine AS runner
+FROM node:22-alpine3.19 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
-# Prisma 5.22 engine 需 libssl.so.1.1 (Alpine3.20+ 已移除原生包)
-# 臨時加 Alpine3.19 repo 裝 openssl1.1-compat
-RUN echo "https://mirror.alpinelinux.org/alpine/v3.19/main" >> /etc/apk/repositories \
-  && apk add --no-cache openssl1.1-compat curl \
-  && sed -i '/v3.19\/main/d' /etc/apk/repositories || true
 RUN corepack enable pnpm
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
