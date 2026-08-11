@@ -22,6 +22,7 @@ import path from 'node:path';
 import { WebSocketServer } from 'ws';
 import { translateDetailed, translateToMany, stats, hashOf } from './translate.mjs';
 import { speechToSubtitle } from './stt_client.mjs';
+import { s2sStatus, isS2SEnabled } from './s2s_gemini_live.mjs';
 
 // 讀取 .env（零依賴實作，優先於 process.env 已存在值）
 try {
@@ -171,6 +172,11 @@ const server = http.createServer(async (req, res) => {
       subtitle: '繁中 ↔ 英文 雙向及時字幕',
       ts: Date.now(),
     });
+  }
+
+  // 語音對語音同傳升級路徑狀態 (可選, 需 GEMINI_API_KEY + GEMINI_LIVE_S2S=1)
+  if (url === '/s2s/status' && req.method === 'GET') {
+    return writeJson(res, s2sStatus());
   }
 
   // 指標端點 (生產級監控: Prometheus 相容結構)

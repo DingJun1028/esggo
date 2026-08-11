@@ -48,3 +48,16 @@ GEMINI_MODEL=gemini-2.5-flash   # 可改為 3.5 Live 正式模型名
 - Tangible：雙語字幕即時可見
 - Transparent：引擎鏈與 fallback 順序公開
 - Trustworthy：fallback 不中斷，寫入即定版
+
+---
+
+## 語音對語音同傳升級路徑 (Speech-to-Speech)
+
+檔案：`s2s_gemini_live.mjs`（可選模組，key-gated + 優雅回落）
+
+- 啟用條件：`GEMINI_API_KEY`（付費 Live API）+ `GEMINI_LIVE_S2S=1`
+- 未啟用時：完全不載入，流量走免費 STT → 翻譯 → 雙語字幕 管線
+- 啟用時：經 Gemini Live API BIDI WebSocket 做即時 S2S 同傳（保留語調/節奏），失敗自動回落免費鏈
+- 狀態端點：`GET /s2s/status`（回報 enabled / available / 所需變數）
+- 實際音訊媒體層（麥克風/揚聲器或 LiveKit track）需搭配 Pipecat/LiveKit/Agora 等即時媒體框架，參考 Gemini Cookbook "Live API dubbing / simultaneous translation" 範例
+- 遵循「免費算立」紅線：不引入付費私鑰 npm；僅用 Node 內建 WebSocket + 環境變數金鑰
