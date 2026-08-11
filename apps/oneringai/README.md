@@ -31,3 +31,17 @@ OA_PROMPT="什麼是循環經濟？" node index.mjs
 ## 驗證狀態
 - 真實實跑：本地 Ollama `qwen2.5:3b-instruct-q4_K_M` 推論，`agent.run()` 回 `output_text`/`output`，5T 由 oa-framework 另層鑄造。
 - 套件實際版本：`@everworker/oneringai@1.0.1`（非 README 寫的 1.0.0）。
+
+
+---
+
+## 最佳實踐 (App 實裝精選)
+
+> 來自本專案實作 OneRingAI 的真實踩坑。
+
+1. **依賴樹必須 pnpm install 建** — 手動 `ln -s` 只連 oneringai 包本身，會缺 `cross-spawn`/`eventemitter3` 等間接依賴（在 `.pnpm` 深層）。正解：`pnpm install --filter @esggo/app-oneringai`。
+2. **Vendor 必須解構** — `import { Connector, Agent, Vendor } from '@everworker/oneringai'`；`Connector.create` 的 `vendor` 用 `Vendor.Ollama` 枚舉（非字串 `'ollama'`），否則 `Vendor is not defined`。
+3. **Agent.create 不收 systemPrompt** — 角色說明併入 prompt 前綴（`${SYSTEM}\n\n使用者問題: ${query}`），避免靜默忽略。
+4. **本地 Ollama 免費優先** — `baseURL: http://localhost:11434/v1`，`model: qwen2.5:3b-instruct-q4_K_M`（實存 tag；寫 `qwen2.5:3b` 會 404）。
+5. **app 直接消費原生套件** — 不依賴 `@esggo/oa-framework`，層級分離（app 展原生能力，adapter 包 5T 閘門）。
+6. **node_modules 不進 git** — 本地 symlink / pnpm 建的依賴樹被 .gitignore 忽略；CI 靠 `pnpm install` 重建。
