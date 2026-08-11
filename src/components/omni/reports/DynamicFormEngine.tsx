@@ -69,7 +69,14 @@ export default function DynamicFormEngine({
     setFeedback({ status: 'idle', message: '' });
 
     const payload = { ...formData, timestamp: Date.now() };
-    setFeedback(computeFeedback(payload));
+    try {
+      setFeedback(computeFeedback(payload));
+    } catch (err) {
+      setFeedback({
+        status: 'error',
+        message: '【果因引擎例外】' + (err instanceof Error ? err.message : String(err)),
+      });
+    }
     setIsSubmitting(false);
   };
 
@@ -169,7 +176,8 @@ export default function DynamicFormEngine({
 
         <div className="pt-6 border-t border-white/10 flex justify-end">
           <button
-            type="submit"
+            type="button"
+            onClick={handleSubmit}
             disabled={isSubmitting}
             className="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-neon-cyan hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] transition-all flex items-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-95"
           >
