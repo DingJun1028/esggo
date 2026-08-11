@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Zap, AlertTriangle, CheckCircle } from 'lucide-react';
 import { validateESGData } from '@/lib/omni-reports/jules-validator';
+import { ncbClient } from '@/lib/omni-reports/ncb-client';
 import EvidenceUploader from './EvidenceUploader';
 import type { DynamicFormSchema } from '@/lib/omni-reports/types';
 
@@ -10,6 +11,7 @@ interface FeedbackState {
   status: 'idle' | 'success' | 'error';
   message: string;
   errors?: Record<string, { _errors: string[] }>;
+  data?: unknown;
 }
 
 /**
@@ -21,7 +23,7 @@ export function computeFeedback(
 ): FeedbackState {
   const result = validateESGData(payload);
   if (result.success) {
-    return { status: 'success', message: result.message };
+    return { status: 'success', message: result.message, data: result.data };
   }
   return {
     status: 'error',
@@ -63,14 +65,27 @@ export default function DynamicFormEngine({
     }));
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     setIsSubmitting(true);
     setFeedback({ status: 'idle', message: '' });
 
     const payload = { ...formData, timestamp: Date.now() };
     try {
-      setFeedback(computeFeedback(payload));
+      const fb = computeFeedback(payload);
+      setFeedback(fb);
+      // 零幻覺驗算通過 → 寫入 NCBDB (Hash Lock 封印；無 NCB_API_KEY 時本地 fallback)
+      if (fb.status === 'success' && fb.data) {
+        try {
+          await ncbClient.insertDocument('reports', fb.data as Record<string, unknown>);
+        } catch (ncbErr) {
+          // NCB 寫入失敗不阻斷 UI，但記錄於訊息
+          setFeedback({
+            status: 'success',
+            message: (fb.message ?? '果因引擎驗算通過') + '（NCB 同步失敗：' + (ncbErr instanceof Error ? ncbErr.message : String(ncbErr)) + '）',
+          });
+        }
+      }
     } catch (err) {
       setFeedback({
         status: 'error',
