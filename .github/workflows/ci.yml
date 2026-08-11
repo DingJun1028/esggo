@@ -317,6 +317,27 @@ jobs:
       - name: Run OA-Team 30-Swarm verification
         run: python3 scripts/verify-agents-yaml.py
 
+  # ─── Playwright E2E 回歸守門 (免費算立, 對線上實例) ────────────
+  # 零幻覺警告橫幅視覺確認 (EdgeResearch exp-k1 KEEP 證據固化)
+  # 對已部署的 esggo.co 跑真 Chromium E2E，不依賴 pnpm install (避開 tesseract.js 鎖定)
+  e2e-k1:
+    name: E2E Zero-Hallucination (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install Playwright (standalone, no pnpm)
+        working-directory: e2e-k1
+        run: npm i @playwright/test playwright && npx playwright install chromium
+      - name: Run K1 zero-hallucination E2E against live esggo.co
+        working-directory: e2e-k1
+        run: npx playwright test --reporter=line
+        env:
+          E2E_BASE: ${{ vars.E2E_BASE || 'https://esggo.co' }}
+
   # ─── VPS 腳本語法檢查 ─────────────────────────────────────────
   validate-vps:
     name: Validate VPS Scripts
