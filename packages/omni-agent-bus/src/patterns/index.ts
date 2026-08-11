@@ -27,6 +27,8 @@ export { verifyGate, verify5T, bus5TGateLocal, hashLock } from './five-t.js';
 // 六模式 (§12.1)
 export { EventBus, createEventBus } from './event-bus.js';
 export type { DomainEvent, EventRecord } from './event-bus.js';
+export { Conduit, createConduit } from './conduit.js';
+export type { ConduitEnvelope, ConduitMessage, ConduitOptions } from './conduit.js';
 export { ServiceOrchestrator } from './service-orchestrator.js';
 export type { WorkflowDefinition, ExecutionRecord } from './service-orchestrator.js';
 export { ETLPipeline } from './etl-pipeline.js';
