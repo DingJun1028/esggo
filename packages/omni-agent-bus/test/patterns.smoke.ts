@@ -23,7 +23,9 @@ import {
   PriorityQueue,
   verify5T,
   hashLock,
-} from '../src/index.js';
+  Conduit,
+  createConduit,
+} from '../src/patterns/index.js';
 
 let passed = 0;
 let failed = 0;
@@ -187,6 +189,24 @@ async function main(): Promise<void> {
   assert(r1.queued && r1.errId.startsWith('err_'), 'ErrorHandler 鎖定 + 入重試隊列');
   const logs = await eh.getErrorLogs(0);
   assert(logs.items.length === 1, 'ErrorHandler 增量錯誤日誌分頁');
+
+  // --- Pattern 7: Conduit (第七種 5T 合規模式) ---
+  console.log('[P7] Conduit');
+  const cdt = createConduit({ strict: true });
+  const cdtId = await cdt.send('02', ['12'], 'gap_02_12', {
+    text: '品牌戰略草案',
+    meta: '【來源/source_origin】OA-Team 子框架 reference 引用 soul.md 5T 協議，建立可追溯元件。【透明/揭露】合規率 100% 說明數據流向。【達成/完成】建立跨組元件，產出可部署成果。【封印/hash】SHA-256 hash lock 凍結 audit trail。【追蹤/年度】2026 年度 monitor 啟用追蹤指標。',
+  });
+  assert(cdtId.startsWith('cdt_'), 'Conduit 產生 Traceable id');
+  const cdtMsgs = cdt.read('12', 0);
+  assert(cdtMsgs.length === 1 && cdtMsgs[0].verified?.pass === true, 'Conduit 點對組投遞 + 收件方反驗 seal pass');
+  let cdtBlocked = false;
+  try {
+    await cdt.send('05', '15', 'gap_05_15', 'x'); // 無 5T 標記 → strict 阻斷
+  } catch {
+    cdtBlocked = true;
+  }
+  assert(cdtBlocked, 'Conduit strict 拒絕未過 5T 的訊息');
 
   // --- 總結 ---
   console.log(`\n=== 結果: ${passed} passed, ${failed} failed ===`);
