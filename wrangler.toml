@@ -1,5 +1,5 @@
 name = "esggo"
-main = "my-worker/src/index.ts"
+main = "my-worker/dist/index.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
@@ -9,7 +9,7 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [build]
-command = "npx --yes pnpm install --frozen-lockfile && pnpm run build"
+command = "npx --yes pnpm install --frozen-lockfile && npx esbuild my-worker/src/index.ts --bundle --outfile=my-worker/dist/index.js --platform=node --format=esm"
 
 [vars]
 ENVIRONMENT = "production"
