@@ -22,6 +22,11 @@ export default defineConfig({
       // 被根 vitest 抓取時會報 "No test suite found in file"。
       // 該套件由 ci.yml 的 "UT API Tests (node --test)" job 執行，覆蓋率不減。
       'apps/universal-translator/test/**',
+      // e2e-k1 是自帶 package.json + playwright.config.mjs 的獨立 Playwright 套件，
+      // 且不在 pnpm-workspace packages 清單內（@playwright/test 從未安裝），
+      // 被根 vitest 抓取時會報 "Cannot find package '@playwright/test'" (ERR_MODULE_NOT_FOUND)。
+      // 該套件應由 Playwright 自身執行，非 vitest。
+      'e2e-k1/**',
     ],
   },
   resolve: {
