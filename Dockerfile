@@ -1,4 +1,4 @@
-FROM node:22-alpine3.19 AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 # 升級系統套件以修復已知的 Alpine 漏洞
 RUN apk upgrade --no-cache
@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 # 安裝所有相依套件
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
-FROM node:22-alpine3.19 AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
@@ -26,10 +26,18 @@ RUN npx prisma generate
 # 執行建置（用 npx next build 繞過 pnpm 11 deps-status-check 鎖定，與本機驗證一致）
 RUN npx next build
 
-FROM node:22-alpine3.19 AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
+# Prisma 5.22 engine 需 libssl.so.1.1 (Alpine3.20+ 已移除原生包)
+# 從 Alpine3.19 的 openssl1.1-compat 提取 .so 手動安裝
+RUN apk add --no-cache curl wget
+RUN wget -q -O /tmp/openssl1.1.apk https://mirror.alpinelinux.org/alpine/v3.19/main/x86_64/openssl1.1-compat-1.1.1w-r1.apk 2>/dev/null \
+  && tar -xzf /tmp/openssl1.1.apk -C /tmp 2>/dev/null \
+  && cp /tmp/usr/lib/libssl.so.1.1 /usr/lib/ 2>/dev/null \
+  && cp /tmp/usr/lib/libcrypto.so.1.1 /usr/lib/ 2>/dev/null \
+  && rm -f /tmp/openssl1.1.apk || echo "openssl1.1 fetch failed, app may need alternative"
 RUN corepack enable pnpm
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
