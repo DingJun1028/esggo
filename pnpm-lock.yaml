@@ -312,6 +312,12 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  apps/oneringai:
+    dependencies:
+      '@everworker/oneringai':
+        specifier: ^1.0.1
+        version: 1.0.1(@cfworker/json-schema@4.1.1)(@napi-rs/canvas@1.0.5)(encoding@0.1.13)
+
   apps/universal-translator:
     dependencies:
       ws:
@@ -5151,10 +5157,6 @@ packages:
   ioredis@5.11.1:
     resolution: {integrity: sha512-ehuGcf94bQXhfagULNXrJdfnWO38v070jxSx/qE87Kjzmu2fU7ro5EFAb+OPituLqgfyuQaym5DlrNydW2sJ9A==}
     engines: {node: '>=12.22.0'}
-
-  ip-address@10.4.0:
-    resolution: {integrity: sha512-oSK96Grm3aP6OrS263xVxbNDGVL7rzBtYdpGqlDG8iQdoenDoTs/nkki+DflYbAEE8Xl6o5YxhxlrKvI3nqKXQ==}
-    engines: {node: '>= 12'}
 
   ip-address@10.5.0:
     resolution: {integrity: sha512-R5SnVLJmgYYvf2F2ZgwSBnelz5G4q5AxIC277GDfUaNbrZKNANcBC7RHqYYePlszf4kBolVkJauG0ZjHHFh55g==}
@@ -11359,6 +11361,7 @@ snapshots:
   '@types/node@26.2.0':
     dependencies:
       undici-types: 8.3.0
+    optional: true
 
   '@types/oracledb@6.5.2':
     dependencies:
@@ -11403,7 +11406,7 @@ snapshots:
 
   '@types/readable-stream@4.0.24':
     dependencies:
-      '@types/node': 26.2.0
+      '@types/node': 20.19.43
 
   '@types/request@2.48.13':
     dependencies:
@@ -13155,7 +13158,7 @@ snapshots:
     dependencies:
       debug: 4.4.3
       express: 5.2.1
-      ip-address: 10.4.0
+      ip-address: 10.5.0
     transitivePeerDependencies:
       - supports-color
 
@@ -14102,10 +14105,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ip-address@10.4.0: {}
-
-  ip-address@10.5.0:
-    optional: true
+  ip-address@10.5.0: {}
 
   ipaddr.js@1.9.1: {}
 
@@ -16556,7 +16556,7 @@ snapshots:
       '@azure/identity': 4.13.1
       '@azure/keyvault-keys': 4.10.2
       '@js-joda/core': 5.7.0
-      '@types/node': 26.2.0
+      '@types/node': 20.19.43
       bl: 6.1.6
       iconv-lite: 0.7.3
       js-md4: 0.3.2
@@ -16822,7 +16822,8 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  undici-types@8.3.0: {}
+  undici-types@8.3.0:
+    optional: true
 
   undici@7.29.0: {}
 
