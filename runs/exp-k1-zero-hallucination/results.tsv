@@ -1,0 +1,1 @@
+exp-k1-zero-hallucination	edge-research-code	DynamicFormEngine Seal 鈕 type=button+onClick+try/catch	提交>500%暴增→琥珀橫幅含【Dr. Thoth 零幻覺警告】	pass	playwright-headless-chromium	keep	2026-08-11	Playwright 真 Chromium 點擊確認橫幅出現(主橫幅+欄位錯誤)；Browserbase 自動化 click 未派發事件致先前誤判為 bug，實為工具限制非程式碼缺陷。
