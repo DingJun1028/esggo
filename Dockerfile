@@ -33,6 +33,8 @@ RUN apk upgrade --no-cache
 RUN corepack enable pnpm
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
+# 應用資料目錄 (NCBDB / uploads 等需要)
+RUN mkdir -p /app/data /app/public/uploads
 
 # 複製構建出的靜態資源與 .next
 COPY --from=builder /app/public ./public
