@@ -27,6 +27,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 .sub-line{font-size:clamp(1rem,3.4vw,1.6rem);font-weight:700;line-height:1.25;text-shadow:0 2px 8px rgba(0,0,0,.8)}
 .sub-line.src{color:#fff}
 .sub-line.tgt{color:var(--accent)}
+.sub-line.ctx{color:#8a97ad;font-size:.8em;opacity:.7;font-style:italic}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:12px;padding:10px 16px;cursor:pointer;font-weight:600;transition:.15s}
 .btn:hover{border-color:var(--accent)}
@@ -46,6 +47,7 @@ select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);bo
   <div class="float-stage">
     <video id="cam" autoplay muted playsinline></video>
     <div class="subtitle-layer">
+      <div class="sub-line ctx" id="ctx"></div>
       <div class="sub-line src" id="src">等待字幕…</div>
       <div class="sub-line tgt" id="tgt"></div>
     </div>
@@ -102,6 +104,8 @@ function connectSSE() {
       const d = JSON.parse(ev.data);
       srcEl.textContent = d.text || '';
       tgtEl.textContent = d.translation || '';
+      const ctxEl = document.getElementById('ctx');
+      if (ctxEl) ctxEl.textContent = (d.context && d.context.length) ? '前文：' + d.context.map(c => c.src || c.text || '').join(' / ') : '';
     } catch {}
   });
   es.onopen = () => { connEl.textContent = 'SSE 已連線'; };
