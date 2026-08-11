@@ -31,6 +31,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 RUN corepack enable pnpm
+# Prisma 5.22 engine 仍 link libssl.so.1.1 (Alpine3.24 原生無, 從 v3.19 臨時 repo 裝)
+RUN echo "https://mirror.alpinelinux.org/alpine/v3.19/main" >> /etc/apk/repositories \
+  && apk add --no-cache openssl1.1-compat \
+  && sed -i '/v3.19\/main/d' /etc/apk/repositories
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
 
