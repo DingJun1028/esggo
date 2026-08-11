@@ -169,7 +169,11 @@ jobs:
     name: SonarQube Agentic Analysis (UT)
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: ${{ env.SONAR_TOKEN != '' }}
+    # NOTE: job-level `if:` 只支援 github / needs / vars / inputs 這四個 context。
+    # 先前寫成 `env.SONAR_TOKEN` 會讓整份 workflow 編譯失敗 (startup_failure, 0 jobs)。
+    # 改用 repo variable 當開關；未設定時整個 job 直接 skip，不佔用 runner。
+    # 啟用方式: gh variable set SONAR_ENABLED --body true  +  gh secret set SONAR_TOKEN
+    if: ${{ vars.SONAR_ENABLED == 'true' }}
     steps:
       - uses: actions/checkout@v4
         with:
