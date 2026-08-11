@@ -190,7 +190,21 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: universal-translator
 
-  # ─── 建置檢查 ─────────────────────────────────────────────────
+  # SonarQube 整合工件本地煙測（免費算立版，不需 token）
+  sonar-smoke:
+    name: SonarQube Integration Smoke (no token)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Verify SonarQube integration artifacts
+        working-directory: apps/universal-translator
+        run: node scripts/sonar-smoke.mjs
+
+  #  
   build:
     name: Build Check
     runs-on: ubuntu-latest
