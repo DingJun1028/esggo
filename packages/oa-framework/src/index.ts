@@ -16,6 +16,7 @@ import { TencentMemAdapter } from './adapters/tencent-mem.js';
 import { OpenMontageAdapter } from './adapters/openmontage.js';
 import { OmniRouteAdapter } from './adapters/omniroute.js';
 import { TurboVecAdapter } from './adapters/turbovec.js';
+import { OneRingAIAdapter } from './adapters/oneringai.js';
 
 /** 建立並註冊全部 10 個子框架適配器的 Orchestrator */
 export function createOAFrame(config: OAFrameConfig = {}): OAOrchestrator {
@@ -30,6 +31,7 @@ export function createOAFrame(config: OAFrameConfig = {}): OAOrchestrator {
   oa.register(new OpenMontageAdapter(config));
   oa.register(new OmniRouteAdapter(config));
   oa.register(new TurboVecAdapter(config));
+  oa.register(new OneRingAIAdapter(config));
   return oa;
 }
 
@@ -38,5 +40,5 @@ export * from './core/types.js';
 export * from './core/omni-gate.js';
 export * from './core/unverified-registry.js';
 export const OA_SUBFRAMES: SubFrameId[] = [
-  'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem', 'openmontage', 'omniroute', 'turbovec',
+  'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem', 'openmontage', 'omniroute', 'turbovec', 'oneringai',
 ];
