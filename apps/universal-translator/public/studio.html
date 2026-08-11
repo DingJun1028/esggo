@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Zoom 會議即時雙語字幕</title>
+<title>萬能即時翻譯 · 繁中↔英文 雙向及時字幕 (Gemini 3.5 Live 可選增強)</title>
 <script src="./qrcode.min.js"></script>
 <style>
 :root{
@@ -118,7 +118,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 </head>
 <body>
 <div class="topbar">
-  <h1>🖥 Zoom 會議即時雙語字幕</h1>
+  <h1>🖥 萬能即時翻譯 · 繁中↔英文 雙向及時字幕</h1>
   <button class="ico-btn" id="themeBtn" title="深色/淺色">🌙</button>
 </div>
 <div class="wrap">
@@ -128,6 +128,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
   </div>
   <div class="meter" id="meter"><div class="meter-fill" id="meterFill"></div><span class="meter-tip" id="meterTip">音量表（開始後顯示 Zoom 會議聲音強弱）</span></div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">點下方按鈕開始，說話即出雙語字幕</span></div>
+  <div class="status" id="geminiBadge" style="margin-top:6px;font-size:.78rem;color:var(--muted)"><span style="opacity:.6">Gemini 3.5 Live Translate：</span><b id="geminiState">檢查中…</b></div>
   <button id="startBtn" class="start-btn">
     <span class="play-ico">▶</span>
     <span class="eq"><i></i><i></i><i></i><i></i></span>
@@ -399,6 +400,24 @@ $('#testBtn').onclick=async()=>{
   finally{ if(s)s.getTracks().forEach(t=>t.stop()); testing=false;$('#testBtn').disabled=false;$('#testBtn').textContent='🖥 測試系統音（錄 4 秒確認 Zoom 聲音有被擷取）'; }
 };
 setStatus('點下方按鈕開始，Zoom 會議聲音即時轉為繁中↔英文 雙語字幕');
+
+// Gemini 3.5 Live Translate 狀態徽章 (可選雲端增強, 失敗自動回落免費鏈)
+(async () => {
+  try {
+    const r = await fetch('/gemini-live-3-5/status', { cache: 'no-store' });
+    const d = await r.json();
+    const el = document.getElementById('geminiState');
+    if (d.enabled) {
+      el.textContent = '已啟用 · ' + (d.engine || 'gemini') + '（雲端增強，自動優雅回落）';
+      el.style.color = 'var(--accent)';
+    } else {
+      el.textContent = '未啟用 · 純免費零 key 運作';
+      el.style.color = 'var(--muted)';
+    }
+  } catch (_) {
+    document.getElementById('geminiState').textContent = '狀態取得失敗';
+  }
+})();
 </script>
 </body>
 </html>

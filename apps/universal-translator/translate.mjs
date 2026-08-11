@@ -78,6 +78,40 @@ async function viaOllama(text, from, to) {
   return out;
 }
 
+// --- 引擎 0.5: Gemini 3.5 Live Translate (可選雲端增強, 需 GEMINI_API_KEY) ---
+// 技術來源: Google 2026-06 發布 Gemini 3.5 Live Translate — 即時 speech-to-speech 翻譯, 自動偵測 70+ 語言,
+//   連續流式 (非逐句), 保留語調/節奏, 低延遲, 抗噪. 開發者經 Gemini Live API 取用.
+// 本引擎取其「最新翻譯品質」做為文字翻譯的最前端增強層; 真正的 S2S 語音同傳為升級路徑 (見 GEMINI_LIVE_3_5_INTEGRATION.md).
+// 預設關閉: 未設 GEMINI_API_KEY 時不進入引擎鏈, 維持純免費零 key 運作. 設了 key 但失敗 → 優雅回落免費鏈.
+const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 10000);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'; // 3.5 Live 正式模型以 GEMINI_MODEL 覆寫
+async function viaGeminiLive35(text, from, to) {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error('GEMINI_API_KEY not configured');
+  // 語碼映射沿用 google-gtx 規範 (zh-TW→zh-TW, en→en, auto→auto)
+  const sl = toEngineLang('google-gtx', toCanonical(from));
+  const tl = toEngineLang('google-gtx', toCanonical(to));
+  const sys = `You are Gemini 3.5 Live Translate, a professional real-time speech translation engine. ` +
+    `Translate the following ${sl} text into ${tl}. Output ONLY the direct translation: no quotes, no explanations, no extra text. Preserve tone, meaning and natural phrasing.`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(key)}`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: sys }] },
+      contents: [{ role: 'user', parts: [{ text }] }],
+      generationConfig: { temperature: 0.2, maxOutputTokens: 2048, candidateCount: 1 },
+    }),
+    signal: AbortSignal.timeout(GEMINI_TIMEOUT_MS),
+  });
+  if (!r.ok) throw new Error('gemini HTTP ' + r.status);
+  const d = await r.json();
+  const parts = (d?.candidates?.[0]?.content?.parts) || [];
+  const out = parts.map((p) => p.text || '').join('').trim();
+  if (!out) throw new Error('gemini empty');
+  return postProcess(out);
+}
+
 // --- 引擎 1: Google Translate 非官方 gtx endpoint (免費, 零 key, 支援 auto 偵測) ---
 async function viaGoogleGtx(text, from, to) {
   const sl = toEngineLang('google-gtx', toCanonical(from));
@@ -150,6 +184,8 @@ function postProcess(text) {
 // 引擎鏈: 碼規範已由 toEngineLang 處理, 此處只排順序
 function engineChain() {
   const chain = [];
+  // 可選雲端增強: 設 GEMINI_API_KEY 才啟用 Gemini 3.5 Live Translate 最前端; 失敗自動回落免費鏈
+  if (process.env.GEMINI_API_KEY) chain.push(['gemini-live-3.5', viaGeminiLive35]);
   if (process.env.OLLAMA_MODEL) chain.push(['ollama-' + process.env.OLLAMA_MODEL, viaOllama]);
   chain.push(['google-gtx', viaGoogleGtx]);
   if (process.env.LIBRETRANSLATE_URL) chain.push(['libretranslate', viaLibre]);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>萬能即時翻譯 · 一體式懸浮字幕</title>
+<title>萬能即時翻譯 · 繁中↔英文 雙向及時懸浮字幕 (Gemini 3.5 Live 可選增強)</title>
 <style>
 :root{
   --bg:#070b12;--panel:rgba(20,27,41,.72);--panel2:rgba(14,22,35,.6);
@@ -38,7 +38,7 @@ select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);bo
 <body>
 <div class="wrap">
   <div class="topbar">
-    <h1>🐝 萬能即時翻譯 · 一體式懸浮字幕</h1>
+    <h1>🐝 萬能即時翻譯 · 繁中↔英文 雙向及時懸浮字幕</h1>
     <button class="ico-btn" id="theme" title="切換主題">🌓</button>
   </div>
   <div class="status"><span class="dot"></span><span id="conn">SSE 連線中…</span></div>
@@ -66,7 +66,7 @@ select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);bo
       </select>
     </label>
   </div>
-  <div class="hint">一體式懸浮浮窗：左側影像為本機攝影機預覽（僅本地，不上傳），底部雙語字幕由 studio 端經 SSE 推播。適用 Zoom / Meet 螢幕共享疊加場景。</div>
+  <div class="hint">一體式懸浮浮窗：左側影像為本機攝影機預覽（僅本地，不上傳），底部雙語字幕由 studio 端經 SSE 推播。適用 Zoom / Meet 螢幕共享疊加場景。翻譯最前端可選 Gemini 3.5 Live Translate 雲端增強（設 GEMINI_API_KEY 啟用，失敗自動回落免費鏈）。</div>
 </div>
 
 <script>
