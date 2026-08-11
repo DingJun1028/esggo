@@ -54,7 +54,7 @@ export class OneRingAIAdapter implements ISubFrameAdapter {
 
       const agent = Agent.create({
         connector: 'oa-oneringai',
-        model: this.config.llmModel ?? (isOllama ? 'qwen2.5:3b' : 'gpt-4.1'),
+        model: this.config.llmModel ?? (isOllama ? 'qwen2.5:3b-instruct-q4_K_M' : 'gpt-4.1'),
       });
 
       const res = await agent.run(task.prompt);
