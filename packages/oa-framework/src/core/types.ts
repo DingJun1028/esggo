@@ -15,7 +15,8 @@ export type SubFrameId =
   | 'tencent-mem' // 騰訊 Agent 記憶 (TencentDB Agent Memory)
   | 'openmontage' // OpenMontage 本地 AI 影片生產 (Ollama+FFmpeg+HyperFrames) — UNVERIFIED: repo 404
   | 'omniroute'  // OmniRoute 統一 AI 閘道 (237+ providers, localhost:20128/v1) — UNVERIFIED: repo 本輪無法核實
-  | 'turbovec';  // TurboVec/PotatoRAG 本地 4-bit RAG 檢索層 (Ollama+nomic-embed-text) — UNVERIFIED: google/turbovec 回 404
+  | 'turbovec'  // TurboVec/PotatoRAG 本地 4-bit RAG 檢索層 (Ollama+nomic-embed-text) — UNVERIFIED: google/turbovec 回 404
+  | 'oneringai'; // OneRingAI 統一多供應商 agent 庫 (@everworker/oneringai) — adapter, scaffold 待安裝啟用
 
 /** 5T 協議狀態 (來自 soul.md) */
 export type T5State = {
