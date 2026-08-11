@@ -26,6 +26,16 @@ ESG-GO 自動化工作區域，承載 OA-Team 雙蜂隊（蜂王 OA-LOCAL + 蜂�
 - 部署不用全量 `pm2 start ecosystem`，改 `--only <svc>` 增量重啟
 - 密鑰外置於 `apps/*/.env`（不進 git），`GATEWAY_API_KEY` 等經 GitHub Secrets 注入
 
+## 📊 OMNI ESG Reports Center（萬能永續報告書）
+
+對齊《OMNI ESG 萬能永續報告書 - 開發與架構對照書》v1.1.0-Universe 補強建議，落實於 Next.js App Router：
+
+- **路由**：`/omni/reports`（報告總樞紐，Grid/Board/List 三布局）、`/omni/reports/[reportId]/edit`（動態表單生成器 + 9式果因引擎零幻覺驗算）
+- **核心庫** `src/lib/omni-reports/`：`IComponentCore` 心核、`jules-validator`（Zod 零幻覺）、`registry`（Schema 註冊）、`ncb-client`（NCB 雲端同源 + Hash Lock）、`agentic-twin`（Dr. Thoth 雙棲決策）、`tier-config`（SaaS 三階權限）
+- **UI** `src/components/omni/reports/`：Liquid Glass 4D 玻璃質感 + 428 懸浮鍵（召喚 Dr. Thoth 側欄）、`OmniGlassChart` 霓虹 3D 圖表
+- **驗證**：`vitest` 17/17（零幻覺驗算 + 欄位警告）、`node --test` 6/6、Next build 通過
+- **SonarQube agentic**：`apps/universal-translator` 已接 `sonar analyze agentic`（`ci.yml` 加 `sonar-agentic` job，`SONAR_TOKEN` 選用閘門，對齊「只用免費算立」）
+
 ## 🔐 機密管理
 - GitHub Secrets (推薦)
 - GCP Secret Manager (備援)
