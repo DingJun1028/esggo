@@ -162,6 +162,30 @@ jobs:
         env:
           NODE_ENV: test
 
+  # ─── SonarQube CLI agentic loop (選用增強) ─────────────────────
+  # 需 SONAR_TOKEN + SonarQube Cloud 組織（啟用 agentic analysis）才啟用。
+  # 未配置時整 job 跳過，不影響既有零依賴驗證鏈（對齊「只用免費算立」）。
+  sonar-agentic:
+    name: SonarQube Agentic Analysis (UT)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: ${{ env.SONAR_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install SonarQube CLI
+        run: npm i -g sonarqube-cli
+      - name: Analyze staged changes (agentic)
+        working-directory: apps/universal-translator
+        run: sonar analyze agentic --staged
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: universal-translator
+
   # ─── 建置檢查 ─────────────────────────────────────────────────
   build:
     name: Build Check
