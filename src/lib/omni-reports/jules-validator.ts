@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { IComponentCore } from './types';
 
 /**
  * Omni 9式果因引擎 (Jules-Karma-Engine) — 零幻覺驗算守門員
