@@ -1,19 +1,19 @@
-FROM node:22-alpine3.19 AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 # 升級系統套件以修復已知的 Alpine 漏洞
 RUN apk upgrade --no-cache
 # 啟用 corepack 以支援 pnpm
-RUN npm install -g pnpm@11.5.2
+RUN corepack enable pnpm
 
 # 複製 package.json 與 lock 檔案
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 # 安裝所有相依套件
-RUN pnpm install --frozen-lockfile --ignore-scripts --config.verify-deps-before-run=false
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-FROM node:22-alpine3.19 AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 RUN apk upgrade --no-cache
-RUN npm install -g pnpm@11.5.2
+RUN corepack enable pnpm
 
 # 複製所有原始碼
 COPY . .
@@ -26,11 +26,11 @@ RUN npx prisma generate
 # 執行建置（用 npx next build 繞過 pnpm 11 deps-status-check 鎖定，與本機驗證一致）
 RUN npx next build
 
-FROM node:22-alpine3.19 AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN apk upgrade --no-cache
-RUN npm install -g pnpm@11.5.2
+RUN corepack enable pnpm
 # healthcheck 探活依賴 curl
 RUN apk add --no-cache curl
 
