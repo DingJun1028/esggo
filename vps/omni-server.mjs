@@ -14,9 +14,10 @@ const API_KEY = process.env.GEMINI_API_KEY;
 // 由 OmniMasterKey 模組統一解析：優先 OMNI_KEY，向後相容 GATEWAY_API_KEY / GATEWAY_KEY
 const GATEWAY_KEY = gatewayKey();
 if (!GATEWAY_KEY) {
-  console.warn(
-    '[OmniGateway] WARNING: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) is not set; gateway requests may be unauthorized or fail.',
+  console.error(
+    '[OmniGateway] CRITICAL: GATEWAY_KEY (OMNI_KEY / GATEWAY_API_KEY) environment variable is required. Starting without it would compromise security. Exiting.',
   );
+  process.exit(1);
 }
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
