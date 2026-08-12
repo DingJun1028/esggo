@@ -58,6 +58,7 @@ source_origin: esggo/shared/types.ts
 created: 2026-08-13
 modified: ${new Date().toISOString().slice(0, 10)}
 sync: mirror
+co_authors: []
 lifecycle: active
 ---
 
