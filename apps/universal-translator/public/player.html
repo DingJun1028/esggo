@@ -89,10 +89,12 @@ video{max-height:56vh;}
     <label class="file-label">📂 選擇影片/音檔
       <input type="file" id="file" accept="video/*,audio/*">
     </label>
-    <input type="text" id="url" placeholder="或貼上影片/音訊網址 (https://...)">
+    <input type="text" id="url" placeholder="或貼上影片/音訊網址 (https://... 支援 YouTube/外部影片)">
     <button class="btn" id="loadUrl">載入</button>
+    <button class="btn" id="loadProxy">🌐 代理載入外部影片</button>
     <button class="btn primary" id="capBtn">🎤 開始轉字幕</button>
     <button class="btn" id="zoomBtn">🎥 Zoom 會議</button>
+    <button class="btn" id="exportBtn" disabled>💾 匯出字幕</button>
     <button class="btn" id="stopBtn" disabled>⏹ 停止</button>
   </div>
 
@@ -160,6 +162,7 @@ function hl(text){return (text||'').replace(/(重要|會議|重點|決議|立即
 /** 顯示雙語字幕 (三元一體: 字幕層)
  * @param {string} src 原文
  * @param {Partial<Record<import('./types/generated/esggo-shared.d.ts').LanguageCode, string>>} translations 目標語翻譯表 */
+let captionLog=[]; // {t:number, src:string, trs:object}
 function showCaption(src,translations){
   const cap=$('#caption');
   $('#capSrc').innerHTML=hl(src)||'';
@@ -172,6 +175,9 @@ function showCaption(src,translations){
   $('#hint').classList.add('hide');
   clearTimeout(capTimer);
   capTimer=setTimeout(()=>cap.classList.add('hide'),9000);
+  // 收集字幕歷史供匯出
+  captionLog.push({t:mediaEl&&mediaEl.currentTime?mediaEl.currentTime:0, src, trs:translations||{}});
+  $('#exportBtn').disabled=false;
 }
 
 // ---------- 語言設定 ----------
@@ -210,6 +216,12 @@ $('#loadUrl').addEventListener('click',()=>{
   const u=$('#url').value.trim(); if(!u)return;
   const isAudio=/\.(mp3|wav|ogg|m4a|aac)$/i.test(u);
   mountMedia(u,isAudio);
+});
+$('#loadProxy').addEventListener('click',()=>{
+  const u=$('#url').value.trim(); if(!u)return;
+  // 透過後端 /proxy-media 解 CORS，讓前端能擷取跨域音軌
+  toast('代理載入中…（解 CORS 跨域擷音）');
+  mountMedia('/proxy-media?url='+encodeURIComponent(u),false);
 });
 $('#splitCap').addEventListener('change',()=>{
   $('#stage').classList.toggle('split',$('#splitCap').checked);
@@ -330,6 +342,32 @@ function stopCapture(){
 $('#capBtn').addEventListener('click',startCapture);
 $('#zoomBtn').addEventListener('click',startZoom);
 $('#stopBtn').addEventListener('click',stopCapture);
+
+// ---------- 字幕匯出 (SRT / VTT) ----------
+function fmtTime(sec){const m=Math.floor(sec/60),s=Math.floor(sec%60),ms=Math.floor((sec%1)*1000);return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')},${String(ms).padStart(3,'0')}`;}
+function buildSRT(){
+  return captionLog.map((c,i)=>{
+    const next=captionLog[i+1]?captionLog[i+1].t:Math.min(c.t+5, (mediaEl&&mediaEl.duration)||c.t+5);
+    const trs=Object.entries(c.trs).map(([k,v])=>`[${LANG_NAME[k]||k}] ${v}`).join('\n');
+    return `${i+1}\n${fmtTime(c.t)} --> ${fmtTime(next)}\n${c.src}\n${trs}\n`;
+  }).join('\n');
+}
+function buildVTT(){
+  return 'WEBVTT\n\n'+captionLog.map((c,i)=>{
+    const next=captionLog[i+1]?captionLog[i+1].t:Math.min(c.t+5,(mediaEl&&mediaEl.duration)||c.t+5);
+    const trs=Object.entries(c.trs).map(([k,v])=>`<${LANG_NAME[k]||k}> ${v}`).join('\n');
+    return `${fmtTime(c.t).replace(',','.')} --> ${fmtTime(next).replace(',','.')}\n${c.src}\n${trs}\n`;
+  }).join('\n');
+}
+$('#exportBtn').addEventListener('click',()=>{
+  if(captionLog.length===0){toast('尚無字幕可匯出');return;}
+  const fmt=$('#url').value.includes('vtt')?'vtt':'srt';
+  const content=fmt==='vtt'?buildVTT():buildSRT();
+  const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`subtitle.${fmt}`;a.click();
+  toast(`已匯出 ${captionLog.length} 條字幕 (${fmt.toUpperCase()})`);
+});
 
 // 頁面隱藏時停止
 document.addEventListener('visibilitychange',()=>{ if(document.hidden&&running)stopCapture(); });
