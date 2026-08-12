@@ -1,3 +1,10 @@
+---
+source_origin: oa-dual-agent-obsidian
+created: 2026-08-13
+modified: 2026-08-13
+co_authors: []
+lifecycle: active
+---
 # OA-Team 第二大腦 · Obsidian 知識花園指令
 
 > 全域全端全量全面 · 雙向同步 TypeScript 終始矩陣 · 蜂群第二大腦記憶系統
