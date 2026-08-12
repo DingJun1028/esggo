@@ -252,6 +252,26 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // 外部影片 CORS 代理：解瀏覽器跨域擷音軌限制 (即時翻譯外部影片源)
+  // 前端 player.html 載入 /proxy-media?url=<外部影片> → 此 route 串流並加 Access-Control-Allow-Origin
+  if (urlPath === '/proxy-media' && req.method === 'GET') {
+    try {
+      const target = new URL(req.url.split('?')[1] ? new URLSearchParams(req.url.split('?')[1]).get('url') || '' : '', 'http://x');
+      if (!/^https?:$/.test(target.protocol)) { res.writeHead(400); return res.end('invalid url'); }
+      const upstream = await fetch(target.toString());
+      if (!upstream.ok) { res.writeHead(upstream.status); return res.end('upstream error'); }
+      res.writeHead(200, {
+        'content-type': upstream.headers.get('content-type') || 'video/mp4',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'no-store',
+      });
+      const buf = Buffer.from(await upstream.arrayBuffer());
+      return res.end(buf);
+    } catch (e) {
+      res.writeHead(500); return res.end('proxy fail: ' + e.message);
+    }
+  }
+
   // 即時轉播推播：studio 直接推播已轉錄文字 → 觀眾端 SSE 即時字幕（免觀眾端二次翻譯）
   if (url === '/speak' && req.method === 'POST') {
     let body;
