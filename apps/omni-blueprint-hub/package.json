@@ -16,6 +16,7 @@
     "health": "node -e \"fetch(process.env.BASE||'http://localhost:8787/healthz').then(r=>r.json()).then(d=>console.log(JSON.stringify(d,null,2)))\"",
     "scraper": "node captions-scraper.mjs",
     "typecheck:engine": "tsc --noEmit --module nodenext --target es2022 --skipLibCheck OmniBlueprintHub.ts",
+    "test:plugins": "tsc --module nodenext --target es2022 --skipLibCheck --outDir .compiled hub-engine.ts plugin-registry.ts plugin-types.ts hub-demo.ts plugins/entropy-reducer.ts plugins/conduit-bridge.ts plugins/soul-canon-verifier.ts test-plugins.ts && node .compiled/test-plugins.js",
     "deploy": "bash deploy.sh"
   },
   "devDependencies": {
