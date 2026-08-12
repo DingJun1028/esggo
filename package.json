@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "prepare": "node scripts/setup-hooks.mjs",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate || true",
     "dev": "next dev",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "bash -c 'set -a; source .env 2>/dev/null; set +a; next start -H 127.0.0.1'",
