@@ -241,6 +241,7 @@ const server = http.createServer(async (req, res) => {
     else if (urlPath === '/stream' || urlPath === '/stream.html') file = '/stream.html';
     else if (urlPath === '/overlay' || urlPath === '/overlay.html') file = '/overlay.html';
     else if (urlPath === '/float' || urlPath === '/float.html') file = '/float.html';
+    else if (urlPath === '/player' || urlPath === '/player.html') file = '/player.html';
     else if (/^\/(qrcode\.min\.js|esggo-shared\.d\.ts)$/.test(urlPath)) { file = urlPath; ctype = 'application/javascript; charset=utf-8'; }
     else if (urlPath.endsWith('.html') && fs.existsSync(path.join(PUBLIC_DIR, urlPath))) file = urlPath;
     if (file) {
