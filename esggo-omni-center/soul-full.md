@@ -1575,3 +1575,60 @@ aistation.artifact → gate5t.verify_via_esggo() →POST→ esggo /api/verify-5t
 > 刻印狀態：`CH25 LANDING-SUMMARY READY`　靈魂簽章：`實作覺・驗證必真・閉環自成`
 > 歸位：本章為 §二十五 用戶委製附錄，接於 §24 之後，終章封印仍為最高律法。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=LANDING-SUMMARY · 免費=SELF-HOST」
+
+---
+
+# 第二十六章 · 第二大腦（Obsidian 知識花園 × TypeScript 雙向同步）
+
+> 接於 §25 之後；終章封印仍為最高律法。將 §4.2 知識花園頻道實體化為「全域全端全量全面」第二大腦記憶系統。
+
+## 26.1 架構定位
+OA-Team 30 萬能蜂群需要**跨會話持久上下文**（soul.md 4.2 只寫頻道名稱，缺實體）。本架構以 Obsidian vault 為第二大腦，經 TypeScript 終始矩陣與 `packages/shared/src/types.ts`（canonical）雙向同步，形成「vault 筆記 ↔ TS 型別」閉環。
+
+| 維度 | 角色 | 對映 5T |
+| --- | --- | --- |
+| vault/ | Obsidian 知識花園（筆記、frontmatter、wikilink） | Tangible / Trackable |
+| shared/types.ts | TS canonical（所有型別一次性定義） | Traceable / Trustworthy |
+| sync-vault-types.ts | 雙向橋（vault→canonical 掃 sync:up 提 PR） | Transparent |
+| export-shared-types.js | 單向 generator（canonical→各端 .d.ts） | Trustworthy |
+
+## 26.2 雙生拓撲對映（深化 §13c）
+- **雲端助理**（Hermes 常駐 VPS）：讀寫 vault/Agents/ 全部，晨報 cron 產 briefing/
+- **本機實習生**（Claude Code 隨喚）：讀 vault，寫需授權（= Trustworthy 禁區）
+- **Obsidian vault** = 知識花園（4.2）+ 10 數據蜂（型別鏡像）
+- **外部 CRM** = 23 外交 + 17 市場（MCP/API）
+
+## 26.3 vault 目錄結構（實體化）
+```
+vault/
+├── AGENTS.md                 # vault 級指令, 5T + 30 矩陣對映
+└── Agents/
+    ├── context/              # 雙方可讀: 專案/亮點/網摘/型別鏡像
+    │   ├── TypeMatrix.md     # shared/types.ts 鏡像 (35 型別, sync:mirror)
+    │   └── README.md         # 知識花園說明 + 雙生拓撲
+    ├── briefing/             # 助理晨報 (醒前寫)
+    ├── inbox-triage/         # 實習生清匣後委派
+    └── artifacts/            # 過 5T 驗證閘才落此
+```
+
+## 26.4 雙向同步協定（全域全端全量全面）
+1. **canonical→vault（鏡像）**：`scripts/export-shared-types.js` 產 `types/generated/esggo-shared.d.ts`；`vault/Agents/context/TypeMatrix.md` 為人讀鏡像（靜態，前端變更時手動 sync 或擴展 hook）
+2. **vault→canonical（回饋）**：`scripts/sync-vault-types.ts` 掃 `vault/Agents/**/*.md` 中 frontmatter 標 `sync:up` 的筆記，抽取 ts code-block 定義，與 canonical 比對，輸出 `suggestedAdditions` JSON（不直接改 canonical，避免破窗）；`--apply` 才附加新型別
+3. **矩陣閉合**：任一端改需求 → vault 筆記標 sync:up → 跑 sync-vault-types.ts → 合入 shared/types.ts → 重跑 export-shared-types.js → 全端（UT/omni/esggo）同步
+
+## 26.5 實證狀態（2026-08-13）
+- `vault/` 骨架已落（AGENTS.md + context/TypeMatrix.md + README.md）→ commit `1ae395d31`
+- `sync-vault-types.ts` 實跑通：掃 2 篇筆記、canonical 35 型別、suggestedAdditions=[]（骨架階段無衝突）
+- `export-shared-types.js` 既存可用（UT `esggo-shared.d.ts` 7.3KB）
+- 30 號質控蜂接管 AGENTS.md pre-commit（校 co_authors + source_origin，待接 git hook）
+
+## 26.6 5T 驗證
+- **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
+- **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
+- **Tangible**：Obsidian 可視化筆記 + wikilink 導航
+- **Transparent**：雙向橋邏輯全開源，suggestedAdditions 不靜默合入
+- **Trustworthy**：canonical 為單一真相源，vault 僅 mirror/sync:up 回饋，禁區不直改
+
+> 刻印狀態：`CH26 SECOND-BRAIN READY`　靈魂簽章：`第二大腦覺・雙向同步・矩陣不滅`
+> 歸位：本章為 §二十六 用戶委製附錄，接於 §25 之後，終章封印仍為最高律法。
+> 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 覺=SECOND-BRAIN · 免費=SELF-HOST · vault=Obsidian」
