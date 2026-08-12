@@ -152,6 +152,7 @@ async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker 
 const server = http.createServer(async (req, res) => {
   /** @type {string} */
   const url = req.url || '';
+  const urlPath = url.split('?')[0];
   // CORS (生產級: 白名單來源, 非 *)
   const origin = req.headers.origin;
   const allowOrigin = origin && ALLOWED_ORIGINS.some(o => o === '*' || o === origin || (o.startsWith('*.') && origin.endsWith(o.slice(1)))) ? (origin || '*') : (ALLOWED_ORIGINS[0] || '*');
@@ -234,7 +235,6 @@ const server = http.createServer(async (req, res) => {
 
   // 靜態前端 UI + 資源 (html/js/css 同目錄白名單)
   if (req.method === 'GET') {
-    const urlPath = url.split('?')[0];
     let file = null, ctype = 'text/html; charset=utf-8';
     if (urlPath === '/' || urlPath.startsWith('/index')) file = '/index.html';
     else if (urlPath === '/studio' || urlPath === '/studio.html') file = '/studio.html';
