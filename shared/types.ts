@@ -280,6 +280,8 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+  /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
+  context?: Array<{ src: string; tgt?: string }>;
 }
 
 // --- STT → 雙語字幕契約 (語音轉字幕場景, 鎖定繁中↔英文雙向) ---
@@ -322,4 +324,32 @@ export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';
   generator: 'scripts/export-shared-types.js';
   consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
+
+// ===== 萬能即時雙語字幕撥放器 · 三元一體 (Zoom 線上會議場景) 領域契約 =====
+// 三元: 載入(source) + 撥放(playback) + 字幕(caption) 同一頁; 來源支援 檔案/網址/Zoom 會議 三態
+export type PlayerSourceKind = 'file' | 'url' | 'zoom';
+
+/** 播放器來源聯合 (繁中英碼終始矩陣雙向同步) */
+export type IPlayerSource =
+  | { kind: 'file'; file: File }
+  | { kind: 'url'; url: string }
+  | { kind: 'zoom'; displayMedia: MediaStream };
+
+/** Zoom 線上會議中繼資料 */
+export interface IZoomMeeting {
+  /** Zoom 會議號 (選填, 僅作展示) */
+  meetingId?: string;
+  /** 會議原文語言 (對齊 LanguageCode) */
+  sourceLang: LanguageCode;
+  /** 是否為線上直播中 */
+  isLive: boolean;
+}
+
+/** 撥放器運行態 (三元一體狀態機) */
+export interface IPlayerState {
+  sourceKind: PlayerSourceKind;
+  isPlaying: boolean;
+  isCaptioning: boolean;
+  lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
 }

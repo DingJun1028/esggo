@@ -259,6 +259,8 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+  /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
+  context?: Array<{ src: string; tgt?: string }>;
 }
 
 export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
@@ -293,4 +295,25 @@ export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';
   generator: 'scripts/export-shared-types.js';
   consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
+
+export type PlayerSourceKind = 'file' | 'url' | 'zoom';
+
+export type IPlayerSource =
+  | { kind: 'file'; file: File }
+
+export interface IZoomMeeting {
+  /** Zoom 會議號 (選填, 僅作展示) */
+  meetingId?: string;
+  /** 會議原文語言 (對齊 LanguageCode) */
+  sourceLang: LanguageCode;
+  /** 是否為線上直播中 */
+  isLive: boolean;
+}
+
+export interface IPlayerState {
+  sourceKind: PlayerSourceKind;
+  isPlaying: boolean;
+  isCaptioning: boolean;
+  lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
 }
