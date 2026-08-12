@@ -1474,7 +1474,9 @@ bash deploy.sh
 5T 凍結產物接 Email/Telegram/Slack/n8n/Webhook，6 類週報；HMAC V2 簽章 + 速率限制 + 一鍵退訂。
 
 ## 23.5　進化路線圖（5 階段）
-Foundation(完成) → Integration(進行中) → Optimization → Expansion → Evolution；KPI 隨階段收緊（熵減 0.08→0.01、自動化 75%→99%）。
+Foundation(完成) → Integration(**✅ 完成 2026-08-11：B/D/A/E 全落地**) → Optimization(進行中：熵減引擎+預測維護) → Expansion → Evolution；KPI 隨階段收緊（熵減 0.08→0.01、自動化 75%→99%）。
+
+> Integration 里程碑實證：Agentic Twin 真 LLM(Ollama) / Evidence Vault 真 MinIO / SonarQube CE 自託 / Playwright E2E 守門 — 全部免費算立，程式碼進 `origin/main`，VPS docker rebuild 成功。詳 §24.1 / §25.1。
 
 ## 23.6　落地代碼（實證）
 `src/gate5t.py`（5T 閘+凍結）、`src/kpi.py`（KPI 儀表板）、`src/newsletter.py`（電子報）；`tests/test_chapter10.py` 12 case 全綠。
