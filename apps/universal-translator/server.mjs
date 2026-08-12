@@ -253,20 +253,44 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 外部影片 CORS 代理：解瀏覽器跨域擷音軌限制 (即時翻譯外部影片源)
-  // 前端 player.html 載入 /proxy-media?url=<外部影片> → 此 route 串流並加 Access-Control-Allow-Origin
+  // 安全防護 (生產級): 阻 SSRF (內網/link-local/metadata) + 大小上限 + 逾時
   if (urlPath === '/proxy-media' && req.method === 'GET') {
+    const MAX_PROXY_BYTES = 50 * 1024 * 1024; // 50MB 上限
+    const PROXY_TIMEOUT_MS = 20000;
     try {
-      const target = new URL(req.url.split('?')[1] ? new URLSearchParams(req.url.split('?')[1]).get('url') || '' : '', 'http://x');
-      if (!/^https?:$/.test(target.protocol)) { res.writeHead(400); return res.end('invalid url'); }
-      const upstream = await fetch(target.toString());
+      const raw = req.url.split('?')[1] ? new URLSearchParams(req.url.split('?')[1]).get('url') || '' : '';
+      const target = new URL(raw, 'http://x');
+      if (!/^https?:$/.test(target.protocol)) { res.writeHead(400); return res.end('invalid protocol'); }
+      // SSRF 防護: 阻內網/link-local/metadata
+      const host = target.hostname.toLowerCase();
+      const isPrivate = /^(localhost|0\.0\.0\.0|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|\[::1\]|::1)/.test(host)
+        || host === 'metadata.google.internal' || host.endsWith('.internal') || host.endsWith('.local');
+      if (isPrivate) { res.writeHead(400); return res.end('blocked: private host'); }
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
+      const upstream = await fetch(target.toString(), { signal: controller.signal });
+      clearTimeout(timer);
       if (!upstream.ok) { res.writeHead(upstream.status); return res.end('upstream error'); }
+      // 串流轉發 (不整包載入記憶體) + 大小邊界
+      const ct = upstream.headers.get('content-type') || 'video/mp4';
+      const cl = Number(upstream.headers.get('content-length') || 0);
+      if (cl > MAX_PROXY_BYTES) { res.writeHead(413); return res.end('payload too large'); }
       res.writeHead(200, {
-        'content-type': upstream.headers.get('content-type') || 'video/mp4',
+        'content-type': ct,
         'Access-Control-Allow-Origin': '*',
         'Cache-Control': 'no-store',
       });
-      const buf = Buffer.from(await upstream.arrayBuffer());
-      return res.end(buf);
+      if (!upstream.body) { const buf = Buffer.from(await upstream.arrayBuffer()); return res.end(buf); }
+      let sent = 0;
+      const reader = upstream.body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        sent += value.byteLength;
+        if (sent > MAX_PROXY_BYTES) { res.end(); return; }
+        res.write(Buffer.from(value));
+      }
+      res.end();
     } catch (e) {
       res.writeHead(500); return res.end('proxy fail: ' + e.message);
     }
