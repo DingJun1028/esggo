@@ -65,3 +65,28 @@ try {
   // git/python may not be available in some environments — warn but don't block
   console.warn('[pre-commit] Could not run agents.yaml verification (skipping):', e.message);
 }
+
+// 4. 30號質控蜂 — vault 筆記 frontmatter 校驗 (Trustworthy 禁區)
+// 所有 vault/ 下 .md 變更必含 source_origin + co_authors (5T Traceable / Trustworthy)
+try {
+  const staged = execSync('git diff --cached --name-only --diff-filter=ACMR', { encoding: 'utf-8' })
+    .split('\n')
+    .map((f) => f.trim())
+    .filter(Boolean)
+    .filter((f) => f.startsWith('vault/') && f.endsWith('.md'));
+  let failed = false;
+  for (const f of staged) {
+    const raw = fs.readFileSync(path.resolve(__dirname, '..', f), 'utf-8');
+    const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/);
+    if (!fmMatch) { console.error(`[質控蜂] ${f}: 缺 frontmatter`); failed = true; continue; }
+    const fm = fmMatch[1];
+    const hasSource = /^\s*source_origin\s*:/m.test(fm);
+    const hasCoAuthors = /^\s*co_authors\s*:/m.test(fm);
+    if (!hasSource) { console.error(`[質控蜂] ${f}: 缺 source_origin (Traceable)`); failed = true; }
+    if (!hasCoAuthors) { console.error(`[質控蜂] ${f}: 缺 co_authors 欄位`); failed = true; }
+  }
+  if (failed) { console.error('[質控蜂] vault 筆記未過 30 號質控蜂校驗 — 補 source_origin/co_authors'); process.exit(1); }
+  else if (staged.length > 0) console.log(`[質控蜂] ${staged.length} vault 筆記通過 5T 校驗 ✓`);
+} catch (e) {
+  console.warn('[質控蜂] vault 校驗跳過:', e.message);
+}

@@ -353,3 +353,12 @@ export interface IPlayerState {
   isCaptioning: boolean;
   lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
 }
+
+
+export interface ISecondBrainNote {
+  id: string;
+  title: string;
+  tags: string[];
+  source_origin: string;
+  sync: 'mirror' | 'up';
+}
