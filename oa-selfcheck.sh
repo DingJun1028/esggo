@@ -18,6 +18,11 @@ echo "--- [2] oa-framework smoke (10 子框架) ---"
 ( cd packages/oa-framework && npx --no-install tsx test/smoke.ts ) \
   && echo "  OA_SMOKE_OK" || { echo "  OA_SMOKE_FAIL"; FAIL=1; }
 
+# 2b. 深貫廣通 smoke (chain + attachBus + 30 蜂群映射)
+echo "--- [2b] oa-framework deep-connect (深貫廣通) ---"
+( cd packages/oa-framework && npx --no-install tsx test/deep-connect.smoke.ts ) \
+  && echo "  DEEP_CONNECT_OK" || { echo "  DEEP_CONNECT_FAIL"; FAIL=1; }
+
 # 3. OAB 跨包管線 (總線 + 5T 閘門 + 跨包聯通)
 echo "--- [3] omni-agent-bus pnpm run test ---"
 ( cd packages/omni-agent-bus && pnpm run test ) \

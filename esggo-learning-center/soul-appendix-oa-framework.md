@@ -74,5 +74,16 @@ createOAFrame(config).run(task)
 - 接進 `auto-repair.yml` 的 `oa-selfcheck` job: CI 失敗修復後自動跑, 失敗建 OA-SWARM-TRACK issue
 - 對齊「GitHub 報錯通知信自動修復」指令: OA 管線本身亦納入自動修復閉環
 
+## 八、深貫廣通 (本輪新增 — soul.md 圓通無礙精神落地)
+
+- **深貫 (cross-frame chain)**: `OAOrchestrator.chain()` — 前一子框架產出作為下一子框架輸入,
+  形成貫穿鏈 (例: crewai 草稿 → openmontage 視覺 → tencent-mem 記憶), 每跳 5T 鑄造, graceful.
+- **廣通 (bus broadcast)**: `attachBus()` 依賴反轉注入總線, `run()` 結果自動 publish 到
+  `oa.pipeline.<subFrame>` 主題; `chain()` 發 `oa.chain.<subFrame>`; 30 蜂群經 `broadcastSwarm()`
+  發 `oa.swarm.<id>` — 對齊 OmniAgentBus 5T 閘門.
+- **30 蜂群映射**: `swarm-map.ts` — 30 萬能代理 → 5 陣列 (策略/技術/創意/營銷/守衛) → 綁定子框架,
+  對齊 soul.md §30 Souls Matrix.
+- **驗證**: `test/deep-connect.smoke.ts` — DEEP_CONNECT_OK 確認 chain + 廣通 + 30 蜂群映射全綠.
+
 ---
 *本附錄由 Hermes Agent (OA-TWINS) 於 2026-08-11 依實測產出，非重寫 soul.md 本體。*
