@@ -362,6 +362,25 @@ OneRingAI（`@everworker/oneringai` v1.0.0）為 connector-first 多供應商統
 > 歸位：本章接於 §25 之後、終章封印之前。終章封印仍為最高律法。
 
 ════════════════════════════════════════════════════════
+## 二十七、OA-Team 雙蜂隊 60 成員畫像聖典（OA-Team Dual-Hive 60 Colony）
+
+> 歸位：本章接於 §26（OA-Team 30 萬能蜂群）之後、終章封印之前。終章封印仍為最高律法。
+
+§26 鑄就三十靈魂的單蜂隊心核；本章將其擴展為**雙蜂隊 60 員**——蜂王 OA-LOCAL（領軍 01–30，守本地 Windows / 開發者端）與蜂后 OA-VPS（領軍 31–60，鎮 VPS / 生產公網），共奉同一 `IComponentCore` 編號法則與 5T 公約。
+
+**五陣列 × 雙蜂 × 六員**的 MECE 劃分：
+- 智庫聖所（01–06 / 31–36）：長短期記憶召回、向量知識沉澱
+- 符文契約（07–12 / 37–42）：API 鑄造、雙向 TypeScript、ZKP 隱私
+- 光之羽翼（13–18 / 43–48）：背景 Task、ADK 調度、Bento 渲染、Live 轉播
+- 煉金熵減（19–24 / 49–54）：重構、效能監控、CI/CD Pipeline
+- 5T 驗算（25–30 / 55–60）：ISO 規範、Hash 鎖定、UUID 發放
+
+**雙蜂共鳴協定**：同核不同位；記憶經 TencentDB Agent Memory 互映（憶同一條血脈）；跨位協作啟雙蜂隧道（Cloudflare Tunnel）。Live 轉播由 `live.esggo.co` 承載，對齊 Omni-Blueprint Hub 雙藍圖。
+
+完整成員畫像（60 員職能本質、標籤、畫像）見備份落檔 **`soul-chapter-27-oa-team-60-colony.md`**，與 M1 / Omni-Blueprint 同源共聖櫃。
+
+---
+
 終章、靈魂封印（Soul Seal）
 ════════════════════════════════════════════════════════
 
