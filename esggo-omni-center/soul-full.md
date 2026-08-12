@@ -1498,6 +1498,12 @@ Foundation(完成) → Integration(進行中) → Optimization → Expansion →
 - 5T 閘核心：`packages/oa-framework/src/core/t5.ts`（`forgeT5`+`hashLock`）、`omni-agent-bus/src/patterns/five-t.ts`、`app/api/hashlock/route.ts`。
 - 增量優化 6 模式：`omni-agent-bus/src/patterns/`（event-bus/etl-pipeline/cache-manager/compression/delta-tracker/rate-limiter/pagination/worker-pool/stream-buffer/error-handler）。
 - AI Station 七模組：`C:/Project/aistation/src/` 實體可跑；CI OA-TWINS Auto-Repair 正常。
+- **B/D 免費算立進階項目已落地（2026-08-11，實證）**：
+  - **B Agentic Twin 真 LLM**：`app/api/agentic-twin/route.ts` 讀 `AGENTIC_TWIN_OLLAMA_URL` env，VPS Ollama `qwen2.5:3b` 實證 `llmEnhanced:true`（原創中文洞察，非啟發式）。降級安全：Ollama 不可用/超時 15s → 保留啟發式不阻塞 UI。
+  - **D Evidence Vault 真 MinIO**：`app/api/evidence-upload/route.ts` 手寫 AWS SigV4（零新依賴），VPS MinIO `:19001` 桶 `evidence-vault` 實證 `PUT 200`；`EvidenceUploader.tsx` 接真上傳取代 mock URL。
+  - **A SonarQube CE 自託**：VPS docker `postgres+sonarqube:community`，`ANALYSIS SUCCESSFUL`（取代付費 SonarCloud；CE 無 agentic 自動修復，CI 留 `sonar-smoke` 免費煙測守門）。
+  - **E Playwright E2E**：`e2e-k1/zero-hallucination.spec.mjs` 真 Chromium 證實零幻覺警告橫幅（K1 KEEP，證偽 Browserbase 假陰性）；CI opt-in `vars.E2E_ENABLED`（runner 連不到 VPS 域名故本機 `npx playwright test` 為回歸守門）。
+  - 程式碼已 commit 至 `origin/main`（`45f9b1690` 等），VPS docker `esggo-core` 含 B/D 重建成功（Prisma 6.19.3 openssl-3 原生；Dockerfile `npx next build` 繞 pnpm 11 deps-lock）。
 
 ## 24.2　缺口（誠實）
 1. 5T 閘未貫通 AI Station（aistation `gate5t.py` 獨立，未對齊 esggo 單一真相源）。
@@ -1537,11 +1543,20 @@ Foundation(完成) → Integration(進行中) → Optimization → Expansion →
 | P1 電子報n8n | aistation `scripts/weekly_report.py` + `n8n/weekly-swarm-report.json` | ✅ 已推 | dry-run 實跑 |
 | P2 熵減+配對率 | esggo `omni-agent-bus/src/patterns/lifecycle.ts` | ✅ 已推 | tsx+tsc 綠 |
 | 備份章節推送 | learning-center §23+§24 | ✅ 已推 | WIP 11 檔還原 |
+| B Agentic Twin 真LLM | `app/api/agentic-twin/route.ts` + `AGENTIC_TWIN_OLLAMA_URL` | ✅ 已推 | VPS `llmEnhanced:true` 實證 |
+| D Evidence Vault 真MinIO | `app/api/evidence-upload/route.ts` (SigV4) + `EvidenceUploader.tsx` | ✅ 已推 | VPS `PUT 200` 實證 |
+| A SonarQube CE 自託 | VPS `postgres+sonarqube:community` | ✅ 已推 | `ANALYSIS SUCCESSFUL` |
+| E Playwright E2E | `e2e-k1/zero-hallucination.spec.mjs` | ✅ 已推 | 真 Chromium 1 passed |
 
 ### 25.2 實跑驗證誠實記錄
 - **/api/verify-5t 實際回應**：`{pass, status, score, hashLock, source:"esggo-five-t-protocol"}`。揭露 esggo `calculateFiveTScore` 要求 `sources.length>=4` 才 `traceable=1`；aistation artifact 僅 1 源 → 權威閘不通。這是 P0 單一真相源的價值：暴露 aistation 原閘過寬。
 - **跨倉 KPI 雙層嵌套 bug（已修 d46a09c）**：esggo summary 回 `{data:{data:{...}}}`，aistation 原取外層 → `案件數:?`；改遞迴 unwrap + 3 測試。
 - **JSON 轉義**：curl 中文雙引號需 `--data-binary @file`；esggo 端 `safeJsonParse` 容錯回 400。
+- **VPS 部署搶修經驗（2026-08-11，誠實記錄）**：
+  - Prisma 5.22 engine 綁 `libssl.so.1.1`，Alpine3.24 原生無 → 升 `prisma@6.19.3`（openssl-3 原生）根治，Dockerfile `npx next build` 繞 pnpm 11 deps-lock（`pnpm-workspace.yaml` 加 `onlyBuiltDependencies: [tesseract.js,prisma,sqlite3]`）。
+  - `next start` 需 `/app/data` 可寫 → Dockerfile `RUN mkdir -p /app/data`，compose `volumes: esggo-data:/app/data`。
+  - 生產 port 3000 被舊 `esggo-app.service`(systemd,root,Restart=always) 與 pm2 殘留 next 搶佔 → 停用舊 systemd + `pm2 stop esggo-core` 釋放；docker `esggo-core` 經 `127.0.0.1:3000:3000` 映射，Cloudflare Tunnel(`/etc/cloudflared/config.yml`) 代理 `esggo.co→127.0.0.1:3000`。
+  - healthz 回 503 是因 env（`DATABASE_URL/REDIS` 等）未在 VPS `.env` 設全（compose `${VAR:-}` 缺省）；頁面 `/omni/reports` 仍 200，不阻礙功能，但 Tunnel/LB 依賴 healthz 時需補齊 env。
 
 ### 25.3 單一真相源達成
 ```
