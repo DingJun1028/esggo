@@ -1,9 +1,9 @@
 ---
 source_origin: esggo/shared/types.ts
-co_authors: []
 created: 2026-08-13
 modified: 2026-08-12
 sync: mirror
+co_authors: []
 lifecycle: active
 ---
 
