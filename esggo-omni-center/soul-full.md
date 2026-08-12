@@ -1622,6 +1622,15 @@ vault/
 - `export-shared-types.js` 既存可用（UT `esggo-shared.d.ts` 7.3KB）
 - 30 號質控蜂接管 AGENTS.md pre-commit（校 co_authors + source_origin，待接 git hook）
 
+## 26.5b 深貫廣通實證（第二輪，2026-08-13）
+- **自動化鏡像** `scripts/sync-types-to-vault.ts`：canonical→vault 單跑通，36 型別鏡像（含 wikilink）
+- **深筆記**：05TProtocol / 30Matrix / BDAgenticEvicence / BilingualSubtitlePlayer / AStationSevenModules（真實知識 + wikilink 互鏈）
+- **廣 MOC** `00-Index.md`：知識地圖串接所有筆記（Maps of Content）
+- **貫+通證明** `SyncUpProbe.md`(sync:up) → `sync-vault-types.ts --apply` → `ISecondBrainNote` 真回流 canonical → 重跑鏡像→36 型別含新條目（雙向閉環全綠）
+- **通 hook** `.githooks/pre-commit` 加 30 號質控蜂：vault 筆記必含 source_origin+co_authors，本機跑通 10 筆記 ✓
+- commit: `4c79af851`（深貫廣通全實體化）
+- 雙向同步閉環：`vault(sync:up) → sync-vault-types.ts → shared/types.ts → sync-types-to-vault.ts → TypeMatrix.md → Obsidian 可視化`
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
