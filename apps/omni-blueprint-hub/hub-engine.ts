@@ -8,9 +8,14 @@ import {
   BroadcastPayload,
   UnifiedBlueprintEntity
 } from './core-types.js';
+import { PluginRegistry } from './plugin-registry.js';
+import type { PluginContext } from './plugin-types.js';
 
 export class OmniBlueprintHub {
   private singleDataTable: Map<string, UnifiedBlueprintEntity> = new Map();
+
+  /** 5T 合規外掛註冊表 (對齊 §十五 Conduit/外掛系統) */
+  public readonly plugins = new PluginRegistry({ strict: false });
 
   public createBlueprint(
     type: BlueprintType,
@@ -52,6 +57,7 @@ export class OmniBlueprintHub {
       createdAt: timestamp
     });
 
+    this.plugins.emit('onBlueprintCreated', blueprint);
     return Object.freeze(blueprint);
   }
 
@@ -94,6 +100,7 @@ export class OmniBlueprintHub {
       createdAt: timestamp
     });
 
+    this.plugins.emit('onProductManifested', product);
     return product;
   }
 
@@ -132,6 +139,7 @@ export class OmniBlueprintHub {
       createdAt: timestamp
     });
 
+    this.plugins.emit('onBroadcastPushed', product);
     return product;
   }
 
@@ -147,6 +155,16 @@ export class OmniBlueprintHub {
 
   public getUnifiedTable(): UnifiedBlueprintEntity[] {
     return Array.from(this.singleDataTable.values());
+  }
+
+  /** 綁定 PluginContext 給註冊表 (由 monitor-server 呼叫以接 broadcast/log) */
+  bindPluginContext(broadcast: PluginContext['broadcast'], log: PluginContext['log']): void {
+    this.plugins.bindContext({
+      hub: this,
+      broadcast,
+      log,
+      getUnifiedTable: () => this.getUnifiedTable(),
+    });
   }
 
   private generateHashLock(data: object): string {
