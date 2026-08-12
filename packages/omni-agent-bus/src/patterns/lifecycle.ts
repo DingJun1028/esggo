@@ -90,7 +90,7 @@ export class LifecycleTracker {
   gaps(): string[] {
     const s = this.snapshot();
     const out: string[] = [];
-    if (s.pairingRate < 100.0) out.push(`cross_unit_pairing=${s.pairingRate}% < 100%`);
+    if (s.pairingRate < 100.0) out.push(`cross_unit_pairing=${s.pairingRate}% < 100% (pairingRate gap)`);
     if (s.entropy >= 0.1) out.push(`entropy=${s.entropy} >= 0.1`);
     if (s.weeklyEntropyReduction < WEEKLY_TARGET_REDUCTION)
       out.push(`weekly_reduction=${s.weeklyEntropyReduction} < ${WEEKLY_TARGET_REDUCTION}`);
