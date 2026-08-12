@@ -74,6 +74,8 @@ export interface OATask {
   /** 指定子框架 (不指定則由 Orchestrator 路由) */
   routeTo?: SubFrameId[];
   requireT5?: boolean;
+  /** 深貫鏈輸入 (chain 模式下上一跳產出會注入此欄) */
+  input?: string;
 }
 
 /** 任務結果 (帶 5T 狀態與 Hash Lock) */

@@ -39,6 +39,7 @@ export { OAOrchestrator, verify5T };
 export * from './core/types.js';
 export * from './core/omni-gate.js';
 export * from './core/unverified-registry.js';
+export * from './core/swarm-map.js';
 export const OA_SUBFRAMES: SubFrameId[] = [
   'adk', 'genkit', 'agent0', 'crewai', 'agentreach', 'deerflow', 'tencent-mem', 'openmontage', 'omniroute', 'turbovec', 'oneringai',
 ];
