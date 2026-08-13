@@ -15,3 +15,6 @@ binding = "AI"
 [vars]
 # 預設模型, 可改
 MODEL = "deepseek/deepseek-v4-pro"
+
+[build]
+command = "npx --yes pnpm install --frozen-lockfile"
