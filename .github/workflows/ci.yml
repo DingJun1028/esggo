@@ -148,7 +148,7 @@ jobs:
 
   # ─── 萬能即時翻譯 (UT) 生產級測試 ─────────────────────────────
   ut-tests:
-    name: UT API Tests (node --test)
+    name: UT API Tests (node --test) + 終始矩陣型別守門
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -156,6 +156,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - name: Install dependencies (frozen)
+        run: pnpm install --frozen-lockfile
+      - name: 終始矩陣型別守門 (tsc 0-error)
+        working-directory: apps/universal-translator
+        run: npx tsc -p tsconfig.ut.json --noEmit
       - name: Run UT test suite
         working-directory: apps/universal-translator
         run: node --test test/ut.test.mjs
