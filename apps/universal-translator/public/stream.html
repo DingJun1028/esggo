@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>萬能語音轉字幕 · 觀眾端</title>
+<title>Zoom 會議字幕 · 觀眾端</title>
 <style>
 :root{
   --bg:#070b12;--panel:rgba(20,27,41,.72);--panel2:rgba(14,22,35,.6);
@@ -21,9 +21,11 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 .ico-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1.05rem;display:grid;place-items:center;transition:.2s}
 .ico-btn:hover{border-color:var(--accent)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;font-size:.85rem;font-weight:600;transition:.18s;user-select:none}
-.chip.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04130f;border-color:transparent}
+.swap{display:flex;align-items:center;justify-content:center;gap:10px;background:#1c2740;
+  border:1px solid var(--line);border-radius:12px;padding:9px 14px;cursor:pointer;font-size:.95rem;font-weight:700;color:var(--txt);transition:.15s}
+.swap:hover{border-color:var(--accent)}
+.swap .ar{color:var(--accent);font-size:1.1rem}
+.swap b{color:var(--gold)}
 .status{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:8px}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
 .dot.on{background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:pulse 1.6s infinite}
@@ -33,11 +35,10 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 .utter{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;animation:slideIn .3s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .utter .src{color:var(--accent);font-weight:700;font-size:1.02rem;line-height:1.45}
-.utter .trs{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px}
-.utter .trs span{font-size:.83rem;color:var(--muted)}
-.utter .trs b{color:var(--txt);font-weight:700;margin-right:5px}
+.utter .trs{margin-top:6px;font-size:.92rem;color:var(--txt)}
+.utter .ctx{margin-top:4px;font-size:.8rem;color:var(--muted);opacity:.75;font-style:italic}
+.ctx{color:var(--muted);font-size:.82rem;opacity:.78;font-style:italic;margin-top:4px}
 .empty{color:var(--muted);text-align:center;padding:30px 10px;opacity:.7}
-/* 浮層 */
 .caption{position:fixed;left:50%;bottom:6vh;transform:translateX(-50%);max-width:94vw;width:min(1000px,94vw);
   background:linear-gradient(135deg,rgba(12,18,30,.72),rgba(8,12,20,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px 22px;text-align:center;line-height:1.5;
@@ -45,9 +46,7 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 .caption.show{opacity:1;animation:pop .3s ease}
 @keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .caption .src{font-size:clamp(1.1rem,2.6vw,1.55rem);color:#fff;font-weight:700;text-shadow:0 2px 6px #000}
-.caption .trs{margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center}
-.caption .trs .pair{font-size:clamp(.92rem,2.1vw,1.2rem);color:var(--accent)}
-.caption .trs .lbl{color:#9fb0c7;font-size:.78em;margin-right:6px;text-transform:uppercase}
+.caption .trs{margin-top:5px;font-size:clamp(.92rem,2.1vw,1.2rem);color:var(--accent);text-shadow:0 2px 6px #000}
 .btn{font-size:.9rem;padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;transition:.15s}
 .btn:hover{border-color:var(--accent)}
 .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04130f;border:0;font-weight:700}
@@ -59,24 +58,27 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;padding:
 <body>
 <div class="wrap">
   <div class="topbar">
-    <h1>📺 觀眾端字幕</h1>
+    <h1>📺 Zoom 會議字幕</h1>
     <button class="ico-btn" id="themeBtn" title="深色/淺色">🌙</button>
   </div>
   <div class="row">
-    <div class="chips" id="chips"></div>
+    <div class="swap" id="swapBtn"><b id="fromLbl">繁中</b><span class="ar">→</span><b id="toLbl">EN</b><span style="font-size:.7rem;color:#9fb0c7;margin-left:6px">點擊互換</span></div>
     <button id="floatBtn" class="btn primary">🎬 顯示字幕浮層</button>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="status">連線中…</span></div>
-  <div class="preview" id="preview"><div class="empty">等待字幕… 來自收音端的即時雙語字幕會出現在此</div></div>
+  <div class="preview" id="preview"><div class="empty">等待字幕… 來自會議收音端的即時繁中 ↔ 英文 雙語字幕會出現在此</div></div>
 </div>
-<div class="caption" id="caption"><div class="src" id="capSrc"></div><div class="trs" id="capTrs"></div></div>
+<div class="caption" id="caption"><div class="src" id="capSrc"></div><div class="trs" id="capTrs"></div><div class="ctx" id="capCtx"></div></div>
 <div class="toast" id="toast"></div>
 <script type="module">
 /// <reference path="./types/generated/esggo-shared.d.ts" />
-const LANGS=[['en','英文'],['zh-TW','繁中'],['ja','日文'],['es','西班牙'],['fr','法文'],['ko','韓文'],['de','德文']];
-const LANG_NAME=Object.fromEntries(LANGS);
+// 語言顯示 — 由 shared/lang-matrix.mjs (終始矩陣單一真源) 定義; 本頁只用繁中↔英文互換
+const LANG_DISPLAY = { 'zh-TW': '繁中', 'en': 'EN' };
+const SWAP_LANGS = ['zh-TW', 'en'];
 const $=s=>document.querySelector(s);
-let room=new URLSearchParams(location.search).get('room')||'';
+const qs=new URLSearchParams(location.search);
+let room=qs.get('room')||'';
+let toLang=qs.get('to')||'en'; if(!SWAP_LANGS.includes(toLang))toLang='en';
 let sse=null,esOk=false,floatOn=false,capTimer=null;
 
 // 主題
@@ -85,30 +87,25 @@ function applyTheme(t){document.documentElement.dataset.theme=t;themeBtn.textCon
 applyTheme(localStorage.getItem('ut-theme')||'dark');
 themeBtn.onclick=()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
 
-// 多目標語 chips
-const targets=new Set(['en','zh-TW']);
-const chipsBox=$('#chips');
-LANGS.forEach(([code,name])=>{
-  const c=document.createElement('div');c.className='chip'+(targets.has(code)?' on':'');c.textContent=name;
-  c.onclick=()=>{ if(targets.has(code)){if(targets.size>1)targets.delete(code);else return;}else targets.add(code);c.classList.toggle('on'); };
-  chipsBox.appendChild(c);
-});
+function fromLang(){return SWAP_LANGS.find(l=>l!==toLang)||'zh-TW';}
+function refreshSwapUI(){$('#fromLbl').textContent=LANG_DISPLAY[fromLang()];$('#toLbl').textContent=LANG_DISPLAY[toLang];}
+refreshSwapUI();
+$('#swapBtn').onclick=()=>{toLang=fromLang();refreshSwapUI();toast('觀看方向：'+LANG_DISPLAY[fromLang()]+' → '+LANG_DISPLAY[toLang]);};
 
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
 function setStatus(on,msg){$('#dot').className='dot '+(on?'on':'');$('#status').textContent=msg;}
 
-function showCaption(src,translations){
+function showCaption(src,trs,ctx){
   $('#capSrc').textContent=src||'';
-  $('#capTrs').innerHTML=Array.from(targets).map(t=>{
-    const txt=translations?translations[t]:'';return txt?`<span class="pair"><span class="lbl">${LANG_NAME[t]||t}</span>${txt}</span>`:'';
-  }).filter(Boolean).join('');
+  $('#capTrs').textContent=trs||'';
+  const ce=$('#capCtx'); if(ce) ce.textContent=(ctx&&ctx.length)?'前文：'+ctx.map(c=>c.src||c.text||'').join(' / '):'';
   const cap=$('#caption');cap.classList.add('show');clearTimeout(capTimer);capTimer=setTimeout(()=>cap.classList.remove('show'),6500);
 }
-function appendPreview(src,translations){
+function appendPreview(src,trs,ctx){
   const p=$('#preview');const e=p.querySelector('.empty');if(e)e.remove();
   const d=document.createElement('div');d.className='utter';
-  const trsHtml=Object.entries(translations||{}).map(([c,t])=>`<span><b>${LANG_NAME[c]||c}</b>${t}</span>`).join('');
-  d.innerHTML=`<div class="src">▸ ${src}</div><div class="trs">${trsHtml}</div>`;
+  const ctxLine=(ctx&&ctx.length)?`<div class="ctx">前文：${ctx.map(c=>c.src||c.text||'').join(' / ')}</div>`:'';
+  d.innerHTML=`<div class="src">▸ ${src}</div>${ctxLine}<div class="trs">${trs||''}</div>`;
   p.appendChild(d);p.scrollTop=p.scrollHeight;
 }
 
@@ -116,9 +113,11 @@ $('#floatBtn').onclick=()=>{floatOn=!floatOn;$('#floatBtn').classList.toggle('pr
   $('#floatBtn').textContent=floatOn?'🙈 隱藏浮層':'🎬 顯示字幕浮層';if(!floatOn)$('#caption').classList.remove('show');};
 
 function onTranslation(d){
-  const src=d.text||'';const tr=d.translations||{};
-  appendPreview(src,tr);
-  if(floatOn)showCaption(src,tr);
+  const src=d.text||'';
+  const tr=(d.translations&&toLang&&d.translations[toLang])||'';
+  const ctx=d.context||[];
+  appendPreview(src,tr,ctx);
+  if(floatOn)showCaption(src,tr,ctx);
 }
 function connect(){
   try{

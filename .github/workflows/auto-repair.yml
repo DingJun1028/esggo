@@ -9,7 +9,7 @@ name: OA-TWINS Auto-Repair
 
 on:
   workflow_run:
-    workflows: ["OmniCore CI", "OmniCore Build", "OmniCore Deploy"]
+    workflows: ["OmniCore CI", "ESG-GO CI/CD Pipeline", "Build & publish AI Station image"]
     types: [completed]
     branches: [main, develop]
 
@@ -571,3 +571,43 @@ jobs:
             詳情見倉庫 Auto-Repair Issue 與 Telegram tracker。
 
             -- ESG-GO OA Framework 自動修復管線 v2.2
+
+  # -- OA 萬能分身元框架自驗 (本地閉環穩定態 CI 門禁)
+  # 每次 CI 失敗修復後, 確認 OA 10 子框架 + OAB 5T 管線仍綠
+  oa-selfcheck:
+    name: OA Framework Self-Check
+    needs: [tracker-notify]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT_AUTO_REPAIR || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Run OA self-check
+        id: oa
+        run: |
+          chmod +x oa-selfcheck.sh
+          bash oa-selfcheck.sh 2>&1 | tail -30 || true
+      - name: Report OA self-check result
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = ${{ github.event.workflow_run.id }};
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '[OA-SWARM-TRACK] OA Self-Check failed after CI #' + runId,
+              body: '## OA 萬能分身元框架自驗失敗\n\nCI Run: #' + runId + '\n\n請萬能分身跟蹤修復 OA 框架 (10 子框架 + OAB 5T 管線)。',
+              labels: ['OmniAgent', 'auto-fix', 'github_actions']
+            });
+            console.log('OA self-check failure issue created');

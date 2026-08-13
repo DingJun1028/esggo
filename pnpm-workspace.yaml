@@ -1,6 +1,7 @@
 packages:
   - 'apps/*'
   - 'apps/*/functions'
+  - 'cli/*'
   - 'packages/*'
   - '.'
 
@@ -21,8 +22,19 @@ overrides:
   "dompurify": ">=3.4.12 <4"
   "body-parser": ">=1.20.6 <2"
   "protobufjs": ">=7.6.5 <8"
-  # 不修 sharp <0.35.0 (GHSA-f88m-g3jw-g9cj)：next 為 devDep、專案 0 處用 next/image、
-  # 且 next@16 只接受 ^0.34.5。AGENTS.md #7。`pnpm audit --prod` 為 0。
+  # ── 2026-08-11 dependabot 批次修補 (pnpm audit 13 項) ──
+  "esbuild": ">=0.24.3 <1"
+  "vite": ">=6.4.3 <9"
+  "@tootallnate/once": ">=2.0.1 <3"
+  "vitest": ">=4.1.0"
+  "adm-zip": ">=0.6.0 <1"
+  "pdfjs-dist": ">=6.2.108 <7"
+  "@opentelemetry/core": ">=2.8.0 <3"
+  "@opentelemetry/sdk-node": ">=0.217.0 <1"
+  "@opentelemetry/auto-instrumentations-node": ">=0.75.0 <1"
+  "@opentelemetry/propagator-jaeger": ">=2.9.0 <3"
+  # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
+  #   chromadb (pip critical) — 僅出現在 .venv 虛擬環境，非提交之 requirements，不納入 pnpm 管線
 
 allowBuilds:
   '@firebase/util': false
@@ -35,6 +47,7 @@ allowBuilds:
   protobufjs: false
   sharp: true
   sqlite3: false
+  tesseract.js: set this to true or false
   unrs-resolver: false
 
 minimumReleaseAgeExclude:
@@ -70,3 +83,7 @@ minimumReleaseAgeExclude:
   - sharp@0.35.0
   - tar@7.5.21
   - js-yaml@4.3.1
+
+onlyBuiltDependencies:
+  - tesseract.js
+  - sqlite3

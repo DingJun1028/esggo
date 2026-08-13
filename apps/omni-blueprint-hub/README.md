@@ -95,6 +95,68 @@ pm2 start ecosystem.config.cjs && pm2 save
 
 ---
 
+## 外掛系統 (Hub Plugin System v0.7)
+
+> 讓 Hub 可被蜂群 30 代理或第三方擴充 — 一套 5T 合規的 Plugin 子系統。
+> 設計哲學：無作（失敗靜默）、圓通（鉤子廣播給所有 enabled 外掛）、無礙（單外掛錯不中斷整體）。
+
+### 架構
+
+```
+OmniBlueprintHub
+  └─ plugins: PluginRegistry (5T Gate + 生命週期)
+       ├─ entropy-reducer    (萬能優化蜂 06) 監聽 onBroadcastPushed → 熵減 < 0.1
+       ├─ conduit-bridge      (萬能編碼蜂 07) 監聽 onBroadcastPushed/onTranslation → 5T 封印轉跨蜂
+       └─ soul-canon-verifier (萬能質控蜂 30) 監聽 onProductManifested/onBlueprintCreated → 30矩陣校驗
+```
+
+### 5T Gate（註冊閘）
+
+外掛 `PluginManifest` 必須聲明全 5T（`traceable/trackable/tangible/transparent/trustworthy`）+ 非空 `hooks` 陣列，否則：
+- **strict 模式**：`register()` 回傳 `false`（結界阻斷，不落地）
+- **loose 模式**（預設）：仍註冊但標記，允許後續補強
+
+### 生命週期
+
+`registered → enabled → disabled → unloaded`；`enable()` 失敗標 `errored` 不向上拋（無作）。
+
+### 鉤子（對齊 monitor-server broadcast 事件）
+
+| Hook | 觸發時機 |
+|---|---|
+| `onBlueprintCreated` | `createBlueprint()` 後 |
+| `onProductManifested` | `manifestToProduct()` 後 |
+| `onBroadcastPushed` | `pushBroadcastPayload()` 後 |
+| `onTranslation` | 翻譯事件 |
+| `onCaption` | Akkadu 字幕事件 |
+| `onSnapshot` | 輪詢快照 |
+| `onHealthCheck` | 健康檢查 |
+
+### 快速開始
+
+```ts
+import { OmniBlueprintHub } from './hub-engine.js';
+import { EntropyReducerPlugin } from './plugins/entropy-reducer.js';
+
+const hub = new OmniBlueprintHub();
+hub.bindPluginContext(
+  (src, event) => console.log('[broadcast]', src, event.type),
+  (lvl, msg) => console.log('[log]', lvl, msg)
+);
+hub.plugins.register(new EntropyReducerPlugin());
+await hub.plugins.enable('entropy-reducer');
+// 之後每筆 pushBroadcastPayload 都會自動觸發熵減
+```
+
+### 測試
+
+```bash
+npm run test:plugins   # 7 斷言全綠 (5T Gate + 生命週期 + 3 示範外掛)
+node .compiled/hub-demo.js   # 含外掛系統演示段
+```
+
+---
+
 ## 檔案
 
 | 檔案 | 說明 |

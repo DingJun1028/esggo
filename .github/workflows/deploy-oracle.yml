@@ -223,9 +223,8 @@ jobs:
             pnpm run build
             # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
-            sleep 2
-            pm2 start ecosystem.config.cjs
+            # 不 kill 其他服務 (避免主站 esggo-core 重啟), 只 update/start 目標
+            pm2 start ecosystem.config.cjs --update-env 2>/dev/null || pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
             sleep 5
@@ -253,8 +252,11 @@ jobs:
         if: needs.pre-check.outputs.mode == 'direct'
         run: |
           set -e
-          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
+          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o ConnectTimeout=30 ${{ env.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s <<'VPS'
             set -e
+            # 修復 git dubious ownership (目錄可能由 root 建立, ubuntu 執行)
+            git config --global --add safe.directory /var/www/esggo
+            git config --global --add safe.directory /opt/esggo 2>/dev/null || true
             export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             export PATH="$PATH:/usr/local/bin:$HOME/.local/bin"
@@ -269,23 +271,30 @@ jobs:
                 [ -f "$f" ] && cp "$f" /var/www/esggo/ && echo "[bootstrap] restored $(basename "$f")"
               done
             fi
+            # 修復目錄擁有者 (root 建目錄 → ubuntu 需寫入權做 git reset)
+            sudo chown -R "$(whoami)" /var/www/esggo 2>/dev/null || chown -R "$(whoami)" /var/www/esggo 2>/dev/null || true
             cd /var/www/esggo
             git checkout -f main
             git fetch origin main
             git reset --hard origin/main
+            export CI=true
             pnpm install --frozen-lockfile
             pnpm run build
             # 重置 PM2 daemon 清掉殘留 (dead/ghost) 進程記錄後重新啟動，
             # 避免 VPS 上 PM2 內部狀態損壞 (ghost id 17/18, pm2_env undefined) 導致部署紅
-            pm2 kill 2>/dev/null || true
-            sleep 2
-            pm2 start ecosystem.config.cjs
+            # 不 kill 其他服務 (避免主站 esggo-core 重啟), 只 update/start 目標
+            pm2 start ecosystem.config.cjs --update-env 2>/dev/null || pm2 start ecosystem.config.cjs
             pm2 save
             # ─── 部署後健康檢查 (集成閉環: 部署≠服務健康) ───
-            sleep 5
-            GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
-            WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://esggo.co || echo 000)
-            echo "[health] gateway=$GW web=$WEB"
+            # 輪詢等待: 服務剛起可能未 ready, 重試至 200 或上限 (最佳實踐: 避免競態)
+            GW=000; WEB=000
+            for i in $(seq 1 12); do
+              sleep 5
+              GW=$(curl -s -m 8 -o /dev/null -w '%{http_code}' https://omniagent.esggo.co/health || echo 000)
+              WEB=$(curl -s -m 8 -o /dev/null -w '%{http_code}' http://localhost:8788/health || echo 000)
+              echo "[health #$i] gateway=$GW web=$WEB"
+              if [ "$GW" = "200" ] && [ "$WEB" = "200" ]; then break; fi
+            done
             if [ "$GW" != "200" ] || [ "$WEB" != "200" ]; then
               echo "[FAIL] post-deploy health check: gateway=$GW web=$WEB"
               exit 1

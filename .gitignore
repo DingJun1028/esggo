@@ -301,3 +301,4 @@ apps/tencentdb-memory/.env
 
 # CLI node_modules
 cli/*/node_modules/
+firebase-service-account.json

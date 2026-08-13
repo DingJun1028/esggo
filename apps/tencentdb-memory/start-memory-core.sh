@@ -34,7 +34,7 @@ if [[ -n "$MEMORY_CORE_GATEWAY_API_KEY" ]]; then
 fi
 
 CONTAINER=tdai-memory-core
-NETWORK=tdai-memory-stack
+NETWORK=host
 
 # 创建共享网络（幂等）
 if ! $DOCKER network inspect "$NETWORK" >/dev/null 2>&1; then
@@ -99,7 +99,9 @@ memory:
     timeoutMs: 5000
   storeBackend: sqlite
   embedding:
-    provider: none
+    provider: ollama
+    baseUrl: "${MEMORY_LLM_BASE_URL}"
+    model: "nomic-embed-text"
 
 # ── Skill 模块 ──
 skill:
@@ -124,7 +126,6 @@ YAML
 info "启动 memory-core (image=$MEMORY_CORE_IMAGE, port=$MEMORY_CORE_PORT)"
 $DOCKER run -d --name "$CONTAINER" \
   --network "$NETWORK" \
-  --network-alias memory-core \
   -p "${MEMORY_CORE_PORT}:8420" \
   -v "${MEMORY_CORE_VOLUME}:/data/tdai-memory" \
   -v "$CORE_CONFIG_FILE:/data/config/tdai-gateway.yaml:ro" \

@@ -27,7 +27,12 @@ export interface IComponentCore {
   /** 刻印時間戳 (ISO-8601) */
   readonly timestamp: string;
   /** 證據佐證庫 (可變數據區，用以鏈結 5T 證明) */
-  evidence: Record<string, unknown>[];
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 export type BlueprintType = 'LIVE_BROADCAST' | 'DESIGNATED_URL_BROADCAST';

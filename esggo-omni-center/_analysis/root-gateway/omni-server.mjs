@@ -49,7 +49,13 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const GROQ_API_KEY   = process.env.GROQ_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY;
+
+if (!GATEWAY_KEY) {
+  console.error('[OmniGateway] CRITICAL: GATEWAY_KEY environment variable is required. Starting without it would compromise security. Exiting.');
+  process.exit(1);
+}
+
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -404,7 +410,7 @@ app.get('/models', (_, res) => res.json({
 app.get('/skills', (_req, res) => {
   res.json({
     total: SKILL_REGISTRY.length,
-    source: 'OmniAgent Open Source + Google Jules → ESGGO OmniAgent',
+    source: 'OmniAgent Open Source + OmniJules → ESGGO OmniAgent',
     skills: SKILL_REGISTRY.map(s => ({
       ...s,
       description: `ESG Domain: ${s.esgDomain} | 5T Tag: ${s.fiveT} | Origin: ${s.origin}`,
@@ -602,7 +608,7 @@ app.post('/stream', requireAuth, aiLimiter, async (req, res) => {
   res.end();
 });
 
-// POST /omni-jules — OmniJules self-healing (Google Jules lineage)
+// POST /omni-jules — OmniJules self-healing (OmniJules lineage)
 app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
   const { failureReason, sourceTaskId, context } = req.body;
   if (!failureReason) return res.status(400).json({ error: 'failureReason required' });
@@ -614,7 +620,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
     id: genId('jules'),
     taskType: 'omni_jules_heal',
     title: `[OmniJules 萬能果因] ${failureReason.slice(0, 60)}`,
-    prompt: `你是 OmniJules（前身：Google Jules），執行萬能果因協議。\n\n故障原因：${failureReason}\n上下文：${context || '無'}\n\n請分析並提出修復方案。`,
+    prompt: `你是 OmniJules（前身：OmniJules），執行萬能果因協議。\n\n故障原因：${failureReason}\n上下文：${context || '無'}\n\n請分析並提出修復方案。`,
     failureReason,
     inputData: context,
   };
@@ -627,7 +633,7 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
 
     res.json({
       jules_version: '1.0.0-esggo',
-      origin: 'Google Jules → OmniJules (ESGGO Adapted)',
+      origin: 'OmniJules → OmniJules (ESGGO Adapted)',
       karmaProtocol: { phase1: '覺察與導向', phase2: '轉化與顯化', phase3: '確信與進化' },
       healingReport: aiResult.content,
       hash_lock: hash,

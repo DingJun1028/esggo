@@ -218,17 +218,19 @@ export interface IApiResult<T> {
 // --- Universal Translator (萬能即時翻譯) Domain Types ---
 // canonical 源: esggo/shared/types.ts → 經 scripts/export-shared-types.js
 // 生成各 consumer 的 types/generated/esggo-shared.d.ts (雙向 TS 終始矩陣)
+// 語言碼矩陣: esggo/shared/lang-matrix.mjs → 經 scripts/sync-lang-matrix.mjs (執行期與型別雙向同步)
 
 /** 翻譯引擎識別 (5T 可溯源 X-OA-Engine) */
 export enum TranslateEngine {
   GOOGLE_GTX = 'google-gtx',
   LIBRETRANSLATE = 'libretranslate',
   MYMEMORY = 'mymemory',
+  OLLAMA = 'ollama',
   PASSTHROUGH = 'passthrough',
   FALLBACK_ORIGIN = 'fallback-origin',
 }
 
-/** 支援語碼 (zh-TW 為繁中展示名, 內部規範為 zh-CN) */
+/** 支援語碼 (zh-TW 為繁中展示名, 內部規範為 zh-CN; 完整 union 見 lang-matrix) */
 export type LanguageCode =
   | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
   | 'en' | 'ja' | 'ko' | 'es' | 'fr';
@@ -278,6 +280,43 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+  /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
+  context?: Array<{ src: string; tgt?: string }>;
+}
+
+// --- STT → 雙語字幕契約 (語音轉字幕場景, 鎖定繁中↔英文雙向) ---
+// 消費端 apps/universal-translator/stt_client.mjs 依賴 ISpeechToSubtitleResult
+// 終始矩陣: 任一端需求 → 回饋 canonical → 重跑 scripts/export-shared-types.js → 全端同步
+
+/** 雙語配對 (鎖定 zh-TW↔en, 禁其他) */
+export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
+
+/** /transcribe 請求契約 (音訊由 multipart 帶入, 此處僅描述 metadata) */
+export interface ISpeechToSubtitleRequest {
+  /** 語言提示 (鎖定雙向, 禁其他) */
+  languageHint?: 'zh-TW' | 'en';
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+  /** 講者標籤 (5T 溯源) */
+  speaker?: string;
+}
+
+/** STT 辨識 + 即時雙向翻譯的合併結果 (stt_client.mjs 產出) */
+export interface ISpeechToSubtitleResult {
+  /** 原始辨識文字 */
+  text: string;
+  /** STT 偵測語 (鎖定雙向) */
+  detected: 'zh-TW' | 'en';
+  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  translation: string;
+  /** 翻譯目標語 */
+  target: 'zh-TW' | 'en';
+  /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
+  engine: string;
+  /** 是否命中快取 */
+  cached: boolean;
+  /** 溯源追蹤碼 */
+  trace?: string;
 }
 
 /** 全域全端全量雙向 TS 架構終始矩陣錨點 (全 consumer 共享同一份契約) */
@@ -285,4 +324,41 @@ export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';
   generator: 'scripts/export-shared-types.js';
   consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
+
+// ===== 萬能即時雙語字幕撥放器 · 三元一體 (Zoom 線上會議場景) 領域契約 =====
+// 三元: 載入(source) + 撥放(playback) + 字幕(caption) 同一頁; 來源支援 檔案/網址/Zoom 會議 三態
+export type PlayerSourceKind = 'file' | 'url' | 'zoom';
+
+/** 播放器來源聯合 (繁中英碼終始矩陣雙向同步) */
+export type IPlayerSource =
+  | { kind: 'file'; file: File }
+  | { kind: 'url'; url: string }
+  | { kind: 'zoom'; displayMedia: MediaStream };
+
+/** Zoom 線上會議中繼資料 */
+export interface IZoomMeeting {
+  /** Zoom 會議號 (選填, 僅作展示) */
+  meetingId?: string;
+  /** 會議原文語言 (對齊 LanguageCode) */
+  sourceLang: LanguageCode;
+  /** 是否為線上直播中 */
+  isLive: boolean;
+}
+
+/** 撥放器運行態 (三元一體狀態機) */
+export interface IPlayerState {
+  sourceKind: PlayerSourceKind;
+  isPlaying: boolean;
+  isCaptioning: boolean;
+  lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
+}
+
+
+export interface ISecondBrainNote {
+  id: string;
+  title: string;
+  tags: string[];
+  source_origin: string;
+  sync: 'mirror' | 'up';
 }

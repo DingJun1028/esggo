@@ -210,6 +210,7 @@ export enum TranslateEngine {
   GOOGLE_GTX = 'google-gtx',
   LIBRETRANSLATE = 'libretranslate',
   MYMEMORY = 'mymemory',
+  OLLAMA = 'ollama',
   PASSTHROUGH = 'passthrough',
   FALLBACK_ORIGIN = 'fallback-origin',
 }
@@ -258,6 +259,34 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+}
+
+export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
+
+export interface ISpeechToSubtitleRequest {
+  /** 語言提示 (鎖定雙向, 禁其他) */
+  languageHint?: 'zh-TW' | 'en';
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+  /** 講者標籤 (5T 溯源) */
+  speaker?: string;
+}
+
+export interface ISpeechToSubtitleResult {
+  /** 原始辨識文字 */
+  text: string;
+  /** STT 偵測語 (鎖定雙向) */
+  detected: 'zh-TW' | 'en';
+  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  translation: string;
+  /** 翻譯目標語 */
+  target: 'zh-TW' | 'en';
+  /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
+  engine: string;
+  /** 是否命中快取 */
+  cached: boolean;
+  /** 溯源追蹤碼 */
+  trace?: string;
 }
 
 export interface IOmniTypeMatrix {

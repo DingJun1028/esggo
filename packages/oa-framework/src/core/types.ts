@@ -15,7 +15,8 @@ export type SubFrameId =
   | 'tencent-mem' // 騰訊 Agent 記憶 (TencentDB Agent Memory)
   | 'openmontage' // OpenMontage 本地 AI 影片生產 (Ollama+FFmpeg+HyperFrames) — UNVERIFIED: repo 404
   | 'omniroute'  // OmniRoute 統一 AI 閘道 (237+ providers, localhost:20128/v1) — UNVERIFIED: repo 本輪無法核實
-  | 'turbovec';  // TurboVec/PotatoRAG 本地 4-bit RAG 檢索層 (Ollama+nomic-embed-text) — UNVERIFIED: google/turbovec 回 404
+  | 'turbovec'  // TurboVec/PotatoRAG 本地 4-bit RAG 檢索層 (Ollama+nomic-embed-text) — UNVERIFIED: google/turbovec 回 404
+  | 'oneringai'; // OneRingAI 統一多供應商 agent 庫 (@everworker/oneringai) — adapter, scaffold 待安裝啟用
 
 /** 5T 協議狀態 (來自 soul.md) */
 export type T5State = {
@@ -31,7 +32,12 @@ export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
   readonly timestamp: number;
-  evidence: Record<string, unknown>;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+    [key: string]: any;
+  };
 }
 
 /** 子框架統一適配器介面 */
@@ -68,6 +74,8 @@ export interface OATask {
   /** 指定子框架 (不指定則由 Orchestrator 路由) */
   routeTo?: SubFrameId[];
   requireT5?: boolean;
+  /** 深貫鏈輸入 (chain 模式下上一跳產出會注入此欄) */
+  input?: string;
 }
 
 /** 任務結果 (帶 5T 狀態與 Hash Lock) */

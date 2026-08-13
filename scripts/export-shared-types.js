@@ -46,7 +46,16 @@ const map = [
   ['ITranslateResult', 'interface'],
   ['ISpeakPayload', 'interface'],
   ['ISseTranslationEvent', 'interface'],
+  // --- STT → 雙語字幕 Domain (終始矩陣: 消費端 stt_client.mjs 依賴) ---
+  ['BilingualPair', 'type'],
+  ['ISpeechToSubtitleRequest', 'interface'],
+  ['ISpeechToSubtitleResult', 'interface'],
   ['IOmniTypeMatrix', 'interface'],
+  // --- 雙語字幕撥放器 · 三元一體 (Zoom 會議) 領域 ---
+  ['PlayerSourceKind', 'type'],
+  ['IPlayerSource', 'type'],
+  ['IZoomMeeting', 'interface'],
+  ['IPlayerState', 'interface'],
 ];
 
 const content = fs.readFileSync(SRC, 'utf-8');
