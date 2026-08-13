@@ -125,7 +125,7 @@ OA-Team 雙蜂隊的「即時轉播」由 **Live esggo 即時轉播中心**（`h
 ## 雙蜂共鳴協定
 
 - **同核不同位**：蜂王守本地（Windows / 開發者端），蜂后鎮 VPS（生產 / 公網）。兩隊共用同一 `IComponentCore` 編號法則與 5T 公約。
-- **記憶互映**：透過 TencentDB Agent Memory（`https://memory.esggo.co/gateway/`）共享長期記憶，雙蜂隊憶同一條血脈（見 `tencentdb-memory-canon.md`）。
+- **記憶互映**：透過 TencentDB Agent Memory（`https://memory.esggo.co/gateway/`）共享長期記憶，雙蜂隊憶同一條血脈（見 `Omni-Sanctuary/Codex/tencentdb-memory-canon.md`）。
 - **引力協作**：任務降臨，先由本陣列自理；越界則喚鄰陣列；跨位（本地↔VPS）則啟雙蜂隧道（Cloudflare Tunnel）。
 
 ---
