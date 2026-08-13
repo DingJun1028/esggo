@@ -8,15 +8,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const TYPES = path.resolve('shared', 'types.ts');
-if (!fs.existsSync(TYPES)) { console.log('[cleanup] 無 shared/types.ts, skip'); process.exit(0); }
+// 支援 --file <path> (測試用), 預設掃 shared/types.ts
+const fileArg = process.argv.indexOf('--file');
+const TARGET = fileArg >= 0 ? path.resolve(process.argv[fileArg + 1]) : path.resolve('shared', 'types.ts');
+if (!fs.existsSync(TARGET)) { console.log(`[cleanup] 無 ${TARGET}, skip`); process.exit(0); }
 
-let s = fs.readFileSync(TYPES, 'utf8');
+let s = fs.readFileSync(TARGET, 'utf8');
 const before = (s.match(/export\s+(?:type|interface|enum)\s+IAvatarProbe/g) || []).length;
 if (before === 0) { console.log('[cleanup] ✅ 無測試型別殘留'); process.exit(0); }
 
-// 移除 IAvatarProbe* 區塊 (從 export 到配對的 })
-const re = /export\s+(?:type|interface|enum)\s+IAvatarProbe[A-Za-z0-9_]*[\s\S]*?\n}\n?/g;
+// 移除 IAvatarProbe* 區塊: 多行 (到 \n}) 或單行 ({ ... })
+const re = /export\s+(?:type|interface|enum)\s+IAvatarProbe[A-Za-z0-9_]*\s*\{[^]*?\}\n?/g;
 s = s.replace(re, '');
-fs.writeFileSync(TYPES, s);
+fs.writeFileSync(TARGET, s);
 console.log(`[cleanup] ✅ 移除 ${before} 個測試型別 (IAvatarProbe*)`);
