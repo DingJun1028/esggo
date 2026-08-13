@@ -1661,6 +1661,14 @@ vault/
 - vault 說明：AGENTS.md「研究權限」+「s 考量」兩章節
 - commit `833d3d047`（14 筆記 + 安全閘腳本 + AGENTS.md）
 
+## 26.11 萬能知識分身 (零時差學習迴路)（2026-08-13）
+- **設計**：結點即孵化 → 分身即吸收 → 反饋即投向本體，零時差
+- **四相**：Hatch(任一結點孵化一分身) / Absorb(跟一知識點, 正確+錯誤變體皆保留) / Feedback(吸收完反饋 MOC+soul) / Project(瞬間投向本體 ontology, 經 sync-vault-types 零時差)
+- **實證**：`scripts/knowledge-avatar.mjs` 掃 vault → 孵化 **137 分身**（正確 128 / 錯誤 9 皆存），全數 absorbed + projected_to_ontology
+- **registry**：`vault/Agents/context/.avatar-registry.json`（機讀, gitignored）
+- **強化正確知識學習**：錯誤變體不刪除，當下即獲最完整內容；投向本體後主應用零時差取用
+- vault 筆記：`vault/Agents/context/OmniKnowledgeAvatar.md`
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
