@@ -16,7 +16,9 @@ import { execSync } from 'node:child_process';
 const VAULT = path.resolve('vault');
 const REG = path.join(VAULT, 'Agents/context/.avatar-registry.json');
 const TDAI_CORE = process.env.TDAI_MEMORY_URL || 'http://127.0.0.1:8420';
-const TDAI_KEY = process.env.TDAI_GATEWAY_API_KEY || '';
+const TDAI_KEY = process.env.TDAI_GATEWAY_API_KEY
+  || (fs.existsSync('.admin-key') ? fs.readFileSync('.admin-key', 'utf8').trim() : '')
+  || (fs.existsSync('/opt/esggo/apps/tencentdb-memory/.admin-key') ? fs.readFileSync('/opt/esggo/apps/tencentdb-memory/.admin-key', 'utf8').trim() : '');
 const SVC = process.env.TDAI_SERVICE_ID || 'default';
 
 const WRITE_PATHS = [
