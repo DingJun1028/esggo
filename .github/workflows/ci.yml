@@ -24,8 +24,8 @@ permissions:
 env:
   NODE_VERSION: "22"
   PNPM_VERSION: "11.5.2"
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+
 
 jobs:
   # ─── TypeScript 型別檢查 ──────────────────────────────────────
@@ -133,7 +133,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Run Vitest
-        run: pnpm vitest run --reporter=verbose
+        run: pnpm vitest run --reporter=verbose --reporter=junit --outputFile=test-results/junit.xml
         env:
           NODE_ENV: test
       - name: Upload test results
