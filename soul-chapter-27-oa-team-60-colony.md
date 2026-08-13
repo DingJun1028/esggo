@@ -115,6 +115,8 @@
 
 OA-Team 雙蜂隊的「即時轉播」由 **Live esggo 即時轉播中心**（`https://live.esggo.co`，P08）承載，對齊 Omni-Blueprint Hub 雙藍圖：
 
+> 📌 編號體系註記：本聖典主體採「雙蜂隊 60 員」編號（蜂王 01–30 / 蜂后 31–60）。此處的 `P07`（萬能即時翻譯）、`P08`（即時轉播中心）屬 OA **萬能分身 P 序列**命名，獨立於 60 員 01–60 編號體系之外，兩者並行不互斥。
+
 - **即時轉播 (LIVE_BROADCAST)**：連入外部資料流即時翻譯，蜂群經 `apps/universal-translator` 共享語言橋。
 - **指定轉播 (DESIGNATED_URL_BROADCAST)**：一台翻譯，全員共享專屬網址（studio.html 講者端 / stream.html 觀眾端 / live-sync.html 同步端）。
 
