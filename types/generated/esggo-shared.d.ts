@@ -259,6 +259,8 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+  /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
+  context?: Array<{ src: string; tgt?: string }>;
 }
 
 export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
@@ -277,12 +279,16 @@ export interface ISpeechToSubtitleResult {
   text: string;
   /** STT 偵測語 (鎖定雙向) */
   detected: 'zh-TW' | 'en';
-  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  /** 即時翻譯對向 (單語場景): zh-TW→en 或 en→zh-TW */
   translation: string;
   /** 翻譯目標語 */
   target: 'zh-TW' | 'en';
+  /** 平行翻譯多語場景: 語碼 → 譯文 (translateToMany 輸出) */
+  translations?: Partial<Record<LanguageCode, string>>;
   /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
   engine: string;
+  /** 平行翻譯多語場景: 語碼 → 引擎 (translateToMany 輸出) */
+  engines?: Partial<Record<LanguageCode, string>>;
   /** 是否命中快取 */
   cached: boolean;
   /** 溯源追蹤碼 */
@@ -293,4 +299,33 @@ export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';
   generator: 'scripts/export-shared-types.js';
   consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
+
+export type PlayerSourceKind = 'file' | 'url' | 'zoom';
+
+export type IPlayerSource =
+  | { kind: 'file'; file: File }
+
+export interface IZoomMeeting {
+  /** Zoom 會議號 (選填, 僅作展示) */
+  meetingId?: string;
+  /** 會議原文語言 (對齊 LanguageCode) */
+  sourceLang: LanguageCode;
+  /** 是否為線上直播中 */
+  isLive: boolean;
+}
+
+export interface IPlayerState {
+  sourceKind: PlayerSourceKind;
+  isPlaying: boolean;
+  isCaptioning: boolean;
+  lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
+}
+
+export interface ISecondBrainNote {
+  id: string;
+  title: string;
+  tags: string[];
+  source_origin: string;
+  sync: 'mirror' | 'up';
 }
