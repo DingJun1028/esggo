@@ -6,7 +6,7 @@
 // 以 text/event-stream 即時轉推思考片段（對齊 5T hashLock 溯源）。
 // ============================================================
 import { subscribeBusEvent } from '@/lib/bus';
-import type { IBusEvent } from '@/lib/bus';
+import type { IBusEvent } from '@/lib/omni-agent-bus';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,14 +30,19 @@ export async function GET(request: Request): Promise<Response> {
       };
 
       const unsub = subscribeBusEvent(topic, (ev: IBusEvent) => {
-        const payload = (ev && ev.payload) || ev;
-        if (runId && payload?.runId !== runId) return; // 過濾特定 run
+        const payload = ((ev && ev.payload) || ev) as {
+          runId?: string;
+          step?: string;
+          content?: string;
+          [k: string]: unknown;
+        };
+        if (runId && payload.runId !== runId) return; // 過濾特定 run
         send({
           type: 'thought',
           agentId,
-          runId: payload?.runId,
-          step: payload?.step,
-          content: payload?.content,
+          runId: payload.runId,
+          step: payload.step,
+          content: payload.content,
         });
       });
 

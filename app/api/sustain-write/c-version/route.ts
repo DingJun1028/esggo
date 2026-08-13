@@ -71,7 +71,11 @@ export async function POST(request: NextRequest) {
           chapters: serializedChapters,
           generatedAt: report.generatedAt,
         },
-        markdown: reportToMarkdown(report as { companyName: string; version?: string; generatedAt?: string }),
+        markdown: reportToMarkdown({
+          companyName: report.companyName,
+          version: (report as { version?: string }).version ?? '1.0.0',
+          generatedAt: report.generatedAt ?? new Date().toISOString(),
+        }),
       });
     }
 
@@ -85,7 +89,10 @@ export async function POST(request: NextRequest) {
         chapters: serializedChapters,
         generatedAt: report.generatedAt,
       },
-      html: reportToHtml(report as { companyName: string; version?: string; generatedAt?: string }),
+      html: reportToHtml({
+        companyName: report.companyName,
+        version: (report as { version?: string }).version ?? '1.0.0',
+      }),
     });
   } catch (error) {
     return jsonErrorInternal(error, 'INTERNAL_ERROR', 500);

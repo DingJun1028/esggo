@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
 import { getNCBClient } from '@/lib/ncb-client';
-import type { SearchResult } from '@/types/notes';
+import type { SearchResult, NoteWithTags } from '@/types/notes';
 
 import type { Pool } from 'pg';
 
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const ncb = getNCBClient();
 
     const notes = await Promise.all(
-      noteIds.map(async (noteId: string): Promise<SearchResult | null> => {
+      noteIds.map(async (noteId: string): Promise<NoteWithTags | null> => {
         try {
           return await ncb.getNoteWithTags(noteId);
         } catch {
@@ -73,10 +73,9 @@ export async function POST(request: NextRequest) {
     // 合併結果
     const results: SearchResult[] = vectorResults.rows
       .map((row: VectorRow, index: number) => ({
-        note: notes[index],
+        note: notes[index]!,
         similarity: row.similarity,
-      }))
-      .filter((r: SearchResult): r is SearchResult => r.note !== null);
+      }));
 
     return jsonResponse({
       data: results,
