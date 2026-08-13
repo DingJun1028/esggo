@@ -43,3 +43,9 @@ access: public-research
 ## 實作
 - `scripts/knowledge-avatar.mjs`：掃 vault → 孵化分身 → 標吸收狀態 → 反饋 MOC → 標投向本體
 - registry：`vault/Agents/context/.avatar-registry.json`（機讀，非人讀）
+
+## ABC 三線強化（2026-08-13 全作）
+- **A. 持續孵化 (cron)**：Hermes cron `omni-knowledge-avatar-daily` 每日 05:00 自動跑 avatar + tdai-sync + vault-access-guard，第二大腦新增結點即零時差孵化反饋
+- **B. 蜂寫層同步 (TencentDB)**：`scripts/tdai-memory-sync.mjs` 讀 registry → 同步分身狀態進 OA 蜂寫層；VPS 內網可連 8420，端點未知時優雅降級（本地不丟）
+- **C. canonical 萃取**：avatar 吸收完萃取型別變體 → `.avatar-types.d.ts` → `sync-vault-types.ts` 接管進 `shared/types.ts`（零時差投向本體）
+- 三線閉環：結點出現 → 分身學完 → 本體更新 → 蜂寫層同步，全程無人工中轉
