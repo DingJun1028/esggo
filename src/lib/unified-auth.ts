@@ -6,7 +6,9 @@
  */
 
 import { NextRequest } from 'next/server';
-import { adminDb } from './firebase-admin';
+import { getAdminApp } from './firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 import { jsonError } from './api-utils';
 import type { ErrorCodeKey } from '@esggo/errors';
 
@@ -41,7 +43,6 @@ const DEFAULT_AUTH_CONFIG: AuthConfig = {
 // ── 認證類別 ───────────────────────────────────────────────────────
 
 export class UnifiedAuth {
-  private static firebaseAdmin = adminDb;
   
   /**
    * 統一認證入口
@@ -108,7 +109,7 @@ export class UnifiedAuth {
       const token = authHeader.substring(7);
       
       // 驗證 Firebase ID Token
-      const decodedToken = await this.firebaseAdmin.auth().verifyIdToken(token);
+      const decodedToken = await getAuth(getAdminApp()).verifyIdToken(token);
       
       // 檢查用戶權限
       if (config.requiredLevel === 'admin') {
@@ -197,11 +198,7 @@ export class UnifiedAuth {
    */
   private static async checkAdminRole(userId: string): Promise<boolean> {
     try {
-      const userDoc = await this.firebaseAdmin
-        .firestore()
-        .collection('users')
-        .doc(userId)
-        .get();
+      const userDoc = await getFirestore(getAdminApp()).collection('users').doc(userId).get();
       
       if (!userDoc.exists) return false;
       
