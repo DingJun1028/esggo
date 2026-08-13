@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { adminDb } from '@/lib/firebase-admin';
 
 type SurveyRow = {
@@ -120,7 +121,7 @@ export async function GET() {
       if (!snap) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const rows = snap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+      const rows = snap.docs.map((doc: QueryDocumentSnapshot) => ({ id: doc.id, ...doc.data() }));
       return NextResponse.json({ ok: true, rows }, { status: 200 });
     }
 

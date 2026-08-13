@@ -1,5 +1,6 @@
 import { getAdminApp } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 export const runtime = 'nodejs';
 
@@ -45,7 +46,7 @@ export async function GET() {
       return NextResponse.json({ ok: true, rows: getMemoryRows() }, { status: 200 });
     }
     const snap = await collection.orderBy('createdAt', 'desc').limit(200).get();
-    const rows = snap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+    const rows = snap.docs.map((doc: QueryDocumentSnapshot) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json({ ok: true, rows }, { status: 200 });
   } catch (error) {
     console.error('[API] /api/admin/resources GET error:', error);
