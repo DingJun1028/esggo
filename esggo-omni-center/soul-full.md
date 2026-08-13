@@ -1669,6 +1669,13 @@ vault/
 - **強化正確知識學習**：錯誤變體不刪除，當下即獲最完整內容；投向本體後主應用零時差取用
 - vault 筆記：`vault/Agents/context/OmniKnowledgeAvatar.md`
 
+## 26.12 ABC 三線強化 (萬能知識分身閉環)（2026-08-13）
+- **A. 持續孵化 (cron)**：Hermes cron `omni-knowledge-avatar-daily` 每日 05:00 跑 avatar+tdai-sync+vault-access-guard
+- **B. 蜂寫層同步 (TencentDB)**：`scripts/tdai-memory-sync.mjs` 讀 registry → 同步分身進 OA 蜂寫層；端點未知優雅降級（本地不丟）
+- **C. canonical 萃取**：avatar 吸收完萃取型別 → `.avatar-types.d.ts` → `sync-vault-types.ts` 進 `shared/types.ts`
+- 三線閉環：結點出現→分身學完→本體更新→蜂寫層同步，零時差無人工中轉
+- 實證：avatar 孵化 137 分身 + 萃取 `ISecondBrainNote` 等型別；tdai-sync 本地降級（VPS 內網才可連）
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
