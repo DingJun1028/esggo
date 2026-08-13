@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { UploadCloud, FileCheck, ShieldAlert, Loader2, Link } from 'lucide-react';
 
 /** 證據庫佐證元件 (mod-src-vault-0001) — Liquid Glass 拖曳上傳 */
@@ -12,14 +12,10 @@ export default function EvidenceUploader({
   const [isDragging, setIsDragging] = useState(false);
   const [status, setStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
   const [evidenceUrl, setEvidenceUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDrop = useCallback(
-    async (e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragging(false);
-      const file = e.dataTransfer.files[0];
-      if (!file) return;
-
+  const processFile = useCallback(
+    async (file: File) => {
       setStatus('uploading');
       try {
         // 真實上傳至 Evidence Vault (MinIO S3 相容, 免費算立自託)
@@ -40,19 +36,59 @@ export default function EvidenceUploader({
     [onUploadComplete]
   );
 
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        await processFile(file);
+      }
+    },
+    [processFile]
+  );
+
+  const handleFileChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        await processFile(file);
+      }
+    },
+    [processFile]
+  );
+
+  const handleClick = useCallback(() => {
+    if (status !== 'uploading' && status !== 'success') {
+      fileInputRef.current?.click();
+    }
+  }, [status]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if ((e.key === 'Enter' || e.key === ' ') && status !== 'uploading' && status !== 'success') {
+      e.preventDefault();
+      fileInputRef.current?.click();
+    }
+  }, [status]);
+
   return (
     <div className="w-full">
       <label className="text-sm font-medium text-cyan-50 mb-2 block">
         佐證憑證 (Evidence Vault) <span className="text-amber-400">*</span>
       </label>
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="點擊或拖曳上傳佐證憑證"
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`relative border-2 border-dashed rounded-2xl p-8 transition-all duration-500 flex flex-col items-center justify-center backdrop-blur-xl bg-black/20 ${
+        className={`cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 relative border-2 border-dashed rounded-2xl p-8 transition-all duration-500 flex flex-col items-center justify-center backdrop-blur-xl bg-black/20 ${
           isDragging
             ? 'border-cyan-400 bg-cyan-500/10 scale-[1.02] shadow-neon-cyan'
             : 'border-white/10 hover:border-white/30 hover:bg-white/5'
@@ -60,10 +96,18 @@ export default function EvidenceUploader({
           status === 'success' ? 'border-emerald-500/50 shadow-neon-emerald' : ''
         }`}
       >
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          accept=".pdf,.jpg,.jpeg,.png"
+          tabIndex={-1}
+        />
         {status === 'idle' && (
           <>
             <UploadCloud size={48} className="text-cyan-500/50 mb-4 animate-pulse" />
-            <p className="text-sm text-gray-300">拖曳發票、水電單或 ISO 證書至此</p>
+            <p className="text-sm text-gray-300">點擊或拖曳發票、水電單或 ISO 證書至此</p>
             <p className="text-xs text-gray-500 mt-1 font-mono">
               支援 PDF, JPG, PNG (上限 10MB)
             </p>
