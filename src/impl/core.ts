@@ -186,7 +186,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   }
 
   async ingress(event: IBusEvent) {
-    const valid = !!event.hashLock && !!(event.evidence as any)?.hash;
+    const valid = !!event.hashLock && !!event.evidence?.hash;
     if (!valid) {
       this.onMartialLaw('evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({
@@ -218,7 +218,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
 
   // egress implementation with validation & freeze
   async egress(event: IBusEvent) {
-    const valid = !!event.hashLock && !!(event.evidence as any)?.hash;
+    const valid = !!event.hashLock && !!event.evidence?.hash;
     if (!valid) {
       this.onMartialLaw('egress evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({

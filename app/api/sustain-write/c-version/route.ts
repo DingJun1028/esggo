@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
           chapters: serializedChapters,
           generatedAt: report.generatedAt,
         },
-        markdown: reportToMarkdown(report as any),
+        markdown: reportToMarkdown(report as { companyName: string; version?: string; generatedAt?: string }),
       });
     }
 
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         chapters: serializedChapters,
         generatedAt: report.generatedAt,
       },
-      html: reportToHtml(report as any),
+      html: reportToHtml(report as { companyName: string; version?: string; generatedAt?: string }),
     });
   } catch (error) {
     return jsonErrorInternal(error, 'INTERNAL_ERROR', 500);
