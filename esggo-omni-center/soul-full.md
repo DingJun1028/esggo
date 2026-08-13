@@ -1629,6 +1629,14 @@ vault/
 - **貫+通證明** `SyncUpProbe.md`(sync:up) → `sync-vault-types.ts --apply` → `ISecondBrainNote` 真回流 canonical → 重跑鏡像→36 型別含新條目（雙向閉環全綠）
 - **通 hook** `.githooks/pre-commit` 加 30 號質控蜂：vault 筆記必含 source_origin+co_authors，本機跑通 10 筆記 ✓
 - commit: `4c79af851`（深貫廣通全實體化）
+
+## 26.6 外部運行時 · DeerFlow 2.0 角色（2026-08-13 實證）
+- **定位**：基於 LangGraph 的 AI Agent 平台，OA-Team 技術陣列的「深度研究 / 代碼執行」後援，非替代
+- **VPS 拓撲**（已實證 `docker ps`）：nginx(2026→443) + gateway(8001) + frontend(3000) + redis(6379)，網域 `deerflow.esggo.co`
+- **功能**：深度研究(Serper/Tavily/Jina/InfoQuest) / 代碼執行 / 網頁瀏覽 / 多通道通訊(Redis 橋接)
+- **集成現狀**：與 OA-Team 尚無程式碼級集成；規劃 `DeerFlowAdapter` 以 `DEERFLOW_GATEWAY_URL` 為 backend 委派研究任務 + 5T 標記
+- **實證**：容器全 Up + `/api/health` 回 `not_authenticated`(活著+受保護) + CSRF/Auth 防護健全（生產級）
+- vault 筆記：`vault/Agents/context/DeerFlowRuntime.md`
 - 雙向同步閉環：`vault(sync:up) → sync-vault-types.ts → shared/types.ts → sync-types-to-vault.ts → TypeMatrix.md → Obsidian 可視化`
 
 ## 26.6 5T 驗證
