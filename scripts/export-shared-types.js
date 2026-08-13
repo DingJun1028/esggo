@@ -56,6 +56,8 @@ const map = [
   ['IPlayerSource', 'type'],
   ['IZoomMeeting', 'interface'],
   ['IPlayerState', 'interface'],
+  // --- 第二大腦知識網 (Second Brain / Knowledge Garden) 領域 ---
+  ['ISecondBrainNote', 'interface'],
 ];
 
 const content = fs.readFileSync(SRC, 'utf-8');
