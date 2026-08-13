@@ -24,3 +24,6 @@ SMART_ROUTER_VERSION = "2.0.0-beta.1"
 # 觀測/日誌 (logpush 為帳號級設定，需在 Cloudflare Dashboard 啟用)
 [observability]
 enabled = true
+
+[build]
+command = "npx --yes pnpm install --frozen-lockfile"

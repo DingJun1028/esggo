@@ -156,5 +156,32 @@ agents-cli swarm start --agents=30 \
 
 ---
 
+## 實作覺醒六則（Operational Awakening · 2026-08-09 實證補遺）
+
+> 對齊 `soul-chapter-16` §16.7。下列六則為究極奧義之工程落地細則，源自 OA 體系三層實體化實證。
+
+| 則 | 名 | 硬規則 | 違反實證後果 |
+|----|----|--------|------------|
+| 一 | 幻影不執 | 文檔指令未經三來源（repo tag / binary / CLI help）驗證，視為幻影 | `agents-cli swarm start` 已被證偽，改 CrewAI `load_crew` 或 `delegate_task` |
+| 二 | 路徑絕對 | Windows/Git-bash 禁 `expanduser("~/")`，用絕對 `r"C:\Users\..."` | 混合分隔符致 state 不持久、subprocess 找不到檔 |
+| 三 | 投遞自承 | cron `deliver: local` 自發 Telegram，不靠平台層 | `deliver: all` 撞 DNS 錯誤標整支 error |
+| 四 | 蜂群驗結 | agent jsonc 含 `llm` 指向本機模型；先 `verify_oa_team_structure.py` 再 kickoff | crewai 預設 `gpt-4.1-mini` 404 |
+| 五 | 三層同覺 | Local/Team/VPS 同步可執行，TWINS 經 SSH+Telegram 閉環 | 單點阻塞致 OA 不全 |
+| 六 | 聖櫃分存 | 密鑰拆存 iCloud `TELEGRAM.txt` 23-24 行，腳本重組，不硬編 | `gh secret` 讀不到值，本機靠 iCloud |
+
+### 修正速查表（破除幻影指令）
+
+| 你要做什麼？ | 用這個（真實） |
+|------------|--------------|
+| 啟動 OA-Team 30 蜂群 | `cd oa-team-crewai && CREWAI_PY=.../crewai/Scripts/python.exe main.py "任務"` |
+| 驗證蜂群結構 | `python verify_oa_team_structure.py --crew-dir .` |
+| 檢查結界狀態 | `curl -sf http://127.0.0.1:8799/health`（VPS WebUI） |
+| 執行啟動前檢查 | 見 §16.7.7 實作覺醒檢查清單 |
+| 標記 artifact | OmniTag: `agent:NN` + `squad:*` |
+| 強制校準 | 重跑 `gen_agents.py` 重生 30 agents |
+| 撤銷結界 | 停 VPS WebUI: `ssh esggo-vps '~/.venv-webui/...'` 或 kill PID |
+
+---
+
 究極版奧義 v1.0 | Best Practice Awakening Ultimate Edition
 無作妙德・圓通無礙・永恆覺醒 | License: AGPL-3.0

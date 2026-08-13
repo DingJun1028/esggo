@@ -52,6 +52,21 @@ curl http://localhost:8125/           # Panel HTML
 
 容器狀態：`docker ps --format '{{.Names}} {{.Status}}'` 應見三個 `tdai-*` healthy。
 
+### 經 nginx / Cloudflare Tunnel 層驗證
+
+本地直接打容器埠（上一步）與經 nginx `:80` 是兩條路徑。nginx 依 `server_name memory.esggo.co` 匹配虛擬主機，
+**本地驗證 nginx 層時必須帶 `Host` 標頭**，否則會落到 default server 而得到 404/500（非部署故障，純測試方法問題）：
+
+```bash
+# 必須帶 Host header 才會匹配 memory.esggo.co 的 server block
+curl -H "Host: memory.esggo.co" http://localhost:80/gateway/health   # {"status":"ok",...}
+curl -H "Host: memory.esggo.co" http://localhost:80/                 # Panel HTML
+
+# 線上 (經 Cloudflare Tunnel, Host 由 Tunnel 自動帶入, 無須手動):
+curl https://memory.esggo.co/gateway/health     # {"status":"ok",...}
+curl https://memory.esggo.co/                   # Panel HTML
+```
+
 ## 5. 生產部署 (VPS + Cloudflare Tunnel)
 
 專案已內建最佳實踐部署（不裸開端口，經 Tunnel 終止 TLS）：
@@ -92,6 +107,7 @@ Docker: tdai-memory-core + tdai-memory-hub + tdai-proxy
 - **腳本無法執行** → `chmod +x start-*.sh _lib.sh`
 - **`$'\r': command not found`** → `sed -i 's/\r$//' .env`
 - **鏡像拉取慢/超時** → `nohup PULL=1 ./start-all.sh &` 背景跑，再 `docker ps` 輪詢
+- **本地 `curl localhost:80/gateway/health` 得 404 / `localhost:80/` 得 500** → 這不是故障。nginx 依 `server_name memory.esggo.co` 選虛擬主機，用 `localhost` 當 Host 會落到 default server。改帶 `Host` 標頭：`curl -H "Host: memory.esggo.co" http://localhost:80/gateway/health` 即回 200。線上經 Cloudflare Tunnel 會自動帶正確 Host，不受影響。
 
 ---
 *源自 TencentCloud/TencentDB-Agent-Memory，由 ESG-GO OA-Team 整合至 esggo 聖櫃。*

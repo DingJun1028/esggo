@@ -67,7 +67,7 @@ if [[ -z "${MEMORY_HUB_PROXY_PUBLIC_URL+x}" ]]; then
 fi
 
 CONTAINER=tdai-memory-hub
-NETWORK=tdai-memory-stack
+NETWORK=host
 
 if ! $DOCKER network inspect "$NETWORK" >/dev/null 2>&1; then
   info "创建 docker 网络 $NETWORK"
@@ -88,8 +88,6 @@ rm_container_if_exists "$CONTAINER"
 info "启动 memory-hub (image=$MEMORY_HUB_IMAGE, panel=$PANEL_PORT knowledge=$KNOWLEDGE_PORT)"
 $DOCKER run -d --name "$CONTAINER" \
   --network "$NETWORK" \
-  --network-alias memory-hub \
-  --add-host=host.docker.internal:host-gateway \
   -p "${PANEL_PORT}:8125" \
   -p "${KNOWLEDGE_PORT}:8424" \
   -v "${PANEL_VOLUME}:/data/knowledge" \

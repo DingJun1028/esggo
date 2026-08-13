@@ -45,4 +45,37 @@ console.table(hub.getUnifiedTable().map((row: UnifiedBlueprintEntity) => ({
   Host: row.hostEmail,
   HashLock: row.hashLock.substring(0, 16) + '...'
 })));
+console.log('\n=== 外掛系統演示 (Hub Plugin System v0.7) ===\n');
+
+// 1. 綁定 PluginContext (broadcast/log 由本地 stub 模擬, 真實環境接 monitor-server)
+hub.bindPluginContext(
+  (src, event) => console.log('  [broadcast]', src, '→', (event as { type: string }).type),
+  (level, msg) => console.log('  [log:' + level + ']', msg)
+);
+
+// 2. 註冊 3 個示範外掛 (皆過 5T Gate)
+import { EntropyReducerPlugin } from './plugins/entropy-reducer.js';
+import { ConduitBridgePlugin } from './plugins/conduit-bridge.js';
+import { SoulCanonVerifierPlugin } from './plugins/soul-canon-verifier.js';
+
+const ok1 = hub.plugins.register(new EntropyReducerPlugin());
+const ok2 = hub.plugins.register(new ConduitBridgePlugin());
+const ok3 = hub.plugins.register(new SoulCanonVerifierPlugin());
+console.log(' 註冊結果:', ok1 && ok2 && ok3 ? '✅ 3 外掛全數通過 5T Gate' : '❌ 部分被拒');
+
+// 3. 啟用全部
+await hub.plugins.enable('entropy-reducer');
+await hub.plugins.enable('conduit-bridge');
+await hub.plugins.enable('soul-canon-verifier');
+
+// 4. 觸發一筆廣播 → 外掛自動反應 (熵減 / 跨蜂 / 聖典校驗)
+hub.pushBroadcastPayload(liveProduct, '外掛演示：永續數據已通過 ISO-14064-1 驗算。', {
+  en: 'Plugin demo: sustainability data verified.',
+  ja: 'プラグインデモ：データ検証済み。'
+});
+
+// 5. 列出註冊表 (Transparent)
+console.table(hub.plugins.list());
+console.log(' 註冊表健康:', JSON.stringify(hub.plugins.health()));
+
 console.log('\n 萬能藍圖產品運作完畢，完全符合 5T 誠信協定與萬能元件心核規範。');

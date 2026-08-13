@@ -158,7 +158,7 @@ export class AwakeningCore {
       esg_report:         `[OmniOne] ESG 報告章節已生成。5T 協議評分：真(0.9) 善(0.85) 美(0.88) 信(0.92) 通(0.87).`,
       ui_design:          `[OmniOne] UI 設計方案已完成。使用 Liquid Glass 設計語言，符合 WCAG 2.1 AA 標準。`,
       architecture:       `[OmniOne] 架構設計已完成。採用事件驅動 + 微服務模式，支援水平擴展。`,
-      bug_fix:            `[OmniOne] 已定位根因（Jules 9步協議）：觀果→立願→尋因→修因→驗因→證果完成。`,
+      bug_fix:            `[OmniOne] 已定位根因（OmniJules 9步協議）：觀果→立願→尋因→修因→驗因→證果完成。`,
       general:            `[OmniOne] 任務已處理。覺醒等級: ${this.level}. 信心度: ${(0.7 + Math.random() * 0.29).toFixed(2)}.`,
     };
     return outputs[caseType] || outputs.general;
@@ -182,7 +182,7 @@ export class AwakeningCore {
       esg_report:         '策略: 5T門控→GRI對標→ZKP封印→輸出',
       ui_design:          '策略: 需求分析→原型→設計令牌→實現',
       architecture:       '策略: C4模型→ADR決策→圖示→文檔',
-      bug_fix:            '策略: Jules 9步因果修復協議',
+      bug_fix:            '策略: OmniJules 9步因果修復協議',
       general:            '策略: 分析→規劃→執行→驗證',
     };
     return strategies[caseType];

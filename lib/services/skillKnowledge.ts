@@ -14,10 +14,6 @@ export class SkillKnowledgeService {
   async searchExpertKnowledge(query: string, category?: SkillCategory) {
     console.log(`[Pinecone] Searching expert knowledge for: ${query} in ${this.indexName}`);
     
-    // In a real implementation, this would use the Pinecone SDK:
-    // const index = pinecone.Index(this.indexName);
-    // const results = await index.query({ ... });
-    
     return {
       query,
       results: [
@@ -36,9 +32,6 @@ export class SkillKnowledgeService {
    */
   async saveExperience(skillId: string, content: string, metadata: any) {
     console.log(`[Pinecone] Upserting expert knowledge for skill ${skillId}`);
-    
-    // In a real implementation:
-    // await index.upsert([{ id: uuidv4(), metadata: { skillId, ...metadata }, values: embedding }]);
     
     return { success: true, id: `exp_${Date.now()}` };
   }

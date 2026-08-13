@@ -205,3 +205,92 @@ export interface IApiResult<T> {
   data: T;
   error?: any;
 }
+
+export enum TranslateEngine {
+  GOOGLE_GTX = 'google-gtx',
+  LIBRETRANSLATE = 'libretranslate',
+  MYMEMORY = 'mymemory',
+  OLLAMA = 'ollama',
+  PASSTHROUGH = 'passthrough',
+  FALLBACK_ORIGIN = 'fallback-origin',
+}
+
+export type LanguageCode =
+  | 'auto' | 'zh' | 'zh-CN' | 'zh-TW' | 'zh-Hant'
+
+export interface ITranslateRequest {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  /** 多語平行翻譯目標 (即時轉播場景) */
+  targets?: LanguageCode[];
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+}
+
+export interface ITranslateResult {
+  text: string;
+  /** 引擎識別字串 (對齊 TranslateEngine 枚舉值, 但以 string 寬鬆容許運行期動態引擎) */
+  engine: string;
+  cached: boolean;
+  version?: string;
+}
+
+export interface ISpeakPayload {
+  text: string;
+  /** 來源語碼 (運行期允許任意 string, 引擎層再做規範化) */
+  from?: string;
+  /** 目標語碼 (運行期允許任意 string) */
+  to?: string;
+  targets?: LanguageCode[];
+  room?: string;
+  speaker?: string;
+}
+
+export interface ISseTranslationEvent {
+  text: string;
+  translations: Partial<Record<LanguageCode, string>>;
+  engines?: Partial<Record<LanguageCode, string>>;
+  /** 單語場景的引擎識別字串 (對齊 TranslateEngine) */
+  engine?: string;
+  cached?: boolean;
+  trace?: string;
+  room?: string;
+  speaker?: string;
+}
+
+export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
+
+export interface ISpeechToSubtitleRequest {
+  /** 語言提示 (鎖定雙向, 禁其他) */
+  languageHint?: 'zh-TW' | 'en';
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+  /** 講者標籤 (5T 溯源) */
+  speaker?: string;
+}
+
+export interface ISpeechToSubtitleResult {
+  /** 原始辨識文字 */
+  text: string;
+  /** STT 偵測語 (鎖定雙向) */
+  detected: 'zh-TW' | 'en';
+  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  translation: string;
+  /** 翻譯目標語 */
+  target: 'zh-TW' | 'en';
+  /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
+  engine: string;
+  /** 是否命中快取 */
+  cached: boolean;
+  /** 溯源追蹤碼 */
+  trace?: string;
+}
+
+export interface IOmniTypeMatrix {
+  canonical: 'esggo/shared/types.ts';
+  generator: 'scripts/export-shared-types.js';
+  consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}

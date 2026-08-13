@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     if (tool === 'ask_jules') {
       return jsonResponse({
         success: true,
-        data: "Jules: " + args.prompt,
+        data: "OmniJules: " + args.prompt,
         metadata: { timestamp: Date.now(), trustScore: 100 }
       });
     }

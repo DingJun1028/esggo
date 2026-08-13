@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* OMNI ESG Reports Center — Liquid Glass 4D 動態玻璃質感
+     對齊《永續報告書架構補強建議》深空底色 + 霓虹光暈規範 */
+  .liquid-glass-container {
+    @apply relative overflow-hidden rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-white/20 hover:bg-white/10;
+  }
+
+  .liquid-glass-button {
+    @apply backdrop-blur-2xl bg-white/10 border border-white/20 shadow-[0_0_15px_rgba(34,211,238,0.2)] transition-all duration-300;
+  }
+}
+
 @layer base {
   :root {
     --bg: #F8FAFC;

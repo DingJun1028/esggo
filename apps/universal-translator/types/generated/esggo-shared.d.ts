@@ -210,6 +210,7 @@ export enum TranslateEngine {
   GOOGLE_GTX = 'google-gtx',
   LIBRETRANSLATE = 'libretranslate',
   MYMEMORY = 'mymemory',
+  OLLAMA = 'ollama',
   PASSTHROUGH = 'passthrough',
   FALLBACK_ORIGIN = 'fallback-origin',
 }
@@ -258,10 +259,61 @@ export interface ISseTranslationEvent {
   trace?: string;
   room?: string;
   speaker?: string;
+  /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
+  context?: Array<{ src: string; tgt?: string }>;
+}
+
+export type BilingualPair = 'zh-TW-en' | 'en-zh-TW';
+
+export interface ISpeechToSubtitleRequest {
+  /** 語言提示 (鎖定雙向, 禁其他) */
+  languageHint?: 'zh-TW' | 'en';
+  /** 房間隔離 (SSE 多房間) */
+  room?: string;
+  /** 講者標籤 (5T 溯源) */
+  speaker?: string;
+}
+
+export interface ISpeechToSubtitleResult {
+  /** 原始辨識文字 */
+  text: string;
+  /** STT 偵測語 (鎖定雙向) */
+  detected: 'zh-TW' | 'en';
+  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  translation: string;
+  /** 翻譯目標語 */
+  target: 'zh-TW' | 'en';
+  /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
+  engine: string;
+  /** 是否命中快取 */
+  cached: boolean;
+  /** 溯源追蹤碼 */
+  trace?: string;
 }
 
 export interface IOmniTypeMatrix {
   canonical: 'esggo/shared/types.ts';
   generator: 'scripts/export-shared-types.js';
   consumers: string[]; // 各端 types/generated/esggo-shared.d.ts 路徑
+}
+
+export type PlayerSourceKind = 'file' | 'url' | 'zoom';
+
+export type IPlayerSource =
+  | { kind: 'file'; file: File }
+
+export interface IZoomMeeting {
+  /** Zoom 會議號 (選填, 僅作展示) */
+  meetingId?: string;
+  /** 會議原文語言 (對齊 LanguageCode) */
+  sourceLang: LanguageCode;
+  /** 是否為線上直播中 */
+  isLive: boolean;
+}
+
+export interface IPlayerState {
+  sourceKind: PlayerSourceKind;
+  isPlaying: boolean;
+  isCaptioning: boolean;
+  lastCaption?: { src: string; translations: Partial<Record<LanguageCode, string>> };
 }
