@@ -70,6 +70,10 @@ omniagent-gateway/package-lock.json
 # VPS gateway (esggo-vps-gateway) — installed deps only
 vps/node_modules/
 
+# e2e-k1 playwright sandbox — installed deps + run artifacts
+e2e-k1/node_modules/
+e2e-k1/runs/
+
 # Local AI tool configs
 .gemini/
 .jules/
