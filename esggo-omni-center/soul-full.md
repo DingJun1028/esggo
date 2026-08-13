@@ -1646,7 +1646,12 @@ vault/
 - vault 筆記：`vault/Agents/context/DevinOptimizationSystem.md`
 - 待驗證：`.devin/scripts` 實際跑通（工具活化）
 
-- 雙向同步閉環：`vault(sync:up) → sync-vault-types.ts → shared/types.ts → sync-types-to-vault.ts → TypeMatrix.md → Obsidian 可視化`
+## 26.8 全量推進三線資產化（2026-08-13 · 最佳實踐）
+- **A. Devin 工具活化** ✅ 3 腳本全跑通（test-coverage-monitor 產 coverage-report / any-type-eliminator 掃 18 any / doc-code-sync 掃 JSDoc 缺口）；修 doc-code-sync.py 三引號 syntax error + 補 @vitest/coverage-v8 依賴；commit `86359c81e`
+- **B. Stash 清理** ✅ 兩個過時 stash 全 drop（pre-ff 雜項 + universal-translator feat 已進 main），無用戶工作遺失
+- **C. DeerFlow 實跑** ⚠️ 受阻（安全正確）：Better Auth + CSRF + 內網隔離，`DEER_FLOW_INTERNAL_AUTH_TOKEN` 不適用 user endpoint，admin 密碼未知 → 需提供密碼/docker exec/重置才能實跑研究任務
+- **D. MCP 疊加態勢** 📋 技能層可疊加（claude-to-deerflow + oa-* + obsidian），MCP 層尚無 server 註冊（~/.hermes/mcp.json 不存在）
+- vault 筆記：`vault/Agents/context/ToolingStackActivation.md`
 
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
