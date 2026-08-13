@@ -47,7 +47,7 @@ allowBuilds:
   protobufjs: false
   sharp: true
   sqlite3: false
-  tesseract.js: set this to true or false
+  tesseract.js: true
   unrs-resolver: false
 
 minimumReleaseAgeExclude:
