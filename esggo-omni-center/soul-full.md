@@ -1677,6 +1677,14 @@ vault/
 - **深入實證**：B 線 VPS 內網 `91 分身全數同步成功` 進 TencentDB (`/v3/conversation/add`)；C 線 avatar 投影型別經 `sync-vault-types.ts --apply` 真寫入 `shared/types.ts` (測試型別驗證後已清)
 - 寫入端點解謎：`agentmemory v3` 協議 = `POST /v3/conversation/add` (messages array) + `x-tdai-service-id` + Bearer key
 
+## 26.13 融會貫通傳承迭代（2026-08-13）
+- **五相螺旋**：Inherit(繼承前日) → Hatch(孵化新結點) → Write(蜂寫層) → Guard(憑證閘) → Clean(回歸)
+- **讀寫雙向閉環**：`oa-memory-recall.mjs` 經 `/v3/conversation/query` 讀回知識分身 (B線補齊)
+- **VPS cron 載體**：`avatar-daily.sh` 每日 05:00 跑五相，91 分身全數同步 + recall 讀回驗證
+- **自迭代**：舊記憶每日被重新讀取/吸收/投射，非靜態存檔
+- 批次: f5f74ecbc(recall) / ab3980af1(cleanup) / 41764c89e(cron) / cc97b6ed4(gitignore)
+- vault 筆記：`vault/Agents/context/OmniKnowledgeInheritance.md` + `OmniKnowledgeAvatar.md`
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
