@@ -6,6 +6,7 @@ sync: mirror
 co_authors: []
 lifecycle: active
 tags: [deerflow, langgraph, research-engine, external-runtime]
+access: public-research
 ---
 
 # DeerFlow 2.0 · 外部深度研究運行時
