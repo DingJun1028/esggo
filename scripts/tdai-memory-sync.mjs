@@ -20,10 +20,19 @@ const TDAI_KEY = process.env.TDAI_GATEWAY_API_KEY || '';
 const SVC = process.env.TDAI_SERVICE_ID || 'default';
 
 const WRITE_PATHS = [
-  `/v3/${SVC}/memory`,
-  `/v1/${SVC}/memory`,
-  `/${SVC}/memory`,
+  `/v3/conversation/add`,
+  `/v3/knowledge/create`,
 ];
+
+// 寫入格式: conversation/add 接受 messages array
+function buildBody(entry) {
+  return {
+    messages: [{
+      role: 'user',
+      content: `[avatar ${entry.node}] correct=${entry.correct} variant=${entry.variant} file=${entry.file}`,
+    }],
+  };
+}
 
 function loadReg() {
   if (!fs.existsSync(REG)) return null;
@@ -43,10 +52,7 @@ async function tryWrite(entry) {
           'x-tdai-service-id': SVC,
           Authorization: 'Bearer ' + TDAI_KEY,
         },
-        body: JSON.stringify({
-          content: `[avatar ${entry.node}] correct=${entry.correct} variant=${entry.variant}`,
-          category: 'second-brain-avatar',
-        }),
+        body: JSON.stringify(buildBody(entry)),
         signal: ctrl.signal,
       });
       clearTimeout(t);
