@@ -153,9 +153,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
       - name: Install dependencies (frozen)
         run: pnpm install --frozen-lockfile
       - name: 終始矩陣型別守門 (tsc 0-error)
