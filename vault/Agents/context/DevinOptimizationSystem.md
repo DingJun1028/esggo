@@ -6,6 +6,7 @@ sync: mirror
 co_authors: [Devin]
 lifecycle: active
 tags: [devin, wukong-meide, auto-repair, type-safety, unified-auth, optimization-system]
+access: public-research
 ---
 
 # Devin 無作妙德優化系統（.devin/）

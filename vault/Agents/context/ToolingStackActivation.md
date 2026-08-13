@@ -6,6 +6,7 @@ sync: mirror
 co_authors: [Devin]
 lifecycle: active
 tags: [devin, tooling, activation, mcp, deerflow]
+access: public-research
 ---
 
 # 工具/技能/MCP 疊加態勢（全量推進實證）

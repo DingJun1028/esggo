@@ -6,6 +6,7 @@ modified: 2026-08-13
 sync: mirror
 lifecycle: active
 tags: [moc, index, second-brain]
+access: public-research
 ---
 
 # 🗂️ OA-Team 第二大腦 · 知識地圖（MOC）
@@ -27,6 +28,7 @@ tags: [moc, index, second-brain]
 - [[BDAgenticEvicence]] — Agentic Twin Ollama + Evidence MinIO
 - [[BilingualSubtitlePlayer]] — 雙語字幕撥放器（RWD）
 - [[AStationSevenModules]] — AI Station 七模組生產線
+- [[EsggoAuditReplayGuard]] — 重播日誌鑑別法 + Cron 路由認證修補實證
 
 ## 雙生拓撲
 - 雲端助理（Hermes VPS）：讀寫 vault/Agents/ 全部
