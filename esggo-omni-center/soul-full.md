@@ -1637,6 +1637,15 @@ vault/
 - **集成現狀**：與 OA-Team 尚無程式碼級集成；規劃 `DeerFlowAdapter` 以 `DEERFLOW_GATEWAY_URL` 為 backend 委派研究任務 + 5T 標記
 - **實證**：容器全 Up + `/api/health` 回 `not_authenticated`(活著+受保護) + CSRF/Auth 防護健全（生產級）
 - vault 筆記：`vault/Agents/context/DeerFlowRuntime.md`
+## 26.7 外部優化啟發源 · Devin 無作妙德系統（2026-08-13 資產化）
+- **來源**：Devin agent 推送（commit `619c8f23a`），3810 行工具 + 規劃文檔（`.devin/` + `src/lib/unified-auth.ts`）
+- **四大維度**（與 5T 呼應）：深冠(測試覆蓋監控) / 廣通(API優化+統一認證) / 無礙(類型安全+錯誤處理) / 圓通(文檔代碼同步+自動修復)
+- **核心**：`unified-auth.ts`(Next.js 統一認證 Firebase/API Key/內部) + 6 個自動化修復腳本 + 7 個 wukong-meide 計劃
+- **集成點**：`AuthStrategy` 對映 5T `Trustworthy` 信任邊界；`auto-repair` 與 `.hermes/auto-repair/` 互補；類型安全目標與 `esggo-shared/types.ts` canonical 一致
+- **實證**：進 origin/main + root typecheck PASS（exit 0）
+- vault 筆記：`vault/Agents/context/DevinOptimizationSystem.md`
+- 待驗證：`.devin/scripts` 實際跑通（工具活化）
+
 - 雙向同步閉環：`vault(sync:up) → sync-vault-types.ts → shared/types.ts → sync-types-to-vault.ts → TypeMatrix.md → Obsidian 可視化`
 
 ## 26.6 5T 驗證
