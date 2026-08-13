@@ -5,14 +5,14 @@ function cleanCoursePayload(doc: FirebaseFirestore.QueryDocumentSnapshot) {
   const data = doc.data() as Record<string, unknown>;
   const plain = { ...data } as Record<string, unknown>;
 
-  delete (plain as any).__METHOD__;
-  delete (plain as any).__CALLBACKS__;
+  delete (plain as { __METHOD__?: unknown }).__METHOD__;
+  delete (plain as { __CALLBACKS__?: unknown }).__CALLBACKS__;
 
   return plain;
 }
 
 function asLoadableCollection(path: string) {
-  const ref = (adminDb as any).collection(path);
+  const ref = adminDb.collection(path);
   if (!ref) {
     throw new Error('Learning center storage is not configured');
   }

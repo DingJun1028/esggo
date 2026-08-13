@@ -37,7 +37,7 @@ function getMemoryRows(): SurveyRow[] {
 }
 
 function asLoadableCollection(path: string) {
-  const ref = (adminDb as any).collection(path);
+  const ref = adminDb.collection(path);
   if (!ref) {
     throw new Error('Survey storage is not configured');
   }
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const docRef = await (db as any).collection('surveys').add({
+      const docRef = await db.collection('surveys').add({
         week: payload.week,
         date: payload.date,
         topic: payload.topic,
@@ -116,7 +116,7 @@ export async function GET() {
       if (!adminDb || !adminDb.collection) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }
-      const snap = await (db as any).collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
+      const snap = await db.collection('surveys').orderBy('submittedAt', 'desc').limit(200).get();
       if (!snap) {
         return NextResponse.json({ ok: false, message: 'Survey storage is not configured' }, { status: 500 });
       }

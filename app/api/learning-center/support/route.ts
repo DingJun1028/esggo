@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 
 function asLoadableCollection(path: string) {
-  const ref = (adminDb as any).collection(path);
+  const ref = adminDb.collection(path);
   if (!ref) {
     throw new Error('Learning center storage is not configured');
   }
