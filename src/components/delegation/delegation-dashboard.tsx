@@ -144,6 +144,7 @@ export function DelegationDashboard() {
           <button
             onClick={() => setError(null)}
             className="ml-2 text-red-500 hover:text-red-700"
+            aria-label="關閉錯誤訊息"
           >
             ×
           </button>
