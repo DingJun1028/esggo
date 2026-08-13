@@ -1685,6 +1685,15 @@ vault/
 - 批次: f5f74ecbc(recall) / ab3980af1(cleanup) / 41764c89e(cron) / cc97b6ed4(gitignore)
 - vault 筆記：`vault/Agents/context/OmniKnowledgeInheritance.md` + `OmniKnowledgeAvatar.md`
 
+## 26.14 可觀測 + 自愈 (2026-08-13)
+- **指標萃取**：`avatar-metrics.mjs` 解析 avatar.log → `avatar-metrics.json` (hatched/synced/failed/recall/healthy)
+- **狀態回流**：`avatar-moc-sync.mjs` 寫回 `00-Index.md` 知識分身日報行 (OA 蜂群可讀每日健康)
+- **VPS 七相**：Inherit→Hatch→Write(retry 3)→Guard→Clean→Metrics→MOC
+- **自愈**：tdai-sync 失敗自動 retry 3 次 (間隔 5s)
+- **實證**：metrics synced=95 healthy=true，MOC 狀態行寫入成功
+- 批次: c0d94edf3(metrics) / c1094cbf6(moc) / 3b78d2c6c(fix metrics sync 解析)
+- 技能: `oa-knowledge-avatar` 已含可觀測+自愈段
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
