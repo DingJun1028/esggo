@@ -25,7 +25,7 @@ const m = {
 };
 for (const l of lines) {
   if (l.includes('[Avatar] 孵化')) m.hatched = Number(l.match(/(\d+) 分身/)?.[1] || 0);
-  if (l.includes('全數同步成功')) m.synced = Number(l.match(/(\d+) 分身/)?.[1] || 0);
+  if (l.includes('全數同步成功')) m.synced = Number(l.match(/成功 \(?(\d+)/)?.[1] || 0);
   if (l.includes('降級') || l.includes('失敗')) { m.syncFailed = Number(l.match(/(\d+) 失敗/)?.[1] || 0); }
   if (l.includes('[VaultGuard] ✅')) m.guardOk = true;
   if (l.includes('[cleanup] ✅')) m.cleaned = true;
