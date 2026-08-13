@@ -132,11 +132,11 @@ async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker 
   if (Array.isArray(targets) && targets.length) {
     const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
     /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
-    const out = { text, translations: r.translations, engines: r.engines, trace, room: room || '', speaker: speaker || 'studio' };
+    const out = { text, translations: r.translations || {}, engines: r.engines || {}, trace, room: room || '', speaker: speaker || 'studio' };
     broadcastTranslation(out);
-    const tgt0a = /** @type {Record<string, string>} */ (r.translations)[String(targets[0])] || '';
+    const tgt0a = /** @type {Record<string, string>} */ (r.translations || {})[String(targets[0])] || '';
     recordUtterance({ room, src: text, tgt: tgt0a, from: String(from), to: String(targets[0]) });
-    return { ...out, engine: Object.values(r.engines)[0] || 'n/a', cached: false };
+    return { ...out, engine: Object.values(r.engines || {})[0] || 'n/a', cached: false };
   }
   const rec = await translateDetailed(text, String(from), String(to), ctxHint);
   /** @type {Record<string, string>} */
@@ -326,10 +326,10 @@ const server = http.createServer(async (req, res) => {
     // 多語平行翻譯 (即時轉播場景)
     if (Array.isArray(targets) && targets.length) {
       const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
-      const firstEngine = Object.values(r.engines)[0] || 'n/a';
-      const tgt0b = /** @type {Record<string, string>} */ (r.translations)[String(targets[0])] || '';
+      const firstEngine = Object.values(r.engines || {})[0] || 'n/a';
+      const tgt0b = /** @type {Record<string, string>} */ (r.translations || {})[String(targets[0])] || '';
       recordUtterance({ room, src: text, tgt: tgt0b, from: String(from), to: String(targets[0]) });
-      broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
+      broadcastTranslation({ text, translations: r.translations || {}, engines: r.engines || {}, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
       return writeJson(res, { ...r, version: APP_VERSION }, {
         'X-OA-Engine': String(firstEngine), 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
       });
