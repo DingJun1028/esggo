@@ -1,6 +1,6 @@
 import { db } from '@lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { jsonResponse, jsonError, validateParams } from '@lib/api-utils';
+import { jsonResponse, jsonError, validateParams, jsonErrorInternal } from '@lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -111,6 +111,6 @@ ${prompt}`;
     });
   } catch (error) {
     console.error('RAG Query Error:', error);
-    return jsonError('RAG_QUERY_FAILED', (error as Error).message);
+    return jsonErrorInternal(error, 'RAG_QUERY_FAILED');
   }
 }

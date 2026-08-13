@@ -116,7 +116,7 @@ ${topProjects.join('\n')}
     return jsonResponse({ trend: trendText, provider });
   } catch (error: unknown) {
     console.error('OmniOne Trend API Error:', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError('INTERNAL_ERROR', `[OmniOne 錯誤] 無法生成趨勢預測：${message}`);
+    console.error('[api] INTERNAL_ERROR:', error);
+    return jsonError('INTERNAL_ERROR');
   }
 }

@@ -70,7 +70,7 @@ export async function GET() {
 
   } catch (error: unknown) {
     console.error('Village Data Error:', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError('INTERNAL_ERROR', message);
+    console.error('[api] INTERNAL_ERROR:', error);
+    return jsonError('INTERNAL_ERROR');
   }
 }
