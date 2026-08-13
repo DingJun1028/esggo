@@ -199,12 +199,12 @@ function parseGlossaryEnv() {
   }
   return map;
 }
-function applyGlossary(text) {
+function applyGlossary(/** @type {string} */ text) {
   let t = text;
   for (const [/** @type {string} */ k, /** @type {string} */ v] of Object.entries(GLOSSARY)) { if (k) t = t.split(k).join(v); }
   return t;
 }
-function postProcess(text) {
+function postProcess(/** @type {string} */ text) {
   if (!text) return text;
   let t = text;
   t = t.replace(/\*/g, '').replace(/\[[^\]]*\]/g, '').trim();
@@ -276,7 +276,7 @@ export async function translateText(text, from, to) {
  * @param {string} text
  * @param {string} from
  * @param {string[]} targets
- * @returns {Promise<import('./types/generated/esggo-shared.d.ts').ISpeechToSubtitleResult>}
+ * @returns {Promise<{translations: Record<string, string>, engines: Record<string, string>}>}
  */
 export async function translateToMany(text, from, targets) {
   const normMap = new Map();
@@ -285,12 +285,14 @@ export async function translateToMany(text, from, targets) {
     if (!normMap.has(key)) normMap.set(key, key);
   }
   const results = await Promise.all(
-    [...normMap.keys()].map(async (n) => [normMap.get(n), await translateDetailed(text, from, n)])
+    [...normMap.keys()].map(async (/** @type {string} */ n) => [normMap.get(n), await translateDetailed(text, from, n)])
   );
+  /** @type {Record<string, string>} */
   const out = {};
+  /** @type {Record<string, string>} */
   const engines = {};
   for (const pair of results) { const t = pair[0]; const r = pair[1]; out[t] = r.text; engines[t] = r.engine; }
   return { translations: out, engines };
 }
 
-export function hashOf(s) { return crypto.createHash('sha256').update(s).digest('hex'); }
+export function hashOf(/** @type {string} */ s) { return crypto.createHash('sha256').update(s).digest('hex'); }
