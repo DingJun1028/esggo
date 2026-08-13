@@ -279,12 +279,16 @@ export interface ISpeechToSubtitleResult {
   text: string;
   /** STT 偵測語 (鎖定雙向) */
   detected: 'zh-TW' | 'en';
-  /** 即時翻譯對向: zh-TW→en 或 en→zh-TW */
+  /** 即時翻譯對向 (單語場景): zh-TW→en 或 en→zh-TW */
   translation: string;
   /** 翻譯目標語 */
   target: 'zh-TW' | 'en';
+  /** 平行翻譯多語場景: 語碼 → 譯文 (translateToMany 輸出) */
+  translations?: Partial<Record<LanguageCode, string>>;
   /** 引擎識別字串 (5T 溯源: stt:whisper + ollama:<model>) */
   engine: string;
+  /** 平行翻譯多語場景: 語碼 → 引擎 (translateToMany 輸出) */
+  engines?: Partial<Record<LanguageCode, string>>;
   /** 是否命中快取 */
   cached: boolean;
   /** 溯源追蹤碼 */

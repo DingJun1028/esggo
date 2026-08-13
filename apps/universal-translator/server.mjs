@@ -134,7 +134,8 @@ async function doTranslateAndBroadcast({ text, from, to, targets, room, speaker 
     /** @type {import('./types/generated/esggo-shared.d.ts').ISseTranslationEvent} */
     const out = { text, translations: r.translations, engines: r.engines, trace, room: room || '', speaker: speaker || 'studio' };
     broadcastTranslation(out);
-    recordUtterance({ room, src: text, tgt: r.translations[targets[0]] || '', from, to: targets[0] });
+    const tgt0a = /** @type {Record<string, string>} */ (r.translations)[String(targets[0])] || '';
+    recordUtterance({ room, src: text, tgt: tgt0a, from: String(from), to: String(targets[0]) });
     return { ...out, engine: Object.values(r.engines)[0] || 'n/a', cached: false };
   }
   const rec = await translateDetailed(text, String(from), String(to), ctxHint);
@@ -258,7 +259,8 @@ const server = http.createServer(async (req, res) => {
     const MAX_PROXY_BYTES = 50 * 1024 * 1024; // 50MB 上限
     const PROXY_TIMEOUT_MS = 20000;
     try {
-      const raw = req.url.split('?')[1] ? new URLSearchParams(req.url.split('?')[1]).get('url') || '' : '';
+      const rawUrl = req.url || '';
+      const raw = rawUrl.split('?')[1] ? new URLSearchParams(rawUrl.split('?')[1]).get('url') || '' : '';
       const target = new URL(raw, 'http://x');
       if (!/^https?:$/.test(target.protocol)) { res.writeHead(400); return res.end('invalid protocol'); }
       // SSRF 防護: 阻內網/link-local/metadata
@@ -291,7 +293,7 @@ const server = http.createServer(async (req, res) => {
         res.write(Buffer.from(value));
       }
       res.end();
-    } catch (e) {
+    } catch (/** @type {any} */ e) {
       res.writeHead(500); return res.end('proxy fail: ' + e.message);
     }
   }
@@ -325,7 +327,8 @@ const server = http.createServer(async (req, res) => {
     if (Array.isArray(targets) && targets.length) {
       const r = await translateToMany(text, String(from), /** @type {string[]} */ (targets));
       const firstEngine = Object.values(r.engines)[0] || 'n/a';
-      recordUtterance({ room, src: text, tgt: r.translations[targets[0]] || '', from, to: targets[0] });
+      const tgt0b = /** @type {Record<string, string>} */ (r.translations)[String(targets[0])] || '';
+      recordUtterance({ room, src: text, tgt: tgt0b, from: String(from), to: String(targets[0]) });
       broadcastTranslation({ text, translations: r.translations, engines: r.engines, trace: hashOf(text).slice(0, 16), room, speaker: 'rest' });
       return writeJson(res, { ...r, version: APP_VERSION }, {
         'X-OA-Engine': String(firstEngine), 'X-OA-Cached': 'false', 'X-OA-Trace': hashOf(text).slice(0, 16),
