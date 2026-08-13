@@ -74,7 +74,6 @@ export interface IComponentCore<T = unknown> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
   };
   readonly lifecycle_events: ReadonlyArray<ComponentLifecycleEntry>;
   readonly data: T;
