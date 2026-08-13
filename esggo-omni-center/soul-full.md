@@ -1674,7 +1674,8 @@ vault/
 - **B. 蜂寫層同步 (TencentDB)**：`scripts/tdai-memory-sync.mjs` 讀 registry → 同步分身進 OA 蜂寫層；端點未知優雅降級（本地不丟）
 - **C. canonical 萃取**：avatar 吸收完萃取型別 → `.avatar-types.d.ts` → `sync-vault-types.ts` 進 `shared/types.ts`
 - 三線閉環：結點出現→分身學完→本體更新→蜂寫層同步，零時差無人工中轉
-- 實證：avatar 孵化 137 分身 + 萃取 `ISecondBrainNote` 等型別；tdai-sync 本地降級（VPS 內網才可連）
+- **深入實證**：B 線 VPS 內網 `91 分身全數同步成功` 進 TencentDB (`/v3/conversation/add`)；C 線 avatar 投影型別經 `sync-vault-types.ts --apply` 真寫入 `shared/types.ts` (測試型別驗證後已清)
+- 寫入端點解謎：`agentmemory v3` 協議 = `POST /v3/conversation/add` (messages array) + `x-tdai-service-id` + Bearer key
 
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
