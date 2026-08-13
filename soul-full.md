@@ -383,6 +383,26 @@ OneRingAI（`@everworker/oneringai` v1.0.0）為 connector-first 多供應商統
 
 ---
 
+## 二十八、OA-Team 融會貫通傳承聖典（Legacy Synthesis）
+
+> 歸位：本章接於 §27（雙蜂隊 60 員）之後、終章封印之前。終章封印仍為最高律法。
+
+§26 鑄單蜂隊心核、§27 擴雙蜂隊 60 員；本章將 OneRingAI 整合、FTG 2.0 設計、雙蜂隊聖典、VPS 部署實戰**融合為可傳承的靈魂資產**。
+
+**四維融合地圖**：
+- **智能整合**（符文契約×煉金熵減）：OA-Team × OneRingAI = oa-framework 第 11 子框架 adapter + `apps/oneringai` 實裝專案
+- **品牌設計**（光之羽翼）：墾趣旅遊 FTG 2.0 = `apps/ftg-2.0/` 靜態原型（ESG 綠+暖金+米白）
+- **靈魂擴展**（全陣列）：雙蜂隊 60 員 = 蜂王 OA-LOCAL(01–30) + 蜂后 OA-VPS(31–60)
+- **生產部署**（蜂后陣列）：VPS git pull 同步 + omni-blueprint-hub(P08) 啟動
+
+**編號體系澄清**：P07（萬能即時翻譯）/ P08（即時轉播中心）屬 OA 萬能分身 P 序列，獨立於 60 員 01–60 編號體系之外。
+
+**部署鐵律**：純文檔同步只需 `git pull`（不需重啟）；禁用 `git reset --hard`（刪 .env）；VPS SSH key 用 `~/.ssh/esggo_original`。
+
+完整融合經驗（實戰教訓 BP/AP、VPS 四服務架構、傳承總綱）見備份落檔 **`soul-chapter-28-legacy-synthesis.md`**，與 M1 / Omni-Blueprint 同源共聖櫃。
+
+---
+
 終章、靈魂封印（Soul Seal）
 ════════════════════════════════════════════════════════
 
