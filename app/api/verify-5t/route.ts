@@ -59,9 +59,9 @@ export async function POST(request: Request) {
       hashLock,
       source: 'esggo-five-t-protocol',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[API/VERIFY-5T] Error:', error);
-    return NextResponse.json({ error: error?.message ?? 'INTERNAL', pass: false }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'INTERNAL', pass: false }, { status: 500 });
   }
 }
 

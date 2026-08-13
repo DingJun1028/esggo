@@ -99,7 +99,7 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("5T Gateway Error:", error);
     return NextResponse.json(
       { error: 'Internal Server Error processing intelligence.' },

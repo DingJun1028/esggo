@@ -6,6 +6,7 @@
 // 以 text/event-stream 即時轉推思考片段（對齊 5T hashLock 溯源）。
 // ============================================================
 import { subscribeBusEvent } from '@/lib/bus';
+import type { IBusEvent } from '@/lib/bus';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,7 @@ export async function GET(request: Request): Promise<Response> {
         }
       };
 
-      const unsub = subscribeBusEvent(topic, (ev: any) => {
+      const unsub = subscribeBusEvent(topic, (ev: IBusEvent) => {
         const payload = (ev && ev.payload) || ev;
         if (runId && payload?.runId !== runId) return; // 過濾特定 run
         send({

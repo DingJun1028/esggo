@@ -1,4 +1,7 @@
 import { jsonResponse, jsonError } from '@lib/api-utils';
+
+interface GeminiPart { text?: string }
+interface GeminiContent { parts?: GeminiPart[] }
 import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
@@ -89,8 +92,8 @@ ${topProjects.join('\n')}
       trendText = steps
         .filter((s) => s.type === 'model_output')
         .flatMap((s) => s.content ?? [])
-        .flatMap((c: any) => c.parts ?? [])
-        .map((p: any) => p.text ?? '')
+        .flatMap((c: GeminiContent) => c.parts ?? [])
+        .map((p: GeminiPart) => p.text ?? '')
         .join('')
         .trim();
     } else {
