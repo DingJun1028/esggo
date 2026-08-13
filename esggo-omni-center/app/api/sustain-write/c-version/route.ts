@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { assembleCVersionReport, reportToHtml, reportToMarkdown, getAvailableCompanies } from '@lib/sustain-write';
-import { jsonResponse, jsonError } from '@lib/api-utils';
+import { jsonResponse, jsonError, jsonErrorInternal } from '@lib/api-utils';
 import type { ReportChapter } from '@lib/sustain-write/omni-tag';
 
 interface CVersionReport {
@@ -87,6 +87,6 @@ export async function POST(request: NextRequest) {
       html: reportToHtml(report),
     });
   } catch (error) {
-    return jsonError('INTERNAL_ERROR', (error as Error).message || '報告生成失敗', 500);
+    return jsonErrorInternal(error, 'INTERNAL_ERROR', 500);
   }
 }

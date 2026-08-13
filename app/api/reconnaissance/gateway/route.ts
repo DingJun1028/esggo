@@ -102,7 +102,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("5T Gateway Error:", error);
     return NextResponse.json(
-      { error: "Internal Server Error processing intelligence.", details: error.message },
+      { error: 'Internal Server Error processing intelligence.' },
       { status: 500 }
     );
   }

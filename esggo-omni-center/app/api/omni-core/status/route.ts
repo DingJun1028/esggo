@@ -15,7 +15,7 @@ export async function GET(): Promise<Response> {
     return apiSuccess(status);
   } catch (error) {
     return apiInternalError(
-      error instanceof Error ? error.message : 'Failed to get OmniCore status'
+      'Failed to get OmniCore status'
     );
   }
 }

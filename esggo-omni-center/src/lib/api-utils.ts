@@ -35,6 +35,20 @@ export function jsonError(
 }
 
 /**
+ * 5T Transparent — 內部錯誤統一截斷。
+ * 不在回應中洩漏原始 error.message（避免資訊洩漏），僅於伺服器端 console.error 留存供排查。
+ * catch 區應改用此函式取代 jsonError('INTERNAL_ERROR', error.message)。
+ */
+export function jsonErrorInternal(
+  error: unknown,
+  errorKey: ErrorCodeKey = 'INTERNAL_ERROR',
+  status?: number
+): NextResponse {
+  console.error(`[api] ${errorKey}:`, error);
+  return jsonError(errorKey, undefined, status);
+}
+
+/**
  * Validate that all required params are present (not null/undefined/empty).
  */
 export function validateParams(
