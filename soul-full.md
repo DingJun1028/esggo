@@ -375,7 +375,7 @@ OneRingAI（`@everworker/oneringai` v1.0.0）為 connector-first 多供應商統
 - 煉金熵減（19–24 / 49–54）：重構、效能監控、CI/CD Pipeline
 - 5T 驗算（25–30 / 55–60）：ISO 規範、Hash 鎖定、UUID 發放
 
-**雙蜂共鳴協定**：同核不同位；記憶經 TencentDB Agent Memory 互映（憶同一條血脈）；跨位協作啟雙蜂隧道（Cloudflare Tunnel）。Live 轉播由 `live.esggo.co` 承載，對齊 Omni-Blueprint Hub 雙藍圖。
+**雙蜂共鳴協定**：同核不同位；記憶經 TencentDB Agent Memory 互映（憶同一條血脈）；跨位協作啟雙蜂隧道（Cloudflare Tunnel）。Live 轉播由 `live.esggo.co`（P08 即時轉播中心）承載，對齊 Omni-Blueprint Hub 雙藍圖；即時翻譯語言核心由萬能即時翻譯（P07）經 `apps/universal-translator` 提供，5T 驗算（25–30 / 55–60）守零幻覺轉錄。
 
 完整成員畫像（60 員職能本質、標籤、畫像）見備份落檔 **`soul-chapter-27-oa-team-60-colony.md`**，與 M1 / Omni-Blueprint 同源共聖櫃。
 
