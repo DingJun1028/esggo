@@ -1653,6 +1653,14 @@ vault/
 - **D. MCP 疊加態勢** 📋 技能層可疊加（claude-to-deerflow + oa-* + obsidian），MCP 層尚無 server 註冊（~/.hermes/mcp.json 不存在）
 - vault 筆記：`vault/Agents/context/ToolingStackActivation.md`
 
+## 26.10 第二大腦研究權限全開（2026-08-13）
+- **決策**：所有 vault 筆記 frontmatter 標 `access: public-research`，讀取全開（代理/使用者/外部檢索無條件可讀做研究）
+- **寫入受控不變**：`co_authors` + `source_origin` + 5T Trustworthy 禁區維持（全開僅授權讀，不棄治理）
+- **s 考量安全閘**：`scripts/vault-access-guard.mjs` 公開前掃 14 篇筆記，阻 `sk-`/`ghp_`/`AKIA`/JWT/私鑰等真憑證（實測通過，無洩漏）
+- **撤回機制**：限閱筆記改 `restricted` + `allowed_readers:`
+- vault 說明：AGENTS.md「研究權限」+「s 考量」兩章節
+- commit `833d3d047`（14 筆記 + 安全閘腳本 + AGENTS.md）
+
 ## 26.6 5T 驗證
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
