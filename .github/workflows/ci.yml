@@ -168,6 +168,11 @@ jobs:
         run: node --test test/ut.test.mjs
         env:
           NODE_ENV: test
+      - name: Run FTG-Tools test suite (node --test)
+        working-directory: apps/ftg-tools
+        run: node --test ftg-mcp/server.test.mjs fal-images.test.mjs
+        env:
+          NODE_ENV: test
 
   # ─── SonarQube CLI agentic loop (選用增強) ─────────────────────
   # 需 SONAR_TOKEN + SonarQube Cloud 組織（啟用 agentic analysis）才啟用。
