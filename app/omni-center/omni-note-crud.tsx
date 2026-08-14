@@ -34,7 +34,7 @@ function loadNotes(): Promise<NoteData[]> {
         fiveTGate: raw.fiveTGate ?? raw.five_t_gate ?? undefined,
         createdAt: typeof raw.createdAt === "number"
           ? raw.createdAt
-          : raw.created_at
+          : typeof raw.created_at === "string" || typeof raw.created_at === "number"
             ? new Date(raw.created_at).getTime()
             : Date.now(),
         };
