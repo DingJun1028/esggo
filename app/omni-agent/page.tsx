@@ -221,17 +221,28 @@ function renderMarkdown(text: string): string {
     .replace(/\n/g, '<br/>');
 }
 
-interface ApiResponse {
+interface ChatData {
+  reply?: string;
+  actions?: string[];
+}
+
+interface DispatchAgentData {
+  agent?: SubAgent;
+}
+
+interface ApiResponse<T = unknown> {
   success: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: unknown;
+  data?: T;
   reply?: string;
   actions?: string[];
   agent?: SubAgent;
   error?: string;
 }
 
-async function apiCall(type: string, payload?: Record<string, unknown>): Promise<ApiResponse> {
+async function apiCall<T = unknown>(
+  type: string,
+  payload?: Record<string, unknown>,
+): Promise<ApiResponse<T>> {
   const res = await fetch('/api/omni-agent/console', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -592,16 +603,16 @@ function ChatInterface() {
     const start = Date.now();
 
     try {
-      const res = await apiCall('chat', { input: trimmed });
+      const res = await apiCall<ChatData>('chat', { input: trimmed });
       const ms = Date.now() - start;
 
       if (res.success) {
         const aiMsg: Message = {
           id: uid(),
           role: 'assistant',
-          text: res.data.reply,
+          text: res.data?.reply ?? '',
           time: now(),
-          actions: res.data.actions,
+          actions: res.data?.actions,
           ms,
         };
         setMsgs((m) => [...m, aiMsg]);
@@ -737,11 +748,11 @@ export default function OmniAgentConsolePage() {
     const fetchData = async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall('get_stats'),
-          apiCall('get_sub_agents'),
+          apiCall<CoreStats>('get_stats'),
+          apiCall<SubAgent[]>('get_sub_agents'),
         ]);
-        if (statsRes.success) setStats(statsRes.data);
-        if (agentsRes.success) setSubAgents(agentsRes.data);
+        if (statsRes.success) setStats(statsRes.data ?? null);
+        if (agentsRes.success) setSubAgents(agentsRes.data ?? []);
       } catch (err) {
         console.warn('[OmniAgent Console] Failed to fetch initial data:', err);
       }
@@ -752,11 +763,11 @@ export default function OmniAgentConsolePage() {
     const interval = setInterval(async () => {
       try {
         const [statsRes, agentsRes] = await Promise.all([
-          apiCall('get_stats'),
-          apiCall('get_sub_agents'),
+          apiCall<CoreStats>('get_stats'),
+          apiCall<SubAgent[]>('get_sub_agents'),
         ]);
-        if (statsRes.success) setStats(statsRes.data);
-        if (agentsRes.success) setSubAgents(agentsRes.data);
+        if (statsRes.success) setStats(statsRes.data ?? null);
+        if (agentsRes.success) setSubAgents(agentsRes.data ?? []);
       } catch {
         /* silent */
       }
@@ -767,12 +778,12 @@ export default function OmniAgentConsolePage() {
 
   const handleDispatchAgent = useCallback(async (agent: SubAgent) => {
     try {
-      const res = await apiCall('dispatch_sub_agent', {
+      const res = await apiCall<DispatchAgentData>('dispatch_sub_agent', {
         agentId: agent.id,
         task: `手動派遣任務 @ ${now()}`,
       });
       if (res.success) {
-        setSubAgents((prev) => prev.map((a) => (a.id === agent.id ? res.data.agent : a)));
+        setSubAgents((prev) => prev.map((a) => (a.id === agent.id ? (res.data?.agent ?? a) : a)));
       }
     } catch (err) {
       console.warn('[OmniAgent Console] Failed to dispatch agent:', err);
@@ -808,8 +819,8 @@ export default function OmniAgentConsolePage() {
   const handleQuickCommand = useCallback(async (cmd: QuickCommand) => {
     try {
       await apiCall('quick_command', { commandId: cmd.id });
-      const statsRes = await apiCall('get_stats');
-      if (statsRes.success) setStats(statsRes.data);
+      const statsRes = await apiCall<CoreStats>('get_stats');
+      if (statsRes.success) setStats(statsRes.data ?? null);
     } catch (err) {
       console.warn('[OmniAgent Console] Quick command failed:', err);
     }
