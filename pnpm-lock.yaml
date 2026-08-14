@@ -202,6 +202,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  apps/ftg-tools: {}
+
   apps/gateway:
     dependencies:
       '@google/generative-ai':

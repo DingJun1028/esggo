@@ -16,9 +16,10 @@ overrides:
   "fast-uri": ">=3.1.5 <4"
   "fast-xml-parser": ">=5.10.1"
   "brace-expansion": ">=5.0.9"
-  # 安全修補：必須加 <major 上界，裸 ">=" 會讓 pnpm 跳到跨 major（AGENTS.md #4）
+  # 安全修補：必須加 <major 上界，裸 '>=' 會讓 pnpm 跳到跨 major（AGENTS.md #4）
   # undici 同 major patch，jsdom@29 接受 ^7.25.0，不觸及 AGENTS.md #5 的跨 major 禁令
   "undici": ">=7.29.0 <8"
+  "nanoid": ">=3.3.18 <4"
   "dompurify": ">=3.4.12 <4"
   "body-parser": ">=1.20.6 <2"
   "protobufjs": ">=7.6.5 <8"
