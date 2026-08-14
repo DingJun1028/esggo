@@ -103,6 +103,12 @@ h2 { font-size: clamp(26px, 4.5vw, 44px); margin-bottom: 18px; }
     radial-gradient(1200px 500px at 80% -10%, rgba(201,162,75,.18), transparent),
     linear-gradient(160deg, var(--cream), var(--paper));
 }
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  opacity: .22; filter: saturate(1.05);
+}
+.hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(243,237,225,.55), rgba(251,248,242,.78)); }
 .hero-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .5; z-index: 0; pointer-events: none; }
 .hero-orb-1 { width: 380px; height: 380px; background: rgba(60,110,71,.35); top: -120px; left: -100px; animation: float 14s ease-in-out infinite; }
 .hero-orb-2 { width: 300px; height: 300px; background: rgba(201,162,75,.3); bottom: -120px; right: -80px; animation: float 18s ease-in-out infinite reverse; }
@@ -141,6 +147,10 @@ h2 { font-size: clamp(26px, 4.5vw, 44px); margin-bottom: 18px; }
   border-top: 4px solid var(--green); transition: transform .25s, box-shadow .25s;
 }
 .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.card-img { padding-top: 0; overflow: hidden; }
+.card-pic { height: 180px; background-size: cover; background-position: center; border-radius: var(--radius) var(--radius) 0 0; margin: -32px -32px 22px; position: relative; box-shadow: inset 0 -20px 40px rgba(16,36,63,.25); }
+.card-pic::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(60,110,71,.05), rgba(16,36,63,.12)); }
+.card .ico { position: relative; z-index: 1; }
 .card .ico { font-size: clamp(28px, 3.5vw, 34px); margin-bottom: 14px; }
 .card h3 { font-size: clamp(18px, 2.2vw, 21px); margin-bottom: 10px; }
 .card p { font-size: clamp(14px, 1.6vw, 15px); }
