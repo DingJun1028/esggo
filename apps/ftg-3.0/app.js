@@ -77,7 +77,10 @@
     if (langBtn) langBtn.textContent = lang === 'zh' ? 'EN' : 'ZH';
     document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
   }
-  if (langBtn) langBtn.addEventListener('click', function () { lang = lang === 'zh' ? 'en' : 'zh'; applyLang(); });
+  function toggleLang() { lang = lang === 'zh' ? 'en' : 'zh'; applyLang(); }
+  if (langBtn) langBtn.addEventListener('click', toggleLang);
+  var langBtnMobile = document.getElementById('langToggleMobile');
+  if (langBtnMobile) langBtnMobile.addEventListener('click', toggleLang);
   applyLang();
 
   // 6) 表單提交
