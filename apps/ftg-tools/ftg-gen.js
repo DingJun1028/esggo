@@ -17,7 +17,8 @@ function getArg(name, def) {
 const version = getArg('version', '2.7');
 const theme = getArg('theme', 'stitch-dark');
 const lang = getArg('lang', 'zh');
-const out = getArg('out', `apps/ftg-${version}`);
+const out = getArg('out', null);
+const dir = out ? path.resolve(out) : path.resolve(__dirname, '..', 'ftg-' + version);
 
 const THEMES = {
   'stitch-dark': {
@@ -203,7 +204,6 @@ document.querySelectorAll('.stat b').forEach(function(el){sio.observe(el);});
 var f=document.querySelector('.form');if(f)f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('button');if(b){var o=b.textContent;b.textContent=lang==='zh'?'已收到 ✓':'Received ✓';setTimeout(function(){b.textContent=o;},2200);}});
 })();`;
 
-const dir = path.resolve(out);
 fs.mkdirSync(dir, { recursive: true });
 fs.mkdirSync(path.join(dir, 'assets'), { recursive: true });
 fs.writeFileSync(path.join(dir, 'index.html'), html);
