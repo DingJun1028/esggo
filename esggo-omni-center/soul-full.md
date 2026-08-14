@@ -1694,7 +1694,13 @@ vault/
 - 批次: c0d94edf3(metrics) / c1094cbf6(moc) / 3b78d2c6c(fix metrics sync 解析)
 - 技能: `oa-knowledge-avatar` 已含可觀測+自愈段
 
-## 26.6 5T 驗證
+## 27. Oracle Always Free 基礎設施研究（2026-08-14）
+- **OA_VPS 實測**: 4 OCPU / 23GB / aarch64, uptime 3d19h, load 0.5 (撐住服務)
+- **額度模糊警告**: 2026-06 Oracle 文件砍 A1 到 2OCPU/12GB, 但執行未定、控制台仍給 4/24
+- **閒置收割**: 7天滑窗 CPU<20%&網路<20%&記憶體<20% → 回收; OA_VPS 靠 omni/relay/next 常駐安全
+- **救援警示**: 開第二台 A1 會吃滿 2OCPU 上限(舊)/直接超額(新) → Trial 結束被刪; 優先單機修復
+- **Autonomous AI DB**: 2 實例免費(各 1OCPU/20GB/20session) = OmniDB 三 Schema 候選(RAG/信任帳本/生命週期)
+- **下一步**: 閒置防護腳本 + Bastion 取代雙埠 + Object Storage 備份 + [可選] Autonom...[truncated]
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
 - **Tangible**：Obsidian 可視化筆記 + wikilink 導航
