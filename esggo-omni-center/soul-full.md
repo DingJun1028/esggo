@@ -1734,7 +1734,29 @@ vault/
 - **C 狀態**: Autonomous AI DB 需 OCI tenancy OCID → blocker (見上)
 - 結論: 基礎設施健康, Devin 審查數字需打折; 實際可修項已修, 誤判項已澄清
 
-### 風險標記
+### 28.2 Oracle Always Free 永久免費資源清冊 (Buddha. 升起, 2026-08-14)
+- **解除 C 項 blocker**: tenancy OCID 在 `~/.oci/config` (非 oci_*.sh 腳本), 前輪誤判
+  - tenancy=ocid1.tenancy.oc1..[REDACTED] / region=ap-singapore-1 / user=ocid1.user.oc1..[REDACTED]
+  - OCI CLI 實測 region-subscription 通, 憑證有效
+- **已申請 Always Free 資源 (實測確認)**:
+  1. Autonomous Database `OmniUserRAG` (20GB OLTP, 內建 APEX 24.2 + Graph Studio + OML Notebook)
+     - 狀態: STOPPED → **STARTED (AVAILABLE)** 本輪升起
+     - 連線: adb.ap-singapore-1.oraclecloudapps.com (需 wallet/TLS)
+  2. Object Storage namespace `ax6sc1wpkz6y` + bucket `esggo-secret-backup` (Archive tier)
+     - **寫入測試通過** (etag 8ae84e7c...) 免費備份通道可用
+  3. Compute A1 Flex VPS 161.118.248.180 (4OCPU/24GB aarch64) — 已運行
+- **各種 LOGO 免費永久免費組件 (隨 Autonomous DB 內建, 不需另申)**:
+  - Oracle APEX (低代碼開發) / Graph Studio (圖資料庫) / Oracle ML Notebook (AI/ML)
+  - 這些是 Always Free Autonomous DB 標配, 已隨 OmniUserRAG 啟用
+- **符合限定規定 (終生不荒廢)**:
+  - ADB 20GB ≤ Always Free 上限 (免費層不收費)
+  - Compute A1 4OCPU/24GB 在 Always Free 模糊額度內 (實測未砍)
+  - Object Storage 10GB 免費層內 (bucket 已建)
+  - 防收割: VPS 已部署 keepalive (load>20%); ADB 需定期喚醒 (STOPPED→START 本輪已做)
+- **風險**: ADB 若長期 STOPPED 可能被 Oracle 回收 → 建議每月 START 一次或接 VPS 定時喚醒
+- 下一步: 配置 VPS cron 每月自動 START OmniUserRAG + 同步 OmniDB 三 Schema 至此 ADB
+
+### 風險標記 (舊)
 - 8420 SonarQube ES 公網開 (若不需外部訪問 → 應鎖 127.0.0.1)
 - tdai 系公網暴露擴大攻擊面, 但功能依賴未明 → 收斂待確認
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
