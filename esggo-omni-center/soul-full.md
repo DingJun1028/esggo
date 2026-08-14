@@ -1721,6 +1721,19 @@ vault/
 - 需用户提供: tenancy OCID + compartment OCID + user API key + wallet
 - 或用戶確認 oci_*.sh 內有可用 OCI CLI 配置 (目前 git status 顯示 untracked 未審)
 
+### 28.1 無作妙德審查執行 (Devin audit 誠實核對, 2026-08-14)
+- Devin 自評「90% 完成 / 達無作妙德境界」= 過度宣稱; 工具建好 ≠ 問題修好
+- **A any 消除**: 工具偵測 9 處 → 實修 6 處 (unknown/Record<string,unknown>)
+  - 保留 3 處 (omni-function.ts 動態函數庫邊界, 強改 unknown[] 破壞 8 處 fn 註冊)
+  - 提交 a35444d26
+- **B1 錯誤洩漏**: Devin 稱 21 處 → 工具實測僅 3 處 (nexus/route.ts:147, console/route.ts:412×2)
+  - 均為內部 API + jsonError 統一通道, 低風險, 不強改 (保留除錯能力)
+- **B2 認證缺失**: Devin 稱 4 路由缺認證 → 實測均已有專屬 secret 檢查
+  - cron/route.ts (CRON_SECRET), memory/route.ts (MEMORY_API_KEY) 非缺失
+  - 工具只看 unified-auth 模式, 誤判專案專屬認證
+- **C 狀態**: Autonomous AI DB 需 OCI tenancy OCID → blocker (見上)
+- 結論: 基礎設施健康, Devin 審查數字需打折; 實際可修項已修, 誤判項已澄清
+
 ### 風險標記
 - 8420 SonarQube ES 公網開 (若不需外部訪問 → 應鎖 127.0.0.1)
 - tdai 系公網暴露擴大攻擊面, 但功能依賴未明 → 收斂待確認
