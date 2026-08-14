@@ -15,6 +15,7 @@
  */
 import { readFileSync, appendFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import os from 'node:os';
+import { dirname } from 'node:path';
 
 const LOG = process.env.OA_KEEPALIVE_LOG || (process.env.HOME ? `${process.env.HOME}/logs/oa-keepalive.log` : '/tmp/oa-keepalive.log');
 const METRICS = process.env.OA_KEEPALIVE_METRICS || (process.env.HOME ? `${process.env.HOME}/logs/oa-keepalive-metrics.json` : '/tmp/oa-keepalive-metrics.json');
@@ -47,7 +48,8 @@ function log(line) {
   const ts = new Date().toISOString();
   const entry = `[${ts}] ${line}`;
   try {
-    if (!existsSync('/var/log')) mkdirSync('/var/log', { recursive: true });
+    const dir = dirname(LOG);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     appendFileSync(LOG, entry + '\n');
   } catch { /* log best-effort */ }
   return entry;
