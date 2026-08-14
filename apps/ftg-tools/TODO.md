@@ -23,7 +23,7 @@
 
 ## 5. 可擴充性 / Extensibility
 - 🔲 主題擴充：`THEMES` 只 stitch-dark/light；`midjourney` 為空殼註解，未實作
-- 🔲 路徑 C (FAL API) 未接：`ftg-gen` 複用本地 jpg，未串 FAL image API 自動生成主題圖
+- ✅ 路徑 C (FAL API) 已接：`fal-images.js` 透過 FAL REST API 生成主題圖，`ftg-gen` 呼叫 `generateForTheme`；無 FAL_KEY / API 失敗時優雅回退本地 assets (本輪, fal-images.test.mjs 2 測試驗證)
 - 🔲 多語擴充：lang 只 zh/en，未做 i18n 字典檔
 
 ## 6. 可觀測性 / Observability

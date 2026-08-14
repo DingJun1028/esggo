@@ -8,6 +8,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { generateForTheme } = require('./fal-images');
 
 const argv = process.argv.slice(2);
 function getArg(name, def) {
@@ -204,19 +205,19 @@ document.querySelectorAll('.stat b').forEach(function(el){sio.observe(el);});
 var f=document.querySelector('.form');if(f)f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('button');if(b){var o=b.textContent;b.textContent=lang==='zh'?'已收到 ✓':'Received ✓';setTimeout(function(){b.textContent=o;},2200);}});
 })();`;
 
+const assetsDir = path.join(dir, 'assets');
 fs.mkdirSync(dir, { recursive: true });
-fs.mkdirSync(path.join(dir, 'assets'), { recursive: true });
+fs.mkdirSync(assetsDir, { recursive: true });
 fs.writeFileSync(path.join(dir, 'index.html'), html);
 fs.writeFileSync(path.join(dir, 'styles.css'), css);
 fs.writeFileSync(path.join(dir, 'app.js'), appjs);
-// 複用既有攝影圖（若不存在則留空，由 ftg-img 補）
-const srcAssets = path.resolve(process.cwd(), 'apps/ftg-3.0/assets');
-if (fs.existsSync(srcAssets)) {
-  ['hero', 'stay', 'eco', 'craft', 'market', 'restore'].forEach(function (n) {
-    const f = path.join(srcAssets, n + '.jpg');
-    if (fs.existsSync(f)) fs.copyFileSync(f, path.join(dir, 'assets', n + '.jpg'));
-  });
-}
-console.log('[ftg-gen] generated ' + dir);
-console.log('[ftg-gen] version=' + version + ' theme=' + theme + ' lang=' + lang);
-console.log('[ftg-gen] files: index.html, styles.css, app.js, assets/*.jpg');
+
+// 路徑 C: 圖像生成 — API 優先，本地回退
+const localSrc = path.resolve(process.cwd(), 'apps/ftg-3.0/assets');
+(async () => {
+  const r = await generateForTheme(theme, assetsDir, localSrc);
+  console.log('[ftg-gen] images source=' + r.source + (r.reason ? ' (' + r.reason + ')' : ''));
+  console.log('[ftg-gen] generated ' + dir);
+  console.log('[ftg-gen] version=' + version + ' theme=' + theme + ' lang=' + lang);
+  console.log('[ftg-gen] files: index.html, styles.css, app.js, assets/*.jpg');
+})();
