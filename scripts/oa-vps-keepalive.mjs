@@ -16,8 +16,8 @@
 import { readFileSync, appendFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import os from 'node:os';
 
-const LOG = process.env.OA_KEEPALIVE_LOG || '/var/log/oa-keepalive.log';
-const METRICS = process.env.OA_KEEPALIVE_METRICS || '/var/log/oa-keepalive-metrics.json';
+const LOG = process.env.OA_KEEPALIVE_LOG || (process.env.HOME ? `${process.env.HOME}/logs/oa-keepalive.log` : '/tmp/oa-keepalive.log');
+const METRICS = process.env.OA_KEEPALIVE_METRICS || (process.env.HOME ? `${process.env.HOME}/logs/oa-keepalive-metrics.json` : '/tmp/oa-keepalive-metrics.json');
 const THRESHOLD = Number(process.env.OA_KEEPALIVE_THRESHOLD || (process.argv.includes('--threshold') ? process.argv[process.argv.indexOf('--threshold') + 1] : 0.4));
 const ONCE = process.argv.includes('--once');
 const BOOST_SECONDS = Number(process.env.OA_KEEPALIVE_BOOST || 60);
