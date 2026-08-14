@@ -2,6 +2,7 @@ import { jsonResponse, jsonError } from '@lib/api-utils';
 
 interface GeminiPart { text?: string }
 interface GeminiContent { parts?: GeminiPart[] }
+type InteractionStep = { type?: string; content?: GeminiContent };
 import { runGeminiWithWorkersAIFallback } from '@/lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
@@ -88,7 +89,7 @@ ${topProjects.join('\n')}
       });
       // model 輸出位於 steps 中 type==="model_output" 的 content.parts[].text
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const steps = (interaction.steps ?? []) as any[];
+      const steps = (interaction.steps ?? []) as InteractionStep[];
       trendText = steps
         .filter((s) => s.type === 'model_output')
         .flatMap((s) => s.content ?? [])
