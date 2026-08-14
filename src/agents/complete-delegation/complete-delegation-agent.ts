@@ -43,7 +43,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   private _manager: CompleteDelegationManager;
   private _executionHistory: DelegationResult[] = [];

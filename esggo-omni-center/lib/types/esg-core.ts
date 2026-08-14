@@ -42,7 +42,6 @@ export interface IComponentCore<T = Record<string, any>> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
   };
   readonly traceability_chain: ITraceableLog[];
 }
