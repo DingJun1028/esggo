@@ -13,7 +13,8 @@
   },
   "scripts": {
     "gen": "node ./ftg-gen.js",
-    "mcp": "node ./ftg-mcp/server.js"
+    "mcp": "node ./ftg-mcp/server.js",
+    "test": "node --test ftg-mcp/server.test.mjs"
   },
   "license": "MIT"
 }
