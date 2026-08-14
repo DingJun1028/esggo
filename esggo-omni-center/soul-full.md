@@ -1754,7 +1754,14 @@ vault/
   - Object Storage 10GB 免費層內 (bucket 已建)
   - 防收割: VPS 已部署 keepalive (load>20%); ADB 需定期喚醒 (STOPPED→START 本輪已做)
 - **風險**: ADB 若長期 STOPPED 可能被 Oracle 回收 → 建議每月 START 一次或接 VPS 定時喚醒
-- 下一步: 配置 VPS cron 每月自動 START OmniUserRAG + 同步 OmniDB 三 Schema 至此 ADB
+- **防回收實作 (本輪完成)**:
+  - VPS `/opt/esggo/scripts/omni-adb-keepalive.py` (oci SDK v2.184.1 in `.venv-oci`)
+  - 邏輯: GET 狀態 → AVAILABLE 略過 / STOPPED → START / 其他 → no-op
+  - cron: `0 3 1 * *` 每月 1 號 03:00 自動喚醒 (防長期 STOPPED 回收)
+  - VPS `~/.oci/config` 已同步本機有效 fingerprint (3d:e1:62:cb:...)
+  - 實測: 腳本跑通, ADB 狀態讀取正確 (AVAILABLE→略過)
+  - 提交 1376bbb69
+- 下一步: 可加 VPS 每日 healthcheck 或接 OmniDB 三 Schema 同步至 ADB
 
 ### 風險標記 (舊)
 - 8420 SonarQube ES 公網開 (若不需外部訪問 → 應鎖 127.0.0.1)
