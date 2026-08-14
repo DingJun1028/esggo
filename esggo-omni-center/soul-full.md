@@ -1700,7 +1700,30 @@ vault/
 - **閒置收割**: 7天滑窗 CPU<20%&網路<20%&記憶體<20% → 回收; OA_VPS 靠 omni/relay/next 常駐安全
 - **救援警示**: 開第二台 A1 會吃滿 2OCPU 上限(舊)/直接超額(新) → Trial 結束被刪; 優先單機修復
 - **Autonomous AI DB**: 2 實例免費(各 1OCPU/20GB/20session) = OmniDB 三 Schema 候選(RAG/信任帳本/生命週期)
-- **下一步**: 閒置防護腳本 + Bastion 取代雙埠 + Object Storage 備份 + [可選] Autonom...[truncated]
+- **下一步**: 閒置防護腳本 + Bastion 取代雙埠 + Object Storage 備份 + [可選] Autonomous AI DB 部署
+
+## 28. OA_VPS 安全收斂 (2026-08-14 A/B/C 執行)
+### A 閒置收割防護 — 完成
+- `scripts/oa-vps-keepalive.mjs`: load1/cpus < 0.4 閾值 → 自啟 60s 輕負載 (Pi 計算) 撐 ~20%
+- VPS cron `*/5 * * * *` 實跑驗證: log/metrics 寫入 `$HOME/logs/`, load 0.67→boost 成功
+- 批次: 9d51ea253(建) / 71f8acd29(/var/log修正) / bb1088b6f(dirname修正)
+
+### B 暴露面偵查 — 保守收斂 (未誤殺)
+- ufw 公網開: 22/80/443 + tdai 系 (8096/8125/8420/8421/8424)
+- **真相**: 8420 實為 SonarQube Elasticsearch (opc用戶), 非 tdai-gateway; 8042 未 listening
+- 8788 (universal-translator) 經 nginx 反代, 不在 ufw 直開
+- **決策**: 不直接鎖 tdai port (避免誤殺正在用服務); 收斂方案留待用戶確認哪些可鎖
+- 建議: 8096/8125/8421/8424 改經 Cloudflare Tunnel 進, ufw 移除非必要公網規則
+- 22 已 pubkey-only (PasswordAuthentication no) 相對安全; Bastion 需 OCI 控制台另註
+
+### C Autonomous AI DB — BLOCKER
+- `oci_*.sh` 無 tenancy OCID (grep ocid1.tenancy 空) → 無法部署
+- 需用户提供: tenancy OCID + compartment OCID + user API key + wallet
+- 或用戶確認 oci_*.sh 內有可用 OCI CLI 配置 (目前 git status 顯示 untracked 未審)
+
+### 風險標記
+- 8420 SonarQube ES 公網開 (若不需外部訪問 → 應鎖 127.0.0.1)
+- tdai 系公網暴露擴大攻擊面, 但功能依賴未明 → 收斂待確認
 - **Traceable**：vault 筆記 frontmatter `source_origin` 指向 `esggo/shared/types.ts`
 - **Trackable**：sync-vault-types.ts 輸出 JSON 含 `from`（來源筆記路徑）
 - **Tangible**：Obsidian 可視化筆記 + wikilink 導航
