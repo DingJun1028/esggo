@@ -15,26 +15,15 @@ function getArg(name, def) {
   const i = argv.indexOf('--' + name);
   return i >= 0 ? argv[i + 1] : def;
 }
-const version = getArg('version', '2.7');
+// 強化: CLI 層版本號白名單 (防路徑穿越 / HTML 注入)
+function safeVer(v) { return /^[a-zA-Z0-9.\-]+$/.test(v) ? v : '2.7'; }
+const version = safeVer(getArg('version', '2.7'));
 const theme = getArg('theme', 'stitch-dark');
 const lang = getArg('lang', 'zh');
 const out = getArg('out', null);
 const dir = out ? path.resolve(out) : path.resolve(__dirname, '..', 'ftg-' + version);
 
-const THEMES = {
-  'stitch-dark': {
-    ink: '#0e1512', paper: '#0e1512', panel: '#141d18', panel2: '#1b261f',
-    line: 'rgba(243,237,225,.10)', cream: '#f3ede1', muted: '#9fb0a4',
-    green: '#7bb38a', gold: '#e3c987', radius: '18px',
-    heroOpacity: '.5', heroAfter: 'linear-gradient(180deg,rgba(14,21,18,.55),rgba(14,21,18,.92))'
-  },
-  'light': {
-    ink: '#10243f', paper: '#fbf8f2', panel: '#ffffff', panel2: '#f3ede1',
-    line: 'rgba(16,36,63,.12)', cream: '#10243f', muted: '#5d6b63',
-    green: '#3c6e47', gold: '#c9a24b', radius: '16px',
-    heroOpacity: '.4', heroAfter: 'linear-gradient(160deg,rgba(243,237,225,.4),rgba(251,248,242,.62))'
-  }
-};
+const THEMES = require('./themes.json');
 const t = THEMES[theme] || THEMES['stitch-dark'];
 
 const ZH = {
@@ -87,7 +76,14 @@ const EN = {
 };
 const D = lang === 'en' ? EN : ZH;
 
-function esc(s) { return s; }
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 const html = `<!DOCTYPE html>
 <html lang="${lang === 'en' ? 'en' : 'zh-Hant'}">

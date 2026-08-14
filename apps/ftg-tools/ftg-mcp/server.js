@@ -21,6 +21,11 @@ const SSH_KEY = process.env.FTG_SSH_KEY || '~/.ssh/esggo_original';
 const DEF_HOST = process.env.FTG_VPS_HOST || '161.118.248.180';
 const DEF_USER = process.env.FTG_VPS_USER || 'ubuntu';
 
+// 結構化錯誤日誌 (可觀測性強化)
+function logErr(ctx, e) {
+  process.stderr.write('[ftg-mcp][err] ' + ctx + ' :: ' + (e && e.message ? e.message : String(e)) + '\n');
+}
+
 // 防命令注入: 僅允許安全字元, 且 host 必須為 IP 或合法域名
 function safeHost(h) {
   if (typeof h !== 'string') return null;
@@ -112,7 +117,7 @@ function handle(req) {
     if (n === 'generate_ftg_page') {
       return runGen(a.version || '2.7', a.theme || 'stitch-dark', a.lang || 'zh')
         .then(out => ({ jsonrpc: '2.0', id, result: { content: [{ type: 'text', text: out }] } }))
-        .catch(e => ({ jsonrpc: '2.0', id, error: { code: -32000, message: String(e) } }));
+        .catch(e => { logErr('tool.' + (params.name || '?'), e); return { jsonrpc: '2.0', id, error: { code: -32000, message: String(e) } }; });
     }
     if (n === 'deploy_ftg_page') {
       return deploy(a.version || '2.7')
