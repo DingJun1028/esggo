@@ -14,7 +14,7 @@
   "scripts": {
     "gen": "node ./ftg-gen.js",
     "mcp": "node ./ftg-mcp/server.js",
-    "test": "node --test ftg-mcp/server.test.mjs"
+    "test": "node --test ftg-mcp/server.test.mjs fal-images.test.mjs"
   },
   "license": "MIT"
 }
