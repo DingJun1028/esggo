@@ -25,7 +25,7 @@ export async function zenrowsFetch(opts: ZenrowsFetchOptions): Promise<string> {
   if (opts.wait) params.set('wait', String(opts.wait));
   if (opts.css) params.set('css', opts.css);
 
-  const res = await fetch(`${BASE}?${params.toString()}", {
+  const res = await fetch(`${BASE}?${params.toString()}`, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
