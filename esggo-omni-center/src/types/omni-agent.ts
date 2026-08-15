@@ -16,7 +16,6 @@ export interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
   };
   /** 防篡改雜湊值（SHA‑256、Keccak‑256 …） */
   readonly hash: string;

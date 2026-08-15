@@ -31,7 +31,7 @@ export class OmniTime implements IOmniTime {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 事件存儲 */
   private _events: IBusEvent[] = [];

@@ -43,7 +43,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   private _manager: CompleteDelegationManager;
   private _executionHistory: DelegationResult[] = [];
@@ -71,13 +71,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
       uuid: this.delegationScope.agentId,
       version: '1.0.0',
       timestamp: Date.now(),
-      evidence: {
-        originCause: 'unknown',
-        processTrace: [],
-        finalEffect: 'unknown',
-        delegationId: this.delegationScope.delegationId,
-        principal: this.principal,
-       },
+      evidence: Object.assign({ originCause: "unknown" as string, processTrace: [] as string[], finalEffect: "unknown" as string }, { delegationId: this.delegationScope.delegationId, principal: this.principal }) as any,
     };
   }
 

@@ -92,7 +92,7 @@ function createResult(
   status: TaskResultBase["status"],
   logs: string[],
   durationMs: number,
-  evidence?: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any }
+  evidence?: { originCause: string; processTrace: string[]; finalEffect: string }
 ): TaskResultBase {
   const uuid = uuidv4();
   return {

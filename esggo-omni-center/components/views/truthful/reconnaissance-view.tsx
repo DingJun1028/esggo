@@ -36,7 +36,6 @@ interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
   };
 }
 

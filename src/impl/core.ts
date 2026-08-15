@@ -186,7 +186,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
   }
 
   async ingress(event: IBusEvent) {
-    const valid = !!event.hashLock && !!event.evidence?.hash;
+    const valid = !!event.hashLock && !!(event.evidence as any)?.hash;
     if (!valid) {
       this.onMartialLaw('evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({
@@ -218,7 +218,7 @@ export class OmniAgentGateway implements IOmniAgentGateway {
 
   // egress implementation with validation & freeze
   async egress(event: IBusEvent) {
-    const valid = !!event.hashLock && !!event.evidence?.hash;
+    const valid = !!event.hashLock && !!(event.evidence as any)?.hash;
     if (!valid) {
       this.onMartialLaw('egress evidence mismatch');
       const ml: IMartialLawEvent = makeCore<IMartialLawEvent>({
@@ -446,7 +446,7 @@ export class OmniCoreEcosystem {
   /** Static helper used by OAB to apply Hash Lock & freeze */
   public static lockAndFreeze<T extends { evidence?: Record<string, unknown> }>(obj: T): T {
     obj.evidence = obj.evidence || {};
-    obj.evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
+    (obj.evidence as any)['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random()
       .toString(36)
       .substring(2, 9)}`;
     return Object.freeze(obj);

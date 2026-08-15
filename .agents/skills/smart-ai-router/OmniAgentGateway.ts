@@ -16,7 +16,6 @@ export interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any;
   };
 }
 
@@ -260,7 +259,7 @@ export class OmniAgentGateway {
     taskType: string
   ): Promise<any> {
     // 1. 建立證據資料
-    const evidence: { originCause: string; processTrace: string[]; finalEffect: string; [key: string]: any } = {
+    const evidence: { originCause: string; processTrace: string[]; finalEffect: string } = {
       originCause: 'unknown',
       processTrace: [],
       finalEffect: 'unknown',

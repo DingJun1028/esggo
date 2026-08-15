@@ -28,7 +28,7 @@ export class OmniComponent implements IOmniComponent {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 組件存儲 */
   private components: Map<ComponentId, ComponentInfo> = new Map();
