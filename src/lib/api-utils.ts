@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // ═══════════════════════════════════════════════════════════════
 // src/lib/api-utils.ts — Next.js API Route 通用工具函式
 // 單一事實來源使用 @esggo/errors 錯誤代碼

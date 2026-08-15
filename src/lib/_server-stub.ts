@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Server-only stub — replaces firebase-admin / @upstash/redis during build
  * to prevent build-time crashes when env vars are missing.

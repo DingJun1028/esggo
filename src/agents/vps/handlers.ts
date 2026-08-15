@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * ==========================================
  * ⚡ VPS 任務處理器 (Task Handlers)

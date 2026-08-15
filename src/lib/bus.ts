@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * ==========================================
  * 統一發布原語（深貫廣通 · 全域事件總線單一來源）

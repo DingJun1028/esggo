@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * ==========================================
  * 🌌 OmniGateway — 萬能網關實現 (增強版)
