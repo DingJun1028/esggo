@@ -60,6 +60,7 @@
     "react-markdown": "^10.1.0",
     "uuid": "^14.0.1",
     "xss": "^1.0.15",
+    "zenrows": "^2.0.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -70,6 +71,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "~11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
@@ -83,8 +85,7 @@
     "turbo": "^2.10.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.63.0",
-    "vitest": "^4.1.9",
-    "@vitest/coverage-v8": "^4.1.9"
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=20",
