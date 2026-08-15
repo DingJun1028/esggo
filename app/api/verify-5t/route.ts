@@ -14,6 +14,7 @@
 // ============================================================================
 import { NextResponse } from 'next/server';
 import { calculateFiveTScore, FiveTGatekeeper, FiveTHashLock } from '@/lib/five-t-protocol';
+import { verifyWebhookSignature } from '@/lib/webhook-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,14 @@ interface VerifyBody {
 
 export async function POST(request: Request) {
   try {
+    const secret = process.env.VERIFY_5T_SECRET;
+    if (secret) {
+      const signature = request.headers.get('x-signature-256');
+      const payload = await request.clone().text();
+      if (!verifyWebhookSignature(payload, signature, secret)) {
+        return NextResponse.json({ error: 'UNAUTHORIZED', pass: false }, { status: 401 });
+      }
+    }
     const body = (await request.json()) as VerifyBody;
     if (!body || typeof body !== 'object') {
       return NextResponse.json({ error: 'MISSING_BODY', pass: false }, { status: 400 });
