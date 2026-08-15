@@ -15,7 +15,9 @@ dist
 vault/**
 docs/**
 scripts/**
-*.md
-prisma-backup-*
 deploy/**
+esggo-omni-center/**
+rules-tutorial/**
+prisma-backup-*
 esggo-learning-center/**
+functions/node_modules/**
