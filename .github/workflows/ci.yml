@@ -170,7 +170,7 @@ jobs:
           NODE_ENV: test
       - name: Run FTG-Tools test suite (node --test)
         working-directory: apps/ftg-tools
-        run: node --test ftg-mcp/server.test.mjs fal-images.test.mjs
+        run: node --test ftg-mcp/server.test.mjs fal-images.test.mjs ftg-gen.test.mjs
         env:
           NODE_ENV: test
 
