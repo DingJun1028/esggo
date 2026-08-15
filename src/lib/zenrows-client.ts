@@ -46,9 +46,12 @@ export function verifyZenrowsWebhookSignature(
   secret: string
 ): boolean {
   if (!signatureHeader) return false;
-  const expected = crypto
+  const expected = 'sha256=' + crypto
     .createHmac('sha256', secret)
     .update(payload)
     .digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
+  const sigBuf = Buffer.from(signatureHeader);
+  const expBuf = Buffer.from(expected);
+  if (sigBuf.length !== expBuf.length) return false;
+  return crypto.timingSafeEqual(sigBuf, expBuf);
 }
