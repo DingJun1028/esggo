@@ -27,7 +27,20 @@ Jules bot 的 preview PR 分支（基於舊 main，含 OOM 設定）全部 backp
 - `sentinel/fix-hardcoded-gateway-key-8885035421419763179` → `f2c8b02da`
 - `sentinel-fail-secure-gateway-16582626749432915534` → `0ed7937d9`
 
+## 第二次根因：Vercel build 實例記憶體 < 3072
+`vercel build` 本機驗證：NODE_OPTIONS=3072 仍 OOM（exit 143），因 Vercel build 實例記憶體上限低於 3072。
+改 **1536** 後 `vercel build` build 階段通過（不再 143），本機 `pnpm build` exit 0。
+commit `ef486a560`（package.json + vercel.json 雙邊設 1536）。
+
+## 已知限制
+- 手動 `vercel deploy` 從本地目錄上傳算 git tracked files（16167+），超過 Vercel 15000 限制 → 失敗。
+  `.vercelignore` 不影響上傳計數（只影響 build 環境忽略）。唯有 Git 整合部署（push 觸發）尊重 .gitignore 且只上傳必要檔。
+- `deploy.yml` 的 push 觸發對「修改 workflow 檔本身」有 GitHub 特殊排除 → 我的 deploy.yml 變更不觸發該 workflow。
+  但其他 agent 的 `src/**` 變更會觸發 `ESG-GO CI/CD Pipeline`，進而跑 `deploy-vercel` job（repo 已含 1536 修復）。
+- `deploy-vercel` job 設獨立 concurrency group（commit `7aeebf91e`），不被 VPS deploy cancel。
+
 ## 待辦
-- [ ] 確認 `deploy-vercel` job 在 CI 跑通（Vercel 生產部署變綠）
-- [ ] 若 `--archive=tgz` 在 CI 仍超時，改 `vercel deploy --prebuilt` 或調整上傳策略
-- [ ] 考慮在 Vercel dashboard 重建 GitHub webhook（長期正道，但 CLI 無法）
+- [x] NODE_OPTIONS=1536 修復（Vercel build OOM 根因）
+- [x] deploy-vercel job + 獨立 concurrency group（取代失效 webhook）
+- [ ] 確認 run 31864133363 的 deploy-vercel job 成功 → Vercel 生產轉綠（監控中）
+- [ ] 長期：Vercel dashboard 重建 GitHub webhook（CLI 無法，需手動）
