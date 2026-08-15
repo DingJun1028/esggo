@@ -158,15 +158,10 @@ export class OmniSingularity implements IOmniSingularity {
       version: "1.0.0",
       timestamp: Date.now(),
       evidence: {
-        originCause: 'unknown',
-        processTrace: [],
-        finalEffect: 'unknown',
-        type: intent.type,
-        name: intent.name,
-        purpose: intent.purpose,
-        manifestFrom: this.signature.uuid,
-        manifestAt: Date.now(),
-       },
+        originCause: 'intent-manifestation',
+        processTrace: [`Manifested ${intent.type} agent ${intent.name}`, `Purpose: ${intent.purpose}`, `Source: ${this.signature.uuid}`],
+        finalEffect: 'Agent materialized'
+      },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     };
 
@@ -234,7 +229,7 @@ export class OmniSingularity implements IOmniSingularity {
       // 記錄事件
       this._recordEvent("singularity.retrieved", {
         entityUuid: targetUuid,
-        entityName: entity.evidence?.name,
+        entityName: (entity.evidence as any)?.name || 'Unknown Entity',
       });
 
       console.log(`[OmniSingularity] ✅ 回歸完成: ${targetUuid.substring(0, 8)}...`);

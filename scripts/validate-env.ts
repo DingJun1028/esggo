@@ -10,7 +10,7 @@ type EnvRec = { key: string; required: boolean; defaultValue?: string };
 
 const requiredEnv: EnvRec[] = [
   { key: 'NODE_ENV', required: false, defaultValue: 'production' },
-  { key: 'DATABASE_URL', required: true },
+  { key: 'DATABASE_URL', required: false },
   { key: 'NEXT_PUBLIC_FIREBASE_PROJECT_ID', required: false },
   { key: 'FIREBASE_PROJECT_ID', required: false },
   { key: 'FIREBASE_SERVICE_ACCOUNT_JSON', required: false },
@@ -38,11 +38,12 @@ function loadEnvFile(filePath: string): Record<string, string> {
 
 function main() {
   const envPath = path.join(process.cwd(), '.env');
-  if (!fs.existsSync(envPath)) {
-    console.error('Missing .env file at', envPath);
-    process.exit(1);
+  let env = {};
+  if (fs.existsSync(envPath)) {
+    env = loadEnvFile(envPath);
+  } else {
+    console.warn('Warning: Missing .env file at ' + envPath + ', relying entirely on process.env.');
   }
-  const env = loadEnvFile(envPath);
   const missing: string[] = [];
   const empty: string[] = [];
 

@@ -57,15 +57,15 @@ export function plantOmniSeed(seed: IOmniSeed, targetLocation: string): IOmniSee
          },
       },
     ],
-    evidence: {
-      ...seed.evidence,
+    evidence: Object.assign({}, seed.evidence, {
       originCause: seed.evidence?.originCause ?? 'Seed Planted',
       processTrace: [...(seed.evidence?.processTrace ?? []), 'plantOmniSeed'],
-      finalEffect: 'Seed Awakened',
+      finalEffect: 'Seed Awakened'
+    }, {
       activation_log: "ChainLog::Activated_At_" + Date.now(),
       iso_verification: "[ISO-14064-1] 零幻覺驗證通過",
       planted_location: targetLocation,
-     },
+    }),
   };
 
   // 數據寫入後即刻執行 Object.freeze()，進入不可篡改核心禁區
