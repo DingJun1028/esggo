@@ -313,3 +313,8 @@ vault/Agents/context/.avatar-types.d.ts
 # Local CLI / agent runtime state (NOT for git)
 .zenrows/
 prisma-backup-*/
+
+# Vercel deploy: exclude non-esggo subdirectories from Vercel upload (64000+ tracked files exceed 15000 limit)
+esggo-omni-center/
+rules-tutorial/
+functions/node_modules/
