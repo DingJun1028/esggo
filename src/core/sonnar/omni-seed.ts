@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * @description [萬能種子] 超永恆覺醒核心契約
  * 具備極簡、快速、不可篡改與無限進化特徵

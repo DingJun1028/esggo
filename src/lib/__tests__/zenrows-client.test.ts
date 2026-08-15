@@ -6,10 +6,10 @@ describe('zenrows client', () => {
     expect(verifyZenrowsWebhookSignature('payload', null, 'secret')).toBe(false);
   });
 
-  it('verifyZenrowsWebhookSignature returns true for matching signature', () => {
+  it('verifyZenrowsWebhookSignature returns true for matching signature', async () => {
     const secret = 'secret';
     const payload = 'payload';
-    const crypto = require('crypto');
+    const crypto = await import('crypto');
     const expected = `sha256=${crypto.createHmac('sha256', secret).update(payload).digest('hex')}`;
     expect(verifyZenrowsWebhookSignature(payload, expected, secret)).toBe(true);
   });

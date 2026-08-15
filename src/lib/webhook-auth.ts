@@ -9,7 +9,10 @@ export function verifyWebhookSignature(
   if (!signatureHeader) return false;
   const hmac = crypto.createHmac('sha256', secret);
   const expected = `sha256=${hmac.update(payload).digest('hex')}`;
-  return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
+  const bufA = Buffer.from(signatureHeader);
+  const bufB = Buffer.from(expected);
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
 }
 
 export async function requireWebhookAuth(req: NextRequest): Promise<NextResponse | null> {

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * ==========================================
  * 🌌 OmniAgent — 萬能代理實現 (增強版)
