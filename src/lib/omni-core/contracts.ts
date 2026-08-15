@@ -14,6 +14,7 @@ export interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   };
 }
 
@@ -84,6 +85,7 @@ export class OmniCoreEcosystem {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } } {
     return typeof obj === 'object' && obj !== null && 'evidence' in obj;
   }
@@ -95,6 +97,7 @@ export class OmniCoreEcosystem {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } }).evidence = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
     }
     (obj as any).evidence['hash_lock'] = `0xCELESTIAL_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;

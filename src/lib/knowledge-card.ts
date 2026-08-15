@@ -85,6 +85,7 @@ export class KnowledgeCardService {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
       type?: string;
       fields?: Record<string, string>;
       tags?: string[];
@@ -118,6 +119,7 @@ export class KnowledgeCardService {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
       type?: string;
       fields?: Record<string, string>;
       tags?: string[];
@@ -203,6 +205,7 @@ export function createKnowledgeCard(
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
     type?: string;
     fields?: Record<string, string>;
     tags?: string[];
