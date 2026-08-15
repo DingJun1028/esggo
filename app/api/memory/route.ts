@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import type { MemoryEntry, MemoryQuery } from '@esggo/shared';
 import { jsonResponse, jsonError } from '@lib/api-utils';
+import { verifyWebhookSignature } from '@/lib/webhook-auth';
 
 /**
  * 寫入/刪除守門：memory 為對內共享總線（Next.js 內部 + Gateway 經 HTTP 呼叫），
@@ -16,10 +17,14 @@ function assertMemoryWriteAuth(req: NextRequest): NextResponse | null {
   const secret = process.env.MEMORY_API_KEY;
   const provided = req.headers.get('x-memory-key') || req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
   if (secret) {
-    if (!provided || provided !== secret) {
+    if (!provided) {
       return jsonError('UNAUTHORIZED', 'Invalid or missing memory key', 401);
     }
-    return null;
+    const payload = `${req.method}:${req.url}`;
+    if (verifyWebhookSignature(payload, provided, secret) || provided === secret) {
+      return null;
+    }
+    return jsonError('UNAUTHORIZED', 'Invalid or missing memory key', 401);
   }
   if (!req.headers.get('x-user-id')) {
     return jsonError('UNAUTHORIZED', 'Authentication required', 401);
