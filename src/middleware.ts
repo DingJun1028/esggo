@@ -28,6 +28,7 @@ const PUBLIC_ROUTES: readonly string[] = [
   '/api/healthz',
   '/api/health',
   '/api/health/metrics',
+  '/api/evidence-upload',
   '/_next/',
   '/favicon.ico',
   '/assets/',
