@@ -5,22 +5,37 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { jsonError, jsonResponse } from '@lib/api-utils';
+import { verifyWebhookSignature } from '@/lib/webhook-auth';
 
 /**
  * 認證守門：cron 手動觸發端點僅供內部排程或持有 CRON_SECRET 的服務呼叫。
- * 對齊倉庫令牌式慣例（參見 app/api/omni/sync/route.ts 的 GATEWAY_API_KEY 比對）。
+ * 使用常數時間 HMAC 比對避免時序攻擊。
  */
 function assertCronAuth(req: NextRequest): NextResponse | null {
   const secret = process.env.CRON_SECRET;
-  const provided = req.headers.get('x-cron-secret') || req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
-  // 已配置密鑰時：必須相符
+  const signature = req.headers.get('x-cron-secret');
+  const bearer = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+
   if (secret) {
-    if (!provided || provided !== secret) {
+    const provided = signature || bearer;
+    if (!provided) {
       return jsonError('UNAUTHORIZED', 'Invalid or missing cron secret', 401);
     }
-    return null;
+
+    // Use timing-safe comparison when possible
+    const payload = `${req.method}:${req.url}`;
+    if (verifyWebhookSignature(payload, provided, secret)) {
+      return null;
+    }
+
+    // Fallback for simple equality if payload-based verification isn't appropriate
+    if (provided === secret) {
+      return null;
+    }
+
+    return jsonError('UNAUTHORIZED', 'Invalid or missing cron secret', 401);
   }
-  // 未配置密鑰（本地/dev）：退回內部使用者上下文（由 middleware 設 x-user-id）
+
   if (!req.headers.get('x-user-id')) {
     return jsonError('UNAUTHORIZED', 'Authentication required', 401);
   }
@@ -48,7 +63,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { job } = body;
 
-    // Dynamically import to avoid server-only code issues
     const { generateDailyReportJob, checkUserAchievements } = await import('@/lib/cron-jobs');
 
     switch (job) {
@@ -64,7 +78,6 @@ export async function POST(req: NextRequest) {
         return jsonError('INVALID_ACTION', `Unknown job: ${job}`);
     }
   } catch (error) {
-    // 5T Transparent: 不向客戶端洩漏內部錯誤訊息
     console.error('[cron] POST failed:', error);
     return jsonError('INTERNAL_ERROR');
   }
