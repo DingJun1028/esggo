@@ -38,9 +38,11 @@ commit `ef486a560`（package.json + vercel.json 雙邊設 1536）。
 - `deploy.yml` 的 push 觸發對「修改 workflow 檔本身」有 GitHub 特殊排除 → 我的 deploy.yml 變更不觸發該 workflow。
   但其他 agent 的 `src/**` 變更會觸發 `ESG-GO CI/CD Pipeline`，進而跑 `deploy-vercel` job（repo 已含 1536 修復）。
 - `deploy-vercel` job 設獨立 concurrency group（commit `7aeebf91e`），不被 VPS deploy cancel。
+- **重構**：`deploy-vercel` job 從 `deploy.yml` 抽出為獨立 `deploy-vercel.yml` workflow（commit `ba62f11aa`），不受 `deploy-vps` concurrency group 約束（原 group 讓所有 ESG-GO CI/CD Pipeline run 串行，被其他 agent 的持續 push 占滿隊列 → deploy-vercel 永遠排隊）。新 workflow 用 `workflow_dispatch` + push paths 觸發，獨立 `vercel-prod-deploy` concurrency group。
+- 手動觸發 `deploy-vercel.yml` run `31864372584`（in_progress，監控中）驗證 1536 修復部署。
 
 ## 待辦
 - [x] NODE_OPTIONS=1536 修復（Vercel build OOM 根因）
-- [x] deploy-vercel job + 獨立 concurrency group（取代失效 webhook）
-- [ ] 確認 run 31864133363 的 deploy-vercel job 成功 → Vercel 生產轉綠（監控中）
+- [x] deploy-vercel 獨立 workflow（取代失效 webhook + 避開 concurrency 佔隊）
+- [ ] 確認 run 31864372584 成功 → Vercel 生產轉綠（監控中）
 - [ ] 長期：Vercel dashboard 重建 GitHub webhook（CLI 無法，需手動）
