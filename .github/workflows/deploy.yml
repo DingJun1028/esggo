@@ -80,7 +80,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
       
       - name: Install dependencies
         id: install
@@ -238,7 +237,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
 
       - name: Lint vps shell / node / python scripts
         run: |
