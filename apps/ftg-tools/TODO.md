@@ -12,8 +12,8 @@
 ## 2. 安全 / Security
 - ✅ server.js 命令注入防護 (safeVer/safeHost/safeUser 白名單)
 - ✅ SSH key 抽 env (FTG_SSH_KEY / FTG_VPS_HOST / FTG_VPS_USER)
-- ✅ **CLI 層 `safeVer` 雙重防護**（MCP 層之外也擋）(強化輪)
-- 🔲 FAL_API_KEY 管理：路徑 C 已接 `FAL_KEY` env，需確認勿進 git（已在 .gitignore 慣例外，但無 .env.example 範本）
+- ✅ CLI 層 `safeVer` 雙重防護 (強化輪)
+- ✅ **FAL_API_KEY 管理**：`.env.example` 範本 + `.env` 進 gitignore (本輪, 真值不進庫)
 
 ## 3. 可維護性 / Maintainability
 - ✅ server.js 嚴格模式 + 函數分離
@@ -35,7 +35,7 @@
 ## 7. 測試 / Testing
 - ✅ 最小冒煙測試：server.test.mjs (3) + fal-images.test.mjs (2) + ftg-gen.test.mjs (2) = **7 測試全過**
 - ✅ `node --test` 7/7 passed
-- 🔲 CI 整合：未接 GitHub Actions test job
+- ✅ **CI 整合**：`ci.yml` 的 `ut-tests` job 加 `ftg-tools` working-directory 跑 `node --test` (含 ftg-gen.test.mjs)，與本機一致 (本輪)
 
 ---
 

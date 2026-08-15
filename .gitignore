@@ -308,3 +308,4 @@ cli/*/node_modules/
 firebase-service-account.json
 vault/Agents/context/.avatar-registry.json
 vault/Agents/context/.avatar-types.d.ts
+!apps/ftg-tools/.env.example
