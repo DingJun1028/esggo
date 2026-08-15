@@ -12,7 +12,7 @@ export function verifyWebhookSignature(
   return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
 }
 
-export function requireWebhookAuth(req: NextRequest, res: NextResponse) {
+export async function requireWebhookAuth(req: NextRequest): Promise<NextResponse | null> {
   const signature = req.headers.get('X-Signature-256');
   const secret = process.env.WEBHOOK_SECRET;
   if (!secret || !verifyWebhookSignature(await req.clone().text(), signature, secret)) {
