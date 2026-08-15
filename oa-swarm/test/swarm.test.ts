@@ -1,0 +1,64 @@
+/**
+ * OA-Team 蜂群核心測試 — 5T 合規 + 30 矩陣 + 靈魂執行鏈
+ */
+import { describe, it, expect } from 'vitest';
+import { purify, verifyZeroHallucination, hashLock, FeedbackCollector } from '../src/protocol-5t';
+import { SOUL_MATRIX, getAgent } from '../src/soul-matrix';
+import { SwarmCore } from '../src/swarm-core';
+import { callLLM } from '../src/llm';
+
+describe('5T 協定強制層', () => {
+  it('Traceable: 產物帶 source_origin', () => {
+    const a = purify('test', '萬能蜂后', { x: 1 });
+    expect(a.source_origin).toBe('test');
+  });
+  it('Trustworthy: hash_lock 非空且凍結', () => {
+    const a = purify('t', '蜂后', {});
+    expect(a.hash_lock).toMatch(/^0x/);
+    expect(Object.isFrozen(a)).toBe(true);
+  });
+  it('Transparent: 零幻覺驗算通過', () => {
+    const a = purify('t', '蜂后', { data: 'ok' });
+    expect(verifyZeroHallucination(a)).toBe(true);
+  });
+  it('Tangible: 回饋收集合格', () => {
+    const fc = new FeedbackCollector();
+    fc.submit('a1', 5, 'good');
+    fc.submit('a1', 3, 'ok');
+    expect(fc.avg('a1')).toBe(4);
+  });
+});
+
+describe('30 萬能蜂群矩陣', () => {
+  it('矩陣含 30 員', () => {
+    expect(SOUL_MATRIX.length).toBe(30);
+  });
+  it('陣列均分 5 組 × 6', () => {
+    const counts: Record<string, number> = {};
+    SOUL_MATRIX.forEach((a) => (counts[a.array] = (counts[a.array] ?? 0) + 1));
+    expect(Object.values(counts).every((c) => c === 6)).toBe(true);
+  });
+  it('編號 1-30 唯一', () => {
+    const ids = SOUL_MATRIX.map((a) => a.id).sort((a, b) => a - b);
+    expect(ids).toEqual(Array.from({ length: 30 }, (_, i) => i + 1));
+  });
+  it('萬能蜂后為 #1', () => {
+    expect(getAgent(1)?.title).toBe('萬能蜂后');
+  });
+});
+
+describe('靈魂執行鏈', () => {
+  it('executeSwarmTask 產出 5T 凍結產物', async () => {
+    const core = new SwarmCore();
+    const art = await core.executeSwarmTask('設計一個登入頁面', 'unit-test');
+    expect(art.hash_lock).toMatch(/^0x/);
+    expect(verifyZeroHallucination(art)).toBe(true);
+    expect(art.evidence.collaborators.length).toBeGreaterThan(0);
+  }, 15000);
+  it('熵減循環降低熵值', () => {
+    const core = new SwarmCore();
+    const before = core.getState().entropy;
+    core.tickEntropyReduction();
+    expect(core.getState().entropy).toBeLessThan(before);
+  });
+});
