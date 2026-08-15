@@ -95,7 +95,7 @@ export class OmniHealing implements IOmniHealing {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: any } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 問題追蹤 (mutable for read/write access) */
   private _issues: Map<string, MutableSystemIssue> = new Map();
