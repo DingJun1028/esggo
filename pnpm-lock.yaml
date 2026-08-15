@@ -119,6 +119,9 @@ importers:
       xss:
         specifier: ^1.0.15
         version: 1.0.15
+      zenrows:
+        specifier: ^2.0.2
+        version: 2.0.2
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -4675,6 +4678,9 @@ packages:
     resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
     engines: {node: ^12.20 || >= 14.13}
 
+  fetch-retry@6.0.0:
+    resolution: {integrity: sha512-BUFj1aMubgib37I3v4q78fYo63Po7t4HUPTpQ6/QE6yK6cIQrP+W43FYToeTEyg5m2Y7eFUtijUuAv/PDlWuag==}
+
   fflate@0.8.3:
     resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
@@ -7907,6 +7913,10 @@ packages:
   yoctocolors@2.2.0:
     resolution: {integrity: sha512-xYqdZFUK/VYazNl/oCDYN+3WloWQwMfZxBoiNt6qNyk+xfOdi598muWE42rNZFp1kNOiqW936q5RhUdnpqElSg==}
     engines: {node: '>=18'}
+
+  zenrows@2.0.2:
+    resolution: {integrity: sha512-ut/bU3Yyko6Zw5R8gQ2hc16wqRJtuMdKFBTgTHdPz5tGFnc6BScWPYgjQRIAuCPzmcSy5qTzdc+pdfvmqRSxeg==}
+    engines: {node: '>=20'}
 
   zip-stream@4.1.1:
     resolution: {integrity: sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==}
@@ -13387,6 +13397,8 @@ snapshots:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
 
+  fetch-retry@6.0.0: {}
+
   fflate@0.8.3: {}
 
   figures@6.1.0:
@@ -17380,6 +17392,11 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yoctocolors@2.2.0: {}
+
+  zenrows@2.0.2:
+    dependencies:
+      fastq: 1.20.1
+      fetch-retry: 6.0.0
 
   zip-stream@4.1.1:
     dependencies:
