@@ -281,7 +281,7 @@ export async function translateText(text, from, to) {
 export async function translateToMany(text, from, targets) {
   const normMap = new Map();
   for (const t of targets) {
-    const key = (t || 'zh-TW').trim();
+    const key = toCanonical(t);
     if (!normMap.has(key)) normMap.set(key, key);
   }
   const results = await Promise.all(
