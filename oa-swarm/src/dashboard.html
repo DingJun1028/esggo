@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>OA-Team 30 萬能蜂群</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;background:#0d1117;color:#e6edf3}
+header{background:linear-gradient(135deg,#10243f,#c9a24b);padding:20px;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:16px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px}
+.id{color:#c9a24b;font-weight:bold}
+.arr{font-size:11px;color:#7d8590}
+#stream{white-space:pre-wrap;background:#0d1117;border:1px solid #30363d;padding:10px;margin:16px;height:160px;overflow:auto}
+button{background:#c9a24b;color:#10243f;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:bold}
+input{width:60%;padding:8px;border-radius:6px;border:1px solid #30363d;background:#0d1117;color:#e6edf3}
+</style>
+</head>
+<body>
+<header><h1>🐝 OA-Team 30 萬能蜂群</h1><p>5T 合規 · 熵減守護 · 背景運行</p></header>
+<div style="padding:16px">
+  <input id="task" placeholder="輸入蜂群任務..." />
+  <button onclick="exec()">提交任務</button>
+  <span id="entropy"></span>
+</div>
+<div id="stream">串流狀態...</div>
+<div class="grid" id="matrix"></div>
+<script>
+async function loadMatrix(){
+  const r=await fetch('/matrix');const d=await r.json();
+  document.getElementById('matrix').innerHTML=d.agents.map(a=>
+    '<div class="card"><div class="id">#'+a.id+' '+a.title+'</div>'+
+    '<div class="arr">'+d.arrays[a.array]+'</div><div style="font-size:12px;margin-top:6px">'+a.task+'</div></div>').join('');
+}
+async function exec(){
+  const t=document.getElementById('task').value;
+  const r=await fetch('/execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task:t})});
+  const d=await r.json();
+  alert(d.ok?'任務完成! Hash: '+d.artifact.hash_lock.slice(0,20)+'...':'失敗: '+d.error);
+}
+const es=new EventSource('/stream');
+es.onmessage=e=>{const d=JSON.parse(e.data);if(d.state){document.getElementById('stream').textContent=
+  '熵值: '+d.state.entropy.toFixed(4)+' | 任務數: '+d.state.tasksDone+' | 運行: '+d.state.uptimeSec+'s';
+  document.getElementById('entropy').textContent=' 熵 '+d.state.entropy.toFixed(4);}};
+loadMatrix();
+</script>
+</body>
+</html>
