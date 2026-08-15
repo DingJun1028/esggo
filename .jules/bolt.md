@@ -8,3 +8,7 @@
 ## 2024-10-25 - Chart Geometry Computation in Render Phase
 **Learning:** Re-computing charting geometries (like mapping bar heights, grid line coordinates, and array spacings) directly inside a component's render function forces the layout logic to run on every state update, even unrelated interactive state like `hoveredPoint` in `omni-bar-chart.tsx`.
 **Action:** Extract static charting logic and layout coordinates into a `useMemo` block separate from dynamic visual states, allowing Recharts or SVG elements to reuse geometry while conditionally applying hover styles.
+
+## 2024-11-20 - Memoization of Line Chart SVG Grid Loops
+**Learning:** In interactive React chart components (`OmniLineChart`), recalculating base SVG grid arrays (e.g. `[0, 0.25, 0.5, 0.75, 1].map(...)`) during the JSX render phase triggers expensive, unnecessary computation every time interaction states like `hoveredPoint` or `mousePos` change.
+**Action:** Always wrap base grid logic and related chart metrics in a `useMemo` block that only depends on the actual data dimensions, preventing recalculation on unrelated render cycles (like mouse movement).
