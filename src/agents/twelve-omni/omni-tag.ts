@@ -28,6 +28,7 @@ export class OmniTag implements IOmniTag {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 標籤存儲 */

@@ -35,6 +35,7 @@ export class OmniBase implements IOmniBase {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   readonly constants: OmniConstants = {

@@ -116,6 +116,7 @@ export class OmniUserRegistry {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 用戶偏好表 (userId → preferences) */

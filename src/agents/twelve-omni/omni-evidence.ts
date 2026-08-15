@@ -31,6 +31,7 @@ export class OmniEvidence implements IOmniEvidence {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 證據存儲 */

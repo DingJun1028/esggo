@@ -31,6 +31,7 @@ export class OmniAPI implements IOmniAPI {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** API 端點 */

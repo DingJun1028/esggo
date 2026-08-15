@@ -64,6 +64,7 @@ export class ChaosHealing implements IChaosHealing {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 混沌注入歷史 */
@@ -130,6 +131,7 @@ export class TemporalRift implements ITemporalRift {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 活躍會話 */
@@ -214,6 +216,7 @@ export class CellularFission implements ICellularFission {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 背壓閾值 */
@@ -273,6 +276,7 @@ export class ProphetMatrix implements IProphetMatrix {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 預測歷史 */
@@ -332,6 +336,7 @@ export class OmniscientHive implements IOmniscientHive {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 共享黑板 */
@@ -404,6 +409,7 @@ export class MartialLaw implements IMartialLaw {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 戒嚴狀態 */
@@ -480,6 +486,7 @@ export class UniversalMemory implements IUniversalMemory {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 個人化存儲 */
@@ -564,6 +571,7 @@ export class TaiChiResonance implements ITaiChiResonance {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   constructor() {
@@ -633,6 +641,7 @@ export class OmniConvergence implements IOmniConvergence {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   constructor() {

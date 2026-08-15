@@ -29,6 +29,7 @@ export class OmniComponent implements IOmniComponent {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
+    [key: string]: unknown;
   } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 組件存儲 */
