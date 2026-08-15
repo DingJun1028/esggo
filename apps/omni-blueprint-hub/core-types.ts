@@ -4,10 +4,14 @@
 export interface IComponentCore {
   readonly uuid: string;
   readonly version: string;
-  readonly timestamp: string;
+  readonly timestamp: number;
   /** 5T 意念: 證據鏈 (元素結構自由, 至少含 originCause/processTrace/finalEffect 其一)
    *  放寬為任意鍵值以相容 hub-engine 的 event/source_origin 風格與外掛的 originCause 風格 */
-  evidence: Array<Record<string, any>>;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
   hashLock?: string;
 }
 
