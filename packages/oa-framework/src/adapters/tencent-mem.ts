@@ -19,7 +19,7 @@ export class TencentMemAdapter implements ISubFrameAdapter {
       coreUrl: oa.memoryGateway ?? 'http://127.0.0.1:8420',
       hubUrl: 'http://127.0.0.1:8125',
       proxyUrl: 'http://127.0.0.1:8096',
-      apiKey: oa.llmApiKey,
+      apiKey: process.env.TDAI_GATEWAY_API_KEY ?? '',
     };
   }
 
@@ -85,7 +85,7 @@ export class TencentMemAdapter implements ISubFrameAdapter {
 
   async health(): Promise<{ status: 'ok' | 'down'; detail?: string }> {
     try {
-      const res = await fetch(`${this.cfg.coreUrl}/health`);
+      const res = await fetch(`${this.cfg.coreUrl}/v1/health`);
       const data = (await res.json().catch(() => null)) as { status?: string } | null;
       return {
         status: data?.status === 'ok' ? 'ok' : 'down',
