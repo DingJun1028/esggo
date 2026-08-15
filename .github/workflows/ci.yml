@@ -241,6 +241,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
           # 提供最低限度的假環境變數讓 build 通過
+          DATABASE_URL: "postgresql://build:placeholder@localhost:5432/build"
           GEMINI_API_KEY: "build-placeholder"
           NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
           NEXT_PUBLIC_SUPABASE_ANON_KEY: "build-placeholder"
@@ -299,6 +300,7 @@ jobs:
         run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+          DATABASE_URL: "postgresql://build:placeholder@localhost:5432/build"
           GEMINI_API_KEY: "build-placeholder"
           NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
           NEXT_PUBLIC_SUPABASE_ANON_KEY: "build-placeholder"
