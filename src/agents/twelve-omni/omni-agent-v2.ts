@@ -154,7 +154,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
    */
   onMartialLaw(reason: string): void {
     this._backpressure = { ...this._backpressure, pressureLevel: 'critical' };
-    this.evidence['martial_law'] = { reason, timestamp: Date.now() };
+    Object.assign((this as any).evidence, { martial_law: { reason, timestamp: Date.now() } });
   }
 
   /**

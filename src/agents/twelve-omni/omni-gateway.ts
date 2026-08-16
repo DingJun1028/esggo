@@ -135,7 +135,7 @@ export class OmniGatewayV2 implements IOmniGatewayV2 {
     this.martialLawActive = true;
     this.martialLawReason = reason;
     this.martialLawActivatedAt = Date.now();
-    this.evidence['martial_law'] = { reason, activatedAt: Date.now() };
+    Object.assign((this as any).evidence, { martial_law: { reason, activatedAt: Date.now() } });
   }
 
   liftMartialLaw(): void {
