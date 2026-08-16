@@ -355,6 +355,36 @@ jobs:
         env:
           E2E_BASE: ${{ vars.E2E_BASE || 'https://esggo.co' }}
 
+  # ─── OA-Team 雙蜂共享記憶 smoke (TDAI MemoryCore) ───────────────
+  # opt-in: 預設 skip (GitHub runner 無 docker / 無 LLM 後端)
+  # 啟用: gh variable set OA_MEMORY_ENABLED --body true
+  #        + 在可連 Docker + 已起 MemoryCore(:8420) 的 self-hosted runner 跑
+  #        + 設 secrets.TDAI_GATEWAY_API_KEY (本機 .admin-key 內容)
+  # 測試本身在 core 不可達 / 無 key 時會 SKIP(exit 0), 不污染主 CI 紅綠.
+  oa-memory:
+    name: OA-Team Shared Memory (TDAI)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: ${{ vars.OA_MEMORY_ENABLED == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies (frozen)
+        run: pnpm install --frozen-lockfile
+      - name: Run OA shared-memory smoke test
+        working-directory: packages/oa-framework
+        run: node test/tencent-mem-shared-memory.mjs
+        env:
+          TDAI_GATEWAY_URL: ${{ vars.TDAI_GATEWAY_URL || 'http://127.0.0.1:8420' }}
+          TDAI_GATEWAY_API_KEY: ${{ secrets.TDAI_GATEWAY_API_KEY }}
+          TDAI_SERVICE_ID: ${{ vars.TDAI_SERVICE_ID || 'oa-team-swarm' }}
+
   # ─── VPS 腳本語法檢查 ─────────────────────────────────────────
   validate-vps:
     name: Validate VPS Scripts
