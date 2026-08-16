@@ -32,8 +32,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: unknown;
-      } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   readonly signature: IComponentCore;
   readonly config: AgentConfig;
