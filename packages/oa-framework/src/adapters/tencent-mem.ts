@@ -16,10 +16,11 @@ export class TencentMemAdapter implements ISubFrameAdapter {
 
   constructor(oa: OAFrameConfig) {
     this.cfg = {
-      coreUrl: oa.memoryGateway ?? 'http://127.0.0.1:8420',
-      hubUrl: 'http://127.0.0.1:8125',
-      proxyUrl: 'http://127.0.0.1:8096',
+      coreUrl: oa.memoryGateway ?? process.env.TDAI_GATEWAY_URL ?? 'http://127.0.0.1:8420',
+      hubUrl: process.env.TDAI_HUB_URL ?? 'http://127.0.0.1:8125',
+      proxyUrl: process.env.TDAI_PROXY_URL ?? 'http://127.0.0.1:8096',
       apiKey: process.env.TDAI_GATEWAY_API_KEY ?? '',
+      serviceId: process.env.TDAI_SERVICE_ID ?? 'oa-team-swarm',
     };
   }
 
@@ -41,7 +42,40 @@ export class TencentMemAdapter implements ISubFrameAdapter {
     }
   }
 
-  /** Knowledge OpenAPI: 呼叫記憶工具 (先 list 發現能力, 再 call 讀取頁面/源碼/影響路徑) */
+  /** 寫入對話到 MemoryCore (L0) — 實測路由 POST /v3/conversation/add */
+  async captureConversation(sessionId: string, messages: Array<{ role: string; content: string }>): Promise<{ ok: boolean; ids?: string[] }> {
+    try {
+      const res = await fetch(`${this.cfg.coreUrl}/v3/conversation/add`, {
+        ...this.auth(),
+        method: 'POST',
+        headers: { ...this.authHeaders(), 'content-type': 'application/json' },
+        body: JSON.stringify({ sessionId, messages }),
+      });
+      if (!res.ok) return { ok: false };
+      const data = (await res.json()) as { data?: { accepted_ids?: string[] } };
+      return { ok: true, ids: data.data?.accepted_ids };
+    } catch {
+      return { ok: false };
+    }
+  }
+
+  /** 從 MemoryCore 召回對話 (L0) — 實測路由 POST /v3/conversation/search */
+  async recallConversation(sessionId: string, query: string): Promise<Array<{ role: string; content: string; score: number }>> {
+    try {
+      const res = await fetch(`${this.cfg.coreUrl}/v3/conversation/search`, {
+        ...this.auth(),
+        method: 'POST',
+        headers: { ...this.authHeaders(), 'content-type': 'application/json' },
+        body: JSON.stringify({ sessionId, query }),
+      });
+      if (!res.ok) return [];
+      const data = (await res.json()) as { data?: { messages?: Array<{ role: string; content: string; score: number }> } };
+      return data.data?.messages ?? [];
+    } catch {
+      return [];
+    }
+  }
+
   async callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
     try {
       const res = await fetch(`${this.cfg.coreUrl}/v3/tools/call`, {
@@ -73,13 +107,16 @@ export class TencentMemAdapter implements ISubFrameAdapter {
     }
   }
 
-  /** OA 任務 → 召回團隊記憶資產作為上下文, 再交給其他框架 (Agent Loadout 語意) */
+  /** OA 任務 → 寫入本次對話 + 召回團隊記憶作為上下文, 再交給其他框架 (Agent Loadout 語意) */
   async dispatch(task: OATask): Promise<{ output: string }> {
-    const tools = await this.listTools();
-    const recall = tools.find((t) => t.name.toLowerCase().includes('recall'));
-    const ctx = recall ? await this.callTool(recall.name, { query: task.prompt }) : null;
+    const sessionId = `oa-${task.id ?? 'task'}`;
+    // 寫入本次任務上下文 (L0)
+    const saved = await this.captureConversation(sessionId, [{ role: 'user', content: task.prompt }]);
+    // 召回相關歷史記憶
+    const ctx = await this.recallConversation(sessionId, task.prompt);
+    const recalled = ctx.length > 0 ? `recalled=${ctx.length}` : 'recalled=0';
     return {
-      output: `[TencentMem] ${task.prompt} | tools=${tools.length} recalled=${ctx ? 'yes' : 'no'} @${this.cfg.coreUrl}`,
+      output: `[TencentMem] ${task.prompt} | saved=${saved.ok ? 'yes' : 'no'} ${recalled} @${this.cfg.coreUrl}`,
     };
   }
 
@@ -132,6 +169,7 @@ export class TencentMemAdapter implements ISubFrameAdapter {
   private authHeaders(): Record<string, string> {
     const h: Record<string, string> = {};
     if (this.cfg.apiKey) h['authorization'] = `Bearer ${this.cfg.apiKey}`;
+    if (this.cfg.serviceId) h['x-tdai-service-id'] = this.cfg.serviceId;
     return h;
   }
   private auth(): RequestInit {
