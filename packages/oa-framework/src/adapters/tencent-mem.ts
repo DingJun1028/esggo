@@ -85,7 +85,7 @@ export class TencentMemAdapter implements ISubFrameAdapter {
 
   async health(): Promise<{ status: 'ok' | 'down'; detail?: string }> {
     try {
-      const res = await fetch(`${this.cfg.coreUrl}/v1/health`);
+      const res = await fetch(`${this.cfg.coreUrl}/health`);
       const data = (await res.json().catch(() => null)) as { status?: string } | null;
       return {
         status: data?.status === 'ok' ? 'ok' : 'down',
@@ -93,6 +93,39 @@ export class TencentMemAdapter implements ISubFrameAdapter {
       };
     } catch {
       return { status: 'down', detail: `core=${this.cfg.coreUrl} unreachable` };
+    }
+  }
+
+  /** 寫入對話記憶 (TDAI POST /capture) — 真連本機 :8420
+   *  body: { user_content, assistant_content, session_key } */
+  async capture(sessionKey: string, userContent: string, assistantContent: string): Promise<{ ok: boolean }> {
+    try {
+      const res = await fetch(`${this.cfg.coreUrl}/capture`, {
+        method: 'POST',
+        headers: { ...this.authHeaders(), 'content-type': 'application/json' },
+        body: JSON.stringify({
+          user_content: userContent,
+          assistant_content: assistantContent,
+          session_key: sessionKey,
+        }),
+      });
+      return { ok: res.ok };
+    } catch {
+      return { ok: false };
+    }
+  }
+
+  /** 召回記憶 (TDAI POST /search/memories) */
+  async search(query: string, maxResults = 5): Promise<unknown> {
+    try {
+      const res = await fetch(`${this.cfg.coreUrl}/search/memories`, {
+        method: 'POST',
+        headers: { ...this.authHeaders(), 'content-type': 'application/json' },
+        body: JSON.stringify({ query, maxResults }),
+      });
+      return res.ok ? await res.json() : null;
+    } catch {
+      return null;
     }
   }
 
