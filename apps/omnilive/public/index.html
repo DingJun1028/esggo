@@ -341,27 +341,38 @@ $('startBtn').onclick=async()=>{
 $('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);analyser=null;recorder=null;captureBuf=null;gotAudio=false;$('startBtn').disabled=false;$('stopBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
 
 let lastSend=0;
-let captureBuf=null; // 累積音訊 (Float32), 滿 ~4s 才整段送, 提升 whisper 長句準確度
-let sttInflight=false; // 防止請求堆積: 上一個 transcribe 沒回來就不送新的 (避免 STT 單線忙不過來 → ClientDisconnect 500 惡性循環)
+let captureBuf=null; // 累積音訊 (Float32), 遇到靜音停頓才整段送 (VAD 切句, 不在句中硬切)
+let silenceSamples=0; // 連續靜音樣本數
+let sttInflight=false; // 防止請求堆積: 上一個 transcribe 沒回來就不送新的
+const SR=16000, FRAME=4096, SILENCE_MS=600, MIN_MS=800, MAX_MS=15000;
+const silThresh=0.012; // RMS 能量閾值 (靜音判定)
+function rms(arr){let s=0;for(let i=0;i<arr.length;i++){const v=arr[i];s+=v*v;}return Math.sqrt(s/arr.length);}
 function sendChunk(float32){
-  // 累積 4 秒 (16kHz*4=64000 samples) 再整段送出; 碎片片段 whisper 易聽錯
+  if(sttInflight){ return; } // 上一個還在跑, 丟掉本幀避免堆積 (漏字但保流暢)
   if(!captureBuf){ captureBuf=new Float32Array(0); }
   const merged=new Float32Array(captureBuf.length+float32.length);
   merged.set(captureBuf,0); merged.set(float32,captureBuf.length); captureBuf=merged;
-  if(captureBuf.length < 64000) return; // 未滿 4s, 繼續累積
-  if(sttInflight){ captureBuf=null; return; } // 上一個還在跑, 丟掉這段避免堆積
-  const samples=captureBuf; captureBuf=null;
-  const pcm=encodeFloatTo16(samples);
-  const wav=encodeWav(pcm, 16000); // 包成 WAV 容器, whisper/PyAV 才能正確解碼 (raw PCM 會被拒)
-  const room=new URLSearchParams(location.search).get('room')||'';
-  const lang=fromSel.value||'';
-  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
-  sttInflight=true;
-  fetch(url,{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
-    .then(r=>r.ok?r.json():Promise.reject(r.status))
-    .then(d=>{ if(d.source)log('辨識: '+d.source.slice(0,40)); })
-    .catch(e=>{ /* 暫時錯誤: 不重試堆積, 直接跳過這段, 下一個 4s 再試 */ })
-    .finally(()=>{ sttInflight=false; });
+  // VAD: 能量低於閾值累計靜音, 高於閾值重置
+  const e=rms(float32);
+  if(e < silThresh) silenceSamples+=float32.length; else silenceSamples=0;
+  const durMs=captureBuf.length/SR*1000;
+  const silMs=silenceSamples/SR*1000;
+  // 送出手條件: (靜音停頓>600ms 且 已累積>800ms) 或 (超過 15s 上限強制送)
+  if((silMs>SILENCE_MS && durMs>MIN_MS) || durMs>MAX_MS){
+    if(captureBuf.length < SR*0.3) { captureBuf=null; silenceSamples=0; return; } // 太短(純噪)丟棄
+    const samples=captureBuf; captureBuf=null; silenceSamples=0;
+    const pcm=encodeFloatTo16(samples);
+    const wav=encodeWav(pcm, 16000);
+    const room=new URLSearchParams(location.search).get('room')||'';
+    const lang=fromSel.value||'';
+    const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
+    sttInflight=true;
+    fetch(url,{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
+      .then(r=>r.ok?r.json():Promise.reject(r.status))
+      .then(d=>{ if(d.source)log('辨識: '+d.source.slice(0,40)); })
+      .catch(()=>{ /* 暫時錯誤跳過本段 */ })
+      .finally(()=>{ sttInflight=false; });
+  }
 }
 // 16-bit PCM → WAV (mon聲, 16kHz) — 瀏覽器原生 DataView, 不用 Node Buffer
 function encodeWav(pcm, sampleRate){
