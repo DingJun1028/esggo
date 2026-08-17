@@ -161,11 +161,6 @@ export class OmniSingularity implements IOmniSingularity {
         originCause: 'unknown',
         processTrace: [],
         finalEffect: 'unknown',
-        type: intent.type,
-        name: intent.name,
-        purpose: intent.purpose,
-        manifestFrom: this.signature.uuid,
-        manifestAt: Date.now(),
        },
       hash: `0x${uuid.replace(/-/g, '').substring(0, 16)}`,
     };

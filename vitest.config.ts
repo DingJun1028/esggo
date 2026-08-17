@@ -34,6 +34,12 @@ export default defineConfig({
       // 該套件由 ci.yml 的 "FTG-Tools test suite (node --test)" 步驟以 working-directory
       // apps/ftg-tools 執行（本機實測 5/5 pass），覆蓋率不減。
       'apps/ftg-tools/**/*.test.mjs',
+      // OmniLive 萬能即時轉譯字幕測試以 Node 內建 test runner (node:test) 撰寫，非 vitest 套件：
+      //   - server.test.mjs   → 根 vitest 報 "No test suite found in file"
+      //   - subtitle.test.mjs → 同上
+      // 兩者皆 import { test } from 'node:test'，由 apps/omnilive 自身的
+      // `pnpm test` (= node --test test/*.test.mjs) 執行，覆蓋率不減。
+      'apps/omnilive/test/**',
     ],
   },
   resolve: {

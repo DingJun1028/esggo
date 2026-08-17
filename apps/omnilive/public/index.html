@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OmniLive 萬能即時轉譯雙語字幕播放器</title>
+<script src="./qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#0e0e14;--panel:rgba(22,22,31,.66);--panel2:rgba(30,30,42,.5);
+  --accent:#7c5cff;--accent2:#36e0c0;--txt:#f4f6fb;--muted:#9aa3b8;
+  --line:rgba(255,255,255,.10);--radius:18px;--gap:clamp(10px,2vw,16px);
+  --font:"Segoe UI",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);color:var(--txt);
+  background:radial-gradient(1200px 700px at 80% -10%,rgba(124,92,255,.18),transparent 55%),radial-gradient(900px 600px at 10% 110%,rgba(54,224,192,.12),transparent 55%),var(--bg);
+  background-attachment:fixed;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
+
+/* 頂部極簡浮條 */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+.topbar h1{font-size:.95rem;margin:0;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.status{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:#3ad17a;flex:none;box-shadow:0 0 8px rgba(58,209,122,.7)}
+.dot.bad{background:#e2554f;box-shadow:0 0 8px rgba(226,85,79,.7)}
+.badge{font-size:.72rem;padding:3px 10px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+.badge.live{color:var(--accent2);border-color:rgba(54,224,192,.4)}
+
+/* 膠囊按鈕 */
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:999px;padding:9px 16px;cursor:pointer;font-weight:600;font-size:.85rem;transition:.15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#5b8cff);color:#fff;border:none}
+.ico-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:.2s}
+.ico-btn:hover{border-color:var(--accent)}
+select,input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.85rem;outline:none}
+select:focus,input[type=text]:focus{border-color:var(--accent)}
+label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+
+/* 控制面板 → 玻璃卡片 */
+.panel{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap)}
+.panel h2{font-size:.82rem;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* 字幕舞台 — 浮動玻璃層 */
+.subtitle-stage{position:relative;background:rgba(8,10,16,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);overflow:hidden;height:52vh;min-height:240px;display:flex;flex-direction:column;gap:12px;padding:20px}
+#subtitles{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;overflow:hidden}
+.sub-group{display:flex;flex-direction:column;gap:6px;animation:subIn .2s ease-out}
+.sub-group.finalized{animation:none}
+.sub-group.active{position:relative}
+.sub-group.active::after{content:'';position:absolute;left:0;bottom:-7px;height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);animation:typing 1.1s ease-in-out infinite}
+@keyframes typing{0%{opacity:.2;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:.2;transform:scaleX(.3)}}
+@keyframes subIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* 新版風格: 大字=翻譯(主), 小字=原文(輔, 較暗) */
+.sub-line{border-radius:12px;padding:6px 14px;font-weight:800;line-height:1.34;color:#fff}
+.sub-line.src{font-size:clamp(.95rem,2.1vw,1.25rem);font-weight:500;color:rgba(255,255,255,.55);background:transparent;padding-left:14px}
+.sub-line.tgt{font-size:clamp(1.4rem,3.6vw,2.2rem);font-weight:800;background:transparent;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.sub-line .meta{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:400;margin-top:3px}
+
+/* 收合浮條: 控制項預設收進頂部膠囊, 點展開才顯面板 */
+.dock{display:flex;flex-direction:column;gap:var(--gap)}
+.dock.collapsed .panel{display:none}
+.dock-toggle{display:flex;align-items:center;gap:8px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.82rem;color:var(--muted);width:fit-content}
+.dock-toggle:hover{color:var(--txt);border-color:var(--accent)}
+
+.stage-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.stage-controls label{color:var(--muted)}
+.hint{font-size:.78rem;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+#errbar{background:rgba(226,85,79,.15);border:1px solid rgba(226,85,79,.5);color:#ffd9d6;border-radius:14px;padding:10px 14px;font-size:.82rem}
+.log{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;color:var(--muted);max-height:110px;overflow:auto;white-space:pre-wrap;line-height:1.4}
+.share-link{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.share-link input{flex:1;min-width:220px;font-size:.78rem}
+.qr{background:#fff;border-radius:12px;padding:8px;width:148px;height:148px;display:grid;place-items:center}
+.qr canvas,.qr img{display:block}
+.viewer-banner{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:rgba(54,224,192,.08);border:1px solid rgba(54,224,192,.3);border-radius:14px;padding:10px 14px;font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>🐝 OmniLive</h1>
+    <div class="status"><span class="dot bad" id="connDot"></span><span id="conn">未連線</span><span class="badge" id="roleBadge">—</span><span class="badge live hidden" id="roomBadge"></span></div>
+    <button class="ico-btn" id="theme" title="切換主題">🌓</button>
+  </div>
+  <div id="errbar" class="hidden"></div>
+
+  <div id="viewerBanner" class="viewer-banner hidden">
+    <span>👁️ 觀眾模式：你正在觀看房間 <b id="vRoom"></b> 的即時雙語字幕。</span>
+    <span class="hint" id="vCount"></span>
+  </div>
+
+  <!-- 控制項收合浮條 -->
+  <div class="dock collapsed" id="dock">
+    <div class="dock-toggle" id="dockToggle">⚙️ 控制項（點擊展開）</div>
+
+    <!-- 分享面板 (主持人) -->
+    <div class="panel" id="sharePanel">
+      <h2>① 建立分享會議</h2>
+      <div class="row">
+        <button class="btn primary" id="createRoom">建立分享連結</button>
+        <label style="flex:1;min-width:220px">房間密碼 (選填) <input type="text" id="roomPwd" placeholder="留空=公開房間"></label>
+        <span class="hint">建立後會產生「主持人連結」與「觀眾連結」；把觀眾連結或 QR Code 發給與會者，他們即可看見相同字幕。</span>
+      </div>
+      <div id="shareBody" class="hidden" style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1;min-width:280px">
+          <div style="margin-bottom:8px;font-size:.85rem;color:var(--accent2)">🎙️ 主持人連結 (含收音)</div>
+          <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink">複製</button></div>
+          <div style="margin:14px 0 8px;font-size:.85rem;color:var(--accent)">👁️ 觀眾連結 (只看字幕)</div>
+          <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink">複製</button></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="openViewer">開新分頁預覽觀眾畫面</button>
+            <button class="btn" id="refreshCount">重新整理人數</button>
+            <span class="hint" id="viewerCount"></span>
+          </div>
+        </div>
+        <div>
+          <div class="hint" style="margin-bottom:6px">掃描加入 (觀眾)</div>
+          <div class="qr" id="qrBox"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主持人收音控制 -->
+    <div class="panel" id="casterPanel">
+      <h2>② 音訊來源 (Zoom 場景)</h2>
+      <div class="row">
+        <label>來源
+          <select id="audioSource">
+            <option value="system-display" selected>系統音訊 / Zoom 共享聲音 (推薦)</option>
+            <option value="mic">本機麥克風</option>
+            <option value="device">指定輸入裝置</option>
+            <option value="caption">手動字幕輸入 (兜底)</option>
+          </select>
+        </label>
+        <button class="btn primary" id="startBtn">開始收音</button>
+        <button class="btn" id="stopBtn" disabled>停止</button>
+        <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊, 確認是否真的有聲音">⬇ 下載擷取音訊</button>
+        <span class="dot bad" id="micDot"></span><span class="hint" id="srcHint"></span>
+      </div>
+      <div class="row" style="margin-top:8px;align-items:center;gap:10px">
+        <span class="hint">即時音量</span>
+        <div style="flex:1;height:10px;background:var(--line);border-radius:999px;overflow:hidden;min-width:160px"><div id="meter" style="height:100%;width:0%;background:#666;transition:width .08s"></div></div>
+        <span class="hint" id="srcHintZoom">Zoom 請用「分享」並勾「分享這台電腦的聲音」；沒聲音就改「本機麥克風」。</span>
+      </div>
+      <div class="row" id="deviceRow" style="margin-top:8px;display:none">
+        <label>裝置 ID <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)"></label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>③ 手動字幕 (caption 模式 / 無音訊權限時)</h2>
+      <div class="row">
+        <input type="text" id="captionInput" placeholder="直接貼上會議發言文字…" style="flex:1;min-width:240px">
+        <button class="btn" id="sendCaption">送出翻譯</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>④ 連線紀錄</h2>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="hint">
+      分享流程：<b>建立分享連結</b> → 把「觀眾連結」或 QR Code 發給與會者 → 開啟 <b>開始收音</b> 選 <b>系統音訊 / Zoom 共享聲音</b>，
+      分享畫面時勾選 <b>分享聲音</b>，即可擷取 Zoom 會議音訊。所有開同一房間連結的人都會看到同步的雙語字幕。
+    </div>
+  </div>
+
+  <div class="subtitle-stage">
+    <div id="subtitles"><div class="sub-line tgt placeholder">等待字幕…</div></div>
+    <div class="stage-controls">
+      <label>字級 <input type="range" id="fontSize" min="14" max="48" value="28"></label>
+      <label><input type="checkbox" id="orderSrcFirst"> 原文在上</label>
+      <label><input type="checkbox" id="bgToggle" checked> 背景可讀</label>
+      <label><input type="checkbox" id="showToggle" checked> 顯示字幕</label>
+      <label>從 <select id="from"><option value="zh-TW" selected>繁中</option><option value="en">英文</option></select></label>
+      <label>到 <select id="to"><option value="en" selected>英文</option><option value="zh-TW">繁中</option></select></label>
+      <button class="btn" id="swapBtn" title="互換語言 (快捷鍵 S)">⇄ 互換 (S)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const connEl=$('conn'),connDot=$('connDot'),logEl=$('log'),errbar=$('errbar');
+const srcSel=$('audioSource'),deviceRow=$('deviceRow');
+const fromSel=$('from'),toSel=$('to'),fontSize=$('fontSize');
+const orderChk=$('orderSrcFirst'),bgChk=$('bgToggle'),showChk=$('showToggle');
+const subsEl=$('subtitles'),captionInput=$('captionInput');
+
+$('theme').onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';};
+srcSel.onchange=()=>{deviceRow.style.display=srcSel.value==='device'?'flex':'none';};
+
+function log(m){const t=new Date().toLocaleTimeString();logEl.textContent=(t+' '+m+'\n')+logEl.textContent;}
+function showErr(m){errbar.textContent='⚠ '+m;errbar.classList.remove('hidden');}
+function hideErr(){errbar.classList.add('hidden');}
+
+// ── 房間 / 角色解析 ──
+const ROOM=new URLSearchParams(location.search).get('room')||'';
+const ROLE=new URLSearchParams(location.search).get('role')||(ROOM?'viewer':'caster');
+const PWD=new URLSearchParams(location.search).get('pwd')||'';
+const isCaster = ROLE!=='viewer';
+$('roleBadge').textContent = isCaster?'角色: 主持人':'角色: 觀眾';
+if(ROOM){$('roomBadge').classList.remove('hidden');$('roomBadge').textContent='房間 '+ROOM;}
+if(!isCaster){
+  $('viewerBanner').classList.remove('hidden');
+  $('vRoom').textContent=ROOM;
+  $('sharePanel').classList.add('hidden');   // 觀眾看不到建立面板
+  $('casterPanel').classList.add('hidden');  // 觀眾不收音
+  $('captionInput').closest('.panel').classList.add('hidden');
+  pollViewers();
+}
+
+// ── SSE 訂閱 (播放器核心) ──
+let es=null;
+function connectSSE(){
+  if(es){ es.close(); es=null; } // 重連時先關舊連線 (caster 建立房間後 room 變更需重連)
+  const room=new URLSearchParams(location.search).get('room')||'';
+  const pwd=new URLSearchParams(location.search).get('pwd')||'';
+  es=new EventSource('/stream?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):''));
+  es.addEventListener('hello',e=>{connEl.textContent='SSE 已連線';connDot.className='dot';log('SSE hello: '+(e.data||''));});
+  es.addEventListener('subtitle',ev=>{
+    try{const p=JSON.parse(ev.data);const d=p.data;if(!d)return;
+      renderSub(d.source,d.target,d.from+'→'+d.to+' · '+d.engine+' · #'+d.id,d.speaker,d.id,d.ts);}catch(e){}
+  });
+  es.onopen=()=>{connEl.textContent='SSE 已連線';connDot.className='dot';hideErr();};
+  es.onerror=()=>{connEl.textContent='SSE 重連中…';connDot.className='dot bad';
+    // 401 = 需要密碼 (受保護房間)
+    fetch('/stream?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):''),{method:'GET'}).then(r=>{
+      if(r.status===401 && !isCaster) promptRoomPassword(room);
+    }).catch(()=>{});
+    showErr('SSE 連線中斷，正在自動重連');setTimeout(connectSSE,3000);};
+}
+// 受保護房間且未帶 pwd → 彈出密碼輸入, 成功後重導向帶 hash 的連結
+function promptRoomPassword(room){
+  const input=prompt('此房間需要密碼：');
+  if(!input)return;
+  // 計算明文 hash (與後端 SHA-256 一致) 避免 URL 暴露明文
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode(input)).then(async h=>{
+    const hex=[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    history.replaceState(null,'',location.pathname+'?room='+encodeURIComponent(room)+'&pwd='+hex);
+    location.reload();
+  });
+}
+let activeGroup=null;      // 目前活躍句 (允許更新/合併), 收到新句才鎖定
+let lastSubTs=0;           // 上一句時間戳, 用於判斷是否合併連續短段
+function renderSub(src,tgt,meta,speaker,id,ts){
+  const now=ts||Date.now();
+  // 同一房間連續段若間隔 < 2.5s → 合併成同一句 (避免一句話被切 2-3 個 6s 段散開)
+  const merge = activeGroup && (now-lastSubTs) < 2500;
+  lastSubTs=now;
+  if(merge){
+    // 合併: 更新活躍句的文字 (append 新內容, 去重疊尾部)
+    const a=activeGroup.querySelector('.sub-line.src, .sub-line.tgt'); // 第一/第二行取決於 order
+    const b=activeGroup.children[1];
+    const cur = orderChk.checked ? {srcEl:a,tgtEl:b} : {srcEl:b,tgtEl:a};
+    const newSrc=(cur.srcEl.textContent+' '+(src||'')).trim();
+    const newTgt=(cur.tgtEl.textContent+' '+(tgt||'')).trim();
+    cur.srcEl.textContent=newSrc; cur.tgtEl.textContent=newTgt;
+    return;
+  }
+  // 新句: 鎖定上一個活躍句
+  if(activeGroup) activeGroup.classList.add('finalized');
+  const wrap=document.createElement('div');wrap.className='sub-group active';
+  const a=document.createElement('div');a.className='sub-line '+(orderChk.checked?'src':'tgt');
+  const b=document.createElement('div');b.className='sub-line '+(orderChk.checked?'tgt':'src');
+  a.textContent=orderChk.checked?(src||''):(tgt||'');
+  b.textContent=orderChk.checked?(tgt||''):(src||'');
+  const m=document.createElement('div');m.className='sub-line';m.style.background='transparent';m.style.fontSize='.7rem';m.style.color='rgba(255,255,255,.6)';m.style.fontWeight='400';m.style.textShadow='none';
+  m.textContent=meta+(speaker?(' · 🗣️ '+speaker):'');
+  wrap.appendChild(a);wrap.appendChild(b);wrap.appendChild(m);
+  const ph=subsEl.querySelector('.placeholder'); if(ph)ph.remove();
+  subsEl.appendChild(wrap); // 新字幕從下方出現, 舊的自動被 flex-end 推往上
+  activeGroup=wrap;
+  // roll-up: 超出上限從最上方移除 (看不見為止)
+  while(subsEl.children.length>8)subsEl.removeChild(subsEl.firstChild);
+}
+
+// 套用顯示設定
+function applyStyles(){
+  document.querySelectorAll('.sub-line.src').forEach(e=>e.style.fontSize='');
+  subsEl.style.fontSize=fontSize.value+'px';
+  // 半透明漂浮層: bgToggle 控制是否加強背景
+  const stage=document.querySelector('.subtitle-stage');
+  stage.style.background=bgChk.checked?'rgba(10,14,22,.72)':'rgba(10,14,22,.2)';
+  subsEl.style.display=showChk.checked?'flex':'none';
+}
+[fontSize,orderChk,bgChk,showChk].forEach(el=>el.oninput=applyStyles);
+applyStyles();
+fromSel.onchange=toSel.onchange=()=>{localStorage.setItem('omnilive_lang',fromSel.value+'|'+toSel.value);};
+const saved=localStorage.getItem('omnilive_lang');if(saved){const[a,b]=saved.split('|');if(a)fromSel.value=a;if(b)toSel.value=b;}
+function swapLang(){
+  const f=fromSel.value, t=toSel.value;
+  fromSel.value=t; toSel.value=f;
+  localStorage.setItem('omnilive_lang',fromSel.value+'|'+toSel.value);
+  log('互換語言: '+fromSel.value+' → '+toSel.value);
+}
+$('swapBtn').onclick=swapLang;
+document.addEventListener('keydown',e=>{ if(e.key==='s'||e.key==='S'){ if(e.target.tagName!=='INPUT'&&e.target.tagName!=='SELECT'){ e.preventDefault(); swapLang(); } } });
+// 控制項收合浮條: 預設收起, 點擊展開/收合
+const dockEl=$('dock'), dockToggle=$('dockToggle');
+dockToggle.onclick=()=>{ const c=dockEl.classList.toggle('collapsed'); dockToggle.textContent=c?'⚙️ 控制項（點擊展開）':'⚙️ 控制項（點擊收合）'; };
+connectSSE();
+
+// ── 建立分享房間 ──
+$('createRoom').onclick=async()=>{
+  try{
+    const pwd=$('roomPwd').value.trim();
+    const r=await fetch('/api/room',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password:pwd})});
+    const d=await r.json();
+    $('casterLink').value=d.casterLink;
+    $('viewerLink').value=d.viewerLink;
+    $('shareBody').classList.remove('hidden');
+    renderQR(d.viewerLink);
+    // 直接切換到主持人連結 (含 room + role=caster)
+    history.replaceState(null,'',d.casterLink.replace(location.origin,''));
+    connectSSE(); // 房間建立後 room 變更, 重連 SSE 到正確房間 (否則 caster 收不到自己播音的字幕)
+    log('建立房間 '+d.room+(d.passwordProtected?' (🔒受密碼保護)':'')+' — 觀眾連結已產生');
+    pollViewers();
+  }catch(e){showErr('建立房間失敗: '+e.message);}
+};
+function renderQR(url){
+  const box=$('qrBox');box.innerHTML='';
+  try{ new QRCode(box,{text:url,width:132,height:132,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M}); }
+  catch(e){ box.textContent=url; }
+}
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{
+  const v=$(b.getAttribute('data-copy')).value;
+  navigator.clipboard?.writeText(v).then(()=>{log('已複製連結');}).catch(()=>{});
+});
+$('openViewer').onclick=()=>{const v=$('viewerLink').value;if(v)window.open(v,'_blank');};
+async function pollViewers(){
+  const room=new URLSearchParams(location.search).get('room');
+  if(!room)return;
+  try{const r=await fetch('/api/room/'+encodeURIComponent(room));const d=await r.json();
+    const txt='目前觀眾: '+d.viewers+' 人';
+    $('viewerCount').textContent=txt;
+    if(!isCaster)$('vCount').textContent=txt;
+  }catch(e){}
+}
+$('refreshCount').onclick=pollViewers;
+if(ROOM)setInterval(pollViewers,5000);
+
+// ── 音訊擷取 (主持人) ──
+let mediaStream=null,audioCtx=null,recorder=null,analyser=null,meterRAF=null,silenceTimer=null,peakSinceStart=0,gotAudio=false;
+function updateMeter(){
+  if(!analyser)return;
+  const buf=new Uint8Array(analyser.fftSize);
+  analyser.getByteTimeDomainData(buf);
+  let peak=0; for(const v of buf){const x=Math.abs(v-128)/128; if(x>peak)peak=x;}
+  const pct=Math.min(100,Math.round(peak*180));
+  const m=$('meter'); if(m){ m.style.width=pct+'%'; m.style.background=pct>4?'#28c76f':'#666'; }
+  if(pct>4){ gotAudio=true; peakSinceStart=Math.max(peakSinceStart,pct); if(errbar.classList.contains('hidden')===false && errbar.textContent.includes('沒有偵測到聲音')) hideErr(); }
+  meterRAF=requestAnimationFrame(updateMeter);
+}
+function armSilenceWatchdog(){
+  clearTimeout(silenceTimer);
+  silenceTimer=setTimeout(()=>{
+    if(!gotAudio){
+      showErr('⚠ 開始收音後 4 秒內沒有偵測到聲音：字幕會是空白。請檢查 — (1) Zoom 分享時是否勾選「分享這台電腦的聲音」；(2) 瀏覽器麥克風/標籤權限；(3) 改用「本機麥克風」來源再試。有聲音進來此訊息會自動消失。');
+    }
+  },4000);
+}
+$('startBtn').onclick=async()=>{
+  hideErr();if(!isCaster)return;
+  const src=srcSel.value;
+  if(src==='caption'){log('caption 模式：直接於下方貼文字送出');return;}
+  try{
+    let stream;
+    if(src==='system-display'){
+      stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+      if(!stream.getAudioTracks().length){showErr('未取得系統音訊：Zoom 請用「分享」→ 勾選「分享這台電腦的聲音」；或改用本機麥克風。');}
+    }else if(src==='device'){
+      const dev=$('deviceId').value.trim();
+      stream=await navigator.mediaDevices.getUserMedia({audio:dev?{deviceId:{exact:dev}}:{}});
+    }else{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }
+    mediaStream=stream;
+    // 強制 16kHz: 瀏覽器 AudioContext 預設 48k, 若直接當 16k 送 STT 會被降速 3 倍 → 慢速怪聲 + whisper 幻覺
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)({sampleRate:16000});
+    const srcNode=audioCtx.createMediaStreamSource(stream);
+    analyser=audioCtx.createAnalyser(); analyser.fftSize=1024; srcNode.connect(analyser);
+    const proc=audioCtx.createScriptProcessor(4096,1,1);
+    proc.onaudioprocess=e=>{sendChunk(e.inputBuffer.getChannelData(0));};
+    srcNode.connect(proc);
+    // gain=0 接 destination: 防回授雜音, 且確保 onaudioprocess 在現代 Chrome 穩定觸發
+    const sink=audioCtx.createGain(); sink.gain.value=0; proc.connect(sink); sink.connect(audioCtx.destination);
+    recorder=proc; gotAudio=false; peakSinceStart=0; updateMeter(); armSilenceWatchdog();
+    captureBuf=null; sttInflight=false; debugBuf=null;
+    flushTimer=setInterval(flushWindow, 6000); // 每 6s 送最近 6s 音 (固定窗+2s 重疊, 適合連續影片)
+    $('dlAudioBtn').disabled=false;
+    $('startBtn').disabled=true;$('stopBtn').disabled=false;
+    connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 每 6 秒送出一段 (固定窗切句, 適合 Zoom/YouTube 連續音訊)');
+  }catch(e){showErr('無法取得音訊: '+e.message+'（Zoom 場景請改用「本機麥克風」或確認已登入系統音訊權限）');log('收音失敗: '+e.message);}
+};
+$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);if(flushTimer){clearInterval(flushTimer);flushTimer=null;}analyser=null;recorder=null;captureBuf=null;gotAudio=false;$('startBtn').disabled=false;$('stopBtn').disabled=true;$('dlAudioBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
+// 除錯: 下載前端實際送給 STT 的音訊 (確認擷取層是否真的有聲音, 還是靜音/雜訊)
+$('dlAudioBtn').onclick=()=>{ if(!debugBuf||debugBuf.length<SR*0.5){showErr('還沒有累積到音訊, 請先收音幾秒');return;} const pcm=encodeFloatTo16(debugBuf); const wav=encodeWav(pcm,16000); const blob=new Blob([wav],{type:'audio/wav'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='omnilive-captured-'+Date.now()+'.wav'; a.click(); log('已下載擷取音訊 ('+(debugBuf.length/SR).toFixed(1)+'s) — 聽聽看是真的有聲音還是靜音/雜訊'); };
+
+let captureBuf=null; // 滑動音訊緩衝 (Float32), 固定時間窗送段, 適合連續影片/會議音訊
+let debugBuf=null; // 除錯: 完整累積音訊, 供『下載擷取音訊』確認前端實際送給 STT 的是什麼
+let sttInflight=false; // 防止請求堆積: 上一個 transcribe 沒回來就跳過本次送
+let flushTimer=null; // 固定窗送段計時器
+const SR=16000, WINDOW_MS=6000, OVERLAP_MS=2000, MAX_KEEP_MS=WINDOW_MS+OVERLAP_MS;
+const WINDOW_SAMPLES=Math.floor(SR*WINDOW_MS/1000);
+const KEEP_SAMPLES=Math.floor(SR*MAX_KEEP_MS/1000);
+// onaudioprocess 只負責把音塞進滑動緩衝; 送段由計時器驅動 (固定窗+重疊, 不靠靜音偵測)
+function sendChunk(float32){
+  if(!captureBuf){ captureBuf=new Float32Array(0); }
+  if(!debugBuf){ debugBuf=new Float32Array(0); }
+  const dm=new Float32Array(debugBuf.length+float32.length); dm.set(debugBuf,0); dm.set(float32,debugBuf.length); debugBuf=dm;
+  const merged=new Float32Array(captureBuf.length+float32.length);
+  merged.set(captureBuf,0); merged.set(float32,captureBuf.length); captureBuf=merged;
+  if(captureBuf.length>KEEP_SAMPLES){ captureBuf=captureBuf.subarray(captureBuf.length-KEEP_SAMPLES); } // 只留最近 8s (重疊用)
+}
+// 每 6s 送「最近 6s 音訊」(與上段重疊 2s), 連續影片/會議不會因沒靜音而憋到 15s 才吐
+function flushWindow(){
+  if(sttInflight || !captureBuf || captureBuf.length < SR*1.0) return; // 音太少跳過
+  const samples=captureBuf.subarray(Math.max(0,captureBuf.length-WINDOW_SAMPLES)); // 取最近 6s
+  const pcm=encodeFloatTo16(samples);
+  const wav=encodeWav(pcm, 16000);
+  const room=new URLSearchParams(location.search).get('room')||'';
+  const lang=fromSel.value||'';
+  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
+  sttInflight=true;
+  const release=()=>{ sttInflight=false; };
+  const to=setTimeout(release, 45000); // 防慢模型(medium)永久卡死 inflight, 導致後續段全被丟棄
+  fetch(url,{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
+    .then(r=>r.ok?r.json():Promise.reject(r.status))
+    .then(d=>{ if(d.source)log('辨識: '+d.source.slice(0,40)); })
+    .catch(()=>{ /* 暫時錯誤跳過本段 */ })
+    .finally(()=>{ clearTimeout(to); release(); });
+}
+// 16-bit PCM → WAV (mon聲, 16kHz) — 瀏覽器原生 DataView, 不用 Node Buffer
+function encodeWav(pcm, sampleRate){
+  const ab=new ArrayBuffer(44+pcm.length);
+  const dv=new DataView(ab);
+  const ws=(off,s)=>{for(let i=0;i<s.length;i++)dv.setUint8(off+i,s.charCodeAt(i));};
+  ws(0,'RIFF'); dv.setUint32(4,36+pcm.length,true); ws(8,'WAVE');
+  ws(12,'fmt '); dv.setUint32(16,16,true); dv.setUint16(20,1,true);
+  dv.setUint16(22,1,true); dv.setUint32(24,sampleRate,true); dv.setUint32(28,sampleRate*2,true);
+  dv.setUint16(32,2,true); dv.setUint16(34,16,true);
+  ws(36,'data'); dv.setUint32(40,pcm.length,true);
+  new Uint8Array(ab,44).set(pcm); // pcm 為 Uint8Array (encodeFloatTo16 產出)
+  return ab;
+}
+function encodeFloatTo16(f){const u=new Uint8Array(f.length*2);const dv=new DataView(u.buffer);for(let i=0;i<f.length;i++){dv.setInt16(i*2,Math.max(-1,Math.min(1,f[i]))*0x7fff,true);}return u;}
+
+// ── 手動字幕送出 ──
+$('sendCaption').onclick=async()=>{
+  const text=captionInput.value.trim();if(!text){showErr('請先輸入文字');return;}
+  const room=new URLSearchParams(location.search).get('room')||'';
+  try{
+    const r=await fetch('/api/speak',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text,room,from:fromSel.value,to:toSel.value})});
+    const d=await r.json();
+    if(d.source)renderSub(d.source,d.target,(fromSel.value)+'→'+(toSel.value)+' · '+d.engine+' · #'+d.id);
+    captionInput.value='';log('手動字幕送出: '+text.slice(0,30));
+  }catch(e){showErr('送出失敗: '+e.message);}
+};
+</script>
+</body>
+</html>
