@@ -110,6 +110,7 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
       </label>
       <button class="btn primary" id="startBtn">開始收音</button>
       <button class="btn" id="stopBtn" disabled>停止</button>
+      <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊, 確認是否真的有聲音">⬇ 下載擷取音訊</button>
       <span class="dot bad" id="micDot"></span><span class="hint" id="srcHint"></span>
     </div>
     <div class="row" style="margin-top:8px;align-items:center;gap:10px">
@@ -334,15 +335,19 @@ $('startBtn').onclick=async()=>{
     // gain=0 接 destination: 防回授雜音, 且確保 onaudioprocess 在現代 Chrome 穩定觸發
     const sink=audioCtx.createGain(); sink.gain.value=0; proc.connect(sink); sink.connect(audioCtx.destination);
     recorder=proc; gotAudio=false; peakSinceStart=0; updateMeter(); armSilenceWatchdog();
-    captureBuf=null; sttInflight=false;
+    captureBuf=null; sttInflight=false; debugBuf=null;
     flushTimer=setInterval(flushWindow, 6000); // 每 6s 送最近 6s 音 (固定窗+2s 重疊, 適合連續影片)
+    $('dlAudioBtn').disabled=false;
     $('startBtn').disabled=true;$('stopBtn').disabled=false;
     connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 每 6 秒送出一段 (固定窗切句, 適合 Zoom/YouTube 連續音訊)');
   }catch(e){showErr('無法取得音訊: '+e.message+'（Zoom 場景請改用「本機麥克風」或確認已登入系統音訊權限）');log('收音失敗: '+e.message);}
 };
-$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);if(flushTimer){clearInterval(flushTimer);flushTimer=null;}analyser=null;recorder=null;captureBuf=null;gotAudio=false;$('startBtn').disabled=false;$('stopBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
+$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);if(flushTimer){clearInterval(flushTimer);flushTimer=null;}analyser=null;recorder=null;captureBuf=null;gotAudio=false;$('startBtn').disabled=false;$('stopBtn').disabled=true;$('dlAudioBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
+// 除錯: 下載前端實際送給 STT 的音訊 (確認擷取層是否真的有聲音, 還是靜音/雜訊)
+$('dlAudioBtn').onclick=()=>{ if(!debugBuf||debugBuf.length<SR*0.5){showErr('還沒有累積到音訊, 請先收音幾秒');return;} const pcm=encodeFloatTo16(debugBuf); const wav=encodeWav(pcm,16000); const blob=new Blob([wav],{type:'audio/wav'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='omnilive-captured-'+Date.now()+'.wav'; a.click(); log('已下載擷取音訊 ('+(debugBuf.length/SR).toFixed(1)+'s) — 聽聽看是真的有聲音還是靜音/雜訊'); };
 
 let captureBuf=null; // 滑動音訊緩衝 (Float32), 固定時間窗送段, 適合連續影片/會議音訊
+let debugBuf=null; // 除錯: 完整累積音訊, 供『下載擷取音訊』確認前端實際送給 STT 的是什麼
 let sttInflight=false; // 防止請求堆積: 上一個 transcribe 沒回來就跳過本次送
 let flushTimer=null; // 固定窗送段計時器
 const SR=16000, WINDOW_MS=6000, OVERLAP_MS=2000, MAX_KEEP_MS=WINDOW_MS+OVERLAP_MS;
@@ -351,6 +356,8 @@ const KEEP_SAMPLES=Math.floor(SR*MAX_KEEP_MS/1000);
 // onaudioprocess 只負責把音塞進滑動緩衝; 送段由計時器驅動 (固定窗+重疊, 不靠靜音偵測)
 function sendChunk(float32){
   if(!captureBuf){ captureBuf=new Float32Array(0); }
+  if(!debugBuf){ debugBuf=new Float32Array(0); }
+  const dm=new Float32Array(debugBuf.length+float32.length); dm.set(debugBuf,0); dm.set(float32,debugBuf.length); debugBuf=dm;
   const merged=new Float32Array(captureBuf.length+float32.length);
   merged.set(captureBuf,0); merged.set(float32,captureBuf.length); captureBuf=merged;
   if(captureBuf.length>KEEP_SAMPLES){ captureBuf=captureBuf.subarray(captureBuf.length-KEEP_SAMPLES); } // 只留最近 8s (重疊用)
