@@ -34,7 +34,10 @@ overrides:
   # vitest 最新穩定 4.1.10 (5.x 仍 beta, 不跨)；CVE 上游未修, 先鎖穩定最新
   "vitest": ">=4.1.10"
   "vite": ">=7.0.0 <8"
-  "undici": ">=8.0.0 <9"
+  # ⛔ 回退 (2026-08-17 09:00 部署前驗證): undici@8 移除了 lib/handler/wrap-handler.js，
+  #    jsdom@29.1.1 硬性 require 該路徑 → OmniCore CI / learning-center-ci / VPS 建置三紅。
+  #    jsdom@29 只接受 ^7.25.0；跨 major 亦違反 AGENTS.md #5。維持 7.x 修補版。
+  "undici": ">=7.29.0 <8"
   "js-yaml": ">=5.0.0 <6"
   "hono": ">=4.0.0 <5"
   # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
