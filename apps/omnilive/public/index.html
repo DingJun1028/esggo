@@ -326,7 +326,8 @@ $('startBtn').onclick=async()=>{
       stream=await navigator.mediaDevices.getUserMedia({audio:dev?{deviceId:{exact:dev}}:{}});
     }else{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }
     mediaStream=stream;
-    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    // 強制 16kHz: 瀏覽器 AudioContext 預設 48k, 若直接當 16k 送 STT 會被降速 3 倍 → 慢速怪聲 + whisper 幻覺
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)({sampleRate:16000});
     const srcNode=audioCtx.createMediaStreamSource(stream);
     analyser=audioCtx.createAnalyser(); analyser.fftSize=1024; srcNode.connect(analyser);
     const proc=audioCtx.createScriptProcessor(4096,1,1);
