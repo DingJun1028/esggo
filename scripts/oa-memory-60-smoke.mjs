@@ -1,6 +1,6 @@
 // OA-Team 60 代理暗光雙屬性共享記憶 smoke test（嚴格 30/30）
 //
-// 暗系蜂王 01-30 (umbra) | 光系蜂后 31-60 (lumen)
+// 暗系蜂王 01-30 (umbra) 代表色 #00FFFF | 光系蜂后 31-60 (lumen) 代表色 #FFD700
 // 五陣列：智庫聖所 / 符文契約 / 暗翼(13-18) / 光翼(43-48) / 煉金熵減 / 5T 驗算
 
 import process from 'node:process';
