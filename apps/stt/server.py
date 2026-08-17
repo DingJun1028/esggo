@@ -88,7 +88,13 @@ async def transcribe(req: Request, lang: str = ""):
             language=lang_hint,
             task="transcribe",
             beam_size=5,
-            vad_filter=False,
+            temperature=[0.0, 0.2, 0.4],
+            condition_on_previous_text=False,
+            vad_filter=True,
+            vad_parameters=dict(min_silence_duration_ms=500, speech_pad_ms=200, threshold=0.35),
+            no_speech_threshold=0.8,
+            compression_ratio_threshold=2.2,
+            log_prob_threshold=-0.8,
         )
         text = "".join(s.text for s in segments)
         detected = info.language or (lang_hint or "en")
