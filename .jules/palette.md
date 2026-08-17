@@ -12,3 +12,7 @@
 ## 2024-05-14 - Keyboard Focus States for Complex Components
 **Learning:** In complex visual components like `full-report-preview.tsx` and `liquid-glass-card.tsx`, basic HTML buttons are sometimes used without inherit focus styles (`focus-visible:ring-2`). This can break keyboard navigation for screen readers or power users.
 **Action:** When auditing or modifying complex components, always explicitly verify focus styles (`focus-visible`) for any newly added or existing interactive elements, particularly buttons mapping to key actions (like downloads or navigation).
+
+## 2026-08-17 - [Toggle Group Accessibility]
+**Learning:** Grouped layout toggle buttons (e.g., Grid/List/Board views) that are icon-only must be grouped using `role="group"` with an `aria-label`. Individual buttons need `aria-label`, `title`, and crucially, `aria-pressed={isActive}` to correctly convey their toggle state to screen readers.
+**Action:** When creating or fixing toggle groups, ensure the parent has `role="group"`, and the children use `aria-pressed` alongside standard icon-only button accessibility attributes (`aria-label`, `focus-visible`).
