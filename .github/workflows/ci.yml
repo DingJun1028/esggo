@@ -384,6 +384,14 @@ jobs:
           TDAI_GATEWAY_URL: ${{ vars.TDAI_GATEWAY_URL || 'http://127.0.0.1:8420' }}
           TDAI_GATEWAY_API_KEY: ${{ secrets.TDAI_GATEWAY_API_KEY }}
           TDAI_SERVICE_ID: ${{ vars.TDAI_SERVICE_ID || 'oa-team-swarm' }}
+      - name: Run OA 60-agent dark/light smoke test
+        working-directory: scripts
+        run: node oa-memory-60-smoke.mjs
+        env:
+          TDAI_GATEWAY_URL: ${{ vars.TDAI_GATEWAY_URL || 'http://127.0.0.1:8420' }}
+          TDAI_GATEWAY_API_KEY: ${{ secrets.TDAI_GATEWAY_API_KEY }}
+          TDAI_SERVICE_ID: ${{ vars.TDAI_SERVICE_ID || 'oa-team-swarm' }}
+          OA_MEMORY_TEST_TIMEOUT_MS: 60000
 
   # ─── VPS 腳本語法檢查 ─────────────────────────────────────────
   validate-vps:
