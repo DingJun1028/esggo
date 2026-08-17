@@ -283,7 +283,7 @@ $('refreshCount').onclick=pollViewers;
 if(ROOM)setInterval(pollViewers,5000);
 
 // ── 音訊擷取 (主持人) ──
-let mediaStream=null,audioCtx=null,recorder=null,analyser=null,meterRAF=null;
+let mediaStream=null,audioCtx=null,recorder=null,analyser=null,meterRAF=null,silenceTimer=null,peakSinceStart=0,gotAudio=false;
 function updateMeter(){
   if(!analyser)return;
   const buf=new Uint8Array(analyser.fftSize);
@@ -291,7 +291,16 @@ function updateMeter(){
   let peak=0; for(const v of buf){const x=Math.abs(v-128)/128; if(x>peak)peak=x;}
   const pct=Math.min(100,Math.round(peak*180));
   const m=$('meter'); if(m){ m.style.width=pct+'%'; m.style.background=pct>4?'#28c76f':'#666'; }
+  if(pct>4){ gotAudio=true; peakSinceStart=Math.max(peakSinceStart,pct); if(errbar.classList.contains('hidden')===false && errbar.textContent.includes('沒有偵測到聲音')) hideErr(); }
   meterRAF=requestAnimationFrame(updateMeter);
+}
+function armSilenceWatchdog(){
+  clearTimeout(silenceTimer);
+  silenceTimer=setTimeout(()=>{
+    if(!gotAudio){
+      showErr('⚠ 開始收音後 4 秒內沒有偵測到聲音：字幕會是空白。請檢查 — (1) Zoom 分享時是否勾選「分享這台電腦的聲音」；(2) 瀏覽器麥克風/標籤權限；(3) 改用「本機麥克風」來源再試。有聲音進來此訊息會自動消失。');
+    }
+  },4000);
 }
 $('startBtn').onclick=async()=>{
   hideErr();if(!isCaster)return;
@@ -315,7 +324,7 @@ $('startBtn').onclick=async()=>{
     srcNode.connect(proc);
     // gain=0 接 destination: 防回授雜音, 且確保 onaudioprocess 在現代 Chrome 穩定觸發
     const sink=audioCtx.createGain(); sink.gain.value=0; proc.connect(sink); sink.connect(audioCtx.destination);
-    recorder=proc; updateMeter();
+    recorder=proc; gotAudio=false; peakSinceStart=0; updateMeter(); armSilenceWatchdog();
     $('startBtn').disabled=true;$('stopBtn').disabled=false;
     connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 看上方音量條確認有聲音進來');
   }catch(e){showErr('無法取得音訊: '+e.message+'（Zoom 場景請改用「本機麥克風」或確認已登入系統音訊權限）');log('收音失敗: '+e.message);}
