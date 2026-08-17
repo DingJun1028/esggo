@@ -341,15 +341,18 @@ function sendChunk(float32){
     .then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{if(d.source)log('辨識: '+d.source.slice(0,40));})
     .catch(e=>{showErr('STT 呼叫失敗 (本地 faster-whisper 未啟動？): '+e);});
 }
-// 16-bit PCM → WAV (mon聲, 16kHz)
+// 16-bit PCM → WAV (mon聲, 16kHz) — 瀏覽器原生 DataView, 不用 Node Buffer
 function encodeWav(pcm, sampleRate){
-  const buf=Buffer.alloc(44+pcm.length);
-  buf.write('RIFF',0); buf.writeUInt32LE(36+pcm.length,4); buf.write('WAVE',8);
-  buf.write('fmt ',12); buf.writeUInt32LE(16,16); buf.writeUInt16LE(1,20);
-  buf.writeUInt16LE(1,22); buf.writeUInt32LE(sampleRate,24); buf.writeUInt32LE(sampleRate*2,28);
-  buf.writeUInt16LE(2,32); buf.writeUInt16LE(16,34); buf.write('data',36);
-  buf.writeUInt32LE(pcm.length,40); pcm.copy(buf,44);
-  return buf;
+  const ab=new ArrayBuffer(44+pcm.length);
+  const dv=new DataView(ab);
+  const ws=(off,s)=>{for(let i=0;i<s.length;i++)dv.setUint8(off+i,s.charCodeAt(i));};
+  ws(0,'RIFF'); dv.setUint32(4,36+pcm.length,true); ws(8,'WAVE');
+  ws(12,'fmt '); dv.setUint32(16,16,true); dv.setUint16(20,1,true);
+  dv.setUint16(22,1,true); dv.setUint32(24,sampleRate,true); dv.setUint32(28,sampleRate*2,true);
+  dv.setUint16(32,2,true); dv.setUint16(34,16,true);
+  ws(36,'data'); dv.setUint32(40,pcm.length,true);
+  new Uint8Array(ab,44).set(pcm); // pcm 為 Uint8Array (encodeFloatTo16 產出)
+  return ab;
 }
 function encodeFloatTo16(f){const u=new Uint8Array(f.length*2);const dv=new DataView(u.buffer);for(let i=0;i<f.length;i++){dv.setInt16(i*2,Math.max(-1,Math.min(1,f[i]))*0x7fff,true);}return u;}
 
