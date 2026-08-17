@@ -3,15 +3,17 @@
 # 暗系蜂王 01-30（umbra）| 光系蜂后 31-60（lumen）
 # 每代理固定：
 #   - 編號 01-60
-#   - 陣列（智庫/符文/光翼/煉金/5T）
+#   - 陣列（智庫聖所 / 符文契約 / 暗翼 or 光翼 / 煉金熵減 / 5T 驗算）
 #   - MemoryAssetKind + visibility（對齊 tencent-mem.ts）
 #   - alignment: umbra（暗系）| lumen（光系）
 #   - archetype: 本代理的暗/光屬性標籤
 #
-# 雙屬性總綱：
-#   暗系蜂王（01-30）：umbra — 潛行、觀察、隱蔽、滲透（深藍 #10243f）
-#   光系蜂后（31-60）：lumen — 啟示、創造、淨化、揭露（暖金 #c9a24b）
-#   每位代理只有單一主屬性，MemoryHub 路由分區严格 30/30。
+# 五陣列：
+#   01-06  智庫聖所
+#   07-12  符文契約
+#   13-18  蜂王隊=暗翼 | 31-60 蜂后隊=光翼
+#   19-24  煉金熵減
+#   25-30  5T 驗算
 
 ## 屬性定義
 
@@ -26,7 +28,8 @@
 |------|------|----------|------------|------|
 | 智庫聖所 | 長短期記憶召回、向量知識沉澆、脈絡提純 | chat_memory + wiki | team | umbra 01-06 / lumen 31-36 |
 | 符文契約 | API 鑄造、雙向 TS、ZKP 隱私 | skill + wiki | restricted | umbra 07-12 / lumen 37-42 |
-| 光之羽翼 | 背景 Task、ADK 調度、Bento 渲染、Live 轉播 | skill + wiki | team | umbra 13-18 / lumen 43-48 |
+| 暗翼（蜂王）| 背景 Task、ADK 調度、Bento 渲染、Live 轉播 | skill + wiki | team | umbra 13-18 |
+| 光翼（蜂后）| 背景 Task、ADK 調度、Bento 渲染、Live 轉播 | skill + wiki | team | lumen 43-48 |
 | 煉金熵減 | 重構、效能監控、CI/CD Pipeline | codegraph + skill | agent | umbra 19-24 / lumen 49-54 |
 | 5T 驗算 | ISO 規範、Hash 鎖定、UUID 發放 | wiki + codegraph | restricted | umbra 25-30 / lumen 55-60 |
 
@@ -59,7 +62,7 @@
 | 11 | 萬能測試蜂 | umbra | Seer | skill | agent | 自動化測試步驟 |
 | 12 | 萬能設計蜂 | umbra | Shaper | wiki | team | UI/UX 設計規範 |
 
-### 光之羽翼 (13-18)
+### 暗翼 (13-18)
 
 | 編號 | 代理 | alignment | archetype | 資產類別 | visibility | 說明 |
 |------|------|-----------|-----------|----------|------------|------|
@@ -121,7 +124,7 @@
 | 41 | 蜂后萬能測試蜂 | lumen | Seer | skill | agent | VPS 自動化測試步驟 |
 | 42 | 蜂后萬能設計蜂 | lumen | Shaper | wiki | team | VPS UI 設計規範 |
 
-### 光之羽翼 (43-48)
+### 光翼 (43-48)
 
 | 編號 | 代理 | alignment | archetype | 資產類別 | visibility | 說明 |
 |------|------|-----------|-----------|----------|------------|------|
