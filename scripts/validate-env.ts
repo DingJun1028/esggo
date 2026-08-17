@@ -38,11 +38,15 @@ function loadEnvFile(filePath: string): Record<string, string> {
 
 function main() {
   const envPath = path.join(process.cwd(), '.env');
-  if (!fs.existsSync(envPath)) {
-    console.error('Missing .env file at', envPath);
-    process.exit(1);
+  const hasEnvFile = fs.existsSync(envPath);
+  if (!hasEnvFile) {
+    // CI / hosted builds (GitHub Actions, Vercel) inject variables directly into
+    // the process environment and never ship a .env file. Fall back to
+    // process.env instead of hard-failing — the required-variable gate below
+    // still applies, so a genuinely missing variable is still an error.
+    console.warn('No .env file at', envPath, '- falling back to process.env');
   }
-  const env = loadEnvFile(envPath);
+  const env = hasEnvFile ? loadEnvFile(envPath) : {};
   const missing: string[] = [];
   const empty: string[] = [];
 
