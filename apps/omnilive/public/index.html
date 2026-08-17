@@ -109,6 +109,11 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
       <button class="btn" id="stopBtn" disabled>停止</button>
       <span class="dot bad" id="micDot"></span><span class="hint" id="srcHint"></span>
     </div>
+    <div class="row" style="margin-top:8px;align-items:center;gap:10px">
+      <span class="hint">即時音量</span>
+      <div style="flex:1;height:10px;background:var(--line);border-radius:6px;overflow:hidden;min-width:160px"><div id="meter" style="height:100%;width:0%;background:#666;transition:width .08s"></div></div>
+      <span class="hint" id="srcHintZoom">Zoom 請用「分享」並勾「分享這台電腦的聲音」；沒聲音就改「本機麥克風」。</span>
+    </div>
     <div class="row" id="deviceRow" style="margin-top:8px;display:none">
       <label>裝置 ID <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)"></label>
     </div>
@@ -278,7 +283,16 @@ $('refreshCount').onclick=pollViewers;
 if(ROOM)setInterval(pollViewers,5000);
 
 // ── 音訊擷取 (主持人) ──
-let mediaStream=null,audioCtx=null,recorder=null;
+let mediaStream=null,audioCtx=null,recorder=null,analyser=null,meterRAF=null;
+function updateMeter(){
+  if(!analyser)return;
+  const buf=new Uint8Array(analyser.fftSize);
+  analyser.getByteTimeDomainData(buf);
+  let peak=0; for(const v of buf){const x=Math.abs(v-128)/128; if(x>peak)peak=x;}
+  const pct=Math.min(100,Math.round(peak*180));
+  const m=$('meter'); if(m){ m.style.width=pct+'%'; m.style.background=pct>4?'#28c76f':'#666'; }
+  meterRAF=requestAnimationFrame(updateMeter);
+}
 $('startBtn').onclick=async()=>{
   hideErr();if(!isCaster)return;
   const src=srcSel.value;
@@ -287,7 +301,7 @@ $('startBtn').onclick=async()=>{
     let stream;
     if(src==='system-display'){
       stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
-      if(!stream.getAudioTracks().length){showErr('未取得系統音訊：分享時請勾選「分享聲音」。改用手動字幕亦可。');}
+      if(!stream.getAudioTracks().length){showErr('未取得系統音訊：Zoom 請用「分享」→ 勾選「分享這台電腦的聲音」；或改用本機麥克風。');}
     }else if(src==='device'){
       const dev=$('deviceId').value.trim();
       stream=await navigator.mediaDevices.getUserMedia({audio:dev?{deviceId:{exact:dev}}:{}});
@@ -295,14 +309,18 @@ $('startBtn').onclick=async()=>{
     mediaStream=stream;
     audioCtx=new (window.AudioContext||window.webkitAudioContext)();
     const srcNode=audioCtx.createMediaStreamSource(stream);
+    analyser=audioCtx.createAnalyser(); analyser.fftSize=1024; srcNode.connect(analyser);
     const proc=audioCtx.createScriptProcessor(4096,1,1);
     proc.onaudioprocess=e=>{sendChunk(e.inputBuffer.getChannelData(0));};
-    srcNode.connect(proc);proc.connect(audioCtx.destination);recorder=proc;
+    srcNode.connect(proc);
+    // gain=0 接 destination: 防回授雜音, 且確保 onaudioprocess 在現代 Chrome 穩定觸發
+    const sink=audioCtx.createGain(); sink.gain.value=0; proc.connect(sink); sink.connect(audioCtx.destination);
+    recorder=proc; updateMeter();
     $('startBtn').disabled=true;$('stopBtn').disabled=false;
-    connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src);
-  }catch(e){showErr('無法取得音訊: '+e.message);log('收音失敗: '+e.message);}
+    connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 看上方音量條確認有聲音進來');
+  }catch(e){showErr('無法取得音訊: '+e.message+'（Zoom 場景請改用「本機麥克風」或確認已登入系統音訊權限）');log('收音失敗: '+e.message);}
 };
-$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}recorder=null;$('startBtn').disabled=false;$('stopBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
+$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);analyser=null;recorder=null;$('startBtn').disabled=false;$('stopBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
 
 let lastSend=0;
 function sendChunk(float32){
