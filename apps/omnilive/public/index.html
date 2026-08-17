@@ -32,8 +32,8 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 select,input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.92rem}
 label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6px}
 /* 半透明漂浮字幕層 — 可疊在 Zoom/影片上, 大字白字+描邊, roll-up (新在下舊上推) */
-.subtitle-stage{position:relative;background:rgba(10,14,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;min-height:220px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:16px}
-#subtitles{display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:hidden}
+.subtitle-stage{position:relative;background:rgba(10,14,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;height:46vh;min-height:200px;display:flex;flex-direction:column;gap:10px;padding:16px}
+#subtitles{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:hidden}
 .sub-group{display:flex;flex-direction:column;gap:4px;animation:subIn .18s ease-out}
 @keyframes subIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .sub-line{border-radius:10px;padding:6px 12px;font-weight:800;line-height:1.32;background:rgba(0,0,0,.35);text-shadow:0 2px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);color:#fff}
