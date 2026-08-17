@@ -7,65 +7,85 @@
 <script src="./qrcode.min.js"></script>
 <style>
 :root{
-  --bg:#070b12;--panel:rgba(20,27,41,.72);--panel2:rgba(14,22,35,.6);
-  --accent:#36e0c0;--accent2:#5b8cff;--txt:#eaf1fb;--muted:#8a97ad;
-  --line:rgba(255,255,255,.09);--radius:18px;--gap:clamp(10px,2vw,16px);
+  --bg:#0e0e14;--panel:rgba(22,22,31,.66);--panel2:rgba(30,30,42,.5);
+  --accent:#7c5cff;--accent2:#36e0c0;--txt:#f4f6fb;--muted:#9aa3b8;
+  --line:rgba(255,255,255,.10);--radius:18px;--gap:clamp(10px,2vw,16px);
   --font:"Segoe UI",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
-  background:radial-gradient(900px 500px at 85% -5%,rgba(91,140,255,.16),transparent 60%),var(--bg);background-attachment:fixed}
-.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
-.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.topbar h1{font-size:1.05rem;margin:0;font-weight:700}
-.ico-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1.05rem;display:grid;place-items:center;transition:.2s}
-.ico-btn:hover{border-color:var(--accent)}
-.status{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:8px}
-.dot{width:9px;height:9px;border-radius:50%;background:#3ad17a;flex:none}
-.dot.bad{background:#e2554f}
-.panel{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap)}
-.panel h2{font-size:.92rem;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.04em}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.btn{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:12px;padding:10px 16px;cursor:pointer;font-weight:600;transition:.15s}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);color:var(--txt);
+  background:radial-gradient(1200px 700px at 80% -10%,rgba(124,92,255,.18),transparent 55%),radial-gradient(900px 600px at 10% 110%,rgba(54,224,192,.12),transparent 55%),var(--bg);
+  background-attachment:fixed;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:var(--gap);padding:var(--gap)}
+
+/* 頂部極簡浮條 */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px}
+.topbar h1{font-size:.95rem;margin:0;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.status{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:#3ad17a;flex:none;box-shadow:0 0 8px rgba(58,209,122,.7)}
+.dot.bad{background:#e2554f;box-shadow:0 0 8px rgba(226,85,79,.7)}
+.badge{font-size:.72rem;padding:3px 10px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+.badge.live{color:var(--accent2);border-color:rgba(54,224,192,.4)}
+
+/* 膠囊按鈕 */
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:999px;padding:9px 16px;cursor:pointer;font-weight:600;font-size:.85rem;transition:.15s}
 .btn:hover{border-color:var(--accent)}
-.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06121a;border:none}
-select,input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.92rem}
-label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6px}
-/* 半透明漂浮字幕層 — 可疊在 Zoom/影片上, 大字白字+描邊, roll-up (新在下舊上推) */
-.subtitle-stage{position:relative;background:rgba(10,14,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;height:46vh;min-height:200px;display:flex;flex-direction:column;gap:10px;padding:16px}
-#subtitles{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:hidden}
-.sub-group{display:flex;flex-direction:column;gap:4px;animation:subIn .18s ease-out}
-.sub-group.finalized{animation:none} /* 已定型句: 鎖定, 不再有進場動畫 */
+.btn.primary{background:linear-gradient(135deg,var(--accent),#5b8cff);color:#fff;border:none}
+.ico-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:.2s}
+.ico-btn:hover{border-color:var(--accent)}
+select,input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.85rem;outline:none}
+select:focus,input[type=text]:focus{border-color:var(--accent)}
+label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+
+/* 控制面板 → 玻璃卡片 */
+.panel{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap)}
+.panel h2{font-size:.82rem;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* 字幕舞台 — 浮動玻璃層 */
+.subtitle-stage{position:relative;background:rgba(8,10,16,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);overflow:hidden;height:52vh;min-height:240px;display:flex;flex-direction:column;gap:12px;padding:20px}
+#subtitles{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;overflow:hidden}
+.sub-group{display:flex;flex-direction:column;gap:6px;animation:subIn .2s ease-out}
+.sub-group.finalized{animation:none}
 .sub-group.active{position:relative}
-.sub-group.active::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);animation:typing 1.1s ease-in-out infinite}
+.sub-group.active::after{content:'';position:absolute;left:0;bottom:-7px;height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);animation:typing 1.1s ease-in-out infinite}
 @keyframes typing{0%{opacity:.2;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:.2;transform:scaleX(.3)}}
-@keyframes subIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.sub-line{border-radius:10px;padding:6px 12px;font-weight:800;line-height:1.32;background:rgba(0,0,0,.35);text-shadow:0 2px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);color:#fff}
-.sub-line.src{font-size:clamp(1rem,2.6vw,1.4rem)}
-.sub-line.tgt{font-size:clamp(1.25rem,3.4vw,1.9rem);color:#fff}
-.sub-line .meta{font-size:.7rem;color:rgba(255,255,255,.6);font-weight:400;margin-top:2px;text-shadow:none}
-.stage-controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:6px}
+@keyframes subIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* 新版風格: 大字=翻譯(主), 小字=原文(輔, 較暗) */
+.sub-line{border-radius:12px;padding:6px 14px;font-weight:800;line-height:1.34;color:#fff}
+.sub-line.src{font-size:clamp(.95rem,2.1vw,1.25rem);font-weight:500;color:rgba(255,255,255,.55);background:transparent;padding-left:14px}
+.sub-line.tgt{font-size:clamp(1.4rem,3.6vw,2.2rem);font-weight:800;background:transparent;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.sub-line .meta{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:400;margin-top:3px}
+
+/* 收合浮條: 控制項預設收進頂部膠囊, 點展開才顯面板 */
+.dock{display:flex;flex-direction:column;gap:var(--gap)}
+.dock.collapsed .panel{display:none}
+.dock-toggle{display:flex;align-items:center;gap:8px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.82rem;color:var(--muted);width:fit-content}
+.dock-toggle:hover{color:var(--txt);border-color:var(--accent)}
+
+.stage-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .stage-controls label{color:var(--muted)}
-.hint{font-size:.8rem;color:var(--muted);line-height:1.5}
+.hint{font-size:.78rem;color:var(--muted);line-height:1.5}
 .hidden{display:none!important}
-#errbar{background:rgba(226,85,79,.15);border:1px solid rgba(226,85,79,.5);color:#ffd9d6;border-radius:12px;padding:10px 14px;font-size:.85rem}
-.log{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.75rem;color:var(--muted);max-height:120px;overflow:auto;white-space:pre-wrap;line-height:1.4}
+#errbar{background:rgba(226,85,79,.15);border:1px solid rgba(226,85,79,.5);color:#ffd9d6;border-radius:14px;padding:10px 14px;font-size:.82rem}
+.log{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;color:var(--muted);max-height:110px;overflow:auto;white-space:pre-wrap;line-height:1.4}
 .share-link{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.share-link input{flex:1;min-width:240px;font-size:.8rem}
-.badge{font-size:.72rem;padding:3px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-.badge.live{color:var(--accent);border-color:var(--accent)}
+.share-link input{flex:1;min-width:220px;font-size:.78rem}
 .qr{background:#fff;border-radius:12px;padding:8px;width:148px;height:148px;display:grid;place-items:center}
 .qr canvas,.qr img{display:block}
-.viewer-banner{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:rgba(54,224,192,.08);border:1px solid rgba(54,224,192,.3);border-radius:12px;padding:10px 14px;font-size:.85rem}
+.viewer-banner{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:rgba(54,224,192,.08);border:1px solid rgba(54,224,192,.3);border-radius:14px;padding:10px 14px;font-size:.82rem}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
-    <h1>🐝 OmniLive 萬能即時轉譯雙語字幕播放器</h1>
+    <h1>🐝 OmniLive</h1>
+    <div class="status"><span class="dot bad" id="connDot"></span><span id="conn">未連線</span><span class="badge" id="roleBadge">—</span><span class="badge live hidden" id="roomBadge"></span></div>
     <button class="ico-btn" id="theme" title="切換主題">🌓</button>
   </div>
-  <div class="status"><span class="dot bad" id="connDot"></span><span id="conn">未連線</span><span class="badge" id="roleBadge">—</span><span class="badge live hidden" id="roomBadge"></span></div>
   <div id="errbar" class="hidden"></div>
 
   <div id="viewerBanner" class="viewer-banner hidden">
@@ -73,57 +93,79 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
     <span class="hint" id="vCount"></span>
   </div>
 
-  <!-- 分享面板 (主持人) -->
-  <div class="panel" id="sharePanel">
-    <h2>① 建立分享會議</h2>
-    <div class="row">
-      <button class="btn primary" id="createRoom">建立分享連結</button>
-      <label style="flex:1;min-width:220px">房間密碼 (選填) <input type="text" id="roomPwd" placeholder="留空=公開房間"></label>
-      <span class="hint">建立後會產生「主持人連結」與「觀眾連結」；把觀眾連結或 QR Code 發給與會者，他們即可看見相同字幕。</span>
-    </div>
-    <div id="shareBody" class="hidden" style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
-      <div style="flex:1;min-width:280px">
-        <div style="margin-bottom:8px;font-size:.85rem;color:var(--accent2)">🎙️ 主持人連結 (含收音)</div>
-        <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink">複製</button></div>
-        <div style="margin:14px 0 8px;font-size:.85rem;color:var(--accent)">👁️ 觀眾連結 (只看字幕)</div>
-        <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink">複製</button></div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="openViewer">開新分頁預覽觀眾畫面</button>
-          <button class="btn" id="refreshCount">重新整理人數</button>
-          <span class="hint" id="viewerCount"></span>
+  <!-- 控制項收合浮條 -->
+  <div class="dock collapsed" id="dock">
+    <div class="dock-toggle" id="dockToggle">⚙️ 控制項（點擊展開）</div>
+
+    <!-- 分享面板 (主持人) -->
+    <div class="panel" id="sharePanel">
+      <h2>① 建立分享會議</h2>
+      <div class="row">
+        <button class="btn primary" id="createRoom">建立分享連結</button>
+        <label style="flex:1;min-width:220px">房間密碼 (選填) <input type="text" id="roomPwd" placeholder="留空=公開房間"></label>
+        <span class="hint">建立後會產生「主持人連結」與「觀眾連結」；把觀眾連結或 QR Code 發給與會者，他們即可看見相同字幕。</span>
+      </div>
+      <div id="shareBody" class="hidden" style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1;min-width:280px">
+          <div style="margin-bottom:8px;font-size:.85rem;color:var(--accent2)">🎙️ 主持人連結 (含收音)</div>
+          <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink">複製</button></div>
+          <div style="margin:14px 0 8px;font-size:.85rem;color:var(--accent)">👁️ 觀眾連結 (只看字幕)</div>
+          <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink">複製</button></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="openViewer">開新分頁預覽觀眾畫面</button>
+            <button class="btn" id="refreshCount">重新整理人數</button>
+            <span class="hint" id="viewerCount"></span>
+          </div>
+        </div>
+        <div>
+          <div class="hint" style="margin-bottom:6px">掃描加入 (觀眾)</div>
+          <div class="qr" id="qrBox"></div>
         </div>
       </div>
-      <div>
-        <div class="hint" style="margin-bottom:6px">掃描加入 (觀眾)</div>
-        <div class="qr" id="qrBox"></div>
+    </div>
+
+    <!-- 主持人收音控制 -->
+    <div class="panel" id="casterPanel">
+      <h2>② 音訊來源 (Zoom 場景)</h2>
+      <div class="row">
+        <label>來源
+          <select id="audioSource">
+            <option value="system-display" selected>系統音訊 / Zoom 共享聲音 (推薦)</option>
+            <option value="mic">本機麥克風</option>
+            <option value="device">指定輸入裝置</option>
+            <option value="caption">手動字幕輸入 (兜底)</option>
+          </select>
+        </label>
+        <button class="btn primary" id="startBtn">開始收音</button>
+        <button class="btn" id="stopBtn" disabled>停止</button>
+        <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊, 確認是否真的有聲音">⬇ 下載擷取音訊</button>
+        <span class="dot bad" id="micDot"></span><span class="hint" id="srcHint"></span>
+      </div>
+      <div class="row" style="margin-top:8px;align-items:center;gap:10px">
+        <span class="hint">即時音量</span>
+        <div style="flex:1;height:10px;background:var(--line);border-radius:999px;overflow:hidden;min-width:160px"><div id="meter" style="height:100%;width:0%;background:#666;transition:width .08s"></div></div>
+        <span class="hint" id="srcHintZoom">Zoom 請用「分享」並勾「分享這台電腦的聲音」；沒聲音就改「本機麥克風」。</span>
+      </div>
+      <div class="row" id="deviceRow" style="margin-top:8px;display:none">
+        <label>裝置 ID <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)"></label>
       </div>
     </div>
-  </div>
 
-  <!-- 主持人收音控制 -->
-  <div class="panel" id="casterPanel">
-    <h2>② 音訊來源 (Zoom 場景)</h2>
-    <div class="row">
-      <label>來源
-        <select id="audioSource">
-          <option value="system-display" selected>系統音訊 / Zoom 共享聲音 (推薦)</option>
-          <option value="mic">本機麥克風</option>
-          <option value="device">指定輸入裝置</option>
-          <option value="caption">手動字幕輸入 (兜底)</option>
-        </select>
-      </label>
-      <button class="btn primary" id="startBtn">開始收音</button>
-      <button class="btn" id="stopBtn" disabled>停止</button>
-      <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊, 確認是否真的有聲音">⬇ 下載擷取音訊</button>
-      <span class="dot bad" id="micDot"></span><span class="hint" id="srcHint"></span>
+    <div class="panel">
+      <h2>③ 手動字幕 (caption 模式 / 無音訊權限時)</h2>
+      <div class="row">
+        <input type="text" id="captionInput" placeholder="直接貼上會議發言文字…" style="flex:1;min-width:240px">
+        <button class="btn" id="sendCaption">送出翻譯</button>
+      </div>
     </div>
-    <div class="row" style="margin-top:8px;align-items:center;gap:10px">
-      <span class="hint">即時音量</span>
-      <div style="flex:1;height:10px;background:var(--line);border-radius:6px;overflow:hidden;min-width:160px"><div id="meter" style="height:100%;width:0%;background:#666;transition:width .08s"></div></div>
-      <span class="hint" id="srcHintZoom">Zoom 請用「分享」並勾「分享這台電腦的聲音」；沒聲音就改「本機麥克風」。</span>
+
+    <div class="panel">
+      <h2>④ 連線紀錄</h2>
+      <div class="log" id="log"></div>
     </div>
-    <div class="row" id="deviceRow" style="margin-top:8px;display:none">
-      <label>裝置 ID <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)"></label>
+    <div class="hint">
+      分享流程：<b>建立分享連結</b> → 把「觀眾連結」或 QR Code 發給與會者 → 開啟 <b>開始收音</b> 選 <b>系統音訊 / Zoom 共享聲音</b>，
+      分享畫面時勾選 <b>分享聲音</b>，即可擷取 Zoom 會議音訊。所有開同一房間連結的人都會看到同步的雙語字幕。
     </div>
   </div>
 
@@ -131,30 +173,13 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
     <div id="subtitles"><div class="sub-line tgt placeholder">等待字幕…</div></div>
     <div class="stage-controls">
       <label>字級 <input type="range" id="fontSize" min="14" max="48" value="28"></label>
-      <label><input type="checkbox" id="orderSrcFirst" checked> 原文在上</label>
+      <label><input type="checkbox" id="orderSrcFirst"> 原文在上</label>
       <label><input type="checkbox" id="bgToggle" checked> 背景可讀</label>
       <label><input type="checkbox" id="showToggle" checked> 顯示字幕</label>
       <label>從 <select id="from"><option value="zh-TW" selected>繁中</option><option value="en">英文</option></select></label>
       <label>到 <select id="to"><option value="en" selected>英文</option><option value="zh-TW">繁中</option></select></label>
       <button class="btn" id="swapBtn" title="互換語言 (快捷鍵 S)">⇄ 互換 (S)</button>
     </div>
-  </div>
-
-  <div class="panel">
-    <h2>③ 手動字幕 (caption 模式 / 無音訊權限時)</h2>
-    <div class="row">
-      <input type="text" id="captionInput" placeholder="直接貼上會議發言文字…" style="flex:1;min-width:240px">
-      <button class="btn" id="sendCaption">送出翻譯</button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h2>④ 連線紀錄</h2>
-    <div class="log" id="log"></div>
-  </div>
-  <div class="hint">
-    分享流程：<b>建立分享連結</b> → 把「觀眾連結」或 QR Code 發給與會者 → 開啟 <b>開始收音</b> 選 <b>系統音訊 / Zoom 共享聲音</b>，
-    分享畫面時勾選 <b>分享聲音</b>，即可擷取 Zoom 會議音訊。所有開同一房間連結的人都會看到同步的雙語字幕。
   </div>
 </div>
 
@@ -275,6 +300,9 @@ function swapLang(){
 }
 $('swapBtn').onclick=swapLang;
 document.addEventListener('keydown',e=>{ if(e.key==='s'||e.key==='S'){ if(e.target.tagName!=='INPUT'&&e.target.tagName!=='SELECT'){ e.preventDefault(); swapLang(); } } });
+// 控制項收合浮條: 預設收起, 點擊展開/收合
+const dockEl=$('dock'), dockToggle=$('dockToggle');
+dockToggle.onclick=()=>{ const c=dockEl.classList.toggle('collapsed'); dockToggle.textContent=c?'⚙️ 控制項（點擊展開）':'⚙️ 控制項（點擊收合）'; };
 connectSSE();
 
 // ── 建立分享房間 ──
