@@ -188,7 +188,7 @@ if(!isCaster){
 // ── SSE 訂閱 (播放器核心) ──
 let es=null;
 function connectSSE(){
-  if(es)return;
+  if(es){ es.close(); es=null; } // 重連時先關舊連線 (caster 建立房間後 room 變更需重連)
   const room=new URLSearchParams(location.search).get('room')||'';
   const pwd=new URLSearchParams(location.search).get('pwd')||'';
   es=new EventSource('/stream?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):''));
@@ -266,6 +266,7 @@ $('createRoom').onclick=async()=>{
     renderQR(d.viewerLink);
     // 直接切換到主持人連結 (含 room + role=caster)
     history.replaceState(null,'',d.casterLink.replace(location.origin,''));
+    connectSSE(); // 房間建立後 room 變更, 重連 SSE 到正確房間 (否則 caster 收不到自己播音的字幕)
     log('建立房間 '+d.room+(d.passwordProtected?' (🔒受密碼保護)':'')+' — 觀眾連結已產生');
     pollViewers();
   }catch(e){showErr('建立房間失敗: '+e.message);}
