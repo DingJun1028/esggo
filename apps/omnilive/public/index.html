@@ -373,11 +373,13 @@ function flushWindow(){
   const lang=fromSel.value||'';
   const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
   sttInflight=true;
+  const release=()=>{ sttInflight=false; };
+  const to=setTimeout(release, 45000); // 防慢模型(medium)永久卡死 inflight, 導致後續段全被丟棄
   fetch(url,{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
     .then(r=>r.ok?r.json():Promise.reject(r.status))
     .then(d=>{ if(d.source)log('辨識: '+d.source.slice(0,40)); })
     .catch(()=>{ /* 暫時錯誤跳過本段 */ })
-    .finally(()=>{ sttInflight=false; });
+    .finally(()=>{ clearTimeout(to); release(); });
 }
 // 16-bit PCM → WAV (mon聲, 16kHz) — 瀏覽器原生 DataView, 不用 Node Buffer
 function encodeWav(pcm, sampleRate){
