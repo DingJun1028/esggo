@@ -15,7 +15,11 @@ export interface IComponentCore {
   readonly version: string; // 語義化版本 (例: 1.1.0-Universe)
   readonly timestamp: number; // 刻印時間戳 (Epoch ms)
   source_origin: string; // 數據來源起點 (Traceable 真理)
-  evidence: string[]; // 證據佐證庫 URL 陣列 (S3/R2)
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
 }
 
 /** 動態表單欄位型別 (Schema-Driven UI) */
