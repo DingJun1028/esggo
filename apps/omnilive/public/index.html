@@ -35,6 +35,10 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
 .subtitle-stage{position:relative;background:rgba(10,14,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;height:46vh;min-height:200px;display:flex;flex-direction:column;gap:10px;padding:16px}
 #subtitles{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:hidden}
 .sub-group{display:flex;flex-direction:column;gap:4px;animation:subIn .18s ease-out}
+.sub-group.finalized{animation:none} /* 已定型句: 鎖定, 不再有進場動畫 */
+.sub-group.active{position:relative}
+.sub-group.active::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);animation:typing 1.1s ease-in-out infinite}
+@keyframes typing{0%{opacity:.2;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:.2;transform:scaleX(.3)}}
 @keyframes subIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .sub-line{border-radius:10px;padding:6px 12px;font-weight:800;line-height:1.32;background:rgba(0,0,0,.35);text-shadow:0 2px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);color:#fff}
 .sub-line.src{font-size:clamp(1rem,2.6vw,1.4rem)}
@@ -195,7 +199,7 @@ function connectSSE(){
   es.addEventListener('hello',e=>{connEl.textContent='SSE 已連線';connDot.className='dot';log('SSE hello: '+(e.data||''));});
   es.addEventListener('subtitle',ev=>{
     try{const p=JSON.parse(ev.data);const d=p.data;if(!d)return;
-      renderSub(d.source,d.target,d.from+'→'+d.to+' · '+d.engine+' · #'+d.id,d.speaker);}catch(e){}
+      renderSub(d.source,d.target,d.from+'→'+d.to+' · '+d.engine+' · #'+d.id,d.speaker,d.id,d.ts);}catch(e){}
   });
   es.onopen=()=>{connEl.textContent='SSE 已連線';connDot.className='dot';hideErr();};
   es.onerror=()=>{connEl.textContent='SSE 重連中…';connDot.className='dot bad';
@@ -216,8 +220,26 @@ function promptRoomPassword(room){
     location.reload();
   });
 }
-function renderSub(src,tgt,meta,speaker){
-  const wrap=document.createElement('div');wrap.className='sub-group';
+let activeGroup=null;      // 目前活躍句 (允許更新/合併), 收到新句才鎖定
+let lastSubTs=0;           // 上一句時間戳, 用於判斷是否合併連續短段
+function renderSub(src,tgt,meta,speaker,id,ts){
+  const now=ts||Date.now();
+  // 同一房間連續段若間隔 < 2.5s → 合併成同一句 (避免一句話被切 2-3 個 6s 段散開)
+  const merge = activeGroup && (now-lastSubTs) < 2500;
+  lastSubTs=now;
+  if(merge){
+    // 合併: 更新活躍句的文字 (append 新內容, 去重疊尾部)
+    const a=activeGroup.querySelector('.sub-line.src, .sub-line.tgt'); // 第一/第二行取決於 order
+    const b=activeGroup.children[1];
+    const cur = orderChk.checked ? {srcEl:a,tgtEl:b} : {srcEl:b,tgtEl:a};
+    const newSrc=(cur.srcEl.textContent+' '+(src||'')).trim();
+    const newTgt=(cur.tgtEl.textContent+' '+(tgt||'')).trim();
+    cur.srcEl.textContent=newSrc; cur.tgtEl.textContent=newTgt;
+    return;
+  }
+  // 新句: 鎖定上一個活躍句
+  if(activeGroup) activeGroup.classList.add('finalized');
+  const wrap=document.createElement('div');wrap.className='sub-group active';
   const a=document.createElement('div');a.className='sub-line '+(orderChk.checked?'src':'tgt');
   const b=document.createElement('div');b.className='sub-line '+(orderChk.checked?'tgt':'src');
   a.textContent=orderChk.checked?(src||''):(tgt||'');
@@ -225,12 +247,13 @@ function renderSub(src,tgt,meta,speaker){
   const m=document.createElement('div');m.className='sub-line';m.style.background='transparent';m.style.fontSize='.7rem';m.style.color='rgba(255,255,255,.6)';m.style.fontWeight='400';m.style.textShadow='none';
   m.textContent=meta+(speaker?(' · 🗣️ '+speaker):'');
   wrap.appendChild(a);wrap.appendChild(b);wrap.appendChild(m);
-  // 移除初始佔位
   const ph=subsEl.querySelector('.placeholder'); if(ph)ph.remove();
   subsEl.appendChild(wrap); // 新字幕從下方出現, 舊的自動被 flex-end 推往上
+  activeGroup=wrap;
   // roll-up: 超出上限從最上方移除 (看不見為止)
   while(subsEl.children.length>8)subsEl.removeChild(subsEl.firstChild);
 }
+
 // 套用顯示設定
 function applyStyles(){
   document.querySelectorAll('.sub-line.src').forEach(e=>e.style.fontSize='');
