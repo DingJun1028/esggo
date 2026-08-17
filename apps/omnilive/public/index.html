@@ -353,9 +353,18 @@ function sendChunk(float32){
   const wav=encodeWav(pcm, 16000); // 包成 WAV 容器, whisper/PyAV 才能正確解碼 (raw PCM 會被拒)
   const room=new URLSearchParams(location.search).get('room')||'';
   const lang=fromSel.value||'';
-  fetch('/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):''),{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
-    .then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{if(d.source)log('辨識: '+d.source.slice(0,40));})
-    .catch(e=>{showErr('STT 呼叫失敗 (本地 faster-whisper 未啟動？): '+e);});
+  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
+  const attempt=(n)=>{
+    fetch(url,{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
+      .then(r=>r.ok?r.json():Promise.reject(r.status))
+      .then(d=>{ if(d.source)log('辨識: '+d.source.slice(0,40)); })
+      .catch(e=>{
+        // 500/暫時錯誤自動重試 (STT 模型載入/瞬時 OOM), 不立即卡死紅字
+        if(n<3){ setTimeout(()=>attempt(n+1), 800*Math.pow(2,n)); }
+        else { showErr('STT 呼叫失敗（語音轉文字服務暫時無法使用）: '+e+' — 請稍後再試或重開收音'); }
+      });
+  };
+  attempt(0);
 }
 // 16-bit PCM → WAV (mon聲, 16kHz) — 瀏覽器原生 DataView, 不用 Node Buffer
 function encodeWav(pcm, sampleRate){
