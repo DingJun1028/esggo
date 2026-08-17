@@ -31,12 +31,15 @@ body{margin:0;font-family:var(--font);color:var(--txt);min-height:100vh;
 .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06121a;border:none}
 select,input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.92rem}
 label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6px}
-.subtitle-stage{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:18px}
-#subtitles{display:flex;flex-direction:column;gap:10px}
-.sub-line{border-radius:12px;padding:10px 14px;font-weight:700;line-height:1.3;background:rgba(0,0,0,.28)}
-.sub-line.src{color:#fff;font-size:clamp(1.1rem,3.6vw,1.7rem)}
-.sub-line.tgt{color:var(--accent);font-size:clamp(1rem,3vw,1.4rem)}
-.sub-line .meta{font-size:.7rem;color:var(--muted);font-weight:400;margin-top:3px}
+/* 半透明漂浮字幕層 — 可疊在 Zoom/影片上, 大字白字+描邊, roll-up (新在下舊上推) */
+.subtitle-stage{position:relative;background:rgba(10,14,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;min-height:220px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:16px}
+#subtitles{display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:hidden}
+.sub-group{display:flex;flex-direction:column;gap:4px;animation:subIn .18s ease-out}
+@keyframes subIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sub-line{border-radius:10px;padding:6px 12px;font-weight:800;line-height:1.32;background:rgba(0,0,0,.35);text-shadow:0 2px 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9);color:#fff}
+.sub-line.src{font-size:clamp(1rem,2.6vw,1.4rem)}
+.sub-line.tgt{font-size:clamp(1.25rem,3.4vw,1.9rem);color:#fff}
+.sub-line .meta{font-size:.7rem;color:rgba(255,255,255,.6);font-weight:400;margin-top:2px;text-shadow:none}
 .stage-controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:6px}
 .stage-controls label{color:var(--muted)}
 .hint{font-size:.8rem;color:var(--muted);line-height:1.5}
@@ -120,7 +123,7 @@ label{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6p
   </div>
 
   <div class="subtitle-stage">
-    <div id="subtitles"><div class="sub-line tgt">等待字幕…</div></div>
+    <div id="subtitles"><div class="sub-line tgt placeholder">等待字幕…</div></div>
     <div class="stage-controls">
       <label>字級 <input type="range" id="fontSize" min="14" max="48" value="28"></label>
       <label><input type="checkbox" id="orderSrcFirst" checked> 原文在上</label>
@@ -213,21 +216,27 @@ function promptRoomPassword(room){
   });
 }
 function renderSub(src,tgt,meta,speaker){
-  const wrap=document.createElement('div');wrap.style.display='flex';wrap.style.flexDirection='column';wrap.style.gap='10px';
+  const wrap=document.createElement('div');wrap.className='sub-group';
   const a=document.createElement('div');a.className='sub-line '+(orderChk.checked?'src':'tgt');
   const b=document.createElement('div');b.className='sub-line '+(orderChk.checked?'tgt':'src');
   a.textContent=orderChk.checked?(src||''):(tgt||'');
   b.textContent=orderChk.checked?(tgt||''):(src||'');
-  const m=document.createElement('div');m.className='sub-line';m.style.background='transparent';m.style.fontSize='.7rem';m.style.color='var(--muted)';m.style.fontWeight='400';
+  const m=document.createElement('div');m.className='sub-line';m.style.background='transparent';m.style.fontSize='.7rem';m.style.color='rgba(255,255,255,.6)';m.style.fontWeight='400';m.style.textShadow='none';
   m.textContent=meta+(speaker?(' · 🗣️ '+speaker):'');
   wrap.appendChild(a);wrap.appendChild(b);wrap.appendChild(m);
-  subsEl.prepend(wrap);
-  while(subsEl.children.length>20)subsEl.removeChild(subsEl.lastChild);
+  // 移除初始佔位
+  const ph=subsEl.querySelector('.placeholder'); if(ph)ph.remove();
+  subsEl.appendChild(wrap); // 新字幕從下方出現, 舊的自動被 flex-end 推往上
+  // roll-up: 超出上限從最上方移除 (看不見為止)
+  while(subsEl.children.length>8)subsEl.removeChild(subsEl.firstChild);
 }
 // 套用顯示設定
 function applyStyles(){
+  document.querySelectorAll('.sub-line.src').forEach(e=>e.style.fontSize='');
   subsEl.style.fontSize=fontSize.value+'px';
-  document.querySelector('.subtitle-stage').style.background=bgChk.checked?'var(--panel2)':'transparent';
+  // 半透明漂浮層: bgToggle 控制是否加強背景
+  const stage=document.querySelector('.subtitle-stage');
+  stage.style.background=bgChk.checked?'rgba(10,14,22,.72)':'rgba(10,14,22,.2)';
   subsEl.style.display=showChk.checked?'flex':'none';
 }
 [fontSize,orderChk,bgChk,showChk].forEach(el=>el.oninput=applyStyles);
