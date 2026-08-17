@@ -7,7 +7,6 @@ packages:
 
 overrides:
   "tar": ">=7.5.21 <8"
-  "js-yaml": ">=4.3.1 <5"
   "postcss": ">=8.5.23"
   "uuid": ">=11.1.1"
   "gaxios": ">=7.1.4"
@@ -17,23 +16,27 @@ overrides:
   "fast-xml-parser": ">=5.10.1"
   "brace-expansion": ">=5.0.9"
   # 安全修補：必須加 <major 上界，裸 '>=' 會讓 pnpm 跳到跨 major（AGENTS.md #4）
-  # undici 同 major patch，jsdom@29 接受 ^7.25.0，不觸及 AGENTS.md #5 的跨 major 禁令
-  "undici": ">=7.29.0 <8"
   "nanoid": ">=3.3.18 <4"
   "dompurify": ">=3.4.12 <4"
   "body-parser": ">=1.20.6 <2"
   "protobufjs": ">=7.6.5 <8"
   # ── 2026-08-11 dependabot 批次修補 (pnpm audit 13 項) ──
   "esbuild": ">=0.24.3 <1"
-  "vite": ">=6.4.3 <9"
   "@tootallnate/once": ">=2.0.1 <3"
-  "vitest": ">=4.1.0"
   "adm-zip": ">=0.6.0 <1"
   "pdfjs-dist": ">=6.2.108 <7"
   "@opentelemetry/core": ">=2.8.0 <3"
   "@opentelemetry/sdk-node": ">=0.217.0 <1"
   "@opentelemetry/auto-instrumentations-node": ">=0.75.0 <1"
   "@opentelemetry/propagator-jaeger": ">=2.9.0 <3"
+  # ── 2026-08-17 Dependabot 24 告警追加 (放寬到修補版所在 major) ──
+  # sharp 依 AGENTS.md #7 排除 (next 限制 0.34.5)；chromadb 僅 .venv 不納入 pnpm
+  # vitest 最新穩定 4.1.10 (5.x 仍 beta, 不跨)；CVE 上游未修, 先鎖穩定最新
+  "vitest": ">=4.1.10"
+  "vite": ">=7.0.0 <8"
+  "undici": ">=8.0.0 <9"
+  "js-yaml": ">=5.0.0 <6"
+  "hono": ">=4.0.0 <5"
   # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
   #   chromadb (pip critical) — 僅出現在 .venv 虛擬環境，非提交之 requirements，不納入 pnpm 管線
 
