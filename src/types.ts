@@ -7,7 +7,6 @@ export interface IComponentCore<T> {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: unknown;
   };
   lifecycle_events: Array<any>; // ⽣命週期 Hook (Trackable)
   data: T; // 數據本體

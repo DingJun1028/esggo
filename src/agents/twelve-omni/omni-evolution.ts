@@ -31,8 +31,7 @@ export class OmniEvolution implements IOmniEvolution {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: unknown;
-  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 演化歷史 */
   private evolutionHistory: EvolutionEvent[] = [];

@@ -229,7 +229,7 @@ export class OmniSingularity implements IOmniSingularity {
       // 記錄事件
       this._recordEvent("singularity.retrieved", {
         entityUuid: targetUuid,
-        entityName: entity.evidence?.name,
+        entityName: entity.evidence?.finalEffect || "unknown",
       });
 
       console.log(`[OmniSingularity] ✅ 回歸完成: ${targetUuid.substring(0, 8)}...`);

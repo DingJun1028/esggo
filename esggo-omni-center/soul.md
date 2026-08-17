@@ -86,7 +86,11 @@ JunAiKey 萬能核心與 Hermes Agent 精神架構鑄造。凡小隊成員
     readonly uuid: string;        // 萬能永憶主體唯一識別碼
     readonly version: string;     // 語義化版本控制 (e.g., v0.7.0)
     readonly timestamp: number;   // 刻印時間戳
-    evidence: Record<string, any>;// 證據佐證庫
+    evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
   }
 
   export const executeSwarmTask = async (

@@ -17,8 +17,7 @@ export interface IComponentCore {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: unknown;
-      };
+  };
   /** 防篡改雜湊值（SHA‑256、Keccak‑256 …） */
   readonly hash: string;
   /** （可選）雜湊 Salt，用於提升撞庫抗性 */

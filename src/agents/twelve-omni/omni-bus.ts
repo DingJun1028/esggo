@@ -29,8 +29,7 @@ export class OmniBusV2 implements IOmniBusV2 {
     originCause: string;
     processTrace: string[];
     finalEffect: string;
-    [key: string]: unknown;
-  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
 
   /** 事件存儲 */
   private events: IBusEvent[] = [];
