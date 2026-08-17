@@ -337,7 +337,7 @@ function sendChunk(float32){
   const pcm=encodeFloatTo16(float32);
   const wav=encodeWav(pcm, 16000); // 包成 WAV 容器, whisper/PyAV 才能正確解碼 (raw PCM 會被拒)
   const room=new URLSearchParams(location.search).get('room')||'';
-  fetch('/api/transcribe?room='+encodeURIComponent(room)+'&vad=1',{method:'POST',headers:{'content-type':'application/octet-stream'},body:wav})
+  fetch('/api/transcribe?room='+encodeURIComponent(room)+'&vad=1',{method:'POST',headers:{'content-type':'audio/wav'},body:wav})
     .then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{if(d.source)log('辨識: '+d.source.slice(0,40));})
     .catch(e=>{showErr('STT 呼叫失敗 (本地 faster-whisper 未啟動？): '+e);});
 }
