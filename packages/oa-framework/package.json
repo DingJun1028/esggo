@@ -16,7 +16,7 @@
     "genkit": "*"
   },
   "dependencies": {
-    "@everworker/oneringai": "^1.0.1"
+    "@everworker/oneringai": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@google/adk": {
