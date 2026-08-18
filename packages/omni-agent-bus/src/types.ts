@@ -3,8 +3,17 @@
  * 目的: 讓 OA 萬能分身的「圓通」骨幹獨立可驗證
  */
 export type SubFrameId =
-  | 'adk' | 'genkit' | 'agent0' | 'crewai'
-  | 'agentreach' | 'deerflow' | 'tencent-mem';
+  | 'adk'        // Google Agent Development Kit (TS)
+  | 'genkit'     // Google Genkit (Firebase)
+  | 'agent0'     // Agent Zero organic framework
+  | 'crewai'     // CrewAI multi-agent
+  | 'agentreach' // Agent Reach (Panniantong/agent-reach)
+  | 'deerflow'   // DeerFlow research flow
+  | 'tencent-mem' // Tencent Agent Memory (TencentDB Agent Memory)
+  | 'openmontage' // OpenMontage local AI video production
+  | 'omniroute'  // OmniRoute unified AI gateway
+  | 'turbovec'  // TurboVec 4-bit RAG retrieval layer
+  | 'oneringai'; // OneRingAI unified multi-vendor agent
 
 export interface IComponentCore {
   readonly uuid: string;
