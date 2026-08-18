@@ -534,6 +534,9 @@ function QuickCommands({ onExecute }: { onExecute: (cmd: QuickCommand) => void }
 // Chat Interface Component
 // ═══════════════════════════════════════════════════════════════
 
+const CHAT_SUGGESTIONS = ['系統狀態', '5T 驗證', '幫助'] as const;
+const LOADING_DOTS = [0, 1, 2] as const;
+
 const RenderedMessage = React.memo(function RenderedMessage({ m }: { m: Message }) {
   return (
   <div className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
@@ -664,7 +667,7 @@ function ChatInterface() {
         {busy && (
           <div className="flex items-start">
             <div className="bg-primary border border-borderColor rounded-2xl rounded-bl-md px-4 py-3 flex gap-1.5 shadow-sm">
-              {[0, 1, 2].map((i) => (
+              {LOADING_DOTS.map((i) => (
                 <div
                   key={i}
                   className="w-2 h-2 rounded-full bg-teal-400"
@@ -679,7 +682,7 @@ function ChatInterface() {
 
       {/* Quick Suggestions */}
       <div className="flex gap-1.5 flex-wrap my-2">
-        {['系統狀態', '5T 驗證', '幫助'].map((s) => (
+        {CHAT_SUGGESTIONS.map((s) => (
           <button
             key={s}
             onClick={() => {

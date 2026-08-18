@@ -9,7 +9,7 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [build]
-command = "node my-worker/node_modules/typescript/bin/tsc -p my-worker/tsconfig.json"
+command = "npx tsc -p my-worker/tsconfig.json"
 
 [vars]
 ENVIRONMENT = "production"
