@@ -107,14 +107,16 @@ export class TencentMemAdapter implements ISubFrameAdapter {
     }
   }
 
-  /** OA 任務 → 寫入本次對話 + 召回團隊記憶作為上下文, 再交給其他框架 (Agent Loadout 語意) */
+  /** OA 任務 → 寫入本次對話 (L0) + 召回團隊記憶作為上下文, 再交給其他框架 (Agent Loadout 語意)
+   *  使用 TDAI Gateway 實測真連路由: POST /capture (body: user_content/assistant_content/session_key)
+   *  + POST /search/memories (body: query/maxResults) */
   async dispatch(task: OATask): Promise<{ output: string }> {
-    const sessionId = `oa-${task.id ?? 'task'}`;
-    // 寫入本次任務上下文 (L0)
-    const saved = await this.captureConversation(sessionId, [{ role: 'user', content: task.prompt }]);
-    // 召回相關歷史記憶
-    const ctx = await this.recallConversation(sessionId, task.prompt);
-    const recalled = ctx.length > 0 ? `recalled=${ctx.length}` : 'recalled=0';
+    const sessionKey = `oa-${task.id ?? 'task'}`;
+    // 寫入本次任務上下文 (L0) — 真連 /capture
+    const saved = await this.capture(sessionKey, task.prompt, `[OATeam dispatch] task=${task.prompt}`);
+    // 召回相關歷史記憶 — 真連 /search/memories
+    const recall = (await this.search(task.prompt, 5)) as { results?: string } | null;
+    const recalled = recall?.results ? `recalled=yes` : 'recalled=no';
     return {
       output: `[TencentMem] ${task.prompt} | saved=${saved.ok ? 'yes' : 'no'} ${recalled} @${this.cfg.coreUrl}`,
     };
