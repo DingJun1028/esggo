@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import translations from './i18n/translations';
 
-const ADMIN_PASS = import.meta.env?.VITE_ADMIN_PASS || import.meta.env.VITE_ADMIN_PASS || '';
+const ADMIN_PASS = import.meta.env?.VITE_ADMIN_PASS || import.meta.env.VITE_ADMIN_PASS;
 
 const CardLink = ({ href, icon, title }) => (
   <a href={href} target="_blank" rel="noreferrer" className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-[#FDB515] transition-all flex flex-col items-center justify-center gap-4 group cursor-pointer min-h-[130px] sm:min-h-[160px]">
@@ -332,7 +332,7 @@ export default function App() {
   };
 
   const confirmAdmin = () => {
-    if (!ADMIN_PASS || adminInput === ADMIN_PASS) { setRole('admin'); setView('admin'); }
+    if (ADMIN_PASS && adminInput === ADMIN_PASS) { setRole('admin'); setView('admin'); }
     else { alert(t.error?.adminWrongPassword || t.admin?.wrongPassword || '管理員密碼錯誤'); }
     setAdminPrompt(false); setAdminInput('');
   };
