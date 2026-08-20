@@ -136,51 +136,6 @@ function writeJson(res, obj, extra = {}) {
   res.end(JSON.stringify(obj));
 }
 
-// ── 課程即時解說: 本地免費 LLM (Ollama qwen2.5:3b) 產生章節概要/重點/名詞解釋/類似案例 ──
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b';
-
-/**
- * 把累積字幕文字送給本地 Ollama, 產出結構化課程解說 (零 key 免費)
- * @param {string} text 累積的字幕文字 (雙語)
- * @returns {Promise<object>} {summary,keypoints[],terms[],similar_cases[]}
- */
-export async function generateCourse(text) {
-  const prompt = `你是一個專業的課程助教。以下是即時會議/課堂的雙語字幕逐字稿（含原文與翻譯）。請整理成結構化課堂重點，嚴格只輸出 JSON，不要任何額外說明文字。
-
-格式：
-{
-  "summary": "本節內容一句話概要",
-  "keypoints": ["重點1", "重點2", "重點3"],
-  "terms": [{"term":"重要名詞(中文)","en":"English term","wiki":"https://zh.wikipedia.org/wiki/名詞","explain":"一句話解釋"}],
-  "similar_cases": ["相關/類似案例或變體整理1", "相關/類似案例或變體整理2"]
-}
-
-字幕逐字稿：
-${text}
-
-請輸出 JSON：`;
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 60000);
-  try {
-    const r = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ model: OLLAMA_MODEL, prompt, stream: false, format: 'json', options: { temperature: 0.3 } }),
-      signal: ctrl.signal,
-    });
-    if (!r.ok) throw new Error(`ollama ${r.status}`);
-    const j = await r.json();
-    const parsed = JSON.parse(j.response);
-    return {
-      summary: parsed.summary || '',
-      keypoints: Array.isArray(parsed.keypoints) ? parsed.keypoints : [],
-      terms: Array.isArray(parsed.terms) ? parsed.terms : [],
-      similar_cases: Array.isArray(parsed.similar_cases) ? parsed.similar_cases : [],
-    };
-  } finally { clearTimeout(t); }
-}
-
 const server = http.createServer(/** @param {import('node:http').IncomingMessage} req @param {import('node:http').ServerResponse} res */ async (req, res) => {
   const url = req.url || '';
   const urlPath = url.split('?')[0];
@@ -301,26 +256,6 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
     } catch (/** @type {any} */ e) {
       const j = errorToJson(e);
       return res.writeHead(500).end(JSON.stringify(j));
-    }
-  }
-
-  // 課程即時解說: 累積字幕 → 本地 Ollama 產生章節概要/重點/名詞/類似案例 (獨立介面用)
-  if (url.split('?')[0] === '/api/course' && req.method === 'POST') {
-    let body; try { body = await readBody(req); } catch { res.writeHead(400); return res.end(JSON.stringify({ error: 'read fail' })); }
-    let p; try { p = JSON.parse(body); } catch { res.writeHead(400); return res.end(JSON.stringify({ error: 'bad json' })); }
-    const room = p.room || '';
-    // 優先用前端傳來的 text, 否則從 store 抓取該房間累積字幕
-    let text = (p.text || '').toString().trim();
-    if (!text && room) {
-      const subs = store.getByRoom ? store.getByRoom(room) : store.snapshot().filter(s => s.room === room);
-      text = subs.map(s => `${s.source || ''}\n${s.target || ''}`).join('\n\n');
-    }
-    if (!text.trim()) return writeJson(res, { summary: '', keypoints: [], terms: [], similar_cases: [], note: 'no transcript yet' });
-    try {
-      const course = await generateCourse(text.slice(-6000)); // 限制長度避免超過 LLM context
-      return writeJson(res, course);
-    } catch (/** @type {any} */ e) {
-      return res.writeHead(502).end(JSON.stringify({ error: 'course gen failed', detail: e.message }));
     }
   }
 
