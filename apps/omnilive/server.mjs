@@ -109,10 +109,14 @@ async function readBody(req) { return (await readBodyRaw(req)).toString('utf-8')
  * @returns {Promise<import('./lib/subtitle.mjs').BilingualSubtitle>}
  */
 async function pipeline(stt, room = '', langOverride) {
-  // 語言配對: 若辨識語 == 目標語, 互換 (e.g. 辨到 en 但預設 to=en → 翻去 zh-TW)
+  // 語言配對: 自動判斷模式 (CFG.from==='auto') → 交由 translate.detectLang 偵測來源語並翻向對向
   let from, to;
   if (langOverride && langOverride.from && langOverride.to) {
     from = langOverride.from; to = langOverride.to;
+  } else if (CFG.from === 'auto' || CFG.to === 'auto') {
+    // 自動模式: 來源交給 detectLang, 目標取對向 (若 to 已明確指定則尊重)
+    from = 'auto';
+    to = (CFG.to && CFG.to !== 'auto') ? CFG.to : 'auto';
   } else {
     from = stt.language && stt.language !== 'unknown' ? stt.language : CFG.from;
     to = CFG.to;

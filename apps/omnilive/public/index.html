@@ -261,8 +261,8 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
         <label class="chk"><input type="checkbox" id="showToggle" checked> 顯示</label>
       </div>
       <div class="row" style="margin-top:6px">
-        <label>從 <select id="from"><option value="zh-TW" selected>繁中</option><option value="en">英文</option></select></label>
-        <label>到 <select id="to"><option value="en" selected>英文</option><option value="zh-TW">繁中</option></select></label>
+        <label>從 <select id="from"><option value="auto" selected>🌐 自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
+        <label>到 <select id="to"><option value="auto" selected>🌐 自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
         <button class="btn" id="swapBtn" style="flex:0">⇄</button>
       </div>
     </div>
@@ -603,7 +603,8 @@ function flushWindow(){
   const wav=encodeWav(pcm, 16000);
   const room=new URLSearchParams(location.search).get('room')||'';
   const lang=fromSel.value||'';
-  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang?'&lang='+encodeURIComponent(lang):'');
+  // auto 模式不送 lang 給 whisper (避免 auto→500 歷史問題); 讓 whisper 自行偵測
+  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang && lang!=='auto'?'&lang='+encodeURIComponent(lang):'');
   sttInflight=true;
   const release=()=>{ sttInflight=false; };
   const to=setTimeout(release, 45000);
