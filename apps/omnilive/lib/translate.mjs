@@ -125,7 +125,9 @@ export async function translate(text, from, to, opts = {}) {
     f = detected;
     t = (t && t !== 'auto' && t !== detected) ? t : (detected === 'zh-TW' ? 'en' : 'zh-TW');
   }
-  if (f === t) return { source: text, target: text, from: f, to: t, engine: 'passthrough', cached: false };
+  // 寫回 from/to, 後續快取/翻譯皆使用偵測後的語言對
+  from = f; to = t;
+  if (from === to) return { source: text, target: text, from, to, engine: 'passthrough', cached: false };
 
   // 離線測試縫 (OMNILIVE_TRANSLATE_MOCK=1 或 opts.mock)：CI / 無網路環境下驗證整條資料流
   if (process.env.OMNILIVE_TRANSLATE_MOCK === '1' || opts.mock) {
