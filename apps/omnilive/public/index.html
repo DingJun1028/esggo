@@ -289,6 +289,7 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 
   <!-- 圖示工具條 -->
   <div class="capsule">
+    <button class="icon-btn" id="btnFloat" title="開啟獨立漂浮視窗 (可蓋在 Zoom 上)">🪟</button>
     <button class="icon-btn" id="btnPos" title="字幕位置">📍</button>
     <button class="icon-btn" id="btnCourse" title="課程即時解說">📚</button>
     <button class="icon-btn" id="btnMic" title="開始/停止收音" class="danger">🎙️</button>
@@ -385,14 +386,14 @@ function renderSub(src,tgt,meta,speaker,id,ts){
   while(subsEl.children.length>8)subsEl.removeChild(subsEl.firstChild);
 }
 
-// 套用顯示設定 (漂浮層: 不設不透明底, 僅 text-shadow; bgToggle 控制額外描邊強化)
+// 套用顯示設定 (漂浮層: bgToggle 開啟 = 黑底 50% 透明, 符合最佳實踐可讀性)
 function applyStyles(){
   document.querySelectorAll('.sub-line.src').forEach(e=>e.style.fontSize='');
   subsEl.style.fontSize=fontSize.value+'px';
-  // 背景可讀: 開啟時給每行加一層極淡漸層底 (仍可透出影片)
+  // 背景可讀: 開啟時每行加黑底 50% 透明 (清晰且不刺眼); 關閉則僅 text-shadow
   document.querySelectorAll('.sub-line').forEach(e=>{
     if(e.classList.contains('meta'))return;
-    e.style.background = bgChk.checked ? 'linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.25))' : 'transparent';
+    e.style.background = bgChk.checked ? 'rgba(0,0,0,.5)' : 'transparent';
   });
   subsEl.style.display=showChk.checked?'flex':'none';
 }
@@ -412,6 +413,18 @@ document.addEventListener('keydown',e=>{ if(e.key==='s'||e.key==='S'){ if(e.targ
 // 工具條收合
 const sheetEl=$('sheet');
 $('btnSheet').onclick=()=>{ sheetEl.classList.toggle('open'); $('btnSheet').classList.toggle('active'); };
+// 一鍵開啟獨立漂浮視窗: 真的蓋在 Zoom/YouTube 上, 達成同時顯示
+let floatWin=null;
+$('btnFloat').onclick=()=>{
+  const room=new URLSearchParams(location.search).get('room')||'';
+  const pwd=new URLSearchParams(location.search).get('pwd')||'';
+  const url='/floating.html?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):'');
+  if(floatWin && !floatWin.closed){ floatWin.focus(); return; }
+  floatWin=window.open(url,'omnilive_float','width=480,height=300,top=80,left=80,resizable=yes,scrollbars=no,toolbar=no,menubar=no,location=no,status=no');
+  if(!floatWin){ showErr('瀏覽器擋住 pop-up，請允許本站開新視窗'); return; }
+  $('btnFloat').classList.add('active');
+  const chk=setInterval(()=>{ if(floatWin.closed){ clearInterval(chk); $('btnFloat').classList.remove('active'); } },1000);
+};
 // 課程浮窗
 const courseWin=$('courseWin');
 $('btnCourse').onclick=()=>{ courseWin.classList.toggle('open'); $('btnCourse').classList.toggle('active'); startCoursePolling(); };
