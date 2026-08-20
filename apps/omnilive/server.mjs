@@ -161,7 +161,7 @@ ${text}
 
 請輸出 JSON：`;
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 60000);
+  const t = setTimeout(() => ctrl.abort(), 120000); // Ollama 冷啟動載入模型可能 >60s
   try {
     const r = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: 'POST',
