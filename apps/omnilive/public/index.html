@@ -287,10 +287,11 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
     <div class="log" id="log"></div>
   </div>
 
-  <!-- 圖示工具條 (必要三鍵) -->
+  <!-- 圖示工具條 (必要四鍵) -->
   <div class="capsule">
     <button class="icon-btn" id="btnFloat" title="開啟獨立字幕小窗 (跨頁面蓋在 Zoom/YouTube 上)">🪟</button>
     <button class="icon-btn" id="btnMic" title="開始/停止收音" class="danger">🎙️</button>
+    <button class="icon-btn" id="btnLink" title="分享連結 / QR Code">🔗</button>
     <button class="icon-btn" id="btnSheet" title="設定面板">⚙️</button>
   </div>
 </div>
@@ -303,7 +304,9 @@ const fromSel=$('from'),toSel=$('to'),fontSize=$('fontSize');
 const orderChk=$('orderSrcFirst'),bgChk=$('bgToggle'),showChk=$('showToggle');
 const subsEl=$('subtitles'),captionInput=$('captionInput');
 
-$('btnTheme').onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';};
+// 主題切換 (按鈕若不存在則略過, 避免 null 崩潰)
+const themeBtn=document.getElementById('btnTheme');
+if(themeBtn) themeBtn.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';};
 srcSel.onchange=()=>{deviceRow.style.display=srcSel.value==='device'?'flex':'none';};
 
 function log(m){const t=new Date().toLocaleTimeString();logEl.textContent=(t+' '+m+'\n')+logEl.textContent;}
@@ -410,6 +413,33 @@ document.addEventListener('keydown',e=>{ if(e.key==='s'||e.key==='S'){ if(e.targ
 // 工具條收合
 const sheetEl=$('sheet');
 $('btnSheet').onclick=()=>{ sheetEl.classList.toggle('open'); $('btnSheet').classList.toggle('active'); };
+// 分享連結 / QR: 直接從工具列取得目前房間觀眾連結
+const linkBtn=$('btnLink');
+if(linkBtn) linkBtn.onclick=()=>{
+  let link=$('viewerLink').value.trim();
+  const room=new URLSearchParams(location.search).get('room')||'';
+  if(!link && room){
+    const proto=(location.protocol||'https:');
+    link=proto+'//'+location.host+'/?room='+encodeURIComponent(room);
+  }
+  if(!link){ showErr('尚未建立房間：請先按 ⚙️ → 建立連結'); sheetEl.classList.add('open'); $('btnSheet').classList.add('active'); return; }
+  navigator.clipboard?.writeText(link).then(()=>log('已複製觀眾連結')).catch(()=>{});
+  showLinkQR(link);
+};
+function showLinkQR(link){
+  let box=document.getElementById('qrModal');
+  if(!box){ box=document.createElement('div'); box.id='qrModal';
+    box.style.cssText='position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.6);z-index:50;pointer-events:auto';
+    box.innerHTML='<div style="background:#16161f;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;align-items:center;max-width:90vw"><div style="font-size:.8rem;color:#aeb6c8">觀眾連結 (已複製)</div><div id="qrBox2" style="background:#fff;border-radius:10px;padding:8px"></div><div id="qrLink2" style="font-size:.68rem;color:#cfd6e6;word-break:break-all;text-align:center;max-width:280px"></div><button id="qrClose" style="border:1px solid rgba(255,255,255,.14);background:transparent;color:#fff;border-radius:10px;padding:8px 16px;cursor:pointer">關閉</button></div>';
+    document.body.appendChild(box);
+    box.onclick=e=>{ if(e.target===box) box.remove(); };
+    box.querySelector('#qrClose').onclick=()=>box.remove();
+  }
+  box.querySelector('#qrLink2').textContent=link;
+  const q=box.querySelector('#qrBox2'); q.innerHTML='';
+  try{ new QRCode(q,{text:link,width:140,height:140,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.textContent=link; }
+  box.style.display='grid';
+}
 // 一鍵開啟獨立漂浮視窗: 真的蓋在 Zoom/YouTube 上, 達成同時顯示
 let floatWin=null;
 $('btnFloat').onclick=()=>{
@@ -422,10 +452,14 @@ $('btnFloat').onclick=()=>{
   $('btnFloat').classList.add('active');
   const chk=setInterval(()=>{ if(floatWin.closed){ clearInterval(chk); $('btnFloat').classList.remove('active'); } },1000);
 };
-// 課程浮窗
+// 課程浮窗 (按鈕不存在則略過)
 const courseWin=$('courseWin');
-$('btnCourse').onclick=()=>{ courseWin.classList.toggle('open'); $('btnCourse').classList.toggle('active'); startCoursePolling(); };
-$('courseClose').onclick=()=>{ courseWin.classList.remove('open'); $('btnCourse').classList.remove('active'); stopCoursePolling(); };
+const courseBtn=document.getElementById('btnCourse');
+if(courseBtn){
+  courseBtn.onclick=()=>{ courseWin.classList.toggle('open'); courseBtn.classList.toggle('active'); startCoursePolling(); };
+}
+const courseClose=document.getElementById('courseClose');
+if(courseClose) courseClose.onclick=()=>{ courseWin.classList.remove('open'); if(courseBtn)courseBtn.classList.remove('active'); stopCoursePolling(); };
 // 字幕位置 (九宮格)
 document.querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>{
   document.documentElement.style.setProperty('--sub-pos',b.dataset.pos);
@@ -440,7 +474,8 @@ document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-align]').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
 });
-$('btnPos').onclick=()=>{ sheetEl.classList.add('open'); $('btnSheet').classList.add('active'); document.getElementById('sheet').scrollIntoView({block:'nearest'}); };
+const posBtn=document.getElementById('btnPos');
+if(posBtn) posBtn.onclick=()=>{ sheetEl.classList.add('open'); $('btnSheet').classList.add('active'); document.getElementById('sheet').scrollIntoView({block:'nearest'}); };
 
 // 拖曳定位 (原生 pointer events)
 (function enableDrag(){
