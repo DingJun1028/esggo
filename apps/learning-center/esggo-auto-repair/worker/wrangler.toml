@@ -3,6 +3,9 @@ main = "src/index.ts"
 compatibility_date = "2025-03-01"
 compatibility_flags = ["nodejs_compat"]
 
+[build]
+command = "npx --yes pnpm install --frozen-lockfile && npx tsc -p tsconfig.json"
+
 [[queues.producers]]
 queue = "esggo-repair-queue"
 binding = "REPAIR_QUEUE"
