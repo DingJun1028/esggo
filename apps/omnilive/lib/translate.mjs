@@ -90,17 +90,42 @@ async function viaGemini(text, from, to, key, model) {
  * @property {boolean} cached
  */
 
+/** 輕量語言偵測 (零依賴/零 key): 依 CJK 字元比例判斷 繁中/英文 */
+// 僅含中日韓統一表意文字 (漢字) 範圍, 不含平假名/片假名, 避免誤判日文
+const CJK = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/;
+export function detectLang(text) {
+  if (!text || !text.trim()) return 'en';
+  let cjk = 0, total = 0;
+  for (const ch of text) {
+    if (/\s/.test(ch)) continue;
+    total++;
+    if (CJK.test(ch)) cjk++;
+  }
+  if (total === 0) return 'en';
+  // 含 CJK 字元比例 > 15% 視為中文, 否則英文
+  return (cjk / total) > 0.15 ? 'zh-TW' : 'en';
+}
+
 /**
  * 將單段文字翻譯為雙語結果。
+ * from 可為 'auto' → 自動偵測來源語 (繁中/英文) 並翻向 to (to='auto' 時取對向)。
  * @param {string} text
- * @param {string} from
- * @param {string} to
+ * @param {string} from  'zh-TW' | 'en' | 'auto'
+ * @param {string} to    'zh-TW' | 'en' | 'auto'
  * @param {{translateTimeoutMs?:number, translateRetries?:number, myMemoryEmail?:string, geminiApiKey?:string, geminiModel?:string, mock?:boolean}} [opts]
  * @returns {Promise<TranslateResult>}
  */
 export async function translate(text, from, to, opts = {}) {
   if (!text || !text.trim()) return { source: text, target: '', from, to, engine: 'passthrough', cached: false };
-  if (from && from === to) return { source: text, target: text, from, to, engine: 'passthrough', cached: false };
+
+  // 自動判斷: from=auto → 偵測來源; to=auto → 取對向
+  let f = from, t = to;
+  if (f === 'auto' || f === t) {
+    const detected = detectLang(text);
+    f = detected;
+    t = (t && t !== 'auto' && t !== detected) ? t : (detected === 'zh-TW' ? 'en' : 'zh-TW');
+  }
+  if (f === t) return { source: text, target: text, from: f, to: t, engine: 'passthrough', cached: false };
 
   // 離線測試縫 (OMNILIVE_TRANSLATE_MOCK=1 或 opts.mock)：CI / 無網路環境下驗證整條資料流
   if (process.env.OMNILIVE_TRANSLATE_MOCK === '1' || opts.mock) {

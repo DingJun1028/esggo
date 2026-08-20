@@ -41,7 +41,7 @@ export function loadConfig() {
       `CONFIG_MISSING: OMNILIVE_AUDIO_SOURCE="${audioSource}" 不合法，必須是 ${AUDIO_SOURCES.join(' | ')}`
     );
   }
-  const from = (process.env.OMNILIVE_FROM || 'zh-TW').trim();
+  const from = (process.env.OMNILIVE_FROM || 'auto').trim();
   const to = (process.env.OMNILIVE_TO || 'en').trim();
   if (!from || !to) {
     throw new Error('CONFIG_MISSING: OMNILIVE_FROM 與 OMNILIVE_TO 皆不可為空');
