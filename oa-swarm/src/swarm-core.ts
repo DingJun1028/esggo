@@ -62,7 +62,13 @@ export class SwarmCore {
     const summary = picks.map((a) => `【${a.title}】${a.task}`).join('\n');
 
     // 3. 5T 驗算與 Hash Lock 刻印
-    const llm = await callLLM(`${brief}\n協作名單:\n${summary}\n請以蜂后口吻回應 50 字內。`);
+    let llm;
+    try {
+      llm = await callLLM(`${brief}\n協作名單:\n${summary}\n請以蜂后口吻回應 50 字內。`);
+    } catch (e) {
+      console.error('[LLM_ERR]', (e as Error).message, (e as Error).stack?.slice(0, 200));
+      llm = { text: '[MOCK] 蜂群收到任務：「' + task.slice(0, 60) + '」。Ollama 未連線，使用本地推演骨架回應。', model: 'mock', source: 'mock' as const };
+    }
     const artifact = purify(`client:${clientId}`, queen.title, {
       task,
       collaborators: picks.map((p) => p.id),
