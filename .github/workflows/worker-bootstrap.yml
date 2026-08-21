@@ -85,10 +85,12 @@ jobs:
           echo "region=$OCI_REGION user_set=${OCI_USER_OCID:+yes} tenancy_set=${OCI_TENANCY_OCID:+yes} fp_set=${OCI_API_FINGERPRINT:+yes}"
           echo "=== AUTH TEST (oci iam user get) ==="
           oci iam user get --user-id "$OCI_USER_OCID" 2>&1 | head -c 400 || echo " AUTH_FAIL_EXIT_$?"
-          echo "=== generate temp ed25519 ==="
+          echo "=== generate temp RSA (force rebuild) ==="
           # OCI 序列控制台只接受 RSA 公鑰 (ed25519 會 InvalidParameter)
+          rm -f ~/.ssh/worker_tmp ~/.ssh/worker_tmp.pub
           ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/worker_tmp >/dev/null
           echo "pub=$(cat ~/.ssh/worker_tmp.pub)" >> $GITHUB_OUTPUT
+          echo "worker_tmp.pub fingerprint: $(ssh-keygen -lf ~/.ssh/worker_tmp.pub)"
 
       - name: Create console connection (RSA) on worker
         id: conn
