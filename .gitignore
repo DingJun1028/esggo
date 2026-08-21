@@ -315,7 +315,10 @@ vault/Agents/context/.avatar-types.d.ts
 prisma-backup-*/
 
 # Vercel deploy: exclude non-esggo subdirectories from Vercel upload (64000+ tracked files exceed 15000 limit)
-esggo-omni-center/
+# 忽略目錄內容但保留目錄本身，使 soul.md 負向例外可生效
+esggo-omni-center/*
+# 例外：主典 soul.md 需永久納入追蹤（§20 OmniTag 契約聖典編輯源頭）
+!esggo-omni-center/soul.md
 rules-tutorial/
 functions/node_modules/
 
