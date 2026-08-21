@@ -58,12 +58,10 @@ jobs:
         id: oci
         run: |
           set -e
-          # GitHub runner 無 oci CLI → 用 pip 裝 oci-cli 套件 (官方 CLI 二進制)
           python3 -m pip install --quiet --user oci-cli
           export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-          which oci && oci --version || { echo "oci not found, try module"; python3 -m oci_cli --version; }
+          which oci && oci --version
           mkdir -p ~/.oci ~/.ssh
-          # 寫入 OCI API key (PEM)
           python3 - <<'PY'
           import os, re, pathlib
           raw = os.environ["OCI_API_KEY"]
@@ -71,7 +69,6 @@ jobs:
           clean = (m.group(0) if m else raw).replace("\r", "").strip() + "\n"
           kp = pathlib.Path("~/.oci/key.pem").expanduser()
           kp.write_text(clean); os.chmod(kp, 0o600)
-          # 寫入 OCI config (避免 [DEFAULT] 被 YAML 誤判, 用 python 寫)
           cfg = pathlib.Path("~/.oci/config").expanduser()
           cfg.write_text(
               "[DEFAULT]\n"
@@ -84,9 +81,11 @@ jobs:
           os.chmod(cfg, 0o600)
           print("oci config written")
           PY
-          echo "=== oci setup check ==="
-          oci iam region list --output json 2>&1 | head -c 120 || echo "region-list-err"
-          # 現場生成 ed25519 臨時 key (用於序列控制台認證)
+          echo "=== DEBUG: config values (no secrets) ==="
+          echo "region=$OCI_REGION user_set=${OCI_USER_OCID:+yes} tenancy_set=${OCI_TENANCY_OCID:+yes} fp_set=${OCI_API_FINGERPRINT:+yes}"
+          echo "=== AUTH TEST (oci iam user get) ==="
+          oci iam user get --user-id "$OCI_USER_OCID" 2>&1 | head -c 400 || echo " AUTH_FAIL_EXIT_$?"
+          echo "=== generate temp ed25519 ==="
           ssh-keygen -t ed25519 -N "" -f ~/.ssh/worker_tmp >/dev/null
           echo "pub=$(cat ~/.ssh/worker_tmp.pub)" >> $GITHUB_OUTPUT
 
