@@ -79,6 +79,58 @@ task
     }
   });
 
+// ── §20 OmniTag 契約閘：產物誕生即過閘（§5 喚醒命令體系入口）──
+program
+  .command('tag')
+  .description('§20 OmniTag 契約閘 — 產物誕生即附必備三枚 + 自動路由 + Hash Lock')
+  .requiredOption('--agent <id>', '代理歸屬 agent:01~agent:30')
+  .requiredOption('--lifecycle <state>', '生命週期 draft/active/frozen/archived')
+  .requiredOption('--p <level>', '品質分級 p0/p1/p2/p3')
+  .option('--squad <name>', '陣列歸屬 智庫聖所/符文契約/光之羽翼/煉金熵減/5T驗算')
+  .option('--security <level>', '安全分級 public/internal/confidential/restricted')
+  .option('--platform <env>', '平台環境 esggo/omni/vps/firebase')
+  .option('--best-practice <state>', '結界繼承 awakened/结界')
+  .option('--content <json>', '待簽印內容 (JSON 字串)，用於產生 Hash Lock')
+  .option('--entity <id>', '實體識別碼，預設自動生成')
+  .option('--json', '以 JSON 格式輸出完整過閘結果')
+  .action(async (opts) => {
+    const { emitArtifact, OmniTagContractViolation } = await import('./omnitag.js');
+    const tag = {
+      agent: opts.agent,
+      lifecycle: opts.lifecycle,
+      priority: opts.p,
+      squad: opts.squad,
+      security: opts.security,
+      platform: opts.platform,
+      bestPractice: opts.bestPractice,
+    };
+    const entityId = opts.entity || `artifact:${Date.now().toString(36)}`;
+    try {
+      const result = emitArtifact({
+        entityId,
+        tag,
+        content: opts.content,
+      });
+      if (opts.json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        const r = result.route;
+        console.log(`[5T:Traceable] entity=${entityId} agent=${tag.agent}`);
+        console.log(`[§20.4 路由] squad=${r.target?.squad ?? 'N/A'} → ${r.target?.action ?? 'N/A'} (${r.target?.routeKey ?? '-'})`);
+        console.log(`[§20.3 結界] barrierInherited=${r.barrierInherited} consistent=${r.consistent}`);
+        console.log(`[§18 HashLock] ${result.hashLock}`);
+        console.log(`[OK] 產物通過 §20.5 契約閘，已凍結可溯源`);
+      }
+    } catch (e) {
+      if (e instanceof OmniTagContractViolation) {
+        console.error(`[§20.5 契約違規] ${e.check.violations.join('; ')}`);
+        process.exit(1);
+      }
+      console.error('[ERROR]', (e as Error).message);
+      process.exit(1);
+    }
+  });
+
 program.parseAsync(process.argv).catch((err) => {
   console.error('[ERROR]', err.message);
   process.exit(1);
