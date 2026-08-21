@@ -120,3 +120,9 @@
 2. **OAB 寫入端點**: 確認 tdai-memory-hub 實際 POST 路徑 (查 deploy.sh / 源碼)
 3. **OAB 認證**: admin-key 注入 oa-swarm env (H3 憑證變更)
 4. **s2s 對外**: `/voice/` 路徑經 nginx + Cloudflare 暴露 WSS
+
+## 六、DNS 對外公開 (2026-08-21 完成)
+- Cloudflare Zone: esggo.co (8dda3653e490290412f7be84a84e0dc9)
+- A 記錄: oa.esggo.co → 161.118.248.180 (TTL 60, proxied=false 灰雲)
+- 驗證: VPS nginx Host: oa.esggo.co → /health 回應正常
+- API Token: cfut_*** (Zone:DNS:Edit, 用戶控制台建立, 不進 git)
