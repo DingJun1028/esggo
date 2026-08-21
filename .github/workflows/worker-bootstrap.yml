@@ -128,10 +128,14 @@ jobs:
         run: |
           set -e
           export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-          PROXY="ssh -W %h:%p -p 443 $CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
+          # OCI 序列控制台 SSH: 目標主機與 user 皆為 console connection 代理
+          # 正確格式: ssh -i key -o ProxyCommand='ssh -W %h:%p -p 443 CONN@instance-console...' CONN@instance-console...
+          CONSOLE_HOST="$CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
+          PROXY="ssh -W %h:%p -p 443 $CONSOLE_HOST"
           ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" \
             -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            ubuntu@$OA_WORKER_OCID bash -s <<VPS
+            -o ConnectTimeout=30 \
+            "$CONSOLE_HOST" bash -s <<'VPS'
             set -e
             mkdir -p ~/.ssh && chmod 700 ~/.ssh
             echo "$WORKER_PUB" >> ~/.ssh/authorized_keys
