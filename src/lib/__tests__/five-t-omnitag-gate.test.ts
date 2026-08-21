@@ -63,4 +63,40 @@ describe('§20.5 FiveTOmniTagGate 接線 (5T 驗算陣列 25-30)', () => {
       expect(v.check.violations.some((x) => x.includes('agent'))).toBe(true);
     }
   });
+
+  it('emitArtifact attaches §20.4 auto-route for each squad', () => {
+    const cases: Array<[string, string]> = [
+      ['agent:03', 'memory-recall'],
+      ['agent:09', 'typescript-contract'],
+      ['agent:15', 'auto-deploy'],
+      ['agent:21', 'entropy-forge'],
+      ['agent:27', 'audit-lock'],
+    ];
+    for (const [agent, routeKey] of cases) {
+      const r = FiveTOmniTagGate.emitArtifact({
+        entityId: `art:${agent}`,
+        tag: { agent, lifecycle: 'active', priority: 'p2', squad: undefined } as OmniTagSet,
+      });
+      expect(r.route.target?.routeKey).toBe(routeKey);
+      expect(r.route.consistent).toBe(true);
+    }
+  });
+
+  it('emitArtifact records route-warn when agent/squad mismatch', () => {
+    const r = FiveTOmniTagGate.emitArtifact({
+      entityId: 'mismatch:01',
+      tag: { agent: 'agent:03', squad: '5T驗算', lifecycle: 'active', priority: 'p2' } as OmniTagSet,
+    });
+    expect(r.route.consistent).toBe(false);
+    const life = FiveTTrackable.getLifecycle('mismatch:01');
+    expect(life.some((e) => e.event === 'omnitag:route-warn')).toBe(true);
+  });
+
+  it('barrier inheritance flag propagates on emit', () => {
+    const r = FiveTOmniTagGate.emitArtifact({
+      entityId: 'barrier:01',
+      tag: { agent: 'agent:25', lifecycle: 'active', priority: 'p2', bestPractice: '结界' } as OmniTagSet,
+    });
+    expect(r.route.barrierInherited).toBe(true);
+  });
 });
