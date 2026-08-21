@@ -430,3 +430,62 @@ export function generateFiveTReport(score: FiveTScore): string {
 
   return report;
 }
+
+// ── §20.5 OmniTag 契約閘（5T 驗算陣列 25-30 接線） ──────────
+// 零侵入掛接 src/lib/omnitag-contract.ts，產物誕生/變更即過契約閘。
+// 用相對 import 避免 @/ alias 在 core tsconfig 解析爭議（參見 universal-tag-service.ts 註解）。
+import {
+  verifyOmniTagContract,
+  type OmniTagSet,
+  type ContractCheck,
+} from './omnitag-contract';
+
+export class OmniTagContractViolation extends Error {
+  constructor(public readonly check: ContractCheck) {
+    super(`§20.5 OmniTag 契約違規: ${check.violations.join('; ')}`);
+    this.name = 'OmniTagContractViolation';
+  }
+}
+
+/**
+ * FiveTOmniTagGate — 產物誕生/變更時的自動契約閘。
+ * 對齊 §18 5T 驗證閘 + §20.5 五規則，預設即合規（§6.2）。
+ */
+export class FiveTOmniTagGate {
+  private static _sealedArtifacts = new Set<string>();
+
+  /**
+   * 產物誕生：通過 5T 評分 + OmniTag 契約閘後才放行。
+   * @throws OmniTagContractViolation 契約不合規時
+   */
+  static emitArtifact(params: {
+    entityId: string;
+    tag: OmniTagSet;
+    ctx?: Parameters<typeof verifyOmniTagContract>[1];
+  }): { entityId: string; contract: ContractCheck } {
+    const check = verifyOmniTagContract(params.tag, params.ctx);
+    if (!check.valid) {
+      throw new OmniTagContractViolation(check);
+    }
+    FiveTTrackable.recordEvent(params.entityId, 'omnitag:sealed', {
+      tag: params.tag,
+      source_origin: `agent:${params.tag.agent ?? '??'}`,
+    });
+    return { entityId: params.entityId, contract: check };
+  }
+
+  /**
+   * 凍結不可改（規則 2 / H4）：試圖變更 lifecycle:frozen+restricted 時拒絕。
+   */
+  static mutateArtifact(entityId: string, tag: OmniTagSet): void {
+    const check = verifyOmniTagContract(tag, { attemptedMutation: true });
+    if (!check.valid) {
+      throw new OmniTagContractViolation(check);
+    }
+    this._sealedArtifacts.delete(entityId);
+  }
+
+  static isSealed(entityId: string): boolean {
+    return this._sealedArtifacts.has(entityId);
+  }
+}
