@@ -157,3 +157,63 @@ export function verifyOmniTagContract(
 
   return { valid: allViolations.length === 0, violations: allViolations };
 }
+
+// ── §20.4 自動路由（Auto-Routing） ──────────────────────────
+// 將 agent 編號 + squad 對齊五大陣列，路由至對應治理動作。
+// 對齊 §20.4 路由表與 §6.2 預設即合規。
+
+export type SquadName =
+  | '智庫聖所'
+  | '符文契約'
+  | '光之羽翼'
+  | '煉金熵減'
+  | '5T驗算';
+
+export interface RouteTarget {
+  squad: SquadName;
+  /** 治理動作描述 */
+  action: string;
+  /** 路由鍵（用於 Trackable 維度追蹤） */
+  routeKey: string;
+}
+
+/** agent:01~30 → 所屬陣列 */
+export function squadOfAgent(agent: string): SquadName | null {
+  const m = agent.match(/^agent:0*(\d{1,2})$/);
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  if (n < 1 || n > 30) return null;
+  if (n <= 6) return '智庫聖所';
+  if (n <= 12) return '符文契約';
+  if (n <= 18) return '光之羽翼';
+  if (n <= 24) return '煉金熵減';
+  return '5T驗算';
+}
+
+const ROUTE_TABLE: Record<SquadName, RouteTarget> = {
+  智庫聖所: { squad: '智庫聖所', action: '永憶聖所 / 記憶召回', routeKey: 'memory-recall' },
+  符文契約: { squad: '符文契約', action: 'API / TypeScript / 型別安全', routeKey: 'typescript-contract' },
+  光之羽翼: { squad: '光之羽翼', action: '部署 / cron / 自動化代行', routeKey: 'auto-deploy' },
+  煉金熵減: { squad: '煉金熵減', action: '重構 / lint / 熵減煉金', routeKey: 'entropy-forge' },
+  5T驗算: { squad: '5T驗算', action: 'ISO / Hash Lock / 稽核', routeKey: 'audit-lock' },
+};
+
+/**
+ * §20.4 自動路由解析。
+ * 優先以 agent 編號決定陣列；若 agent 缺漏則退用 squad 字面值。
+ * best-practice:结界 標記時，繼承旗標全體擴散。
+ */
+export function routeOmniTag(tag: OmniTagSet): {
+  target: RouteTarget | null;
+  barrierInherited: boolean;
+  /** 路由是否與標籤自述 squad 一致 */
+  consistent: boolean;
+} {
+  const barrierInherited = isBarrierInherited(tag);
+  const byAgent = tag.agent ? squadOfAgent(tag.agent) : null;
+  const bySquad = (tag.squad as SquadName) ?? null;
+  const resolved = byAgent ?? bySquad;
+  const target = resolved ? ROUTE_TABLE[resolved] : null;
+  const consistent = byAgent == null || bySquad == null || byAgent === bySquad;
+  return { target, barrierInherited, consistent };
+}
