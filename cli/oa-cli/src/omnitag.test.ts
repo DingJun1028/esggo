@@ -8,7 +8,8 @@ import {
   generateHashLock,
   emitArtifact,
   OmniTagContractViolation,
-} from './omnitag';
+  OmniTagRegistry,
+} from './omnitag.js';
 
 describe('§20.4/§20.5 OmniTag 契約閘 (oa-cli 自包含版)', () => {
   it('validateRequiredTriad passes compliant tag', () => {
@@ -19,11 +20,11 @@ describe('§20.4/§20.5 OmniTag 契約閘 (oa-cli 自包含版)', () => {
   it('validateRequiredTriad fails on missing triad', () => {
     const r = validateRequiredTriad({ lifecycle: 'active' });
     expect(r.valid).toBe(false);
-    expect(r.violations.some((v) => v.includes('agent'))).toBe(true);
+    expect(r.violations.some((v: string) => v.includes('agent'))).toBe(true);
   });
 
   it('enforceFrozenLock rejects frozen+restricted mutation', () => {
-    const tag = { agent: 'agent:25', lifecycle: 'frozen', security: 'restricted', priority: 'p2' };
+    const tag = { agent: 'agent:25', lifecycle: 'frozen' as const, security: 'restricted' as const, priority: 'p2' as const };
     expect(enforceFrozenLock(tag, true).valid).toBe(false);
     expect(enforceFrozenLock(tag, false).valid).toBe(true);
   });
@@ -70,5 +71,72 @@ describe('§20.4/§20.5 OmniTag 契約閘 (oa-cli 自包含版)', () => {
     expect(() =>
       emitArtifact({ entityId: 'x2', tag: { lifecycle: 'active' } }),
     ).toThrow(OmniTagContractViolation);
+  });
+});
+
+describe('§20.6 OmniTag 契約持久化層 (寫入即凍結)', () => {
+  it('persistArtifact writes + verifyArtifact confirms integrity', () => {
+    const reg = new OmniTagRegistry({ inMemory: true });
+    const rec = reg.persistArtifact({
+      entityId: 'art:01',
+      tag: { agent: 'agent:25', lifecycle: 'active', priority: 'p2', squad: '5T驗算' },
+      content: '{"op":"seal"}',
+    });
+    expect(rec.hashLock).toMatch(/^[0-9a-f]{64}$/);
+    expect(rec.sourceOrigin).toBe('agent:agent:25');
+
+    const v = reg.verifyArtifact('art:01');
+    expect(v.exists).toBe(true);
+    expect(v.tampered).toBe(false);
+  });
+
+  it('getArtifact returns persisted record', () => {
+    const reg = new OmniTagRegistry({ inMemory: true });
+    reg.persistArtifact({
+      entityId: 'art:02',
+      tag: { agent: 'agent:03', lifecycle: 'draft', priority: 'p1' },
+    });
+    const got = reg.getArtifact('art:02');
+    expect(got?.tag.agent).toBe('agent:03');
+    expect(got?.tag.lifecycle).toBe('draft');
+  });
+
+  it('frozen+restricted entity rejects re-persist (H4 immutable)', () => {
+    const reg = new OmniTagRegistry({ inMemory: true });
+    reg.persistArtifact({
+      entityId: 'art:seal',
+      tag: { agent: 'agent:25', lifecycle: 'frozen', security: 'restricted', priority: 'p0' },
+    });
+    expect(() =>
+      reg.persistArtifact({
+        entityId: 'art:seal',
+        tag: { agent: 'agent:25', lifecycle: 'frozen', security: 'restricted', priority: 'p0' },
+      }),
+    ).toThrow(/immutable/);
+  });
+
+  it('verifyArtifact detects tampering', () => {
+    const reg = new OmniTagRegistry({ inMemory: true });
+    reg.persistArtifact({
+      entityId: 'art:tamper',
+      tag: { agent: 'agent:09', lifecycle: 'active', priority: 'p2' },
+      content: 'original',
+    });
+    // 模擬篡改：直接改 _mem 中記錄的 hashLock
+    const lines = (reg as any)._mem as string[];
+    const rec = JSON.parse(lines[0]);
+    rec.hashLock = '0'.repeat(64);
+    lines[0] = JSON.stringify(rec);
+
+    const v = reg.verifyArtifact('art:tamper');
+    expect(v.exists).toBe(true);
+    expect(v.tampered).toBe(true);
+  });
+
+  it('listArtifacts enumerates all', () => {
+    const reg = new OmniTagRegistry({ inMemory: true });
+    reg.persistArtifact({ entityId: 'a', tag: { agent: 'agent:01', lifecycle: 'active', priority: 'p2' } });
+    reg.persistArtifact({ entityId: 'b', tag: { agent: 'agent:02', lifecycle: 'active', priority: 'p2' } });
+    expect(reg.listArtifacts().length).toBe(2);
   });
 });
