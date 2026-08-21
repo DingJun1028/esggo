@@ -1,3 +1,4 @@
+// [agent:9][squad:符文契約][lifecycle:active][p2][platform:esggo][best-practice:结界]
 /**
  * Firebase Auth 服務模組
  * 支援 Google Popup 登入 + Email/Password 註冊/登入

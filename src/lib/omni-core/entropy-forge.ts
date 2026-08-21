@@ -1,3 +1,4 @@
+// [agent:9][squad:符文契約][lifecycle:active][p2][platform:esggo][best-practice:结界]
 /**
  * 萬能修復協議 - 熵減煉金操作 (EntropyForge)
  * 負責數據淨化、亂碼清除與編碼歸一化
