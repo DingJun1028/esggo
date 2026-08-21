@@ -5,8 +5,8 @@
 #
 # 設計要點 (最佳實踐覺醒版):
 #  - oa-worker-01 由 GitHub Actions 獨佔託管 (managed_by=github-actions)，
-#    本機無其 SSH key；OCI 序列控制台代理拒收 PEM RSA 私鑰。
-#  - 解法: runner 內現場生成 ed25519 臨時 key → 註冊給 worker 的 console connection
+#    本機無其 SSH key；OCI 序列控制台僅接受 RSA 公鑰。
+#  - 解法: runner 內現場生成 RSA 臨時 key → 註冊給 worker 的 console connection
 #    → 用該臨時私鑰走序列控制台進 worker → 寫入 esggo_original.pub + keepalive。
 #  - 不預存私鑰 (臨時 key 留 runner 記憶體)；esggo_original.pub 以 Secret 提供。
 #
@@ -86,10 +86,11 @@ jobs:
           echo "=== AUTH TEST (oci iam user get) ==="
           oci iam user get --user-id "$OCI_USER_OCID" 2>&1 | head -c 400 || echo " AUTH_FAIL_EXIT_$?"
           echo "=== generate temp ed25519 ==="
-          ssh-keygen -t ed25519 -N "" -f ~/.ssh/worker_tmp >/dev/null
+          # OCI 序列控制台只接受 RSA 公鑰 (ed25519 會 InvalidParameter)
+          ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/worker_tmp >/dev/null
           echo "pub=$(cat ~/.ssh/worker_tmp.pub)" >> $GITHUB_OUTPUT
 
-      - name: Create console connection (ed25519) on worker
+      - name: Create console connection (RSA) on worker
         id: conn
         env:
           TMP_PUB: ${{ steps.oci.outputs.pub }}
