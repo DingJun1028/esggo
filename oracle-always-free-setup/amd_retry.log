@@ -54,3 +54,1836 @@ For OCI CLI commands and parameters suggestion, auto completion and other useful
 Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
 
 For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T04:58:05Z] attempt 75: launching AMD E2.1.Micro
+[2026-08-21T04:58:08Z] attempt 48: launching AMD E2.1.Micro
+[2026-08-21T04:58:10Z] attempt 75: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "F448E07B81D14806BA0D1EB71D82E6AE/E716B8B02623A1C6E1DA876A53494EF8/C0635DFD9593D53F57BCDCD85ECB320C",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:58:09.757458+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:58:12Z] attempt 48: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "627C98878A8D428DAD0A3CFB70FC346D/8B8E7C16DD9D0044E3DA876A53494E17/83DE16DEFDE43130837411B686EC8FCA",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:58:12.384903+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:58:39Z] attempt 78: launching AMD E2.1.Micro
+[2026-08-21T04:58:40Z] attempt 78: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T04:58:57Z] attempt 49: launching AMD E2.1.Micro
+[2026-08-21T04:59:01Z] attempt 49: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "86B979834A494FDC8E654625672C9F08/6A7CF8D3CE1BC96314DB876A53494E3B/3A5511C4D162C27720C50891C4686E19",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:59:00.897652+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:59:10Z] attempt 76: launching AMD E2.1.Micro
+[2026-08-21T04:59:13Z] attempt 49: launching AMD E2.1.Micro
+[2026-08-21T04:59:14Z] attempt 76: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "B8D9634A650B4908B34863A2B59647BF/9934692FC57A97FA21DB876A53494E2C/EB42B6642054B42205E6BA8015E967B1",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:59:13.605254+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:59:17Z] attempt 49: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "53DE697744F74C619FC50C6677DD5740/903B9C8AE269B72A23DB876A53494EE5/391F74D89B61F4F7414D299154F44045",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:59:16.504714+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:59:40Z] attempt 79: launching AMD E2.1.Micro
+[2026-08-21T04:59:41Z] attempt 79: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:00:01Z] attempt 50: launching AMD E2.1.Micro
+[2026-08-21T05:00:06Z] attempt 50: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "644973759CF4499EA3B0A10C414EAB02/0AB1A0CC823B7F3D54DB876A53494E62/ED5660BB9D5D0A80F772B5B09BCBE7EB",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:00:05.468452+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:00:14Z] attempt 77: launching AMD E2.1.Micro
+[2026-08-21T05:00:17Z] attempt 50: launching AMD E2.1.Micro
+[2026-08-21T05:00:19Z] attempt 77: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "6E7DB8037C32435F9BEEC4E1FA31F4AA/DF1EA9789046E63B62DB876A53494E2E/A9A89AEE586A310CF9D19BE206D06CD1",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:00:18.344222+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:00:21Z] attempt 50: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "975830A340754E8BA51AD80B4EA0B24C/ED0A6286A4DCBA5664DB876A53494E7C/FFC44A7E38E27AA19F1F1CE232C0E147",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:00:21.090793+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:00:42Z] attempt 80: launching AMD E2.1.Micro
+[2026-08-21T05:00:43Z] attempt 80: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:01:06Z] attempt 51: launching AMD E2.1.Micro
+[2026-08-21T05:01:11Z] attempt 51: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "02C2F37F8229418489F4122EDEA60390/6237C24909E647D596DB876A53494E26/AA4428F106DF15E88B3120B8309C0FA8",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:01:10.786876+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:01:19Z] attempt 78: launching AMD E2.1.Micro
+[2026-08-21T05:01:21Z] attempt 51: launching AMD E2.1.Micro
+[2026-08-21T05:01:22Z] attempt 78: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "1D99EAE22EAB4D0A925D04A578AF6539/EE57A339659203A8A2DB876A53494EF1/E608B5F6BD3C62311D2656CBDB071AB8",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:01:22.399064+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:01:25Z] attempt 51: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "2B2FD7FC9DA54232805AB16C6770901B/D2BE07BC44B3E003A4DB876A53494EA3/5F0266714A972EC46849F8FE2361286C",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:01:25.296522+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:01:43Z] attempt 81: launching AMD E2.1.Micro
+[2026-08-21T05:01:44Z] attempt 81: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:02:11Z] attempt 52: launching AMD E2.1.Micro
+[2026-08-21T05:02:15Z] attempt 52: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "01FBB64B738C4891A22210AB69DCCB7A/8EE43F88CE345199D6DB876A53494E6B/C363B29DDD43998EC5C1C9CE2D178A42",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:02:14.869232+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:02:23Z] attempt 79: launching AMD E2.1.Micro
+[2026-08-21T05:02:26Z] attempt 52: launching AMD E2.1.Micro
+[2026-08-21T05:02:26Z] attempt 79: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "5B86ABD1271A4385B5E76556130C9510/DFDEC31A8C7D4F15E1DB876A53494E82/159E6B667C329096B567AB83E009AA3E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:02:26.082227+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:02:30Z] attempt 52: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "80EE6525FE954B97A708D7253BA802F7/083EBCB18518C967E4DB876A53494E12/8903DC8F46F00AD8E8F1A77667BC25C4",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:02:29.539111+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:02:45Z] attempt 82: launching AMD E2.1.Micro
+[2026-08-21T05:02:46Z] attempt 82: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:03:15Z] attempt 53: launching AMD E2.1.Micro
+[2026-08-21T05:03:19Z] attempt 53: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "022A54E6723D4BFA8CF8B6C073718F7A/D6880768BE4D0EC016DC876A53494E73/95284E0D1A5486F219BDBEDA63BF996A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:03:18.887574+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:03:26Z] attempt 80: launching AMD E2.1.Micro
+[2026-08-21T05:03:30Z] attempt 80: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "32E15394DD9B49C59934A6504DDE03AA/FFA8568BF2C9254C21DC876A53494EAC/812703CFD32031DC6986EB81E93B27F4",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:03:29.537414+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:03:30Z] attempt 53: launching AMD E2.1.Micro
+[2026-08-21T05:03:33Z] attempt 53: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B25FDD741EFB467094FD834398B896E4/DB4A51288CB8FB2F25DC876A53494E12/DD4EF0CD0AE115BCC00DF0C60DE4833A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:03:33.515886+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:03:46Z] attempt 83: launching AMD E2.1.Micro
+[2026-08-21T05:03:47Z] attempt 83: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:04:19Z] attempt 54: launching AMD E2.1.Micro
+[2026-08-21T05:04:24Z] attempt 54: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "BCED65AA547B4F84BE5BF4E0359B6DB3/3D778B9599409E6A57DC876A53494E0F/3D50BC4D9E8E234CFF9A9D2E6978430D",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:04:23.977754+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:04:30Z] attempt 81: launching AMD E2.1.Micro
+[2026-08-21T05:04:33Z] attempt 81: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "2ADB534D55674CA28418444FD2F0AD8D/D40F76B7475D57E961DC876A53494ECB/03D0BC196ABD20B07E38D8B2D1C65585",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:04:33.290930+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:04:34Z] attempt 54: launching AMD E2.1.Micro
+[2026-08-21T05:04:38Z] attempt 54: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "2FA957B6B8EE43C5ACDFE80474AE8F5D/137125B562F3D95F65DC876A53494E58/4597ABA568E46F6D2E48900E642520FC",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:04:37.742674+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:04:47Z] attempt 84: launching AMD E2.1.Micro
+[2026-08-21T05:04:49Z] attempt 84: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:05:24Z] attempt 55: launching AMD E2.1.Micro
+[2026-08-21T05:05:28Z] attempt 55: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "AD8F5B0D23B34959AFAF17B241070B15/FA69A1C0B92E5F2997DC876A53494E81/CEA7ABCE6EA530789BE36E05FE500F48",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:05:27.770324+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:05:33Z] attempt 82: launching AMD E2.1.Micro
+[2026-08-21T05:05:37Z] attempt 82: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "21D8BF70E8064EE48F94AB73EA0712BB/3C33BAC51F2AD31BA0DC876A53494E4B/A91E6C629C280B78566E6905190E97FA",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:05:36.776863+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:05:38Z] attempt 55: launching AMD E2.1.Micro
+[2026-08-21T05:05:41Z] attempt 55: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "C498B03F56284B769862D76B2712650E/83C9566554282CC0A4DC876A53494E50/1ED8909864804D1920D77868C87EF70B",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:05:41.469291+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:05:49Z] attempt 85: launching AMD E2.1.Micro
+[2026-08-21T05:05:50Z] attempt 85: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:06:28Z] attempt 56: launching AMD E2.1.Micro
+[2026-08-21T05:06:32Z] attempt 56: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "20EB2E1052994DB2811AAA9EA96650FD/EDE56BC6386BB6BED7DC876A53494E54/6F5CAA22B55A64F5F2328D8FFC84C053",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:06:31.775225+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:06:37Z] attempt 83: launching AMD E2.1.Micro
+[2026-08-21T05:06:40Z] attempt 83: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "32C8E5B161F9428C9BAEFDAC9EF52DF1/532287DDDD3D9F2ADFDC876A53494E07/405B3B6A452235ECEC867B67596B013C",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:06:40.200318+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:06:42Z] attempt 56: launching AMD E2.1.Micro
+[2026-08-21T05:06:46Z] attempt 56: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "923AD22F8E764879A278FF3D4DF435EE/471FB99996FAADBAE5DC876A53494EF7/7B2C9A12910B092CC9FD81DCEDA6BF8A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:06:45.617148+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:06:50Z] attempt 86: launching AMD E2.1.Micro
+[2026-08-21T05:06:51Z] attempt 86: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:07:32Z] attempt 57: launching AMD E2.1.Micro
+[2026-08-21T05:07:36Z] attempt 57: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B9B36298068C497E922A2AC0A2294567/449389FF0371B8CE17DD876A53494EDA/A36287B60A604FE162BADF43C9F2F8B7",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:07:35.787444+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:07:40Z] attempt 84: launching AMD E2.1.Micro
+[2026-08-21T05:07:44Z] attempt 84: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "3CEE5C3C949A400AA5F56F3CF49FC783/D3D3453EB32DCE9B1FDD876A53494E4C/9AA7C0001B7899BECD25F272A3E8BC2A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:07:44.006177+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:07:46Z] attempt 57: launching AMD E2.1.Micro
+[2026-08-21T05:07:50Z] attempt 57: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "1D1A624C623240318418775E0F4999B5/995222C32AC7195C25DD876A53494E11/E2C320ECBFBB68712743A33436B3AED6",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:07:49.898316+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:07:51Z] attempt 87: launching AMD E2.1.Micro
+[2026-08-21T05:07:52Z] attempt 87: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:08:36Z] attempt 58: launching AMD E2.1.Micro
+[2026-08-21T05:08:40Z] attempt 58: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "76AF00CC95934AEDA2F0A0C2C8FF25B5/7DD7F3045E5B317057DD876A53494EF7/549A74B3FB4C711D56001575F151DB37",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:08:39.605635+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:08:44Z] attempt 85: launching AMD E2.1.Micro
+[2026-08-21T05:08:48Z] attempt 85: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "ED784DBC445445319AB6FC3557651CB8/424D0D3D23A2ADC25FDD876A53494E54/7130A3DE881F084483983D1F925491EE",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:08:47.993788+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:08:50Z] attempt 58: launching AMD E2.1.Micro
+[2026-08-21T05:08:52Z] attempt 88: launching AMD E2.1.Micro
+[2026-08-21T05:08:53Z] attempt 88: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:08:54Z] attempt 58: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "BF4C8FD0D2B54B959AF63E7061DBA743/FF6581A692F9D7C765DD876A53494E5D/9DC54842ED9DF207811678ADD6030CA4",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:08:53.649348+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:09:40Z] attempt 59: launching AMD E2.1.Micro
+[2026-08-21T05:09:44Z] attempt 59: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "AC9224AE91B1462088B61DF6E86144DB/00CA5430FD949C8A97DD876A53494E72/37D00971A08FB03E9E9F3684D549D9C3",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:09:43.953174+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:09:48Z] attempt 86: launching AMD E2.1.Micro
+[2026-08-21T05:09:52Z] attempt 86: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "25DE17FE9D8F41C393FEB9F00B30C2E0/D633FB69054E4FE19FDD876A53494E03/EEEADA2C7A9128D8645147018DA303D8",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:09:51.791374+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:09:53Z] attempt 89: launching AMD E2.1.Micro
+[2026-08-21T05:09:54Z] attempt 59: launching AMD E2.1.Micro
+[2026-08-21T05:09:55Z] attempt 89: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:09:58Z] attempt 59: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "306959B5C4F6497E9A3CEDA034FEA9C9/720733DAD42685FEA5DD876A53494EA9/6CF550EB7EA2D0B79EB9468799E79BEE",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:09:58.117706+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:10:44Z] attempt 60: launching AMD E2.1.Micro
+[2026-08-21T05:10:48Z] attempt 60: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "0AB7C9B117524D469BE39ABC3FDF7C32/E2872D39B2B69A9AD7DD876A53494E9F/3203B1ECB2707FADC0F35A860050EA87",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:10:48.162318+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:10:52Z] attempt 87: launching AMD E2.1.Micro
+[2026-08-21T05:10:55Z] attempt 90: launching AMD E2.1.Micro
+[2026-08-21T05:10:56Z] attempt 87: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "A61DE26F6CBD4A14BBABDB02E45F7B22/B4D64C2D1C77AFBEDFDD876A53494EA1/CA766C76CFD1065891DE347C1E103C70",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:10:56.021963+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:10:56Z] attempt 90: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:10:58Z] attempt 60: launching AMD E2.1.Micro
+[2026-08-21T05:11:02Z] attempt 60: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "0955960CABAD46F9BAC4DB47044DF72C/6E8B68A64CCB2EE0E5DD876A53494E68/D85811EDFD28FBCB6052AAA0ADD3AFEA",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:11:02.282926+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:11:48Z] attempt 61: launching AMD E2.1.Micro
+[2026-08-21T05:11:52Z] attempt 61: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "157421C0B9444CD88B0986BEAC395C0F/74F72E471C2318E417DE876A53494EBD/61DB5444BEE32E688EC92CBAD5F8A81E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:11:52.314684+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:11:56Z] attempt 88: launching AMD E2.1.Micro
+[2026-08-21T05:11:56Z] attempt 91: launching AMD E2.1.Micro
+[2026-08-21T05:11:58Z] attempt 91: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:12:01Z] attempt 88: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "4129E14C98924DBB9A89C21187C1BC76/4CE3121F7CB1809A20DE876A53494E4A/69D6771755D9CE8FDCEB10AED306E36B",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:12:00.553844+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:12:02Z] attempt 61: launching AMD E2.1.Micro
+[2026-08-21T05:12:07Z] attempt 61: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "15E0C6BD32A3431FA03F82FC95D03812/93483420358F6B7126DE876A53494E0F/8F648A82B46C67F1DC0D540831E9496D",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:12:06.655750+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:12:52Z] attempt 62: launching AMD E2.1.Micro
+[2026-08-21T05:12:56Z] attempt 62: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "ABCC2DE1CDF9408297B4757C5A4B4F68/8A95DF0090A8A02E57DE876A53494E5D/856C87CC92CB809284B339F465BBACC6",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:12:56.181181+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:12:58Z] attempt 92: launching AMD E2.1.Micro
+[2026-08-21T05:12:59Z] attempt 92: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:13:01Z] attempt 89: launching AMD E2.1.Micro
+[2026-08-21T05:13:04Z] attempt 89: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "90004ED2481E415AA74365E2691F2D73/AED13A386EF0FB7F5FDE876A53494EE8/07A5EDC49F5073E1C7EA5AC97F94853A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:13:04.328554+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:13:07Z] attempt 62: launching AMD E2.1.Micro
+[2026-08-21T05:13:11Z] attempt 62: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "0D01372667414C54A46C3DA52FB64996/99F06E2229229EFE66DE876A53494EA1/5AAE0667D59D518145375FA28C938D32",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:13:10.681312+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:13:56Z] attempt 63: launching AMD E2.1.Micro
+[2026-08-21T05:13:59Z] attempt 93: launching AMD E2.1.Micro
+[2026-08-21T05:14:01Z] attempt 63: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "F266E3AB8F824DECB579D4D3FD680662/7B68723A8A46C0AF98DE876A53494E89/EFDCBCE78279D097A11C5018D172F6BB",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:14:00.574746+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:14:01Z] attempt 93: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:14:04Z] attempt 90: launching AMD E2.1.Micro
+[2026-08-21T05:14:09Z] attempt 90: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "7A88F4BB85FB4C299EC8BCABD0BC6C9E/B93C3123AFDD8996A0DE876A53494E46/AFAB1960C298F49F4FF4C2F9F2055C41",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:14:08.388328+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:14:11Z] attempt 63: launching AMD E2.1.Micro
+[2026-08-21T05:14:15Z] attempt 63: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B14C6383A4184951929B55DD919D0455/85B82AD55F1FF20FA6DE876A53494E59/6ACCC3D102572BA04CBC601270FAD4EB",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:14:14.861701+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:15:01Z] attempt 64: launching AMD E2.1.Micro
+[2026-08-21T05:15:01Z] attempt 94: launching AMD E2.1.Micro
+[2026-08-21T05:15:02Z] attempt 94: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:15:05Z] attempt 64: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "C0FBE3685B4448FD9F1E34F67671D3BB/2A6892346B9613ACD8DE876A53494E64/5AF1EB50E9FE6BA93952FB664A64F6C3",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:15:04.943651+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:15:09Z] attempt 91: launching AMD E2.1.Micro
+[2026-08-21T05:15:12Z] attempt 91: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "AEFD77F511DC41E6B258AC54825D19DA/6C4E2A1A02A4DE2FDFDE876A53494E9D/30E159B131B236A0EC17BE89061E6AD1",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:15:12.159821+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:15:15Z] attempt 64: launching AMD E2.1.Micro
+[2026-08-21T05:15:19Z] attempt 64: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "C49DF98DF3094AF4873988544211756B/59817E7DED737219E6DE876A53494E90/4586A1C73DF2413D625F932E18D2C7BF",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:15:19.086183+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:16:02Z] attempt 95: launching AMD E2.1.Micro
+[2026-08-21T05:16:04Z] attempt 95: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:16:05Z] attempt 65: launching AMD E2.1.Micro
+[2026-08-21T05:16:09Z] attempt 65: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B61B86393B364D03B5786C34D7C3E81A/13FBCD002102870E18DF876A53494EA4/79AE33077F8D8BC68E59D92CB7239A16",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:16:09.157577+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:16:12Z] attempt 92: launching AMD E2.1.Micro
+[2026-08-21T05:16:17Z] attempt 92: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "D103D1547DB34C4B803CCE35583EB35A/D1621B0E1EC332B420DF876A53494EE4/89CDA50A5C62FA23E430275E76C6AC62",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:16:16.436226+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:16:19Z] attempt 65: launching AMD E2.1.Micro
+[2026-08-21T05:16:23Z] attempt 65: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "95B4B811126F451CB7178D985DB73244/DCA6288A3DC55D2526DF876A53494EDE/3BA1C6D309967CF904C9B057E5DB226C",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:16:22.907915+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:17:04Z] attempt 96: launching AMD E2.1.Micro
+[2026-08-21T05:17:05Z] attempt 96: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:17:09Z] attempt 66: launching AMD E2.1.Micro
+[2026-08-21T05:17:13Z] attempt 66: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "93C737B77334483EAE378482F54765D3/D35CCB359E23237458DF876A53494E06/1AECEA75F9E0241C2A18EEB58A395419",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:17:12.977018+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:17:17Z] attempt 93: launching AMD E2.1.Micro
+[2026-08-21T05:17:20Z] attempt 93: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "4C6FA2CCCE7649CB9046E9189F0AD9A2/4F2580862687BE965FDF876A53494E7A/68A54A88777AEF57864BDD4B5A2ADA0B",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:17:20.175188+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:17:23Z] attempt 66: launching AMD E2.1.Micro
+[2026-08-21T05:17:27Z] attempt 66: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "FBA25C56FAA3418386D643F191C543EE/9794C263C5DE2D6066DF876A53494EAD/1749D006BFACF6A74F4B82F91084C0E3",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:17:26.992085+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:18:05Z] attempt 97: launching AMD E2.1.Micro
+[2026-08-21T05:18:06Z] attempt 97: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:18:13Z] attempt 67: launching AMD E2.1.Micro
+[2026-08-21T05:18:17Z] attempt 67: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "90F224EAB6A84188AC7515FBA8011F43/7E43976679F29FA298DF876A53494EF9/DAD6409CAF31168897D17CEFA7592AF8",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:18:17.152744+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:18:20Z] attempt 94: launching AMD E2.1.Micro
+[2026-08-21T05:18:24Z] attempt 94: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "51DCEA0E28B34E15ADF029BF315A4665/FF6E6288193E2AD89FDF876A53494E13/5CD87F378E3776051EB7B457C85D6819",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:18:24.223715+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:18:27Z] attempt 67: launching AMD E2.1.Micro
+[2026-08-21T05:18:31Z] attempt 67: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "6B0B06E0A6EA41EBAC736CEA867B2A07/BF2F73686F93B646A6DF876A53494EAF/D272974339FEBD0EE4FBBB0E65729F2E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:18:31.431525+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:19:06Z] attempt 98: launching AMD E2.1.Micro
+[2026-08-21T05:19:07Z] attempt 98: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:19:17Z] attempt 68: launching AMD E2.1.Micro
+[2026-08-21T05:19:21Z] attempt 68: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "BD6627E3A8C94928B49A0341BBBB4C89/ACFC33F54AD2191CD8DF876A53494E46/7297BC6A1A5B91EECAC2261314CA48A9",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:19:21.031848+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:19:24Z] attempt 95: launching AMD E2.1.Micro
+[2026-08-21T05:19:28Z] attempt 95: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "16EA92BC0CF04B158FD533169CD12C9E/04580BEDA10FD903DFDF876A53494E1B/67E234721424016CCA373FC5FF897921",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:19:27.854748+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:19:32Z] attempt 68: launching AMD E2.1.Micro
+[2026-08-21T05:19:35Z] attempt 68: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "89B948F98C6049F1A92EDB5CA1F6C582/A20D148D3164759DE6DF876A53494E7C/C09B15487271919271F020AC6C85BC0A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:19:35.096477+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:20:07Z] attempt 99: launching AMD E2.1.Micro
+[2026-08-21T05:20:08Z] attempt 99: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:20:21Z] attempt 69: launching AMD E2.1.Micro
+[2026-08-21T05:20:25Z] attempt 69: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "4BDB6B0A9143431BBB7E1524FEBF4EC0/D92BF940264EDDC718E0876A53494E6F/AEF89878832EFC2FD93E3374CA5FD1D3",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:20:24.870944+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:20:28Z] attempt 96: launching AMD E2.1.Micro
+[2026-08-21T05:20:32Z] attempt 96: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "DAEBDB49DCDD4FFB95049A81544F8274/E77EAE0FC33BA34E1FE0876A53494E0D/9032CC0866E868E53B951D4865405F69",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:20:31.564798+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:20:35Z] attempt 69: launching AMD E2.1.Micro
+[2026-08-21T05:20:39Z] attempt 69: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "58BB0918215745C584098DDD7F562DC5/9A5055FF6C386FE926E0876A53494EFD/B51933450C88B2AE31D862D3C88FDC53",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:20:38.948691+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:21:09Z] attempt 100: launching AMD E2.1.Micro
+[2026-08-21T05:21:10Z] attempt 100: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:21:25Z] attempt 70: launching AMD E2.1.Micro
+[2026-08-21T05:21:30Z] attempt 70: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "DAF4BC152A654C129FF66ABB5C342867/D5DF2B545C39791559E0876A53494E58/1552354711CE976E9F856DDD11729882",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:21:29.795105+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:21:32Z] attempt 97: launching AMD E2.1.Micro
+[2026-08-21T05:21:36Z] attempt 97: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "F9F128BFC98E4B7AB8CB509CB59F9022/68865E2CFAE891BE5FE0876A53494E07/BBB4F8B94DFDF64FBE80BCADA8F9B59E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:21:35.907198+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:21:39Z] attempt 70: launching AMD E2.1.Micro
+[2026-08-21T05:21:48Z] attempt 70: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "8007E24BA5064C4BA6A13679DBA33DC2/43501CDA0D8E58A16AE0876A53494E47/1C44DC324CDEA7AA4A623BDC1F94C343",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:21:47.342386+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:22:10Z] attempt 101: launching AMD E2.1.Micro
+[2026-08-21T05:22:12Z] attempt 101: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:22:30Z] attempt 71: launching AMD E2.1.Micro
+[2026-08-21T05:22:34Z] attempt 71: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B7F4CEAC66614BEE85DEC78BBE92F9EE/4C0A8211ADF6775D99E0876A53494EAE/8DBF93DEFCF74595AF6D3DD631D62868",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:22:34.374609+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:22:37Z] attempt 98: launching AMD E2.1.Micro
+[2026-08-21T05:22:40Z] attempt 98: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "2EA3ACFEA536420086F3884302D63B9F/3FC6666F3B6A83269FE0876A53494E54/1C8F5CE0BB54503DD8EDC31CA1D70360",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:22:40.167573+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:22:48Z] attempt 71: launching AMD E2.1.Micro
+[2026-08-21T05:22:52Z] attempt 71: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "BC67B12BB2994916A4A1463A96C2E4C6/5FD80EA90CD10874ABE0876A53494ED5/4F824D961CA7FA3344EFF424BAA20454",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:22:51.741925+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:23:12Z] attempt 102: launching AMD E2.1.Micro
+[2026-08-21T05:23:13Z] attempt 102: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:23:35Z] attempt 72: launching AMD E2.1.Micro
+[2026-08-21T05:23:39Z] attempt 72: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "867569C48A7542B7AF80F5E8D51E0EDE/1646EB6FC9D72E30DAE0876A53494EA4/0DAE833B4EB30CF48BB8EC9CF5E3D877",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:23:38.569281+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:23:40Z] attempt 99: launching AMD E2.1.Micro
+[2026-08-21T05:23:45Z] attempt 99: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "71C79298AC964C6AA7C8BFEC50CDFFC4/52917ABF5DBFF697E0E0876A53494E77/D539991FF89B959E9377AFE8929E5F5D",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:23:44.897776+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:23:52Z] attempt 72: launching AMD E2.1.Micro
+[2026-08-21T05:23:59Z] attempt 72: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "9BA7583F72EE4D3D989170CC4DA6814C/A8EB4CD15DE8D6B7EEE0876A53494EEB/9A3F591E583487CE4908F663DC30857E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:23:58.840305+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:24:13Z] attempt 103: launching AMD E2.1.Micro
+[2026-08-21T05:24:15Z] attempt 103: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:24:39Z] attempt 73: launching AMD E2.1.Micro
+[2026-08-21T05:24:43Z] attempt 73: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "38C6319270AE441C90329C0D7C3AD0B2/359656AB79F023041AE1876A53494EAF/0774676CD47186B674742D6E75947E45",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:24:42.988851+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:24:45Z] attempt 100: launching AMD E2.1.Micro
+[2026-08-21T05:24:50Z] attempt 100: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "E1831034D4C44BD797BDA2784E506BF5/EEC1EEAA7D2160FD21E1876A53494EA1/F0619377EBE7752DBBEE2E156AA0E6DB",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:24:49.631954+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:24:59Z] attempt 73: launching AMD E2.1.Micro
+[2026-08-21T05:25:05Z] attempt 73: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "7717003122B2464DBB8034B69DB89F94/3086A44DEF3D574930E1876A53494ED3/D01D208169DB68E5046B423720FBF4B7",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:25:04.903769+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:25:15Z] attempt 104: launching AMD E2.1.Micro
+[2026-08-21T05:25:17Z] attempt 104: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:25:43Z] attempt 74: launching AMD E2.1.Micro
+[2026-08-21T05:25:50Z] attempt 101: launching AMD E2.1.Micro
+[2026-08-21T05:26:00Z] attempt 101: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "F0928B5199B640D6840E54BA835B59D8/8BEB63FF1AAF88B267E1876A53494E3E/E84DC3CA885BF4F358FD8CFC7DE3800A",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:26:00.037633+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:26:01Z] attempt 74: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "A1C55CBD3DBD47CC9EB47895889B6993/A50CF311C69B5D0567E1876A53494E41/B14026C57298909610E9689947373728",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:26:00.394452+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:26:05Z] attempt 74: launching AMD E2.1.Micro
+[2026-08-21T05:26:10Z] attempt 74: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "5988C8C0D87F4873B40ABD91C06D6760/153696F8B711E97771E1876A53494E00/120F8D7C32ED8FE60340B98345A19BCE",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:26:09.724558+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:26:17Z] attempt 105: launching AMD E2.1.Micro
+[2026-08-21T05:26:18Z] attempt 105: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:27:00Z] attempt 102: launching AMD E2.1.Micro
+[2026-08-21T05:27:01Z] attempt 75: launching AMD E2.1.Micro
+[2026-08-21T05:27:05Z] attempt 102: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "2AE02E311D5A42AD98027E1259B6F84E/C76FEDA82E73BFF2A8E1876A53494EC2/DAA249C923D23030F8EF5A670269D45B",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:27:04.727952+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:27:05Z] attempt 75: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "7A98173653414C7EA4BF7F1BDBE27FE5/98988E324289E3BBA8E1876A53494E2A/83A162ACD408F20788BF07357E16029C",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:27:05.293236+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:27:10Z] attempt 75: launching AMD E2.1.Micro
+[2026-08-21T05:27:14Z] attempt 75: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "39BB8F324E73441CAC670550461FA56A/7B2D9ECA44563D64B1E1876A53494E06/EEEC4ABE7EA2BA0623B20F5D0255805E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:27:13.907684+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:27:18Z] attempt 106: launching AMD E2.1.Micro
+[2026-08-21T05:27:19Z] attempt 106: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:28:05Z] attempt 103: launching AMD E2.1.Micro
+[2026-08-21T05:28:06Z] attempt 76: launching AMD E2.1.Micro
+[2026-08-21T05:28:10Z] attempt 103: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "AEF84688A02041D3A93835CF5FEE929B/DA27810E49D0D683E9E1876A53494E17/5DA22A081488D023C44901055896A23E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:28:09.740233+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:28:11Z] attempt 76: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "D67E540FA39646279BDB8787730097A8/36FCA683C85696A2E9E1876A53494ED5/95BB7F58199436C4841168F24C0CF297",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:28:10.258097+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:28:14Z] attempt 76: launching AMD E2.1.Micro
+[2026-08-21T05:28:19Z] attempt 76: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "92AF0CCA638C4D86AA0BCEA0B143400F/F10143376F75D1BBF1E1876A53494EA7/07DA68BA63FC9726488B73DF6DE207C4",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:28:18.364893+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:28:20Z] attempt 107: launching AMD E2.1.Micro
+[2026-08-21T05:28:21Z] attempt 107: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:29:10Z] attempt 104: launching AMD E2.1.Micro
+[2026-08-21T05:29:11Z] attempt 77: launching AMD E2.1.Micro
+[2026-08-21T05:29:15Z] attempt 104: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "89EEDECF5FF346B3B5D05960A033F21C/78160D39E0E1B8722AE2876A53494E75/04DACEAE5044C4F32C2BF476C9526EE1",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:29:15.079901+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:29:16Z] attempt 77: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "4D6794FEF4244B44ACB24E491BEAF04F/D57773C21CF9723D2BE2876A53494EB4/10FC0CC1A2200CF4372F2EDE599A40B9",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:29:15.710423+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:29:19Z] attempt 77: launching AMD E2.1.Micro
+[2026-08-21T05:29:21Z] attempt 108: launching AMD E2.1.Micro
+[2026-08-21T05:29:23Z] attempt 108: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:29:24Z] attempt 77: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "7F0F3B99BF764A4688D4762399EBFA17/23F84C631760E0A733E2876A53494E48/A5BFEA376F526B31A69E4116772D4AFD",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:29:23.744829+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:30:16Z] attempt 105: launching AMD E2.1.Micro
+[2026-08-21T05:30:16Z] attempt 78: launching AMD E2.1.Micro
+[2026-08-21T05:30:20Z] attempt 105: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "A7A4CF8E5C244E368608B58758CEE954/97978D9162339CFA6BE2876A53494E12/4D25727ADE5E179458CB95CCC9627D21",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:30:20.171263+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:30:22Z] attempt 78: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "6A5035D77B994A69A5255391462A5103/2E72C35FA1D090766DE2876A53494E20/0BFA11DCE4D96DB1AB1E6B5D386F5D61",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:30:21.556862+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:30:23Z] attempt 109: launching AMD E2.1.Micro
+[2026-08-21T05:30:24Z] attempt 78: launching AMD E2.1.Micro
+[2026-08-21T05:30:25Z] attempt 109: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:30:30Z] attempt 78: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "F1DA6B2913CC469982C5CC7F17393054/B81228D26098D4BF75E2876A53494EAC/D9FE60CEAAAC484D183A921BCC426FFD",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:30:29.585423+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:31:21Z] attempt 106: launching AMD E2.1.Micro
+[2026-08-21T05:31:22Z] attempt 79: launching AMD E2.1.Micro
+[2026-08-21T05:31:25Z] attempt 110: launching AMD E2.1.Micro
+[2026-08-21T05:31:25Z] attempt 106: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "31E8027FD3E74499B936B1B08ABEE6C7/8DE721E67D01A3CEACE2876A53494E47/71929795E7D953AD2AF52D5CAA77E0DF",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:31:24.973437+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:31:27Z] attempt 110: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:31:28Z] attempt 79: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "8D949C04332F41EEAA612CA82C17E788/84FD239345DA639DAEE2876A53494E31/80539734C25184EA9CC6AD43F2BB1954",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:31:27.311985+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:31:30Z] attempt 79: launching AMD E2.1.Micro
+[2026-08-21T05:31:35Z] attempt 79: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "451C81C1C54E435AB4CA4318F4F0B427/582068DB646158FDB6E2876A53494E79/B7BD7F1476602D006FC6CF8BA8B0D1DB",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:31:34.763865+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:32:25Z] attempt 107: launching AMD E2.1.Micro
+[2026-08-21T05:32:27Z] attempt 111: launching AMD E2.1.Micro
+[2026-08-21T05:32:28Z] attempt 80: launching AMD E2.1.Micro
+[2026-08-21T05:32:29Z] attempt 111: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:32:31Z] attempt 107: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "40B23D1625094707B55E86F81369098D/9949D0A7AEDD20B4EEE2876A53494EE4/664DB96DDB8E78719B7F19FC02428BDA",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:32:30.733377+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:32:34Z] attempt 80: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "2782FCDB0E5243DDAEDD9DD3671116FB/30F1003CCA0AF4EFF1E2876A53494E4C/00893BC45C1E7A650C0AEE690BB5C373",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:32:33.867716+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:32:35Z] attempt 80: launching AMD E2.1.Micro
+[2026-08-21T05:32:40Z] attempt 80: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "345ABD3F14294ED29B2CC0551DA8043B/D6AC24B8C7B6C353F7E2876A53494ECB/1B8DF2E1D16BB39E705BF98E1DD1A19E",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:32:40.042513+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:33:29Z] attempt 112: launching AMD E2.1.Micro
+[2026-08-21T05:33:31Z] attempt 112: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:33:31Z] attempt 108: launching AMD E2.1.Micro
+[2026-08-21T05:33:34Z] attempt 81: launching AMD E2.1.Micro
+[2026-08-21T05:33:36Z] attempt 108: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "4E0BDE21664242668A0CB475F4B8BA6F/28E401DBC23D9C2A2FE3876A53494E13/B39FB271198F0BF88AEF089888879CA2",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:33:35.877334+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:33:40Z] attempt 81: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "73CA69EB67C4466B8699D027DF6B8BD2/40816D55BF2C7C4132E3876A53494ED1/8D3FC0738AFCE237426B8B0D7F3141A9",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:33:39.456423+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:33:40Z] attempt 81: launching AMD E2.1.Micro
+[2026-08-21T05:33:45Z] attempt 81: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "84FC8CB24FA340C1861D6858E76F2B56/0A8C7A544109778D38E3876A53494E9F/E8AF0D64566B15E4A6EC307474B0E6E7",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:33:44.924285+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:34:31Z] attempt 113: launching AMD E2.1.Micro
+[2026-08-21T05:34:33Z] attempt 113: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:34:36Z] attempt 109: launching AMD E2.1.Micro
+[2026-08-21T05:34:40Z] attempt 82: launching AMD E2.1.Micro
+[2026-08-21T05:34:41Z] attempt 109: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "C43DF29900A043C99D443A65A9328CDE/EDA59B400600EB6770E3876A53494EB7/A8B734A97DB57E698A2FEAADEFCF6499",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:34:40.456840+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:34:45Z] attempt 82: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "9D2B8D1992384566AFEB12724644D1D3/7F3820BEAA97C07B74E3876A53494EA5/00DE5DCA8FCD93D6DC1F4F31B4E9EC1B",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:34:44.854698+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:34:45Z] attempt 82: launching AMD E2.1.Micro
+[2026-08-21T05:34:50Z] attempt 82: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "B0BE515F2EEA497CA0560B33D11BB469/C13BBA07B3E1800679E3876A53494E34/B59B6B079F4C8CF650F9D1F90A634DAD",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:34:50.198304+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:35:33Z] attempt 114: launching AMD E2.1.Micro
+[2026-08-21T05:35:34Z] attempt 114: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T05:35:41Z] attempt 110: launching AMD E2.1.Micro
+[2026-08-21T05:35:45Z] attempt 83: launching AMD E2.1.Micro
+[2026-08-21T05:35:46Z] attempt 110: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "81330ADC7B4446E4AD6852BE9A96EA0F/355287D3073C1B2CB1E3876A53494E9F/55DCF942EB200818C225904BF56C7B49",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:35:45.260579+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:35:51Z] attempt 83: launching AMD E2.1.Micro
+[2026-08-21T05:35:51Z] attempt 83: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "87AA5916803E4C3FAE149BC1A20F3AEB/FBC534DA0F9E6539B6E3876A53494E43/F8E22F5A5602B08E5E52F1052CB27BF5",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:35:50.505722+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:35:56Z] attempt 83: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "LimitExceeded",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The following service limits were exceeded: standard-e2-micro-core-count. You can request a service limit increase from the Console's Limits, Quotas and Usage page or from the Help menu.",
+    "opc-request-id": "4CD7EAB27444460F83F7A591FD4A853A/970BC2CE145950B1BBE3876A53494E7B/DB8E792502B96D69A592CBB8ECAF9C16",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T05:35:55.726852+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T05:36:34Z] attempt 115: launching AMD E2.1.Micro
+[2026-08-21T05:36:36Z] attempt 115: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
