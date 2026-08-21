@@ -58,12 +58,10 @@ jobs:
         id: oci
         run: |
           set -e
-          # GitHub runner 無 oci CLI → 裝官方二進制 (不是 pip oci SDK)
-          curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh -o /tmp/oci_install.sh
-          bash /tmp/oci_install.sh --accept-all --verbose
-          # 加入 PATH (installer 預設裝到 ~/.local/bin 或 /usr/local/bin)
-          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
-          which oci && oci --version
+          # GitHub runner 無 oci CLI → 用 pip 裝 oci-cli 套件 (官方 CLI 二進制)
+          python3 -m pip install --quiet --user oci-cli
+          export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+          which oci && oci --version || { echo "oci not found, try module"; python3 -m oci_cli --version; }
           mkdir -p ~/.oci ~/.ssh
           # 寫入 OCI API key (PEM)
           python3 - <<'PY'
@@ -98,7 +96,7 @@ jobs:
           TMP_PUB: ${{ steps.oci.outputs.pub }}
         run: |
           set -e
-          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+          export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
           # 先刪舊的 (若有) 避免衝突
           EXISTING=$(oci compute instance-console-connection list \
             --instance-id "$OA_WORKER_OCID" --compartment-id "$OCI_TENANCY_OCID" \
@@ -129,7 +127,7 @@ jobs:
           WORKER_PUB: ${{ secrets.WORKER_AUTHORIZED_PUB }}
         run: |
           set -e
-          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+          export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
           PROXY="ssh -W %h:%p -p 443 $CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
           ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" \
             -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
