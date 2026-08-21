@@ -3,6 +3,7 @@ import {
   FiveTOmniTagGate,
   OmniTagContractViolation,
   FiveTTrackable,
+  MemoryArtifactStore,
 } from '../five-t-protocol';
 import type { OmniTagSet } from '../omnitag-contract';
 
@@ -98,5 +99,73 @@ describe('§20.5 FiveTOmniTagGate 接線 (5T 驗算陣列 25-30)', () => {
       tag: { agent: 'agent:25', lifecycle: 'active', priority: 'p2', bestPractice: '结界' } as OmniTagSet,
     });
     expect(r.route.barrierInherited).toBe(true);
+  });
+});
+
+describe('§20.6 FiveTOmniTagGate 持久化層 (寫入即凍結)', () => {
+  it('persistArtifact writes + verifyPersisted confirms integrity', () => {
+    const rec = FiveTOmniTagGate.persistArtifact({
+      entityId: 'persist:01',
+      tag: { agent: 'agent:25', lifecycle: 'active', priority: 'p2', squad: '5T驗算' },
+      content: '{"op":"seal"}',
+    });
+    expect(rec.hashLock).toMatch(/^[0-9a-f]{64}$/);
+    expect(rec.sourceOrigin).toBe('agent:agent:25');
+
+    const v = FiveTOmniTagGate.verifyPersisted('persist:01');
+    expect(v.exists).toBe(true);
+    expect(v.tampered).toBe(false);
+  });
+
+  it('getPersisted returns stored record', () => {
+    FiveTOmniTagGate.persistArtifact({
+      entityId: 'persist:02',
+      tag: { agent: 'agent:03', lifecycle: 'draft', priority: 'p1' },
+    });
+    const got = FiveTOmniTagGate.getPersisted('persist:02');
+    expect(got?.tag.agent).toBe('agent:03');
+    expect(got?.tag.lifecycle).toBe('draft');
+  });
+
+  it('frozen+restricted rejects re-persist (H4 immutable)', () => {
+    FiveTOmniTagGate.persistArtifact({
+      entityId: 'persist:seal',
+      tag: { agent: 'agent:25', lifecycle: 'frozen', security: 'restricted', priority: 'p0' },
+    });
+    expect(() =>
+      FiveTOmniTagGate.persistArtifact({
+        entityId: 'persist:seal',
+        tag: { agent: 'agent:25', lifecycle: 'frozen', security: 'restricted', priority: 'p0' },
+      }),
+    ).toThrow(/immutable/);
+  });
+
+  it('verifyPersisted detects tampering', () => {
+    FiveTOmniTagGate.persistArtifact({
+      entityId: 'persist:tamper',
+      tag: { agent: 'agent:09', lifecycle: 'active', priority: 'p2' },
+      content: 'original',
+    });
+    // 直接篡改 store 內記錄的 hashLock
+    const store = FiveTOmniTagGate.getStore() as any;
+    const rec = store._map.get('persist:tamper');
+    rec.hashLock = '0'.repeat(64);
+
+    const v = FiveTOmniTagGate.verifyPersisted('persist:tamper');
+    expect(v.exists).toBe(true);
+    expect(v.tampered).toBe(true);
+  });
+
+  it('setStore swaps backend (in-memory default → custom)', () => {
+    const custom = new MemoryArtifactStore();
+    FiveTOmniTagGate.setStore(custom);
+    const rec = FiveTOmniTagGate.persistArtifact({
+      entityId: 'persist:custom',
+      tag: { agent: 'agent:01', lifecycle: 'active', priority: 'p2' },
+    });
+    expect(custom.read('persist:custom')?.entityId).toBe('persist:custom');
+    expect(FiveTOmniTagGate.getStore()).toBe(custom);
+    // 還原預設避免影響其他測試
+    FiveTOmniTagGate.setStore(new MemoryArtifactStore());
   });
 });
