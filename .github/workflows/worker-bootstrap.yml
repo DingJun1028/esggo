@@ -97,13 +97,19 @@ jobs:
         run: |
           set -e
           export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-          # 先刪舊的 (若有) 避免衝突
-          EXISTING=$(oci compute instance-console-connection list \
+          # 刪除該 instance 所有現有 console connection (避免 409 IncorrectState)
+          echo "=== list existing console connections ==="
+          EXISTING_IDS=$(oci compute instance-console-connection list \
             --instance-id "$OA_WORKER_OCID" --compartment-id "$OCI_TENANCY_OCID" \
             --region "$OCI_REGION" --output json 2>/dev/null \
-            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['data'][0]['id'] if d.get('data') else '')" || true)
-          [ -n "$EXISTING" ] && oci compute instance-console-connection delete \
-            --instance-console-connection-id "$EXISTING" --region "$OCI_REGION" --force || true
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(' '.join(x['id'] for x in d.get('data',[])))" || true)
+          echo "existing: $EXISTING_IDS"
+          for cid in $EXISTING_IDS; do
+            echo "deleting $cid"
+            oci compute instance-console-connection delete \
+              --instance-console-connection-id "$cid" --region "$OCI_REGION" --force || true
+            sleep 2
+          done
           sleep 3
           OUT=$(oci compute instance-console-connection create \
             --instance-id "$OA_WORKER_OCID" --region "$OCI_REGION" \
