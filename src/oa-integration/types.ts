@@ -19,6 +19,11 @@ export interface IComponentCore {
   readonly timestamp: number;
   readonly sourceOrigin: string;
   readonly fiveT: FiveT;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
 }
 
 function fnv1a(str: string): string {

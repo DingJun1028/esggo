@@ -26,6 +26,11 @@ export interface IComponentCore {
   readonly sourceOrigin: string;
   readonly fiveT: FiveT;
   readonly hashLock: string;
+  evidence: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
 }
 
 export interface DeltaOp {

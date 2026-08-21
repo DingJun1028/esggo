@@ -25,7 +25,7 @@ export interface IComponentCore {
   /** 語義化版本控制 (e.g., v0.5.0) */
   readonly version: string;
   /** 刻印時間戳 (ISO-8601) */
-  readonly timestamp: string;
+  readonly timestamp: number;
   /** 證據佐證庫 (可變數據區，用以鏈結 5T 證明) */
   evidence: {
     originCause: string;
@@ -57,7 +57,7 @@ export interface BlueprintProduct extends IComponentCore {
     translatedText: Record<string, string>;
     sourceOrigin: string;
     hash: string;
-    timestamp: string;
+    timestamp: string | number;
   }>;
 }
 
@@ -91,7 +91,7 @@ export class OmniBlueprintHub {
     targetLanguages: string[]
   ): BlueprintDefinition {
     const uuid = `uuid-${crypto.randomUUID()}`;
-    const timestamp = new Date().toISOString();
+    const timestamp = Date.now();
 
     const blueprint: BlueprintDefinition = {
       uuid,
@@ -102,14 +102,11 @@ export class OmniBlueprintHub {
       hostEmail,
       sourceEndpoint,
       targetLanguages,
-      evidence: [
-        {
-          event: 'BLUEPRINT_CREATED',
-          source_origin: 'OmniBlueprintHub.createBlueprint',
-          iso_standard: 'ISO-14064-1',
-          timestamp
-        }
-      ]
+      evidence: {
+        originCause: 'OmniBlueprintHub.createBlueprint',
+        processTrace: ['BLUEPRINT_CREATED'],
+        finalEffect: 'ISO-14064-1 verified'
+      }
     };
 
     // 固化 Hash Lock (Trustworthy)
@@ -135,7 +132,7 @@ export class OmniBlueprintHub {
    */
   public manifestToProduct(blueprint: BlueprintDefinition): BlueprintProduct {
     const productUuid = `prod-${crypto.randomUUID()}`;
-    const timestamp = new Date().toISOString();
+    const timestamp = Date.now();
 
     let broadcastUrl: string | undefined = undefined;
 
@@ -159,15 +156,11 @@ export class OmniBlueprintHub {
       status: 'RUNNING',
       activeViewers: blueprint.type === 'DESIGNATED_URL_BROADCAST' ? 1 : 0,
       payloadStream: [],
-      evidence: [
-        ...blueprint.evidence,
-        {
-          event: 'PRODUCT_MANIFESTED',
-          source_origin: 'OmniBlueprintHub.manifestToProduct',
-          broadcastUrl,
-          timestamp
-        }
-      ]
+      evidence: {
+        originCause: 'OmniBlueprintHub.manifestToProduct',
+        processTrace: ['PRODUCT_MANIFESTED'],
+        finalEffect: broadcastUrl || 'none'
+      }
     };
 
     const hashLock = this.generateHashLock(product);
@@ -199,7 +192,7 @@ export class OmniBlueprintHub {
     }
 
     const logId = `log-${crypto.randomUUID()}`;
-    const timestamp = new Date().toISOString();
+    const timestamp = Date.now();
     const sourceOrigin = `EmailHost:${product.blueprintId}`;
 
     const payloadHash = crypto.createHash('sha256')
@@ -237,11 +230,7 @@ export class OmniBlueprintHub {
    */
   public freezeProduct(product: BlueprintProduct): Readonly<BlueprintProduct> {
     product.status = 'FROZEN';
-    product.evidence.push({
-      event: 'PRODUCT_FROZEN',
-      hashLock: this.generateHashLock(product),
-      timestamp: new Date().toISOString()
-    });
+    product.evidence.finalEffect = 'PRODUCT_FROZEN';
     return Object.freeze(product);
   }
 
