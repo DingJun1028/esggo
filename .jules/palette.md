@@ -16,3 +16,6 @@
 ## 2026-08-17 - [Toggle Group Accessibility]
 **Learning:** Grouped layout toggle buttons (e.g., Grid/List/Board views) that are icon-only must be grouped using `role="group"` with an `aria-label`. Individual buttons need `aria-label`, `title`, and crucially, `aria-pressed={isActive}` to correctly convey their toggle state to screen readers.
 **Action:** When creating or fixing toggle groups, ensure the parent has `role="group"`, and the children use `aria-pressed` alongside standard icon-only button accessibility attributes (`aria-label`, `focus-visible`).
+## 2025-02-20 - Ensure screen reader accessibility and keyboard focus for icon buttons
+**Learning:** Icon-only buttons (like the floating action buttons in `FloatingFunctionKey428.tsx` and the close button in `DrThothResonance.tsx`) often lack context for screen readers and visible focus indicators for keyboard navigation, leading to poor accessibility in complex UI tools.
+**Action:** When adding or reviewing icon-only interactive elements, ensure `aria-label` is applied to describe the action, and use Tailwind `focus-visible` classes (e.g., `focus-visible:outline-none focus-visible:ring-2`) to provide a clear, accessible focus ring without breaking the default visual design.
