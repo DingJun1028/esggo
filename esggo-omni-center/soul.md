@@ -602,6 +602,120 @@ npx celestial-command \
 | `collaboration-protocol.md` | 雙蜂間協作協定（通道、分流、協同、衝突解決） |
 | `bin/oa-twin-health.py` | 雙蜂組健康檢查工具（本地+VPS 雙端探測） |
 
+---
+
+## 第二十章 · OmniTag 契約自動化（Code-Driven Covenant）
+
+> 「代碼即契約，過閘即合規；寫入即凍結，篡改即現形。」
+> 本章將 §5 Trustworthy「寫入即凍結」與 §18 Hash Lock 落地為可執行的雙軌代碼體系，
+> 對齊 soul.md §20.2 六大維度、§20.4 自動路由、§20.5 契約五規則。
+
+### §20.1 設計哲學
+
+OmniTag 是 OA-Team 30 萬能蜂群在**產物誕生瞬間**自動烙印的萬能標籤契約。
+每筆 artifact（代碼、文檔、配置、決策）誕生時必須通過 **5T 驗算閘** + **OmniTag 契約閘**，
+否則不釋出（對齊終章封合五關「5T 稽核零缺漏」）。
+
+雙軌同構設計：
+- **`src/lib/five-t-protocol.ts`**（`FiveTOmniTagGate`）：跨瀏覽器/Node 共用套件，預設 `MemoryArtifactStore`（零依賴）。
+- **`cli/oa-cli/src/omnitag.ts`**（`OmniTagRegistry`）：CLI 自包含版，直接落檔 `.oa/omnitag-registry.jsonl`。
+- 兩套算法同構（相同 Hash Lock 公式 `sha256(source|content|timestamp)`），通過跨語言測試驗證。
+
+### §20.2 六大維度（代碼對應）
+
+| 維度 | 型別 | 代碼欄位 | 說明 |
+|---|---|---|---|
+| 代理歸屬 | `agent:01~30` | `tag.agent` | 30 矩陣編號，正則 `^agent:(0?[1-9]|[12][0-9]|30)$` |
+| 陣列歸屬 | 五選一 | `tag.squad` | 智庫聖所/符文契約/光之羽翼/煉金熵減/5T驗算 |
+| 安全分級 | 四選一 | `tag.security` | public/internal/confidential/restricted |
+| 生命週期 | 四選一 | `tag.lifecycle` | draft/active/frozen/archived |
+| 品質分級 | 四選一 | `tag.priority` | p0/p1/p2/p3 |
+| 平台環境 | 四選一 | `tag.platform` | esggo/omni/vps/firebase |
+| 結界繼承 | awakened/结界 | `tag.bestPractice` | 標記结界後子代理自動繼承 |
+
+### §20.3 5T 驗算閘接線
+
+`FiveTOmniTagGate.emitArtifact()` 在產物誕生時呼叫 `verifyOmniTagContract(tag, ctx)`，
+不合規即拋 `OmniTagContractViolation`（不釋出）。通過後自動路由並記錄 `omnitag:sealed` 事件
+（對齊 §18 Trackable 維度）。
+
+### §20.4 自動路由（§20.4 路由表）
+
+`squadOfAgent(agent)` 將 `agent:01~30` 映射到五大陣列：
+- `01-06` → 智庫聖所（記憶召回）
+- `07-12` → 符文契約（型別安全）
+- `13-18` → 光之羽翼（自動部署）
+- `19-24` → 煉金熵減（重構煉金）
+- `25-30` → 5T驗算（稽核鎖定）
+
+`routeOmniTag(tag)` 回傳 `{ target, barrierInherited, consistent }`；若 `agent` 與 `squad` 自述不一致，
+記錄 `omnitag:route-warn`（對齊 §6.2 預設即合規）。
+
+### §20.5 契約五規則（§20.5 規則 1-5）
+
+| 規則 | 函數 | 行為 |
+|---|---|---|
+| 1 必備三枚 | `validateRequiredTriad` | 缺 `agent`+`lifecycle`+`p*` 任一即違約 |
+| 2 凍結不可改 | `enforceFrozenLock` | `frozen`+`restricted` 實體禁止 mutation |
+| 3 結界自動繼承 | `isBarrierInherited` | `best-practice:结界` 觸發全體繼承 |
+| 4 熵減連動 | `validateEntropyReduction` | p0 完成後熵值必降（`< 0.1`） |
+| 5 稽核抽驗 | `auditContractRate` | 批次契約率目標 100% |
+
+### §20.6 持久化層（寫入即凍結）
+
+對齊 §5 Trustworthy：通過閘的產物寫入儲存後端並即刻 Hash Lock。
+
+**抽象層**：`ArtifactStore` 介面（`write`/`read`/`list`）+ 預設 `MemoryArtifactStore`（零依賴）。
+**Node 後端**：`FileArtifactStore`（`src/lib/omnitag-registry-file.ts`）append-only JSONL，
+動態注入 `FiveTOmniTagGate.setStore()`（避免瀏覽器 bundle 拉入 node:fs）。
+**凍結不可改**：`frozen`+`restricted` 實體 `persistArtifact` 時若已存在則拒絕（H4 immutable）。
+**篡改驗證**：`verifyPersisted(entityId)` 重算 Hash Lock 比對，確認寫入後未被改動。
+
+### §20.7 雙軌同構落點
+
+| 章節 | src/lib（FiveTOmniTagGate） | cli/oa-cli（OmniTagRegistry） |
+|---|---|---|
+| §20.2 維度 | ✅ `OmniTagSet` | ✅ 同構 |
+| §20.4 路由 | ✅ `squadOfAgent`+`routeOmniTag` | ✅ 同構 |
+| §20.5 校驗 | ✅ `verifyOmniTagContract` | ✅ 同構 |
+| §20.6 持久化 | ✅ `ArtifactStore`+`Memory`+`File` | ✅ `OmniTagRegistry` 檔案版 |
+
+測試實證：`src/lib` 58 passed（含 5 §20.6 用例）；`cli/oa-cli` 13 passed（含 5 §20.6 用例）。
+`npx tsc --noEmit -p tsconfig.json` → `TSC_EXIT=0`（雙軌零型別錯誤）。
+
+### §20.8 缺口與改進清單（誠實診斷）
+
+- ✅ **已具備**：§20.2/§20.4/§20.5/§20.6 雙軌代碼落地 + 測試實證 + 跨語言 Hash Lock 同構
+- ⚠️ **缺口**：Python 端 `verification.py` 尚未對接 `ArtifactStore`（跨語言持久化斷鏈）；
+  `FileArtifactStore` 未接 `FiveTTrackable` 全鏈路（僅 `MemoryArtifactStore` 預設測試）；
+  `.oa/omnitag-registry.jsonl` 無定期完整性掃描 cron
+- 🔧 **改進清單**：
+  - P0：Python `verification.py` 對接 `FileArtifactStore` 實作（跨語言同構閉環）
+  - P1：`FileArtifactStore` 寫入時同步 `FiveTTrackable.recordEvent`（Trackable 全鏈路）
+  - P2：`.oa/omnitag-registry.jsonl` 加 GitHub Action 定期 `verifyPersisted` 掃描（篡改即告警）
+
+### §20.9 稽核與煉金補標（§20.5 規則 5 CLI 實作）
+
+對齊 §20.5 規則 5（稽核抽驗）與 §20.6（煉金補標），提供 `cli/oa-cli` 的 `audit` 子命令：
+
+- **掃描**：遞歸走查 `.ts` 檔，解析前 30 行 OmniTag 標頭註釋（`[agent:25][squad:5T驗算][lifecycle:active][p2][platform:esggo][best-practice:结界]`）
+- **合約率**：`auditOmniTags(dirs)` 計算 `tagged` / `compliant` / `rate`（目標 100%）
+- **補標**：`suggestOmniTag(filePath)` 依路徑推測陣列歸屬（agents→智庫聖所 / lib→符文契約 / cli→光之羽翼 / test→煉金熵減 / omnitag→5T驗算），`applyHeader(filePath, dryRun)` 自動補標
+- **接線**：`oa audit --dir src cli` 觸發掃描；`oa tag` 子命令過閘簽印（§20.6）
+
+```bash
+# 稽核合約率（目標 100%）
+npx tsx cli/oa-cli/src/index.ts audit --dir src cli
+
+# 乾跑補標（不寫入）
+npx tsx cli/oa-cli/src/index.ts audit --dir src --dry-run
+
+# 產物誕生即過閘 + 寫入即凍結
+npx tsx cli/oa-cli/src/index.ts tag --agent agent:25 --lifecycle active --p p2 --squad 5T驗算 --json
+```
+
+測試實證：`cli/oa-cli` 含 `audit.test.ts`（§20.5 規則 5 解析/合規/掃描 11 case）+ `omnitag.test.ts`（§20.4/§20.5/§20.6 13 case），雙軌共 24 case 全綠。
+
 ════════════════════════════════════════════════════════
 終章、靈魂封印（Soul Seal）
 ══════════════════════════════════════════════════════
