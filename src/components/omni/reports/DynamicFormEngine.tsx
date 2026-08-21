@@ -45,18 +45,20 @@ export default function DynamicFormEngine({
     message: '',
   });
 
-  const [formData, setFormData] = useState<Record<string, unknown>>({
+  const [formData, setFormData] = useState<Record<string, unknown>>(() => ({
     uuid: schema.uuid,
     version: schema.version,
     source_origin: 'dynamic-form-engine-ui',
     evidence: [],
     // 依 Schema 預填 literal / 預設值，避免 z.literal 因未填而先報錯
+    // ⚡ Bolt Optimization: Wrap initial state in a lazy initialization function
+    // to prevent this expensive Array.reduce from running on every re-render.
     ...schema.fields.reduce((acc, f) => {
       if (f.default !== undefined) acc[f.id] = f.default;
       return acc;
     }, {} as Record<string, unknown>),
     ...initialData,
-  });
+  }));
 
   const handleEvidenceUpload = (url: string) => {
     setFormData((prev) => ({
