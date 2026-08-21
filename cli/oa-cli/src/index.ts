@@ -146,6 +146,33 @@ program
     }
   });
 
+// ── §20.5 規則 5 / §20.6 驗收：OmniTag 合約率稽核 ──────────
+program
+  .command('audit')
+  .description('§20.5 稽核抽驗 — 掃描 .ts 檔 OmniTag 標頭合約率 (目標 100%)')
+  .option('--dir <paths>', '掃描目錄 (逗號分隔)，預設 src,cli', 'src,cli')
+  .option('--json', '以 JSON 格式輸出稽核結果')
+  .action(async (opts) => {
+    const { auditOmniTags } = await import('./audit.js');
+    const dirs = opts.dir.split(',').map((d: string) => d.trim());
+    const result = auditOmniTags(dirs);
+    if (opts.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log(`[§20.5 稽核] 掃描檔案=${result.scanned} 帶標籤=${result.tagged} 合約=${result.compliant}`);
+      console.log(`[§20.5 合約率] ${(result.rate * 100).toFixed(1)}% (目標 100%)`);
+      if (result.violations.length > 0) {
+        console.log(`[§20.5 違規] ${result.violations.length} 項:`);
+        for (const v of result.violations) {
+          console.log(`  - ${v.file}: ${v.issues.join('; ')}`);
+        }
+        process.exit(1);
+      } else {
+        console.log(`[OK] 全部帶標籤檔案通過 §20.5 契約，合約率 100%`);
+      }
+    }
+  });
+
 program.parseAsync(process.argv).catch((err) => {
   console.error('[ERROR]', err.message);
   process.exit(1);

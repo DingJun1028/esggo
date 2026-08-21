@@ -11,8 +11,8 @@
  * [agent:25][squad:5T驗算][lifecycle:active][p2][platform:esggo][best-practice:结界]
  */
 
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { mkdirSync, existsSync, readFileSync, appendFileSync } from 'node:fs';
+import { dirname } from 'node:path';
 import type { ArtifactStore, PersistedArtifact } from './five-t-protocol';
 
 export interface FileStoreOptions {
@@ -28,19 +28,18 @@ export class FileArtifactStore implements ArtifactStore {
 
   constructor(opts: FileStoreOptions = {}) {
     this._path = opts.path ?? '.oa/omnitag-registry.jsonl';
-    fs.mkdirSync(path.dirname(this._path), { recursive: true });
+    mkdirSync(dirname(this._path), { recursive: true });
   }
 
   private _readLines(): string[] {
-    if (!fs.existsSync(this._path)) return [];
-    return fs
-      .readFileSync(this._path, 'utf8')
+    if (!existsSync(this._path)) return [];
+    return readFileSync(this._path, 'utf8')
       .split('\n')
       .filter((l: string) => l.trim().length > 0);
   }
 
   write(record: PersistedArtifact): void {
-    fs.appendFileSync(this._path, JSON.stringify(record) + '\n', 'utf8');
+    appendFileSync(this._path, JSON.stringify(record) + '\n', 'utf8');
   }
 
   read(entityId: string): PersistedArtifact | null {
