@@ -2,7 +2,7 @@
 
 > 來源: oa-team-60-colony 技能 + oa-swarm 實作 (C:\Project\esggo-learning-center\oa-swarm\src\soul-matrix-60.ts)
 > 版本: v2.0 (2026-08-20) | 對齊 soul-full.md §27 + §20 OAB
-> 狀態: 實戰部署 (VPS 161.118.248.180:8800 + 本機 Windows)
+> 狀態: 實戰部署 (VPS 161.118.248.180:8800) | nginx 反向代理 oa.esggo.co 已設 (待 Cloudflare DNS A 記錄指向 161.118.248.180)
 
 ## 一、核心結構 (雙蜂共鳴)
 
