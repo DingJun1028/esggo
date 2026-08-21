@@ -42,6 +42,8 @@ overrides:
   "hono": ">=4.0.0 <5"
   # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
   #   chromadb (pip critical) — 僅出現在 .venv 虛擬環境，非提交之 requirements，不納入 pnpm 管線
+  # ── 2026-08-21 Dependabot 修補 (pnpm audit --prod 剩 1 high) ──
+  "deepmerge-ts": ">=8.0.0 <9"
 
 allowBuilds:
   '@firebase/util': false
