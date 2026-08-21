@@ -1,8 +1,9 @@
+// [agent:15][squad:光之羽翼][lifecycle:active][p2][platform:esggo][best-practice:结界]
 import { program } from 'commander';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
-import { gatewayRequest, loadGatewayConfig } from './gateway.js';
+import { gatewayRequest } from './gateway.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -109,10 +110,9 @@ program
 
     // §20.6 煉金補標模式：掃描目錄為無標頭 .ts 自動補標
     if (opts.init) {
-      const { auditOmniTags, applyHeader } = await import('./audit.js');
+      const { findUntagged, applyHeader } = await import('./audit.js');
       const dirs = (opts.dir || 'src,cli').split(',').map((d: string) => d.trim());
-      const result = auditOmniTags(dirs);
-      const untagged = result.violations.map((v) => v.file);
+      const untagged = findUntagged(dirs);
       console.log(`[§20.6 煉金補標] 待補標檔案=${untagged.length} (dry-run=${!opts.write})`);
       const written: string[] = [];
       for (const f of untagged) {
@@ -160,7 +160,7 @@ program
       // §20.6 寫入即凍結
       if (opts.persist) {
         const reg = new OmniTagRegistry({ path: opts.registry });
-        const rec = reg.persistArtifact({ entityId, tag, content: opts.content });
+        reg.persistArtifact({ entityId, tag, content: opts.content });
         const verify = reg.verifyArtifact(entityId);
         console.log(`[§20.6 凍結] 寫入 registry=${opts.registry || '.oa/omnitag-registry.jsonl'} entity=${entityId}`);
         console.log(`[§20.6 驗證] exists=${verify.exists} tampered=${verify.tampered}`);
