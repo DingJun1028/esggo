@@ -5,7 +5,7 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { SwarmCore } from './swarm-core.js';
-import { SOUL_MATRIX, ARRAY_NAMES } from './soul-matrix.js';
+import { SOUL_MATRIX_60, ARRAY_NAMES, LOCAL_AGENTS, VPS_AGENTS } from './soul-matrix-60.js';
 
 export function createServerApp(core: SwarmCore, port = 8788) {
   const sseClients = new Set<(d: string) => void>();
@@ -35,13 +35,23 @@ export function createServerApp(core: SwarmCore, port = 8788) {
       return;
     }
 
-    // 30 矩陣
+    // 60 矩陣 (雙蜂戰隊)
     if (url.pathname === '/matrix') {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({
-        agents: SOUL_MATRIX,
+        agents: SOUL_MATRIX_60,
         arrays: ARRAY_NAMES,
+        localCount: LOCAL_AGENTS.length,
+        vpsCount: VPS_AGENTS.length,
+        total: SOUL_MATRIX_60.length,
       }));
+      return;
+    }
+
+    // OAB 狀態
+    if (url.pathname === '/oab') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify(core.getState().oab));
       return;
     }
 
