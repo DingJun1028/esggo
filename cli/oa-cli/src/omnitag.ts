@@ -8,6 +8,8 @@
  */
 
 import { createHash } from 'crypto';
+import { mkdirSync, readFileSync, existsSync, appendFileSync } from 'fs';
+import { dirname } from 'path';
 
 // ── §20.2 六大維度 ──────────────────────────────────────────
 export type OmnitagSecurity = 'public' | 'internal' | 'confidential' | 'restricted';
@@ -155,4 +157,141 @@ export function emitArtifact(params: {
   );
 
   return { entityId: params.entityId, contract: check, route, hashLock, sealedAt };
+}
+
+// ── §20.6 OmniTag 契約持久化層（寫入即凍結）─────────────────
+// 對齊 soul.md §5 Trustworthy：數據寫入後即刻 Hash Lock + 不可篡改。
+// append-only JSONL 儲存，零外部依賴（僅 fs + crypto）。
+// 凍結不可改（§20.5 規則 2 / H4）：lifecycle:frozen + restricted 實體拒絕覆寫。
+
+export interface PersistedArtifact {
+  entityId: string;
+  tag: OmniTagSet;
+  content?: string;
+  hashLock: string;
+  sealedAt: number;
+  sourceOrigin: string;
+}
+
+export interface RegistryOptions {
+  /** 持久化路徑；預設專案本地 .oa/omnitag-registry.jsonl */
+  path?: string;
+  /** 測試用：inMemory 模式不碰檔案系統 */
+  inMemory?: boolean;
+}
+
+export class OmniTagRegistry {
+  private _path: string;
+  private _inMemory: boolean;
+  private _mem: string[] = [];
+
+  constructor(opts: RegistryOptions = {}) {
+    this._inMemory = opts.inMemory ?? false;
+    if (!this._inMemory) {
+      const base = opts.path ?? '.oa/omnitag-registry.jsonl';
+      this._path = base;
+      // 確保目錄存在
+      mkdirSync(dirname(this._path), { recursive: true });
+    } else {
+      this._path = ':memory:';
+    }
+  }
+
+  /** 已存在的實體 IDs（用於凍結不可改檢查） */
+  private _readLines(): string[] {
+    if (this._inMemory) return this._mem;
+    if (!existsSync(this._path)) return [];
+    return readFileSync(this._path, 'utf8')
+      .split('\n')
+      .filter((l: string) => l.trim().length > 0);
+  }
+
+  private _appendLine(line: string): void {
+    if (this._inMemory) {
+      this._mem.push(line);
+      return;
+    }
+    appendFileSync(this._path, line + '\n', 'utf8');
+  }
+
+  /**
+   * 寫入即凍結：通過 emitArtifact 後將產物持久化。
+   * @throws OmniTagContractViolation 契約不合規
+   * @throws Error frozen+restricted 實體已存在（不可改）
+   */
+  persistArtifact(params: {
+    entityId: string;
+    tag: OmniTagSet;
+    content?: string;
+  }): PersistedArtifact {
+    // 1. 過閘
+    const sealed = emitArtifact(params);
+
+    // 2. 凍結不可改：若已存在 frozen+restricted 實體，拒絕
+    const existing = this.getArtifact(params.entityId);
+    if (existing) {
+      const isSealed =
+        existing.tag.lifecycle === 'frozen' && existing.tag.security === 'restricted';
+      if (isSealed) {
+        throw new Error(
+          `H4 frozen: entity ${params.entityId} is sealed (frozen+restricted) — immutable`,
+        );
+      }
+    }
+
+    // 3. 寫入即凍結
+    const record: PersistedArtifact = {
+      entityId: sealed.entityId,
+      tag: params.tag,
+      content: params.content,
+      hashLock: sealed.hashLock,
+      sealedAt: sealed.sealedAt,
+      sourceOrigin: `agent:${params.tag.agent ?? 'unknown'}`,
+    };
+    this._appendLine(JSON.stringify(record));
+    return record;
+  }
+
+  /** 讀取單一實體（若有） */
+  getArtifact(entityId: string): PersistedArtifact | null {
+    for (const line of this._readLines()) {
+      try {
+        const rec = JSON.parse(line) as PersistedArtifact;
+        if (rec.entityId === entityId) return rec;
+      } catch {
+        // 跳過毀損行
+      }
+    }
+    return null;
+  }
+
+  /** 列舉所有實體 */
+  listArtifacts(): PersistedArtifact[] {
+    const out: PersistedArtifact[] = [];
+    for (const line of this._readLines()) {
+      try {
+        out.push(JSON.parse(line) as PersistedArtifact);
+      } catch {
+        // 跳過毀損行
+      }
+    }
+    return out;
+  }
+
+  /**
+   * 篡改驗證：重算 hashLock 比對，確認寫入後未被改動。
+   * 對齊 §5 Trustworthy + §18 同構 Hash Lock。
+   */
+  verifyArtifact(entityId: string): { exists: boolean; tampered: boolean; record?: PersistedArtifact } {
+    const rec = this.getArtifact(entityId);
+    if (!rec) return { exists: false, tampered: false };
+
+    const expected = generateHashLock(
+      rec.tag.agent ?? 'unknown',
+      rec.content ?? JSON.stringify(rec.tag),
+      rec.sealedAt,
+    );
+    const tampered = expected !== rec.hashLock;
+    return { exists: true, tampered, record: rec };
+  }
 }
