@@ -54,11 +54,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configure OCI + generate temp ed25519 key
+      - name: Install OCI CLI + generate temp ed25519 key
         id: oci
         run: |
           set -e
-          pip install --quiet oci
+          # GitHub runner 無 oci CLI → 裝官方二進制 (不是 pip oci SDK)
+          curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh -o /tmp/oci_install.sh
+          bash /tmp/oci_install.sh --accept-all --verbose
+          # 加入 PATH (installer 預設裝到 ~/.local/bin 或 /usr/local/bin)
+          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+          which oci && oci --version
           mkdir -p ~/.oci ~/.ssh
           # 寫入 OCI API key (PEM)
           python3 - <<'PY'
@@ -68,7 +73,21 @@ jobs:
           clean = (m.group(0) if m else raw).replace("\r", "").strip() + "\n"
           kp = pathlib.Path("~/.oci/key.pem").expanduser()
           kp.write_text(clean); os.chmod(kp, 0o600)
+          # 寫入 OCI config (避免 [DEFAULT] 被 YAML 誤判, 用 python 寫)
+          cfg = pathlib.Path("~/.oci/config").expanduser()
+          cfg.write_text(
+              "[DEFAULT]\n"
+              f"user={os.environ['OCI_USER_OCID']}\n"
+              f"fingerprint={os.environ['OCI_API_FINGERPRINT']}\n"
+              "key_file=~/.oci/key.pem\n"
+              f"tenancy={os.environ['OCI_TENANCY_OCID']}\n"
+              f"region={os.environ['OCI_REGION']}\n"
+          )
+          os.chmod(cfg, 0o600)
+          print("oci config written")
           PY
+          echo "=== oci setup check ==="
+          oci iam region list --output json 2>&1 | head -c 120 || echo "region-list-err"
           # 現場生成 ed25519 臨時 key (用於序列控制台認證)
           ssh-keygen -t ed25519 -N "" -f ~/.ssh/worker_tmp >/dev/null
           echo "pub=$(cat ~/.ssh/worker_tmp.pub)" >> $GITHUB_OUTPUT
@@ -79,6 +98,7 @@ jobs:
           TMP_PUB: ${{ steps.oci.outputs.pub }}
         run: |
           set -e
+          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
           # 先刪舊的 (若有) 避免衝突
           EXISTING=$(oci compute instance-console-connection list \
             --instance-id "$OA_WORKER_OCID" --compartment-id "$OCI_TENANCY_OCID" \
@@ -109,6 +129,7 @@ jobs:
           WORKER_PUB: ${{ secrets.WORKER_AUTHORIZED_PUB }}
         run: |
           set -e
+          export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
           PROXY="ssh -W %h:%p -p 443 $CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
           ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" \
             -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
