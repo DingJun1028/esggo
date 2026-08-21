@@ -1,0 +1,56 @@
+[2026-08-21T04:16:10Z] attempt 28: launching AMD E2.1.Micro
+[2026-08-21T04:16:12Z] attempt 36: launching AMD E2.1.Micro
+[2026-08-21T04:16:14Z] attempt 28: other error -> RequestException:
+{
+    "client_version": "Oracle-PythonCLI/3.90.1",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The connection to endpoint timed out.",
+    "request_endpoint": null,
+    "target_service": "CLI",
+    "timestamp": "2026-08-21T04:16:13.169649",
+    "troubleshooting_tips": " See [https://docs.oracle.com/iaas/Content/API/SDKDocs/clitroubleshooting.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:16:14Z] AMD watcher start (attempt 26/200)
+[2026-08-21T04:16:14Z] attempt 26: launching AMD E2.1.Micro
+[2026-08-21T04:16:18Z] attempt 36: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "158D5184F1064F1DBF9D37A6E7111D8E/A106775A85E1089811D1876A53494E49/B4351785D506903E5CE7A0C7039513C4",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:16:17.474880+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:16:33Z] attempt 37: launching AMD E2.1.Micro
+[2026-08-21T04:16:35Z] attempt 37: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+[2026-08-21T04:17:14Z] attempt 29: launching AMD E2.1.Micro
+[2026-08-21T04:17:18Z] attempt 37: launching AMD E2.1.Micro
+[2026-08-21T04:17:23Z] attempt 37: other error -> ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.184.0, Oracle-PythonCLI/3.90.1",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Shape VM.Standard.E2.1.Micro is not valid for image ocid1.image.oc1.ap-singapore-1.aaaaaaaa4j2rnkp36hxwkuad3r4ga3skp4uvlfdaixwifsduqhvveqfkpcja.",
+    "opc-request-id": "E6ED40CA25504356AAD3DD0AE2219609/860037DDAD08747152D1876A53494E22/77AE8AA9BE3FF5233ABBA96040EA7A6D",
+    "operation_name": "launch_instance",
+    "request_endpoint": "POST https://iaas.ap-singapore-1.oraclecloud.com/20160918/instances",
+    "status": 400,
+    "target_service": "compute",
+    "timestamp": "2026-08-21T04:17:22.493553+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+[2026-08-21T04:17:35Z] attempt 38: launching AMD E2.1.Micro
+[2026-08-21T04:17:36Z] attempt 38: other error -> Usage: oci.exe compute instance launch [OPTIONS]
+
+Error: Invalid value for '--ssh-authorized-keys-file': '/c/Users/dingj/.ssh/esggo_original.pub': No such file or directory
+
+For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
