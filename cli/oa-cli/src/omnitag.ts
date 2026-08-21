@@ -246,7 +246,7 @@ export class OmniTagRegistry {
       content: params.content,
       hashLock: sealed.hashLock,
       sealedAt: sealed.sealedAt,
-      sourceOrigin: `agent:${params.tag.agent ?? 'unknown'}`,
+      sourceOrigin: params.tag.agent ?? 'unknown',
     };
     this._appendLine(JSON.stringify(record));
     return record;

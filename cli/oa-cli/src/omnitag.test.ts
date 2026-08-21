@@ -83,7 +83,8 @@ describe('§20.6 OmniTag 契約持久化層 (寫入即凍結)', () => {
       content: '{"op":"seal"}',
     });
     expect(rec.hashLock).toMatch(/^[0-9a-f]{64}$/);
-    expect(rec.sourceOrigin).toBe('agent:agent:25');
+    // sourceOrigin 即 agent 標籤本身 (agent:25)，不重複前綴 (修正雙重 agent: 畸形值)
+    expect(rec.sourceOrigin).toBe('agent:25');
 
     const v = reg.verifyArtifact('art:01');
     expect(v.exists).toBe(true);

@@ -92,9 +92,11 @@ program
   .option('--best-practice <state>', '結界繼承 awakened/结界')
   .option('--content <json>', '待簽印內容 (JSON 字串)，用於產生 Hash Lock')
   .option('--entity <id>', '實體識別碼，預設自動生成')
+  .option('--persist', '寫入即凍結：將過閘產物持久化至 OmniTag Registry (§20.6)')
+  .option('--registry <path>', 'Registry 路徑，預設 .oa/omnitag-registry.jsonl')
   .option('--json', '以 JSON 格式輸出完整過閘結果')
   .action(async (opts) => {
-    const { emitArtifact, OmniTagContractViolation } = await import('./omnitag.js');
+    const { emitArtifact, OmniTagContractViolation, OmniTagRegistry } = await import('./omnitag.js');
     const tag = {
       agent: opts.agent,
       lifecycle: opts.lifecycle,
@@ -120,6 +122,19 @@ program
         console.log(`[§20.3 結界] barrierInherited=${r.barrierInherited} consistent=${r.consistent}`);
         console.log(`[§18 HashLock] ${result.hashLock}`);
         console.log(`[OK] 產物通過 §20.5 契約閘，已凍結可溯源`);
+      }
+
+      // §20.6 寫入即凍結
+      if (opts.persist) {
+        const reg = new OmniTagRegistry({ path: opts.registry });
+        const rec = reg.persistArtifact({ entityId, tag, content: opts.content });
+        const verify = reg.verifyArtifact(entityId);
+        console.log(`[§20.6 凍結] 寫入 registry=${opts.registry || '.oa/omnitag-registry.jsonl'} entity=${entityId}`);
+        console.log(`[§20.6 驗證] exists=${verify.exists} tampered=${verify.tampered}`);
+        if (verify.tampered) {
+          console.error('[§5 Trustworthy] 寫入後 hash 校驗失敗，資料已被篡改');
+          process.exit(1);
+        }
       }
     } catch (e) {
       if (e instanceof OmniTagContractViolation) {
