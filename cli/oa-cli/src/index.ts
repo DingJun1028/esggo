@@ -83,9 +83,9 @@ task
 program
   .command('tag')
   .description('§20 OmniTag 契約閘 — 產物誕生即附必備三枚 + 自動路由 + Hash Lock')
-  .requiredOption('--agent <id>', '代理歸屬 agent:01~agent:30')
-  .requiredOption('--lifecycle <state>', '生命週期 draft/active/frozen/archived')
-  .requiredOption('--p <level>', '品質分級 p0/p1/p2/p3')
+  .option('--agent <id>', '代理歸屬 agent:01~agent:30 (--init 模式免填)')
+  .option('--lifecycle <state>', '生命週期 draft/active/frozen/archived (--init 模式免填)')
+  .option('--p <level>', '品質分級 p0/p1/p2/p3 (--init 模式免填)')
   .option('--squad <name>', '陣列歸屬 智庫聖所/符文契約/光之羽翼/煉金熵減/5T驗算')
   .option('--security <level>', '安全分級 public/internal/confidential/restricted')
   .option('--platform <env>', '平台環境 esggo/omni/vps/firebase')
@@ -94,9 +94,42 @@ program
   .option('--entity <id>', '實體識別碼，預設自動生成')
   .option('--persist', '寫入即凍結：將過閘產物持久化至 OmniTag Registry (§20.6)')
   .option('--registry <path>', 'Registry 路徑，預設 .oa/omnitag-registry.jsonl')
+  .option('--init', '§20.6 煉金補標：掃描目錄為無標頭 .ts 自動補 OmniTag 標籤 (預設 dry-run)')
+  .option('--write', '與 --init 搭配：實際寫入標頭 (否則僅預覽)')
+  .option('--dir <paths>', '與 --init 搭配：掃描目錄 (逗號分隔)，預設 src,cli')
   .option('--json', '以 JSON 格式輸出完整過閘結果')
   .action(async (opts) => {
     const { emitArtifact, OmniTagContractViolation, OmniTagRegistry } = await import('./omnitag.js');
+
+    // 非 --init 模式：手動檢查必備三枚 (commander 已改為非 required 以支持 --init)
+    if (!opts.init && (!opts.agent || !opts.lifecycle || !opts.p)) {
+      console.error('[錯誤] tag 模式需 --agent / --lifecycle / --p 三枚必備 (或用 --init 補標模式)');
+      process.exit(1);
+    }
+
+    // §20.6 煉金補標模式：掃描目錄為無標頭 .ts 自動補標
+    if (opts.init) {
+      const { auditOmniTags, applyHeader } = await import('./audit.js');
+      const dirs = (opts.dir || 'src,cli').split(',').map((d: string) => d.trim());
+      const result = auditOmniTags(dirs);
+      const untagged = result.violations.map((v) => v.file);
+      console.log(`[§20.6 煉金補標] 待補標檔案=${untagged.length} (dry-run=${!opts.write})`);
+      const written: string[] = [];
+      for (const f of untagged) {
+        const r = applyHeader(f, !opts.write);
+        if (r.header) {
+          console.log(`  ${opts.write ? '✎' : '?'} ${r.file} -> ${r.header.trim()}`);
+          if (r.written) written.push(f);
+        }
+      }
+      if (!opts.write) {
+        console.log(`[提示] 加 --write 才實際寫入標頭 (§21.2 紅線防護)`);
+      } else {
+        console.log(`[OK] 已補標 ${written.length} 檔案`);
+      }
+      return;
+    }
+
     const tag = {
       agent: opts.agent,
       lifecycle: opts.lifecycle,

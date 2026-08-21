@@ -8,7 +8,7 @@
  * [agent:25][squad:5T驗算][lifecycle:active][p2][platform:esggo][best-practice:结界]
  */
 
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { join, relative } from 'path';
 
 export interface AuditResult {
@@ -95,3 +95,55 @@ export function auditOmniTags(rootDirs: string[]): AuditResult {
   const rate = tagged === 0 ? 1 : compliant / tagged;
   return { scanned: files.length, tagged, compliant, rate, violations };
 }
+
+// ── §20.6 驗收：缺失者當週煉金補標 ──────────────────────────
+// 依檔案路徑推測陣列歸屬 (對齊 §20.4 路由表)。
+export function suggestOmniTag(filePath: string): Record<string, string> | null {
+  const p = filePath.replace(/\\/g, '/');
+  let squad: string | null = null;
+  let priority = 'p2';
+  if (p.includes('/agents/') || p.includes('/agents/')) squad = '智庫聖所';
+  else if (p.includes('/lib/') || p.includes('/api/') || p.includes('/core/')) squad = '符文契約';
+  else if (p.includes('/cli/') || p.includes('/deploy') || p.includes('/cron')) squad = '光之羽翼';
+  else if (p.includes('/test') || p.includes('.test.') || p.includes('lint')) squad = '煉金熵減';
+  else if (p.includes('omnitag') || p.includes('five-t') || p.includes('verif')) squad = '5T驗算';
+  if (!squad) return null;
+  const agentNum = squad === '智庫聖所' ? 3
+    : squad === '符文契約' ? 9
+    : squad === '光之羽翼' ? 15
+    : squad === '煉金熵減' ? 21
+    : 27;
+  return {
+    agent: `agent:${agentNum}`,
+    squad,
+    lifecycle: 'active',
+    p: priority,
+    platform: 'esggo',
+    'best-practice': '结界',
+  };
+}
+
+/**
+ * 為未帶標頭的 .ts 檔自動補標 (§20.6 煉金補標)。
+ * @param dryRun 僅回傳建議，不寫入檔案
+ * @returns 實際寫入的檔案清單 (dryRun 時為空)
+ */
+export function applyHeader(
+  filePath: string,
+  dryRun = true,
+): { file: string; header: string; written: boolean } {
+  const content = readFileSync(filePath, 'utf8');
+  if (parseOmniTagHeader(content)) {
+    return { file: filePath, header: '', written: false }; // 已帶標籤
+  }
+  const tags = suggestOmniTag(filePath);
+  if (!tags) {
+    return { file: filePath, header: '', written: false }; // 無法推測
+  }
+  const header = `// [${tags.agent}][squad:${tags.squad}][lifecycle:${tags.lifecycle}][${tags.p}][platform:${tags.platform}][best-practice:${tags['best-practice']}]\n`;
+  if (!dryRun) {
+    writeFileSync(filePath, header + content, 'utf8');
+  }
+  return { file: filePath, header, written: !dryRun };
+}
+

@@ -50,4 +50,28 @@ export const x = 1;`;
     expect(result.compliant).toBe(result.tagged);
     expect(result.rate).toBe(1);
   });
+
+  it('suggestOmniTag infers squad from path', () => {
+    expect(suggestOmniTag('src/lib/foo.ts')?.squad).toBe('符文契約');
+    expect(suggestOmniTag('cli/oa-cli/src/bar.ts')?.squad).toBe('光之羽翼');
+    expect(suggestOmniTag('src/core/agents/baz.ts')?.squad).toBe('智庫聖所');
+  });
+
+  it('applyHeader dry-run does not write, --write does', async () => {
+    const fs = await import('fs');
+    const os = await import('os');
+    const path = await import('path');
+    const tmp = path.join(os.tmpdir(), `oa-head-${Date.now()}.ts`);
+    fs.writeFileSync(tmp, 'export const x = 1;\n');
+    try {
+      const dry = applyHeader(tmp, true);
+      expect(dry.written).toBe(false);
+      expect(fs.readFileSync(tmp, 'utf8')).toBe('export const x = 1;\n');
+      const real = applyHeader(tmp, false);
+      expect(real.written).toBe(true);
+      expect(fs.readFileSync(tmp, 'utf8').startsWith('// [agent:')).toBe(true);
+    } finally {
+      fs.unlinkSync(tmp);
+    }
+  });
 });
