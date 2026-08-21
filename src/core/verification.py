@@ -82,3 +82,31 @@ if __name__ == "__main__":
     )
     is_valid, error = gate.verify_5t(asdict(my_artifact))
     print(f"Verification Result: {is_valid}, Error: {error}")
+
+# ── §18 跨語言 Hash Lock 一致性（對齊 TS FiveTHashLock.generate）──
+# TS: sha256(`${source}|${content}|${ts}`)  — 算法同構，供跨語言契約測試複用。
+import hashlib
+
+def generate_hash_lock(source: str, content: str, timestamp: int) -> str:
+    """Trustworthy: 與 src/lib/five-t-protocol.ts FiveTHashLock.generate 同構。"""
+    payload = f"{source}|{content}|{timestamp}"
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+def emit_cross_lang_vectors(path: str = "tests/hashlock_vectors.json") -> None:
+    """產生跨語言一致性測試向量 (source, content, ts, expected_hash)。"""
+    import json
+    cases = [
+        ("agent:25", "大家好，我是壽司博士", 1760000000000),
+        ("agent:09", '{"op":"replace","line":2}', 1760000001000),
+        ("QueenBee", "entropy-forge-artifact", 1760000002000),
+    ]
+    vectors = [
+        {"source": s, "content": c, "timestamp": t, "expected_hash": generate_hash_lock(s, c, t)}
+        for s, c, t in cases
+    ]
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(vectors, f, ensure_ascii=False, indent=2)
+    print(f"Wrote {len(vectors)} cross-lang vectors to {path}")
+
+if __name__ == "__main__":
+    emit_cross_lang_vectors()
