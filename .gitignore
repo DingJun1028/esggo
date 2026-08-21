@@ -318,3 +318,5 @@ prisma-backup-*/
 esggo-omni-center/
 rules-tutorial/
 functions/node_modules/
+
+.env*
