@@ -128,37 +128,61 @@ jobs:
         run: |
           set -e
           export PATH="$(python3 -m site --user-base)/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-          # OCI 序列控制台 SSH: 目標主機與 user 皆為 console connection 代理
-          # 正確格式: ssh -i key -o ProxyCommand='ssh -W %h:%p -p 443 CONN@instance-console...' CONN@instance-console...
+          pip install --quiet pexpect 2>/dev/null || python3 -m pip install --quiet pexpect
           CONSOLE_HOST="$CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
           PROXY="ssh -W %h:%p -p 443 $CONSOLE_HOST"
-          ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" \
-            -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -o ConnectTimeout=30 \
-            "$CONSOLE_HOST" bash -s <<'VPS'
-            set -e
-            mkdir -p ~/.ssh && chmod 700 ~/.ssh
-            echo "$WORKER_PUB" >> ~/.ssh/authorized_keys
-            chmod 600 ~/.ssh/authorized_keys
-            # keepalive.sh
-            cat > /usr/local/bin/keepalive.sh <<'KA'
-          #!/usr/bin/env bash
-          # OA-Team Soul 30 keepalive — 避免 ARM 被回收
-          awk 'BEGIN{for(i=0;i<50000;i++){s+=sqrt(i)*sin(i)}}' >/dev/null 2>&1
-          LOG=/var/log/keepalive-heartbeat.log
-          echo "$(date -u +%FT%TZ) keepalive-ok" >> "$LOG"
-          tail -n 200 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
-          curl -m 5 -s -o /dev/null http://169.254.169.254/opc/v2/instance/ || true
-          KA
-            chmod 755 /usr/local/bin/keepalive.sh
-            ( crontab -l 2>/dev/null | grep -v keepalive.sh
-              echo "*/9 * * * * /usr/local/bin/keepalive.sh >> /var/log/keepalive.log 2>&1"
-            ) | crontab -
-            echo "=== verify ==="
-            ls -l /usr/local/bin/keepalive.sh
-            crontab -l | grep keepalive.sh
-            echo "auth_keys_lines=$(wc -l < ~/.ssh/authorized_keys)"
-          VPS
+          # 用 pexpect 驅動 OCI 序列控制台 (繞過互動選單/login)
+          python3 - <<PY
+          import pexpect, os, time, sys
+          conn = os.environ['CONN']
+          region = os.environ['OCI_REGION']
+          worker_pub = os.environ['WORKER_PUB']
+          console_host = f"{conn}@instance-console.{region}.oci.oraclecloud.com"
+          proxy = f"ssh -W %h:%p -p 443 {console_host}"
+          key = os.path.expanduser("~/.ssh/worker_tmp")
+          cmd = f"ssh -i {key} -o ProxyCommand='{proxy}' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30 {console_host}"
+          print("SPAWN:", cmd)
+          child = pexpect.spawn(cmd, timeout=90, encoding='utf-8', codec_errors='replace')
+          # 等待登入提示或 shell prompt (OCI 序列控制台通常直接給 shell 或 login:)
+          i = child.expect([r'[Ll]ogin:',
+                            r'[#\$] ',
+                            r'Press any key',
+                            pexpect.TIMEOUT,
+                            pexpect.EOF], timeout=60)
+          print("EXPECT_RESULT:", i)
+          if i == 2:  # Press any key
+              child.sendline("")
+              child.expect([r'[Ll]ogin:', r'[#\$] ', pexpect.TIMEOUT], timeout=30)
+          if i in (0,):  # login prompt -> send ubuntu
+              child.sendline("ubuntu")
+              child.expect([r'assword:', r'[#\$] ', pexpect.TIMEOUT], timeout=30)
+              # console connection 用 key 認證, 通常無密碼; 若問密碼則送空
+              child.sendline("")
+              child.expect([r'[#\$] ', pexpect.TIMEOUT], timeout=30)
+          # 現在應在 shell; 寫入 authorized_keys
+          child.sendline("mkdir -p ~/.ssh && chmod 700 ~/.ssh")
+          child.expect(r'[#\$] ', timeout=20)
+          # 用 printf 避免 heredoc 換行問題
+          for line in worker_pub.split('\n'):
+              if line.strip():
+                  child.sendline(f"echo '{line}' >> ~/.ssh/authorized_keys")
+                  child.expect(r'[#\$] ', timeout=20)
+          child.sendline("chmod 600 ~/.ssh/authorized_keys")
+          child.expect(r'[#\$] ', timeout=20)
+          child.sendline("cat > /usr/local/bin/keepalive.sh <<'KA'\n#!/usr/bin/env bash\nawk 'BEGIN{for(i=0;i<50000;i++){s+=sqrt(i)*sin(i)}}' >/dev/null 2>&1\nLOG=/var/log/keepalive-heartbeat.log\necho \"$(date -u +%FT%TZ) keepalive-ok\" >> \"$LOG\"\ntail -n 200 \"$LOG\" > \"$LOG.tmp\" && mv \"$LOG.tmp\" \"$LOG\"\ncurl -m 5 -s -o /dev/null http://169.254.169.254/opc/v2/instance/ || true\nKA")
+          child.expect(r'[#\$] ', timeout=20)
+          child.sendline("chmod 755 /usr/local/bin/keepalive.sh")
+          child.expect(r'[#\$] ', timeout=20)
+          child.sendline("( crontab -l 2>/dev/null | grep -v keepalive.sh; echo '*/9 * * * * /usr/local/bin/keepalive.sh >> /var/log/keepalive.log 2>&1' ) | crontab -")
+          child.expect(r'[#\$] ', timeout=20)
+          child.sendline("ls -l /usr/local/bin/keepalive.sh; crontab -l | grep keepalive.sh; echo AUTH_LINES=$(wc -l < ~/.ssh/authorized_keys)")
+          child.expect(r'[#\$] ', timeout=20)
+          child.sendline("exit")
+          time.sleep(2)
+          print("=== SERIAL OUTPUT TAIL ===")
+          print(child.before[-2000:] if child.before else "NO_OUTPUT")
+          child.close()
+          PY
 
       - name: Cleanup
         if: always()
