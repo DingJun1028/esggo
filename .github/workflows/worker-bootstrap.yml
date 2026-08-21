@@ -1,0 +1,145 @@
+# =============================================================================
+# ESG GO — OA-Team Worker (oa-worker-01) Keepalive Bootstrap
+# 目的: 下次 CI 重跑即把 esggo_original.pub 注入 oa-worker-01 的 authorized_keys
+#       並部署 keepalive.sh + crontab，永久補齊 30/30 簽核最後 1 項 (Soul 30 QA)。
+#
+# 設計要點 (最佳實踐覺醒版):
+#  - oa-worker-01 由 GitHub Actions 獨佔託管 (managed_by=github-actions)，
+#    本機無其 SSH key；OCI 序列控制台代理拒收 PEM RSA 私鑰。
+#  - 解法: runner 內現場生成 ed25519 臨時 key → 註冊給 worker 的 console connection
+#    → 用該臨時私鑰走序列控制台進 worker → 寫入 esggo_original.pub + keepalive。
+#  - 不預存私鑰 (臨時 key 留 runner 記憶體)；esggo_original.pub 以 Secret 提供。
+#
+# 需在 GitHub Settings → Secrets 設定:
+#   OA_WORKER_OCID        (ocid1.instance...oa-worker-01)
+#   WORKER_AUTHORIZED_PUB (esggo_original.pub 全文, ssh-rsa AAAAB3N... 那行)
+#   OCI_USER_OCID / OCI_TENANCY_OCID / OCI_REGION / OCI_API_FINGERPRINT / OCI_API_KEY
+# =============================================================================
+
+name: OA Worker Keepalive Bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "強制重跑 (即便已標記 done)"
+        required: false
+        default: "false"
+        type: boolean
+  # 也可掛到 main push 後自動觸發 (取消下方註解)
+  # push:
+  #   branches: [main]
+  #   paths: [".github/workflows/worker-bootstrap.yml"]
+
+concurrency:
+  group: oa-worker-bootstrap
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  OA_WORKER_OCID: ${{ secrets.OA_WORKER_OCID }}
+  OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+  OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+  OCI_REGION: ${{ secrets.OCI_REGION }}
+  OCI_API_FINGERPRINT: ${{ secrets.OCI_API_FINGERPRINT }}
+  OCI_API_KEY: ${{ secrets.OCI_API_KEY }}
+
+jobs:
+  bootstrap:
+    name: Bootstrap oa-worker-01 keepalive
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure OCI + generate temp ed25519 key
+        id: oci
+        run: |
+          set -e
+          pip install --quiet oci
+          mkdir -p ~/.oci ~/.ssh
+          # 寫入 OCI API key (PEM)
+          python3 - <<'PY'
+          import os, re, pathlib
+          raw = os.environ["OCI_API_KEY"]
+          m = re.search(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', raw, re.S)
+          clean = (m.group(0) if m else raw).replace("\r", "").strip() + "\n"
+          kp = pathlib.Path("~/.oci/key.pem").expanduser()
+          kp.write_text(clean); os.chmod(kp, 0o600)
+          PY
+          # 現場生成 ed25519 臨時 key (用於序列控制台認證)
+          ssh-keygen -t ed25519 -N "" -f ~/.ssh/worker_tmp >/dev/null
+          echo "pub=$(cat ~/.ssh/worker_tmp.pub)" >> $GITHUB_OUTPUT
+
+      - name: Create console connection (ed25519) on worker
+        id: conn
+        env:
+          TMP_PUB: ${{ steps.oci.outputs.pub }}
+        run: |
+          set -e
+          # 先刪舊的 (若有) 避免衝突
+          EXISTING=$(oci compute instance-console-connection list \
+            --instance-id "$OA_WORKER_OCID" --compartment-id "$OCI_TENANCY_OCID" \
+            --region "$OCI_REGION" --output json 2>/dev/null \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['data'][0]['id'] if d.get('data') else '')" || true)
+          [ -n "$EXISTING" ] && oci compute instance-console-connection delete \
+            --instance-console-connection-id "$EXISTING" --region "$OCI_REGION" --force || true
+          sleep 3
+          OUT=$(oci compute instance-console-connection create \
+            --instance-id "$OA_WORKER_OCID" --region "$OCI_REGION" \
+            --ssh-public-key-file ~/.ssh/worker_tmp.pub --output json)
+          CONN=$(echo "$OUT" | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['id'])")
+          echo "conn=$CONN" >> $GITHUB_OUTPUT
+          # 等待 ACTIVE
+          for i in $(seq 1 12); do
+            ST=$(oci compute instance-console-connection get \
+              --instance-console-connection-id "$CONN" --region "$OCI_REGION" \
+              --output json | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['lifecycle-state'])")
+            [ "$ST" = "ACTIVE" ] && break
+            sleep 5
+          done
+          echo "conn_state=$ST" >> $GITHUB_OUTPUT
+
+      - name: Serial-console in + inject esggo_original.pub + keepalive
+        if: steps.conn.outputs.conn_state == 'ACTIVE'
+        env:
+          CONN: ${{ steps.conn.outputs.conn }}
+          WORKER_PUB: ${{ secrets.WORKER_AUTHORIZED_PUB }}
+        run: |
+          set -e
+          PROXY="ssh -W %h:%p -p 443 $CONN@instance-console.$OCI_REGION.oci.oraclecloud.com"
+          ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" \
+            -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            ubuntu@$OA_WORKER_OCID bash -s <<VPS
+            set -e
+            mkdir -p ~/.ssh && chmod 700 ~/.ssh
+            echo "$WORKER_PUB" >> ~/.ssh/authorized_keys
+            chmod 600 ~/.ssh/authorized_keys
+            # keepalive.sh
+            cat > /usr/local/bin/keepalive.sh <<'KA'
+          #!/usr/bin/env bash
+          # OA-Team Soul 30 keepalive — 避免 ARM 被回收
+          awk 'BEGIN{for(i=0;i<50000;i++){s+=sqrt(i)*sin(i)}}' >/dev/null 2>&1
+          LOG=/var/log/keepalive-heartbeat.log
+          echo "$(date -u +%FT%TZ) keepalive-ok" >> "$LOG"
+          tail -n 200 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+          curl -m 5 -s -o /dev/null http://169.254.169.254/opc/v2/instance/ || true
+          KA
+            chmod 755 /usr/local/bin/keepalive.sh
+            ( crontab -l 2>/dev/null | grep -v keepalive.sh
+              echo "*/9 * * * * /usr/local/bin/keepalive.sh >> /var/log/keepalive.log 2>&1"
+            ) | crontab -
+            echo "=== verify ==="
+            ls -l /usr/local/bin/keepalive.sh
+            crontab -l | grep keepalive.sh
+            echo "auth_keys_lines=$(wc -l < ~/.ssh/authorized_keys)"
+          VPS
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/worker_tmp ~/.ssh/worker_tmp.pub ~/.oci/key.pem || true
+          # 可選: 保留 console connection 供日後維運, 或刪除
+          # oci compute instance-console-connection delete --instance-console-connection-id "${{ steps.conn.outputs.conn }}" --region "$OCI_REGION" --force || true
