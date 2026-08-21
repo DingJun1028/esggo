@@ -3,6 +3,8 @@ import {
   parseOmniTagHeader,
   checkTagCompliance,
   auditOmniTags,
+  suggestOmniTag,
+  applyHeader,
 } from './audit';
 
 describe('§20.5 規則 5 / §20.6 驗收：OmniTag 合約率稽核', () => {
