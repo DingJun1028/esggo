@@ -17,6 +17,19 @@
 | Ch.09 | Kill Switch 與治理 | ✅ |
 | Ch.10 | 結界誓約 | ✅ |
 
+## 品質門檻與 CI 守則 (OmniTag 合約率 100%)
+
+本專案所有 `.ts` 產物必須攜帶合規 OmniTag 標頭（見 Ch.07）。合約率由 CI 強制把關：
+
+- **驗證入口**：`pnpm oa:audit`
+  掃描 `src/lib` + `cli/oa-cli/src`，輸出帶標籤數 / 合約數 / 合約率；違規即非零退出。
+- **CI 閘**：`.github/workflows/ci.yml` 的 `omnitag-audit` job 強制合約率 **100%**（`agent` + `lifecycle` + `p` 三枚必備且值合法），未達標 PR 不予合併。
+- **自動補標**：`npx tsx cli/oa-cli/src/index.ts tag --init --write --dir <dirs>`
+  為無標頭 `.ts` 依路徑推測陣列並自動補合規標頭（§6.2 預設即合規）。
+- **跨語言一致性**：Python 端 `src/core/verification.py` 與 TS 端 `src/lib/five-t-protocol.ts` 共用同構 Hash Lock 算法，位元級吻合（見 Ch.01）。
+
+> 任何並發 session / PR 都應先跑 `pnpm oa:audit` 確認 100% 再推送，避免 CI 紅。
+
 ## 導覽
 
 - `INDEX.md` — 依任務 / 工具 / 組合流程查章節
