@@ -436,6 +436,7 @@ export function generateFiveTReport(score: FiveTScore): string {
 // 用相對 import 避免 @/ alias 在 core tsconfig 解析爭議（參見 universal-tag-service.ts 註解）。
 import {
   verifyOmniTagContract,
+  routeOmniTag,
   type OmniTagSet,
   type ContractCheck,
 } from './omnitag-contract';
@@ -449,29 +450,37 @@ export class OmniTagContractViolation extends Error {
 
 /**
  * FiveTOmniTagGate — 產物誕生/變更時的自動契約閘。
- * 對齊 §18 5T 驗證閘 + §20.5 五規則，預設即合規（§6.2）。
+ * 對齊 §18 5T 驗證閘 + §20.5 五規則 + §20.4 自動路由，預設即合規（§6.2）。
  */
 export class FiveTOmniTagGate {
   private static _sealedArtifacts = new Set<string>();
 
   /**
-   * 產物誕生：通過 5T 評分 + OmniTag 契約閘後才放行。
+   * 產物誕生：通過 5T 評分 + OmniTag 契約閘 + 自動路由後才放行。
    * @throws OmniTagContractViolation 契約不合規時
    */
   static emitArtifact(params: {
     entityId: string;
     tag: OmniTagSet;
     ctx?: Parameters<typeof verifyOmniTagContract>[1];
-  }): { entityId: string; contract: ContractCheck } {
+  }): { entityId: string; contract: ContractCheck; route: ReturnType<typeof routeOmniTag> } {
     const check = verifyOmniTagContract(params.tag, params.ctx);
     if (!check.valid) {
       throw new OmniTagContractViolation(check);
     }
+    const route = routeOmniTag(params.tag);
     FiveTTrackable.recordEvent(params.entityId, 'omnitag:sealed', {
       tag: params.tag,
+      routeKey: route.target?.routeKey,
       source_origin: `agent:${params.tag.agent ?? '??'}`,
     });
-    return { entityId: params.entityId, contract: check };
+    if (!route.consistent) {
+      FiveTTrackable.recordEvent(params.entityId, 'omnitag:route-warn', {
+        agent: params.tag.agent,
+        squad: params.tag.squad,
+      });
+    }
+    return { entityId: params.entityId, contract: check, route };
   }
 
   /**
