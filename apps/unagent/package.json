@@ -1,0 +1,36 @@
+{
+  "name": "@esggo/unagent",
+  "version": "1.0.0",
+  "description": "Autonomous Agent Codex - Self-directed knowledge compilation and vault synchronization",
+  "private": true,
+  "type": "module",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "scripts": {
+    "dev": "esbuild src/index.ts --bundle --watch --outfile=dist/main.js --sourcemap --format=esm --external:sharp",
+    "build": "pnpm run typecheck && esbuild src/index.ts --bundle --outfile=dist/main.js --minify --format=esm && node scripts/generate-manifest.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "sync:vault": "node scripts/sync-to-vault.mjs",
+    "audit": "node scripts/codex-audit.mjs"
+  },
+  "dependencies": {
+    "@esggo/shared": "workspace:*",
+    "@esggo/errors": "workspace:*",
+    "commander": "^12.1.0",
+    "zod": "^3.25.76",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "workspace:*",
+    "@types/jest": "^29.5.0",
+    "esbuild": "^0.21.0",
+    "typescript": "workspace:*",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": "11.5.2"
+  }
+}
