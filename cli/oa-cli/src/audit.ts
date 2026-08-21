@@ -23,8 +23,10 @@ export interface AuditResult {
 const TAG_RE = /\[([a-z]+):([^\]]+)\]/g;
 
 export function parseOmniTagHeader(content: string): Record<string, string> | null {
-  // 只掃前 30 行（標頭註釋區）
-  const head = content.split('\n').slice(0, 30).join('\n');
+  // 只掃前 30 行的「註釋行」(// 或 * 開頭)，排除程式碼 (如 `[key: string]: unknown`)
+  const headLines = content.split('\n').slice(0, 30);
+  const commentLines = headLines.filter((l) => /^\s*(\/\/|\*)/.test(l));
+  const head = commentLines.join('\n');
   const tags: Record<string, string> = {};
   let m: RegExpExecArray | null;
   TAG_RE.lastIndex = 0;
@@ -96,18 +98,29 @@ export function auditOmniTags(rootDirs: string[]): AuditResult {
   return { scanned: files.length, tagged, compliant, rate, violations };
 }
 
+// ── §20.6 煉金補標：找出完全無 OmniTag 標頭的 .ts 檔 ──
+export function findUntagged(rootDirs: string[]): string[] {
+  const files = rootDirs.flatMap((d) => walkTsFiles(d));
+  return files.filter((f) => {
+    const content = readFileSync(f, 'utf8');
+    return parseOmniTagHeader(content) === null;
+  });
+}
+
 // ── §20.6 驗收：缺失者當週煉金補標 ──────────────────────────
 // 依檔案路徑推測陣列歸屬 (對齊 §20.4 路由表)。
 export function suggestOmniTag(filePath: string): Record<string, string> | null {
   const p = filePath.replace(/\\/g, '/');
+  const segs = p.split('/');
   let squad: string | null = null;
-  let priority = 'p2';
-  if (p.includes('/agents/') || p.includes('/agents/')) squad = '智庫聖所';
-  else if (p.includes('/lib/') || p.includes('/api/') || p.includes('/core/')) squad = '符文契約';
-  else if (p.includes('/cli/') || p.includes('/deploy') || p.includes('/cron')) squad = '光之羽翼';
-  else if (p.includes('/test') || p.includes('.test.') || p.includes('lint')) squad = '煉金熵減';
-  else if (p.includes('omnitag') || p.includes('five-t') || p.includes('verif')) squad = '5T驗算';
-  if (!squad) return null;
+  const priority = 'p2';
+  if (segs.includes('agents')) squad = '智庫聖所';
+  else if (segs.includes('lib') || segs.includes('api') || segs.includes('core')) squad = '符文契約';
+  else if (segs.includes('cli') || segs.includes('deploy') || segs.includes('cron')) squad = '光之羽翼';
+  else if (segs.includes('test') || p.includes('.test.') || p.includes('lint')) squad = '煉金熵減';
+  else if (segs.some((s) => /omnitag|five-t|verif/.test(s))) squad = '5T驗算';
+  // 預設即合規：無法推測路徑時歸屬 5T驗算 (§6.2)
+  if (!squad) squad = '5T驗算';
   const agentNum = squad === '智庫聖所' ? 3
     : squad === '符文契約' ? 9
     : squad === '光之羽翼' ? 15

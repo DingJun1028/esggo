@@ -5,6 +5,7 @@ import {
   auditOmniTags,
   suggestOmniTag,
   applyHeader,
+  findUntagged,
 } from './audit';
 
 describe('§20.5 規則 5 / §20.6 驗收：OmniTag 合約率稽核', () => {
@@ -74,6 +75,25 @@ export const x = 1;`;
       expect(fs.readFileSync(tmp, 'utf8').startsWith('// [agent:')).toBe(true);
     } finally {
       fs.unlinkSync(tmp);
+    }
+  });
+
+  it('findUntagged finds files without header', () => {
+    const fs = require('fs');
+    const os = require('os');
+    const path = require('path');
+    const dir = path.join(os.tmpdir(), `oa-untagged-${Date.now()}`);
+    fs.mkdirSync(dir, { recursive: true });
+    const f1 = path.join(dir, 'nohead.ts');
+    const f2 = path.join(dir, 'hashead.ts');
+    fs.writeFileSync(f1, 'export const a = 1;\n');
+    fs.writeFileSync(f2, '// [agent:09][squad:符文契約][lifecycle:active][p2][platform:esggo][best-practice:结界]\nexport const b = 2;\n');
+    try {
+      const found = findUntagged([dir]);
+      expect(found.length).toBe(1);
+      expect(found[0].endsWith('nohead.ts')).toBe(true);
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
     }
   });
 });
