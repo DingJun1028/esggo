@@ -127,13 +127,22 @@ ssh -i ~/.ssh/worker_tmp -o ProxyCommand="$PROXY" "$CONSOLE_HOST" bash -s <<'VPS
 VPS
 ```
 
-### 7.3 Serial console is UNRELIABLE in non-interactive CI
-Even with a correctly registered RSA key, the OCI serial-console proxy auth layer
-frequently returns `Permission denied (publickey)` or hangs with no stdout in a
-CI runner (interactive menu / proxy rejects non-interactive auth). After 6 iterations
-this path was abandoned. **Prefer one of:**
-- Manual paste of the target pubkey into the worker's `~/.ssh/authorized_keys` (user does it), then verify from a host that holds the matching private key.
-- OCI **Bastion** tunnel (needs worker private IP + `OCI_BASTION_ID`/`OCI_TARGET_RESOURCE_ID` secrets) — Oracle's official no-public-IP entry, more reliable than serial console.
+### 7.3 Serial console is UNRELIABLE in non-interactive CI (and even local)
+Even with a *correctly registered* RSA key whose private key you actually hold, the OCI
+serial-console proxy auth layer returns `Permission denied (publickey)`. Proven locally:
+created a console connection with `esggo_original.pub`, waited until `ACTIVE`, then
+`ssh -i ~/.ssh/esggo_original -o ProxyCommand='ssh -W %h:%p -p 443 CONN@instance-console...' CONN@instance-console...`
+still got `Permission denied (publickey)`. The proxy auth path is independent of the
+registered key and rejects automated key logins. After 8+ iterations (CI + local), this
+path was abandoned. **Prefer one of:**
+- Manual paste of the target pubkey into the worker's `~/.ssh/authorized_keys` via the
+  **OCI web console interactive terminal** (console.oracle.com → instance → Console
+  Connection → opens an interactive web terminal that does NOT go through the SSH proxy
+  auth layer). This is the only reliable entry.
+- OCI **Bastion** tunnel (needs worker private IP + `OCI_BASTION_ID`/`OCI_TARGET_RESOURCE_ID`
+  secrets) — Oracle's official no-public-IP entry, more reliable than serial console.
+- Have the CI that already manages the instance (`managed_by=github-actions`) inject the
+  pubkey in its deploy step.
 
 ### 7.4 `oci` CLI is NOT on GitHub runners
 `oci: command not found` in CI. `pip install oci` installs the **SDK** (no `oci` binary).
