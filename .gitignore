@@ -246,7 +246,6 @@ docker-compose.yml
 apphosting.yaml
 chromatic.config.json
 eslint.config.mjs
-next.config.ts
 tailwind.config.mjs
 openapi.yaml
 firebase.json
