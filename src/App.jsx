@@ -294,7 +294,7 @@ export default function App() {
 
 
   const confirmAdmin = () => {
-    if (!ADMIN_PASS || adminInput === ADMIN_PASS) { setAdminOk(true); setRole('admin'); setView('admin'); }
+    if (ADMIN_PASS && adminInput === ADMIN_PASS) { setAdminOk(true); setRole('admin'); setView('admin'); }
     else { alert(t.error?.adminWrongPassword || t.admin?.wrongPassword || '管理員密碼錯誤'); }
     setAdminPrompt(false); setAdminInput('');
   };
