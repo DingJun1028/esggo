@@ -183,8 +183,12 @@ describe('FiveTHashLock (T4 Trustworthy)', () => {
   });
 
   it('verifies a lock at any age inside the window (per-ms coverage)', () => {
-    // 驗證修復：容差窗內任何偏移（如 250ms / 3300ms）皆可驗證，不再依賴 1000ms 取樣
-    for (const age of [250, 3300, 4999]) {
+    // 驗證修復：容差窗內任何偏移（如 250ms / 3300ms）皆可驗證，不再依賴 1000ms 取樣。
+    // 注意：verify() 內部會重新取樣 Date.now() 並掃描 0..toleranceMs，
+    // 故 age 必須留下實際執行時間的餘裕 —— age=4999 對 5000ms 窗只剩 1ms 預算，
+    // 而本迴圈前幾輪的 generate/verify 已耗用數千次 SHA-256，必然越過窗緣造成偽紅。
+    // 因此取 4500 (仍為非 1000 倍數，per-ms 覆蓋語意不變) 保留 500ms 餘裕。
+    for (const age of [250, 3300, 4500]) {
       const ts = Date.now() - age;
       const hash = FiveTHashLock.generate('src', 'content', ts);
       expect(FiveTHashLock.verify('src', 'content', hash, 5000)).toBe(true);
