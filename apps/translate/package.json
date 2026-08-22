@@ -1,0 +1,12 @@
+{
+  "name": "translate",
+  "version": "1.0.0",
+  "description": "即時萬能語音翻譯 — translate.esggo.co 純前端 Web Speech 實作",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "health": "curl -sf http://localhost:8789/health || true"
+  },
+  "engines": { "node": ">=18" }
+}

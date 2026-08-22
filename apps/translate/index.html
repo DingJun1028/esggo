@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>即時萬能語音翻譯 · translate.esggo.co</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --gold: #c9a24b;
+      --blue: #1f6feb;
+      --text: #e6edf3;
+      --muted: #8b949e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; padding: 24px;
+    }
+    header { text-align: center; margin-bottom: 16px; }
+    header h1 { font-size: 1.4rem; margin: 0; color: var(--gold); }
+    header p { color: var(--muted); font-size: 0.85rem; margin: 4px 0 0; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+    select, button {
+      background: var(--panel); color: var(--text); border: 1px solid #30363d;
+      border-radius: 8px; padding: 8px 14px; font-size: 0.95rem; cursor: pointer;
+    }
+    button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .capsule {
+      width: min(720px, 92vw); background: var(--panel); border: 1px solid #30363d;
+      border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    }
+    .capsule .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
+    .capsule .src { color: #fff; font-size: 1.05rem; min-height: 1.4em; white-space: pre-wrap; }
+    .capsule .dst { color: var(--gold); font-size: 1.05rem; min-height: 1.4em; white-space: pre-wrap; }
+    .status { color: var(--muted); font-size: 0.8rem; margin-top: 8px; min-height: 1em; }
+    .warn {
+      max-width: 720px; background: #3d2a00; border: 1px solid var(--gold);
+      color: #ffe8a3; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 16px;
+    }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#21262d; color:var(--muted); font-size:0.75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>即時萬能語音翻譯</h1>
+    <p>translate.esggo.co · 純免費算力 · Google Web Speech 技術</p>
+  </header>
+
+  <div class="warn" id="warn" hidden></div>
+
+  <div class="controls">
+    <label class="pill">來源語</label>
+    <select id="srcLang">
+      <option value="zh-TW">中文（台灣）</option>
+      <option value="en-US">English (US)</option>
+      <option value="ja-JP">日本語</option>
+      <option value="ko-KR">한국어</option>
+      <option value="">自動偵測</option>
+    </select>
+    <label class="pill">目標語</label>
+    <select id="dstLang">
+      <option value="en">English</option>
+      <option value="zh-TW" selected>中文（台灣）</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
+    <button id="startBtn" class="primary">▶ 開始聆聽</button>
+    <button id="stopBtn" disabled>■ 停止</button>
+    <button id="speakBtn">🔊 朗讀翻譯</button>
+  </div>
+
+  <div class="capsule">
+    <div class="label">原文（辨識）</div>
+    <div class="src" id="srcText">—</div>
+  </div>
+  <div class="capsule">
+    <div class="label">翻譯</div>
+    <div class="dst" id="dstText">—</div>
+  </div>
+  <div class="status" id="status">就緒。點擊「開始聆聽」並授權麥克風。</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
