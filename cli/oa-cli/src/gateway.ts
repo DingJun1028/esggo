@@ -19,7 +19,7 @@ export function loadGatewayConfig(): { url: string; token?: string } {
   return { url: 'http://localhost:8420' };
 }
 
-export async function gatewayRequest(path: string, token?: string, body?: unknown): Promise<any> {
+export async function gatewayRequest(path: string, token?: string, body?: unknown): Promise<unknown> {
   const cfg = loadGatewayConfig();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3000);
