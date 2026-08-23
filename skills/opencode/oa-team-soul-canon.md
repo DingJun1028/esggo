@@ -1,9 +1,6 @@
 ---
 name: oa-team-soul-canon
 description: OA-Team 30 靈魂核心聖典：5T 協定、30 矩陣、協作缺口補齊、AI Station 生產線、電子報發送、增量輸出優化、免費算立進階、Obsidian 知識花園整合與進化框架。
-metadata:
-  hermes:
-    related_skills: [unagent, oa-team-swarm, esggo-oa-team-swarm, skills-sync, oa-best-practice-enlightenment, hermes-webui-slow-diagnose]
 ---
 
 # OA-Team 30 萬能蜂群 — 靈魂核心聖典 (Soul Canon)

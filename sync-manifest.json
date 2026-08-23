@@ -1,11 +1,12 @@
 {
   "branch": "OmniTag",
-  "updated": "2026-08-24T03:35:00+08:00",
+  "updated": "2026-08-24T04:12:00+08:00",
   "synced_by": "oa-team-swarm",
   "mappings": [
     {"hermes":"skills/hermes/unagent/SKILL.md","opencode":"skills/opencode/unagent.md","name":"unagent","version":"1.1.0","last_sync":"2026-08-24T03:08:00+08:00"},
-    {"hermes":"skills/hermes/oa-team-soul-canon/SKILL.md","opencode":"skills/opencode/oa-team-soul-canon.md","name":"oa-team-soul-canon","version":"aligned-unagent-v1.1.0+related","last_sync":"2026-08-24T03:30:00+08:00"},
-    {"hermes":"skills/hermes/skills-sync/SKILL.md","opencode":"skills/opencode/skills-sync.md","name":"skills-sync","version":"1.1.0+SAFETY-GATE","last_sync":"2026-08-24T03:35:00+08:00","note":"新增 SAFETY GATE 防呆：禁止 git checkout -f / skills 需 add -f / 勿 -A"}
+    {"hermes":"skills/hermes/oa-team-soul-canon/SKILL.md","opencode":"skills/opencode/oa-team-soul-canon.md","name":"oa-team-soul-canon","version":"related-fixed+webui-diagnose","last_sync":"2026-08-24T04:12:00+08:00","note":"移除懸空引用 oa-best-practice-enlightenment；保留 hermes-webui-slow-diagnose（已補建）"},
+    {"hermes":"skills/hermes/skills-sync/SKILL.md","opencode":"skills/opencode/skills-sync.md","name":"skills-sync","version":"1.1.0+SAFETY-GATE","last_sync":"2026-08-24T03:35:00+08:00"},
+    {"hermes":"skills/hermes/hermes-webui-slow-diagnose/SKILL.md","opencode":"skills/opencode/hermes-webui-slow-diagnose.md","name":"hermes-webui-slow-diagnose","version":"1.0.0","last_sync":"2026-08-24T04:12:00+08:00","note":"補建：本輪 WebUI 慢診斷固化（state.db trigram/cjk_fts/cron/Docker chown 四根因）"}
   ],
   "converter":"skills-sync/scripts/hermes_to_opencode.py"
 }

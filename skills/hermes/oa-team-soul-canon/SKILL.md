@@ -6,7 +6,7 @@ tags: [soul, swarm, 5t, oa-team, best-practice, esggo, ai-station, entropy, obsi
 metadata:
   hermes:
     tags: [soul, swarm, 5t, oa-team, best-practice, esggo, ai-station, entropy, obsidian, knowledge-garden]
-    related_skills: [unagent, oa-team-swarm, esggo-oa-team-swarm, skills-sync, oa-best-practice-enlightenment, hermes-webui-slow-diagnose]
+    related_skills: [unagent, oa-team-swarm, esggo-oa-team-swarm, skills-sync, hermes-webui-slow-diagnose]
 ---
 
 # OA-Team 30 萬能蜂群 — 靈魂核心聖典 (Soul Canon)
