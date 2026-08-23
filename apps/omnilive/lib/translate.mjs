@@ -88,6 +88,7 @@ async function viaGemini(text, from, to, key, model) {
  * @property {string} to        目標語言
  * @property {string} engine    實際使用引擎
  * @property {boolean} cached
+ * @property {string} [error]   5T 溯源: 當 engine='fallback-origin' 時附最後失敗原因
  */
 
 /** 輕量語言偵測 (零依賴/零 key): 依 CJK 字元比例判斷 繁中/英文 */
@@ -145,6 +146,7 @@ export async function translate(text, from, to, opts = {}) {
   chain.push(['google-gtx', () => viaGoogleGtx(text, from, to)]);
   chain.push(['mymemory', () => viaMyMemory(text, from, to, opts.myMemoryEmail || '')]);
 
+  let lastErr;
   for (const [name, fn] of chain) {
     try {
       const target = await withRetry(fn, name, retries);
@@ -152,10 +154,10 @@ export async function translate(text, from, to, opts = {}) {
       CACHE.set(k, rec);
       if (CACHE.size > CACHE_MAX) { const oldest = CACHE.keys().next().value; if (oldest) CACHE.delete(oldest); }
       return { source: text, target, from, to, engine: name, cached: false };
-    } catch { /* 換下一引擎 */ }
+    } catch (e) { lastErr = e; /* 換下一引擎 */ }
   }
-  // 誠實回落: 所有引擎失敗 → 原文兜底 (不中斷流程)
-  return { source: text, target: text, from, to, engine: 'fallback-origin', cached: false };
+  // 誠實回落: 所有引擎失敗 → 原文兜底 (不中斷流程), 附最後錯誤以利 5T 溯源
+  return { source: text, target: text, from, to, engine: 'fallback-origin', error: lastErr?.message || 'all engines failed', cached: false };
 }
 
 /** 5T: 產生不可篡改 trace (hash of source text) */
