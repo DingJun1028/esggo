@@ -1,0 +1,15 @@
+{
+  "branch": "OmniTag",
+  "updated": "2026-08-24T03:08:00+08:00",
+  "synced_by": "oa-team-swarm",
+  "mappings": [
+    {
+      "hermes": "skills/hermes/unagent/SKILL.md",
+      "opencode": "skills/opencode/unagent.md",
+      "name": "unagent",
+      "version": "1.1.0",
+      "last_sync": "2026-08-24T03:08:00+08:00"
+    }
+  ],
+  "converter": "skills-sync/scripts/hermes_to_opencode.py"
+}
