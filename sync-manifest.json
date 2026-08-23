@@ -1,23 +1,10 @@
 {
   "branch": "OmniTag",
-  "updated": "2026-08-24T03:22:00+08:00",
+  "updated": "2026-08-24T03:30:00+08:00",
   "synced_by": "oa-team-swarm",
   "mappings": [
-    {
-      "hermes": "skills/hermes/unagent/SKILL.md",
-      "opencode": "skills/opencode/unagent.md",
-      "name": "unagent",
-      "version": "1.1.0",
-      "last_sync": "2026-08-24T03:08:00+08:00"
-    },
-    {
-      "hermes": "skills/hermes/oa-team-soul-canon/SKILL.md",
-      "opencode": "skills/opencode/oa-team-soul-canon.md",
-      "name": "oa-team-soul-canon",
-      "version": "aligned-unagent-v1.1.0",
-      "last_sync": "2026-08-24T03:22:00+08:00",
-      "note": "附錄 B.1 UNagent 段落對齊 unagent v1.1.0 最佳實踐版（工具表/think///完全配置版/開發紅線）"
-    }
+    {"hermes":"skills/hermes/unagent/SKILL.md","opencode":"skills/opencode/unagent.md","name":"unagent","version":"1.1.0","last_sync":"2026-08-24T03:08:00+08:00"},
+    {"hermes":"skills/hermes/oa-team-soul-canon/SKILL.md","opencode":"skills/opencode/oa-team-soul-canon.md","name":"oa-team-soul-canon","version":"aligned-unagent-v1.1.0+related","last_sync":"2026-08-24T03:30:00+08:00","note":"附錄B.1對齊unagent v1.1.0 + frontmatter 反向引用 unagent 等6技能，雙向交軌"}
   ],
-  "converter": "skills-sync/scripts/hermes_to_opencode.py"
+  "converter":"skills-sync/scripts/hermes_to_opencode.py"
 }
