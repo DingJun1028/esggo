@@ -237,7 +237,6 @@ docker-compose.yml
 apphosting.yaml
 chromatic.config.json
 eslint.config.mjs
-next.config.ts
 tailwind.config.mjs
 openapi.yaml
 firebase.json
@@ -323,3 +322,11 @@ rules-tutorial/
 functions/node_modules/
 
 .env*
+# ── 調試產物 (本地 watchdog / trace, 不納入版本控制) ──
+wd_out.txt
+wd_trace.txt
+_h.txt
+*.trace
+*_trace.txt
+watchdog_*.txt
+watchdog_*.log
