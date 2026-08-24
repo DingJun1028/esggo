@@ -35,9 +35,10 @@ export function OmniPieChart({
     };
 
     let cumulative = 0;
+    let [startX, startY] = getCoordinatesForPercent(0);
+
     const computedSliceData = data.map((slice, i) => {
       const slicePercent = slice.value / computedTotal;
-      const [startX, startY] = getCoordinatesForPercent(cumulative);
       cumulative += slicePercent;
       const [endX, endY] = getCoordinatesForPercent(cumulative);
       const largeArcFlag = slicePercent > 0.5 ? 1 : 0;
@@ -46,6 +47,12 @@ export function OmniPieChart({
         `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
         `L 0 0`,
       ].join(' ');
+
+      // ⚡ Bolt Optimization: Reuse end coordinates as start coordinates for the next slice
+      // This prevents redundant Math.cos/Math.sin calculations.
+      startX = endX;
+      startY = endY;
+
       return { slice, i, slicePercent, pathData };
     });
 
