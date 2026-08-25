@@ -3,7 +3,7 @@
 # Platform: linux/arm64 (Oracle Cloud Ampere A1 / Apple Silicon)
 # =============================================================================
 
-FROM --platform=linux/arm64 node:22-alpine AS deps
+FROM --platform=linux/arm64 node:20-alpine AS deps
 WORKDIR /app
 RUN apk upgrade --no-cache && apk add --no-cache libc6-compat build-base python3
 RUN corepack enable pnpm
@@ -13,7 +13,7 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/ui/package.json packages/ui/
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
-FROM --platform=linux/arm64 node:22-alpine AS builder
+FROM --platform=linux/arm64 node:20-alpine AS builder
 WORKDIR /app
 RUN apk upgrade --no-cache && corepack enable pnpm && rm -rf /var/cache/apk/*
 COPY . .
@@ -27,7 +27,7 @@ ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
 RUN npx prisma generate
 RUN pnpm run build
 
-FROM --platform=linux/arm64 node:22-alpine AS runner
+FROM --platform=linux/arm64 node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 CI=true
 # Install runtime deps with security hardening
