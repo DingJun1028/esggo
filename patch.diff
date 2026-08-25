@@ -1,0 +1,7 @@
+<<<<<<< SEARCH
+[build]
+command = "npx --yes pnpm install --frozen-lockfile && npx tsc -p my-worker/tsconfig.json"
+=======
+[build]
+command = "cd my-worker && npx --yes pnpm install --frozen-lockfile && npx tsc -p tsconfig.json"
+>>>>>>> REPLACE
