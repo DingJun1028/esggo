@@ -35,11 +35,18 @@ export function OmniPieChart({
     };
 
     let cumulative = 0;
+    let [prevX, prevY] = getCoordinatesForPercent(0);
     const computedSliceData = data.map((slice, i) => {
       const slicePercent = slice.value / computedTotal;
-      const [startX, startY] = getCoordinatesForPercent(cumulative);
+      const startX = prevX;
+      const startY = prevY;
+
       cumulative += slicePercent;
+
       const [endX, endY] = getCoordinatesForPercent(cumulative);
+      prevX = endX;
+      prevY = endY;
+
       const largeArcFlag = slicePercent > 0.5 ? 1 : 0;
       const pathData = [
         `M ${startX} ${startY}`,
