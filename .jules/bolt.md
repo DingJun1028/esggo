@@ -5,3 +5,7 @@
 ## 2026-08-18 - [OmniAgent Console Rendering Optimization]
 **Learning:** In React components, static configuration arrays (like `CHAT_SUGGESTIONS`) created inside the render cycle (specifically within the JSX) cause the array to be recreated on every re-render. This triggers unnecessary re-renders of mapped child elements depending on referential equality, which is a common performance anti-pattern.
 **Action:** Hoist static arrays and configuration objects out of the component function to the module scope to avoid garbage collection and recreation overhead.
+
+## 2026-08-19 - [OmniPieChart SVG Geometry Optimization]
+**Learning:** When calculating consecutive paths in SVG charts (like pie slices), independent calculation of both start and end points for each segment results in redundant trigonometric operations (`Math.cos`/`Math.sin`).
+**Action:** Track and reuse the previous segment's end coordinates as the start coordinates for the next segment to halve the computational cost in rendering loops.
