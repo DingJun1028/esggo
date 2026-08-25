@@ -6,7 +6,7 @@ import {
   suggestOmniTag,
   applyHeader,
   findUntagged,
-} from './audit';
+} from './audit.js';
 
 describe('§20.5 規則 5 / §20.6 驗收：OmniTag 合約率稽核', () => {
   it('parseOmniTagHeader extracts tags from header comment', () => {
@@ -39,9 +39,9 @@ export const x = 1;`;
   });
 
   it('checkTagCompliance fails missing triad', () => {
-    const v = checkTagCompliance({ lifecycle: 'active' });
+    const v = checkTagCompliance({ lifecycle: 'active' } as Record<string, string>);
     expect(v.length).toBeGreaterThan(0);
-    expect(v.some((x) => x.includes('agent'))).toBe(true);
+    expect(v.some((x: string) => x.includes('agent'))).toBe(true);
   });
 
   it('auditOmniTags scans real project files and finds tagged ones', () => {
