@@ -19,3 +19,6 @@
 ## 2025-02-20 - Ensure screen reader accessibility and keyboard focus for icon buttons
 **Learning:** Icon-only buttons (like the floating action buttons in `FloatingFunctionKey428.tsx` and the close button in `DrThothResonance.tsx`) often lack context for screen readers and visible focus indicators for keyboard navigation, leading to poor accessibility in complex UI tools.
 **Action:** When adding or reviewing icon-only interactive elements, ensure `aria-label` is applied to describe the action, and use Tailwind `focus-visible` classes (e.g., `focus-visible:outline-none focus-visible:ring-2`) to provide a clear, accessible focus ring without breaking the default visual design.
+## 2025-02-25 - Dynamic Form Engine Accessibility
+**Learning:** Found a pattern where dynamic form builders generate inputs based on schemas but often forget to explicitly link the rendered `<label>` and `<input>` with `htmlFor` and `id`. This breaks screen reader associations for auto-generated fields.
+**Action:** Always ensure that when mapping over schema fields to generate form elements, `field.id` (or equivalent unique identifier) is used to map the `<label htmlFor={field.id}>` to `<input id={field.id}>`.

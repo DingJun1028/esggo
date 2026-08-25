@@ -114,7 +114,7 @@ export default function DynamicFormEngine({
             const err = fieldError(field.id);
             return (
               <div key={field.id} className="space-y-2">
-                <label className="text-sm font-medium text-cyan-50 flex items-center justify-between">
+                <label htmlFor={field.id} className="text-sm font-medium text-cyan-50 flex items-center justify-between">
                   <span>
                     {field.label}{' '}
                     {field.required && <span className="text-amber-400">*</span>}
@@ -128,6 +128,7 @@ export default function DynamicFormEngine({
 
                 {field.type === 'number' ? (
                   <input
+                    id={field.id}
                     type="number"
                     required={field.required}
                     placeholder={field.placeholder}
@@ -142,6 +143,7 @@ export default function DynamicFormEngine({
                   />
                 ) : (
                   <input
+                    id={field.id}
                     type="text"
                     required={field.required}
                     placeholder={field.placeholder}
