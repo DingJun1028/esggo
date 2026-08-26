@@ -29,6 +29,7 @@
     "turbo:lint": "eslint . --fix",
     "oa:summon": "ts-node --transpile-only scripts/run-summon.ts",
     "oa:summon:core": "ts-node --transpile-only scripts/run-summon.ts -- --core",
+    "oa:weekly-report": "tsx cli/oa-cli/src/index.ts weekly-report",
     "verify": "pnpm turbo run lint typecheck test build && pnpm -F ./apps/learning-center check:types-sync"
   },
   "dependencies": {
