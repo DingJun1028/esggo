@@ -8,8 +8,6 @@ directory = "my-worker/dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 
-[build]
-command = "npx --yes pnpm install --frozen-lockfile && npx tsc -p my-worker/tsconfig.json"
 
 [vars]
 ENVIRONMENT = "production"
@@ -31,3 +29,6 @@ SMART_ROUTER_VERSION = "2.0.0-beta.1"
 
 [observability]
 enabled = true
+
+[build]
+command = "cd my-worker && npx --yes pnpm install --frozen-lockfile && npx tsc -p tsconfig.json"
