@@ -9,3 +9,6 @@
 ## 2025-02-18 - [SVG Path Math Optimization]
 **Learning:** Generating continuous SVG paths (like pie chart slices) often calculates the boundary coordinates twice for shared edges. In `omni-pie-chart.tsx`, `getCoordinatesForPercent` was computing both `startX`/`startY` and `endX`/`endY` per slice, recalculating `Math.cos` and `Math.sin` for the start coordinate that already matched the previous slice's end coordinate.
 **Action:** When rendering adjacent SVG path segments, initialize a starting coordinate state (like `prevX` and `prevY`) before the loop, then reuse the previous slice's `endX` and `endY` as the current slice's `startX` and `startY`. This removes one heavy `getCoordinatesForPercent` call per iteration.
+## 2024-05-24 - Lazy Initialization for Expensive Form Schema Reduction
+**Learning:** In dynamically generated forms that rely on schema definitions, computing initial form state using `Array.reduce` directly inside `useState` causes the expensive reduction to execute on every keystroke (re-render), even though React ignores the result after mount.
+**Action:** Always wrap expensive initial state computations in a lazy initializer function (`useState(() => ({ ... }))`) to ensure they only run once during the component's initial mount phase.
