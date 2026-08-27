@@ -34,3 +34,8 @@
 **Vulnerability:** The Cloudflare Worker gateway (`worker/src/index.ts`) contained a fail-open authentication vulnerability in its `bearerOk` function. If the `OMNI_GATEWAY_KEY` environment variable was missing or not configured, it would return `true` (`if (!expected) return true;`), essentially allowing unauthenticated requests to pass through as if they were valid.
 **Learning:** This occurred due to an attempt to "allow local only if not configured". However, deploying such logic to production without environment safeguards essentially disables authentication by default if there's an environment configuration error or omission. This violates the fail-secure principle.
 **Prevention:** Remove fail-open conditions that fallback to `true` when secrets are absent. Authentication logic must default to `false` (fail-secure) to ensure that misconfigurations result in denied access rather than unauthorized access.
+
+## 2026-08-27 - [Fix Fail-Open Authentication in Admin Login]
+**Vulnerability:** The application had a fail-open vulnerability in the admin login logic (`src/App.jsx`). The `VITE_ADMIN_PASS` environment variable check had a fallback to an empty string (`''`), allowing unauthorized access if the variable was not configured.
+**Learning:** Fallback values for sensitive configuration options, like passwords or API keys, should never be weak defaults (like an empty string). Failing to check if a secret is securely configured can allow bypasses via simple input manipulation.
+**Prevention:** Remove fallback values for environment variables used for authentication. Always explicitly check if a configuration variable is defined, and implement a fail-secure approach (e.g., logging an error and disabling access) if it is missing.
