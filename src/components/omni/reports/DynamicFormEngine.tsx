@@ -45,7 +45,8 @@ export default function DynamicFormEngine({
     message: '',
   });
 
-  const [formData, setFormData] = useState<Record<string, unknown>>({
+  // ⚡ Bolt Optimization: Use lazy initialization for state to prevent evaluating `schema.fields.reduce` on every re-render.
+  const [formData, setFormData] = useState<Record<string, unknown>>(() => ({
     uuid: schema.uuid,
     version: schema.version,
     source_origin: 'dynamic-form-engine-ui',
@@ -56,7 +57,7 @@ export default function DynamicFormEngine({
       return acc;
     }, {} as Record<string, unknown>),
     ...initialData,
-  });
+  }));
 
   const handleEvidenceUpload = (url: string) => {
     setFormData((prev) => ({
