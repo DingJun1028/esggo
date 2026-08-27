@@ -2,7 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ['googleapis-common', 'googleapis', 'gaxios', '@google/genai', 'firebase-admin', 'google-auth-library', 'gcp-metadata', 'ioredis', 'pg'],
+  // Exclude server-only ADK/gRPC packages from client-side webpack bundling
+  serverExternalPackages: [
+    "@google/adk",
+    "@grpc/grpc-js",
+    "@google-cloud/opentelemetry-cloud-trace-exporter",
+    "@opentelemetry/api",
+    "@opentelemetry/context-async-hooks",
+    'googleapis-common', 'googleapis', 'gaxios', '@google/genai', 'firebase-admin', 'google-auth-library', 'gcp-metadata', 'ioredis', 'pg'
+  ],
   typescript: {
     ignoreBuildErrors: true,
   },
