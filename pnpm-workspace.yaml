@@ -71,6 +71,7 @@ allowBuilds:
   sqlite3: false
   tesseract.js: true
   unrs-resolver: false
+  workerd: true
 
 minimumReleaseAgeExclude:
   - '@typescript-eslint/eslint-plugin@8.62.1'
