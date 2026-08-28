@@ -1,0 +1,1169 @@
+{
+  "version": 1,
+  "installed": {
+    "adversarial-ux-test": {
+      "source": "official",
+      "identifier": "official/dogfood\\adversarial-ux-test",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:b191394abf052fa2",
+      "install_path": "adversarial-ux-test",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/dogfood\\adversarial-ux-test",
+        "bundle_hash": "sha256:b191394abf052fa21bbf39a0385935f24094ab48b6e9239ac284c9c310a51d56",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-02T11:47:19.273816+00:00",
+        "summary": "adversarial-ux-test: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-02T11:47:19.281442+00:00",
+      "updated_at": "2026-08-02T11:47:19.281442+00:00"
+    },
+    "1password": {
+      "source": "official",
+      "identifier": "official/security\\1password",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:f7b484f3637855f3",
+      "install_path": "1password",
+      "files": [
+        "SKILL.md",
+        "references\\cli-examples.md",
+        "references\\get-started.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/security\\1password",
+        "bundle_hash": "sha256:f7b484f3637855f308f4d9248b595070af2425cd2d3e872360b63b81ec245bc2",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-02T11:47:19.658295+00:00",
+        "summary": "1password: clean scan, no threats detected",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:25.188666+00:00",
+      "updated_at": "2026-08-02T11:48:25.189205+00:00"
+    },
+    "3-statement-model": {
+      "source": "official",
+      "identifier": "official/finance\\3-statement-model",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:77d4bbddf569b6c9",
+      "install_path": "3-statement-model",
+      "files": [
+        "SKILL.md",
+        "references\\formatting.md",
+        "references\\formulas.md",
+        "references\\sec-filings.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/finance\\3-statement-model",
+        "bundle_hash": "sha256:77d4bbddf569b6c9ff2fe237b5dcfbe10e1f8f33e35543664c2ea1380fe9afb1",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-02T11:47:20.110299+00:00",
+        "summary": "3-statement-model: clean scan, no threats detected",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:25.603513+00:00",
+      "updated_at": "2026-08-02T11:48:25.603513+00:00"
+    },
+    "agentmail": {
+      "source": "official",
+      "identifier": "official/email/agentmail",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:8b1766faf804f4e3",
+      "install_path": "email/agentmail",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/email/agentmail",
+        "bundle_hash": "sha256:8b1766faf804f4e3a7cca8d687c6e499ef8640a0f415e63c3b4a0e91daae2468",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 114,
+            "match": "- The `mcp` Python package must be installed: `pip install mcp`",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "hermes_config_mod",
+            "severity": "critical",
+            "category": "persistence",
+            "file": "SKILL.md",
+            "line": 40,
+            "match": "Add to `~/.hermes/config.yaml` (paste your actual key — MCP env vars are not expanded from .env):",
+            "description": "references Hermes configuration files directly"
+          }
+        ],
+        "rules": [
+          "hermes_config_mod",
+          "unpinned_pip_install"
+        ],
+        "scanned_at": "2026-08-20T12:27:35.067186+00:00",
+        "summary": "agentmail: dangerous — 2 finding(s) in persistence, supply_chain",
+        "fresh": true
+      },
+      "installed_at": "2026-08-20T12:27:35.073896+00:00",
+      "updated_at": "2026-08-20T12:27:35.073896+00:00"
+    },
+    "antigravity-cli": {
+      "source": "official",
+      "identifier": "official/autonomous-ai-agents\\antigravity-cli",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:9a40f928d24833b5",
+      "install_path": "antigravity-cli",
+      "files": [
+        "SKILL.md",
+        "references\\cli-docs.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/autonomous-ai-agents\\antigravity-cli",
+        "bundle_hash": "sha256:9a40f928d24833b5758000ad7f5708a057c7449c0ed23d8870bcd82f9d89d3cb",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "curl_pipe_shell",
+            "severity": "critical",
+            "category": "supply_chain",
+            "file": "references\\cli-docs.md",
+            "line": 9,
+            "match": "- macOS/Linux: `curl -fsSL https://antigravity.google/cli/install.sh | bash`",
+            "description": "curl piped to shell (download-and-execute)"
+          }
+        ],
+        "rules": [
+          "curl_pipe_shell"
+        ],
+        "scanned_at": "2026-07-23T06:16:04.652573+00:00",
+        "summary": "antigravity-cli: dangerous — 1 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:25.931192+00:00",
+      "updated_at": "2026-08-02T11:48:25.931192+00:00"
+    },
+    "baoyu-article-illustrator": {
+      "source": "official",
+      "identifier": "official/creative\\baoyu-article-illustrator",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:1a4464073f93ee8b",
+      "install_path": "baoyu-article-illustrator",
+      "files": [
+        "PORT_NOTES.md",
+        "SKILL.md",
+        "prompts\\system.md",
+        "references\\prompt-construction.md",
+        "references\\style-presets.md",
+        "references\\styles.md",
+        "references\\usage.md",
+        "references\\workflow.md",
+        "references\\palettes\\macaron.md",
+        "references\\palettes\\mono-ink.md",
+        "references\\palettes\\neon.md",
+        "references\\palettes\\warm.md",
+        "references\\styles\\blueprint.md",
+        "references\\styles\\chalkboard.md",
+        "references\\styles\\editorial.md",
+        "references\\styles\\elegant.md",
+        "references\\styles\\fantasy-animation.md",
+        "references\\styles\\flat-doodle.md",
+        "references\\styles\\flat.md",
+        "references\\styles\\ink-notes.md",
+        "references\\styles\\intuition-machine.md",
+        "references\\styles\\minimal.md",
+        "references\\styles\\nature.md",
+        "references\\styles\\notion.md",
+        "references\\styles\\pixel-art.md",
+        "references\\styles\\playful.md",
+        "references\\styles\\retro.md",
+        "references\\styles\\scientific.md",
+        "references\\styles\\screen-print.md",
+        "references\\styles\\sketch-notes.md",
+        "references\\styles\\sketch.md",
+        "references\\styles\\vector-illustration.md",
+        "references\\styles\\vintage.md",
+        "references\\styles\\warm.md",
+        "references\\styles\\watercolor.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/creative\\baoyu-article-illustrator",
+        "bundle_hash": "sha256:1a4464073f93ee8bfdfbc5d65cbe9209ba1fefb73b1d1398c4e1100990b888a3",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-23T06:16:08.755858+00:00",
+        "summary": "baoyu-article-illustrator: clean scan, no threats detected",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:26.446360+00:00",
+      "updated_at": "2026-08-02T11:48:26.446360+00:00"
+    },
+    "axolotl": {
+      "source": "official",
+      "identifier": "official/mlops\\training\\axolotl",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:214b99bf079532f6",
+      "install_path": "axolotl",
+      "files": [
+        "SKILL.md",
+        "references\\api.md",
+        "references\\dataset-formats.md",
+        "references\\index.md",
+        "references\\other.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/mlops\\training\\axolotl",
+        "bundle_hash": "sha256:214b99bf079532f649a54c0007eb76ee4c954bc1d96458ff555f110b51f540ce",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "curl_pipe_shell",
+            "severity": "critical",
+            "category": "supply_chain",
+            "file": "references\\other.md",
+            "line": 310,
+            "match": "curl -LsSf https://astral.sh/uv/install.sh | sh",
+            "description": "curl piped to shell (download-and-execute)"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\other.md",
+            "line": 110,
+            "match": "A: Try upgrading deepspeed w: pip install -U deepspeed",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\other.md",
+            "line": 323,
+            "match": "uv pip install packaging setuptools wheel",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\other.md",
+            "line": 325,
+            "match": "uv pip install awscli pydantic",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\other.md",
+            "line": 648,
+            "match": "Make sure you’ve installed the correct version of vLLM by including it as an extra when installing axolotl, e.g. pip ...",
+            "description": "pip install without version pinning"
+          }
+        ],
+        "rules": [
+          "curl_pipe_shell",
+          "unpinned_pip_install"
+        ],
+        "scanned_at": "2026-07-23T06:16:09.572831+00:00",
+        "summary": "axolotl: dangerous — 5 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:26.869708+00:00",
+      "updated_at": "2026-08-02T11:48:26.869708+00:00"
+    },
+    "bioinformatics": {
+      "source": "official",
+      "identifier": "official/research/bioinformatics",
+      "trust_level": "builtin",
+      "scan_verdict": "caution",
+      "content_hash": "sha256:d036e1fb69ad600b",
+      "install_path": "research/bioinformatics",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/research/bioinformatics",
+        "bundle_hash": "sha256:d036e1fb69ad600b7f404f4b49af9dfcf589ab93a7d19d68558444a420134cd7",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "caution",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 215,
+            "match": "pip install biopython pysam cyvcf2 pybedtools pyBigWig scikit-allel anndata scanpy mygene",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "git_clone",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 36,
+            "match": "git clone --depth 1 https://github.com/GPTomics/bioSkills.git /tmp/bioSkills",
+            "description": "clones a git repository at runtime"
+          },
+          {
+            "pattern_id": "git_clone",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 39,
+            "match": "git clone --depth 1 https://github.com/ClawBio/ClawBio.git /tmp/ClawBio",
+            "description": "clones a git repository at runtime"
+          },
+          {
+            "pattern_id": "sudo_usage",
+            "severity": "high",
+            "category": "privilege_escalation",
+            "file": "SKILL.md",
+            "line": 221,
+            "match": "sudo apt install samtools bcftools ncbi-blast+ minimap2 bedtools",
+            "description": "uses sudo (privilege escalation)"
+          }
+        ],
+        "rules": [
+          "git_clone",
+          "sudo_usage",
+          "unpinned_pip_install"
+        ],
+        "scanned_at": "2026-08-20T12:27:37.067461+00:00",
+        "summary": "bioinformatics: caution — 4 finding(s) in privilege_escalation, supply_chain",
+        "fresh": true
+      },
+      "installed_at": "2026-08-20T12:27:37.067461+00:00",
+      "updated_at": "2026-08-20T12:27:37.067461+00:00"
+    },
+    "blender-mcp": {
+      "source": "official",
+      "identifier": "official/creative\\blender-mcp",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:dcd4d34014bffea6",
+      "install_path": "blender-mcp",
+      "files": [
+        "SKILL.md",
+        "references\\bpy-api.md",
+        "references\\pitfalls.md",
+        "references\\recipes.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/creative\\blender-mcp",
+        "bundle_hash": "sha256:dcd4d34014bffea6a8c56db3d255146a483b081ab8df04b73a107371479cfe64",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-23T06:16:13.273263+00:00",
+        "summary": "blender-mcp: clean scan, no threats detected",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:27.162211+00:00",
+      "updated_at": "2026-08-02T11:48:27.162211+00:00"
+    },
+    "blackbox": {
+      "source": "official",
+      "identifier": "official/autonomous-ai-agents\\blackbox",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:6e217db3c63c53d4",
+      "install_path": "blackbox",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/autonomous-ai-agents\\blackbox",
+        "bundle_hash": "sha256:6e217db3c63c53d468f7bffd3fbafc327a31432a980dc4d8baed728e9c157046",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 23,
+            "match": "- Blackbox CLI installed: `npm install -g @blackbox_ai/blackbox-cli` (binary: `blackbox`)",
+            "description": "npm install without version pinning"
+          },
+          {
+            "pattern_id": "git_clone",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 85,
+            "match": "terminal(command=\"REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.git $REVIEW && cd $REVIEW && gh pr ch...",
+            "description": "clones a git repository at runtime"
+          }
+        ],
+        "rules": [
+          "git_clone",
+          "unpinned_npm_install"
+        ],
+        "scanned_at": "2026-08-02T11:47:22.674834+00:00",
+        "summary": "blackbox: safe — 2 finding(s) in supply_chain",
+        "fresh": true
+      },
+      "installed_at": "2026-08-02T11:47:22.680865+00:00",
+      "updated_at": "2026-08-02T11:47:22.680865+00:00"
+    },
+    "canvas": {
+      "source": "official",
+      "identifier": "official/productivity\\canvas",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:095e36492d7c4039",
+      "install_path": "canvas",
+      "files": [
+        "SKILL.md",
+        "scripts\\canvas_api.py"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/productivity\\canvas",
+        "bundle_hash": "sha256:095e36492d7c40399b7181527b809e414f4d22afcb8caafbac3ae29de8ce8793",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "env_exfil_curl",
+            "severity": "critical",
+            "category": "exfiltration",
+            "file": "SKILL.md",
+            "line": 74,
+            "match": "curl -s -H \"Authorization: Bearer $CANVAS_API_TOKEN\" \\",
+            "description": "curl command interpolating secret environment variable"
+          },
+          {
+            "pattern_id": "env_exfil_curl",
+            "severity": "critical",
+            "category": "exfiltration",
+            "file": "SKILL.md",
+            "line": 78,
+            "match": "curl -s -H \"Authorization: Bearer $CANVAS_API_TOKEN\" \\",
+            "description": "curl command interpolating secret environment variable"
+          },
+          {
+            "pattern_id": "python_os_environ",
+            "severity": "high",
+            "category": "exfiltration",
+            "file": "scripts\\canvas_api.py",
+            "line": 19,
+            "match": "CANVAS_API_TOKEN = os.environ.get(\"CANVAS_API_TOKEN\", \"\")",
+            "description": "accesses os.environ (potential env dump)"
+          },
+          {
+            "pattern_id": "python_environ_get_secret",
+            "severity": "critical",
+            "category": "exfiltration",
+            "file": "scripts\\canvas_api.py",
+            "line": 19,
+            "match": "CANVAS_API_TOKEN = os.environ.get(\"CANVAS_API_TOKEN\", \"\")",
+            "description": "reads secret via os.environ.get()"
+          }
+        ],
+        "rules": [
+          "env_exfil_curl",
+          "python_environ_get_secret",
+          "python_os_environ"
+        ],
+        "scanned_at": "2026-08-02T11:47:22.977803+00:00",
+        "summary": "canvas: dangerous — 4 finding(s) in exfiltration",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:27.480229+00:00",
+      "updated_at": "2026-08-02T11:48:27.480229+00:00"
+    },
+    "baoyu-comic": {
+      "source": "official",
+      "identifier": "official/creative\\baoyu-comic",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:2c5f77a1f93a5b14",
+      "install_path": "baoyu-comic",
+      "files": [
+        "PORT_NOTES.md",
+        "SKILL.md",
+        "references\\analysis-framework.md",
+        "references\\auto-selection.md",
+        "references\\base-prompt.md",
+        "references\\character-template.md",
+        "references\\ohmsha-guide.md",
+        "references\\partial-workflows.md",
+        "references\\storyboard-template.md",
+        "references\\workflow.md",
+        "references\\art-styles\\chalk.md",
+        "references\\art-styles\\ink-brush.md",
+        "references\\art-styles\\ligne-claire.md",
+        "references\\art-styles\\manga.md",
+        "references\\art-styles\\minimalist.md",
+        "references\\art-styles\\realistic.md",
+        "references\\layouts\\cinematic.md",
+        "references\\layouts\\dense.md",
+        "references\\layouts\\four-panel.md",
+        "references\\layouts\\mixed.md",
+        "references\\layouts\\splash.md",
+        "references\\layouts\\standard.md",
+        "references\\layouts\\webtoon.md",
+        "references\\presets\\concept-story.md",
+        "references\\presets\\four-panel.md",
+        "references\\presets\\ohmsha.md",
+        "references\\presets\\shoujo.md",
+        "references\\presets\\wuxia.md",
+        "references\\tones\\action.md",
+        "references\\tones\\dramatic.md",
+        "references\\tones\\energetic.md",
+        "references\\tones\\neutral.md",
+        "references\\tones\\romantic.md",
+        "references\\tones\\vintage.md",
+        "references\\tones\\warm.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/creative\\baoyu-comic",
+        "bundle_hash": "sha256:2c5f77a1f93a5b1406efe38c4ade0278d9c9d71b99c5c1307c6a2359ddc6a7a0",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-23T06:16:19.605459+00:00",
+        "summary": "baoyu-comic: clean scan, no threats detected",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:27.919158+00:00",
+      "updated_at": "2026-08-02T11:48:27.919158+00:00"
+    },
+    "workers-best-practices": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/cloudflare/skills/workers-best-practices",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:0051cc23758af890",
+      "install_path": "workers-best-practices",
+      "files": [
+        "SKILL.md",
+        "references/review.md",
+        "references/rules.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/cloudflare/skills/tree/30553f89ae1ef1e3c2917cd09d72dac992bb4e9a/skills/workers-best-practices",
+        "source_revision": "30553f89ae1ef1e3c2917cd09d72dac992bb4e9a",
+        "detail_url": "https://skills.sh/cloudflare/skills/workers-best-practices",
+        "repo_url": "https://github.com/cloudflare/skills"
+      },
+      "scan_provenance": {
+        "source": "skills-sh/cloudflare/skills/workers-best-practices",
+        "source_url": "https://github.com/cloudflare/skills/tree/30553f89ae1ef1e3c2917cd09d72dac992bb4e9a/skills/workers-best-practices",
+        "bundle_hash": "sha256:0051cc23758af890553dd0f4dd0b00847c762d659e39db2c5b631108bdb66c85",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 106,
+            "match": "const response = await fetch(\"https://api.example.com/large-dataset\");",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 137,
+            "match": "const response = await fetch(\"https://api.example.com/large-dataset\");",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 176,
+            "match": "**Check**: no `fetch(\"https://api.cloudflare.com/client/v4/...\")` calls for services available as bindings.",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 222,
+            "match": "**Check**: Worker-to-Worker calls use `env.SERVICE_NAME.method()` (RPC) or `env.SERVICE_NAME.fetch()`, not `fetch(\"ht...",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 349,
+            "match": "const response = await fetch(\"https://api.example.com/process\", { method: \"POST\", body: JSON.stringify(data) });",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 352,
+            "match": "ctx.waitUntil(fetch(\"https://api.example.com/webhook\", { method: \"POST\", body: JSON.stringify(data) }));",
+            "description": "fetches remote resource at runtime"
+          },
+          {
+            "pattern_id": "remote_fetch",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\rules.md",
+            "line": 358,
+            "match": "fetch(\"https://api.example.com/webhook\", { method: \"POST\", body: JSON.stringify(data) });",
+            "description": "fetches remote resource at runtime"
+          }
+        ],
+        "rules": [
+          "remote_fetch"
+        ],
+        "scanned_at": "2026-07-28T09:47:02.738299+00:00",
+        "summary": "workers-best-practices: safe — 7 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-08-02T11:48:31.663259+00:00",
+      "updated_at": "2026-08-02T11:48:31.663259+00:00"
+    },
+    "wrangler": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/cloudflare/skills/wrangler",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:986d5a7aaebb4bc0",
+      "install_path": "wrangler",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/cloudflare/skills/tree/f96bff754e428838818017f75817f0f9428acd48/skills/wrangler",
+        "source_revision": "f96bff754e428838818017f75817f0f9428acd48",
+        "detail_url": "https://skills.sh/cloudflare/skills/wrangler",
+        "repo_url": "https://github.com/cloudflare/skills"
+      },
+      "scan_provenance": {
+        "source": "skills-sh/cloudflare/skills/wrangler",
+        "source_url": "https://github.com/cloudflare/skills/tree/f96bff754e428838818017f75817f0f9428acd48/skills/wrangler",
+        "bundle_hash": "sha256:986d5a7aaebb4bc0d3bd1e3299caf52e59af1d447dda89d8c0e48a2a6b7c0ff2",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 31,
+            "match": "npm install -D wrangler@latest",
+            "description": "npm install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 854,
+            "match": "npm install -D @cloudflare/vitest-pool-workers vitest",
+            "description": "npm install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 890,
+            "match": "| `command not found: wrangler` | Install: `npm install -D wrangler` |",
+            "description": "npm install without version pinning"
+          }
+        ],
+        "rules": [
+          "unpinned_npm_install"
+        ],
+        "scanned_at": "2026-08-20T12:27:41.283914+00:00",
+        "summary": "wrangler: safe — 3 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-08-20T13:03:32.998958+00:00",
+      "updated_at": "2026-08-20T13:03:32.998958+00:00"
+    },
+    "i-have-adhd": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/ayghri/i-have-adhd/skills/i-have-adhd",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:0ffc37656bd6aeaf",
+      "install_path": "i-have-adhd",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/ayghri/i-have-adhd/tree/e7555fcaf612dfa1739dc86610ea926a906db614/skills/i-have-adhd",
+        "source_revision": "e7555fcaf612dfa1739dc86610ea926a906db614",
+        "detail_url": "https://skills.sh/ayghri/i-have-adhd/skills/i-have-adhd",
+        "repo_url": "https://github.com/ayghri/i-have-adhd"
+      },
+      "scan_provenance": {
+        "source": "skills-sh/ayghri/i-have-adhd/skills/i-have-adhd",
+        "source_url": "https://github.com/ayghri/i-have-adhd/tree/e7555fcaf612dfa1739dc86610ea926a906db614/skills/i-have-adhd",
+        "bundle_hash": "sha256:0ffc37656bd6aeaf8cc6d4059b10de137955267254fdee95ea969cb2bed194c0",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 38,
+            "match": "Good: \"Run `npm install jsonwebtoken`, then edit `src/auth.ts:42`.\"",
+            "description": "npm install without version pinning"
+          }
+        ],
+        "rules": [
+          "unpinned_npm_install"
+        ],
+        "scanned_at": "2026-08-20T12:27:43.946621+00:00",
+        "summary": "i-have-adhd: safe — 1 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-08-20T13:03:36.048621+00:00",
+      "updated_at": "2026-08-20T13:03:36.048621+00:00"
+    },
+    "chinese-code-review": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/jnmetacode/superpowers-zh/chinese-code-review",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:6bd158d04f279bdd",
+      "install_path": "chinese-code-review",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/jnmetacode/superpowers-zh/tree/c68725b4f6d203674b161c8dbeb9f52826b8378f/skills/chinese-code-review",
+        "source_revision": "c68725b4f6d203674b161c8dbeb9f52826b8378f"
+      },
+      "scan_provenance": {
+        "source": "skills-sh/jnmetacode/superpowers-zh/chinese-code-review",
+        "source_url": "https://github.com/jnmetacode/superpowers-zh/tree/c68725b4f6d203674b161c8dbeb9f52826b8378f/skills/chinese-code-review",
+        "bundle_hash": "sha256:6bd158d04f279bddb8caf316659bd9c8572da970020f9d7a0c492a00f6426b2f",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:14:53.654463+00:00",
+        "summary": "chinese-code-review: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:14:53.857997+00:00",
+      "updated_at": "2026-08-26T07:14:53.857997+00:00"
+    },
+    "nemoclaw-user-guide": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemoclaw-user-guide",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:874eed581b48f8ed",
+      "install_path": "nemoclaw-user-guide",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemoclaw-user-guide",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemoclaw-user-guide",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemoclaw-user-guide",
+        "bundle_hash": "sha256:874eed581b48f8ed6ac1891576369afd25efa3e95392569ebb442637814ef4d1",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:19:35.506059+00:00",
+        "summary": "nemoclaw-user-guide: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:19:36.048243+00:00",
+      "updated_at": "2026-08-26T07:19:36.048243+00:00"
+    },
+    "nemo-relay-plugin-build": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-plugin-build",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:02f3c6a040044a2c",
+      "install_path": "nemo-relay-plugin-build",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-build",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-plugin-build",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-build",
+        "bundle_hash": "sha256:02f3c6a040044a2c329072a8b3a7cbada666e9a944ab8d7c11816acba8411060",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:20:40.756851+00:00",
+        "summary": "nemo-relay-plugin-build: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:20:40.901124+00:00",
+      "updated_at": "2026-08-26T07:20:40.901124+00:00"
+    },
+    "nemo-relay-plugin-adaptive-tuning": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-plugin-adaptive-tuning",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:131e11a34000128e",
+      "install_path": "nemo-relay-plugin-adaptive-tuning",
+      "files": [
+        "SKILL.md",
+        "references/config.md",
+        "references/hints.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-adaptive-tuning",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-plugin-adaptive-tuning",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-adaptive-tuning",
+        "bundle_hash": "sha256:131e11a34000128e46a1e566fb1e0bce89316c9a25df072f94e1cd703b79bed5",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:21:44.496169+00:00",
+        "summary": "nemo-relay-plugin-adaptive-tuning: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:21:44.701938+00:00",
+      "updated_at": "2026-08-26T07:21:44.701938+00:00"
+    },
+    "nemo-relay-migrate-from-flow": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-migrate-from-flow",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:23eaaea5f16598b5",
+      "install_path": "nemo-relay-migrate-from-flow",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-migrate-from-flow",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-migrate-from-flow",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-migrate-from-flow",
+        "bundle_hash": "sha256:23eaaea5f16598b57b83dccddd5b3a3c970d557271570f9ec007aca10580079e",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:21:54.384358+00:00",
+        "summary": "nemo-relay-migrate-from-flow: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:21:54.507426+00:00",
+      "updated_at": "2026-08-26T07:21:54.507426+00:00"
+    },
+    "nemo-relay-instrument-typed-wrappers": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-typed-wrappers",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:cdb65163db6cf26d",
+      "install_path": "nemo-relay-instrument-typed-wrappers",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-typed-wrappers",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-instrument-typed-wrappers",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-typed-wrappers",
+        "bundle_hash": "sha256:cdb65163db6cf26daca1ac4ec450afd5dc99c14fd1eda7d516df84ae218535bc",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:22:04.805697+00:00",
+        "summary": "nemo-relay-instrument-typed-wrappers: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:22:05.095315+00:00",
+      "updated_at": "2026-08-26T07:22:05.095315+00:00"
+    },
+    "nemo-relay-instrument-context-isolation": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-context-isolation",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:c73e1f64463aa485",
+      "install_path": "nemo-relay-instrument-context-isolation",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-context-isolation",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-instrument-context-isolation",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-context-isolation",
+        "bundle_hash": "sha256:c73e1f64463aa485678eab733dbf6f68a150b52c6efc135d707286361d03d0eb",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:22:16.610209+00:00",
+        "summary": "nemo-relay-instrument-context-isolation: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:22:16.782846+00:00",
+      "updated_at": "2026-08-26T07:22:16.782846+00:00"
+    },
+    "nemo-relay-debug-runtime-integration": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-debug-runtime-integration",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:8aa0f55e78b35a6c",
+      "install_path": "nemo-relay-debug-runtime-integration",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-debug-runtime-integration",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-debug-runtime-integration",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-debug-runtime-integration",
+        "bundle_hash": "sha256:8aa0f55e78b35a6c2776a07efad769e82aeb3a4b7500c4e33b66e613b36d0c9d",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:22:27.112072+00:00",
+        "summary": "nemo-relay-debug-runtime-integration: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:22:27.181518+00:00",
+      "updated_at": "2026-08-26T07:22:27.181518+00:00"
+    },
+    "nemo-relay-install": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-install",
+      "trust_level": "trusted",
+      "scan_verdict": "caution",
+      "content_hash": "sha256:39a5cab1de0157c6",
+      "install_path": "nemo-relay-install",
+      "files": [
+        "SKILL.md",
+        "assets/codex-desktop-recovery.md",
+        "references/cli-install.md",
+        "references/language-packages.md",
+        "references/maintained-integrations.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-install",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-install",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-install",
+        "bundle_hash": "sha256:39a5cab1de0157c6bb2f3f12d663ff609f80e16f95806743318224bc64fe92ba",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "caution",
+        "trust_level": "trusted",
+        "findings": [
+          {
+            "pattern_id": "sudo_usage",
+            "severity": "high",
+            "category": "privilege_escalation",
+            "file": "references\\cli-install.md",
+            "line": 62,
+            "match": "not invoke `sudo`. Remove the downloaded installer only after verification if",
+            "description": "uses sudo (privilege escalation)"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\language-packages.md",
+            "line": 41,
+            "match": "uv pip install nemo-relay",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\language-packages.md",
+            "line": 44,
+            "match": "Use `python -m pip install nemo-relay` only when no project manager owns the",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\language-packages.md",
+            "line": 65,
+            "match": "- Use `npm install nemo-relay-node` for `package-lock.json` or",
+            "description": "npm install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_npm_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\language-packages.md",
+            "line": 75,
+            "match": "npm install nemo-relay-node",
+            "description": "npm install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references\\maintained-integrations.md",
+            "line": 25,
+            "match": "pip install nemo-relay",
+            "description": "pip install without version pinning"
+          }
+        ],
+        "rules": [
+          "sudo_usage",
+          "unpinned_npm_install",
+          "unpinned_pip_install"
+        ],
+        "scanned_at": "2026-08-26T07:22:36.791395+00:00",
+        "summary": "nemo-relay-install: caution — 6 finding(s) in privilege_escalation, supply_chain",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:22:36.964050+00:00",
+      "updated_at": "2026-08-26T07:22:36.964050+00:00"
+    },
+    "nemo-relay-instrument-calls": {
+      "source": "github",
+      "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-calls",
+      "trust_level": "trusted",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:e295d8987b6b8253",
+      "install_path": "nemo-relay-instrument-calls",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-calls",
+        "source_revision": "994b87022af46deada9fdb79fc560a77aaf931ce"
+      },
+      "scan_provenance": {
+        "source": "NVIDIA/skills/skills/nemo-relay-instrument-calls",
+        "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-calls",
+        "bundle_hash": "sha256:e295d8987b6b8253a83b13049c829edbe6ec0efe35c65e816167eb29ce7b5da1",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "trusted",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-08-26T07:22:46.066361+00:00",
+        "summary": "nemo-relay-instrument-calls: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-08-26T07:22:46.202806+00:00",
+      "updated_at": "2026-08-26T07:22:46.202806+00:00"
+    }
+  }
+}

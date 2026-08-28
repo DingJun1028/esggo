@@ -1,0 +1,13 @@
+{
+  "source": "skills-sh/jnmetacode/superpowers-zh/chinese-code-review",
+  "source_url": "https://github.com/jnmetacode/superpowers-zh/tree/c68725b4f6d203674b161c8dbeb9f52826b8378f/skills/chinese-code-review",
+  "bundle_hash": "sha256:6bd158d04f279bddb8caf316659bd9c8572da970020f9d7a0c492a00f6426b2f",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "community",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-26T07:14:53.654463+00:00",
+  "summary": "chinese-code-review: clean scan, no threats detected",
+  "fresh": true
+}

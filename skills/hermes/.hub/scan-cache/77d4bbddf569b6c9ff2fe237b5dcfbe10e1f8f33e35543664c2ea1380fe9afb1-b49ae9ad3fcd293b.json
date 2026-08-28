@@ -1,0 +1,13 @@
+{
+  "source": "official",
+  "source_url": "official/finance\\3-statement-model",
+  "bundle_hash": "sha256:77d4bbddf569b6c9ff2fe237b5dcfbe10e1f8f33e35543664c2ea1380fe9afb1",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-02T11:47:20.110299+00:00",
+  "summary": "3-statement-model: clean scan, no threats detected",
+  "fresh": true
+}

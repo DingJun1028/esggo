@@ -1,0 +1,18 @@
+{
+  "ollama": {
+    "npm": "@ai-sdk/openai-compatible",
+    "name": "Ollama (Local)",
+    "options": {
+      "baseURL": "http://localhost:11434/v1"
+    },
+    "models": {
+      "qwen2.5:3b-instruct-q4_K_M": {
+        "name": "Qwen2.5 3B Instruct (Local, Free)",
+        "limit": {
+          "context": 32768,
+          "output": 8192
+        }
+      }
+    }
+  }
+}

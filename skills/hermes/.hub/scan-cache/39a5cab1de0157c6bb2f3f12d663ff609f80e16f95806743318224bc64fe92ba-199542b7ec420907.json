@@ -1,0 +1,72 @@
+{
+  "source": "NVIDIA/skills/skills/nemo-relay-install",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-install",
+  "bundle_hash": "sha256:39a5cab1de0157c6bb2f3f12d663ff609f80e16f95806743318224bc64fe92ba",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "caution",
+  "trust_level": "trusted",
+  "findings": [
+    {
+      "pattern_id": "sudo_usage",
+      "severity": "high",
+      "category": "privilege_escalation",
+      "file": "references\\cli-install.md",
+      "line": 62,
+      "match": "not invoke `sudo`. Remove the downloaded installer only after verification if",
+      "description": "uses sudo (privilege escalation)"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\language-packages.md",
+      "line": 41,
+      "match": "uv pip install nemo-relay",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\language-packages.md",
+      "line": 44,
+      "match": "Use `python -m pip install nemo-relay` only when no project manager owns the",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\language-packages.md",
+      "line": 65,
+      "match": "- Use `npm install nemo-relay-node` for `package-lock.json` or",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\language-packages.md",
+      "line": 75,
+      "match": "npm install nemo-relay-node",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\maintained-integrations.md",
+      "line": 25,
+      "match": "pip install nemo-relay",
+      "description": "pip install without version pinning"
+    }
+  ],
+  "rules": [
+    "sudo_usage",
+    "unpinned_npm_install",
+    "unpinned_pip_install"
+  ],
+  "scanned_at": "2026-08-26T07:22:36.791395+00:00",
+  "summary": "nemo-relay-install: caution \u2014 6 finding(s) in privilege_escalation, supply_chain",
+  "fresh": true
+}

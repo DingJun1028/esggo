@@ -1,0 +1,25 @@
+{
+  "source": "official",
+  "source_url": "official/autonomous-ai-agents\\antigravity-cli",
+  "bundle_hash": "sha256:9a40f928d24833b5758000ad7f5708a057c7449c0ed23d8870bcd82f9d89d3cb",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "dangerous",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "curl_pipe_shell",
+      "severity": "critical",
+      "category": "supply_chain",
+      "file": "references\\cli-docs.md",
+      "line": 9,
+      "match": "- macOS/Linux: `curl -fsSL https://antigravity.google/cli/install.sh | bash`",
+      "description": "curl piped to shell (download-and-execute)"
+    }
+  ],
+  "rules": [
+    "curl_pipe_shell"
+  ],
+  "scanned_at": "2026-07-23T06:16:04.652573+00:00",
+  "summary": "antigravity-cli: dangerous \u2014 1 finding(s) in supply_chain",
+  "fresh": true
+}

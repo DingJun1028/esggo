@@ -1,0 +1,35 @@
+{
+  "source": "official",
+  "source_url": "official/email/agentmail",
+  "bundle_hash": "sha256:8b1766faf804f4e3a7cca8d687c6e499ef8640a0f415e63c3b4a0e91daae2468",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "dangerous",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 114,
+      "match": "- The `mcp` Python package must be installed: `pip install mcp`",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "hermes_config_mod",
+      "severity": "critical",
+      "category": "persistence",
+      "file": "SKILL.md",
+      "line": 40,
+      "match": "Add to `~/.hermes/config.yaml` (paste your actual key \u2014 MCP env vars are not expanded from .env):",
+      "description": "references Hermes configuration files directly"
+    }
+  ],
+  "rules": [
+    "hermes_config_mod",
+    "unpinned_pip_install"
+  ],
+  "scanned_at": "2026-08-20T12:27:35.067186+00:00",
+  "summary": "agentmail: dangerous \u2014 2 finding(s) in persistence, supply_chain",
+  "fresh": true
+}

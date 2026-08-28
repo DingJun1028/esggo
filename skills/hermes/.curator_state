@@ -1,0 +1,9 @@
+{
+  "last_report_path": "C:\\Users\\dingj\\AppData\\Local\\hermes\\logs\\curator\\20260826-114736",
+  "last_run_at": "2026-08-26T11:47:36.114580+00:00",
+  "last_run_duration_seconds": 205.944369,
+  "last_run_summary": "auto: 13 marked stale; llm: skipped (consolidation off)",
+  "last_run_summary_shown_at": null,
+  "paused": false,
+  "run_count": 7
+}

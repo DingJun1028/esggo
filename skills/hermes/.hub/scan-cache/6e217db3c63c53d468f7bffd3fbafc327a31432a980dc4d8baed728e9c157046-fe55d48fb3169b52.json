@@ -1,0 +1,35 @@
+{
+  "source": "official",
+  "source_url": "official/autonomous-ai-agents\\blackbox",
+  "bundle_hash": "sha256:6e217db3c63c53d468f7bffd3fbafc327a31432a980dc4d8baed728e9c157046",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 23,
+      "match": "- Blackbox CLI installed: `npm install -g @blackbox_ai/blackbox-cli` (binary: `blackbox`)",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 85,
+      "match": "terminal(command=\"REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.git $REVIEW && cd $REVIEW && gh pr ch...",
+      "description": "clones a git repository at runtime"
+    }
+  ],
+  "rules": [
+    "git_clone",
+    "unpinned_npm_install"
+  ],
+  "scanned_at": "2026-08-02T11:47:22.674834+00:00",
+  "summary": "blackbox: safe \u2014 2 finding(s) in supply_chain",
+  "fresh": true
+}

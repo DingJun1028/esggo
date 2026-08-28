@@ -1,0 +1,13 @@
+{
+  "source": "NVIDIA/skills/skills/nemo-relay-plugin-build",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-build",
+  "bundle_hash": "sha256:02f3c6a040044a2c329072a8b3a7cbada666e9a944ab8d7c11816acba8411060",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "trusted",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-26T07:20:40.756851+00:00",
+  "summary": "nemo-relay-plugin-build: clean scan, no threats detected",
+  "fresh": true
+}

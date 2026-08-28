@@ -1,0 +1,13 @@
+{
+  "source": "official",
+  "source_url": "official/creative\\blender-mcp",
+  "bundle_hash": "sha256:dcd4d34014bffea6a8c56db3d255146a483b081ab8df04b73a107371479cfe64",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-07-23T06:16:13.273263+00:00",
+  "summary": "blender-mcp: clean scan, no threats detected",
+  "fresh": true
+}

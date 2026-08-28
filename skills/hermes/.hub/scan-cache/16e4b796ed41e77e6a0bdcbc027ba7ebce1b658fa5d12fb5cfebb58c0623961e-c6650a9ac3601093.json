@@ -1,0 +1,55 @@
+{
+  "source": "NVIDIA/skills/skills/rag-blueprint",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/rag-blueprint",
+  "bundle_hash": "sha256:16e4b796ed41e77e6a0bdcbc027ba7ebce1b658fa5d12fb5cfebb58c0623961e",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "dangerous",
+  "trust_level": "trusted",
+  "findings": [
+    {
+      "pattern_id": "allowed_tools_field",
+      "severity": "low",
+      "category": "privilege_escalation",
+      "file": "SKILL.md",
+      "line": 35,
+      "match": "allowed-tools: Bash(echo *) Bash(nvidia-smi *) Bash(curl --version *) Bash(docker ps *) Bash(docker info *) Bash(dock...",
+      "description": "skill declares allowed-tools (standard frontmatter; informational)"
+    },
+    {
+      "pattern_id": "read_secrets_file",
+      "severity": "critical",
+      "category": "exfiltration",
+      "file": "references\\deploy.md",
+      "line": 8,
+      "match": "echo \"=== GPU ===\" && nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader 2>/dev/null || echo \"NO_GP...",
+      "description": "reads known secrets file"
+    },
+    {
+      "pattern_id": "path_traversal_deep",
+      "severity": "high",
+      "category": "traversal",
+      "file": "references\\configure\\evaluation.md",
+      "line": 17,
+      "match": "When building a CLI eval bundle from a public benchmark, materialize `corpus/` as PDF when you can (multimodal conten...",
+      "description": "deep relative path traversal (3+ levels up)"
+    },
+    {
+      "pattern_id": "path_traversal",
+      "severity": "medium",
+      "category": "traversal",
+      "file": "references\\configure\\evaluation.md",
+      "line": 17,
+      "match": "When building a CLI eval bundle from a public benchmark, materialize `corpus/` as PDF when you can (multimodal conten...",
+      "description": "relative path traversal (2+ levels up)"
+    }
+  ],
+  "rules": [
+    "allowed_tools_field",
+    "path_traversal",
+    "path_traversal_deep",
+    "read_secrets_file"
+  ],
+  "scanned_at": "2026-08-26T07:18:33.698927+00:00",
+  "summary": "rag-blueprint: dangerous \u2014 4 finding(s) in exfiltration, privilege_escalation, traversal",
+  "fresh": true
+}

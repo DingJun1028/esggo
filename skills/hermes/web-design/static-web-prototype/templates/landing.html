@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRAND 2.0 — 設計原型</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="nav"><div class="container">
+    <a class="brand" href="#top"><span class="logo">B</span> BRAND <span class="accent">2.0</span></a>
+    <div class="nav-links"><a href="#story">品牌</a><a href="#services">服務</a><a href="#features">特色</a><a href="#contact">聯絡</a></div>
+    <a class="btn" href="#contact">預約</a>
+  </div></nav>
+
+  <header class="hero" id="top"><div class="container">
+    <div>
+      <span class="eyebrow">BRAND · 2.0</span>
+      <h1>主標題<span class="accent">強調字</span>在這裡。</h1>
+      <p class="lead">一句品牌承諾。描述你解決的問題與帶來的價值。</p>
+      <div class="hero-cta"><a class="btn" href="#services">探索</a><a class="btn-ghost" href="#features">承諾</a></div>
+      <div class="stats">
+        <div class="stat"><div class="num">42</div><div class="lbl">指標一</div></div>
+        <div class="stat"><div class="num">180+</div><div class="lbl">指標二</div></div>
+        <div class="stat"><div class="num">96%</div><div class="lbl">指標三</div></div>
+        <div class="stat"><div class="num">0</div><div class="lbl">指標四</div></div>
+      </div>
+    </div>
+    <div class="hero-visual"><div><div class="big">BR</div><div class="sub">品 · 牌 · 2 · 0</div></div></div>
+  </div></header>
+
+  <section class="section" id="story"><div class="container">
+    <span class="eyebrow">Our Story</span><h2>品牌故事標題</h2>
+    <p class="lead">品牌敘事段落。</p>
+    <div class="grid-3">
+      <div class="card"><div class="ico">🌿</div><h3>特色一</h3><p>說明文字。</p></div>
+      <div class="card"><div class="ico">🍃</div><h3>特色二</h3><p>說明文字。</p></div>
+      <div class="card"><div class="ico">📚</div><h3>特色三</h3><p>說明文字。</p></div>
+    </div>
+  </div></section>
+
+  <section class="section" id="services" style="background:var(--cream)"><div class="container">
+    <span class="eyebrow">Services</span><h2>三類服務</h2>
+    <div class="grid-3">
+      <div class="card"><div class="ico">🏡</div><h3>服務一</h3><p>說明。</p></div>
+      <div class="card"><div class="ico">🌿</div><h3>服務二</h3><p>說明。</p></div>
+      <div class="card"><div class="ico">🎨</div><h3>服務三</h3><p>說明。</p></div>
+    </div>
+  </div></section>
+
+  <section class="section features" id="features"><div class="container">
+    <span class="eyebrow">Pledge</span><h2>我們的承諾</h2>
+    <div class="feat-grid">
+      <div class="feat"><h3>承諾一</h3><p>說明。</p></div>
+      <div class="feat"><h3>承諾二</h3><p>說明。</p></div>
+      <div class="feat"><h3>承諾三</h3><p>說明。</p></div>
+      <div class="feat"><h3>承諾四</h3><p>說明。</p></div>
+      <div class="feat"><h3>承諾五</h3><p>說明。</p></div>
+      <div class="feat"><h3>承諾六</h3><p>說明。</p></div>
+    </div>
+  </div></section>
+
+  <section class="section" id="process"><div class="container">
+    <span class="eyebrow">How to Book</span><h2>四步流程</h2>
+    <div class="steps">
+      <div class="step"><h3>步驟一</h3><p>說明。</p></div>
+      <div class="step"><h3>步驟二</h3><p>說明。</p></div>
+      <div class="step"><h3>步驟三</h3><p>說明。</p></div>
+      <div class="step"><h3>步驟四</h3><p>說明。</p></div>
+    </div>
+  </div></section>
+
+  <section class="section contact" id="contact"><div class="container">
+    <span class="eyebrow">Contact</span><h2>預約諮詢</h2>
+    <div class="contact-grid">
+      <form onsubmit="return handleSubmit(event)">
+        <div class="field"><label>姓名</label><input required placeholder="姓名 / 單位" /></div>
+        <div class="field"><label>Email</label><input type="email" required placeholder="you@example.com" /></div>
+        <div class="field"><label>需求</label><textarea placeholder="想體驗的主題"></textarea></div>
+        <button class="btn" type="submit">送出</button>
+        <p id="form-msg" style="margin-top:12px;color:var(--gold-soft);font-weight:600"></p>
+      </form>
+      <div class="info"><p>📍 總部地址</p><p>✉️ hello@brand.example</p><p>☎️ +886-0-000-0000</p></div>
+    </div>
+  </div></section>
+
+  <footer class="footer"><div class="container">
+    <div>© 2026 BRAND 2.0</div>
+    <div><a href="#story">品牌</a> · <a href="#services">服務</a> · <a href="#features">特色</a> · <a href="#contact">聯絡</a></div>
+  </div></footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<!-- RWD: viewport-fit=cover for notch devices; initial-scale=1 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RWD Bento Box 骨架</title>
+<style>
+:root{
+  --bg-0:#0b0e14; --bg-1:#121722; --bg-2:#1a2230; --line:#243044;
+  --txt-0:#e8eef7; --txt-1:#9fb0c8; --txt-2:#6b7d99;
+  --accent:#38e1c4; --accent-2:#ffd166; --accent-3:#7c9cff;
+  --radius:14px; --gap:12px; --maxw:1440px;
+  --font:"Segoe UI","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg-0);color:var(--txt-0);padding:var(--gap);line-height:1.5}
+.topbar{max-width:var(--maxw);margin:0 auto var(--gap);display:flex;justify-content:space-between;gap:var(--gap);flex-wrap:wrap;padding:10px 14px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius)}
+.topbar h1{font-size:clamp(15px,2.4vw,20px)}
+.bento{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1fr;gap:var(--gap)}
+.tile{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.tile h2{font-size:13px;color:var(--txt-1);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{position:sticky;top:0;background:var(--bg-2);color:var(--txt-2)}
+/* Breakpoints: tablet -> 2 col, desktop -> 3/4 col */
+@media(min-width:480px){}
+@media(min-width:768px){.bento{grid-template-columns:repeat(2,1fr)}.tile.span-2{grid-column:span 2}}
+@media(min-width:1024px){.bento{grid-template-columns:repeat(3,1fr)}.tile.span-2{grid-column:span 2}.tile.span-3{grid-column:span 3}}
+@media(min-width:1440px){.bento{grid-template-columns:repeat(4,1fr)}.tile.span-4{grid-column:span 4}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><h1>◆ 控制中樞</h1><div id="meta" style="font-family:var(--mono);font-size:11px;color:var(--txt-2)"></div></header>
+<main class="bento">
+  <section class="tile span-2"><h2>區塊 A</h2><div id="a"></div></section>
+  <section class="tile"><h2>區塊 B</h2><div id="b"></div></section>
+  <section class="tile span-3"><h2>單一資料表</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Host</th></tr></thead><tbody id="tbody"></tbody></table></div></section>
+</main>
+<script>
+  // 在此掛載資料邏輯；注意 window 存在（瀏覽器環境）
+  document.getElementById('meta').textContent = new Date().toISOString().slice(11,19);
+</script>
+</body>
+</html>

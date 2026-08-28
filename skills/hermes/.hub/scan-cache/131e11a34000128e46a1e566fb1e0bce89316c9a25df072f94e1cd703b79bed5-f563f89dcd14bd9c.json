@@ -1,0 +1,13 @@
+{
+  "source": "NVIDIA/skills/skills/nemo-relay-plugin-adaptive-tuning",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-plugin-adaptive-tuning",
+  "bundle_hash": "sha256:131e11a34000128e46a1e566fb1e0bce89316c9a25df072f94e1cd703b79bed5",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "trusted",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-26T07:21:44.496169+00:00",
+  "summary": "nemo-relay-plugin-adaptive-tuning: clean scan, no threats detected",
+  "fresh": true
+}

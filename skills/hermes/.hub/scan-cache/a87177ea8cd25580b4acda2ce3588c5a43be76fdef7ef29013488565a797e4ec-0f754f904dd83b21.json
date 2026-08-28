@@ -1,0 +1,54 @@
+{
+  "source": "official",
+  "source_url": "official/productivity\\canvas",
+  "bundle_hash": "sha256:a87177ea8cd25580b4acda2ce3588c5a43be76fdef7ef29013488565a797e4ec",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "dangerous",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "env_exfil_curl",
+      "severity": "critical",
+      "category": "exfiltration",
+      "file": "SKILL.md",
+      "line": 74,
+      "match": "curl -s -H \"Authorization: Bearer $CANVAS_API_TOKEN\" \\",
+      "description": "curl command interpolating secret environment variable"
+    },
+    {
+      "pattern_id": "env_exfil_curl",
+      "severity": "critical",
+      "category": "exfiltration",
+      "file": "SKILL.md",
+      "line": 78,
+      "match": "curl -s -H \"Authorization: Bearer $CANVAS_API_TOKEN\" \\",
+      "description": "curl command interpolating secret environment variable"
+    },
+    {
+      "pattern_id": "python_os_environ",
+      "severity": "high",
+      "category": "exfiltration",
+      "file": "scripts\\canvas_api.py",
+      "line": 19,
+      "match": "CANVAS_API_TOKEN = os.environ.get(\"CANVAS_API_TOKEN\", \"\")",
+      "description": "accesses os.environ (potential env dump)"
+    },
+    {
+      "pattern_id": "python_environ_get_secret",
+      "severity": "critical",
+      "category": "exfiltration",
+      "file": "scripts\\canvas_api.py",
+      "line": 19,
+      "match": "CANVAS_API_TOKEN = os.environ.get(\"CANVAS_API_TOKEN\", \"\")",
+      "description": "reads secret via os.environ.get()"
+    }
+  ],
+  "rules": [
+    "env_exfil_curl",
+    "python_environ_get_secret",
+    "python_os_environ"
+  ],
+  "scanned_at": "2026-07-23T06:16:13.724593+00:00",
+  "summary": "canvas: dangerous \u2014 4 finding(s) in exfiltration",
+  "fresh": true
+}

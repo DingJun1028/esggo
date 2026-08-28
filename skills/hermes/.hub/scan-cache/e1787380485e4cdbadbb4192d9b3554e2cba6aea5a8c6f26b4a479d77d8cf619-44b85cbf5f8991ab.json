@@ -1,0 +1,13 @@
+{
+  "source": "official",
+  "source_url": "official/dogfood\\adversarial-ux-test",
+  "bundle_hash": "sha256:e1787380485e4cdbadbb4192d9b3554e2cba6aea5a8c6f26b4a479d77d8cf619",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-07-23T06:16:00.062333+00:00",
+  "summary": "adversarial-ux-test: clean scan, no threats detected",
+  "fresh": true
+}

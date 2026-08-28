@@ -1,0 +1,39 @@
+/**
+ * <Name> Adapter — <framework>
+ * 真實呼叫: <one-line how>; 未就緒時 graceful 降級 (health=down + scaffold 輸出)
+ */
+import type { ISubFrameAdapter, OAFrameConfig, OATask, SubFrameId } from '../core/types.js';
+
+export class XxxAdapter implements ISubFrameAdapter {
+  readonly id: SubFrameId = 'xxx';
+  readonly label = '<Name>';
+  readonly runtime = 'ts' as const;
+  constructor(private config: OAFrameConfig) {}
+
+  async bootstrap(): Promise<{ ok: boolean; endpoint?: string; error?: string }> {
+    try {
+      // probe the real dep / endpoint here
+      return { ok: true };
+    } catch {
+      return { ok: false, error: '<dep> 未安裝 — scaffold 模式' };
+    }
+  }
+
+  async dispatch(task: OATask): Promise<{ output: string }> {
+    try {
+      // real dynamic import + call; fall back to scaffold string on any error
+      return { output: `[Xxx] ${task.prompt}` };
+    } catch (e: any) {
+      return { output: `[Xxx] ${task.prompt} (scaffold: ${e?.message ?? 'unreachable'})` };
+    }
+  }
+
+  async health() {
+    try {
+      // probe again
+      return { status: 'ok' as const, detail: '' };
+    } catch {
+      return { status: 'down' as const, detail: 'scaffold' };
+    }
+  }
+}

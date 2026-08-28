@@ -1,0 +1,13 @@
+{
+  "source": "NVIDIA/skills/skills/nemo-relay-instrument-calls",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-relay-instrument-calls",
+  "bundle_hash": "sha256:e295d8987b6b8253a83b13049c829edbe6ec0efe35c65e816167eb29ce7b5da1",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "trusted",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-26T07:22:46.066361+00:00",
+  "summary": "nemo-relay-instrument-calls: clean scan, no threats detected",
+  "fresh": true
+}

@@ -1,0 +1,13 @@
+{
+  "source": "official",
+  "source_url": "official/creative\\baoyu-comic",
+  "bundle_hash": "sha256:2c5f77a1f93a5b1406efe38c4ade0278d9c9d71b99c5c1307c6a2359ddc6a7a0",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-07-23T06:16:19.605459+00:00",
+  "summary": "baoyu-comic: clean scan, no threats detected",
+  "fresh": true
+}

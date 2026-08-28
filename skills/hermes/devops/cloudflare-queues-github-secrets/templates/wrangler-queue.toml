@@ -1,0 +1,23 @@
+name = "esggo-auto-repair"
+main = "src/index.ts"
+compatibility_date = "2025-03-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables
+[vars]
+AUTO_MERGE = false
+
+# Queue producer binding
+[[queues.producers]]
+queue = "<QUEUE_NAME>"
+binding = "REPAIR_QUEUE"
+
+# Queue consumer configuration
+# Note: max_batch_timeout should be 1-5 seconds for faster processing
+# Default is 30 seconds which causes delays
+[[queues.consumers]]
+queue = "<QUEUE_NAME>"
+max_batch_size = 5
+max_retries = 3
+max_batch_timeout = 1
+dead_letter_queue = "<QUEUE_NAME>-dlq"

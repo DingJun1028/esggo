@@ -1,0 +1,53 @@
+# Proven deploy-vercel.yml — separate workflow (NOT nested in deploy.yml)
+# Replaces the dead GitHub→Vercel webhook. Run via push (src/** etc) or workflow_dispatch.
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "app/**"
+      - "packages/**"
+      - "apps/**"
+      - "public/**"
+      - "prisma/**"
+      - "next.config.*"
+      - "package.json"
+      - "vercel.json"
+      - "pnpm-lock.yaml"
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-prod-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy-vercel:
+    name: Deploy esggo to Vercel (production)
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.5.2'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pnpm install --frozen-lockfile
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm i -g vercel@latest
+          vercel deploy --prod --yes --archive=tgz --token "$VERCEL_TOKEN"
+      - if: success()
+        run: echo "✅ Vercel production deployment successful"
+
+# Required GitHub secrets (set in repo settings):
+#   VERCEL_TOKEN       valid Vercel personal token (from dashboard; local CLI token is in OS keychain, not plaintext)
+#   VERCEL_ORG_ID      from local .vercel/project.json  -> orgId  (e.g. team_ftbNvUrnTqZ13QWbUwNaIr7W)
+#   VERCEL_PROJECT_ID  from local .vercel/project.json  -> projectId (e.g. prj_chfQRaoQnAYiegt5PVjz9QfkwwBC)

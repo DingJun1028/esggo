@@ -1,0 +1,90 @@
+---
+name: unagent
+category: obsidian
+version: "1.0.0"
+author: UNcore
+license: "Source Available License (商用需授權)"
+description: UNagent Obsidian 行動優先 AI 助手 BYO key 純 JS 遠程 HTTP 16 工具 5T 對應
+tags: [obsidian, unagent, mobile-first, ai-assistant, knowledge-garden, byo-key]
+metadata:
+  hermes:
+    tags: [obsidian, unagent, mobile-first, ai-assistant, knowledge-garden]
+    related_skills: [oa-team-soul-canon, obsidian:hermes-agent-obsidian-plugin, skills-sync]
+---
+
+# UNagent — Obsidian 行動優先 AI 助手
+
+## When to use
+- 用戶要在 Obsidian 用手機/平板輕量自託 AI 助手，或提及 UNagent 插件、BYO key 模型檔案。
+- 用戶要把 UNagent 納入 OA-Team 知識花園（見 `oa-team-soul-canon` 附錄 B.1）。
+- 用戶問 UNagent 的工具、技能、記憶、MCP 邊界或安全設定。
+
+## How it works (brief)
+- **定位**：Obsidian 行動優先 AI 助手插件；手機/平板輕量自足，桌面同樣完整可用。
+- **架構**：純插件內 JS + 遠程 HTTP（原生 `fetch` + 手寫 SSE），無 LLM SDK 依賴；行動端零本地進程，桌面端僅多一條 `run_command`（永遠強制確認）。
+- **插件 id**：`unagent`，顯名「UNagent」，作者 UNcore。
+- **核心**：「純插件內 JS + 遠程 HTTP」——不依賴任何 LLM SDK，移動端零本地進程；桌面端在此之上只多一條本地命令執行（`run_command`，永遠強制確認）。
+
+## 5 分鐘上手（BYO key：自帶你自己的模型 Key）
+1. **安裝**：手動放置三件套至 `<vault>/.obsidian/plugins/unagent/`：`main.js` / `manifest.json` / `styles.css`，settings → 啟用「UNagent」。
+2. **添加模型檔案**：Settings → UNagent → 模型標籤頁 → 「＋ 添加廠商」，填 API 協議（自動回填預設地址）/ API 地址（Base URL，不含 `/chat/completions`）/ API 密鑰；再於模型列表輸入模型名回車添加。多廠商多協議可並存，`/model` 切換。
+3. **開聊**：直接說需求；AI 流式回答、按需工具讀寫筆記；破壞性操作彈窗確認，改錯點頂部「撤銷」。
+
+## 能力清單（移動 + 桌面一致）
+- 流式對話（多廠商多協議並存，`/model` 切、`/think` 控思考強度）
+- 15 工具（桌面 16）：讀/搜/寫筆記；破壞性操作彈窗確認，刪除與編輯可撤銷；桌面另有 `run_command`（移動端不可見）
+- 技能 (Skills)：純提示文本 SKILL.md 指南，`//技能名` 調用或 `load_skill` 載入；**絕不執行代碼**
+- 混合檢索：關鍵字 + 元數據為主，語義可選（遠程 embedding + 本地向量快取）
+- 生圖：`generate_image` 文生圖存 vault
+- 記憶與進化：`agent.md` / `user.md` / `memory.md` 三可見檔；顯式 `save_memory` + 反思建議（逐條確認才落盤）
+- 文字引用：編輯器/畫布/表格/內建瀏覽器選字按 Alt+Z（Option+Z）跳 AI 輸入框並帶來源+選字引用
+- 對話管理：自動存 vault、重啟恢復、`/branch` 分支、`/rewind` 回溯、`/compact` 壓縮
+- MCP（最小形態）：僅遠程 streamableHttp + tools 面（initialize/tools/list/tools/call），工具上限 8，單條 2 萬字截斷；不做 stdio/WebSocket/OAuth/resources/prompts/sampling
+
+## 工具清單（16 個）
+`search_notes` / `semantic_search` / `library_index` / `read_note` / `create_note` / `edit_note`（可確認）/ `update_frontmatter`（可確認）/ `rename_or_move`（可確認）/ `delete_note`（永遠強制確認，可撤銷）/ `run_command`（僅桌面，永遠強制確認）/ `generate_image` / `mcp_admin`（刪除強制）/ `load_skill` / `save_memory` / `todo_write` / `ask_user`
+
+## 檢索（如實版）
+- 主通道：關鍵字 + 元數據（`metadataCache`），CJK 友好。
+- 語義可選：筆記按標題切塊 → 遠程 embedding → 向量只為遠程結果本地快取（`.retrieval/`）→ 暴力餘弦 top-k；embedding 不本地發生，無 ANN 索引與重排。embedding 模型複用統一廠商體系（勾「向量化（檢索）」），未配置零啟動成本。
+
+## 記憶與進化
+- `agent.md`（人設，整篇注入系統提示）/ `user.md`（畫像，`-` 條目注入）/ `memory.md`（長期記憶，`-` 條目注入）。
+- A 案顯式：你說「記住 xxx」→ `save_memory` 寫入（含提示注入防護與額度）。
+- B 案反思建議：每若干輪靜默複盤，建議逐條擺面板，**你逐條確認才落盤，絕不自動寫**，切對話即廢。`/learn` 結晶對話成技能。
+
+## 邊界與安全（先看再用）
+- **API Key 明文存** vault `data.json`（v1 從眾做法）：勿提交公開倉、勿放會公開同步目錄。
+- **技能是提示注入面**：正文原樣注入 AI 上下文，等同提示詞——只裝可信來源。技能永遠純提示文本、絕不執行代碼；破壞性確認彈窗不受技能影響照常兜底。
+- **刪除雙保險**：`delete_note` 永遠強制彈窗（不受「跳過確認」設置影響）；刪除與編輯前留全文快照，頂部「撤銷」可還原（撤銷棧落盤，重啟不丟）。
+- **MCP 工具也是工具**：遠程 MCP 調用同進工具鏈與確認機制，別接入不受信服務。
+
+## 平台差異
+- 移動端 = 純插件內 JS + 遠程 HTTP（零本地進程/算力，embedding 也走遠程），三端核心一致。
+- 桌面專屬只有 `run_command`（庫外計算，永遠強制確認，絕不用於庫內檔）；移動端該入口缺席而非報錯。
+
+## 5T 對應（接入 OA-Team 知識花園）
+- **Traceable**：`save_memory` 寫入來源可溯；工具調用紀錄。
+- **Trackable**：工具調用日誌、對話落盤 `history`（vault 內）。
+- **Tangible**：UI 回饋、引用跳框、撤銷快照。
+- **Transparent**：技能為純提示文本公開可查；檢索以關鍵字+元數據主通道如實描述。
+- **Trustworthy**：`data.json` 密鑰隔離、刪除強制確認+撤銷棧落盤不可竄改。
+
+## 同步映射（雙向 → esggo @ OmniTag）
+- 本技能書的 Hermes 原生格式為 `SKILL.md`（frontmatter + markdown）。
+- 雙向同步目標：`esggo` 倉庫分支 `OmniTag`，倉庫內轉換為 OpenCode 格式後更新。
+- 格式對映規則見 `skills-sync` 技能（`skills-sync` 定義 Hermes ↔ OpenCode 雙向映射契約）。
+- 注意：UNagent 的 SKILL.md 正文若含 CJK，轉 OpenCode 時保留 UTF-8，勿掉字。
+
+## 開發（給改代碼的人）
+```bash
+cd unagent
+npm install
+npm run dev      # esbuild watch，自動同步產物到測試 vault
+npm run build    # tsc strict + esbuild 生產構建 → main.js / manifest.json / styles.css
+npm test         # jest 全量
+```
+產物體積受關注（main.js ≈ 600–700K）；每次構建後 grep 確認無隱藏依賴泄漏（pglite/lexical/framer-motion/langchain 須全 0）。
+
+## License
+Source Available License（商用需授權）。

@@ -1,0 +1,43 @@
+{
+  "source": "skills-sh/cloudflare/skills/wrangler",
+  "source_url": "https://github.com/cloudflare/skills/tree/30553f89ae1ef1e3c2917cd09d72dac992bb4e9a/skills/wrangler",
+  "bundle_hash": "sha256:986d5a7aaebb4bc0d3bd1e3299caf52e59af1d447dda89d8c0e48a2a6b7c0ff2",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "community",
+  "findings": [
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 31,
+      "match": "npm install -D wrangler@latest",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 854,
+      "match": "npm install -D @cloudflare/vitest-pool-workers vitest",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 890,
+      "match": "| `command not found: wrangler` | Install: `npm install -D wrangler` |",
+      "description": "npm install without version pinning"
+    }
+  ],
+  "rules": [
+    "unpinned_npm_install"
+  ],
+  "scanned_at": "2026-07-28T09:48:26.418935+00:00",
+  "summary": "wrangler: safe \u2014 3 finding(s) in supply_chain",
+  "fresh": true
+}

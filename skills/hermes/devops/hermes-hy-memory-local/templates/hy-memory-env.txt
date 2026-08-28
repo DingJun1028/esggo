@@ -1,0 +1,25 @@
+# ===== HY-Memory 配置（本地 Ollama CPU 路徑 · 免費算立）=====
+HY_MEMORY_USER_ID=dingj
+HY_MEMORY_AGENT_ID=hermes
+HY_MEMORY_MODE=pro
+HY_MEMORY_WRITE_TURN_WINDOW=2
+HY_MEMORY_PREFETCH_MAX_CHARS=2000
+HY_MEMORY_SYNC_WORKERS=2
+HY_MEMORY_SHUTDOWN_GRACE_SEC=15
+HY_MEMORY_LOG_LEVEL=INFO
+
+# 記憶抽取 LLM（本地 Ollama，OpenAI 兼容端點欺騙 SDK）
+MEMORY_LLM_PROVIDER=openai
+MEMORY_LLM_MODEL=qwen2.5:3b-instruct-q4_K_M
+MEMORY_LLM_API_KEY=ollama-local-not-verified
+MEMORY_LLM_BASE_URL=http://localhost:11434/v1
+
+# Embedder（本地 Ollama nomic-embed-text，768 維）
+MEMORY_EMBEDDER_PROVIDER=openai
+MEMORY_EMBEDDER_MODEL=nomic-embed-text
+MEMORY_EMBEDDER_API_KEY=ollama-local-not-verified
+MEMORY_EMBEDDER_BASE_URL=http://localhost:11434/v1
+MEMORY_EMBEDDING_DIMS=768
+
+# 向量庫（預設 chroma；若 sqlite < 3.35 報錯可換 qdrant/faiss）
+MEMORY_VECTOR_STORE=chroma

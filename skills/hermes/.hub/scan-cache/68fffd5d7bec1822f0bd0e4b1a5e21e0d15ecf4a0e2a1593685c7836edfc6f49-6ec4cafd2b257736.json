@@ -1,0 +1,54 @@
+{
+  "source": "official",
+  "source_url": "official/research\\bioinformatics",
+  "bundle_hash": "sha256:68fffd5d7bec1822f0bd0e4b1a5e21e0d15ecf4a0e2a1593685c7836edfc6f49",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "caution",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 213,
+      "match": "pip install biopython pysam cyvcf2 pybedtools pyBigWig scikit-allel anndata scanpy mygene",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 34,
+      "match": "git clone --depth 1 https://github.com/GPTomics/bioSkills.git /tmp/bioSkills",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 37,
+      "match": "git clone --depth 1 https://github.com/ClawBio/ClawBio.git /tmp/ClawBio",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "sudo_usage",
+      "severity": "high",
+      "category": "privilege_escalation",
+      "file": "SKILL.md",
+      "line": 219,
+      "match": "sudo apt install samtools bcftools ncbi-blast+ minimap2 bedtools",
+      "description": "uses sudo (privilege escalation)"
+    }
+  ],
+  "rules": [
+    "git_clone",
+    "sudo_usage",
+    "unpinned_pip_install"
+  ],
+  "scanned_at": "2026-08-02T11:47:22.071209+00:00",
+  "summary": "bioinformatics: caution \u2014 4 finding(s) in privilege_escalation, supply_chain",
+  "fresh": true
+}

@@ -1,0 +1,29 @@
+{
+  "timezone": "+08:00",
+  "storeBackend": "sqlite",
+  "recall": {
+    "strategy": "hybrid",
+    "maxResults": 5,
+    "maxCharsPerMemory": 1500,
+    "maxTotalRecallChars": 6000
+  },
+  "pipeline": {
+    "everyNConversations": 5,
+    "enableWarmup": true,
+    "l1IdleTimeoutSeconds": 600,
+    "l2MinIntervalSeconds": 900
+  },
+  "extraction": {
+    "maxMemoriesPerSession": 20,
+    "enableDedup": true
+  },
+  "persona": {
+    "triggerEveryN": 50
+  },
+  "offload": {
+    "enabled": false
+  },
+  "bm25": {
+    "language": "zh"
+  }
+}

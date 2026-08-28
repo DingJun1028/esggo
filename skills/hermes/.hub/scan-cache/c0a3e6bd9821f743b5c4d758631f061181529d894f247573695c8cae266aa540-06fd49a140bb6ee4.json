@@ -1,0 +1,25 @@
+{
+  "source": "skills-sh/ayghri/i-have-adhd/skills/i-have-adhd",
+  "source_url": "https://github.com/ayghri/i-have-adhd/tree/07684c4ab625dd7d1ea6e99e065f60bc0ac6a1ba/skills/i-have-adhd",
+  "bundle_hash": "sha256:c0a3e6bd9821f743b5c4d758631f061181529d894f247573695c8cae266aa540",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "community",
+  "findings": [
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 40,
+      "match": "Good: \"Run `npm install jsonwebtoken`, then edit `src/auth.ts:42`.\"",
+      "description": "npm install without version pinning"
+    }
+  ],
+  "rules": [
+    "unpinned_npm_install"
+  ],
+  "scanned_at": "2026-07-30T00:54:10.313556+00:00",
+  "summary": "i-have-adhd: safe \u2014 1 finding(s) in supply_chain",
+  "fresh": true
+}

@@ -1,0 +1,53 @@
+{
+  "source": "official",
+  "source_url": "official/autonomous-ai-agents\\blackbox",
+  "bundle_hash": "sha256:0521570777866c6ae5bc525cda219eee54388fd776d2575019cd6bddbd81c76e",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "builtin",
+  "findings": [
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 23,
+      "match": "- Blackbox CLI installed: `npm install -g @blackboxai/cli`",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_npm_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 27,
+      "match": "cd cli && npm install && npm install -g .",
+      "description": "npm install without version pinning"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 26,
+      "match": "git clone https://github.com/blackboxaicode/cli.git",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "SKILL.md",
+      "line": 90,
+      "match": "terminal(command=\"REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.git $REVIEW && cd $REVIEW && gh pr ch...",
+      "description": "clones a git repository at runtime"
+    }
+  ],
+  "rules": [
+    "git_clone",
+    "unpinned_npm_install"
+  ],
+  "scanned_at": "2026-07-23T06:16:13.430169+00:00",
+  "summary": "blackbox: safe \u2014 4 finding(s) in supply_chain",
+  "fresh": true
+}

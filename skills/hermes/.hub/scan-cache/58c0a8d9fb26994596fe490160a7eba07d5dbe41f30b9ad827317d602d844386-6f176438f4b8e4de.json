@@ -1,0 +1,120 @@
+{
+  "source": "NVIDIA/skills/skills/nemo-retriever",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemo-retriever",
+  "bundle_hash": "sha256:58c0a8d9fb26994596fe490160a7eba07d5dbe41f30b9ad827317d602d844386",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "dangerous",
+  "trust_level": "trusted",
+  "findings": [
+    {
+      "pattern_id": "allowed_tools_field",
+      "severity": "low",
+      "category": "privilege_escalation",
+      "file": "SKILL.md",
+      "line": 5,
+      "match": "allowed-tools: Bash Write Read",
+      "description": "skill declares allowed-tools (standard frontmatter; informational)"
+    },
+    {
+      "pattern_id": "dns_exfil",
+      "severity": "critical",
+      "category": "exfiltration",
+      "file": "references\\install.md",
+      "line": 90,
+      "match": "| `.mp3` `.wav` `.m4a` / `.mp4` `.mov` `.mkv` | `[multimedia]` + ffmpeg (host pkg) | `sudo apt-get install -y ffmpeg ...",
+      "description": "DNS lookup with variable interpolation (possible DNS exfiltration)"
+    },
+    {
+      "pattern_id": "backtick_subshell",
+      "severity": "medium",
+      "category": "execution",
+      "file": "references\\install.md",
+      "line": 90,
+      "match": "| `.mp3` `.wav` `.m4a` / `.mp4` `.mov` `.mkv` | `[multimedia]` + ffmpeg (host pkg) | `sudo apt-get install -y ffmpeg ...",
+      "description": "backtick string with command substitution"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\install.md",
+      "line": 56,
+      "match": "env SOURCE_DATE_EPOCH=$EPOCH uv pip install -q --python \"$VENV/bin/python\" \"torch~=2.11.0\" \"torchvision>=0.26.0,<0.27...",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\install.md",
+      "line": 57,
+      "match": "env SOURCE_DATE_EPOCH=$EPOCH uv pip install -q --python \"$VENV/bin/python\" \".[local]\"",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\install.md",
+      "line": 59,
+      "match": "env SOURCE_DATE_EPOCH=$EPOCH uv pip install -q --python \"$VENV/bin/python\" \".\"",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "unpinned_pip_install",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\install.md",
+      "line": 90,
+      "match": "| `.mp3` `.wav` `.m4a` / `.mp4` `.mov` `.mkv` | `[multimedia]` + ffmpeg (host pkg) | `sudo apt-get install -y ffmpeg ...",
+      "description": "pip install without version pinning"
+    },
+    {
+      "pattern_id": "git_clone",
+      "severity": "medium",
+      "category": "supply_chain",
+      "file": "references\\install.md",
+      "line": 36,
+      "match": "git clone https://github.com/NVIDIA/NeMo-Retriever.git \"$NRL_SRC\"",
+      "description": "clones a git repository at runtime"
+    },
+    {
+      "pattern_id": "sudo_usage",
+      "severity": "high",
+      "category": "privilege_escalation",
+      "file": "references\\install.md",
+      "line": 89,
+      "match": "| `.docx` `.pptx` | libreoffice (host pkg) | `sudo apt-get install -y libreoffice` |",
+      "description": "uses sudo (privilege escalation)"
+    },
+    {
+      "pattern_id": "sudo_usage",
+      "severity": "high",
+      "category": "privilege_escalation",
+      "file": "references\\install.md",
+      "line": 90,
+      "match": "| `.mp3` `.wav` `.m4a` / `.mp4` `.mov` `.mkv` | `[multimedia]` + ffmpeg (host pkg) | `sudo apt-get install -y ffmpeg ...",
+      "description": "uses sudo (privilege escalation)"
+    },
+    {
+      "pattern_id": "backtick_subshell",
+      "severity": "medium",
+      "category": "execution",
+      "file": "references\\query.md",
+      "line": 10,
+      "match": "Run that **exactly** as a single pipeline \u2014 do not split it into `HITS=$(...)` + `echo \"$HITS\" | <RETRIEVER_VENV>/bin...",
+      "description": "backtick string with command substitution"
+    }
+  ],
+  "rules": [
+    "allowed_tools_field",
+    "backtick_subshell",
+    "dns_exfil",
+    "git_clone",
+    "sudo_usage",
+    "unpinned_pip_install"
+  ],
+  "scanned_at": "2026-08-26T07:20:23.865313+00:00",
+  "summary": "nemo-retriever: dangerous \u2014 11 finding(s) in execution, exfiltration, privilege_escalation, supply_chain",
+  "fresh": true
+}

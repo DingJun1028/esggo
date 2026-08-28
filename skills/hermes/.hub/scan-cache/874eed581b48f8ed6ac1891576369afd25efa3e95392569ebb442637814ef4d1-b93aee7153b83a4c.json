@@ -1,0 +1,13 @@
+{
+  "source": "NVIDIA/skills/skills/nemoclaw-user-guide",
+  "source_url": "https://github.com/NVIDIA/skills/tree/994b87022af46deada9fdb79fc560a77aaf931ce/skills/nemoclaw-user-guide",
+  "bundle_hash": "sha256:874eed581b48f8ed6ac1891576369afd25efa3e95392569ebb442637814ef4d1",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "trusted",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-08-26T07:19:35.506059+00:00",
+  "summary": "nemoclaw-user-guide: clean scan, no threats detected",
+  "fresh": true
+}
