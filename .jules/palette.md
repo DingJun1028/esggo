@@ -22,3 +22,7 @@
 ## 2024-05-24 - Accessibility for Filter Toggle Buttons
 **Learning:** Screen readers cannot infer that a custom filter button acts as a toggle state just by its visual styling or click handler. When custom filter buttons (like ESG pillars or difficulty levels) toggle between active and inactive states, the lack of `aria-pressed` prevents screen reader users from understanding which filters are currently applied.
 **Action:** Always add `aria-pressed={isActive}` to any `<button>` that behaves as a toggle switch or filter chip, ensuring its active/inactive state is programmatically announced.
+
+## 2026-08-29 - [Keyboard Focus States for Complex Components]
+**Learning:** In complex visual components like `DynamicFormEngine.tsx`, basic HTML buttons are sometimes used without inherit focus styles (`focus-visible:ring-2`). This can break keyboard navigation for screen readers or power users.
+**Action:** When auditing or modifying complex components, always explicitly verify focus styles (`focus-visible`) for any newly added or existing interactive elements, particularly buttons mapping to key actions (like downloads or navigation or submission).
