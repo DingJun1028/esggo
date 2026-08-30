@@ -4,6 +4,8 @@ packages:
   - 'cli/*'
   - 'packages/*'
   - 'libs/*'
+  - 'esggo-auto-repair/*'
+  - 'apps/*/esggo-auto-repair/*'
   - '.'
   # oa-swarm 為獨立可部署 App (自有 Dockerfile/ecosystem/lock)，排除出根 workspace
   # 避免根 pnpm-lock.yaml 需同步其 devDeps 導致 --frozen-lockfile 失敗
@@ -69,6 +71,7 @@ allowBuilds:
   sqlite3: false
   tesseract.js: true
   unrs-resolver: false
+  workerd: true
 
 minimumReleaseAgeExclude:
   - '@typescript-eslint/eslint-plugin@8.62.1'
