@@ -194,7 +194,7 @@ export default function DynamicFormEngine({
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-neon-cyan hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] transition-all flex items-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-95"
+            className="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-neon-cyan hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] transition-all flex items-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             {isSubmitting ? (
               <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
