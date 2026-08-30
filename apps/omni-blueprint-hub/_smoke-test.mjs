@@ -1,5 +1,5 @@
 // 端對端煙霧測試：SSE 訂閱 → /speak → 收 translation → 回放驗證
-const BASE = process.env.BASE || 'http://localhost:8799';
+const BASE = process.env.BASE || 'http://localhost:8787';
 const TOKEN = process.env.INGEST_TOKEN || '';
 // 寫入端點統一帶認證（未設 token 時為無害的普通 header 集）
 const WHEAD = { 'Content-Type': 'application/json', ...(TOKEN ? { Authorization: 'Bearer ' + TOKEN } : {}) };

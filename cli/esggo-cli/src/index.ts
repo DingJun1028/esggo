@@ -2,7 +2,7 @@ import { program } from 'commander';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
-import { gatewayRequest, loadGatewayConfig } from './gateway.js';
+import { gatewayRequest } from './gateway.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
