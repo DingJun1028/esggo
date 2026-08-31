@@ -25,4 +25,4 @@ SMART_ROUTER_VERSION = "2.0.0-beta.1"
 enabled = true
 
 [build]
-command = "npx --yes pnpm install --no-frozen-lockfile --ignore-scripts && cd worker && npx tsc -p tsconfig.json"
+command = "npx --yes pnpm install --frozen-lockfile && cd worker && npx tsc -p tsconfig.json"
