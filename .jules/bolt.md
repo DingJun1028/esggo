@@ -16,3 +16,10 @@
 ## 2024-05-18 - Lazy initialization in React forms
 **Learning:** In React functional components, `useState` initialization code runs on every render, even if the result is only used on the first render. This is particularly problematic when the initial state is computed dynamically from props, such as reducing over an array to build a form data object.
 **Action:** Always wrap expensive or dynamic `useState` initializations (e.g. `Array.reduce` over schema fields) in a callback function `() => ({ ... })`. This leverages React's lazy initial state feature, ensuring the expensive computation only runs once during component mount, preventing redundant work on every keystroke or subsequent render.
+## 2025-02-18 - [SVG Chart Hoisting Optimization]
+**Learning:** In interactive React chart components using SVG, configuration objects (like `CHART_PADDING`) or arrays (like `CHART_COLORS`, `GRID_RATIOS`) declared inside the component body are garbage collected and recreated on every single render cycle (e.g. mouse move/hover updates).
+**Action:** Always hoist static configuration arrays and layout constants out of the component function to the module scope to avoid garbage collection and memory overhead during high-frequency renders.
+
+## 2025-02-18 - [SVG Chart Grid Line Memoization]
+**Learning:** In interactive React chart components using SVG, grid line calculation that runs inside the JSX map without being memoized causes mathematical operations to execute on every single pixel move.
+**Action:** Move grid line map computations inside existing `useMemo` blocks to memoize `gridLines` so that they only recalculate when `data` or `height` change, eliminating computation on mouse movement.
