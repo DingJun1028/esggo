@@ -19,8 +19,10 @@ import { join, relative, resolve } from 'path';
 const ARGS = process.argv.slice(2);
 const MODE = ARGS.find(a => a.startsWith('--mode='))?.split('=')[1] || 'daily';
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:14b';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b';
 const VAULT_PATH = process.env.VAULT_PATH || 'C:/Project/esggo/vault';
+const MAX_NOTES = parseInt(process.env.MAX_NOTES || '20');
+const MAX_CHARS_PER_NOTE = parseInt(process.env.MAX_CHARS_PER_NOTE || '1000');
 
 // ─── 1. SCAN ───────────────────────────────────────────────
 
@@ -44,7 +46,7 @@ function scanVault(vaultPath) {
         relativePath: file,
         dir: dir,
         frontmatter,
-        content: content.slice(0, 8000),  // 截斷避免 token 爆炸
+        content: content.slice(0, MAX_CHARS_PER_NOTE),
         wikilinks: extractWikilinks(content),
         tags: extractTags(content),
         modified: statSync(filePath).mtime
@@ -52,7 +54,7 @@ function scanVault(vaultPath) {
     }
   }
   
-  return notes;
+  return notes.slice(0, MAX_NOTES);
 }
 
 function parseFrontmatter(content) {
@@ -88,6 +90,8 @@ async function reasonWithOllama(notes, mode) {
   console.log(`[reasoning-core] 送 ${notes.length} 筆記進 ${OLLAMA_MODEL}...`);
   
   try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 120000);
     const response = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -95,9 +99,11 @@ async function reasonWithOllama(notes, mode) {
         model: OLLAMA_MODEL,
         prompt,
         stream: false,
-        options: { temperature: 0.7, num_predict: 4096 }
-      })
+        options: { temperature: 0.7, num_predict: 512 }
+      }),
+      signal: controller.signal
     });
+    clearTimeout(tid);
     
     if (!response.ok) {
       console.error(`[reasoning-core] Ollama 錯誤: ${response.status}`);
