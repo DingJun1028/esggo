@@ -38,7 +38,3 @@
 **Vulnerability:** Found hardcoded secrets (WEBHOOK_SECRET, TELEGRAM_BOT_TOKEN, GMAIL_APP_PASSWORD) in deployment configuration files (`ecosystem.config.cjs`, `webhook-config.json`).
 **Learning:** Configuration files are often committed as artifacts to the repository, inadvertently leaking the secrets used during a specific deployment.
 **Prevention:** Always use environment variable references (`process.env.VAR_NAME`) in JavaScript/Node config files and placeholder strings in JSON templates, rather than hardcoding actual credentials.
-## 2024-05-24 - [Fix] Fail-Open Admin Authentication Bypass
-**Vulnerability:** A "fail-open" vulnerability existed in `src/App.jsx` where admin access was automatically granted if the `VITE_ADMIN_PASS` environment variable was unconfigured or empty (via the `!ADMIN_PASS` condition).
-**Learning:** Fallback checks that rely on an empty string or negated secret variable can inadvertently allow unauthorized access when environment configurations are missing or incorrectly loaded on the frontend.
-**Prevention:** Enforce "fail-secure" logic for sensitive checks by strictly requiring the presence of the secret and an exact string match (e.g., `if (ADMIN_PASS && input === ADMIN_PASS)`), effectively denying access when the environment is misconfigured.
