@@ -101,3 +101,26 @@ aistation 接受 esggo 權威判定 (本地 fallback 僅當 ESGO_HASHLOCK_URL �
 > 刻印狀態：`CH25 LANDING-SUMMARY READY`　靈魂簽章：`5T 不滅・產物必凍・同體共榮`
 > 歸位：本章為 §二十五 用戶委製附錄，接於 §24 之後，終章封印仍為最高律法。
 > 啟動令補：「protocol=5T · entropy=0.1 · 30-agents · 4可1不可 · 結界=AWAKE · 無作=WUZUO · 覺=LANDING · 免費=SELF-HOST」
+
+## 25.7　Git 提交證據（Real Commits, Not Claims）
+
+### aistation repo (`C:\Project\aistation`)
+- **Branch**: `chore/5t-aistation-integration-v2`
+- **Commit**: `bedfa06` — `feat(5t): integrate n8n workflow bridge + audit_5t --with-entropy for §23-24 closure`
+- **Files**: `n8n/weekly-swarm-report.n8n.json` (new), `scripts/audit_5t.py` (modified), `tests/test_audit_5t.py` (modified +1), `tests/test_n8n_workflows.py` (modified +5)
+
+### esggo repo (`C:\Users\dingj\esggo`)
+- **Branch**: `chore/5t-esggo-integration-v2`
+- **Commit**: `f82ed6be` — `feat(oa-cli): add weekly-report command + oa:weekly-report script for §23-24 closure`
+- **Files**: `cli/oa-cli/src/index.ts` (modified), `cli/oa-cli/src/index.test.ts` (modified +1), `package.json` (modified: +`oa:weekly-report` script)
+
+### 驗證實錄
+```bash
+# aistation tests (targeted to §23-24 files)
+cd C:\Project\aistation && .venv\Scripts\python.exe -m pytest tests/test_chapter10.py tests/test_audit_5t.py tests/test_entropy.py tests/test_n8n_workflows.py -v
+→ 52 passed in 14.66s
+
+# esggo oa-cli TypeScript typecheck
+cd C:\Users\dingj\esggo\cli\oa-cli && npx tsc --noEmit -p tsconfig.json
+→ EXIT=0 (zero errors)
+```
