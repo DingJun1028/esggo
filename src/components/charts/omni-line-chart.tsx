@@ -4,6 +4,9 @@ import React, { useState, useMemo } from 'react';
 import { LineChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
+const CHART_PADDING = { top: 40, right: 20, bottom: 40, left: 50 };
+const GRID_RATIOS = [0, 0.25, 0.5, 0.75, 1];
+
 export function OmniLineChart({
   title,
   description,
@@ -18,16 +21,15 @@ export function OmniLineChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  const padding = { top: 40, right: 20, bottom: 40, left: 50 };
-  const graphHeight = Number(height) - padding.top - padding.bottom;
+  const graphHeight = Number(height) - CHART_PADDING.top - CHART_PADDING.bottom;
   const viewBoxWidth = 800;
-  const graphWidth = viewBoxWidth - padding.left - padding.right;
+  const graphWidth = viewBoxWidth - CHART_PADDING.left - CHART_PADDING.right;
 
   const defaultColor = 'var(--accent-teal)';
 
-  const { minValue, valueRange, points, pathD, areaD } = useMemo(() => {
+  const { points, pathD, areaD, gridLines } = useMemo(() => {
     if (!data || data.length === 0) {
-      return { minValue: 0, valueRange: 1, points: [], pathD: '', areaD: '' };
+      return { points: [], pathD: '', areaD: '', gridLines: [] };
     }
     const stepX = data.length > 1 ? graphWidth / (data.length - 1) : 0;
     const maxVal = Math.max(...data.map(d => d.value), 1);
@@ -35,8 +37,8 @@ export function OmniLineChart({
     const valRange = maxVal - minVal || 1;
 
     const pts = data.map((point, index) => {
-      const x = padding.left + stepX * index;
-      const y = padding.top + graphHeight - ((point.value - minVal) / valRange) * graphHeight;
+      const x = CHART_PADDING.left + stepX * index;
+      const y = CHART_PADDING.top + graphHeight - ((point.value - minVal) / valRange) * graphHeight;
       return { x, y, point };
     });
 
@@ -44,10 +46,16 @@ export function OmniLineChart({
       .map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : smooth ? `S ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
       .join(' ');
 
-    const aD = `${pD} L ${pts[pts.length - 1].x} ${padding.top + graphHeight} L ${pts[0].x} ${padding.top + graphHeight} Z`;
+    const aD = `${pD} L ${pts[pts.length - 1].x} ${CHART_PADDING.top + graphHeight} L ${pts[0].x} ${CHART_PADDING.top + graphHeight} Z`;
 
-    return { minValue: minVal, valueRange: valRange, points: pts, pathD: pD, areaD: aD };
-  }, [data, padding.left, padding.top, graphWidth, graphHeight, smooth]);
+    const gLines = GRID_RATIOS.map((ratio) => {
+      const y = CHART_PADDING.top + graphHeight * (1 - ratio);
+      const val = (minVal + valRange * ratio).toFixed(1);
+      return { ratio, y, val };
+    });
+
+    return { points: pts, pathD: pD, areaD: aD, gridLines: gLines };
+  }, [data, graphWidth, graphHeight, smooth]);
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
@@ -74,19 +82,15 @@ export function OmniLineChart({
             setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
           }}
         >
-          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = padding.top + graphHeight * (1 - ratio);
-            const val = (minValue + valueRange * ratio).toFixed(1);
-            return (
-              <g key={`grid-${ratio}`}>
-                <line x1={padding.left} y1={y} x2={viewBoxWidth - padding.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
-                <text x={padding.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
-              </g>
-            );
-          })}
+          {gridLines.map(({ ratio, y, val }) => (
+            <g key={`grid-${ratio}`}>
+              <line x1={CHART_PADDING.left} y1={y} x2={viewBoxWidth - CHART_PADDING.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
+              <text x={CHART_PADDING.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
+            </g>
+          ))}
 
           {yAxisLabel && (
-            <text x={10} y={padding.top - 15} fontSize="10" className="fill-textSecondary font-bold">{yAxisLabel}</text>
+            <text x={10} y={CHART_PADDING.top - 15} fontSize="10" className="fill-textSecondary font-bold">{yAxisLabel}</text>
           )}
 
           <defs>
