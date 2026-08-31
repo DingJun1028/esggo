@@ -28,7 +28,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { toast } from "sonner";
 
 // --- 5T Protocol Core Types ---
-interface IComponentCore {
+export interface IComponentCore {
   // 萬能永憶主體唯一識別碼 (Immutable)
   readonly uuid: string;
   // 語義化版本控制

@@ -27,7 +27,13 @@ export class EntropyForge {
     if (typeof obj === 'object' && obj !== null) {
       // 確保每一筆數據符合 ISO-14064-1 零幻覺驗算標準的哈希鎖
       const hash = crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
-      Object.assign(obj, { hash_lock: hash });
+
+      // Safely inject hash_lock into the evidence property without altering the core interface with index signatures
+      if ('evidence' in obj && typeof (obj as any).evidence === 'object' && (obj as any).evidence !== null) {
+        Object.assign((obj as any).evidence, { hash_lock: hash });
+      } else {
+        Object.assign(obj, { hash_lock: hash });
+      }
     }
     return Object.freeze(obj);
   }
