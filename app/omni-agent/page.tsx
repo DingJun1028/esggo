@@ -380,7 +380,7 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
     );
   }
 
-  const statCards = [
+  const statCards = React.useMemo(() => [
     {
       label: '註冊組件',
       value: stats.kernel.registryCount,
@@ -417,7 +417,7 @@ function CoreStatsDisplay({ stats }: { stats: CoreStats | null }) {
       color: COLORS.green,
       icon: '⏱',
     },
-  ];
+  ], [stats]);
 
   return (
     <div className="flex flex-col h-full">

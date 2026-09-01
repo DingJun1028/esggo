@@ -16,3 +16,7 @@
 ## 2024-05-18 - Lazy initialization in React forms
 **Learning:** In React functional components, `useState` initialization code runs on every render, even if the result is only used on the first render. This is particularly problematic when the initial state is computed dynamically from props, such as reducing over an array to build a form data object.
 **Action:** Always wrap expensive or dynamic `useState` initializations (e.g. `Array.reduce` over schema fields) in a callback function `() => ({ ... })`. This leverages React's lazy initial state feature, ensuring the expensive computation only runs once during component mount, preventing redundant work on every keystroke or subsequent render.
+
+## 2026-08-31 - [OmniAgent Console statCards Memoization]
+**Learning:** In React components, dynamic configuration arrays (like `statCards`) that depend on props and are created inside the render cycle cause the array to be recreated on every re-render. This triggers unnecessary re-renders of mapped child elements and wastes CPU cycles.
+**Action:** Always wrap dynamic arrays and configuration objects that depend on props (such as `statCards` depending on `stats`) in `useMemo` with the appropriate dependency array to prevent unnecessary recreation during re-renders.
