@@ -9,7 +9,7 @@ export const engraveHashLock = <T>(
   payload: T,
   source: string,
   actor: string = "ADK_STORM_01_04"
-): IComponentCore<T> => {
+): IComponentCore => {
   const timestamp = Date.now();
   const uuid = `OMNI-CORE-${crypto.randomUUID().toUpperCase()}`;
 
@@ -34,7 +34,7 @@ export const engraveHashLock = <T>(
   };
 
   // [01] 契約鑄造者：封裝組件核心並執行不可篡改鎖定
-  const core: IComponentCore<T> = {
+  const core: IComponentCore = {
     uuid,
     version: 'v1.0.0-immutable',
     timestamp,

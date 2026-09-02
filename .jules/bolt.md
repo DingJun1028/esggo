@@ -16,3 +16,6 @@
 ## 2024-05-18 - Lazy initialization in React forms
 **Learning:** In React functional components, `useState` initialization code runs on every render, even if the result is only used on the first render. This is particularly problematic when the initial state is computed dynamically from props, such as reducing over an array to build a form data object.
 **Action:** Always wrap expensive or dynamic `useState` initializations (e.g. `Array.reduce` over schema fields) in a callback function `() => ({ ... })`. This leverages React's lazy initial state feature, ensuring the expensive computation only runs once during component mount, preventing redundant work on every keystroke or subsequent render.
+## 2026-08-30 - [Omni Restoration: Causal Traceability Strictness]
+**Learning:** In the 'Omni Restoration' (萬能修復) architecture, interfaces ensuring causal tracking like `IComponentCore` must not use generic types (`<T>`) to guarantee the data payload is encapsulated uniformly, avoiding TypeScript's structural flexibility loop holes.
+**Action:** Removed generic type parameter from `IComponentCore` across `lib/services/trust-vault.ts`, `lib/adk/engraver.ts`, and `components/views/trustful/impact-nexus-view.tsx` to align with the new strict non-generic constraint.
