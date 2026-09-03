@@ -22,3 +22,7 @@
 ## 2024-05-24 - Accessibility for Filter Toggle Buttons
 **Learning:** Screen readers cannot infer that a custom filter button acts as a toggle state just by its visual styling or click handler. When custom filter buttons (like ESG pillars or difficulty levels) toggle between active and inactive states, the lack of `aria-pressed` prevents screen reader users from understanding which filters are currently applied.
 **Action:** Always add `aria-pressed={isActive}` to any `<button>` that behaves as a toggle switch or filter chip, ensuring its active/inactive state is programmatically announced.
+
+## 2026-08-05 - [Form Submission and Keyboard Accessibility]
+**Learning:** Native keyboard submission (pressing "Enter") for forms is a critical accessibility feature. Wrapping inputs and submit buttons in simple `<div onClick={...}>` and using `type="button"` breaks this default behavior, hindering users relying on keyboards to navigate.
+**Action:** When creating forms, always wrap inputs and the primary submission action in a `<form>` element. Use an `onSubmit` handler with `e.preventDefault()`, set the primary submission button to `type="submit"`, and explicitly set all other secondary buttons to `type="button"` to avoid unintentional submissions.
