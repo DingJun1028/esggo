@@ -16,3 +16,7 @@
 ## 2024-05-18 - Lazy initialization in React forms
 **Learning:** In React functional components, `useState` initialization code runs on every render, even if the result is only used on the first render. This is particularly problematic when the initial state is computed dynamically from props, such as reducing over an array to build a form data object.
 **Action:** Always wrap expensive or dynamic `useState` initializations (e.g. `Array.reduce` over schema fields) in a callback function `() => ({ ... })`. This leverages React's lazy initial state feature, ensuring the expensive computation only runs once during component mount, preventing redundant work on every keystroke or subsequent render.
+
+## 2026-08-10 - React SVG Chart Optimization with useRef
+**Learning:** Using React state (`useState`) to track high-frequency events like `onMouseMove` for tooltips inside SVG charts triggers a complete re-render of the entire chart on every pixel the mouse moves. This is a severe performance bottleneck, especially for complex SVG elements.
+**Action:** When tracking mouse position for tooltip overlays, completely decouple it from the React render cycle by replacing `useState` with `useRef`. Update the tooltip's position directly via DOM style manipulation (`tooltipRef.current.style.left = ...`) inside the `onMouseMove` event handler.
