@@ -9,7 +9,7 @@
  */
 
 // ── §20.2 六大維度定義 ──────────────────────────────────
-import { type TrustLevel } from '../omni-core/types';
+import { type TrustLevel } from './omni-core/types';
 export type OmnitagSecurity = 'public' | 'internal' | 'confidential' | 'restricted';
 export type OmnitagLifecycle = 'draft' | 'active' | 'frozen' | 'archived';
 export type OmnitagPriority = 'p0' | 'p1' | 'p2' | 'p3';
@@ -56,9 +56,7 @@ export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
   if (!tag.agent || !AGENT_ID_RE.test(tag.agent)) {
     violations.push('Missing required [agent:*] (agent:01~agent:30)');
   }
-  if (!tag.trustLevel) {
-    violations.push('Missing required [trustLevel:*] (low/medium/high/critical/authenticated)');
-  }
+  // trustLevel is OPTIONAL (§20.7) — validated separately by validateTrustLevel()
   if (!tag.lifecycle) {
     violations.push('Missing required [lifecycle:*] (draft/active/frozen/archived)');
   }
