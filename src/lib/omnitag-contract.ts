@@ -18,6 +18,8 @@ export type OmnitagPlatform = 'esggo' | 'omni' | 'vps' | 'firebase';
 export interface OmniTagSet {
   /** 代理歸屬: agent:01 ~ agent:30 */
   agent?: string;
+  /** §20.7 信任標別 (optional — 由獨立 validateTrustLevel 校驗) */
+  trustLevel?: TrustLevel;
   /** 陣列歸屬: 智庫聖所 / 符文契約 / 光之羽翼 / 煉金熵減 / 5T驗算 */
   squad?: string;
   /** 安全分級 */
@@ -48,7 +50,8 @@ const SQUAD_SET = new Set([
 
 /**
  * §20.5 規則 1 — 必備三枚自動校驗
- * 每筆產物至少 agent:* + trustLevel:* + lifecycle:* + p* 四枚，缺一即不合約。
+ * 每筆產物至少 agent:* + lifecycle:* + p* 三枚，缺一即不合約。
+ * (§20.7 註：trustLevel 為 optional，由獨立 validateTrustLevel 校驗)
  */
 export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
   const violations: string[] = [];
