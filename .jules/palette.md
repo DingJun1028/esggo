@@ -22,3 +22,7 @@
 ## 2024-05-24 - Accessibility for Filter Toggle Buttons
 **Learning:** Screen readers cannot infer that a custom filter button acts as a toggle state just by its visual styling or click handler. When custom filter buttons (like ESG pillars or difficulty levels) toggle between active and inactive states, the lack of `aria-pressed` prevents screen reader users from understanding which filters are currently applied.
 **Action:** Always add `aria-pressed={isActive}` to any `<button>` that behaves as a toggle switch or filter chip, ensuring its active/inactive state is programmatically announced.
+
+## $(date +%Y-%m-%d) - Enable Enter key submission on auth forms
+**Learning:** React auth components that conditionally render email/password inputs inside standard `<div>` wrappers break native keyboard accessibility (specifically pressing 'Enter' to submit).
+**Action:** Always ensure input fields are wrapped in a `<form>` element with an `onSubmit` handler (using `e.preventDefault()`). Make sure the primary action button has `type="submit"`, and explicitly add `type="button"` to any other toggle or secondary buttons inside the form to prevent unintended submissions.
