@@ -48,3 +48,13 @@ The `IComponentCore` interface definition was sometimes defined as a generic typ
 
 **Prevention:**
 Enforce strict typing by entirely rewriting generic implementations (`IComponentCore<T>`) and any loose interfaces to correctly define exactly the required properties. Avoid adding `any` types or index signatures in `IComponentCore` to ensure immutability and precise traceability throughout Omni Architecture.
+## 2024-10-31 - Fix IComponentCore definition errors
+
+**Vulnerability:**
+The `IComponentCore` generic interface cleanup resulted in typecheck and build failures downstream because of invalid references and duplicated definitions.
+
+**Learning:**
+`IComponentCore` MUST not be a generic interface and its structure must be strictly enforced.
+
+**Prevention:**
+Enforce strict typing by entirely rewriting generic implementations (`IComponentCore<T>`) and any loose interfaces to correctly define exactly the required properties. Avoid adding `any` types or index signatures in `IComponentCore` to ensure immutability and precise traceability throughout Omni Architecture.
