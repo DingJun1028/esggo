@@ -30,6 +30,7 @@ import {
   type IComponentCore,
   type OmniNote,
 } from './types';
+import { type TrustLevel, TRUST_LEVEL_SCORE } from './types';
 import {
   createNote,
   createTask,

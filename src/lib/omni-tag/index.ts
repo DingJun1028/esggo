@@ -27,6 +27,69 @@ import {
 } from '../omni-base/index';
 
 import type { FiveTDimension } from '../omni-core/types';
+import { type TrustLevel } from '../omni-core/types';
+
+// ═══════════════════════════════════════════════════════════════
+// SECTION 1.5: Trust Label (信任標別)
+// ═══════════════════════════════════════════════════════════════
+
+export interface TrustLabelTag {
+  readonly tagId: string;
+  readonly agentId: string;
+  readonly trustLevel: TrustLevel;
+  readonly trustScore: number;
+  readonly componentId: string;
+  readonly hashLock: string;
+  readonly verifiedAt: number;
+  readonly verifiedBy: string;
+  readonly labels: readonly string[];
+  readonly previousTrustLevel?: TrustLevel;
+  readonly lifecycle: 'genesis' | 'verified' | 'frozen' | 'revoked';
+}
+
+/** 創建信任標別標籤 */
+export function createTrustTag(params: {
+  tagId: string;
+  agentId: string;
+  componentId: string;
+  labels?: readonly string[];
+  verifiedBy: string;
+}): TrustLabelTag {
+  const trustScore = TRUST_LEVEL_SCORE[params.trustLevel] ?? 0.7;
+  const hashLock = FiveTHashLock.generate(params.tagId, JSON.stringify(params));
+  return Object.freeze<TrustLabelTag>({
+    tagId: params.tagId,
+    agentId: params.agentId,
+    trustLevel: params.trustLevel ?? 'low',
+    trustScore,
+    componentId: params.componentId,
+    hashLock,
+    verifiedAt: Date.now(),
+    verifiedBy: params.verifiedBy,
+    labels: params.labels ?? [],
+    lifecycle: 'genesis',
+  });
+}
+
+/** 驗證信任標別 */
+export function verifyTrustLabel(tag: TrustLabelTag): boolean {
+  const expectedHash = FiveTHashLock.generate(tag.tagId, JSON.stringify(tag));
+  return tag.hashLock === expectedHash;
+}
+
+/** 升級信任等級 */
+export function upgradeTrustLevel(
+  tag: TrustLabelTag,
+  newLevel: TrustLevel,
+): TrustLabelTag {
+  return Object.freeze<TrustLabelTag>({
+    ...tag,
+    previousTrustLevel: tag.trustLevel,
+    trustLevel: newLevel,
+    trustScore: TRUST_LEVEL_SCORE[newLevel],
+    lifecycle: newLevel === 'critical' ? 'frozen' : 'verified',
+  });
+}
 
 export type {
   OmniTag,

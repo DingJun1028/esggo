@@ -47,13 +47,16 @@ const SQUAD_SET = new Set([
 
 /**
  * §20.5 規則 1 — 必備三枚自動校驗
- * 每筆產物至少 agent:* + lifecycle:* + p* 三枚，缺一即不合約。
+ * 每筆產物至少 agent:* + trustLevel:* + lifecycle:* + p* 四枚，缺一即不合約。
  */
 export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
   const violations: string[] = [];
 
   if (!tag.agent || !AGENT_ID_RE.test(tag.agent)) {
     violations.push('Missing required [agent:*] (agent:01~agent:30)');
+  }
+  if (!tag.trustLevel) {
+    violations.push('Missing required [trustLevel:*] (low/medium/high/critical/authenticated)');
   }
   if (!tag.lifecycle) {
     violations.push('Missing required [lifecycle:*] (draft/active/frozen/archived)');
@@ -142,6 +145,7 @@ export function verifyOmniTagContract(
   const allViolations: string[] = [];
 
   allViolations.push(...validateRequiredTriad(tag).violations);
+  allViolations.push(...validateTrustLevel(tag).violations);
   if (ctx?.attemptedMutation) {
     allViolations.push(...enforceFrozenLock(tag, true).violations);
   }
