@@ -27,11 +27,7 @@ export class OmniEvolution implements IOmniEvolution {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   /** 演化歷史 */
   private evolutionHistory: EvolutionEvent[] = [];

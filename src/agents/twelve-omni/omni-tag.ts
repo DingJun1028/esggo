@@ -24,11 +24,7 @@ export class OmniTag implements IOmniTag {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   /** 標籤存儲 */
   private tags: Map<TagId, TagDefinition> = new Map();

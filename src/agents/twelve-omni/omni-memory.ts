@@ -22,11 +22,7 @@ export class OmniMemory implements IOmniMemory {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   /** 記憶體存儲 (mutable, renamed to avoid conflict with store() method) */
   private _entries: Map<MemoryId, MemoryEntry> = new Map();

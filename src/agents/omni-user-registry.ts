@@ -112,11 +112,7 @@ export class OmniUserRegistry {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-    } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   /** 用戶偏好表 (userId → preferences) */
   private _preferences: Map<string, UserPreference[]> = new Map();

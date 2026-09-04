@@ -38,3 +38,13 @@
 **Vulnerability:** Found hardcoded secrets (WEBHOOK_SECRET, TELEGRAM_BOT_TOKEN, GMAIL_APP_PASSWORD) in deployment configuration files (`ecosystem.config.cjs`, `webhook-config.json`).
 **Learning:** Configuration files are often committed as artifacts to the repository, inadvertently leaking the secrets used during a specific deployment.
 **Prevention:** Always use environment variable references (`process.env.VAR_NAME`) in JavaScript/Node config files and placeholder strings in JSON templates, rather than hardcoding actual credentials.
+## 2024-10-31 - IComponentCore Generic Interface Standardization
+
+**Vulnerability:**
+The `IComponentCore` interface definition was sometimes defined as a generic type (e.g. `IComponentCore<T>`) or included improper index signatures (`[key: string]: any`), or used an incorrectly typed `timestamp` (e.g., `string`). Additionally, `evidence` was sometimes loosely defined or absent from implementations. This causes typing inconsistencies in causality tracking ("Traceable, Trackable, Trustworthy" framework).
+
+**Learning:**
+`IComponentCore` MUST not be a generic interface and its structure must be strictly enforced. `evidence` needs to be defined explicitly as `{ originCause: string, processTrace: string[], finalEffect: string }`.
+
+**Prevention:**
+Enforce strict typing by entirely rewriting generic implementations (`IComponentCore<T>`) and any loose interfaces to correctly define exactly the required properties. Avoid adding `any` types or index signatures in `IComponentCore` to ensure immutability and precise traceability throughout Omni Architecture.

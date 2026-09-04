@@ -28,11 +28,7 @@ export class OmniAgentV2 implements IOmniAgentV2 {
   readonly uuid: string;
   readonly version: string = '1.0.0';
   readonly timestamp: number;
-  evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   readonly signature: IComponentCore;
   readonly config: AgentConfig;

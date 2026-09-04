@@ -40,11 +40,7 @@ export class CompleteDelegationAgent implements ICompleteDelegationAgent {
   readonly uuid: string;
   readonly version: string = "1.0.0";
   readonly timestamp: number;
-  readonly evidence: {
-    originCause: string;
-    processTrace: string[];
-    finalEffect: string;
-  } = { originCause: 'unknown', processTrace: [], finalEffect: 'unknown' };
+  readonly evidence = { originCause: 'unknown', processTrace: [] as string[], finalEffect: 'unknown' };
 
   private _manager: CompleteDelegationManager;
   private _executionHistory: DelegationResult[] = [];
