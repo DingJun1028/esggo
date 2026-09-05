@@ -26,3 +26,10 @@ OA-Team 30 萬能蜂群的靈魂核心公約。所有產物必過 5T 驗證閘�
 
 ## 相關
 - [[ThirtyMatrix]] · [[SecondBrain]] · [[BDAgenticEvicence]]
+- [[5T-Canon-Proof]] — 5T-Canon 格式證明
+
+## 證明驗證
+```
+SHA-256 Hash Lock: 228664e4dd162c818b09212d2aa9e719e3dd9c8f46b44cfbdb1f9a718c4c51a0
+5T Gate: Traceable ✅ Trackable ✅ Tangible ✅ Transparent ✅ Trustworthy ✅
+```

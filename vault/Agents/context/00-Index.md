@@ -27,6 +27,8 @@ tags: [moc, index, second-brain]
 - [[BDAgenticEvicence]] — Agentic Twin Ollama + Evidence MinIO
 - [[BilingualSubtitlePlayer]] — 雙語字幕撥放器（RWD）
 - [[AStationSevenModules]] — AI Station 七模組生產線
+- [[Hermex-PWA-Deployment]] — 手機端 PWA 永久注入（2026-08-31 落地）
+- [[5T-Canon-Proof]] — 5T-Canon 格式證明（inclusionai/ling-3.0-flash-fin:free）
 
 ## 雙生拓撲
 - 雲端助理（Hermes VPS）：讀寫 vault/Agents/ 全部
