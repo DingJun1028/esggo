@@ -33,16 +33,16 @@ overrides:
   "@opentelemetry/sdk-node": ">=0.217.0 <1"
   "@opentelemetry/auto-instrumentations-node": ">=0.75.0 <1"
   "@opentelemetry/propagator-jaeger": ">=2.9.0 <3"
-  # ── 2026-09-05 npm audit 修補 ──
+  # ── 2026-09-05 npm audit 修補 (強化版，與 main 同步) ──
   "@xmldom/xmldom": ">=0.9.12 <1"
   "deepmerge-ts": ">=8.0.0 <9"
-  "mariadb": ">=3.4.6 <4"
-  "mysql2": ">=3.22.0 <4"
+  "mariadb": ">=3.4.6"
+  # mysql2: GHSA-rgwj-5xj2-c3m3 (zlib inflate DoS)，升級至 >=3.23.1
+  "mysql2": ">=3.23.1"
   "nanoid": ">=3.3.18 <4"
-  "qs": ">=6.15.4 <7"
-  "sharp": ">=0.35.0 <1"
-  # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
-  #   chromadb (pip critical) — 僅出現在 .venv 虛擬環境，非提交之 requirements，不納入 pnpm 管線
+  "qs": ">=6.5.3 <7"
+  # sharp: CVE-2026-33327/33328/35590/35591，升級至 >=0.35.0 (無 <major 上界)
+  "sharp": ">=0.35.0"
 
 allowBuilds:
   '@firebase/util': false
