@@ -118,6 +118,7 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
             aria-label="搜尋"
           />
           <button
+            type="button"
             onClick={onClose}
             className="text-textSecondary hover:text-textPrimary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current rounded"
             aria-label="關閉搜尋"
@@ -136,6 +137,7 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
           ) : (
             results.map((result, index) => (
               <button
+                type="button"
                 key={result.id}
                 onClick={() => handleSelect(result)}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
