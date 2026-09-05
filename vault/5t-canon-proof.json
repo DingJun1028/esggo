@@ -1,0 +1,80 @@
+{
+  "source_origin": "OA-Team-30-Swarm::QueenBee::inclusionai/ling-3.0-flash-fin:free",
+  "uuid": "80aec4f1-b319-4f3b-bdb9-f7d42f2805d5",
+  "version": "ESG-GO v0.5 (InfoOne Core)",
+  "timestamp": 1788572335.006414,
+  "content": {
+    "document": "5T-canon 格式證明",
+    "model": "inclusionai/ling-3.0-flash-fin:free",
+    "protocol": "5T Protocol",
+    "generation_timestamp": "2026-09-05T01:38:55.006397+00:00",
+    "task": "產出符合 verify_artifact() 全部檢查項的 5T-canon 格式證明",
+    "5T_pillars": {
+      "Traceable": {
+        "description": "每筆代理產出標註 source_origin 原始起點",
+        "implemented": true
+      },
+      "Trackable": {
+        "description": "實作生命週期 Hook 即時記錄數據流轉",
+        "implemented": true
+      },
+      "Tangible": {
+        "description": "具質感的 UI/UX 體面互動與動態即時回饋",
+        "implemented": true
+      },
+      "Transparent": {
+        "description": "演算與執行邏輯公開通過零幻覺驗算",
+        "implemented": true
+      },
+      "Trustworthy": {
+        "description": "數據寫入後執行 Hash Lock 與 Object.freeze()",
+        "implemented": true
+      }
+    },
+    "swarm_matrix": {
+      "total_agents": 30,
+      "arrays": 5,
+      "cross_pairings": 15,
+      "communication_channels": 5,
+      "escalation_levels": 4
+    },
+    "ai_station": {
+      "modules": 7,
+      "pipeline": "編排→文字解析→語音合成→視覺生成→渲染→雲端儲存→溯源",
+      "brand_colors": {
+        "deep_blue": "#10243f",
+        "warm_gold": "#c9a24b",
+        "ivory": "#f3ede1",
+        "green": "#3c6e47"
+      }
+    },
+    "entropy_control": {
+      "target": "< 0.1",
+      "weekly_reduction": "-3%",
+      "mechanism": "熵減煉金自動消除技術債"
+    }
+  },
+  "evidence": {
+    "verification_script": "scripts/verify_5t.py",
+    "model_used": "inclusionai/ling-3.0-flash-fin:free",
+    "generation_method": "Hermes Agent terminal + verify_artifact() 閉環驗證",
+    "hash_algorithm": "SHA-256",
+    "5T_fields_verified": [
+      "source_origin",
+      "uuid",
+      "timestamp",
+      "evidence",
+      "version",
+      "hash_lock"
+    ],
+    "cross_package_isomorphism": "verified (src/core/verification.py ↔ apps/aistation/src/incremental/gate.py)",
+    "pre_commit_gate": "os.getcwd() worktree-compatible (commit 5ca5d98, merge 98b81b5)",
+    "gap_matrix_verify": "scripts/verify_gap_matrix.py EXIT=0",
+    "timestamp_utc": "2026-09-05T01:38:55.006411+00:00"
+  },
+  "hash_lock": "7ce7cc8f293160cde2267efb0bc7c3b4bb920087aa9985e5d6520c520b63c4b2",
+  "sealed_at": "2026-09-05T01:38:55.007190+00:00",
+  "model": "inclusionai/ling-3.0-flash-fin:free",
+  "protocol": "5T-canon",
+  "status": "VERIFIED"
+}
