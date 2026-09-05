@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html Lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG-GO 架構地圖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #10243f 0%, #16426b 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #c9a24b, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .flow-arrow {
+            font-size: 3em;
+            color: #c9a24b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .queen-bee {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+        }
+        .queen-bee h2 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .arrays {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .array {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .array:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .array h3 {
+            color: #c9a24b;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .agents {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .agent {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.9em;
+            border-left: 3px solid #c9a24b;
+        }
+        .verification {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .verify-item {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .verify-item h4 {
+            color: #c9a24b;
+            margin-bottom: 8px;
+        }
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #c9a24b, #ffd700);
+            border-radius: 4px;
+        }
+        .pipeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #c9a24b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #10243f;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .arrays, .verification {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .agents {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏰 ESG-GO 架構地圖</h1>
+        
+        <div class="diagram">
+            <!-- 5T 協議核心 -->
+            <div class="box">
+                <h2>🎯 5T 數據與行為協議</h2>
+                <p style="text-align: center; margin-top: 10px;">
+                    Traceable • Trackable • Tangible • Transparent • Trustworthy
+                </p>
+            </div>
+            
+            <div class="flow-arrow">⚡</div>
+            
+            <!-- 蜂群核心 -->
+            <div class="queen-bee">
+                <h2>👑 萬能蜂后 (Queen Bee)</h2>
+                <p>全局指揮 & 戰略總覽</p>
+            </div>
+            
+            <div class="flow-arrow">↓ 5T 驗證 ↓</div>
+            
+            <!-- 代理矩陣 -->
+            <div class="box">
+                <h3 style="color: #c9a24b; margin-bottom: 20px;">🏢 30 代理矩陣</h3>
+                <div class="arrays">
+                    <div class="array">
+                        <h4>策略組 (1-6)</h4>
+                        <div class="agents">
+                            <div>01 蜂后</div>
+                            <div>02 規劃蜂</div>
+                            <div>03 分析蜂</div>
+                            <div>04 策効蜂</div>
+                            <div>05 風險蜂</div>
+                            <div>06 優化蜂</div>
+                        </div>
+                    </div>
+                    <div class="array">
+                        <h4>技術組 (7-12)</h4>
+                        <div class="agents">
+                            <div>07 編碼蜂</div>
+                            <div>08 算法蜂</div>
+                            <div>09 架構蜂</div>
+                            <div>10 數據蜂</div>
+                            <div>11 測試蜂</div>
+                            <div>12 設計蜂</div>
+                        </div>
+                    </div>
+                    <div class="array">
+                        <h4>創意組 (13-18)</h4>
+                        <div class="agents">
+                            <div>13 圖像蜂</div>
+                            <div>14 動畫蜂</div>
+                            <div>15 文案蜂</div>
+                            <div>16 音頻蜂</div>
+                            <div>17 市場蜂</div>
+                            <div>18 社群蜂</div>
+                        </div>
+                    </div>
+                    <div class="array">
+                        <h4>營銷組 (19-24)</h4>
+                        <div class="agents">
+                            <div>19 增長蜂</div>
+                            <div>20 運營蜂</div>
+                            <div>21 商業分析蜂</div>
+                            <div>22 探路蜂</div>
+                            <div>23 外交蜂</div>
+                            <div>24 調研蜂</div>
+                        </div>
+                    </div>
+                    <div class="array">
+                        <h4>守衛組 (25-30)</h4>
+                        <div class="agents">
+                            <div>25 測場蜂</div>
+                            <div>26 追蹤蜂</div>
+                            <div>27 安全蜂</div>
+                            <div>28 維護蜂</div>
+                            <div>29 支援蜂</div>
+                            <div>30 質控蜂</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓ 5T 驗證閘門 ↓</div>
+            
+            <!-- 5T 驗證 -->
+            <div class="box">
+                <h3 style="color: #c9a24b; margin-bottom: 20px;">🔒 5T 驗證流程</h3>
+                <div class="verification">
+                    <div class="verify-item">
+                        <h4>Traceable</h4>
+                        <p>代碼標註 source_origin</p>
+                        <div style="margin-top: 10px;">
+                            <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                    <div class="verify-item">
+                        <h4>Trackable</h4>
+                        <p>lifecycle hooks 記錄</p>
+                        <div style="margin-top: 10px;">
+                            <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                    <div class="verify-item">
+                        <h4>Tangible</h4>
+                        <p>UI/UX 體驗設計</p>
+                        <div style="margin-top: 10px;">
+                            <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                    <div class="verify-item">
+                        <h4>Transparent</h4>
+                        <p>零幻覺驗算</p>
+                        <div style="margin-top: 10px;">
+                            <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                    <div class="verify-item">
+                        <h4>Trustworthy</h4>
+                        <p>Hash Lock + freeze</p>
+                        <div style="margin-top: 10px;">
+                            <div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓ 產出 Purified 成果 ↓</div>
+        </div>
+    </div>
+</body>
+</html>

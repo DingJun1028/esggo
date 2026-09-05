@@ -13,7 +13,7 @@ overrides:
   "gaxios": ">=7.1.4"
   "glob": ">=10.5.0"
   "minimatch": ">=9.0.7"
-  "fast-uri": ">=3.1.5 <4"
+  "fast-uri": ">=3.1.6 <4"
   "fast-xml-parser": ">=5.10.1"
   "brace-expansion": ">=5.0.9"
   # 安全修補：必須加 <major 上界，裸 ">=" 會讓 pnpm 跳到跨 major（AGENTS.md #4）
@@ -33,6 +33,14 @@ overrides:
   "@opentelemetry/sdk-node": ">=0.217.0 <1"
   "@opentelemetry/auto-instrumentations-node": ">=0.75.0 <1"
   "@opentelemetry/propagator-jaeger": ">=2.9.0 <3"
+  # ── 2026-09-05 npm audit 修補 ──
+  "@xmldom/xmldom": ">=0.9.12 <1"
+  "deepmerge-ts": ">=8.0.0 <9"
+  "mariadb": ">=3.4.6 <4"
+  "mysql2": ">=3.22.0 <4"
+  "nanoid": ">=3.3.18 <4"
+  "qs": ">=6.15.4 <7"
+  "sharp": ">=0.35.0 <1"
   # 排除 (AGENTS.md #7)：sharp <0.35.0 — next 為 devDep、專案 0 處用 next/image、next@16 只接受 ^0.34.5
   #   chromadb (pip critical) — 僅出現在 .venv 虛擬環境，非提交之 requirements，不納入 pnpm 管線
 
