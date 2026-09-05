@@ -15,6 +15,7 @@ tags: [moc, index, second-brain]
 
 ## 核心協定
 - [[05TProtocol]] — 五大真理原則（Traceable/Trackable/Tangible/Transparent/Trustworthy）
+- [[5T-Canon-Proof]] — 5T-Canon 格式證明
 - [[30Matrix]] — 30 萬能蜂群矩陣（5 陣列 × 6 員）
 
 ## 第二大腦架構

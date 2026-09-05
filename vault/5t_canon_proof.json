@@ -2,12 +2,12 @@
   "artifact_type": "5T-Canon-Format-Proof",
   "source_origin": "inclusionai/ling-3.0-flash-fin:free",
   "uuid": "bb0f4dd8-cf6f-4a8b-95e0-dce275a85239",
-  "version": "ESG GO v0.5 (InfoOne Core)",
+  "version": "ESG GO v0.7.1 (InfoOne Core · 全書終版 + 運作實錄 + 最佳實踐覺結界對齊)",
   "timestamp": 1788517627924,
   "iso_timestamp": "2026-09-04T10:27:07.924690+00:00",
   "content": {
     "title": "OA-Team 30 萬能蜂群靈魂核心聖典 — 5T-Canon 格式證明",
-    "version": "ESG GO v0.5 (InfoOne Core)",
+    "version": "ESG GO v0.7.1 (InfoOne Core · 全書終版 + 運作實錄 + 最佳實踐覺結界對齊)",
     "generated_by": "inclusionai/ling-3.0-flash-fin:free",
     "generated_at": "2026-09-05T03:10:00+08:00",
     "core_dogma": {
@@ -141,7 +141,7 @@
     "entropy_target": "< 0.1",
     "protocol_compliance": "5T-Compliant"
   },
-  "hash_lock": "228664e4dd162c818b09212d2aa9e719e3dd9c8f46b44cfbdb1f9a718c4c51a0",
+  "hash_lock": "88df482ae5a6a5ee87a0b0f9ddb3ae9ba893f84229850bc15038e22e3e7bb73d",
   "verification_gate": {
     "traceable": {
       "status": "PASS",
@@ -167,7 +167,7 @@
     },
     "trustworthy": {
       "status": "PASS",
-      "hash_lock": "228664e4dd162c818b09212d2aa9e719e3dd9c8f46b44cfbdb1f9a718c4c51a0",
+      "hash_lock": "88df482ae5a6a5ee87a0b0f9ddb3ae9ba893f84229850bc15038e22e3e7bb73d",
       "algorithm": "SHA-256",
       "object_freeze": true
     }

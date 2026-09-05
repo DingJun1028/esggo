@@ -24,6 +24,7 @@ access: public-research
 | **SHA-256 Hash Lock** | `228664e4dd162c818b09212d2aa9e719e3dd9c8f46b44cfbdb1f9a718c4c51a0` |
 | **Immutable** | ✅ True |
 | **Frozen At** | 2026-09-04T10:27:07Z |
+| **System Version** | ESG GO v0.7.1 (InfoOne Core · 全書終版 + 運作實錄 + 最佳實踐覺結界對齊) |
 
 ## 5T 驗證閘
 

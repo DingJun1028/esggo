@@ -25,8 +25,9 @@ OA-Team 30 萬能蜂群的靈魂核心公約。所有產物必過 5T 驗證閘�
 - [[SyncVaultTypes]] 輸出 JSON.from = Trackable
 
 ## 相關
-- [[ThirtyMatrix]] · [[SecondBrain]] · [[BDAgenticEvicence]]
 - [[5T-Canon-Proof]] — 5T-Canon 格式證明
+- [[ThirtyMatrix]] · [[SecondBrain]] · [[BDAgenticEvicence]]
+- [[30Matrix]] — 30 萬能蜂群矩陣
 
 ## 證明驗證
 ```
