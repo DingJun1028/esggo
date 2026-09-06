@@ -371,7 +371,7 @@ export default function App() {
   return layoutShell(
     <>
       {authMessage && (<div className="max-w-5xl mx-auto mb-4"><div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-4">{authMessage}</div></div>)}
-      {error && (<div className="max-w-5xl mx-auto mb-6"><div className="bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl p-4 whitespace-pre-wrap font-mono">{error?.message}{'\n'}{error?.stack}</div></div>)}
+      {error && (<div className="max-w-5xl mx-auto mb-6"><div className="bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl p-4 whitespace-pre-wrap font-mono">{error?.message}</div></div>)}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-1">
         <div className="text-[10px] text-slate-400">{useFirebase ? t.list.storageMode : t.list.localMode}</div>
       </div>

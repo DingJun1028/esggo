@@ -11,8 +11,6 @@ const Fallback = ({ error }) => (
       <h2 className="text-lg font-bold mb-2">發生未預期的錯誤</h2>
       <pre className="text-xs bg-red-50 border border-red-200 rounded-lg p-4 whitespace-pre-wrap font-mono">
         {error?.message}
-        {'\n'}
-        {error?.stack}
       </pre>
     </div>
   </div>
