@@ -10,8 +10,12 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 COPY packages/errors/package.json packages/errors/
 COPY packages/shared/package.json packages/shared/
-COPY packages/ui/package.json packages/ui/
+COPY packages/capacities/package.json packages/capacities/
+COPY packages/cli/package.json packages/cli/
+COPY packages/oa-framework/package.json packages/oa-framework/
 COPY packages/omni-agent/package.json packages/omni-agent/
+COPY packages/omni-agent-bus/package.json packages/omni-agent-bus/
+COPY packages/ui/package.json packages/ui/
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM --platform=linux/arm64 node:22-alpine AS builder
