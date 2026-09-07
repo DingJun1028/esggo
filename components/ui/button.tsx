@@ -20,7 +20,7 @@ export function Button({
   };
 
   return (
-    <button className={cn(baseStyles, variants[variant], className)} {...props}>
+    <button type="button" className={cn(baseStyles, variants[variant], className)} {...props}>
       {children}
     </button>
   );

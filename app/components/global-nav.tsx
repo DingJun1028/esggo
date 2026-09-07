@@ -106,6 +106,7 @@ export function GlobalNav() {
           ))}
         </div>
         <button
+          type="button"
           onClick={toggleTheme}
           className="w-7 h-7 flex items-center justify-center rounded-md text-textSecondary hover:text-accentTeal hover:bg-accentTeal/10 transition-all text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
           title="切換主題"
