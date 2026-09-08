@@ -5,6 +5,15 @@ import React, { useState, useMemo, useRef } from 'react';
 import { OmniPieChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
+// Fallback palette
+const PIE_COLORS = [
+  'var(--accent-teal)',
+  'var(--accent-gold)',
+  'var(--accent-blue)',
+  'var(--accent-purple)',
+  '#E74C3C'
+] as const;
+
 export function OmniPieChart({
   title,
   description,
@@ -63,15 +72,6 @@ export function OmniPieChart({
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
-  // Fallback palette
-  const colors = [
-    'var(--accent-teal)',
-    'var(--accent-gold)',
-    'var(--accent-blue)',
-    'var(--accent-purple)',
-    '#E74C3C'
-  ];
-
   return (
     <div className="flex flex-col gap-2 w-full" style={{ width }}>
       <div className="flex justify-between items-start mb-2">
@@ -108,7 +108,7 @@ export function OmniPieChart({
                   <circle
                     key={`slice-${i}`}
                     r={radius}
-                    fill={slice.color || colors[i % colors.length]}
+                    fill={slice.color || PIE_COLORS[i % PIE_COLORS.length]}
                     className={`transition-all duration-300 cursor-pointer ${hoveredPoint?.label === slice.label ? 'opacity-80 scale-105 transform-gpu' : 'opacity-100'}`}
                     onMouseEnter={() => setHoveredPoint(slice)}
                   />
@@ -119,7 +119,7 @@ export function OmniPieChart({
                 <path
                   key={`slice-${i}`}
                   d={pathData}
-                  fill={slice.color || colors[i % colors.length]}
+                  fill={slice.color || PIE_COLORS[i % PIE_COLORS.length]}
                   className={`transition-all duration-300 cursor-pointer ${hoveredPoint?.label === slice.label ? 'opacity-80 scale-105 transform-gpu origin-center' : 'opacity-100'}`}
                   onMouseEnter={() => setHoveredPoint(slice)}
                 />
@@ -153,7 +153,7 @@ export function OmniPieChart({
         <div className="absolute top-4 right-4 flex flex-col gap-2">
            {data.map((d, i) => (
              <div key={`legend-${i}`} className="flex items-center gap-2 text-xs">
-               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color || colors[i % colors.length] }} />
+               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color || PIE_COLORS[i % PIE_COLORS.length] }} />
                <span className={hoveredPoint?.label === d.label ? 'font-bold text-textPrimary' : 'text-textSecondary'}>
                  {d.label}
                </span>
