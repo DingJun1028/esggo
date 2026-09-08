@@ -39,3 +39,6 @@
 ## 2026-09-08 - [GitHub Actions Node.js Deprecation]
 **Learning:** GitHub Actions deprecated Node.js 20 on their runners, forcing actions that target Node 20 to run on Node 24. Older versions of Docker-related actions (like `docker/build-push-action@v5` and `docker/setup-buildx-action@v3`) may encounter strange context or mount failures when forced into newer Node.js runtime environments or updated builder containers.
 **Action:** When auditing or modifying CI/CD workflows, ensure Docker-related GitHub Actions are updated to their latest major versions (e.g., `docker/build-push-action@v6`) to maintain compatibility with updated runner environments and Node.js versions.
+## 2026-09-08 - [Docker BuildKit Sandbox Issue]
+**Learning:** Docker build failures exhibiting the error `failed to mount /tmp/containerd-mount... err: invalid argument` often indicate a Docker/BuildKit snapshotter issue specific to the runner's kernel or containerization settings. When `docker-container` driver fails in this manner, it is a runner infrastructure limitation, not an application code issue.
+**Action:** When diagnosing persistent `buildx` failures that are fundamentally environment-level mounting bugs, do not attempt to fix application code, and rely on infrastructure teams or runner host updates.
