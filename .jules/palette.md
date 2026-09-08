@@ -36,3 +36,6 @@
 ## 2026-09-08 - [GitHub Actions Dependency Resolution]
 **Learning:** Beta versions of GitHub actions, such as `actions/checkout@v5-beta`, `actions/setup-node@v5-beta`, and `actions/upload-artifact@v5-beta`, can become abruptly unavailable or unresolvable by the GitHub Actions runner environment, causing immediate pipeline failures before jobs even start. This typically occurs when a beta branch or tag is deleted upstream upon release of the stable version.
 **Action:** When auditing or modifying CI/CD workflows, strictly avoid using `-beta` or `-alpha` tags for core GitHub actions (like `checkout` or `setup-node`). Always use stable versions (e.g., `v4`) to guarantee pipeline reliability.
+## 2026-09-08 - [GitHub Actions Node.js Deprecation]
+**Learning:** GitHub Actions deprecated Node.js 20 on their runners, forcing actions that target Node 20 to run on Node 24. Older versions of Docker-related actions (like `docker/build-push-action@v5` and `docker/setup-buildx-action@v3`) may encounter strange context or mount failures when forced into newer Node.js runtime environments or updated builder containers.
+**Action:** When auditing or modifying CI/CD workflows, ensure Docker-related GitHub Actions are updated to their latest major versions (e.g., `docker/build-push-action@v6`) to maintain compatibility with updated runner environments and Node.js versions.
