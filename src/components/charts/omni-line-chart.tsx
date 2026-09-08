@@ -4,6 +4,10 @@ import React, { useState, useMemo, useRef } from 'react';
 import { LineChartProps, ChartDataPoint } from '@/types/esg-charts';
 import { Lock } from 'lucide-react';
 
+const CHART_PADDING = { top: 40, right: 20, bottom: 40, left: 50 } as const;
+const VIEWBOX_WIDTH = 800;
+const DEFAULT_COLOR = 'var(--accent-teal)';
+
 export function OmniLineChart({
   title,
   description,
@@ -18,12 +22,8 @@ export function OmniLineChart({
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const padding = { top: 40, right: 20, bottom: 40, left: 50 };
-  const graphHeight = Number(height) - padding.top - padding.bottom;
-  const viewBoxWidth = 800;
-  const graphWidth = viewBoxWidth - padding.left - padding.right;
-
-  const defaultColor = 'var(--accent-teal)';
+  const graphHeight = Number(height) - CHART_PADDING.top - CHART_PADDING.bottom;
+  const graphWidth = VIEWBOX_WIDTH - CHART_PADDING.left - CHART_PADDING.right;
 
   const { minValue, valueRange, points, pathD, areaD } = useMemo(() => {
     if (!data || data.length === 0) {
@@ -35,8 +35,8 @@ export function OmniLineChart({
     const valRange = maxVal - minVal || 1;
 
     const pts = data.map((point, index) => {
-      const x = padding.left + stepX * index;
-      const y = padding.top + graphHeight - ((point.value - minVal) / valRange) * graphHeight;
+      const x = CHART_PADDING.left + stepX * index;
+      const y = CHART_PADDING.top + graphHeight - ((point.value - minVal) / valRange) * graphHeight;
       return { x, y, point };
     });
 
@@ -44,10 +44,10 @@ export function OmniLineChart({
       .map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : smooth ? `S ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
       .join(' ');
 
-    const aD = `${pD} L ${pts[pts.length - 1].x} ${padding.top + graphHeight} L ${pts[0].x} ${padding.top + graphHeight} Z`;
+    const aD = `${pD} L ${pts[pts.length - 1].x} ${CHART_PADDING.top + graphHeight} L ${pts[0].x} ${CHART_PADDING.top + graphHeight} Z`;
 
     return { minValue: minVal, valueRange: valRange, points: pts, pathD: pD, areaD: aD };
-  }, [data, padding.left, padding.top, graphWidth, graphHeight, smooth]);
+  }, [data, graphWidth, graphHeight, smooth]);
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
@@ -66,7 +66,7 @@ export function OmniLineChart({
 
       <div className="relative w-full overflow-visible bg-surface rounded-lg border border-borderColor p-4 shadow-sm">
         <svg
-          viewBox={`0 0 ${viewBoxWidth} ${height}`}
+          viewBox={`0 0 ${VIEWBOX_WIDTH} ${height}`}
           className="w-full h-full overflow-visible"
           onMouseLeave={() => setHoveredPoint(null)}
           onMouseMove={(e) => {
@@ -78,28 +78,28 @@ export function OmniLineChart({
           }}
         >
           {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-            const y = padding.top + graphHeight * (1 - ratio);
+            const y = CHART_PADDING.top + graphHeight * (1 - ratio);
             const val = (minValue + valueRange * ratio).toFixed(1);
             return (
               <g key={`grid-${ratio}`}>
-                <line x1={padding.left} y1={y} x2={viewBoxWidth - padding.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
-                <text x={padding.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
+                <line x1={CHART_PADDING.left} y1={y} x2={VIEWBOX_WIDTH - CHART_PADDING.right} y2={y} stroke="currentColor" className="text-borderColor/30" strokeDasharray="4,4" />
+                <text x={CHART_PADDING.left - 10} y={y + 4} textAnchor="end" fontSize="10" className="fill-textSecondary">{val}</text>
               </g>
             );
           })}
 
           {yAxisLabel && (
-            <text x={10} y={padding.top - 15} fontSize="10" className="fill-textSecondary font-bold">{yAxisLabel}</text>
+            <text x={10} y={CHART_PADDING.top - 15} fontSize="10" className="fill-textSecondary font-bold">{yAxisLabel}</text>
           )}
 
           <defs>
             <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={defaultColor} stopOpacity="0.3" />
-              <stop offset="100%" stopColor={defaultColor} stopOpacity="0" />
+              <stop offset="0%" stopColor={DEFAULT_COLOR} stopOpacity="0.3" />
+              <stop offset="100%" stopColor={DEFAULT_COLOR} stopOpacity="0" />
             </linearGradient>
           </defs>
           <path d={areaD} fill="url(#lineGradient)" />
-          <path d={pathD} fill="none" stroke={defaultColor} strokeWidth="2" strokeLinejoin="round" />
+          <path d={pathD} fill="none" stroke={DEFAULT_COLOR} strokeWidth="2" strokeLinejoin="round" />
 
           {points.map((p, i) => (
             <circle
@@ -107,14 +107,14 @@ export function OmniLineChart({
               cx={p.x}
               cy={p.y}
               r={hoveredPoint?.label === p.point.label ? 5 : 3}
-              fill={p.point.color || defaultColor}
+              fill={p.point.color || DEFAULT_COLOR}
               className="transition-all duration-200 cursor-pointer"
               onMouseEnter={() => setHoveredPoint(p.point)}
             />
           ))}
 
           {xAxisLabel && (
-            <text x={viewBoxWidth / 2} y={height - 5} textAnchor="middle" fontSize="10" className="fill-textSecondary font-bold">{xAxisLabel}</text>
+            <text x={VIEWBOX_WIDTH / 2} y={height - 5} textAnchor="middle" fontSize="10" className="fill-textSecondary font-bold">{xAxisLabel}</text>
           )}
         </svg>
 
