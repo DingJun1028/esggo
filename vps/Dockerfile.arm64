@@ -33,6 +33,7 @@ COPY apps/learning-center/package.json apps/learning-center/
 COPY apps/ftg-tours-website/package.json apps/ftg-tours-website/
 COPY apps/cf-tunnel-manager/package.json apps/cf-tunnel-manager/
 COPY apps/oneringai/package.json apps/oneringai/
+COPY apps/htb-b2b/package.json apps/htb-b2b/
 COPY cli/omnicli/package.json cli/omnicli/
 COPY cli/esggo-cli/package.json cli/esggo-cli/
 COPY cli/oa-cli/package.json cli/oa-cli/
