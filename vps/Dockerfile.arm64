@@ -38,6 +38,7 @@ COPY cli/omnicli/package.json cli/omnicli/
 COPY cli/esggo-cli/package.json cli/esggo-cli/
 COPY cli/oa-cli/package.json cli/oa-cli/
 COPY apps/learning-center/functions/package.json apps/learning-center/functions/
+COPY esggo-auto-repair/worker/package.json esggo-auto-repair/worker/
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM --platform=linux/arm64 node:22-alpine AS builder
