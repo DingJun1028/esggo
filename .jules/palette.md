@@ -30,3 +30,7 @@
 ## 2024-05-18 - [Icon Button Accessibility and Focus Tracking]
 **Learning:** In complex, highly interactive data views (like `wuzuo-note-view.tsx`), icon-only control buttons (for tasks, mobile menus, creating entries, and deletion) are completely opaque to screen readers if they lack `aria-label`s. Furthermore, the absence of `focus-visible` styles prevents keyboard-only users from understanding their focus location.
 **Action:** Consistently apply `aria-label` (using dynamic strings for toggle states where necessary) and use targeted `focus-visible:ring-2 focus-visible:ring-[Color] focus:outline-none` Tailwind utility classes on all icon buttons to guarantee clear navigation state without polluting pointer-event styles.
+
+## 2024-05-18 - Enforce type="button" on all buttons in React
+**Learning:** Found that `<button>` tags without `type="button"` will submit forms if inside a form, or cause unintended behaviours on some interactions, degrading user experience for people using keyboard navigation or screen readers as focus can be lost unexpectedly. In Next.js App Router applications, this has caused subtle issues on form interactions inside modals.
+**Action:** Always add `type="button"` to secondary, interactive, and navigational `<button>` elements, saving them from acting as implicit submit buttons. Only submit buttons should have `type="submit"`, or no type if we intentionally want to trigger a submission.
