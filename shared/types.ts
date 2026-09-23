@@ -282,6 +282,8 @@ export interface ISseTranslationEvent {
   speaker?: string;
   /** 跨句脈絡記憶: 近期前文 (供 UI 顯示「前文」, 提升連貫) */
   context?: Array<{ src: string; tgt?: string }>;
+  /** 方案C 輔助字幕來源標記 (Windows/Chrome Live Captions 等外部字幕來源; 5T 溯源) */
+  source?: string;
 }
 
 // --- STT → 雙語字幕契約 (語音轉字幕場景, 鎖定繁中↔英文雙向) ---

@@ -254,12 +254,12 @@ if (htmlSrc && mjsSrc.includes('CSS_VARS')) {
     FAIL++;
   }
 
-  // 檢查金黃色主調 (#ffd479)
-  if (htmlSrc.includes('#ffd479')) {
-    ok('  ✅ 金黃色主調 (#ffd479) 已實現');
+  // 檢查品牌暖金主調 (#c9a24b) — 2026-09-23 品牌色統一後之正規值 (#ffd479 為非正規舊色)
+  if (htmlSrc.includes('#c9a24b')) {
+    ok('  ✅ 品牌暖金主調 (#c9a24b) 已實現');
     PASS++;
   } else {
-    bad('  ❌ 金黃色主調 (#ffd479) 缺失');
+    bad('  ❌ 品牌暖金主調 (#c9a24b) 缺失');
     FAIL++;
   }
 } else {

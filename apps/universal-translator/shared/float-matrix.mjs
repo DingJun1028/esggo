@@ -45,7 +45,7 @@ export const CSS_VARS = {
   '--cap-bg':  'rgba(10,14,24,.6)',
   '--src':     '#ffffff',
   '--trs':     '#7fe9d6',
-  '--gold':    '#ffd479',
+  '--gold':    '#c9a24b',
   '--ui':      '#e8eef7',
   '--accent':  '#36e0c0',
   '--accent2': '#5b8cff',
