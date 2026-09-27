@@ -4,7 +4,9 @@
 # 用法：bash verify_release.sh [exe路徑]
 set -u
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+# pwd -W 只存在於 MSYS/Git Bash。此檔僅有 set -u（無 -e），故推導失敗時不會
+# 中止，會靜默得到 "/_pyi/dist/..." 之類假路徑 —— 故顯式退回原生 pwd。
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W 2>/dev/null || pwd)"
 EXE="${1:-$SCRIPT_DIR/_pyi/dist/esggo-agent-mesh.exe}"
 # 工作目錄必須是「原生 Windows 路徑」：本機 MSYS 路徑轉換已停用，
 # 傳 /tmp/... 給原生 .exe 會無法解析而靜默失敗（且 $TMPDIR 常為 /tmp）。

@@ -56,7 +56,7 @@ import json
 import logging
 import sys
 import time
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
@@ -1004,17 +1004,18 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     # 優先載入配置檔
     cfg = build_config_from_file(args.config) if args.config else RunConfig()
 
-    # CLI 覆蓋配置檔：僅在使用者「明確給值」時覆蓋。
-    # parse_args 對這些欄位採 default=None，故 None 代表未指定，應保留配置檔
-    # （或 dataclass）值；若無條件賦值，argparse 預設值會靜默蓋掉配置檔設定。
+    # CLI 覆蓋配置檔：僅在使用者「明確給值」時覆蓋（理由見 parse_args 處
+    # default=None 的說明）。None 代表未指定，應保留配置檔或 dataclass 的值。
     if args.model:
         cfg.models = args.model
 
-    for _field in ("prompt", "timeout", "concurrency", "retry",
-                   "temperature", "num_predict"):
-        _given = getattr(args, _field)
+    # 以 dataclass 欄位為單一真相來源：往 TestConfig 加欄位並配同名 CLI 旗標
+    # 後自動生效，不需再同步維護一份欄位清單。欄位若無對應旗標，getattr 回傳
+    # None 而自動跳過。
+    for _f in fields(cfg.test):
+        _given = getattr(args, _f.name, None)
         if _given is not None:
-            setattr(cfg.test, _field, _given)
+            setattr(cfg.test, _f.name, _given)
 
     # setattr 不會重新觸發 dataclass 驗證，須顯式重跑 __post_init__，
     # 否則非法值會直達執行期：--concurrency 0 使 Semaphore(0) 永久阻塞、
