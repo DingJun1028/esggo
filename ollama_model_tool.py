@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import contextlib
 import csv
 import inspect
 import json
@@ -100,11 +101,10 @@ def _setup_console() -> None:
             ctypes.windll.kernel32.SetConsoleCP(65001)
         except Exception:  # 非致命：無主控台（服務/重導向）時略過
             pass
+    # 非致命：舊版/替換串流無 reconfigure
     for stream in (sys.stdout, sys.stderr):
-        try:
+        with contextlib.suppress(Exception):
             stream.reconfigure(encoding="utf-8", errors="replace")
-        except Exception:  # 非致命：舊版/替換串流無 reconfigure
-            pass
 
 
 # ============================================================================
@@ -121,13 +121,13 @@ def _setup_console() -> None:
 def _python_type_to_json_schema(py_type: type) -> dict:
     """將 Python 型別映射為 JSON Schema 片段。"""
     origin = get_origin(py_type)
-    if py_type is str or origin is None and py_type == str:
+    if py_type is str:
         return {"type": "string"}
-    if py_type is int or origin is None and py_type == int:
+    if py_type is int:
         return {"type": "integer"}
-    if py_type is float or origin is None and py_type == float:
+    if py_type is float:
         return {"type": "number"}
-    if py_type is bool or origin is None and py_type == bool:
+    if py_type is bool:
         return {"type": "boolean"}
     if origin is list or py_type is list:
         return {"type": "array", "items": {"type": "string"}}
@@ -612,9 +612,14 @@ class OllamaClient:
         """測試單個模型（帶重試）。"""
         ts = datetime.now(UTC).isoformat()
         last_error = ""
+        # 總計時基準置於重試迴圈「之外」：elapsed_seconds 必須涵蓋全部嘗試
+        # 與退避等待。若置於迴圈內，每次嘗試都會重設，導致回報值只量到
+        # 最後一次（實測 --retry 2 真實 15s 卻回報 2.05s，低報 86%）。
+        total_start = time.monotonic()
 
         for attempt in range(1 + retry):
-            start = time.monotonic()
+            # 單次嘗試基準：僅供 cache_hit 判定使用（該語意為「本次請求」）
+            attempt_start = time.monotonic()
             try:
                 resp = await asyncio.wait_for(
                     self._request(
@@ -631,7 +636,9 @@ class OllamaClient:
                     ),
                     timeout=timeout,
                 )
-                elapsed = time.monotonic() - start
+                _now = time.monotonic()
+                elapsed = _now - total_start        # 回報用：跨全部嘗試
+                attempt_elapsed = _now - attempt_start  # 判定用：單次嘗試
 
                 content = ""
                 load_dur = 0.0
@@ -654,10 +661,15 @@ class OllamaClient:
                 if "eval_count" in resp:
                     eval_cnt = int(resp["eval_count"])
 
-                # 快取偵測：載入時間 < 總時間 50% 則判定為快取命中。
-                # load_dur 單位為毫秒、elapsed 為秒，必須先換算再比較，
+                # 快取偵測：載入時間 < 單次請求時間 50% 則判定為快取命中。
+                # load_dur 單位為毫秒、attempt_elapsed 為秒，必須先換算再比較，
                 # 否則毫秒值恆遠大於秒值，cache_hit 將永遠為 False。
-                cache_hit = (load_dur / 1000.0) < (elapsed * 0.5) if elapsed > 0 else True
+                # 用單次嘗試時間而非跨嘗試總時間：總時間含先前失敗的嘗試與
+                # 退避等待，會使重試後的快取判定失準。
+                cache_hit = (
+                    (load_dur / 1000.0) < (attempt_elapsed * 0.5)
+                    if attempt_elapsed > 0 else True
+                )
 
                 # 語義圖譜：將響應提純為 digest（熵減摘要）
                 digest = ""
@@ -693,7 +705,7 @@ class OllamaClient:
             if attempt < retry:
                 await asyncio.sleep(2)  # 等待模型重新載入
 
-        elapsed = time.monotonic() - start
+        elapsed = time.monotonic() - total_start
         return TestResult(
             model=model_name,
             status=Status.ERROR,
@@ -932,18 +944,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="指定測試模型（可重覆：-m A -m B）")
 
     # 測試行為
+    # default=None（而非 dataclass 預設值）：讓「使用者未給值」與「使用者給了
+    # 預設值」可區分。否則 build_run_config 的無條件賦值會把配置檔設定覆蓋
+    # 成 argparse 預設值，使 --config 對未同時下旗標的欄位完全失效。
+    # 優先序：CLI > 配置檔 > dataclass 預設值（TestConfig 已持有相同預設值）。
     test = parser.add_argument_group("測試設定")
-    test.add_argument("--prompt", "-p", default=RunConfig().test.prompt,
+    test.add_argument("--prompt", "-p", default=None,
                       help="推論提示（預設：簡短 JSON 測試）")
-    test.add_argument("--timeout", "-t", type=float, default=RunConfig().test.timeout,
+    test.add_argument("--timeout", "-t", type=float, default=None,
                       help="單次推論超時（預設 90 秒）")
-    test.add_argument("--concurrency", "-c", type=int, default=RunConfig().test.concurrency,
+    test.add_argument("--concurrency", "-c", type=int, default=None,
                       help="並行數（預設 3）")
-    test.add_argument("--retry", "-r", type=int, default=RunConfig().test.retry,
+    test.add_argument("--retry", "-r", type=int, default=None,
                       help="失敗重試次數（預設 0）")
-    test.add_argument("--temperature", type=float, default=RunConfig().test.temperature,
+    test.add_argument("--temperature", type=float, default=None,
                       help="溫度參數（預設 0.0）")
-    test.add_argument("--num-predict", type=int, default=RunConfig().test.num_predict,
+    test.add_argument("--num-predict", type=int, default=None,
                       help="最大產生 token 數（預設 32）")
 
     # 輸出
@@ -956,7 +972,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="額外輸出 JSONL 檔案")
     output.add_argument("--table", action="store_true",
                         help="以表格格式打印結果到終端")
-    output.add_argument("--no-terminal-json", action="store_true",
+    output.add_argument("--no-terminal-json", action="store_true", default=None,
                         help="關閉終端 JSON 輸出（僅檔案）")
     output.add_argument("--semantic-db", "-sd", metavar="PATH",
                         help="語義圖譜 SQLite 路徑（啟用熵減 Context 管理）")
@@ -977,9 +993,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     args = parser.parse_args(argv)
 
     # 驗證：--health 與其他模式互斥
-    if args.health:
-        if args.list or args.batch or args.model:
-            parser.error("--health 不能與其他模式同時使用")
+    if args.health and (args.list or args.batch or args.model):
+        parser.error("--health 不能與其他模式同時使用")
 
     return args
 
@@ -987,25 +1002,35 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def build_run_config(args: argparse.Namespace) -> RunConfig:
     """從 CLI 參數建構 RunConfig。"""
     # 優先載入配置檔
-    if args.config:
-        cfg = build_config_from_file(args.config)
-    else:
-        cfg = RunConfig()
+    cfg = build_config_from_file(args.config) if args.config else RunConfig()
 
-    # CLI 覆蓋配置檔
+    # CLI 覆蓋配置檔：僅在使用者「明確給值」時覆蓋。
+    # parse_args 對這些欄位採 default=None，故 None 代表未指定，應保留配置檔
+    # （或 dataclass）值；若無條件賦值，argparse 預設值會靜默蓋掉配置檔設定。
     if args.model:
         cfg.models = args.model
 
-    cfg.test.prompt = args.prompt
-    cfg.test.timeout = args.timeout
-    cfg.test.concurrency = args.concurrency
-    cfg.test.retry = args.retry
-    cfg.test.temperature = args.temperature
-    cfg.test.num_predict = args.num_predict
+    for _field in ("prompt", "timeout", "concurrency", "retry",
+                   "temperature", "num_predict"):
+        _given = getattr(args, _field)
+        if _given is not None:
+            setattr(cfg.test, _field, _given)
+
+    # setattr 不會重新觸發 dataclass 驗證，須顯式重跑 __post_init__，
+    # 否則非法值會直達執行期：--concurrency 0 使 Semaphore(0) 永久阻塞、
+    # --retry -1 使 range(1 + (-1)) 一次都不嘗試、--timeout 0 使推論立即逾時。
+    # 同一重跑也讓配置檔中的非法值獲得修正（原本僅 dataclass 建構時驗證）。
+    cfg.test.__post_init__()
 
     cfg.output.path = args.output or cfg.output.path
-    cfg.output.format = OutputFormat.AUTO  # 根據副檔名自動判斷
-    cfg.output.no_terminal_json = args.no_terminal_json
+    # AUTO 僅在使用者給了輸出路徑時才有意義：ResultWriter 只在
+    # self.config.path 為真時才解析 AUTO→副檔名，無路徑時 fmt 不參與判斷。
+    # 若無條件設為 AUTO，配置檔的 output.format 便形同虛設（與 test.* 同一
+    # 類缺陷：無條件賦值覆蓋配置檔）。
+    if args.output:
+        cfg.output.format = OutputFormat.AUTO
+    if args.no_terminal_json is not None:
+        cfg.output.no_terminal_json = args.no_terminal_json
 
     # 語義圖譜（CLI 覆蓋配置檔；未指定則沿用配置檔設定 = 停用）
     if args.semantic_db:
