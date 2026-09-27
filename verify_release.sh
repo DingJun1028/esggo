@@ -4,7 +4,8 @@
 # 用法：bash verify_release.sh [exe路徑]
 set -u
 
-EXE="${1:-C:/Project/esggo/_pyi/dist/esggo-agent-mesh.exe}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+EXE="${1:-$SCRIPT_DIR/_pyi/dist/esggo-agent-mesh.exe}"
 # 工作目錄必須是「原生 Windows 路徑」：本機 MSYS 路徑轉換已停用，
 # 傳 /tmp/... 給原生 .exe 會無法解析而靜默失敗（且 $TMPDIR 常為 /tmp）。
 # pwd -W 會把當前目錄轉成 C:/... 形式；失敗時退回硬編碼專案路徑。

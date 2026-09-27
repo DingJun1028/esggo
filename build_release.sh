@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # Agent Mesh 單一 CLI 執行檔打包腳本（可重複建置）
-# 產出：C:/Project/esggo/_pyi/dist/esggo-agent-mesh.exe
+# 產出：<腳本所在目錄>/_pyi/dist/esggo-agent-mesh.exe
+# 路徑由腳本自身位置推導，不可寫死主目錄 —— 否則 git worktree 的隔離建置
+# 會悄悄覆寫主目錄產物，等同沒有隔離。
 # 用法：bash build_release.sh
 set -euo pipefail
 
 PY="${PY:-C:/Users/dingj/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe}"
-SRC="${SRC:-C:/Project/esggo/ollama_model_tool.py}"
-OUT_DIR="C:/Project/esggo/_pyi"
+# pwd -W 產生原生 C:/... 形式，PyInstaller 是原生程式，不接受 MSYS /c/... 路徑
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+SRC="${SRC:-$SCRIPT_DIR/ollama_model_tool.py}"
+OUT_DIR="${OUT_DIR:-$SCRIPT_DIR/_pyi}"
 
 echo "▸ 建置用直譯器：$PY"
 "$PY" --version
