@@ -20,10 +20,10 @@ const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'ftg-journey.db');
 // 單靠封鎖清單不夠：2026-09-27 審查實測發現 JWT_SECRET='a' / '123' / 'password'
 // 都能讓服務正常啟動，等於留下一個更容易猜的簽章金鑰。故一併強制最小長度。
 //
-// 2026-09-27 追加：commit 7a1365dc7 曾把一枚真實隨機金鑰（96 hex）硬寫進
+// 2026-09-27 追加：commit 7a1365dc7 曾把一枚真實隨機金鑰（128 hex = 64 bytes）硬寫進
 // apps/ftg-journey-server/ecosystem.config.js，而 repo 為 public —— 該值可由
 // https://raw.githubusercontent.com/DingJun1028/esggo/7a1365dc7/... 直接取用。
-// 長度達 96 hex，會通過上面的 MIN_SECRET_LENGTH 檢查，因此必須明確列入封鎖。
+// 長度達 128 hex，遠高於下面的 MIN_SECRET_LENGTH 門檻，因此必須明確列入封鎖。
 // 這是防禦縱深：金鑰輪換屬部署端責任，程式層至少不得再默默接受它。
 const LEAKED_FROM_GIT_HISTORY =
   'e2e2f887bf4ffdbb05a4f48144e545a82c3c1c0018df1de23de939c850e5cfafc68fa5dc0cbb90d409abca146e39a39bdaae319a98ff271024b474d14eb5a59b';
