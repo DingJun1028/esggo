@@ -4,9 +4,16 @@ import http from 'node:http';
 import net from 'node:net';
 import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
-const SERVER = 'C:/Project/esggo/apps/gateway/omni-server.mjs';
-const require = createRequire('C:/Project/esggo/apps/gateway/');
+// 以本檔位置推導路徑，不寫死 C:/ 絕對路徑 —— 否則在 Linux CI 上
+// SERVER 會指向不存在的路徑而無法 spawn。
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const SERVER = path.join(HERE, 'omni-server.mjs');
+// createRequire 只接受絕對路徑或 file:// URL。import.meta.url 是
+// 标准的 file:// URL，Windows 與 Linux 皆可。
+const require = createRequire(import.meta.url);
 const WebSocket = require('ws');
 
 // 刻意使用無高熵、無憑證特徵的測試值：GitGuardian 會把
@@ -29,7 +36,7 @@ function waitForLine(proc, re, ms = 20000) {
 
 function startServer(env) {
   const proc = spawn('node', [SERVER], {
-    cwd: 'C:/Project/esggo/apps/gateway',
+    cwd: HERE,
     env: { ...process.env, PORT: String(PORT), GATEWAY_API_KEY: 'dummy-test-key', ...env },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
