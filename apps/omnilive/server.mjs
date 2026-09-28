@@ -143,16 +143,68 @@ function writeJson(res, obj, extra = {}) {
   res.end(JSON.stringify(obj));
 }
 
-// ── 課程即時解說: 本地免費 LLM (Ollama qwen2.5:3b) 產生章節概要/重點/名詞解釋/類似案例 ──
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b';
+// ── 課程即時解說: 本地免費 LLM (Ollama) 產生章節概要/重點/名詞解釋/類似案例 ──
+// 實測 (VPS 161.118.248.180, 純 CPU): qwen2.5:3b 產出此結構化 JSON 需 >400s,
+// 原 120000ms 逾時恆失敗。改為可調, 並預設換用更快的 1.5b。
+const OLLAMA_URL_DEFAULT = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:1.5b';
+const OLLAMA_TIMEOUT_MS = Number(process.env.OLLAMA_TIMEOUT_MS || 600000);
+const OLLAMA_NUM_PREDICT = Number(process.env.OLLAMA_NUM_PREDICT || 700);
+
+/** generateCourse 失敗時的型別化錯誤, 讓上層能區分逾時與其他故障 */
+export class CourseGenError extends Error {
+  /** @param {string} message @param {'timeout'|'ollama'|'parse'} code */
+  constructor(message, code) {
+    super(message);
+    this.name = 'CourseGenError';
+    this.code = code;
+  }
+}
+
+/**
+ * 以 node:http 送 POST 並收完整 body, 逾時可控。
+ * 不用 fetch 的原因: undici 的 headersTimeout 預設 300s, 且需額外安裝 undici
+ * 才能調校。實測 VPS 純 CPU 生成需 >300s, fetch 會在 300s 硬失敗回 "fetch failed"。
+ * @param {string} url
+ * @param {string} body
+ * @param {number} timeoutMs
+ * @returns {Promise<{status: number, text: string}>}
+ */
+function httpPost(url, body, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const u = new URL(url);
+    const req = http.request({
+      hostname: u.hostname,
+      port: u.port || 80,
+      path: u.pathname + u.search,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) },
+    }, (res) => {
+      const chunks = [];
+      res.on('data', (c) => chunks.push(c));
+      res.on('end', () => resolve({ status: res.statusCode || 0, text: Buffer.concat(chunks).toString('utf8') }));
+      res.on('error', reject);
+    });
+    req.setTimeout(timeoutMs, () => {
+      req.destroy(Object.assign(new Error(`timeout after ${timeoutMs}ms`), { name: 'AbortError' }));
+    });
+    req.on('error', reject);
+    req.end(body);
+  });
+}
 
 /**
  * 把累積字幕文字送給本地 Ollama, 產出結構化課程解說 (零 key 免費)
  * @param {string} text 累積的字幕文字 (雙語)
+ * @param {{timeoutMs?: number, model?: string, numPredict?: number, url?: string}} [opts]
  * @returns {Promise<object>} {summary,keypoints[],terms[],similar_cases[]}
  */
-export async function generateCourse(text) {
+export async function generateCourse(text, opts = {}) {
+  const timeoutMs = opts.timeoutMs ?? OLLAMA_TIMEOUT_MS;
+  const model = opts.model ?? OLLAMA_MODEL;
+  const numPredict = opts.numPredict ?? OLLAMA_NUM_PREDICT;
+  // 呼叫時解析 URL: 讓測試可注入假 Ollama, 也便於執行期切換端點
+  const baseUrl = opts.url ?? process.env.OLLAMA_URL ?? OLLAMA_URL_DEFAULT;
   const prompt = `你是一個專業的課程助教。以下是即時會議/課堂的雙語字幕逐字稿（含原文與翻譯）。請整理成結構化課堂重點，嚴格只輸出 JSON，不要任何額外說明文字。
 
 格式：
@@ -167,25 +219,34 @@ export async function generateCourse(text) {
 ${text}
 
 請輸出 JSON：`;
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 120000); // Ollama 冷啟動載入模型可能 >60s
+  const payload = JSON.stringify({
+    model,
+    prompt,
+    stream: false,
+    format: 'json',
+    options: { temperature: 0.3, num_predict: numPredict },
+  });
   try {
-    const r = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ model: OLLAMA_MODEL, prompt, stream: false, format: 'json', options: { temperature: 0.3 } }),
-      signal: ctrl.signal,
-    });
-    if (!r.ok) throw new Error(`ollama ${r.status}`);
-    const j = await r.json();
-    const parsed = JSON.parse(j.response);
+    const { status, text } = await httpPost(`${baseUrl}/api/generate`, payload, timeoutMs);
+    if (status < 200 || status >= 300) throw new CourseGenError(`ollama ${status}`, 'ollama');
+    let j; try { j = JSON.parse(text); }
+    catch { throw new CourseGenError('ollama 回應非合法 JSON', 'parse'); }
+    let parsed;
+    try { parsed = JSON.parse(j.response); }
+    catch { throw new CourseGenError('ollama 回應非合法 JSON', 'parse'); }
     return {
       summary: parsed.summary || '',
       keypoints: Array.isArray(parsed.keypoints) ? parsed.keypoints : [],
       terms: Array.isArray(parsed.terms) ? parsed.terms : [],
       similar_cases: Array.isArray(parsed.similar_cases) ? parsed.similar_cases : [],
     };
-  } finally { clearTimeout(t); }
+  } catch (e) {
+    if ((/** @type {any} */ (e)).name === 'AbortError') {
+      throw new CourseGenError(`ollama 逾時 (${timeoutMs}ms, model=${model})`, 'timeout');
+    }
+    if (e instanceof CourseGenError) throw e;
+    throw new CourseGenError(/** @type {any} */ (e).message, 'ollama');
+  }
 }
 
 const server = http.createServer(/** @param {import('node:http').IncomingMessage} req @param {import('node:http').ServerResponse} res */ async (req, res) => {
@@ -329,12 +390,20 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
       const subs = store.getByRoom(room);
       text = subs.map(s => `${s.source || ''}\n${s.target || ''}`).join('\n\n');
     }
-    if (!text.trim()) return writeJson(res, { summary: '', keypoints: [], terms: [], similar_cases: [], note: 'no transcript yet' });
+    if (!text.trim()) return writeJson(res, { status: 'empty', summary: '', keypoints: [], terms: [], similar_cases: [], note: 'no transcript yet' });
+    const timeoutMs = Number(p.timeoutMs) > 0 ? Number(p.timeoutMs) : undefined;
     try {
-      const course = await generateCourse(text.slice(-6000)); // 限制長度避免超過 LLM context
-      return writeJson(res, course);
+      const course = await generateCourse(text.slice(-6000), timeoutMs ? { timeoutMs } : {});
+      return writeJson(res, { status: 'ok', ...course });
     } catch (/** @type {any} */ e) {
-      return res.writeHead(502).end(JSON.stringify({ error: 'course gen failed', detail: e.message }));
+      // 逾時不是伺服器故障: LLM 純 CPU 生成可能數分鐘, 回 200 讓前端顯示
+      // 「生成中」而非錯誤。502 會讓呼叫端誤判為端點壞掉。
+      const code = e.code === 'timeout' ? 'timeout' : 'failed';
+      return writeJson(res, {
+        status: code,
+        summary: '', keypoints: [], terms: [], similar_cases: [],
+        error: 'course gen failed', detail: e.message, retryable: code === 'timeout',
+      });
     }
   }
 
@@ -344,10 +413,19 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
   res.end(JSON.stringify({ usage: 'GET /health | GET /config | GET /stream (SSE) | POST /api/transcribe (audio) | POST /api/speak {text,room} | GET / (player)' }));
 });
 
-server.listen(PORT, () => {
-  const d = describeSource(CFG.audioSource, CFG.audioDeviceId);
-  console.log(`[omnilive] v${APP_VERSION} listening on :${PORT}`);
-  console.log(`[omnilive] 音訊來源: ${d.label} (${CFG.audioSource})`);
-  console.log(`[omnilive] 雙語: ${CFG.from} → ${CFG.to}${CFG.geminiApiKey ? '  (Gemini 增強開啟)' : ''}`);
-  console.log(`[omnilive] 播放器: http://localhost:${PORT}/`);
-});
+// 是否 listen 由環境變數決定, 不用 argv 比對。
+// 原因 (實測): PM2 以 /usr/lib/node_modules/pm2/lib/ProcessContainerFork.js 包裝
+// 腳本執行, 故 process.argv[1] 永遠不是本檔案, 任何 argv 比對在 PM2 下必為 false
+// → 服務靜默不綁定埠。此坑已導致一次生產事故 (PM2 顯示 online 但 health 無回應)。
+// 測試設定 OMNILIVE_NO_LISTEN=1 即可只取純函式匯出。
+const shouldListen = process.env.OMNILIVE_NO_LISTEN !== '1';
+
+if (shouldListen) {
+  server.listen(PORT, () => {
+    const d = describeSource(CFG.audioSource, CFG.audioDeviceId);
+    console.log(`[omnilive] v${APP_VERSION} listening on :${PORT}`);
+    console.log(`[omnilive] 音訊來源: ${d.label} (${CFG.audioSource})`);
+    console.log(`[omnilive] 雙語: ${CFG.from} → ${CFG.to}${CFG.geminiApiKey ? '  (Gemini 增強開啟)' : ''}`);
+    console.log(`[omnilive] 播放器: http://localhost:${PORT}/`);
+  });
+}
