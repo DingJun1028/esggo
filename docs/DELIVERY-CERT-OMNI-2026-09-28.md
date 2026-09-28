@@ -101,6 +101,31 @@ unsound cast 可達。**不誇大為嚴重問題。**
 【6】依賴稽核       pnpm audit: info 0 low 0 moderate 0 high 0 critical 0
 ```
 
+### 全庫健康度（因全庫 vitest 總時長約 9 分鐘超過工具 420s 硬上限，改以分段跑完）
+
+以 `find` 枚舉的 **42 個測試檔全數執行**，7 段合計 **422 tests、0 失敗**：
+
+| 分段 | 測試檔 | Tests | 耗時 |
+|------|-------|-------|------|
+| `src/lib` | 7 | 73 passed | 45s |
+| `src/core` | 6 | 92 passed | 33s |
+| `src/agents` | 6 | 44 passed | 35s |
+| `src/__tests__` + `src/impl` | 7 | 60 passed | 38s |
+| `src/components` + `incremental-output` + `middleware` + `oa-integration` | 5 | 18 passed | 53s |
+| `packages/` | 9 | 68 passed | 79s |
+| `oa-swarm` + `ftg-3.0` + `gateway` | 5 | 67 passed | 16s |
+| **合計** | **45 次計數** | **422 passed / 0 failed** | ~5 min |
+
+**全庫 vitest 超時並非測試掛住**，而是總時長 ~9 分鐘超出工具硬上限。逐段實測無任何
+檔案逾時或失敗。
+
+| 閘 | 指令 | 結果 |
+|----|------|------|
+| Lint | `pnpm run lint`（`ts-node scripts/celestial-gate.ts`）| `32 problems (0 errors, 32 warnings)`，`✅ 核心目錄通過熵境門檻` |
+| TS 矩陣 | `node tools/ts-matrix/verify.mjs` | exit 0 · lock 連 3 次穩定 `3702e54f…` |
+
+`lint` 的 0 errors / 32 warnings 與另一 session 證書宣稱的數字**完全一致**，屬獨立證實。
+
 ## 工具自述與觀察事實矛盾處（以實測為準）
 
 兩批 subagent 皆回報「8 分鐘無進度已取消」之**失敗**。實測 `shared` / `i18n` /
