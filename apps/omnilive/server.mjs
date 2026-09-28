@@ -261,6 +261,32 @@ ${text}
   }
 }
 
+/**
+ * 主持人端金鑰驗證 (Trustworthy)
+ *
+ * 守護對象: POST /api/* (room / transcribe / speak / course)。這四個端點會實際
+ * 消耗主機 CPU —— STT 要跑 whisper, /api/course 要跑本地 LLM (實測單次 115 秒)。
+ * 若無防護, 任何拿到網址的人都能無限觸發並打爆主機。
+ *
+ * 刻意保持公開: GET /health (監控)、GET /config (播放器初始化)、
+ * GET /stream (SSE, 另由房間密碼保護)、靜態檔案 —— 這些是公開職責, 加驗證會
+ * 擋掉監控與觀眾端。
+ *
+ * 比對採 crypto.timingSafeEqual 避免時間差旁路; 長度不同先短路, 因為
+ * timingSafeEqual 對長度不符會拋錯。
+ */
+function hostKeyOk(req, expected) {
+  if (!expected) return true; // 未設定 → 不驗證 (僅適合本機開發)
+  const bearer = (req.headers['authorization'] || '').toString().replace(/^Bearer\s+/i, '').trim();
+  const custom = (req.headers['x-omnilive-key'] || '').toString().trim();
+  const provided = bearer || custom;
+  if (!provided) return false;
+  const a = Buffer.from(provided, 'utf8');
+  const b = Buffer.from(expected, 'utf8');
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
 const server = http.createServer(/** @param {import('node:http').IncomingMessage} req @param {import('node:http').ServerResponse} res */ async (req, res) => {
   const url = req.url || '';
   const urlPath = url.split('?')[0];
@@ -275,6 +301,13 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
   // 公開設定 (供播放器初始化)
   if (url === '/config' && req.method === 'GET') {
     return writeJson(res, { ...publicConfig(CFG), audioSources: AUDIO_SOURCES, audioSourceDesc: describeSource(CFG.audioSource, CFG.audioDeviceId) });
+  }
+
+  // 主持人端守護 (Trustworthy): 所有 POST /api/* 需金鑰, 否則 401。
+  // 放在 /health、/config 之後 → 監控與播放器初始化不受影響。
+  if (req.method === 'POST' && urlPath.startsWith('/api/') && !hostKeyOk(req, CFG.hostApiKey)) {
+    return res.writeHead(401, { 'content-type': 'application/json', 'WWW-Authenticate': 'Bearer realm="omnilive"' })
+      .end(JSON.stringify({ error: 'host api key required', code: 'HOST_KEY_REQUIRED' }));
   }
 
   // 建立分享房間 (主持人呼叫) → 回傳 caster / viewer 分享連結
