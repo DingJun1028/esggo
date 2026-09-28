@@ -311,11 +311,11 @@ api-health-tags 17.3s / audit-logger 9.9s / complete-delegation 9.4s
 
 | 項目 | 狀態 | 說明 |
 |------|------|------|
-| CI 於 ubuntu runner 實測 | ⏸ **待驗證** | 本地為 Windows。`ws-auth.test.mjs` 已刻意不寫死路徑（由 `import.meta.url` 推導），跨平台性只由既有 CI 歷史佐證，本輪未實測 |
+| CI 於 ubuntu runner 實測 | ✅ **已驗證** | run 36401777384：Vitest Tests pass（836 passed，與本地一致）、UT API Tests pass（WS 認證 25 斷言 + OmniAgentBus 32/20 passed + DIST_IMPORT_SMOKE_OK）。跨平台性確認 |
 | `Code scanning AI findings` 紅燈 | ⚫ **非 repo 缺陷** | 根因為 GitHub Copilot 服務端 `CAPIError: 400 The requested model is not supported`，repo 內無法修 |
 | `dist-smoke` 合規文本長度 | ⚠️ **耦合** | 文本長度 281 綁定 `src/bus.ts` 的 `GATE_MIN_LENGTH`（最高 tangible ≥ 200）。常數調高需同步延長 fixture，否則測試以「某維度掉下去」形式紅燈（失敗訊息會指出具體維度） |
 | 30 蜂群 × 7 子框架 = 37 分身 | ✅ 已驗 | `live-clones.smoke.ts` 第 2 節實跑 |
-| `ollama_model_tool` 殘留引用 | ✅ 無殘留 | ripgrep 全 repo 掃描：tracked files 0 matches |
+| `ollama_model_tool` 殘留引用 | ✅ 無殘留 | `git grep "ollama_model_tool"` 查索引：唯一命中為本文件此列敘述，程式碼 0 殘留 |
 | `cli/oa-cli/src/audit.test.ts` flaky | ✅ 已修 | 見下方 ADR-D |
 | `tests/cron-auth` / `tests/api-health-tags` flaky | ✅ 已修 | 見下方 ADR-D |
 
@@ -351,4 +351,4 @@ api-health-tags 17.3s / audit-logger 9.9s / complete-delegation 9.4s
 ---
 
 *文件由 agent:01（蜂后）統籌 · agent:07（編碼）· agent:11（測試）· agent:30（質控）*
-*5T 狀態：Traceable ✅ · Trackable ✅ · Tangible ✅ · Transparent ✅ · Trustworthy ⏸（dist 待 CI 實測）*
+*5T 狀態：Traceable ✅ · Trackable ✅ · Tangible ✅ · Transparent ✅ · Trustworthy ✅（CI run 36401777384 實測確認）*
