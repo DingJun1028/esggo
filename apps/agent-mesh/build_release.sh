@@ -10,7 +10,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 
 PY="${PY:-C:/Users/dingj/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe}"
-SRC="${SRC:-$HERE/agent_mesh_tool.py}"
+SRC="${SRC:-$HERE/agent-tool.py}"
 OUT_DIR="${OUT_DIR:-$REPO_ROOT/_pyi}"
 
 echo "▸ 建置用直譯器：$PY"

@@ -6,6 +6,7 @@
 執行：python -m pytest apps/agent-mesh/tests/ -q
 """
 
+import importlib.util
 import json
 import sqlite3
 import sys
@@ -18,18 +19,27 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from agent_mesh_tool import (  # noqa: E402
-    OutputConfig,
-    OutputFormat,
-    ResultWriter,
-    RunConfig,
-    Status,
-    TestResult,
-    build_config_from_file,
-    compute_summary,
-    render_summary_table,
-)
 from semantic_graph import SemanticGraph  # noqa: E402
+
+# 被測主模組正式名為 agent-tool.py，含連字號 → 無法用 `import agent-tool`
+# 一般語法匯入（Python 模組名不接受 `-`）。故以 importlib 由檔案路徑載入，
+# 並註冊為 sys.modules["agent_tool"]，讓後續 `import agent_tool` 仍可用。
+_TOOL_PATH = ROOT / "agent-tool.py"
+_spec = importlib.util.spec_from_file_location("agent_tool", _TOOL_PATH)
+assert _spec is not None and _spec.loader is not None, f"無法載入 {_TOOL_PATH}"
+agent_tool = importlib.util.module_from_spec(_spec)
+sys.modules["agent_tool"] = agent_tool
+_spec.loader.exec_module(agent_tool)
+
+OutputConfig = agent_tool.OutputConfig
+OutputFormat = agent_tool.OutputFormat
+ResultWriter = agent_tool.ResultWriter
+RunConfig = agent_tool.RunConfig
+Status = agent_tool.Status
+TestResult = agent_tool.TestResult
+build_config_from_file = agent_tool.build_config_from_file
+compute_summary = agent_tool.compute_summary
+render_summary_table = agent_tool.render_summary_table
 
 
 def _ok(model: str = "m1", **kw) -> TestResult:
@@ -235,7 +245,7 @@ def test_graph_stats_on_fresh_db(tmp_path):
 
 def test_cli_uses_canonical_graph_not_duplicate():
     """回歸：CLI 曾內嵌一份 SemanticGraph 副本，造成 stats() 只在內嵌版可用。"""
-    import agent_mesh_tool as cli
+    import agent_tool as cli
     from semantic_graph import SemanticGraph as Canonical
 
     assert cli.SemanticGraph is Canonical, "CLI 必須使用正典模組，不可有內嵌副本"

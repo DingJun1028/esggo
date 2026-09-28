@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-agent_mesh_tool.py — 生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）
+agent-tool.py — 生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）
 
 特色：
 - 非同步並行推論測試（asyncio + aiohttp）
@@ -12,25 +12,29 @@ agent_mesh_tool.py — 生產級代理工具模組（代理網狀協作 · 模�
 
 用法（在 apps/agent-mesh/ 下執行）：
     # 健康檢查
-    python agent_mesh_tool.py --health
+    python agent-tool.py --health
 
     # 列出模型
-    python agent_mesh_tool.py --list
+    python agent-tool.py --list
 
     # 單模型測試
-    python agent_mesh_tool.py --model gemma4:e4b
+    python agent-tool.py --model gemma4:e4b
 
     # 批次並行測試所有模型（預設 concurrency=3）
-    python agent_mesh_tool.py --batch
+    python agent-tool.py --batch
 
     # 指定並行數 + 提示 + 輸出
-    python agent_mesh_tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
+    python agent-tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
 
     # 使用配置檔（鍵名 ollama: 為對應 Ollama REST API 的技術契約，不隨專案更名）
-    python agent_mesh_tool.py --config models.yaml
+    python agent-tool.py --config models.yaml
 
     # 僅輸出表格
-    python agent_mesh_tool.py --batch --table
+    python agent-tool.py --batch --table
+
+註：檔名含連字號（agent-tool.py），故無法用 `import agent-tool` 一般語法
+匯入 —— 需以 importlib.util.spec_from_file_location 載入。本檔設計為
+CLI 執行檔（PyInstaller onefile），此限制不影響實際使用。
 
 配置檔範例 (models.yaml)：
     ollama:
@@ -898,7 +902,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
 )
-logger = logging.getLogger("agent_mesh_tool")
+logger = logging.getLogger("agent_tool")
 
 
 # ============================================================================
