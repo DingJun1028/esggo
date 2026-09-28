@@ -76,7 +76,7 @@ export class LiquidGlassRenderer {
   private readonly config: LiquidGlassConfig;
 
   constructor(config?: LiquidGlassConfig) {
-    this.config = config ? { ...config } : { ...DEFAULT_GLASS };
+    this.config = { ...DEFAULT_GLASS, ...config };
   }
 
   /**
@@ -132,7 +132,7 @@ export class FloatingCore {
   private readonly config: FloatingCoreConfig;
 
   constructor(config?: FloatingCoreConfig) {
-    this.config = config ? { ...config } : { ...DEFAULT_FLOATING_CORE };
+    this.config = { ...DEFAULT_FLOATING_CORE, ...config };
   }
 
   /**
