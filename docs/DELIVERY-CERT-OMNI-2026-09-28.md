@@ -126,6 +126,45 @@ unsound cast 可達。**不誇大為嚴重問題。**
 
 `lint` 的 0 errors / 32 warnings 與另一 session 證書宣稱的數字**完全一致**，屬獨立證實。
 
+### 全庫熵減（commit `ac28f7dd1`）
+
+`pnpm run lint` 警告 **32 → 7**（減 78%），0 errors 維持；`no-unused-vars` 全數清零。
+13 檔 **+22 / −34**（淨減 12 行）。每一處均先 grep 查證使用情形才動手。
+
+**死碼（需判斷，非機械刪除）**
+
+- **三個 health 路由的 `const cpu = os.loadavg()[0]`** —— 同一段程式碼被
+  copy-paste 三份（`health/route.ts`、`health-metrics/route.ts`、
+  `health/metrics/route.ts`）。實測 `os.platform()` = `win32`、
+  `os.loadavg()` 恆為 `[0,0,0]`，且該值從未進入 metrics 模板。
+  **刻意「補上 CPU 指標」是錯的選擇** —— 會輸出一個恆為 0、在 Prometheus
+  看似「CPU 閒置」的誤導 gauge，比沒有更糟。故刪除，並連帶移除僅供其使用的
+  `import os`。首次只修了 1 份，經 lint 掃描才發現另有 2 份。
+- `omnitag-contract.ts` 的 `SQUAD_SET` —— 5 個 squad 名稱完整保留於
+  `src/core/omnitag_registry.py`，移除不損失資訊。
+- `omni-kernel.ts` 的 `register<T>` —— `<T>` 從未用於簽章，且專案程式碼
+  無任何 `.register<Type>()` 顯式型別引數。
+
+**未使用匯入（10 處）** —— 僅移除 flagged 名稱，保留同一匯入中仍有使用的成員
+（例：`api-gateway.ts` 的 `import { freeze, uuidV4, OA_VERSION }` 只刪 `OA_VERSION`）。
+
+**未使用參數** —— 依 eslint 規則自身的 `/^_/u` 慣例處理而非刪除（這些是刻意的
+API 相容 stub，註解明寫「GCP Firebase Auth 已停用，本地模式降級回 null」）。
+
+### 驗證方法論教訓（重要）
+
+本次曾以 `tsconfig.core.json` 驗證 `src/lib` 的變更，但該設定的 `include` 僅含
+`src/impl`、`src/lib/omni-core`、`src/lib/cloudflare`、`lib/types` ——
+**不含 `src/lib/unified-auth.ts`**，因此把「實際有使用」的參數 `config` 誤改名為
+`_config` 時，檢查回報 exit 0（假綠），該 bug 會在執行期拋 `ReferenceError`。
+
+補救與防再發：
+1. 逐一大括號配對切出函式本體，確認 3 個 `_config` 函式體內 0 個裸 `config`、
+   2 個 `config` 函式有 3–4 處使用（`verify-params.js`，問題數 0）
+2. `src/lib` 的驗證一律改用 `tsconfig.json`（確認涵蓋 2/2 目標檔案）
+
+**教訓：全域檢查通過不等於本次變更被檢查到。必須確認檢查工具的覆蓋範圍包含變更檔案。**
+
 ## 工具自述與觀察事實矛盾處（以實測為準）
 
 兩批 subagent 皆回報「8 分鐘無進度已取消」之**失敗**。實測 `shared` / `i18n` /
