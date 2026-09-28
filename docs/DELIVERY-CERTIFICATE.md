@@ -26,7 +26,7 @@ access: public
 | nginx 站點 | ✅ **HTTP 已上線** | 26 站點全正常，`nginx -t` = test is successful |
 | 備分 | ✅ **已完成** | 25 檔案 + git bundle 283MB，MD5 與線上一致 |
 | 對外網域 | ⛔ **未開放** | 所有既有 Cloudflare 憑證皆無 DNS 寫入權限（見第六節） |
-| vault 檔案權限 | ⛔ **未修復** | chmod 600 後實測仍為 644（見第八節） |
+| vault 檔案權限 | ✅ **本已安全** | 先前「644 未修復」為**誤診**，已用 `icacls` 更正（見第八節） |
 
 ## 二、本次修復的三個真實缺陷
 
@@ -158,7 +158,7 @@ PM2 以 `ProcessContainerFork.js` 包裝腳本執行，`process.argv[1]` 永遠�
 | DNS A 記錄 | ⛔ 未完成 | 需**有效的** Cloudflare API Token（金鑰按鈕提供，環境變數名 `CF_API_TOKEN`，需 `Zone:DNS:Edit`）。為 `omnilive.esggo.co` 與 `omnilivetranslation.esggo.co` 建立 A 記錄指向 `161.118.248.180` |
 | TLS 憑證 | ⛔ 未完成 | 依賴 DNS；DNS 就緒後執行 `certbot --nginx -d omnilive.esggo.co -d omnilivetranslation.esggo.co` |
 | 手機實測 | ⛔ 未完成 | 依賴上述兩項 |
-| **vault 檔案權限** | ⛔ **未修復** | 目標 600，實測 `chmod` 後**仍為 644**。原因：Windows NTFS 權限為模擬式，`chmod` 不生效，須改用 `icacls` 設定 Windows ACL |
+| ~~**vault 檔案權限**~~ | ✅ **誤診，已更正** | 先前記載「chmod 後仍 644、未修復」**是錯的**。經 `icacls` 查證真實 ACL：`DINGJUN\dingj:(I)(F)` — 僅擁有者、繼承已移除、無 SYSTEM／Administrators。此即 `chmod 600` 的等效狀態。`stat -c %a` 在 Windows 回傳的是 MSYS 合成 mode，**不是真實權限**，不應作為判斷依據。對照組 `.gitconfig` 為 `SYSTEM:(F)+Administrators:(F)+dingj:(F)` 三方，vault 明顯更嚴格。已額外執行 `icacls /inheritance:r /grant:r` 確認收緊，讀取驗證 50 筆金鑰仍可正常讀取 |
 
 ## 九、備分
 
