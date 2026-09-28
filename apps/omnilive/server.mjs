@@ -132,6 +132,7 @@ async function pipeline(stt, room = '', langOverride) {
     geminiModel: CFG.geminiModel,
   });
   const sub = buildSubtitle(stt, tr);
+  sub.room = room || '';          // 標記所屬房間, 供 /api/course 取累積字幕
   store.push(sub);
   broadcast(sub, room);
   return sub;
@@ -325,7 +326,7 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
     // 優先用前端傳來的 text, 否則從 store 抓取該房間累積字幕
     let text = (p.text || '').toString().trim();
     if (!text && room) {
-      const subs = store.getByRoom ? store.getByRoom(room) : store.snapshot().filter(s => s.room === room);
+      const subs = store.getByRoom(room);
       text = subs.map(s => `${s.source || ''}\n${s.target || ''}`).join('\n\n');
     }
     if (!text.trim()) return writeJson(res, { summary: '', keypoints: [], terms: [], similar_cases: [], note: 'no transcript yet' });
