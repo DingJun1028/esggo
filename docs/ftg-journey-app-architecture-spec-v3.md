@@ -407,6 +407,39 @@ apps/ftg-journey-server   Node 22 + Express 4 + node:sqlite + google-auth-librar
 
 
 
+### 7.1 部署管線驗證閘（2026-09-28）
+
+YAML 可解析**不足以**證明 workflow 正確 —— 真正執行的是 `bash -s <<'VPS'` heredoc
+內的 shell。故驗證目標是那段腳本，不是 YAML。
+
+| 閘 | 指令 | 實測結果 |
+|---|---|---|
+| YAML 結構 | `python yaml.safe_load` | OK — 3 jobs（pre-check / deploy / notify） |
+| heredoc 語法 | 抽出 2 個 `<<'VPS'` 區塊 → `bash -n` | **block 1: 66 行 SYNTAX_OK**<br>**block 2: 137 行 SYNTAX_OK** |
+| 關鍵邏輯斷言 | 對抽取區段做 regex 斷言 | 8787 納入阻擋條件 ✅ / DEGRADED 已移除 ✅ / pm2 診斷 ✅ / ss 診斷 ✅ / .env 診斷 ✅ / 成功訊息含 ftg ✅ / fuser 清單含 8787 ✅ |
+| **行為驗證** | 抽出 `if` 判斷式，以 4 種 health 情境實跑 | 見下表 |
+
+**行為驗證（模擬 VPS，實際執行判斷式）**
+
+| 情境 | GW / WEB / FTG | 期望 | 實測 |
+|---|---|---|---|
+| 正常部署 | 200 / 200 / 200 | exit 0 | **exit 0**，`[OK] health check passed (gateway/web/ftg)` ✅ |
+| 僅 ftg 掛 | 200 / 200 / 502 | exit 1 | **exit 1** ✅ |
+| 僅 gateway 掛 | 500 / 200 / 200 | exit 1 | **exit 1** ✅ |
+| 全部 502 | 502 / 502 / 502 | exit 1 | **exit 1** ✅ |
+
+修復前後差異（這是本 commit 的核心價值）：
+
+| 情境 | 修復前 | 修復後 |
+|---|---|---|
+| 僅 ftg 掛 | `[DEGRADED]` 印警告後 **exit 0**（部署綠） | **exit 1**（部署紅） |
+
+**已知驗證邊界（如實聲明）**：`actionlint` 安裝失敗（choco 權限不足、官方 release
+下載受阻、npm 包無 binary），故 **actions 專屬語法未經 actionlint 驗證**
+（`${{ }}` expression 引用、`if:` 條件等）。本次僅跑 `yaml.safe_load` + shell 語法
+檢查 + 行為模擬。風險評估：本次未新增任何 `${{ }}` expression，僅修改既有 `if`
+條件與 echo 字串，故 actionlint 能發現的問題類別未被觸及。
+
 ### P1 — 補齊官網承諾（10 個 ❌）
 
 依 §4 缺口清單，依序：永續目的地評分 → 共創挑戰 → 在地餐食 → 手作工作坊 → 親子運動 → 數位排毒 → 正念計時器 → 深度對話 → 跨部門協作 → SASB 對應。
