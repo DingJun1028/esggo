@@ -81,18 +81,51 @@ def update_step(task_id: str, step_index: int, status: str, output: str = ""):
     save_state(state)
     return True
 
-def complete_task(task_id: str, success: bool = True, final_output: str = ""):
-    """Mark task as completed.
+def complete_task(task_id: str, success: bool = True, final_output: str = "", final: bool = True):
+    """Mark task as completed, or advance it when not the last step.
 
     假成功防護：命令回傳碼為 0 但 stdout 為空，代表修復「沒有留下任何證據」。
     舊版仍標記 status=success，導致 tracker-state.json 出現無法證實的
     completed_tasks（實測：TASK-CCA36E1A / TASK-AC526708 皆 final_output 為空）。
     此處改判為 failed，避免監看器與人工都被誤導。
+
+    final=False 時不結案 —— 只更新該步的輸出並留在 active_tasks，
+    讓多步任務能逐步追蹤。舊版無論第幾步都呼叫最終結案，導致
+    「3 步任務」在 step 0 就被移出 active_tasks，step 1/2 直接報
+    "task_id not found in active_tasks"（2026-09-28 實測）。
     """
     state = load_state()
     task = state["active_tasks"].pop(task_id, None)
     if not task:
         return False
+
+    # 非最終步：記錄輸出後放回 active_tasks，維持可續追。
+    if not final:
+        task["step_outputs"] = task.get("step_outputs", {})
+        task["step_outputs"][str(task.get("current_step", 0))] = final_output
+        task["updated_at"] = datetime.now().isoformat()
+        # 假成功在「每一步」就要攔截，不只在結案時。
+        # 否則 3 步任務若前兩步都回傳空輸出，會一路靜默到最後一步才被判失敗，
+        # 中間期間監看器看到的是「running 中」而非異常（2026-09-28 實測發現）。
+        if success and not (final_output or "").strip():
+            task["status"] = "failed"
+            task["failed_reason"] = (
+                f"步驟 {task.get('current_step', 0)} 命令回傳碼為 0 但輸出為空 —— 無證據顯示修復生效"
+            )
+            state["failed_tasks"][task_id] = task
+            log_event(task_id, "FAILED",
+                      f"Step {task.get('current_step', 0)} exited 0 with no output "
+                      f"— unverified success, task failed")
+            print(f"  ⚠️ [{task_id}] 步驟 {task.get('current_step', 0)} 成功但無輸出 "
+                  f"→ 判定為未證實的修復，任務記為失敗")
+            escalate(task_id, task)
+        else:
+            state["active_tasks"][task_id] = task
+            log_event(task_id, "STEP_OUTPUT",
+                      f"Step {task.get('current_step', 0)} output recorded "
+                      f"({len(final_output)} chars), task remains active")
+        save_state(state)
+        return True
 
     # 假成功偵測：宣稱成功卻無任何輸出
     unverified_success = success and not (final_output or "").strip()
@@ -204,10 +237,16 @@ if __name__ == "__main__":
                 sys.exit(1)
             task_id = create_task(args.task, args.steps.split(",") if args.steps else ["Execute", "Verify", "Complete"])
         success, output = track_command(task_id, args.step, args.cmd)
+        # 僅在最後一步才結案；中間步驟保持 active 以供續追。
+        # （修正 2026-09-28：舊版每步都結案，3 步任務在 step 0 即被移出 active_tasks）
+        state_now = load_state()
+        task_now = state_now.get("active_tasks", {}).get(task_id, {})
+        total_steps = len(task_now.get("steps", []))
+        is_last = args.step >= total_steps - 1 if total_steps else True
         if success:
-            complete_task(task_id, success=True, final_output=output)
+            complete_task(task_id, success=True, final_output=output, final=is_last)
         else:
-            complete_task(task_id, success=False, final_output=output)
+            complete_task(task_id, success=False, final_output=output, final=is_last)
     elif args.command == "get":
         task_id = args.task_id or args.task
         if task_id:
