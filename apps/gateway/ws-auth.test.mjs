@@ -45,9 +45,17 @@ function startServer(env) {
 }
 
 async function stop(proc) {
-  // Windows: SIGTERM to the shim doesn't always reap node; use taskkill /T /F.
-  spawn('taskkill', ['/PID', String(proc.pid), '/T', '/F'], { stdio: 'ignore' });
-  await new Promise(r => { proc.on('exit', r); setTimeout(r, 3000); });
+  // 先走標準 SIGTERM（跨平台），Windows 上對 node 子行程也有效。
+  // 舊實作直接 spawn taskkill，該指令不存在於 Linux/macOS，CI 上會留下
+  // 孤兒行程佔用 8899 埠，導致後續執行 bind 失敗。
+  const exited = new Promise((r) => proc.once('exit', r));
+  try { proc.kill('SIGTERM'); } catch {}
+  const exitedInTime = await Promise.race([exited.then(() => true), new Promise((r) => setTimeout(() => r(false), 3000))]);
+  if (!exitedInTime) {
+    // 有界退路：僅在 SIGTERM 沒收尾時才強制，且不依賴平台專屬指令。
+    try { proc.kill('SIGKILL'); } catch {}
+    await Promise.race([exited, new Promise((r) => setTimeout(r, 2000))]);
+  }
 }
 
 // Raw handshake so we can see the exact HTTP status line.
@@ -134,39 +142,60 @@ record('raw handshake subprotocol 錯 token 被拒', raw6.statusLine.includes('4
 const raw7 = await rawHandshake({ query: '?token=' + TOKEN + 'extra' });
 record('raw handshake token+雜訊被拒（嚴格相等）', raw7.statusLine.includes('401'), raw7.statusLine);
 
+// 多候選遮蔽：client 可能同時帶無關的 header 與有效的 subprotocol token。
+// 舊實作在第一個 header 就 return，會讓有效的 subprotocol 永不被檢查而誤回 401。
+const raw8 = await rawHandshake({
+  query: '',
+  protocol: 'bearer, ' + TOKEN,
+  headers: { Authorization: 'Bearer injected-by-proxy-not-a-real-token' },
+});
+record('無關 Authorization 不遮蔽有效 subprotocol token', raw8.statusLine.includes('101'), raw8.statusLine);
+
+const raw9 = await rawHandshake({
+  query: '',
+  protocol: 'bearer, NOPE',
+  headers: { Authorization: 'Bearer injected-by-proxy-not-a-real-token' },
+});
+record('所有候選皆錯才拒絕', raw9.statusLine.includes('401'), raw9.statusLine);
+
 const c1 = await wsClientTry(`ws://127.0.0.1:${PORT}/?token=${TOKEN}`);
 record('ws 套件 帶正確 token', c1.ok, JSON.stringify(c1));
 
+// 負向斷言必須要求「明確的 401」，不能只判斷 !ok。
+// 舊寫法讓 TIMEOUT、500、連線錯誤都算通過，掩蓋真實故障。
+const rejected401 = (r) => !r.ok && /401/.test(String(r.reason || ''));
+const j = (r) => JSON.stringify(r);
+
 const c2 = await wsClientTry(`ws://127.0.0.1:${PORT}/?token=bad`);
-record('ws 套件 錯誤 token 被拒', !c2.ok, JSON.stringify(c2));
+record('ws 套件 錯誤 token 被拒 (401)', rejected401(c2), j(c2));
 
 const c3 = await wsClientTry(`ws://127.0.0.1:${PORT}/`);
-record('ws 套件 無 token 被拒', !c3.ok, JSON.stringify(c3));
+record('ws 套件 無 token 被拒 (401)', rejected401(c3), j(c3));
 
 const c4 = await wsClientTry(`ws://127.0.0.1:${PORT}/`, ['bearer', TOKEN]);
-record('ws 套件 subprotocol [bearer,TOKEN] 認證', c4.ok, JSON.stringify(c4));
+record('ws 套件 subprotocol [bearer,TOKEN] 認證', c4.ok, j(c4));
 
 const c5 = await wsClientTry(`ws://127.0.0.1:${PORT}/`, ['bearer', 'NOPE']);
-record('ws 套件 subprotocol 錯 token 被拒', !c5.ok, JSON.stringify(c5));
+record('ws 套件 subprotocol 錯 token 被拒 (401)', rejected401(c5), j(c5));
 
 const c6 = await wsClientTry(`ws://127.0.0.1:${PORT}/`, ['auth.' + TOKEN]);
-record('ws 套件 subprotocol auth.TOKEN 認證', c6.ok, JSON.stringify(c6));
+record('ws 套件 subprotocol auth.TOKEN 認證', c6.ok, j(c6));
 
 // header-based auth (Node clients, e.g. gateway-client.ts X-Omni-Token)
 const rawH1 = await rawHandshake({ query: '', headers: { 'X-Omni-Token': TOKEN } });
 record('header X-Omni-Token 認證（既有 client 相容）', rawH1.statusLine.includes('101'), rawH1.statusLine);
 
 const rawH2 = await rawHandshake({ query: '', headers: { Authorization: 'Bearer ' + TOKEN } });
-record('header Authorization: Bearer 認證', rawH2.statusLine.includes('101'), rawH2.statusLine);
+record('header Authorization: Bearer ***', rawH2.statusLine.includes('101'), rawH2.statusLine);
 
 const rawH3 = await rawHandshake({ query: '', headers: { 'X-Omni-Token': 'nope' } });
 record('header 錯誤 token 被拒', rawH3.statusLine.includes('401'), rawH3.statusLine);
 
 const c7 = await wsClientTry(`ws://127.0.0.1:${PORT}/`, null, { headers: { 'X-Omni-Token': TOKEN } });
-record('ws 套件 X-Omni-Token header 認證', c7.ok, JSON.stringify(c7));
+record('ws 套件 X-Omni-Token header 認證', c7.ok, j(c7));
 
 const c8 = await wsClientTry(`ws://127.0.0.1:${PORT}/`, null, { headers: { 'X-Omni-Token': 'bad' } });
-record('ws 套件 錯 header 被拒', !c8.ok, JSON.stringify(c8));
+record('ws 套件 錯 header 被拒 (401)', rejected401(c8), j(c8));
 
 // legitimate client stays connected, health reports it
 const live = new WebSocket(`ws://127.0.0.1:${PORT}/?token=${TOKEN}`);

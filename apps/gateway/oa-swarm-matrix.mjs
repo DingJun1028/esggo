@@ -100,16 +100,25 @@ const CAPABILITY_KEYWORDS = {
 };
 
 /**
- * 依 prompt 關鍵字挑出最合適的代理編號。
- * 回傳 null 代表無關鍵字命中，呼叫端應退回陣列預設（第一位）。
+ * 依 prompt 關鍵字挑出最合適的代理編號。回傳 null 代表無命中，
+ * 呼叫端應退回陣列預設（第一位）。
+ *
+ * allowedNums 為 null 時回傳全域最佳命中；給定 Set 時只在該集合內挑選 ——
+ * 這是必要的，因為關鍵字會互相遮蔽：`資安分析報告` 同時命中
+ * `分析`(03) 與 `資安`(27)，若不限定陣列就會被表格順序決定勝負，
+ * 導致派給守衛組（不含 03）時退回 25 測場蜂而漏掉 27 資安蜂。
+ * 命中多個時取「最長關鍵字」，讓 `平面設計` 勝過 `設計`。
  */
-export function inferAgentNum(prompt) {
+export function inferAgentNum(prompt, allowedNums = null) {
   const text = String(prompt || '').toLowerCase();
   if (!text) return null;
+  let best = null;
   for (const [kw, num] of Object.entries(CAPABILITY_KEYWORDS)) {
-    if (text.includes(kw.toLowerCase())) return num;
+    if (allowedNums && !allowedNums.has(num)) continue;
+    if (!text.includes(kw.toLowerCase())) continue;
+    if (!best || kw.length > best.kw.length) best = { kw, num };
   }
-  return null;
+  return best ? best.num : null;
 }
 
 export function listAgents(arrayId) {

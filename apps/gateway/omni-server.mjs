@@ -465,25 +465,33 @@ function safeTokenEqual(a, b) {
  * 回傳的 protocol 一定來自 client 實際提出的清單，ws server 才會接受。
  */
 function extractWsToken(req) {
+  // 收集「所有」候選而非取第一個：實測中 client 可能同時帶多個憑證來源
+  // （例如反向代理注入的無關 Authorization + 有效的 subprotocol token）。
+  // 舊實作在第一個 header 就 return，會讓後面有效的憑證永遠不被檢查而誤回 401。
+  const candidates = [];
+
   // 1) query string（瀏覽器 WebSocket 唯一可行方式）
   try {
     const url = new URL(req.url, 'http://localhost');
     const q = url.searchParams.get('token') || url.searchParams.get('access_token');
-    if (q) return { token: q, protocol: null };
+    if (q) candidates.push(q);
   } catch {}
 
   // 2) HTTP header（僅 Node / 裝置端 client 可用；瀏覽器 WS 無法自訂 header）
   //    相容既有 gateway-client.ts 的 `X-Omni-Token: GATEWAY_API_KEY` 寫法
   const h = req.headers;
-  if (h['x-omni-token']) return { token: String(h['x-omni-token']), protocol: null };
-  if (h['x-api-key']) return { token: String(h['x-api-key']), protocol: null };
+  if (h['x-omni-token']) candidates.push(String(h['x-omni-token']));
+  if (h['x-api-key']) candidates.push(String(h['x-api-key']));
   const auth = h['authorization'];
   if (auth) {
     const t = auth.replace(/^Bearer\s+/i, '').trim();
-    if (t) return { token: t, protocol: null };
+    if (t) candidates.push(t);
   }
 
   // 3) Sec-WebSocket-Protocol
+  //    需一併記住「哪個 protocol 對應哪個 token」，因為 ws server 只會
+  //    回應 client 實際提出的 protocol 值。
+  let protocol = null;
   const raw = req.headers['sec-websocket-protocol'];
   if (raw) {
     const list = String(raw).split(',').map(s => s.trim()).filter(Boolean);
@@ -491,16 +499,17 @@ function extractWsToken(req) {
       const c = list[i];
       // 帶前綴的單一 protocol：bearer.TOKEN / auth.TOKEN / token.TOKEN
       const m = /^(?:bearer|auth|token)[\s.:]+(.+)$/i.exec(c);
-      if (m) return { token: m[1].trim(), protocol: c };
+      if (m) { candidates.push(m[1].trim()); protocol ||= c; }
       // 裸 marker：['bearer', TOKEN] → 取下一個作為 token
       if (/^(?:bearer|auth|token)$/i.test(c) && list[i + 1]) {
-        return { token: list[i + 1], protocol: list[i + 1] };
+        candidates.push(list[i + 1]); protocol ||= list[i + 1];
       }
     }
     // 單一 protocol 本身就是 token
-    if (list.length === 1) return { token: list[0], protocol: list[0] };
+    if (list.length === 1) { candidates.push(list[0]); protocol ||= list[0]; }
   }
-  return { token: null, protocol: null };
+
+  return { candidates, protocol };
 }
 
 // ws 的 handleUpgrade() 沒有第 5 個 options 參數，protocol 選擇必須走
@@ -535,14 +544,17 @@ httpServer.on('upgrade', (req, socket, head) => {
 
   pendingProtocol = null;
   if (WS_AUTH_ENABLED) {
-    const { token, protocol } = extractWsToken(req);
-    if (!token || !safeTokenEqual(token, WS_AUTH_TOKEN)) {
+    const { candidates, protocol } = extractWsToken(req);
+    // 任一候選命中即放行：不能只比第一個，否則無關的 header（例如反向代理
+    // 注入的 Authorization）會遮蔽掉後面有效的 subprotocol token 而誤回 401。
+    const matched = candidates.some((t) => safeTokenEqual(t, WS_AUTH_TOKEN));
+    if (!matched) {
       console.warn(`[OmniGateway] 🔒 WS 認證失敗 — 拒絕 ${req.socket?.remoteAddress} (url=${req.url})`);
       rejectUpgrade(socket, 401, 'Unauthorized', 'WS token missing or invalid');
       return;
     }
     if (protocol) pendingProtocol = protocol;
-    console.log(`[OmniGateway] 🔓 WS 認證通過 (${protocol ? 'subprotocol' : 'query token'})`);
+    console.log(`[OmniGateway] 🔓 WS 認證通過 (${protocol ? 'subprotocol' : 'query/header token'})`);
   }
 
   wss.handleUpgrade(req, socket, head, (ws) => {
@@ -960,8 +972,10 @@ app.post('/oa/task/dispatch', requireAuth, aiLimiter, (req, res) => {
   const result = handleDispatch({ body: req.body, taskLog: oaTaskLog });
   if (result.status !== 200) return res.status(result.status).json(result.body);
 
-  // 5T-Trustworthy: WS 通道無認證（既有架構，WSS 未設 verifyClient），
-  // 故廣播時不夾帶 prompt 原文，只送摘要避免內容外流。
+  // 5T-Trustworthy: prompt 一律不進 WS 廣播，只送摘要與長度。
+  // WS 認證（WS_AUTH_TOKEN）未設定時通道形同公開，此遮蔽是該情況下唯一
+  // 的保護；認證啟用後仍維持遮蔽，因為廣播會送給所有已連線的 client，
+  // 不宜假設每個連線者都有權看到完整任務內容。
   broadcastWS({ type: 'OA_TASK', source: 'OaDispatch', payload: buildBroadcastPayload(result.task) });
 
   res.json(result.body);

@@ -73,7 +73,9 @@ export function routeAgent(arrayId, prompt) {
   const pool = AGENTS.filter((a) => a.arrayId === arrayId);
   if (pool.length === 0) return undefined;
 
-  const num = inferAgentNum(prompt);
+  // 把候選限制在此陣列內再比對關鍵字。若不限定，`資安分析報告` 會先撞上
+  // 表格較前的 `分析`(03) 而漏掉本陣列的 `資安`(27)。
+  const num = inferAgentNum(prompt, new Set(pool.map((a) => a.id.slice(6))));
   if (num) {
     const hit = pool.find((a) => a.id === `agent:${num}`);
     if (hit) return hit;
