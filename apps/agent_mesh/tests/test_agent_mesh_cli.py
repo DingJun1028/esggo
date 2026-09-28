@@ -3,10 +3,9 @@
 覆蓋範圍為純邏輯：設定組裝、輸出格式分派、摘要計算、語義圖譜、
 @tool 裝飾器 Schema 生成、逾時與快取判定的單位一致性。
 
-執行：python -m pytest apps/agent-mesh/tests/ -q
+執行：python -m pytest apps/agent_mesh/tests/ -q
 """
 
-import importlib.util
 import json
 import sqlite3
 import sys
@@ -14,32 +13,23 @@ from pathlib import Path
 
 import pytest
 
-# 測試位於 apps/agent-mesh/tests/，被測模組在上一層 apps/agent-mesh/
+# 測試位於 apps/agent_mesh/tests/，被測模組在上一層 apps/agent_mesh/
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from agent_tool import (  # noqa: E402
+    OutputConfig,
+    OutputFormat,
+    ResultWriter,
+    RunConfig,
+    Status,
+    TestResult,
+    build_config_from_file,
+    compute_summary,
+    render_summary_table,
+)
 from semantic_graph import SemanticGraph  # noqa: E402
-
-# 被測主模組正式名為 agent-tool.py，含連字號 → 無法用 `import agent-tool`
-# 一般語法匯入（Python 模組名不接受 `-`）。故以 importlib 由檔案路徑載入，
-# 並註冊為 sys.modules["agent_tool"]，讓後續 `import agent_tool` 仍可用。
-_TOOL_PATH = ROOT / "agent-tool.py"
-_spec = importlib.util.spec_from_file_location("agent_tool", _TOOL_PATH)
-assert _spec is not None and _spec.loader is not None, f"無法載入 {_TOOL_PATH}"
-agent_tool = importlib.util.module_from_spec(_spec)
-sys.modules["agent_tool"] = agent_tool
-_spec.loader.exec_module(agent_tool)
-
-OutputConfig = agent_tool.OutputConfig
-OutputFormat = agent_tool.OutputFormat
-ResultWriter = agent_tool.ResultWriter
-RunConfig = agent_tool.RunConfig
-Status = agent_tool.Status
-TestResult = agent_tool.TestResult
-build_config_from_file = agent_tool.build_config_from_file
-compute_summary = agent_tool.compute_summary
-render_summary_table = agent_tool.render_summary_table
 
 
 def _ok(model: str = "m1", **kw) -> TestResult:

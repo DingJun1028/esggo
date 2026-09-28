@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Agent Mesh 發布驗收腳本
 # 對單一 CLI 執行檔（exe 或 py）逐項實測，輸出 PASS/FAIL 與真實工具輸出。
-# 用法：bash apps/agent-mesh/verify_release.sh [exe路徑]
+# 用法：bash apps/agent_mesh/verify_release.sh [exe路徑]
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

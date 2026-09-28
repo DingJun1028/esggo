@@ -178,7 +178,7 @@ Error: No test suite found in file apps/gateway/ws-auth.test.mjs
 | 測試碼型別 | `pnpm -F @esggo/omni-agent-bus typecheck:test` | exit 0 |
 | **安裝完整性** | `pnpm install --frozen-lockfile` | exit 0 — 39 workspace projects, lockfile 一致 |
 | Workflow schema | `python .scratch/verify-workflows-schema.py` | exit 0 — 25 檔 0 錯誤 |
-| Python 語法 | `python -m py_compile apps/agent-mesh/agent-tool.py` | exit 0 |
+| Python 語法 | `python -m py_compile apps/agent_mesh/agent_tool.py` | exit 0 |
 
 ---
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-agent-tool.py — 生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）
+agent_tool.py — 生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）
 
 特色：
 - 非同步並行推論測試（asyncio + aiohttp）
@@ -10,31 +10,30 @@ agent-tool.py — 生產級代理工具模組（代理網狀協作 · 模型管�
 - 多種輸出格式：JSON, JSONL, CSV, 表格
 - 型別安全、輸入驗證、退出碼協定
 
-用法（在 apps/agent-mesh/ 下執行）：
+用法（在 apps/agent_mesh/ 下執行）：
     # 健康檢查
-    python agent-tool.py --health
+    python agent_tool.py --health
 
     # 列出模型
-    python agent-tool.py --list
+    python agent_tool.py --list
 
     # 單模型測試
-    python agent-tool.py --model gemma4:e4b
+    python agent_tool.py --model gemma4:e4b
 
     # 批次並行測試所有模型（預設 concurrency=3）
-    python agent-tool.py --batch
+    python agent_tool.py --batch
 
     # 指定並行數 + 提示 + 輸出
-    python agent-tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
+    python agent_tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
 
     # 使用配置檔（鍵名 ollama: 為對應 Ollama REST API 的技術契約，不隨專案更名）
-    python agent-tool.py --config models.yaml
+    python agent_tool.py --config models.yaml
 
     # 僅輸出表格
-    python agent-tool.py --batch --table
+    python agent_tool.py --batch --table
 
-註：檔名含連字號（agent-tool.py），故無法用 `import agent-tool` 一般語法
-匯入 —— 需以 importlib.util.spec_from_file_location 載入。本檔設計為
-CLI 執行檔（PyInstaller onefile），此限制不影響實際使用。
+命名：檔名與目錄一律用底線（agent_tool.py / apps/agent_mesh/），
+Python 模組名不接受連字號，底線可同時支援 CLI 執行與 `import agent_tool`。
 
 配置檔範例 (models.yaml)：
     ollama:
