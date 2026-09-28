@@ -149,7 +149,8 @@ function writeJson(res, obj, extra = {}) {
 const OLLAMA_URL_DEFAULT = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:1.5b';
 const OLLAMA_TIMEOUT_MS = Number(process.env.OLLAMA_TIMEOUT_MS || 600000);
-const OLLAMA_NUM_PREDICT = Number(process.env.OLLAMA_NUM_PREDICT || 700);
+// 實測 0.51 tok/s: 120 上限約對應 235s, 足夠精簡格式 (實測 53 token/115s)。
+const OLLAMA_NUM_PREDICT = Number(process.env.OLLAMA_NUM_PREDICT || 120);
 
 /** generateCourse 失敗時的型別化錯誤, 讓上層能區分逾時與其他故障 */
 export class CourseGenError extends Error {
@@ -205,15 +206,26 @@ export async function generateCourse(text, opts = {}) {
   const numPredict = opts.numPredict ?? OLLAMA_NUM_PREDICT;
   // 呼叫時解析 URL: 讓測試可注入假 Ollama, 也便於執行期切換端點
   const baseUrl = opts.url ?? process.env.OLLAMA_URL ?? OLLAMA_URL_DEFAULT;
-  const prompt = `你是一個專業的課程助教。以下是即時會議/課堂的雙語字幕逐字稿（含原文與翻譯）。請整理成結構化課堂重點，嚴格只輸出 JSON，不要任何額外說明文字。
-
-格式：
-{
+  // 實測 (VPS 161.118.248.180, 4 核純 CPU, 0.51 tok/s):
+  // 完整 5 欄位格式需 ~1188s 完全不可行; 精簡 2 欄位 53 token 僅需 115s。
+  // 因此預設採精簡格式, 完整格式可透過 OLLAMA_FORMAT=full 啟用。
+  const full = (process.env.OLLAMA_FORMAT || 'slim') === 'full';
+  const shape = full
+    ? `{
   "summary": "本節內容一句話概要",
   "keypoints": ["重點1", "重點2", "重點3"],
-  "terms": [{"term":"重要名詞(中文)","en":"English term","wiki":"https://zh.wikipedia.org/wiki/名詞","explain":"一句話解釋"}],
-  "similar_cases": ["相關/類似案例或變體整理1", "相關/類似案例或變體整理2"]
-}
+  "terms": [{"term":"重要名詞","wiki":"https://zh.wikipedia.org/wiki/名詞","explain":"一句話解釋"}],
+  "similar_cases": ["相關案例1"]
+}`
+    : `{
+  "summary": "本節內容一句話概要",
+  "keypoints": ["重點1", "重點2"]
+}`;
+  const prompt = `你是一個專業的課程助教。以下是即時會議/課堂的雙語字幕逐字稿（含原文與翻譯）。請整理成結構化課堂重點，嚴格只輸出 JSON，不要任何額外說明文字。
+所有文字必須使用繁體中文（台灣用語），不得使用簡體中文。
+
+格式：
+${shape}
 
 字幕逐字稿：
 ${text}
