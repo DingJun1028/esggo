@@ -97,14 +97,22 @@ access: public-research
 > **不存在**「每個分身各自受閘」的性質。`live-clones.smoke.ts` 驗證的是：
 > 閘門的攔截/放行結果**不因分身數量而改變**。
 
-**兩條並行的驗證面**：
+**三條並行的驗證面**（2026-09-28 補第三面，OMH served-surface gate 觸發）：
 
-| 面 | 測試 | 驗證對象 |
-|----|------|---------|
-| src 面 | 7 支 `*.smoke.ts`（tsx 直接跑 TS） | 原始碼行為 |
-| dist 面 | `dist-smoke.mjs`（先 `tsc` 再 import） | **消費者真正 import 的產物** |
+| 面 | 測試 | 驗證對象 | 失效時的症狀 |
+|----|------|---------|-------------|
+| src 面 | 7 支 `*.smoke.ts`（tsx 直接跑 TS） | 原始碼行為 | 本機即紅 |
+| dist 面 | `dist-smoke.mjs`（先 `tsc` 再 import） | **消費者真正 import 的產物** | 本機即紅 |
+| 型別面 | `types-smoke.ts`（`tsc --noEmit` 讀 `dist/*.d.ts`） | `types` 欄位可被**外部 tsc** 解析 | **runtime 全綠、CI 紅燈** |
 
-`dist-smoke.mjs` 需先 `tsc` 產生 `dist/`（gitignored），故獨立為 `test:dist`。
+> ⚠️ **第三面是本輪實際抓到缺陷的那一面。**
+> `dist-smoke.mjs` 驗 runtime 匯入（node 執行 `.js`），**完全不讀 `.d.ts`**。
+> 故 `types` 欄位指向壞檔、`.d.ts` 漏匯型別時，dist 面全綠。
+> 型別面補上這個缺口：見下方 ADR-C。
+
+`dist-smoke.mjs` 需先 `tsc` 產生 `dist/`（gitignored），故獨立為 `test:dist`；
+型別面同樣需先產出 `.d.ts`，故 `typecheck:surface` 必須在 `tsc` 之後執行
+（`test:surface = tsc && npm run typecheck:surface` 即此約束）。
 
 ### 2.3 Gateway WS 認證 — `apps/gateway/ws-auth.test.mjs`
 
@@ -157,15 +165,18 @@ Error: No test suite found in file apps/gateway/ws-auth.test.mjs
 
 | 閘 | 指令 | 實測結果 |
 |----|------|---------|
-| 根單元測試 | `npx vitest run` | exit 0 — 81 files / 823 tests passed |
+| 根單元測試 | `npx vitest run` | exit 0 ×3 連跑 — 81 files / 836 tests passed |
 | Repo 標準檢查 | `npm run check` | exit 0 — 4 files / 24 tests passed |
+| Repo 型別閘 | `npm run typecheck` | exit 0 |
 | 熵境 lint 閘 | `npm run lint` | exit 0 — 32 warnings, **0 errors** |
 | 核心型別 | `npx tsc -p tsconfig.core.json` | exit 0 |
 | 蜂群矩陣 SSOT | `npx vitest run apps/gateway` | exit 0 — 42 tests passed |
 | WS 認證腳本 | `node apps/gateway/ws-auth.test.mjs` | exit 0 — 25/25 |
 | 總線 src 面 | `pnpm -F @esggo/omni-agent-bus test` | exit 0 — 7 smoke 全過 |
 | 總線 dist 面 | `pnpm -F @esggo/omni-agent-bus test:dist` | exit 0 — DIST_IMPORT_SMOKE_OK |
+| **總線型別面** | `pnpm -F @esggo/omni-agent-bus typecheck:surface` | exit 0 — 抓到並修 `FiveTDimension` 未匯出 |
 | 測試碼型別 | `pnpm -F @esggo/omni-agent-bus typecheck:test` | exit 0 |
+| **安裝完整性** | `pnpm install --frozen-lockfile` | exit 0 — 39 workspace projects, lockfile 一致 |
 | Workflow schema | `python .scratch/verify-workflows-schema.py` | exit 0 — 25 檔 0 錯誤 |
 | Python 語法 | `python -m py_compile agent_mesh_tool.py` | exit 0 |
 
@@ -199,6 +210,103 @@ Error: No test suite found in file apps/gateway/ws-auth.test.mjs
 
 ---
 
+### ADR-C：型別出現在公開簽章卻不可命名（2026-09-28 型別面實測發現）
+
+**決策**：`export type FiveTDimension`（`src/bus.ts`），並經 `src/index.ts` 轉出至公開入口。
+
+**缺陷**：`bus5TGate` 的公開簽章為
+`{ pass: boolean; failed: FiveTDimension[] }`，但 `FiveTDimension` 當時是
+`src/bus.ts` 的**內部**型別（無 `export`）。`dist/index.d.ts` 因此不含它。
+
+**為何是真缺陷而非潔癖**：consumer 想標註該欄位型別時寫不出來 ——
+`const dims: FiveTDimension[] = gate.failed` 直接 TS2305；也無法對
+`gate.failed` 做 exhaustive switch。型別出現在公開簽章卻不可命名，等於契約有洞。
+
+**為何前兩面抓不到**：
+
+| 面 | 為何漏掉 |
+|----|---------|
+| src 面（tsx 跑 .ts） | 測試在同 module 內可直接用內部型別，無跨 module 邊界 |
+| dist 面（node import .js） | node 執行 `.js` **完全不讀 `.d.ts`** |
+| 型別面 | ✅ `tsc --noEmit` 讀 `dist/index.d.ts` → TS2305 |
+
+**驗證**：
+```
+$ npx tsc -p tsconfig.types-smoke.json     # 修正前
+test/types-smoke.ts(17,3): error TS2305: Module '"../dist/index.js"' has no exported member 'OmniBusInstance'.
+test/types-smoke.ts(18,3): error TS2305: ... has no exported member 'IOmniBus'.
+test/types-smoke.ts(21,3): error TS2305: ... has no exported member 'FiveTDimension'.
+
+$ npx tsc -p tsconfig.types-smoke.json     # 修正後
+（無輸出，exit 0）
+```
+
+**方法論教訓**：`OmniBusInstance` / `IOmniBus` 也在首輪報 TS2305，但它們屬
+`lib/agents/omni-agent-bus.ts` 那一層，**不在本 package 契約內**。
+修正測試（改測真實存在的 7 個型別）而非擴大 package 契約 ——
+測試寫錯對象與產品有缺陷要分開處理，否則會為遷就測試而擴大 API。
+
+---
+
+---
+
+### ADR-D：根 vitest 隨機失敗 5 → 1 → 0（資源競爭，非回歸）
+
+**現象**：修改後連續兩次 `npx vitest run`（**完全相同命令**）：
+```
+第 1 次: Test Files 3 failed | 79 passed | 4 skipped (86)   Tests 5 failed
+第 2 次: Test Files 1 failed | 81 passed | 4 skipped (86)   Tests 1 failed
+```
+同一個 commit 兩次結果不同 → 非確定性缺陷。
+
+**定因過程**（三步，皆實測）：
+
+| 步驟 | 方法 | 結果 |
+|------|------|------|
+| 1 | `git stash push -u -- packages/omni-agent-bus/` 後單跑 3 檔 | 35 passed — 但**不能定罪**，因全量並行才是真實條件 |
+| 2 | `git stash pop` 還原後單跑同 3 檔 | 35 passed — 排除「我的改動」 |
+| 3 | 全量並行重跑 | 5 failed → 1 failed — **證明是資源競爭** |
+
+**根因**：三檔耗時 5-15 秒，遠超 vitest 預設 5s timeout。
+- `audit.test.ts` 掃真實檔案系統 → 全量並行下 15.9s
+- `cron-auth` / `api-health-tags` 首次 import Next.js route，需 transpile + 載入 Next runtime
+
+**修法（第一版，逐檔加 timeout — 錯了）**：
+先只替 3 檔加個別 timeout，結果第 3 次全量跑**反而出現 7 個新失敗**：
+```
+api-health-tags 17.3s / audit-logger 9.9s / complete-delegation 9.4s
+```
+→ 證明受影響範圍遠大於最初觀察到的 3 檔，逐檔補是打地鼠。
+
+**修法（第二版，正解：全域）**：改在 `vitest.config.ts` 設定
+`testTimeout: 30_000` + `hookTimeout: 30_000`，並**移除**先前加的三處個別設定，
+維持單一真相來源。
+
+| 層級 | 設定 | 涵蓋範圍 |
+|------|------|---------|
+| 全域 | `vitest.config.ts` `testTimeout: 30_000` | 所有測試，含未來新增 |
+| 個別 | ~~`describe` / `it` options~~ | 已移除（冗餘） |
+
+**成本來源分類**（皆為 top-level import 或真實 I/O 的載入成本）：
+- Next.js route 動態/靜態 import → transpile + 初始化 Next runtime
+- `auditOmniTags` → 掃描真實檔案系統
+- delegation / audit-logger 生命週期測試 → 完整 I/O 往返
+
+**為何 30s 恰當**：正常情況全部 857 個測試 < 1s，30s 遠高於合理執行時間，
+真正的 hang 仍會在此時限內被抓出，不至於讓 CI 掛死。
+
+**修後驗證**：連續 4 次 `npx vitest run`（全量並行）全綠。
+
+**方法論**：
+1. 看到測試失敗時，先問「這是回歸還是 flaky」。
+   定因靠**同一命令重跑 + stash 隔離**，不可只看一次結果就改產品碼。
+   把 flaky 當回歸去改，會改壞原本正確的東西。
+2. 逐檔修補的失敗模式：觀察到的症狀只是冰山一角。
+   當同一根因的症狀**出現在多個檔案**，正解是找共同層級（config），
+   不是逐一在各檔加保護。
+
+---
+
 ## 5. 已知邊界與未驗證項
 
 | 項目 | 狀態 | 說明 |
@@ -208,6 +316,8 @@ Error: No test suite found in file apps/gateway/ws-auth.test.mjs
 | `dist-smoke` 合規文本長度 | ⚠️ **耦合** | 文本長度 281 綁定 `src/bus.ts` 的 `GATE_MIN_LENGTH`（最高 tangible ≥ 200）。常數調高需同步延長 fixture，否則測試以「某維度掉下去」形式紅燈（失敗訊息會指出具體維度） |
 | 30 蜂群 × 7 子框架 = 37 分身 | ✅ 已驗 | `live-clones.smoke.ts` 第 2 節實跑 |
 | `ollama_model_tool` 殘留引用 | ✅ 無殘留 | ripgrep 全 repo 掃描：tracked files 0 matches |
+| `cli/oa-cli/src/audit.test.ts` flaky | ✅ 已修 | 見下方 ADR-D |
+| `tests/cron-auth` / `tests/api-health-tags` flaky | ✅ 已修 | 見下方 ADR-D |
 
 ---
 
