@@ -323,6 +323,15 @@ async function dispatchAI(task, skillId) {
   // 1b. Text tasks -> local Gemma 4 (text-only, stronger) before cloud
   if (localServer && !imageUrl) {
     try {
+      // ⚠ `/api/generate` + `stream:false` + `data.response` 是 Ollama 原生
+      //   REST API 的契約（非 OpenAI 相容的 /v1/chat/completions）。
+      //   這裡的「Ollama」是後端服務實作名，不是模型名也不是專案品牌 ——
+      //   模型是 Gemma/Qwen，專案品牌是 Agent Mesh。
+      //   若日後換成 LM Studio / llama.cpp / vLLM 等相容服務，須確認其
+      //   仍實作此原生端點與回應欄位，否則應改走 /v1/chat/completions。
+      //   對照：model-router.mjs 的 local_gemma provider 走的是
+      //   `/ollama/v1/chat/completions`（OpenAI 相容層），兩者刻意不同：
+      //   這裡要的是 Ollama 原生語意，路由層要的是跨供應商統一介面。
       const response = await fetch(`${localServer}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

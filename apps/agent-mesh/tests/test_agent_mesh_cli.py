@@ -3,7 +3,7 @@
 覆蓋範圍為純邏輯：設定組裝、輸出格式分派、摘要計算、語義圖譜、
 @tool 裝飾器 Schema 生成、逾時與快取判定的單位一致性。
 
-執行：python -m pytest tests/agent_mesh/ -q
+執行：python -m pytest apps/agent-mesh/tests/ -q
 """
 
 import json
@@ -13,7 +13,8 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[2]
+# 測試位於 apps/agent-mesh/tests/，被測模組在上一層 apps/agent-mesh/
+ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
