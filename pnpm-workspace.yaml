@@ -113,9 +113,14 @@ allowBuilds:
   # CI 乾淨環境 pnpm install 於 Install dependencies 階段 exit 1
   # （ERR_PNPM_IGNORED_BUILDS），連帶 23 個 check 全紅。
   # 與 40621aeb5（tesseract.js 同類問題）相同根因。
-  # 採 false：workerd 僅供 wrangler dev 執行 Cloudflare worker，CI 不需要其
-  # postinstall 產物，與 sqlite3 / protobufjs / unrs-resolver 採相同保守設定。
-  workerd: false
+  # 修正 2026-09-29：原設 false，理由為「workerd 僅供 wrangler dev 執行
+  # Cloudflare worker，CI 不需要其 postinstall 產物」。該理由只涵蓋本機
+  # wrangler dev，漏了 Cloudflare Workers Builds 在 CI 執行的 wrangler deploy
+  # 同樣需要 workerd runtime binary；跳過其 postinstall 即不下載該 binary，
+  # 導致 esggo / esggo-worker / oa 三個 worker 建置失敗（證據見 commit 訊息
+  # 的橫向對照表）。故改為 true，與 my-worker/pnpm-workspace.yaml 的
+  # 「workerd = wrangler 建置鏈必要」對齊。
+  workerd: true
 
 minimumReleaseAgeExclude:
   - '@typescript-eslint/eslint-plugin@8.62.1'
