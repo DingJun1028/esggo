@@ -4,6 +4,11 @@ packages:
   - 'cli/*'
   - 'packages/*'
   - 'libs/*'
+  # esggo-auto-repair/worker 為獨立部署的 CF Worker（自有 wrangler.toml + queue 綁定）。
+  # 修正 2026-09-28：先前未列入本清單，導致 `pnpm install` 不進此目錄、
+  # devDependencies（hono 等）永遠不被安裝 → tsc 報 TS2307 Cannot find module 'hono'
+  # → CF Workers Builds 失敗。
+  - 'esggo-auto-repair/*'
   - '.'
   # oa-swarm 為獨立可部署 App (自有 Dockerfile/ecosystem/lock)，排除出根 workspace
   # 避免根 pnpm-lock.yaml 需同步其 devDeps 導致 --frozen-lockfile 失敗
