@@ -1,3 +1,4 @@
+// source_origin: 最佳實踐覺（覺四熵減）— 消除 any cast，改用結構型別描述存取邊界
 import { describe, it, expect } from 'vitest';
 import {
   validateRequiredTriad,

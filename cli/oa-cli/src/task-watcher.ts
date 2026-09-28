@@ -1,4 +1,6 @@
 /**
+ * source_origin: 萬能奧義「每個工作項目都有 TASK ID，分身修復自動跟隨」
+ *
  * cli/oa-cli/src/task-watcher.ts — 萬能分身修復任務線監看器（TASK ID 追蹤）
  *
  * 目的（萬能奧義：每個工作項目都有 TASK ID，分身修復自動跟隨）：

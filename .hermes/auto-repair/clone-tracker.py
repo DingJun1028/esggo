@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# source_origin: 萬能分身修復機制（.hermes/auto-repair）— 本輪修三缺陷 + 多步續追
 """
 Clone Tracker (萬能分身追蹤器) for esggo Auto-Repair
 Tracks repair task progress and sends status updates.

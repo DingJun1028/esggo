@@ -1,3 +1,4 @@
+# source_origin: esggo monorepo workspace 定義（本輪加入 esggo-auto-repair/*，見 a1fedbb4e）
 packages:
   - 'apps/*'
   - 'apps/*/functions'

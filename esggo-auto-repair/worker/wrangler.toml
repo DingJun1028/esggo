@@ -1,3 +1,5 @@
+# source_origin: 萬能分身修復 Worker（CF Workers Builds 部署目標）
+# 本輪修正：[build].command 的 npx 重複 + 納入 pnpm workspace（見 git log a1fedbb4e）
 name = "esggo-auto-repair"
 main = "src/index.ts"
 compatibility_date = "2025-03-01"

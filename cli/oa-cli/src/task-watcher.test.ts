@@ -1,3 +1,5 @@
+// source_origin: 萬能奧義「每個工作項目都有 TASK ID，分身修復自動跟隨」
+// 對應 task-watcher.ts 的四種健康狀態判定測試
 import { describe, it, expect } from 'vitest';
 import { mkdtempSync, writeFileSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
