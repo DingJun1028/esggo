@@ -9,12 +9,13 @@
 //   （express/index.js 缺失），無法真正啟動 server.js。
 //   因此本測試以「同一組常數 + 同一組判斷式」獨立重現守門邏輯，
 //   驗證的是「規則本身正確」，非「server.js 已載入該規則」。
-//   兩者的同步性由下方 5T-Traceable 的逐字元比對守住。
+//   兩者的同步性由下方 readConst() 直接讀取 server.js 原始碼守住。
 //
-// 執行: cd apps/ftg-journey-server && node --test jwt-gate.test.js
+// 執行: pnpm vitest run apps/ftg-journey-server/jwt-gate.test.js
+//   （採 vitest 風格而非 node:test，才能進 repo 主測試套件；
+//     若改用 node:test 需在 vitest.config.ts 加 exclude 且另建 CI job 才會被執行）
 
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
+import { test, expect } from 'vitest';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -33,7 +34,7 @@ function readConst(name) {
   const m = serverSrc.match(
     new RegExp(String.raw`const ${name} =\s*\n?\s*'?([^'\n]+?)'?\s*;`)
   );
-  assert.ok(m, `server.js 內找不到常數 ${name}（守門邏輯已變更，請同步本測試）`);
+  expect(m, `server.js 內找不到常數 ${name}（守門邏輯已變更，請同步本測試）`).toBeTruthy();
   return m[1];
 }
 
@@ -58,35 +59,35 @@ function gate(secret) {
 }
 
 test('已外洩於公開 git 歷史的金鑰必須被擋下', () => {
-  assert.equal(gate(LEAKED_FROM_GIT_HISTORY), 'REJECT');
+  expect(gate(LEAKED_FROM_GIT_HISTORY)).toBe('REJECT');
 });
 
 test('外洩金鑰常數事實正確：128 hex / 64 bytes', () => {
-  assert.equal(LEAKED_FROM_GIT_HISTORY.length, 128);
-  assert.match(LEAKED_FROM_GIT_HISTORY, /^[0-9a-f]{128}$/);
+  expect(LEAKED_FROM_GIT_HISTORY).toHaveLength(128);
+  expect(LEAKED_FROM_GIT_HISTORY).toMatch(/^[0-9a-f]{128}$/);
 });
 
 test('舊硬編碼預設值必須被擋下', () => {
-  assert.equal(gate('ftg-journey-secret-key-change-in-production'), 'REJECT');
+  expect(gate('ftg-journey-secret-key-change-in-production')).toBe('REJECT');
 });
 
 test('常見弱值必須被擋下（含大小寫與空白繞過）', () => {
   for (const w of ['a', '123', 'password', 'PassWord', '  password  ', 'secret']) {
-    assert.equal(gate(w), 'REJECT', `弱值 "${w}" 竟被接受`);
+    expect(gate(w), `弱值 "${w}" 竟被接受`).toBe('REJECT');
   }
 });
 
 test('未設定 / 空字串必須被擋下', () => {
-  assert.equal(gate(undefined), 'REJECT');
-  assert.equal(gate(''), 'REJECT');
-  assert.equal(gate('   '), 'REJECT');
+  expect(gate(undefined)).toBe('REJECT');
+  expect(gate('')).toBe('REJECT');
+  expect(gate('   ')).toBe('REJECT');
 });
 
-test('長度不足必須被擋下（邊界：31 < 32）', () => {
-  assert.equal(gate('a'.repeat(MIN_SECRET_LENGTH - 1)), 'REJECT');
+test(`長度不足必須被擋下（邊界：${MIN_SECRET_LENGTH - 1} < ${MIN_SECRET_LENGTH}）`, () => {
+  expect(gate('a'.repeat(MIN_SECRET_LENGTH - 1))).toBe('REJECT');
 });
 
-test('長度達標的隨機金鑰必須被接受（邊界：32 = 32）', () => {
-  assert.equal(gate('a'.repeat(MIN_SECRET_LENGTH)), 'ACCEPT');
-  assert.equal(gate(crypto.randomBytes(48).toString('hex')), 'ACCEPT');
+test(`長度達標的隨機金鑰必須被接受（邊界：${MIN_SECRET_LENGTH} = ${MIN_SECRET_LENGTH}）`, () => {
+  expect(gate('a'.repeat(MIN_SECRET_LENGTH))).toBe('ACCEPT');
+  expect(gate(crypto.randomBytes(48).toString('hex'))).toBe('ACCEPT');
 });
