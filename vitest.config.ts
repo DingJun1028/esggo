@@ -48,6 +48,13 @@ export default defineConfig({
       // 由 apps/self-healing 自身的 `pnpm test` (= node --test test/*.test.mjs) 執行，
       // 該套件 dependencies 為空，純 Node 即可跑，覆蓋率不減。
       'apps/self-healing/test/**',
+      // Gateway WS 認證整合測試以腳本形式撰寫（頂層 await + record() + process.exit），
+      // 非 vitest 套件：根 vitest 抓取時報 "No test suite found in file"，
+      // 使整個 Vitest Tests job exit 1（本分支 2026-09-28 CI 紅燈根因）。
+      // 由 ci.yml 的 "Run Gateway WS auth test (node script)" 步驟直接
+      // `node apps/gateway/ws-auth.test.mjs` 執行（spawn 真 server + raw handshake），
+      // 25/25 斷言覆蓋不減。
+      'apps/gateway/ws-auth.test.mjs',
     ],
   },
   resolve: {

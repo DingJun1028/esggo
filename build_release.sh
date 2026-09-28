@@ -5,7 +5,7 @@
 set -euo pipefail
 
 PY="${PY:-C:/Users/dingj/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe}"
-SRC="${SRC:-C:/Project/esggo/ollama_model_tool.py}"
+SRC="${SRC:-C:/Project/esggo/agent_mesh_tool.py}"
 OUT_DIR="C:/Project/esggo/_pyi"
 
 echo "▸ 建置用直譯器：$PY"

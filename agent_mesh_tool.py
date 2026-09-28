@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ollama_model_tool.py — 生產級 Ollama 模型管理與推論測試工具
+agent_mesh_tool.py — 生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）
 
 特色：
 - 非同步並行推論測試（asyncio + aiohttp）
@@ -12,25 +12,25 @@ ollama_model_tool.py — 生產級 Ollama 模型管理與推論測試工具
 
 用法：
     # 健康檢查
-    python ollama_model_tool.py --health
+    python agent_mesh_tool.py --health
 
     # 列出模型
-    python ollama_model_tool.py --list
+    python agent_mesh_tool.py --list
 
     # 單模型測試
-    python ollama_model_tool.py --model gemma4:e4b
+    python agent_mesh_tool.py --model gemma4:e4b
 
     # 批次並行測試所有模型（預設 concurrency=3）
-    python ollama_model_tool.py --batch
+    python agent_mesh_tool.py --batch
 
     # 指定並行數 + 提示 + 輸出
-    python ollama_model_tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
+    python agent_mesh_tool.py --batch --concurrency 5 -p "列出 3 個優點" -o result.json
 
     # 使用配置檔
-    python ollama_model_tool.py --config models.yaml
+    python agent_mesh_tool.py --config models.yaml
 
     # 僅輸出表格
-    python ollama_model_tool.py --batch --table
+    python agent_mesh_tool.py --batch --table
 
 配置檔範例 (models.yaml)：
     ollama:
@@ -892,7 +892,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
 )
-logger = logging.getLogger("ollama_tool")
+logger = logging.getLogger("agent_mesh_tool")
 
 
 # ============================================================================
@@ -903,7 +903,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     """解析命令列參數。"""
     parser = argparse.ArgumentParser(
         prog=APP_NAME,
-        description="生產級 Ollama 模型管理與推論測試工具",
+        description="生產級代理工具模組（代理網狀協作 · 模型管理與推論測試）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 範例：
