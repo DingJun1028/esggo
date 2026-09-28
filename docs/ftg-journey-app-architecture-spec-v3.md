@@ -378,7 +378,33 @@ apps/ftg-journey-server   Node 22 + Express 4 + node:sqlite + google-auth-librar
 | 前端 `https://journey.ftgtours.esggo.co/` | 200 ✅ |
 | SPA 深層路由 `/journey/1` | 200（nginx `try_files` fallback 正常）✅ |
 
-**教訓（寫入運維規範）**：`pm2 status` 顯示 `online` **不足以**判定服務可用。該案例中服務連續重啟 7 次、每次都處於 `online`，因為 process 尚未退出。**唯一可靠的驗收是同時確認 `ss -tlnp` 有監聽，且實際 HTTP 請求成功。**
+**教訓（寫入運運規範）**：`pm2 status` 顯示 `online` **不足以**判定服務可用。該案例中服務連續重啟 7 次、每次都處於 `online`，因為 process 尚未退出。**唯一可靠的驗收是同時確認 `ss -tlnp` 有監聽，且實際 HTTP 請求成功。**
+
+---
+
+## 0.2 部署管線層的失效（2026-09-28 追加）
+
+修好 `.env` 後才發現第二層問題：**這個修復撐不過下一次部署。**
+
+| 層 | 機制 | 失效方式 |
+|---|---|---|
+| 應用層 | `loadDotEnv()` 讀不到設定 → fail-fast | 本 commit 修好 |
+| **部署層** | `deploy-oracle.yml:390` 對 8787 執行 `fuser -k`，`:394` 以 `pm2 start ecosystem.config.cjs` 重啟 | **根目錄那份 config 沒有 ftg 條目 → 殺掉後不再拉起 → 502 精確復現** |
+
+`apps/ftg-journey-server/ecosystem.config.cjs`（子目錄那支，寫 `PORT: 8792`）**從未被任何 workflow 執行** — GitHub Actions 不執行巢狀於子目錄的 workflow。真正生效的是 repo 根目錄的 `ecosystem.config.cjs`。兩者同名，極易誤判。
+
+修復：ftg 條目加回根 config（`PORT 8787`，與 nginx / 健康檢查一致），並將 `:8787` 從 workflow 的 `[DEGRADED]` 降級警告升為 **exit 1 阻擋級**。詳見 PR #1175 commit `1eb367ade`。
+
+### 0.3 PM2 雙 daemon 陷阱（2026-09-28 追加）
+
+診斷時執行 `pm2 resurrect`，從舊 `dump.pm2` 還原出 5 個行程，全部 `EADDRINUSE` 崩潰迴圈 —— 看似幽靈行程，實為**真實 production 生態系的複本**。
+
+原因：`deploy-oracle.yml:350` 顯式指定 `PM2_HOME=/root/.pm2`。VPS 對外服務的是 **root 的 daemon**，而一般 SSH 進去預設是 `ubuntu`（`/home/ubuntu/.pm2`）。在不指定 `PM2_HOME` 下操作會觸及第二個 daemon，製造與真實服務搶 port 的重啟迴圈。
+
+**處置**：刪除複本 + `pm2 save --force` 重寫 dump。**驗證真實服務未受影響**（3000 / 8642 / 8787 / 8788 / 8791 全 LISTEN，公開端點全 200）。
+
+**操作 VPS PM2 前必先確認 `PM2_HOME`**，否則會誤判狀態、刪掉不該動的東西。
+
 
 
 ### P1 — 補齊官網承諾（10 個 ❌）
