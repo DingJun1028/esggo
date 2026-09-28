@@ -10,10 +10,13 @@
 packages:
   - '.'
 
+# pnpm 11 首次安裝時寫入 allowBuilds 提示，值為字串 "set this to true or
+# false"（無效設定）。依各套件的實際需要明確設定為布林值：
+# esbuild/workerd = wrangler 建置鏈必要；sharp = 原生相依，需建置。
 allowBuilds:
-  esbuild: set this to true or false
-  sharp: set this to true or false
-  workerd: set this to true or false
+  esbuild: true
+  sharp: true
+  workerd: true
 
 overrides:
   # GHSA 高危 SSRF + host confusion。root pnpm-workspace.yaml:26 已有同一約束，
