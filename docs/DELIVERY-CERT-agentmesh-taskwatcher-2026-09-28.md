@@ -78,16 +78,29 @@ Git 偵測到 6 個 rename，歷史完整保留。
   `final_output` 為空字串。代表 `track_command` 的 stdout 從未被記下，
   **從未真正修復**。
 
-### 3.2 追蹤器本身的三個缺陷（未修，僅記錄）
+### 3.2 追蹤器三個缺陷 — ✅ 已於本輪修復並實測
 
 `.hermes/auto-repair/clone-tracker.py`：
 
-1. **`track` 分支重複建 task**（約 L172）— 先 `create_task` 再 `track_command`，每步開新任務
-2. **`sys.exit` 未匯入**（約 L170、L183）— 參數錯誤時 `NameError` 而非友善提示
-3. **假成功未阻擋** — `final_output` 空字串仍標記 `success`
+| # | 缺陷 | 修法 | 實測 |
+|---|---|---|---|
+| 1 | `sys.exit` 未匯入 → 參數錯誤拋 `NameError` | 補 `import sys`，訊息改走 stderr | ✅ 友善訊息 + exit=1 |
+| 2 | `track` 分支無條件 `create_task()` → 每步開新任務 | 新增 `--task-id` 續追；未給定才新建 | ✅ 3 步 = 1 個 TASK |
+| 3 | **假成功**：`final_output` 空仍標記 success | 新增 `unverified_success` 判定 → 改記 failed 並升級 | ✅ 空輸出被阻擋、有輸出仍 success |
 
-未修原因：`.hermes/` 被 `.gitignore:384` 排除，修改無法進 PR 驗證；
-且檔內有真實狀態資料，變更需要你確認。
+**四項隔離實測全 PASS**（於暫存目錄進行，未觸碰真實 tracker 資料）：
+
+```
+假成功被阻擋   status=failed  reason=命令回傳碼為 0 但輸出為空
+未重複建 task  狀態檔任務總數: 1
+參數錯誤友善   Error: --cmd required  exit=1
+真成功未誤判   status=success  output='step0-ok'
+```
+
+真實 `tracker-state.json` 驗證：仍為 3 個任務、日誌仍 25 行 — **零污染**。
+
+> **注意**：`.hermes/` 被 `.gitignore:384` 排除，此修復**僅在本機生效，不在版控內**。
+> 若要讓它隨 repo 分發，需先決定是否納入版控（見第四節）。
 
 ### 3.3 `wrangler-deploy` CI 失敗 — 既有基礎設施故障
 
@@ -115,7 +128,7 @@ repo 內**無對應 `wrangler.toml`**（僅根目錄、`apps/cloudflare-deepseek
 | 項目 | 狀態 | 建議 |
 |---|---|---|
 | ~~`lib/types/oab-types.ts`、`oag-types.ts`~~ | ✅ **已由 `4d610f28d` 解決** | 證據欄位覆寫（TS2783）與 uuid 死依賴均已修復並提交 |
-| `clone-tracker.py` 三缺陷 | 未修 | 需先決定 `.hermes/` 是否納入版控 |
+| `clone-tracker.py` 三缺陷 | ✅ **本輪已修並實測** | 但 `.hermes/` 不在版控，僅本機生效 |
 | `wrangler-deploy` | 未修 | 需確認該 service 應 build 的目錄，或停用 |
 | `esggo-agent-mesh.exe` 連字號 | **刻意保留** | 對外散佈檔名，改名屬 breaking change |
 | 「技能名說明」「分支的用法」 | **未指明方向** | 三種可能解讀未猜，待指明 |
