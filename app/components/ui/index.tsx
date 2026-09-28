@@ -326,6 +326,7 @@ export function EmptyState({
       )}
       {actionLabel && onAction && (
         <button
+          type="button"
           onClick={onAction}
           className="mt-4 px-4 py-2 text-xs font-semibold bg-[#009EB0] text-white rounded-lg hover:bg-[#007d8f] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
         >
@@ -362,7 +363,7 @@ export function ErrorBanner({ message, onRetry, severity = 'error' }: ErrorBanne
         <span>{message}</span>
       </div>
       {onRetry && (
-        <button onClick={onRetry} className="font-semibold underline hover:no-underline">
+        <button type="button" onClick={onRetry} className="font-semibold underline hover:no-underline">
           重試
         </button>
       )}
@@ -425,6 +426,7 @@ export function TabBar({ tabs, active, onChange }: TabBarProps) {
       {tabs.map((tab) => (
         <button
           key={tab.id}
+          type="button"
           role="tab"
           aria-selected={active === tab.id}
           onClick={() => onChange(tab.id)}
@@ -491,6 +493,7 @@ export function SearchInput({
       />
       {value && (
         <button
+          type="button"
           onClick={() => setValue('')}
           aria-label="清除搜尋"
           title="清除搜尋"

@@ -141,6 +141,7 @@ export default function ThoughtStreamPanel({
 
       <div className="mt-4 flex gap-3">
         <button
+          type="button"
           onClick={triggerReal}
           disabled={busy !== 'none'}
           className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#63a6b0] to-[#8b5cf6] text-white text-sm font-medium py-2.5 px-4 hover:opacity-90 disabled:opacity-50 transition"
@@ -149,6 +150,7 @@ export default function ThoughtStreamPanel({
           {busy === 'real' ? '推論中…' : '試推理 (真實管線)'}
         </button>
         <button
+          type="button"
           onClick={triggerDemo}
           disabled={busy !== 'none'}
           className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-accentPurple/40 text-accentPurple text-sm font-medium py-2.5 px-4 hover:bg-accentPurple/10 disabled:opacity-50 transition"
