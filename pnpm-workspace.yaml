@@ -31,7 +31,8 @@ overrides:
   "fast-uri": ">=3.1.6 <4"
   "fast-xml-parser": ">=5.10.1"
   "brace-expansion": ">=5.0.9"
-  # 安全修補：必須加 <major 上界，裸 '>=' 會讓 pnpm 跳到跨 major（AGENTS.md #4）
+  # 安全修補：必須加 <major 上界，裸 '>=' 會讓 pnpm 跳到跨 major。
+  # （原註解引用的 AGENTS.md #4 經實查不存在：root AGENTS.md 無編號條文）
   "nanoid": ">=3.3.18 <4"
   "dompurify": ">=3.4.12 <4"
   "body-parser": ">=1.20.6 <2"
@@ -58,11 +59,12 @@ overrides:
   "@opentelemetry/auto-instrumentations-node": ">=0.75.0 <1"
   "@opentelemetry/propagator-jaeger": ">=2.9.0 <3"
   # ── 2026-08-17 Dependabot 告警追加 (放寬到修補版所在 major) ──
-  # sharp 依 AGENTS.md #7 排除 (next 限制 0.34.5)；chromadb 僅 .venv 不納入 pnpm
+  # sharp 原依「AGENTS.md #7」排除 (next 限制 0.34.5) —— 該條文經實查不存在；
+  # chromadb 僅 .venv 不納入 pnpm
   # vitest 最新穩定 4.1.10 (5.x 仍 beta, 不跨)；CVE 上游未修, 先鎖穩定最新
   #
   # 2026-09-28 修正：原值 ">=4.1.11" 為裸 >=，無上界 → 實際解析到 5.0.1，
-  # 與上一行註解「5.x 仍 beta, 不跨」直接矛盾，且違反 AGENTS.md #4
+  # 與上一行註解「5.x 仍 beta, 不跨」直接矛盾，且違反上方 major 上界原則
   # (override 須含 <major 上界)。實測：package.json 宣告 ^4.1.10，
   # node_modules/vitest 實際為 5.0.1。
   # 該矛盾同時是 12 筆 GHSA-5xrq-8626-4rwp critical 誤報的根源：
@@ -73,11 +75,13 @@ overrides:
   "vite": ">=7.0.0 <9"
   # ⛔ 回退 (2026-08-17 09:00 部署前驗證): undici@8 移除了 lib/handler/wrap-handler.js，
   #    jsdom@29.1.1 硬性 require 該路徑 → OmniCore CI / learning-center-ci / VPS 建置三紅。
-  #    jsdom@29 只接受 ^7.25.0；跨 major 亦違反 AGENTS.md #5。維持 7.x 修補版。
+  #    jsdom@29 只接受 ^7.25.0；跨 major 亦違反 major 上界原則。維持 7.x 修補版。
   "undici": ">=7.29.0 <8"
   "js-yaml": ">=5.0.0 <6"
   "hono": ">=4.13.5 <5"
-  # sharp 修補升級（原 AGENTS.md #7 排除，現 0.35.0 已修 CVE-2026-33327/33328/35590/35591）
+  # sharp 修補升級（0.35.0 已修 CVE-2026-33327/33328/35590/35591）。
+  # 原註解引用的「AGENTS.md #7」經實查並無出處（root AGENTS.md 無編號條文），
+  # 故改以 CVE 編號作為依據。
   "sharp": ">=0.35.0"
   # ── 2026-08-21 Dependabot 修補 (pnpm audit --prod 剩 1 high) ──
   "deepmerge-ts": ">=8.0.0 <9"

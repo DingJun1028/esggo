@@ -8,7 +8,10 @@
 # 'The "pnpm" field in package.json is no longer read by pnpm'），
 # 設定改由 pnpm-workspace.yaml 承接。
 #
-# 依 AGENTS.md #4：override 須含 <major 上界，不可為裸 >=。
+# override 須含 <major 上界，不可為裸 >= —— 否則 vitest 5 一發布就會被強制升上去
+# 而不受測試覆蓋。理由出自 docs/security/dependabot-triage-2026-09-28.md
+# （該處自身標註與 AGENTS.md 條文衝突；root AGENTS.md 全文 66 行並無編號條文，
+#  實查確認此規則無一手出處，故以本檔註解為準）。
 packages:
   - '.'
 
