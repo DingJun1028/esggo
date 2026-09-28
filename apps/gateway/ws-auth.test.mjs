@@ -9,7 +9,10 @@ const SERVER = 'C:/Project/esggo/apps/gateway/omni-server.mjs';
 const require = createRequire('C:/Project/esggo/apps/gateway/');
 const WebSocket = require('ws');
 
-const TOKEN = 's3cr3t-ws-token-abc123';
+// 刻意使用無高熵、無憑證特徵的測試值：GitGuardian 會把
+// 's3cr3t-…' 這類高熵字串判為 Generic High Entropy Secret。
+// 這不是真憑證，但掃描器只看樣態不看語意，故選用明確的佔位字串。
+const TOKEN = 'test-token-not-a-real-secret';
 const PORT = Number(process.env.WS_AUTH_TEST_PORT || 8899);
 
 function waitForLine(proc, re, ms = 20000) {
