@@ -10,6 +10,11 @@
 :root{
   --bg:transparent;
   --gold:#c9a24b;--gold-soft:#b8941f;--txt:#f3ede1;--muted:#8a8275;
+  /* --green: 強調色。
+     品牌文件的 #3c6e43 在本深藍玻璃(#142A47)上僅 2.42:1，小字(.74rem)不可讀；
+     此處取經對比度驗證的 #5fb37e = 5.67:1 (WCAG AA 通過)。
+     勿直接改回品牌值，會讓 csec h3 / term b 變成看不見。 */
+  --green:#5fb37e;
   --glass:rgba(20,42,71,.62);--glass-strong:rgba(20,42,71,.82);
   --line:rgba(255,255,255,.14);--radius:6px;--gap:clamp(10px,2vw,16px);
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
@@ -18,7 +23,7 @@
   --sub-align:center; /* left|center|right */
   --sub-scale:1;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:var(--font);color:var(--txt);
@@ -32,7 +37,8 @@ body{
 #stage{
   position:absolute;left:0;right:0;
   top:0;bottom:0;
-  padding:clamp(12px,3vh,32px);
+  padding:calc(clamp(12px,3vh,32px) + env(safe-area-inset-top)) clamp(12px,3vw,32px)
+           calc(clamp(12px,3vh,32px) + env(safe-area-inset-bottom));
   display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
   pointer-events:none;
 }
@@ -73,7 +79,9 @@ body{
 
 /* ===== 玻璃工具條 (圖示化, 預設收合) ===== */
 #toolbar{
-  position:fixed;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);
+  position:fixed;
+  right:calc(clamp(12px,2vw,24px) + env(safe-area-inset-right));
+  bottom:calc(clamp(12px,2vw,24px) + env(safe-area-inset-bottom));
   display:flex;flex-direction:column;align-items:flex-end;gap:10px;
   pointer-events:auto;z-index:20;
 }
@@ -85,18 +93,18 @@ body{
   padding:8px;box-shadow:0 8px 30px rgba(0,0,0,.4);
 }
 .icon-btn{
-  width:42px;height:42px;border-radius:50%;border:1px solid transparent;
+  width:44px;height:44px;min-width:44px;min-height:44px;border-radius:50%;border:1px solid transparent;
   background:transparent;color:var(--txt);cursor:pointer;font-size:1.2rem;
   display:grid;place-items:center;transition:.18s;flex:none;
 }
 .icon-btn:hover{background:rgba(255,255,255,.1);border-color:var(--line)}
-.icon-btn.active{background:linear-gradient(135deg,var(--gold),var(--green));color:#06121a}
+.icon-btn.active{background:var(--gold);color:#06121a}
 .icon-btn.danger{color:#ff8a82}
 .icon-btn.danger.active{background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff}
 
 /* 展開面板 (點工具條上的 設定 才展開) */
 .sheet{
-  width:min(92vw,360px);max-height:70dvh;overflow:auto;
+  width:min(92vw,360px);max-height:70dvh;overflow:auto;overscroll-behavior:contain;
   background:var(--glass-strong);backdrop-filter:blur(22px) saturate(160%);
   -webkit-backdrop-filter:blur(22px) saturate(160%);
   border:1px solid var(--line);border-radius:var(--radius);
@@ -111,7 +119,17 @@ body{
   border-radius:12px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:.85rem;transition:.15s;flex:1;min-width:120px;
 }
 .btn:hover{border-color:var(--gold)}
-.btn.primary{background:linear-gradient(135deg,var(--gold),var(--green));color:#06121a;border:none}
+/* 鍵盤焦點指示 (WCAG 2.4.7)。原先全站無 focus 樣式，
+   鍵盤使用者操作時完全看不到自己在哪 —— 只用 :focus 會在滑鼠點擊時
+   也留下外框，故採 :focus-visible。 */
+:focus-visible{
+  outline:2px solid var(--gold);outline-offset:2px;border-radius:var(--radius);
+}
+.icon-btn:focus-visible{outline-offset:3px}
+@media (prefers-contrast:more){
+  :focus-visible{outline-width:3px}
+}
+.btn.primary{background:var(--gold);color:#06121a;border:none}
 select,input[type=text]{
   background:rgba(0,0,0,.3);color:var(--txt);border:1px solid var(--line);
   border-radius:10px;padding:8px 10px;font-size:.85rem;flex:1;min-width:120px;
@@ -225,9 +243,9 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
       </div>
       <div id="shareBody" class="hidden" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
         <div class="hint" style="color:var(--green)">主播️ 主持人連結</div>
-        <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink">複製</button></div>
+        <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink" aria-label="複製主持人連結" title="複製主持人連結">複製</button></div>
         <div class="hint" style="color:var(--gold)">觀眾️ 觀眾連結</div>
-        <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink">複製</button></div>
+        <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink" aria-label="複製觀眾連結" title="複製觀眾連結">複製</button></div>
         <div class="row" style="margin-top:4px">
           <button class="btn" id="openViewer">預覽觀眾</button>
           <button class="btn" id="refreshCount">人數</button>
@@ -283,9 +301,9 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
         <label class="chk"><input type="checkbox" id="showToggle" checked> 顯示</label>
       </div>
       <div class="row" style="margin-top:6px">
-        <label>從 <select id="from"><option value="auto" selected>自動 自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
-        <label>到 <select id="to"><option value="auto" selected>自動 自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
-        <button class="btn" id="swapBtn" style="flex:0">⇄</button>
+        <label>從 <select id="from"><option value="auto" selected>自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
+        <label>到 <select id="to"><option value="auto" selected>自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
+        <button class="btn" id="swapBtn" style="flex:0" aria-label="交換原文與翻譯方向" title="交換原文與翻譯方向">⇄</button>
       </div>
     </div>
 
@@ -295,7 +313,7 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
       <div class="row" style="justify-content:center;gap:4px">
         <button class="icon-btn" data-pos="top" title="置頂">⬆</button>
         <button class="icon-btn" data-pos="center" title="置中">⬌</button>
-        <button class="icon-btn" data-pos="bottom" title="置底" style="background:linear-gradient(135deg,var(--gold),var(--green));color:#06121a">⬇</button>
+        <button class="icon-btn" data-pos="bottom" title="置底" style="background:var(--gold);color:#06121a">⬇</button>
       </div>
       <div class="row" style="justify-content:center;gap:4px;margin-top:4px">
         <button class="icon-btn" data-align="left" title="靠左">⤙</button>
