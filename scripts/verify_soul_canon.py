@@ -55,6 +55,26 @@ ARCHIVE_SUBSTRINGS = (
     os.path.join('archive', 'soul.md'),
 )
 
+_CN_DIGITS = {'一': 1, '二': 2, '三': 3, '四': 4, '五': 5,
+              '六': 6, '七': 7, '八': 8, '九': 9}
+
+
+def cn2int(s):
+    """中文數字轉整數，支援 一～九十九（正典章號範圍）。無法解析回傳 None。"""
+    if not s:
+        return None
+    if s in _CN_DIGITS:
+        return _CN_DIGITS[s]
+    if s.startswith('十'):
+        return 10 + _CN_DIGITS.get(s[1:], 0)
+    if '十' in s:
+        a, b = s.split('十', 1)
+        hi = _CN_DIGITS.get(a, 0)
+        lo = _CN_DIGITS.get(b, 0) if b else 0
+        if hi or b:
+            return hi * 10 + lo
+    return None
+
 
 def read_text(path, limit=None):
     """安全讀取：errors='replace' 避免 UnicodeDecodeError（修 D3）。
@@ -191,10 +211,12 @@ def main():
                     help='正典版號分歧時升級為 FAIL（供 CI 表態）')
     ap.add_argument('--no-divergence', action='store_true',
                     help='跳過分歧偵測的全樹掃描（最快路徑）')
+    ap.add_argument('--require-contiguous', action='store_true',
+                    help='章號缺號時升級為 FAIL（[6] 章節結構檢查）')
     args = ap.parse_args()
 
     print('=' * 60)
-    print(f'OA-Team 30 聖典結構驗證 v4  (expect={args.expect})')
+    print(f'OA-Team 30 聖典結構驗證 v5  (expect={args.expect})')
     print('=' * 60)
 
     filepath = find_canon(args.canon)
@@ -315,6 +337,67 @@ def main():
         passed = False
     if len(loose) > len(rows):
         print(f'  ℹ 寬鬆掃描命中 {len(loose)} 列，嚴格（序號==編號）命中 {len(rows)} 列')
+
+    # ---- 驗證 6: 章節結構完整性（v5 新增）----
+    # 稽核正典本身時發現的實缺陷：章首標題格式四種混用，且 §27 完全不存在。
+    #   格式 A「## 第N章 · 標題」  §20 §21 §25 §26
+    #   格式 B「第N章 · 標題」（裸行，缺 ##）  §22 §23 §24
+    #   格式 C「N、標題」（中文數字逗號，缺 ##）  §28 §29
+    #   格式 D「N、標題」（卷首 1-19）
+    # 本項檢查兩件事：章號連續性（含缺號）、章首格式一致性。
+    print(f'\n[6] 章節結構驗證')
+    chapters = {}
+    for m in re.finditer(r'^(?:#{1,3}\s*)?第([一二三四五六七八九十]+)章\b[^\n]*', content, re.M):
+        n = cn2int(m.group(1))
+        if n:
+            chapters.setdefault(n, []).append(('第N章', m.start()))
+    for m in re.finditer(r'^(?:#{1,3}\s*)?([一二三四五六七八九十]+)、\s*\S[^\n]*', content, re.M):
+        n = cn2int(m.group(1))
+        if n:
+            chapters.setdefault(n, []).append(('N、', m.start()))
+
+    if chapters:
+        lo, hi = min(chapters), max(chapters)
+        missing_ch = [n for n in range(lo, hi + 1) if n not in chapters]
+        print(f'  ℹ 章號範圍 §{lo}–§{hi}，共 {len(chapters)} 章')
+        if missing_ch:
+            print(f'  ⚠ 缺號章節: {", ".join(f"§{n}" for n in missing_ch)}')
+            print('    缺號可能為刻意保留（未寫），也可能是誤刪。請人工確認。')
+            # 缺號不自動判 FAIL：正典可能刻意跳號。改以 --require-contiguous 強制。
+            if args.require_contiguous:
+                print('    [FAIL] --require-contiguous 已啟用 → 升級為失敗')
+                passed = False
+        else:
+            print(f'  ✓ 章號連續，無缺號')
+
+        dup_ch = {n: v for n, v in chapters.items() if len(v) > 1}
+        if dup_ch:
+            for n, v in sorted(dup_ch.items()):
+                print(f'  ⚠ §{n} 有 {len(v)} 個章首標記（可能為「續」章，需確認）')
+
+        # 章首格式一致性：缺 ## 的章會在文件大綱/錨點導航中隱形。
+        # 只檢查 §20 起——卷首 §1-19 使用「一、」是既定的卷首格式，非缺陷。
+        no_hash = []
+        for n, entries in sorted(chapters.items()):
+            if n < 20:
+                continue
+            line_no = content.count('\n', 0, entries[0][1]) + 1
+            raw = content[entries[0][1]:content.find('\n', entries[0][1])]
+            if not raw.lstrip().startswith('#'):
+                no_hash.append((n, line_no, raw.strip()[:32]))
+        if no_hash:
+            print(f'  ⚠ §20 起有 {len(no_hash)} 章的章首缺 Markdown 標題階層'
+                  f'（不產生文件大綱與錨點）:')
+            for n, ln, t in no_hash[:8]:
+                print(f'      §{n:02d}  L{ln}  {t}')
+            if len(no_hash) > 8:
+                print(f'      …另有 {len(no_hash) - 8} 章')
+            print('    建議統一為「## 第N章 · 標題」（§1-19 卷首「一、」格式為既定慣例，不在此列）。')
+        else:
+            print('  ✓ §20 起章首格式一致（皆具 Markdown 標題階層）')
+    else:
+        print('  ✗ 未偵測到任何章節標題')
+        passed = False
 
     # ---- 驗證 2-5 ----
     print('\n[2] 5T 協定驗證')
