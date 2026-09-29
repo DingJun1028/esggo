@@ -34,9 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     # token 放在 job 層 env；run: 內只引用 shell 變數 $CF_TOKEN。
-    # 優先用 CF_DNS_EDIT_TOKEN（#dns_records:edit）；未設定時退回 CF_API_TOKEN。
+    # 只認 CF_DNS_EDIT_TOKEN（#dns_records:edit）。刻意不做 || CF_API_TOKEN fallback：
+    # CF_API_TOKEN 綁 runner IP，在 Actions 內會被 Cloudflare 拒絕（code 9109），
+    # fallback 只會掩蓋「secret 配錯」這個真因，應直接 fast-fail。
     env:
-      CF_TOKEN: ${{ secrets.CF_DNS_EDIT_TOKEN || secrets.CF_API_TOKEN }}
+      CF_TOKEN: ${{ secrets.CF_DNS_EDIT_TOKEN }}
       CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
       HOSTNAME: ${{ inputs.hostname }}
       TARGET: ${{ inputs.tunnel_target }}
@@ -86,17 +88,32 @@ jobs:
           set -euo pipefail
           auth=(-H "Authorization: Bearer ${CF_TOKEN}")
 
+          # HOSTNAME 僅允許 esggo.co 及其子網域：此步驟會刪除記錄，
+          # 未經約束的輸入可改寫 zone 內任意名稱（含 www.esggo.co）。
+          case "${HOSTNAME}" in
+            *.esggo.co|esggo.co) ;;
+            *) echo "::error::HOSTNAME 必須落在 esggo.co 內，收到：${HOSTNAME}"; exit 1 ;;
+          esac
+
+          # URL 編碼後才拼進 query string，避免 & # ? 等字元注入額外參數。
+          HOSTNAME_ENC=$(jq -rn --arg v "${HOSTNAME}" '$v|@uri')
+
           existing=$(curl -sS --max-time 30 "${auth[@]}" \
-            "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=CNAME&name=${HOSTNAME}" \
+            "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=CNAME&name=${HOSTNAME_ENC}" \
             | jq -r '.result[]?.id')
           if [ -z "${existing}" ]; then
             echo "無既有記錄"
           fi
           for rid in $existing; do
             echo "刪除既有記錄 ${rid} (${HOSTNAME})"
-            curl -sS --max-time 30 -X DELETE "${auth[@]}" \
-              "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${rid}" \
-              | jq -r '"  刪除結果 success=\(.success)"'
+            resp=$(curl -sS --max-time 30 -X DELETE "${auth[@]}" \
+              "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${rid}")
+            # 刪除失敗必須讓 job 紅燈：靜默失敗會使後續建立重複而全盤告錯。
+            if [ "$(jq -r '.success' <<<"${resp}")" != "true" ]; then
+              echo "::error::刪除記錄 ${rid} 失敗: $(jq -c '.errors' <<<"${resp}")"
+              exit 1
+            fi
+            echo "  刪除結果 success=true"
           done
 
       - name: 建立 CNAME
