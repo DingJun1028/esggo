@@ -34,6 +34,7 @@
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -44,6 +45,8 @@ from datetime import datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOUL = os.path.join(ROOT, "esggo-omni-center", "soul.md")
 CLOSURE = os.path.join(ROOT, "scripts", "verify_sync_closure.py")
+# 本檔自身（repo 相對路徑）。用於 G4 排除自我引用。
+SELF = "scripts/verify_delivery_center.py"
 CANON = os.path.join(ROOT, "scripts", "verify_soul_canon.py")
 SKILLS = os.path.join(
     os.environ.get("LOCALAPPDATA", ""), "hermes", "skills", "esggo"
@@ -69,7 +72,13 @@ def record(gate, level, check, detail, observed=None):
 
 
 def run(cmd, cwd=ROOT, timeout=600):
-    """執行指令，回傳 (exit_code, combined_output)。不拋例外，失敗也是觀測值。"""
+    """執行指令，回傳 (exit_code, combined_output)。不拋例外，失敗也是觀測值。
+
+    設 OA_GATE_INNER=1：宣告本指令是在驗證中心內層執行。若被呼叫的驗證器
+    反過來又執行驗證中心（雙蜂探針 I1 即此情形），它可據此標記切斷遞迴，
+    避免 verify_dual_hive → verify_delivery_center → verify_dual_hive 死鎖。
+    """
+    env = dict(os.environ, OA_GATE_INNER="1")
     try:
         proc = subprocess.run(
             cmd,
@@ -78,6 +87,7 @@ def run(cmd, cwd=ROOT, timeout=600):
             text=True,
             timeout=timeout,
             shell=False,
+            env=env,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         return -1, f"{type(exc).__name__}: {exc}"
@@ -186,6 +196,33 @@ def gate_three_layer(manifest):
             }
         )
 
+    # 追加技能層：extra_skills 必須真實存在於任一 skill 根目錄。
+    # 為何需要：欄位若只寫不驗，就退化成無法被推翻的空宣稱（違反 G4 精神）。
+    # 實測佈局：SKILLS 指向 skills/<ns>/，但同一技能庫下另有 skills/<category>/
+    # 且層數不一（esggo/ vs autonomous-ai-agents/）。猜固定層數會誤判為不存在，
+    # 故以 glob 遞迴涵蓋任意深度，終局條件是 SKILL.md 實檔存在。
+    # 負向測試：不存在之名必回 None，使 G3 由綠轉紅。
+    import glob
+
+    def locate_skill(name: str):
+        hits = glob.glob(
+            os.path.join(os.path.dirname(SKILLS), "**", name, "SKILL.md"), recursive=True
+        )
+        if not hits:
+            hits = glob.glob(os.path.join(SKILLS, "**", name, "SKILL.md"), recursive=True)
+        return os.path.relpath(sorted(hits)[0], os.path.dirname(SKILLS)) if hits else None
+
+    for name in layers.get("extra_skills", []):
+        found = locate_skill(name)
+        all_ok = all_ok and found is not None
+        detail_rows.append(
+            {
+                "layer": "技能(追加)",
+                "status": "PASS" if found else "FAIL",
+                "observed": found or f"{name} 不存在（已遞迴掃 skills/**）",
+            }
+        )
+
     for doc in layers.get("fallback_docs", []):
         abs_path = os.path.join(ROOT, doc)
         exists = os.path.isfile(abs_path)
@@ -219,15 +256,28 @@ def gate_claim_matches(manifest):
 
     declared_bytes = claims.get("total_bytes")
     if declared_bytes is not None:
-        total = 0
+        total, counted = 0, 0
         for art in manifest.get("artifacts", []):
+            # 自我引用排除：驗證器自己常在產物清單內，但執行它的過程會
+            # 持續改動該檔，使「宣稱 == 實測」在數學上不可能成立。
+            # 這不是放水，是移除一個自我指涉的量測。
+            if art["path"] == SELF:
+                continue
             abs_path = os.path.join(ROOT, art["path"])
             if os.path.isfile(abs_path):
                 total += os.path.getsize(abs_path)
+                counted += 1
         ok = declared_bytes == total
         all_ok = all_ok and ok
         rows.append(
-            {"metric": "total_bytes", "claimed": declared_bytes, "measured": total, "ok": ok}
+            {
+                "metric": "total_bytes",
+                "claimed": declared_bytes,
+                "measured": total,
+                "ok": ok,
+                "excluded_self": SELF,
+                "counted_files": counted,
+            }
         )
 
     if not rows:
@@ -263,11 +313,62 @@ def gate_closure_clean():
     return ok
 
 
+# ── 宣稱值自我校準（--reconcile）────────────────────────────────────────
+def measure_claims(manifest):
+    """由實測推導宣稱值，不猜測。回傳可寫入 manifest 的 claims 字典。"""
+    artifacts = manifest.get("artifacts", [])
+    total = 0
+    for art in artifacts:
+        if art["path"] == SELF:          # 與 G4 同理：排除自我引用
+            continue
+        abs_path = os.path.join(ROOT, art["path"])
+        if os.path.isfile(abs_path):
+            total += os.path.getsize(abs_path)
+    return {
+        "file_count": len(artifacts),
+        "total_bytes": total,
+        "measured_at": datetime.now().isoformat(timespec="seconds"),
+    }
+
+
+def reconcile(manifest_path, manifest):
+    """把 claims 校正為實測值，並回報每個產物的 sha256 前 16 碼。
+
+    存在的理由：宣稱值靠人手動同步必然過期（曾發生 94473 vs 103735）。
+    校準是機械動作，應由工具做，而不是靠記憶。
+    """
+    measured = measure_claims(manifest)
+    before = manifest.get("claims", {})
+    digest_rows = []
+    for art in manifest.get("artifacts", []):
+        abs_path = os.path.join(ROOT, art["path"])
+        if os.path.isfile(abs_path):
+            with open(abs_path, "rb") as fh:
+                art["sha256"] = hashlib.sha256(fh.read()).hexdigest()[:16]
+        digest_rows.append(
+            {
+                "path": art["path"],
+                "bytes": os.path.getsize(abs_path) if os.path.isfile(abs_path) else None,
+                "sha256": art.get("sha256"),
+            }
+        )
+    manifest["claims"] = measured
+    with open(manifest_path, "w", encoding="utf-8") as fh:
+        json.dump(manifest, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    return before, measured, digest_rows
+
+
 # ── 主流程 ───────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser(description="第六階 · 交付驗證中心")
     ap.add_argument("--json", action="store_true", help="機器可讀輸出")
     ap.add_argument("--manifest", default=DEFAULT_MANIFEST, help="交付清單路徑")
+    ap.add_argument(
+        "--reconcile",
+        action="store_true",
+        help="先以實測值校正清單的 claims 與 sha256，再跑閘門（會寫檔）",
+    )
     args = ap.parse_args()
 
     try:
@@ -275,6 +376,19 @@ def main():
     except (OSError, json.JSONDecodeError) as exc:
         print(f"[FATAL] 無法讀取交付清單 {args.manifest}: {exc}", file=sys.stderr)
         return 2
+
+    if args.reconcile:
+        before, measured, digest_rows = reconcile(args.manifest, manifest)
+        print("=" * 72)
+        print("宣稱值校準 (--reconcile)")
+        print("=" * 72)
+        for key in ("file_count", "total_bytes"):
+            mark = "不變" if before.get(key) == measured[key] else "已更新"
+            print(f"  {key:<12} {before.get(key)} -> {measured[key]}  [{mark}]")
+        print(f"  {'sha256':<12} 已重算 {len(digest_rows)} 個產物指紋")
+        for row in digest_rows:
+            print(f"    {row['sha256'] or '(缺檔)':<18} {row['bytes'] or 0:>7} B  {row['path']}")
+        print("=" * 72)
 
     gate_artifact_exists(manifest)
     gate_artifact_verifiable(manifest)

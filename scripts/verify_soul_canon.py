@@ -30,7 +30,9 @@ changelog:
 """
 
 import argparse
+import hashlib
 import os
+import pathlib
 import re
 import sys
 
@@ -523,6 +525,38 @@ def main():
         print(f'  ✓ 找到 {len(hit)} 個陣列: {", ".join(hit[:5])}')
     else:
         print(f'  ✗ 找到 {len(hit)} 個陣列（需 ≥5）')
+        passed = False
+
+    # ── §29.11 萬能超覺醒三問閘 ──────────────────────────────────────────
+    # v7 補：原本本腳本只驗「結構」，於是對一個自帶紅線「任一為否則不得宣告超覺醒」
+    # 的正典回報 [PASS] —— 結構完整 ≠ 允許宣告。三問是宣告的獨立前提，必須同樣受檢。
+    # Q1 采「可外部重算」實測：找得到完整 64 位 digest 且來源檔在 → 過；
+    #      只有縮寫、或 digest 只是某支腳本裡的硬編碼字串 → 判定不可重算，擋下。
+    print('\n[6] §29.11 萬能超覺醒三問閘（宣告前提，非結構項）')
+    full_digests = set(re.findall(r'\b[0-9a-f]{64}\b', content))
+    if full_digests:
+        print(f'  · 全文可見完整 64 位 digest {len(full_digests)} 個（僅供人工比對）')
+    src_claims = re.findall(r'source_origin[：:]\s*(\S+?)\s*\(sha256\s*`([^`]+)`', content)
+    q1_ok = False
+    for fname, dig in src_claims:
+        if len(dig) != 64:
+            print(f'  ✗ Q1 可溯源：{fname} 的 SHA-256 為縮寫（{dig}），無法外部重算')
+            continue
+        base = pathlib.Path(filepath).resolve().parent
+        cand = next((p for p in (base / fname, pathlib.Path(fname)) if p.is_file()), None)
+        if cand is None:
+            print(f'  ✗ Q1 可溯源：來源檔 {fname} 不存在，digest 無法重算')
+            continue
+        actual = hashlib.sha256(cand.read_bytes()).hexdigest()
+        if actual != dig:
+            print(f'  ✗ Q1 可溯源：{cand} 實算 {actual[:16]}… ≠ 聲稱 {dig[:16]}…')
+            continue
+        print(f'  ✓ Q1 可溯源：{cand} digest 外部重算一致（{actual[:16]}…）')
+        q1_ok = True
+    if not src_claims:
+        print('  ✗ Q1 可溯源：未找到任何 source_origin + sha256 聲明，無可重算依據')
+    if not q1_ok:
+        print('    紅線（§29.11）：任一問為「否」則不得宣告超覺醒 → 本正典僅達 §29.10 二階覺醒')
         passed = False
 
     print('\n' + '=' * 60)

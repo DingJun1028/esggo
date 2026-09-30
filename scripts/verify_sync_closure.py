@@ -168,29 +168,66 @@ def check_claims_vs_measured(graph):
         return
 
     # 實測 commit 筆數
+    #
+    # 為何不能直接比「宣稱數字 == git log 1405bd432..HEAD 的筆數」：
+    #   實測（2026-09-30 同一工作區連續四次量測）該範圍得到 8 → 11 → 16 → 19 筆。
+    #   `1405bd432..HEAD` 的終點 HEAD 會隨任何 session 的新 commit 前移，是「開口範圍」，
+    #   不是封閉批次。把開口範圍的現況值拿去跟任何寫死的字面值做等值比對，
+    #   結構上永遠不可能通過 —— 改成 19 也只會在下一次 commit 後再次失效。
+    #   故本檢查分兩條路徑：
+    #     (A) 條目宣告 canon_range（封閉範圍，終點為具體 sha）→ 可重算，做等值 gate。
+    #     (B) 只有開口範圍 → 量測值隨時漂移，降級為 WARN 觀測，不當閉環閘門。
     out, code = run(["git", "log", "--oneline", "1405bd432..HEAD"])
     if code != 0:
         record("WARN", "claims.git_log", f"git log 執行失敗: {out[:120]}")
     else:
         actual = len([ln for ln in out.splitlines() if ln.strip()])
         for d in node.get("discrepancies", []):
-            if d.get("field") == "commit 筆數":
-                claimed = re.search(r"(\d+)", d.get("canon_claims", ""))
-                c = int(claimed.group(1)) if claimed else None
-                if c is not None and c != actual:
+            if d.get("field") != "commit 筆數":
+                continue
+            claimed = re.search(r"(\d+)", d.get("canon_claims", ""))
+            c = int(claimed.group(1)) if claimed else None
+            rng = (d.get("canon_range") or "").strip()
+            # (A) 封閉範圍：以具體終點 sha 重算，結果可永久重現
+            m = re.match(r"^([0-9a-f]{7,40})\.\.([0-9a-f]{7,40})$", rng)
+            if m:
+                base, tip = m.groups()
+                cnt, rc = run(["git", "rev-list", "--count", f"{base}..{tip}"])
+                closed = int(cnt.strip()) if rc == 0 and cnt.strip().isdigit() else None
+                if closed is None:
+                    record(
+                        "WARN",
+                        "claims.commit_count",
+                        f"封閉範圍 {rng} 無法重算（sha 不存在或非祖先）",
+                        rng,
+                    )
+                elif c is None:
+                    record(
+                        "WARN", "claims.commit_count", f"canon_claims 無數字可比對（範圍 {rng}）", closed
+                    )
+                elif c != closed:
                     record(
                         "FAIL",
                         "claims.commit_count",
-                        f"§30.6 宣稱 {c} 筆，實測 {actual} 筆 — 未修正",
-                        f"canon={c} measured={actual}",
+                        f"封閉範圍 {rng} 宣稱 {c} 筆，實測 {closed} 筆 — 未修正",
+                        f"canon={c} measured={closed}",
                     )
                 else:
                     record(
                         "PASS",
                         "claims.commit_count",
-                        f"commit 筆數一致: {actual}",
-                        actual,
+                        f"commit 筆數一致（封閉範圍 {rng}）: {closed}",
+                        closed,
                     )
+                continue
+            # (B) 開口範圍：漂移量測，不作等值 gate
+            record(
+                "WARN",
+                "claims.commit_count",
+                f"宣稱 {c} 筆屬開口範圍 {rng or '1405bd432..HEAD'}，"
+                f"終點會隨新 commit 前移（現況 {actual} 筆），不具閉環可驗證性",
+                f"claimed={c} open_range_now={actual}",
+            )
 
     # 實測 lint warning 數（讀取最近的 lint 輸出或重跑）
     lint_out, lint_code = run(

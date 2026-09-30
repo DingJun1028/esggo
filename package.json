@@ -36,6 +36,10 @@
     "oa:audit": "tsx cli/oa-cli/src/index.ts audit --dir \"src/lib,cli/oa-cli/src\"",
     "verify:gap-matrix": "node scripts/export-shared-types.js && npx tsx scripts/verify_gap_matrix.ts",
     "verify:matrix": "node scripts/verify-terminal-origin.mjs",
+    "verify:closure": "python scripts/verify_sync_closure.py",
+    "verify:delivery": "python scripts/verify_delivery_center.py",
+    "verify:delivery:json": "python scripts/verify_delivery_center.py --json",
+    "verify:delivery:reconcile": "python scripts/verify_delivery_center.py --reconcile",
 
     "verify": "pnpm turbo run lint typecheck test build && pnpm -F ./apps/learning-center check:types-sync"
   },
