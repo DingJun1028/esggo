@@ -1,0 +1,64 @@
+# Base44 development compose — runs the Next.js app from source with live reload.
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: esggo
+      POSTGRES_PASSWORD: esggo_dev
+      POSTGRES_DB: esggo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U esggo -d esggo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    image: node:22-alpine
+    restart: on-failure
+    working_dir: /app
+    volumes:
+      # Bind-mount the source so edits are reflected live
+      - ./:/app
+      # Persist node_modules in a named volume so it survives container restarts
+      # without being overwritten by the (empty) host directory
+      - web_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      # Local infra credentials — inline so they never override user secrets
+      - DATABASE_URL=postgresql://esggo:esggo_dev@postgres:5432/esggo
+      - DIRECT_URL=postgresql://esggo:esggo_dev@postgres:5432/esggo
+      - REDIS_HOST=127.0.0.1
+      - NODE_ENV=development
+      - PORT=3000
+      # Pass through the Base44 public host suffix for Next.js allowedDevOrigins
+      - BASE44_PUBLIC_HOST_SUFFIX=${BASE44_PUBLIC_HOST_SUFFIX}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Install deps, generate prisma client, push schema, then start dev server.
+    # pnpm via corepack; --frozen-lockfile to respect the lockfile.
+    command: ["sh", "-ec", "
+      apk add --no-cache openssl libc6-compat >/dev/null 2>&1 || true;
+      corepack enable pnpm;
+      pnpm install --frozen-lockfile;
+      npx prisma generate;
+      npx prisma db push --skip-generate --accept-data-loss;
+      exec npx next dev --hostname 0.0.0.0 --port 3000
+    "]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:3000/"]
+      interval: 15s
+      timeout: 5s
+      start_period: 120s
+      retries: 5
+
+volumes:
+  pgdata:
+  web_node_modules:

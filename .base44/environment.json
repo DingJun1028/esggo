@@ -1,0 +1,37 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/api/healthz",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "GEMINI_API_KEY",
+      "description": "Google Gemini API key for AI features (optional — app boots without it, AI features will be disabled)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "GROQ_API_KEY",
+      "description": "Groq API key for AI model routing (optional)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "OPENROUTER_API_KEY",
+      "description": "OpenRouter API key for AI model routing (optional)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "description": "Supabase project URL (optional — used for data features)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "description": "Supabase anon key (optional — public client key)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "description": "Supabase service role key (optional — server-side only)",
+      "requiredAtBoot": false
+    }
+  ]
+}

@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Allow the Base44 preview origin to access dev assets/HMR
+  allowedDevOrigins: process.env.BASE44_PUBLIC_HOST_SUFFIX
+    ? ['3000-' + process.env.BASE44_PUBLIC_HOST_SUFFIX]
+    : [],
   serverExternalPackages: ['googleapis-common', 'googleapis', 'gaxios', '@google/genai', 'ioredis', 'pg'],
   typescript: {
     ignoreBuildErrors: true,

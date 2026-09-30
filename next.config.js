@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Allow the Base44 preview origin to access dev assets/HMR
+  allowedDevOrigins: process.env.BASE44_PUBLIC_HOST_SUFFIX
+    ? ['3000-' + process.env.BASE44_PUBLIC_HOST_SUFFIX]
+    : [],
   // Type errors MUST be caught at build time — never ignore them
   typescript: {
     ignoreBuildErrors: false,

@@ -1,5 +1,19 @@
 # esggo AGENTS.md — 自動修復協議
 
+## Base44 開發環境
+
+- **啟動**: `docker compose -f docker-compose.base44.yml up -d`
+- **預覽端口**: 3000（Next.js 16 Turbopack dev server，bind 0.0.0.0）
+- **資料庫**: PostgreSQL 16（compose service `postgres`），Prisma schema 用 `prisma db push` 同步（無 migration 檔案）
+- **唯一必填環境變數**: `DATABASE_URL`（compose 內聯提供，指向本地 postgres）
+- **可選外部服務**: AI providers（Gemini/Groq/OpenRouter）、Supabase、Firebase — app 不接也可啟動
+- **Auth**: 本地 localStorage 模擬（`src/lib/auth.ts`），不依賴 Firebase
+- **兩個 next.config**: Next.js 16 使用 `next.config.js`（非 `.ts`）；`allowedDevOrigins` 加在 `.js` 中
+- **健康檢查**: `/api/healthz` 回傳 503（import smart-ai-router 失敗），compose healthcheck 改用 `/`
+- **驗證 app 運作**: `curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/` 應回 200
+
+## 自動修復機制
+
 ## 自動修復機制
 
 本專案啟用了 **自動修復 + 萬能分身追蹤** 機制，位於 `.hermes/auto-repair/`。
