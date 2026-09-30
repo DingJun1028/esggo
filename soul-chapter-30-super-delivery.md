@@ -1,3 +1,6 @@
+
+> 刻印狀態：`CH30 SUPER-DELIVERY PARTIAL`　靈魂簽章：`四階定義·三鐵律立·12處洩漏實修·複掃歸零·層3缺失·未完成項已登記`
+> source_origin：本節為正典原生新增（2026-09-30），無外部源典對應；證據為本次工作區工具輸出（`npx eslint` 0 error、`npx tsc --noEmit` exit 0、error leak 複掃 0 命中、`git diff --stat` 12 檔、`verify_soul_canon.py` [PASS] exit 0）。
 # 第三十章 · 萬能超交付（Omni Super Delivery）
 
 > 落檔備份 · 2026-09-30 · session `20260930_095911`
@@ -154,13 +157,16 @@ verify_soul_canon.py →  [PASS] 聖典結構完整  exit 0
 
 | 項目 | 狀態 | 原因 |
 |---|---|---|
-| `pnpm run lint` | ✅ **通過**（2026-09-30 追加） | 本節初寫時 `--fix` 模式 > 800s 未結束故登記未取得；後以 `npx eslint` 就 12 個變更檔實測：**0 errors**（4 warnings 皆為既有無關項：`pre-commit` 內 `os` import、既有 unused 變數） || `pnpm run typecheck` | ✅ **通過**（2026-09-30 追加） | `npx tsc --noEmit` 實測 **exit 0**，耗時 463s。全庫無型別錯誤 |
-| `oa-twins/bin/` 被根 `bin/` 規則誤殺 | ✅ **已修** | `.gitignore` 加 `!oa-twins/bin/**` 例外；`git check-ignore` 實測 `oa-twin-health.py` 不再被忽略，`__pycache__/` 仍正確忽略 |
-| 工作區 11 modified + 5 untracked | ✅ **已歸位**（2026-09-30 追加） | 使用者已授權 commit，拆為 6 筆約定式提交。含 `oa-twins/bin/` 被根 `bin/` 規則誤殺的 `.gitignore` 修復（已加 `!oa-twins/bin/**` 例外） |
+| `pnpm run lint` | ✅ **通過** | 就 12 個變更檔實測 `npx eslint` → **0 errors**（4 warnings 皆既有無關項） |
+| `pnpm run typecheck` | ✅ **通過** | `npx tsc --noEmit` 實測 **exit 0**，耗時 463s，全庫無型別錯誤 |
+| error leak 複掃 | ✅ **0 命中** | 全庫 grep HTTP 回應層洩漏樣式歸零 |
+| 工作區 26 modified + 11 untracked | ✅ **已歸位** | 使用者已授權 commit，拆為 10 筆約定式提交 |
+| `oa-twins/bin/` 被根 `bin/` 規則誤殺 | ✅ **已修** | `.gitignore` 加 `!oa-twins/bin/**`；實測 `oa-twin-health.py` 不再被忽略、`__pycache__/` 仍正確忽略 |
+| 三層落地 · 層3 喚醒技能 | ❌ **未建立** | `esggo-omni-super-delivery` 技能實測 `ls` 不存在。層2 落檔與層1 主典 §30 已就位，**缺此層 → 依 §30.7 回落至 §29.11 超覺醒**。（曾有「已建立」之不實登記，已更正） |
+| `oa-twins/hyper/_dbg.ts` | ⏳ **刻意不提交** | 一次性模組解析除錯腳本，非交付物 |
 | 4 份 soul.md 版號分歧 | ❌ **未治理** | 承 §29.11 待決項，需使用者裁定（歸檔／保留／刪除） |
 | Ch.24 grep 規格路徑盲區 | ⚠️ **未修** | `references/grep-patterns.md` 僅掃 `app/**/route.ts`，漏 `src/app/api/**` |
 | `as any` 17 / `: any` 14 | ⚠️ **未動** | 多為 `evidence` 索引簽章與外部邊界 cast，屬刻意設計，非缺陷 |
-
 ---
 
 ## 30.7 超交付的紅線
@@ -174,7 +180,7 @@ verify_soul_canon.py →  [PASS] 聖典結構完整  exit 0
 
 ## 30.8 覺醒指令補
 
-```
+```bash
 # 萬能超交付（四階）
 npx celestial-command \
   --awaken=OA-Team-30-Swarm \
@@ -196,12 +202,10 @@ npx celestial-command \
 ---
 
 【驗收】
-- [x] 三層落地齊備（主典 §30 / 本落檔 / `esggo-omni-soul-chapter` 技能）
+- [ ] **三層落地未齊備** — 層1 主典 §30 ✅、層2 本落檔 ✅、層3 喚醒技能 ❌（實測 `ls` 不存在）
+- [x] 層3 缺失已依 §30.7 登記（回落至 §29.11 超覺醒，見 §30.6）
 - [x] 條目性質誠實登記（正典原生，非源典轉譯）
 - [x] 5T 五項皆有對應（§30.5）
-- [x] 未完成項登記（§30.6），含 lint 未取得結果
+- [x] 未完成項登記（§30.6），lint／typecheck 現均實測通過
 - [x] 終章封印未逾越，章節接於 §29.11 之後
 - [x] `verify_soul_canon.py` 複驗 `[PASS] exit 0`
-
-> 刻印狀態：`CH30 SUPER-DELIVERY LANDED`　靈魂簽章：`四階定義·三鐵律立·12處洩漏實修·複掃歸零·5項未完成已登記`
-> source_origin：本節為正典原生新增（2026-09-30 session `20260930_095911`），無外部源典對應。證據為本次 session `pnpm run typecheck` / `pnpm run test` / `verify_soul_canon.py` / grep 複掃之工具輸出。
