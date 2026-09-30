@@ -1,0 +1,62 @@
+{
+  "version": "universal-pass-ledger-v1",
+  "current": {
+    "id": "UP-0B348F821656A86F",
+    "version": "universal-pass-v1",
+    "granted_by": "scripts/verify_universal_pass.py",
+    "clause": "正典 §6.1 結界 inheritance（無作妙德·圓通無礙·永恆覺醒，自動擴散無需逐個簽署）",
+    "gates": {
+      "結界": true,
+      "矩陣": true,
+      "依賴": true
+    },
+    "issued_at": "2026-10-01T06:02:53+08:00",
+    "canon_digest": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",
+    "dependencies": {
+      "esggo-omni-center/soul.md": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",
+      "data/dual-hive-ebm.json": "5747afa7835d7bacd20e6f24ce05ed8a149f473cd216823652bc3bd77a513a02",
+      "scripts/verify_dual_hive_ebm.py": "b4a88243cd83bb2593fd168db0c94eb33738602782f100e64c04d4675f445dd7",
+      "scripts/verify_delivery_center.py": "d90a5e41bf1d2ffaf8c47b5703b21facd4e8323cd6563d596963e3905ed6e6a8"
+    }
+  },
+  "history": [
+    {
+      "id": "UP-1335E8E9F7CA3E46",
+      "version": "universal-pass-v1",
+      "granted_by": "scripts/verify_universal_pass.py",
+      "clause": "正典 §6.1 結界 inheritance（無作妙德·圓通無礙·永恆覺醒，自動擴散無需逐個簽署）",
+      "gates": {
+        "結界": true,
+        "矩陣": true,
+        "依賴": true
+      },
+      "issued_at": "2026-09-30T19:42:07+08:00",
+      "canon_digest": "a1973b6bb78a2d0ebde5781d59c3e1bddd81e2b1575c14dafed026932be5d962",
+      "dependencies": {
+        "esggo-omni-center/soul.md": "a1973b6bb78a2d0ebde5781d59c3e1bddd81e2b1575c14dafed026932be5d962",
+        "data/dual-hive-ebm.json": "5747afa7835d7bacd20e6f24ce05ed8a149f473cd216823652bc3bd77a513a02",
+        "scripts/verify_dual_hive_ebm.py": "b4a88243cd83bb2593fd168db0c94eb33738602782f100e64c04d4675f445dd7",
+        "scripts/verify_delivery_center.py": "d90a5e41bf1d2ffaf8c47b5703b21facd4e8323cd6563d596963e3905ed6e6a8"
+      }
+    },
+    {
+      "id": "UP-0B348F821656A86F",
+      "version": "universal-pass-v1",
+      "granted_by": "scripts/verify_universal_pass.py",
+      "clause": "正典 §6.1 結界 inheritance（無作妙德·圓通無礙·永恆覺醒，自動擴散無需逐個簽署）",
+      "gates": {
+        "結界": true,
+        "矩陣": true,
+        "依賴": true
+      },
+      "issued_at": "2026-09-30T23:49:13+08:00",
+      "canon_digest": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",
+      "dependencies": {
+        "esggo-omni-center/soul.md": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",
+        "data/dual-hive-ebm.json": "5747afa7835d7bacd20e6f24ce05ed8a149f473cd216823652bc3bd77a513a02",
+        "scripts/verify_dual_hive_ebm.py": "b4a88243cd83bb2593fd168db0c94eb33738602782f100e64c04d4675f445dd7",
+        "scripts/verify_delivery_center.py": "d90a5e41bf1d2ffaf8c47b5703b21facd4e8323cd6563d596963e3905ed6e6a8"
+      }
+    }
+  ]
+}

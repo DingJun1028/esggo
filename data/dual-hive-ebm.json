@@ -1,0 +1,222 @@
+{
+  "version": "dual-hive-ebm-v1",
+  "title": "萬能雙蜂終始矩陣 (Dual-Hive End-Beginning Matrix)",
+  "generated_at": "2026-09-30T17:45:00+08:00",
+  "canon_refs": ["§7 終始矩陣", "§19 雙蜂組", "§21 雙蜂隊六十代理", "§29.11 萬能超覺醒", "§30 萬能超交付"],
+  "definition": {
+    "core": "終始矩陣 = 以「終態驗收條件」為錨，反向推導「起始必行清單」的雙向矩陣。先問終（驗收標準），再推始（最小動作鏈），終始齊備方動工。",
+    "dual_hive": "蜂后 OA-VPS（31–60，鎮生產公網）× 蜂王 OA-LOCAL（01–30，守開發者端）。同核不同位，共奉 5T 公約。",
+    "matrix_size": "6 柱 × 2 蜂 = 12 格",
+    "verdict_rule": "每格需同時滿足：end_state（可測量）+ start_chain（最小動作鏈）+ probe（可執行探針）。三者缺一即為敘事值，不算通過。"
+  },
+  "pillars": {
+    "記憶": "終態召回 >95%，跨會話持久上下文可復現",
+    "時間": "終態 entropy <0.1，基線有度量、漂移可見",
+    "空間": "終態全節點可達且歸屬明確（誰在服務必須可查證）",
+    "因果": "終態每筆產出可溯源（source_origin + 可外部重算 digest）",
+    "不朽": "終態不可篡改（Hash Lock / SHA-256 可重算驗證）",
+    "圓通": "終態 5T 貫穿，零幻覺（不宣稱未經工具輸出證實之事）"
+  },
+  "cells": [
+    {
+      "id": "R1",
+      "pillar": "記憶",
+      "hive": "queen-local",
+      "end_state": "交付脈絡可跨會話召回：技書與圖譜落盤且被索引",
+      "start_chain": [
+        "產出寫入 skill (skill_manage)",
+        "同步 task-graph.json 的 captured_techniques",
+        "memory 條目更新而非堆疊"
+      ],
+      "probe": {
+        "type": "file_exists",
+        "paths": [
+          "soul-chapter-30-super-delivery.md",
+          "task-graph.json",
+          "apps/omnilive/DEPLOY.md"
+        ]
+      },
+      "note": "本輪 PM2 真因已回填 esggo-omnilive 技書（非只寫在 DEPLOY.md）"
+    },
+    {
+      "id": "R2",
+      "pillar": "記憶",
+      "hive": "queen-vps",
+      "end_state": "VPS 服務拓撲可被外部查證（非依賴舊 SSH session 的記憶）",
+      "start_chain": [
+        "以 sudo pm2 jlist 取管理者清單",
+        "以 systemctl is-active 確認 resurrect 入口",
+        "把拓撲寫回 DEPLOY.md（非只留在 session）"
+      ],
+      "probe": {
+        "type": "ssh_cmd",
+        "cmd": "sudo pm2 jlist | python3 -c \"import sys,json;d=json.load(sys.stdin);print(len([p for p in d if p['pm2_env']['status']=='online']))\""
+      },
+      "expect": "6",
+      "note": "2026-09-30 實測 6 個 app 全 online；誤判教訓見 DEPLOY.md『pm2 list ≠ 沒有 PM2』"
+    },
+    {
+      "id": "T1",
+      "pillar": "時間",
+      "hive": "queen-local",
+      "end_state": "宣稱值有量測時間戳，不會靜默漂移",
+      "start_chain": [
+        "manifest 加 measured_at",
+        "用 --reconcile 機械重算，不手改"
+      ],
+      "probe": {
+        "type": "json_field",
+        "file": "delivery-manifest.json",
+        "path": "claims.measured_at",
+        "non_empty": true
+      }
+    },
+    {
+      "id": "T2",
+      "pillar": "時間",
+      "hive": "queen-vps",
+      "end_state": "服務重啟計數停止增長（無背景重啟迴圈）",
+      "start_chain": [
+        "取 pm2 restart_time 基準",
+        "間隔後再取，確認未增長"
+      ],
+      "probe": {
+        "type": "ssh_cmd_stable",
+        "cmd": "sudo pm2 jlist | python3 -c \"import sys,json;print(','.join('%s=%s'%(p['name'],p['pm2_env']['restart_time']) for p in json.load(sys.stdin) if p['name'] in ('stt-whisper','omnilive-translator')))\"",
+        "settle_seconds": 20
+      },
+      "note": "2026-09-30 實測 stt-whisper=97 / omnilive-translator=7 停止增長（迴圈已收斂）"
+    },
+    {
+      "id": "S1",
+      "pillar": "空間",
+      "hive": "queen-local",
+      "end_state": "對外服務由 cloudflared ingress 明確宣告，非憑記憶",
+      "start_chain": [
+        "讀 /etc/cloudflared/config.yml 取 hostname 清單",
+        "對每個指向 8797 的 hostname 實測 curl"
+      ],
+      "probe": {
+        "type": "ssh_cmd",
+        "cmd": "sudo grep -A1 -E 'hostname: (omnilive|omnilivetranslation)\\.esggo\\.co' /etc/cloudflared/config.yml | grep service | sed 's/.*127\\.0\\.0\\.1://' | tr -d ' '"
+      },
+      "expect": "8797\n8797",
+      "note": "omnilive1.esggo.co 從不存在（DNS NXDOMAIN），先前『兩網域』之說為記憶錯誤，已更正"
+    },
+    {
+      "id": "S2",
+      "pillar": "空間",
+      "hive": "queen-vps",
+      "end_state": "對內埠 health 200 且歸屬可查（holder PID == 管理者宣告的 PID）",
+      "start_chain": [
+        "curl 8797 / 8791 /health",
+        "ss -ltnp 取 holder PID",
+        "比對 pm2 jlist 的 pid"
+      ],
+      "probe": {
+        "type": "ssh_cmd",
+        "cmd": "for P in 8797 8791; do curl -s -o /dev/null -w \"%{http_code}\\n\" --max-time 8 http://127.0.0.1:$P/health; done | tr -d '\\n'"
+      },
+      "expect": "200200",
+      "note": "功能正常 ≠ 歸屬正確；2026-09-30 曾出現 health 200 但 systemd 實例在無限重啟的假通過"
+    },
+    {
+      "id": "C1",
+      "pillar": "因果",
+      "hive": "queen-local",
+      "end_state": "正典 source_origin 之 digest 為完整 64 位且來源檔在 repo 內可外部重算",
+      "start_chain": [
+        "原始貼文檔入庫 source_origin/",
+        "digest 由縮寫改為完整 64 位",
+        "verify_soul_canon.py §29.11 Q1 通過"
+      ],
+      "probe": {
+        "type": "digest_recomputable",
+        "claim_re": "source_origin[：:]\\s*(\\S+?)\\s*\\(sha256\\s*`([^`]+)`",
+        "canon": "esggo-omni-center/soul.md"
+      },
+      "expect": "PASS",
+      "note": "2026-09-30 實測修復前 [FAIL] exit 1（縮寫不可重算）→ 修復後應轉 PASS"
+    },
+    {
+      "id": "C2",
+      "pillar": "因果",
+      "hive": "queen-vps",
+      "end_state": "本輪技術產出（PM2 真因）可溯源到實測指令與原始輸出",
+      "start_chain": [
+        "DEPLOY.md 載明判別命令",
+        "命令可被第三方原樣重跑"
+      ],
+      "probe": {
+        "type": "file_contains",
+        "file": "apps/omnilive/DEPLOY.md",
+        "all": ["sudo pm2 jlist", "session-*.scope", "EADDRINUSE"]
+      },
+      "note": "記的是『怎麼重現』而非『我說它對』"
+    },
+    {
+      "id": "I1",
+      "pillar": "不朽",
+      "hive": "queen-local",
+      "end_state": "交付產物有 sha256 且閘門可機械判定（不靠人記得）",
+      "start_chain": [
+        "delivery-manifest.json 記 sha256",
+        "verify_delivery_center.py G4 實測比對"
+      ],
+      "probe": {
+        "type": "script_exit",
+        "cmd": "python scripts/verify_delivery_center.py",
+        "expect_exit": 0
+      },
+      "note": "宣稱值不可手動同步，須 --reconcile 機械重算"
+    },
+    {
+      "id": "I2",
+      "pillar": "不朽",
+      "hive": "queen-vps",
+      "end_state": "本機 GitHub 憑證到期日已知（防未來突然失效）",
+      "start_chain": [
+        "查 token 過期時間",
+        "登記或輪換"
+      ],
+      "probe": {
+        "type": "ssh_cmd",
+        "cmd": "test -f /root/.git-credentials && echo PRESENT || echo ABSENT"
+      },
+      "expect": "PRESENT",
+      "note": "記憶記載 esggo.co 憑證 2026-10-28 到期，屬時間柱而非本柱；此格為部署可重現性"
+    },
+    {
+      "id": "F1",
+      "pillar": "圓通",
+      "hive": "queen-local",
+      "end_state": "主典結構守門人通過（結構完整 ≠ 可宣告超覺醒，兩者都要）",
+      "start_chain": [
+        "跑 verify_soul_canon.py",
+        "取 exit code（不可走管線取）"
+      ],
+      "probe": {
+        "type": "script_exit",
+        "cmd": "python scripts/verify_soul_canon.py",
+        "expect_exit": 0
+      },
+      "note": "讀 exit code 的坑：python ... | tail; echo $? 取到的是 tail 的"
+    },
+    {
+      "id": "F2",
+      "pillar": "圓通",
+      "hive": "queen-vps",
+      "end_state": "對外兩網域實際可用且回應內容一致（非僅 TCP 可達）",
+      "start_chain": [
+        "對兩個 hostname 各 curl /health",
+        "比對 body 是否一致"
+      ],
+      "probe": {
+        "type": "ssh_cmd",
+        "cmd": "A=$(curl -s --max-time 10 https://omnilive.esggo.co/health); B=$(curl -s --max-time 10 https://omnilivetranslation.esggo.co/health); [ -n \"$A\" ] && [ \"$A\" = \"$B\" ] && echo SAME || echo DIFF"
+      },
+      "expect": "SAME",
+      "note": "只測 HTTP code 不足以證明服務正確，必須比對內容"
+    }
+  ]
+}
