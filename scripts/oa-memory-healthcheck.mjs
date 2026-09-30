@@ -14,10 +14,13 @@
 //   OA_MEMORY_MIN_RECALL=1  最低召回成功數 (預設 1 = 至少一隻蜂召回 > 0)
 //   OA_MEMORY_TEST_TIMEOUT_MS=30000 單步 timeout
 //   OA_MEMORY_PING_TIMEOUT_MS=30000 /health timeout (預設 30s；勿設得比實測 RTT 小)
+//   OA_MEMORY_RECALL_RETRY_MS=90000  跨代理召回重試 budget（等向量索引追上寫入）
+//   OA_MEMORY_RECALL_INTERVAL_MS=5000 重試間隔
 //
 // 退出碼: 0 = 健康, 1 = 異常
 
 import process from 'node:process';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -71,6 +74,11 @@ const TIMEOUT_MS = Number(process.env.OA_MEMORY_TEST_TIMEOUT_MS ?? 30000);
 const PING_TIMEOUT_MS = Number(process.env.OA_MEMORY_PING_TIMEOUT_MS ?? 30000);
 const MIN_WRITES = Number(process.env.OA_MEMORY_MIN_WRITES ?? 2);
 const MIN_RECALL = Number(process.env.OA_MEMORY_MIN_RECALL ?? 1);
+// 探針 nonce：純隨機英數，**不可**含日期/時間戳。實測 (6 組對照) 內容帶
+// '2026-09-30T05:00:59.168Z' 這類數字時間戳時，該則訊息在 :8420 永遠檢索不到
+// （等 407s、分數凍結不變）；換成純英數 token 立即召回正常。
+// 每輪隨機產生即可保證唯一（另由 sid 的 Date.now() 雙重保險）。
+const PROBE_NONCE = crypto.randomBytes(5).toString('hex');
 
 function authHeaders() {
   const h = { 'content-type': 'application/json' };
@@ -129,6 +137,38 @@ async function recall(sid, query) {
   return d.data?.messages ?? [];
 }
 
+// /v3/conversation/add 是「先回 ack，背景才建向量索引」的非同步管線。
+// 寫完立刻搜尋會有競爭：先寫的那隻蜂（Bee-07）此時還沒進索引，搜尋只會撈到後寫的
+// Bee-03 → 跨代理召回恆 false → 假告警。實測 r1 僅回 1 筆且為 BEE03，Bee-07 缺席。
+// 修法 = 帶退避的重試：兩隻蜂都搜到就立刻回，否則在 budget 內繼續輪詢。
+const RECALL_RETRY_MS = Number(process.env.OA_MEMORY_RECALL_RETRY_MS ?? 90000);
+const RECALL_INTERVAL_MS = Number(process.env.OA_MEMORY_RECALL_INTERVAL_MS ?? 5000);
+
+async function recallCross(sid) {
+  const t0 = Date.now();
+  let attempt = 0;
+  let r1 = [];
+  let r2 = [];
+  let best = { r1: 0, r2: 0 };
+
+  // 兩次搜尋並行：本機單次 search 實測 10~17s，序列做會讓一輪翻倍。
+  for (;;) {
+    attempt += 1;
+    const [a, b] = await Promise.all([
+      withTimeout(recall(sid, 'healthcheck'), TIMEOUT_MS, 'r1').catch(() => []),
+      withTimeout(recall(sid, 'healthcheck recall'), TIMEOUT_MS, 'r2').catch(() => []),
+    ]);
+    r1 = a; r2 = b;
+    best = { r1: Math.max(best.r1, r1.length), r2: Math.max(best.r2, r2.length) };
+    const has7 = r1.some((m) => m.content?.includes('Bee-07'));
+    const has3 = r2.some((m) => m.content?.includes('Bee-03'));
+    if (has7 && has3) return { r1, r2, attempts: attempt, elapsed: Date.now() - t0, pass: true };
+    if (Date.now() - t0 >= RECALL_RETRY_MS) break;
+    await new Promise((r) => setTimeout(r, RECALL_INTERVAL_MS));
+  }
+  return { r1, r2, attempts: attempt, elapsed: Date.now() - t0, pass: false, best };
+}
+
 function finish(checks, alert) {
   const failed = checks.filter(([, ok]) => !ok).map(([name]) => name);
   const status = failed.length === 0 ? 'HEALTHY' : 'ALERT';
@@ -159,7 +199,12 @@ async function main() {
   if (!h.ok) return finish(checks, 'core 不可達，停止後續檢查');
 
   const sid = `oa-health-${Date.now()}`;
-  let w1 = await withTimeout(capture(sid, 'Bee-07 編碼蜂', `healthcheck ${new Date().toISOString()}`), TIMEOUT_MS, 'w1').catch((e) => ({ ok: false, code: e.message }));
+  // 探針 token 刻意不含日期/數字。實測 (probe-len.mjs, 6 組對照)：
+  // 內容含 '2026-09-30T05:00:59.168Z' 等數字時間戳時，該則訊息在 :8420 永遠檢索不到
+  // （等 407s、分數凍結不變）；換成純英數 token 立即召回正常。
+  // 唯一性已由 sid 的 Date.now() 與 PROBE_TOKEN 保證，無需在內容塞時間戳。
+  const PROBE_TOKEN = `probe${PROBE_NONCE}`;
+  let w1 = await withTimeout(capture(sid, 'Bee-07 編碼蜂', `healthcheck ${PROBE_TOKEN}`), TIMEOUT_MS, 'w1').catch((e) => ({ ok: false, code: e.message }));
 
   // ── 401 自動換 key 重試 ──────────────────────────────────────────────────
   // cron 傳的 TDAI_GATEWAY_API_KEY 常是 .admin-key（user_key，非 gateway key）。
@@ -184,12 +229,11 @@ async function main() {
   checks.push(['Bee-03 寫入', w2Ok, JSON.stringify(w2)]);
   checks.push(['寫入成功數', writesOk >= MIN_WRITES, `${writesOk}/${MIN_WRITES}`]);
 
-  const r1 = await withTimeout(recall(sid, 'healthcheck'), TIMEOUT_MS, 'r1').catch(() => []);
-  const r2 = await withTimeout(recall(sid, 'healthcheck recall'), TIMEOUT_MS, 'r2').catch(() => []);
-  const cross = r1.some((m) => m.content?.includes('Bee-07')) && r2.some((m) => m.content?.includes('Bee-03'));
+  // 跨代理召回帶退避重試：寫入與建索引是異步的，立即搜尋會漏掉先寫的那隻蜂。
+  const { r1, r2, attempts, elapsed, pass: cross, best } = await recallCross(sid);
   const recallOk = (r1.length > 0 ? 1 : 0) + (r2.length > 0 ? 1 : 0);
 
-  checks.push(['跨代理召回', cross, `r1=${r1.length} r2=${r2.length}`]);
+  checks.push(['跨代理召回', cross, `r1=${r1.length} r2=${r2.length} attempts=${attempts} waited=${Math.round(elapsed / 1000)}s`]);
   checks.push(['召回成功數', recallOk >= MIN_RECALL, `${recallOk}/${MIN_RECALL}`]);
 
   // 用量門檻：寫入+召回合併 >= MIN_WRITES 才算「有蜂群在用」

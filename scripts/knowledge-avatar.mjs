@@ -12,32 +12,17 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { execSync } from 'node:child_process';
+import { collectNodes } from './vault-walk.mjs';
 
 const VAULT = path.resolve('vault');
 const REG = path.join(VAULT, 'Agents/context/.avatar-registry.json');
 
 // ── Hatch: 掃所有結點 ──────────────────────────────────────────
-function collectNodes(dir, rel = '.') {
-  const nodes = [];
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    const p = path.join(dir, e.name);
-    const r = rel === '.' ? e.name : `${rel}/${e.name}`;
-    if (e.isDirectory()) nodes.push(...collectNodes(p, r));
-    else if (e.name.endsWith('.md') && e.name !== 'AGENTS.md') {
-      let s;
-      try { s = fs.readFileSync(p, 'utf8'); } catch { continue; } // 不可讀檔跳過, 不炸全批
-      const body = s.replace(/^---[\s\S]*?---/, '');
-      // ## 標題 作結點
-      const heads = [...body.matchAll(/^##\s+(.+)$/gm)].map(m => m[1].trim());
-      // [[wikilink]] 作結點
-      const links = [...body.matchAll(/\[\[([^\]]+)\]\]/g)].map(m => m[1].trim());
-      for (const h of heads) nodes.push({ type: 'heading', text: h, file: r });
-      for (const l of links) nodes.push({ type: 'wikilink', text: l, file: r });
-    }
-  }
-  return nodes;
-}
+// 走訪規則 (排除 .obsidian/node_modules 等) 集中於 vault-walk.mjs 單一來源。
+// 2026-10-01: 本檔曾無排除清單 → 掃進 Obsidian plugin 的 node_modules,
+// Hatch 孵化 2043 分身 (真實業務量 366), 分身命名空間被第三方套件 README 佔據。
 
 // ── Absorb: 標變體 (正確/錯誤) ─────────────────────────────────
 function classify(node, fileBody) {
@@ -84,7 +69,10 @@ function main() {
   const registry = {};
   const avatars = [];
   for (const n of nodes) {
-    const id = Buffer.from(n.text).toString('base64').slice(0, 12);
+    // id 必須涵蓋出處 (file + type) 與文字: 只用文字會讓不同檔案裡的同名結點
+    // (例: "相關" / "TypeMatrix") 撞同一 base64 前綴, 366 結點塌成 220 (損 40%)。
+    const key = `${n.file}\0${n.type}\0${n.text}`;
+    const id = createHash('sha1').update(key, 'utf8').digest('hex').slice(0, 16);
     const fileBody = fs.readFileSync(path.join(VAULT, n.file), 'utf8');
     const cls = classify(n, fileBody);
     const av = {
@@ -99,6 +87,13 @@ function main() {
     };
     registry[id] = av;
     avatars.push(av);
+  }
+  const keys = Object.keys(registry);
+  if (keys.length !== avatars.length) {
+    throw new Error(
+      `registry 塌縮: 收集 ${avatars.length} 結點只存進 ${keys.length} 個 id — ` +
+      `id 生成器仍有碰撞 (回報 exit 1, 禁止靜默丟資料)`
+    );
   }
   fs.writeFileSync(REG, JSON.stringify(registry, null, 2));
   feedbackToMOC(avatars);

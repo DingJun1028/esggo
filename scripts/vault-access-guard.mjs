@@ -12,6 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { walkMarkdown } from './vault-walk.mjs';
 
 const VAULT = path.resolve('vault');
 const SECRET_PATTERNS = [
@@ -24,18 +25,11 @@ const SECRET_PATTERNS = [
   /-----BEGIN (PRIVATE|OPENSSH) KEY-----/,
 ];
 
-function walk(dir) {
-  const out = [];
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    const p = path.join(dir, e.name);
-    if (e.isDirectory()) out.push(...walk(p));
-    else if (e.name.endsWith('.md')) out.push(p);
-  }
-  return out;
-}
-
+// 走訪規則與 Hatch 共用 vault-walk.mjs 單一來源。
+// 2026-10-01: 本檔曾獨立遞迴整個 vault/, 掃進 .obsidian/plugins/*/node_modules/
+// → 對第三方套件 README 產生假告警 (缺 access 欄位)。
 let blocked = 0;
-const files = walk(VAULT);
+const files = walkMarkdown(VAULT);
 console.log(`[VaultGuard] 掃描 ${files.length} 篇筆記`);
 
 for (const f of files) {

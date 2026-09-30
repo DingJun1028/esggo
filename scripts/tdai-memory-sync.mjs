@@ -84,12 +84,54 @@ async function tryWrite(entry, attempt = 0) {
   return { ok: false, why: 'all-paths-404' };
 }
 
+// 啟動前探測 (circuit breaker 前置): TDAI 完全不可達時 (Docker daemon 未起 /
+// 服務未啟 / 連接被拒), 逐筆 18s 逾時會讓 N 筆分身耗掉 N×18s —— 358 筆就是
+// 6444s, 直接把整條 avatar-daily 拖到超時, 且不會有任何診斷輸出 (因為每筆都要
+// 等滿才輪到下一筆)。故先探一次, 不可達就明確降級退出, 不進入寫入迴圈。
+// 可用 TDAI_PROBE=0 跳過探測 (排查期用: 懷疑探測本身誤判時)。
+async function probeOnce() {
+  const t0 = Date.now();
+  try {
+    const ctrl = new AbortController();
+    // 實測教訓 (2026-10-01): fetch 對「連線階段」的 abort 不保證立即中止 ——
+    // 3s 逾時實測跑了 6998ms 才 AbortError。故用兩道: controller 定時 abort,
+    // 外加 Promise.race 硬性在 PROBE_HARD_MS 內返回 (逾時即視為不可達)。
+    // 殘留的 fetch 交由 process.exit 收割, 不讓它拖住整體。
+    const t = setTimeout(() => ctrl.abort(), Number(process.env.TDAI_PROBE_TIMEOUT_MS || 3_000));
+    const HARD_MS = Number(process.env.TDAI_PROBE_HARD_MS || 2_000);
+    const hardCap = new Promise(res =>
+      setTimeout(() => res({ reachable: false, ms: Date.now() - t0, why: `probe hard-cap ${HARD_MS}ms` }), HARD_MS)
+    );
+    const r = await Promise.race([
+      fetch(TDAI_CORE + '/health', { signal: ctrl.signal })
+        .then(resp => ({ reachable: true, ms: Date.now() - t0, status: resp.status }))
+        .catch(e => ({ reachable: false, ms: Date.now() - t0, why: String(e?.message || e).slice(0, 80) })),
+      hardCap,
+    ]);
+    return r;
+  } catch (e) {
+    return { reachable: false, ms: Date.now() - t0, why: String(e?.message || e).slice(0, 80) };
+  }
+}
+
 async function main() {
   const reg = loadReg();
   if (!reg) {
     console.error('[tdai-sync] 無 registry, 請先跑 knowledge-avatar.mjs');
     process.exit(1);
   }
+
+  // 探測在無 key 時也要跑: 「服務不可達」比「沒 key」更該先知道。
+  if (process.env.TDAI_PROBE !== '0') {
+    const p = await probeOnce();
+    if (!p.reachable) {
+      console.warn(`[tdai-sync] ⚠ 熔斷: TDAI ${TDAI_CORE} 不可達 (${p.why}, ${p.ms}ms), 跳過 ${Object.keys(reg).length} 筆寫入`);
+      console.warn('[tdai-sync] 本地 registry 不丟, 未同步的分身留待下次; 排查: docker ps 有無 tdai 容器 / 8420 是否在監聽');
+      process.exit(1);   // 誠實非零, 排程層看得到
+    }
+    console.log(`[tdai-sync] 探測 OK ${TDAI_CORE}/health → ${p.status} (${p.ms}ms)`);
+  }
+
   const entries = Object.values(reg);
   console.log(`[tdai-sync] 同步 ${entries.length} 分身 → TencentDB (${TDAI_CORE})`);
 

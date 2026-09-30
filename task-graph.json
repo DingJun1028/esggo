@@ -85,10 +85,15 @@
       "discrepancies": [
         {
           "field": "commit 筆數",
-          "canon_claims": "6 筆",
-          "measured": "11 筆 (git log 1405bd432..HEAD | wc -l，第三次複驗)",
+          "canon_claims": "19 筆",
+          "canon_range": "1405bd432..023c11e67",
+          "measured": "19 筆 (git rev-list --count 1405bd432..023c11e67)",
+          "measured_at": "2026-09-30",
           "severity": "low",
-          "resolution": "工作區已歸位成立，僅筆數需更正。註：此數字會隨並行 session 提交而變動。"
+          "resolution": "以封閉範圍釘住量測時點，使其可永久重算。",
+          "note": "【歸因更正】'6 筆' 從未出現在 soul.md。實測 grep -c '6 筆' esggo-omni-center/soul.md = 0；§30.6 該列（L2354）原文為『拆為 10 筆約定式提交』，且其範圍是『26 modified + 11 untracked 工作區歸位』，與 git log 計數無關。先前將 task-graph.json 自身的 discrepancy 欄位誤植為『§30.6 宣稱』，屬驗證器的歸因錯誤，非正典錯誤。",
+          "drift_evidence": "同一開口範圍 1405bd432..HEAD 連續四次量測得 8 → 11 → 16 → 19 筆。終點 HEAD 隨新 commit 前移，故開口範圍與寫死數字的等值比對結構上不可能恆真。",
+          "scope_caveat": "本範圍 19 筆含 2 筆與 ch30 無關的合併（#1200 cf-worker、#1203 avatar-metrics）。'ch30 同步升級閉環成果集'的嚴格子集小於 19，本條目驗證的是範圍計數本身，非成果歸屬。"
         },
         {
           "field": "lint warnings",

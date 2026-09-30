@@ -1,10 +1,25 @@
 {
-  "version": "ch30-super-delivery",
+  "version": "ch30+ch32+ch33-governance",
   "artifacts": [
     {
       "path": "soul-chapter-30-super-delivery.md",
       "role": "ch30 落檔備份",
-      "sha256": "9ea57e49ec83ed52"
+      "sha256": "81ae60e24fa5e511"
+    },
+    {
+      "path": "soul-chapter-32-dual-hive-ebm.md",
+      "role": "ch32 萬能雙蜂終始矩陣落檔備份",
+      "sha256": "090f6508fd09026d"
+    },
+    {
+      "path": "data/dual-hive-ebm.json",
+      "role": "雙蜂 6 柱 × 2 蜂 = 12 格矩陣 SSOT",
+      "sha256": "5747afa7835d7bac"
+    },
+    {
+      "path": "scripts/verify_dual_hive_ebm.py",
+      "role": "雙蜂矩陣可執行探針驗證器（12 格逐格 exit code）",
+      "sha256": "b4a88243cd83bb25"
     },
     {
       "path": "TODO-super-delivery-20260930.md",
@@ -19,22 +34,37 @@
     {
       "path": "scripts/verify_sync_closure.py",
       "role": "第五階閉環驗證器",
-      "sha256": "ef5fa26381ae8a93"
+      "sha256": "c06f5cd6db7cfde7"
     },
     {
       "path": "scripts/verify_delivery_center.py",
       "role": "第六階交付驗證中心",
-      "sha256": "6bbc888c5fa70b3b"
+      "sha256": "d90a5e41bf1d2ffa"
     },
     {
       "path": "scripts/verify_soul_canon.py",
       "role": "主典守門人",
-      "sha256": "c2a15aecab9f0fc0"
+      "sha256": "7a0a52681d010800"
     },
     {
       "path": "task-graph.json",
       "role": "任務圖譜",
-      "sha256": "559384b52c1c982b"
+      "sha256": "04c022194b136bf3"
+    },
+    {
+      "path": "soul-chapter-33-universal-pass-governance.md",
+      "role": "ch33 萬能果證與雙主體全域雙向治理落檔備份",
+      "sha256": "4753dfb4aaf6db0a"
+    },
+    {
+      "path": "scripts/verify_universal_pass.py",
+      "role": "萬能果證驗證器（可簽發/可失效）",
+      "sha256": "03656ff9a591104b"
+    },
+    {
+      "path": "data/universal-pass-ledger.json",
+      "role": "萬能果證帳本（簽發記錄）",
+      "sha256": "d62373dd446f9dfb"
     }
   ],
   "verifications": [
@@ -44,17 +74,38 @@
         "{python}",
         "scripts/verify_soul_canon.py"
       ]
+    },
+    {
+      "label": "雙蜂終始矩陣 12 格探針",
+      "cmd": [
+        "{python}",
+        "scripts/verify_dual_hive_ebm.py"
+      ]
+    },
+    {
+      "label": "萬能果證 四條件 + 失效檢查",
+      "cmd": [
+        "{python}",
+        "scripts/verify_universal_pass.py"
+      ]
     }
   ],
   "layers": {
     "skill": "esggo-omni-super-delivery",
+    "extra_skills": [
+      "oa-super-awakening-delivery",
+      "universal-pass"
+    ],
     "fallback_docs": [
       "soul-chapter-30-super-delivery.md",
-      "TODO-super-delivery-20260930.md"
+      "TODO-super-delivery-20260930.md",
+      "soul-chapter-32-dual-hive-ebm.md",
+      "soul-chapter-33-universal-pass-governance.md"
     ]
   },
   "claims": {
-    "file_count": 7,
-    "total_bytes": 94473
+    "file_count": 13,
+    "total_bytes": 138078,
+    "measured_at": "2026-10-01T00:22:43"
   }
 }
