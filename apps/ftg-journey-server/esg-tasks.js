@@ -42,7 +42,7 @@ export const DEFAULT_CARBON_MODE = '汽車';
 export const ESG_TASKS = [
   {
     id: 'cleanup',
-    title: 'Clean-up Walk',
+    title: '淨灘清拾',
     icon: '🗑️',
     fields: [
       { name: 'count', label: '撿拾垃圾件數', type: 'number', placeholder: '例如 12' },

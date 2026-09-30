@@ -1,7 +1,7 @@
 import { db } from '@lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from '@lib/firebase';
 import { v4 as uuidv4 } from 'uuid';
-import { jsonResponse, jsonError } from '@lib/api-utils';
+import { jsonResponse, jsonError, jsonErrorInternal } from '@lib/api-utils';
 import { runGeminiWithWorkersAIFallback } from '@lib/cloudflare';
 
 export const dynamic = 'force-dynamic';
@@ -142,8 +142,6 @@ ${JSON.stringify(tasks)}
 
     return jsonError('UNKNOWN_TOOL', `未知的工具呼叫: ${tool}`, 400);
   } catch (error) {
-    const err = error as Error;
-    console.error('Nexus Error:', err);
-    return jsonError('INTERNAL_ERROR', err.message || 'Unknown error');
+    return jsonErrorInternal(error);
   }
 }

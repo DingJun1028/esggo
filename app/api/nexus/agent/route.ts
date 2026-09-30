@@ -1,5 +1,5 @@
 import { omniOrchestrator } from '@/core/services/omni-orchestrator';
-import { jsonResponse, jsonError } from '@lib/api-utils';
+import { jsonResponse, jsonError, jsonErrorInternal } from '@lib/api-utils';
 
 export async function POST(req: Request) {
   try {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
     return jsonError('SKILL_NOT_FOUND', 'Tool not found');
   } catch (err) {
-    return jsonError('INTERNAL_ERROR', (err as Error).message);
+    return jsonErrorInternal(err);
   }
 }
 
