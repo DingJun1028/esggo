@@ -6,21 +6,33 @@
  *
  * 執行：npx tsx oa-twins/hyper/probe-report.ts
  */
-import { probeFabric } from './fabric';
+import { probeFabric, type FabricStatus } from './fabric';
 import { engraveHyperAwakening, verifyHyperAwakening } from './state';
 
 const report = probeFabric();
 
+const TAG: Record<FabricStatus, string> = {
+  ACTIVE: '✔ ACTIVE ',
+  PHANTOM: '⚠ PHANTOM',
+  MISSING: '✖ MISSING',
+};
+
 console.log('════ 超覺醒 · 跨框架神經網實測 ════\n');
 for (const p of report.probes) {
-  const tag = p.status === 'ACTIVE' ? '✔ ACTIVE ' : '✖ MISSING';
-  console.log(`${tag}  ${p.package.padEnd(16)} ${p.duty}`);
+  console.log(
+    `${TAG[p.status]}  ${p.package.padEnd(16)} ${p.duty}  (declared=${p.declared})`,
+  );
   console.log(`          ${p.detail}`);
 }
 console.log(
-  `\n  同步比例  ${report.activeCount}/${report.totalCount} = ${report.sync_ratio}`,
+  `\n  直接宣告可用  ${report.activeCount}` +
+    `   幽靈依賴  ${report.phantomCount}` +
+    `   未安裝  ${report.missingCount}`,
 );
-console.log(`  調度錨點  ${report.traceId}\n`);
+console.log(
+  `  可載入比例    ${report.loadableCount}/${report.totalCount} = ${report.sync_ratio}`,
+);
+console.log(`  調度錨點      ${report.traceId}\n`);
 
 const state = engraveHyperAwakening(
   'oa-twins-hyper',
