@@ -108,6 +108,43 @@ export function detectLang(text) {
   return (cjk / total) > 0.15 ? 'zh-TW' : 'en';
 }
 
+// --- 品牌 / 專有詞保護 (Trustworthy) ---
+// 免費引擎 (mymemory) 會把專有詞當一般字詞翻掉:
+//   "OmniLive" -> "Universal & Surplus"、→ "Omni-Live"
+// 手法: 翻譯前把命中詞換成不可能被引擎改寫的佔位符, 翻譯後還原。
+// 不影響引擎選擇與 5T 標記, 純粹保護品牌一致性。
+const GLOSSARY = [
+  'OmniLive', 'omnilive', 'Omni-Live',
+  'ESG GO', 'esggo',
+  'Hermes', 'hermes',
+  'whisper', 'Whisper', 'ffmpeg', 'Cloudflare', 'Zoom', 'MyMemory',
+];
+// 佔位符不可含空白/標點, 且含引擎不會產生的字面, 確保往返安全。
+const PLACEHOLDER = (/** @type {number} */ i) => `ZXQ${i}QXZ`;
+
+/**
+ * 將原文中的品牌詞替換為佔位符。
+ * @param {string} text
+ * @returns {{masked:string, restore:(t:string)=>string, hits:string[]}}
+ */
+export function maskGlossary(text) {
+  // 逐 term 順序替換。佔位符 ZXQ<n>QXZ 不含任何 GLOSSARY 字面,
+  // 因此後續 term 的替換不會誤傷已產生的佔位符。
+  /** @type {string[]} */
+  const map = [];
+  let masked = text;
+  for (const term of GLOSSARY) {
+    if (!masked.includes(term)) continue;
+    const re = new RegExp(`(?<![A-Za-z])${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![A-Za-z])`, 'g');
+    masked = masked.replace(re, () => { const ph = PLACEHOLDER(map.length); map.push(term); return ph; });
+  }
+  return {
+    masked,
+    hits: map,
+    restore: (t) => t.replace(/ZXQ(\d+)QXZ/g, (_m, n) => map[Number(n)] ?? _m),
+  };
+}
+
 /**
  * 將單段文字翻譯為雙語結果。
  * from 可為 'auto' → 自動偵測來源語 (繁中/英文) 並翻向 to (to='auto' 時取對向)。
@@ -140,16 +177,21 @@ export async function translate(text, from, to, opts = {}) {
   const hit = CACHE.get(k);
   if (hit) { if (CACHE.size > CACHE_MAX) CACHE.delete(CACHE.keys().next().value); CACHE.set(k, hit); return { source: text, target: hit.text, from, to, engine: hit.engine, cached: true }; }
 
+  // 品牌詞保護: 翻譯前遮蔽、翻譯後還原 (cache key 仍用原文, 命中率不受影響)
+  const g = maskGlossary(text);
+  const payload = g.masked || text;
+
   const retries = opts.translateRetries ?? 2;
   /** @type {Array<[string, () => Promise<string>]>} */
   const chain = [];
-  if (opts.geminiApiKey) chain.push(['gemini', () => viaGemini(text, from, to, opts.geminiApiKey, opts.geminiModel || 'gemini-2.5-flash')]);
-  chain.push(['google-gtx', () => viaGoogleGtx(text, from, to)]);
-  chain.push(['mymemory', () => viaMyMemory(text, from, to, opts.myMemoryEmail || '')]);
+  if (opts.geminiApiKey) chain.push(['gemini', () => viaGemini(payload, from, to, opts.geminiApiKey, opts.geminiModel || 'gemini-2.5-flash')]);
+  chain.push(['google-gtx', () => viaGoogleGtx(payload, from, to)]);
+  chain.push(['mymemory', () => viaMyMemory(payload, from, to, opts.myMemoryEmail || '')]);
 
   for (const [name, fn] of chain) {
     try {
-      const target = await withRetry(fn, name, retries);
+      const raw = await withRetry(fn, name, retries);
+      const target = g.masked ? g.restore(raw) : raw;
       const rec = { text: target, engine: name };
       CACHE.set(k, rec);
       if (CACHE.size > CACHE_MAX) { const oldest = CACHE.keys().next().value; if (oldest) CACHE.delete(oldest); }

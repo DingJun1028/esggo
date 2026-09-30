@@ -2,6 +2,98 @@
 
 > 這份筆記記錄 2026-08-17 實戰踩過的坑與修復，部署時照著做可避免重蹈覆轍。
 
+## ⚠️ 2026-09-30 實測更正（優先採用本節，與下方舊內容衝突時以此為準）
+
+### 現行真實拓撲
+
+> 🔴 **本節 2026-09-30 晚間已再次更正**：OmniLive 與 STT **由 PM2 管理，不是 systemd**。
+> 下方表格的「管理者」欄位已修正；當時誤判的 systemd 遷移已完整回退（unit 已刪除）。
+
+| 元件 | 監聽 | 管理者 | 位置 |
+|---|---|---|---|
+| OmniLive 服務 | `*:8797` | **root PM2 app `omnilive-translator`** | `/var/www/esggo/apps/omnilive` |
+| STT (faster-whisper) | `127.0.0.1:8791` | **root PM2 app `stt-whisper`** | `/var/www/esggo/apps/stt` |
+| Cloudflare Tunnel | — | `cloudflared.service` (systemd) | `/etc/cloudflared/config.yml` |
+
+**管理指令一律用 PM2**：
+
+```bash
+sudo pm2 list                      # 6 個 app（見下）
+sudo pm2 restart omnilive-translator
+sudo pm2 restart stt-whisper
+sudo pm2 logs omnilive-translator --lines 50
+```
+
+`pm2-root.service`（`ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect`）為**開機自啟入口**，`enabled` + 應保持 `active`。2026-09-30 曾發現它 `enabled` 但 `inactive`（daemon 只靠某次 SSH session 存活），已 `systemctl start` 修好——這才是本機真正的單點故障。
+
+### 🔴 診斷陷阱：`pm2 list` 只看到 logrotate ≠ 沒有 PM2
+
+**症狀**：用 `ubuntu` 身分跑 `pm2 list` 只看到 `pm2-logrotate`，容易誤判「這台機不用 PM2，服務是裸行程」，於是改用 systemd 接管。
+
+**真相**：PM2 有**兩套 daemon**，分屬不同使用者：
+
+- `/root/.pm2` → **root PM2 v7.0.3 God Daemon**，管 6 個關鍵 app：`esggo-core` / `omniagent-gateway` / `universal-translator` / `stt-whisper` / `deerflow` / `omnilive-translator`
+- `/home/ubuntu/.pm2` → 只有 `pm2-logrotate`
+
+**正確查法**：`sudo pm2 list` 或 `sudo pm2 jlist`。用 `pm2 list`（無 sudo）會看到錯誤的（小的）那一套。
+
+### 🔴 誤判後果：systemd 與 PM2 搶埠 → EADDRINUSE 永迴圈
+
+若在 PM2 已管理的情況下又建 systemd unit 搶同一個埠，兩邊互相重啟：
+
+- systemd 側：`NRestarts` 一路升到 **91**，`SubState=auto-restart`，日誌刷 `Error: listen EADDRINUSE :::8797`
+- **PM2 側仍 online、health 仍回 200** ← 最容易誤判成「遷移成功」
+- 真相：PM2 的行程在服務，systemd 實例在無限重啟白燒 CPU（實測 **95.7%**）
+
+**判別法**（務必做，健康檢查不足以判斷）：
+
+```bash
+sudo ss -ltnp | grep 8797                    # holder 的 PID
+sudo cat /proc/<holderPID>/cgroup | tail -1  # PM2 撐的會是 session-*.scope，不是 system.slice/*
+# 或直接問真正的管理者：
+sudo pm2 jlist | python3 -c "import sys,json;[print(p['name'],p.get('pid'),p['pm2_env']['status'],'restarts=',p['pm2_env']['restart_time']) for p in json.load(sys.stdin)]"
+```
+
+**教訓**：在這台 VPS 上要判斷服務歸誰管，**先 `sudo pm2 jlist` 確認有沒有 PM2 托管**（特別是舊的、只有 SSH session 撐著的 daemon），再談 systemd。本專案 20 個 systemd unit（aistation / cloudflared / n8n / oa-swarm / esggo-gateway / ftg-journey…）與 PM2 是**並存**的兩套體系，不能想當然。
+
+**更正要點**（皆為 2026-09-30 實測確認）：
+
+1. **由 PM2 管理（root daemon）。** app 名是 `omnilive-translator` 與 `stt-whisper`。`pm2-root.service` 負責開機 resurrect。
+2. **對外埠是 8797，不是 8795。** 8795 是 hermex PWA 的埠（由 nginx 持有）。`package.json` 的 `health` script 仍寫 8795，屬殘留。
+3. **STT 模型是 `base` 不是 `small`。** env 變數真名為 `WHISPER_MODEL` / `WHISPER_DEVICE` / `WHISPER_COMPUTE` / `STT_PORT`（**不是** `MODEL_SIZE` / `DEVICE` / `COMPUTE_TYPE`）。切換模型用 `sudo pm2 set stt-whisper:WHISPER_MODEL <size> && sudo pm2 restart stt-whisper --update-env`。
+
+### 開機自啟與重啟
+
+```bash
+sudo pm2 restart omnilive-translator
+sudo pm2 restart stt-whisper
+systemctl status pm2-root.service      # 應為 active（開機 resurrect 入口）
+curl -sf http://127.0.0.1:8797/health
+curl -sf http://127.0.0.1:8791/health
+```
+
+> STT 重啟需載入模型，實測約 20s。PM2 自帶崩潰重啟（`restarts` 計數可查），不需 systemd 的 `Restart=always`。
+
+### 實測效能基線（2026-09-30，4 核 CPU / base 模型 / int8）
+
+| 場景 | 延遲 | 倍率 |
+|---|---|---|
+| 6.87s 中文音訊完整檔 | 7.4–7.9s | ~1.1x rt |
+| 2s 串流 chunk（`OMP_NUM_THREADS=2`） | 4.65s | 1.39x rt |
+| 3s 串流 chunk（`OMP_NUM_THREADS=2`） | **2.70s** | **0.90x rt ✅** |
+| 0.5s 靜音 | 0s | — |
+
+`small` 模型品質更高（96.8% vs 92% 字元相似度）但 18.8s 推論 = **2.73x rt**，不適合即時串流，故維持 `base`。
+`OMP_NUM_THREADS=2` 於 4 核實測**優於** 4（8.17s vs 9.64s）——過度訂閱反效果，已寫入 unit。
+
+### 翻譯引擎降級
+
+`google-gtx` 對 `curl` 持續回 **429**（Google 反爬），但 Node `fetch` + `Mozilla/5.0` UA 回 **200**。因此 `curl` 診斷 gtx 失敗**不代表**服務失效；以 `engine` 欄位為準（`mymemory` = gtx 當次失敗後降級，`google-gtx` = 正常）。免費引擎品質較差，翻譯結果可能較差。
+
+### 品牌詞保護（`lib/translate.mjs` `maskGlossary`）
+
+免費引擎會把專有詞當一般字詞翻掉（實測 `OmniLive` → `Universal & Surplus` / `Omni-Live`）。已加佔位符遮蔽 + 還原，涵蓋 `OmniLive` / `esggo` / `Hermes` / `whisper` / `ffmpeg` / `Cloudflare` / `Zoom` / `MyMemory`。測試見 `test/glossary.test.mjs`（8 例）。新增品牌詞請同時加進 `GLOSSARY` 與測試。
+
 ## 架構
 
 - **OmniLive**（port 8795）：即時雙語字幕播放器。前端 `public/index.html` 擷取螢幕/麥克風音訊 → POST `/api/transcribe` → 後端 `server.mjs` 轉發到 STT → 雙語翻譯 → SSE 廣播給房間。

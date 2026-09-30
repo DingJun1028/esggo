@@ -171,13 +171,24 @@ export async function transcribe(audioBuf, opts) {
     if (words.length > 0) result.words = words;
   }
   // VAD 語者分段: 任意格式經 ffmpeg 解碼後做能量偵測 (webm/ogg/mp3/wav 皆支援)
+  // 注意: vadSegments 只做能量偵測, 回傳的每個 segment.text 恆為 ''。
+  // 因此覆寫 whisper 結果時必須小心, 否則會把有效文字清空。
   if (opts.vad && Buffer.isBuffer(audioBuf)) {
     const segs = await vadSegmentsAny(audioBuf);
-    if (segs.length > 1 || segs[0].text !== '') {
+    // 只在「真的分出多個語音段」且 whisper 有辨識出文字時才覆寫。
+    // 若 whisper 對這段音訊回空 (近靜音/無語音), 保留它原本的 segments, 不要用
+    // 啞元組把結果蓋成空 —— 這正是 "[omnilive] STT returned empty" 的來源。
+    const hasRealText = typeof text === 'string' && text.trim() !== '';
+    const realSpeechSegs = segs.filter((s) => (s.end - s.start) > 0);
+    if (hasRealText && realSpeechSegs.length > 1) {
       // 將 whisper 整段文字指派給最長語音段, 其餘標註語者輪替
       let maxIdx = 0, maxDur = -1;
       segs.forEach((s, i) => { const d = s.end - s.start; if (d > maxDur) { maxDur = d; maxIdx = i; } });
       result.segments = segs.map((s, i) => ({ ...s, text: i === maxIdx ? text : '' }));
+    } else if (realSpeechSegs.length >= 1 && hasRealText) {
+      // 單一語音段: 只標時間/語者, 保留完整文字
+      const s = segs[0];
+      result.segments = [{ ...s, text }];
     }
   }
   return result;

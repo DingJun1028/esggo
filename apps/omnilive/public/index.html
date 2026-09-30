@@ -9,6 +9,17 @@
 /* ===== 最新技術: 容器查詢 + dvh + 動態色彩 ===== */
 :root{
   --bg:transparent;
+  /* ===== OmniUI v1.0 液態玻璃 SSOT =====
+     樣貌唯一來源: packages/omni-ui/src/index.ts
+     (LiquidGlassRenderer.renderStyle / DEFAULT_GLASS)
+     任何玻璃外觀改動都應改這裡的 token, 勿在各元件散寫數值。
+     本檔顏色與 OmniUI 品牌色同色系 (深藍/暖金/米白), 僅深藍底取 #142A47
+     而非 #10243f —— 屬「顏色稍微不同」, 已刻意保留。 */
+  --omni-radius:12px;              /* OmniUI border-radius */
+  --omni-blur:20px;                /* OmniUI DEFAULT_GLASS.blur */
+  --omni-shadow:0 8px 32px rgba(0,0,0,.2);      /* OmniUI standard */
+  --omni-shadow-lift:0 12px 40px rgba(0,0,0,.28); /* 浮起層 (選單/彈窗) */
+  --omni-fill:rgba(201,162,75,.08); /* 玻璃上的淡金填色 (取代冷白疊色) */
   --gold:#c9a24b;--gold-soft:#b8941f;--txt:#f3ede1;--muted:#8a8275;
   /* --green: 強調色。
      品牌文件的 #3c6e43 在本深藍玻璃(#142A47)上僅 2.42:1，小字(.74rem)不可讀；
@@ -16,12 +27,24 @@
      勿直接改回品牌值，會讓 csec h3 / term b 變成看不見。 */
   --green:#5fb37e;
   --glass:rgba(20,42,71,.62);--glass-strong:rgba(20,42,71,.82);
-  --line:rgba(255,255,255,.14);--radius:6px;--gap:clamp(10px,2vw,16px);
+  /* OmniUI 標準邊框為淡金 (rgba(201,162,75,.3)), 非冷白 —— 白邊是偏離樣貌的主因之一。 */
+  --line:rgba(201,162,75,.3);
+  --radius:var(--omni-radius);--gap:clamp(10px,2vw,16px);
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
   --mono:ui-monospace,"Cascadia Code",monospace;
   --sub-pos:bottom; /* top|center|bottom */
   --sub-align:center; /* left|center|right */
   --sub-scale:1;
+  /* 深色玻璃介面 → 讓 UA 原生控制項 (select/checkbox/range/捲軸) 也走深色,
+     否則下拉選單與捲軸會以淺色渲染, 在深藍玻璃上形成亮色破洞。 */
+  color-scheme:dark;
+  /* 觸控高亮: 桌機無此效果, 行動裝置點按會閃一塊預設藍灰底。 */
+  -webkit-tap-highlight-color:transparent;
+}
+/* 僅供螢幕閱讀器: 視覺隱藏但保留在無障礙樹中 (不能用 display:none/visibility:hidden)。 */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
 }
 *{-webkit-text-size-adjust:100%;text-size-adjust:100%;box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -52,6 +75,15 @@ body{
   pointer-events:auto;cursor:grab;touch-action:none;
 }
 #subtitles.dragging{cursor:grabbing}
+/* ── 固定視窗滾動字幕 ──────────────────────────────────────────────
+   需求: 字幕在同一個視窗中由左向右一直替換, 畫面不會一直往下增長。
+   舊版 .sub-group 每句 append 一組 (3 列 × 上限 8 組 = 24 列) → 向下無限增長。
+   新版: #subtitles 內固定 slotCount 組 .sub-group, 新句進 A1、舊句位移到 A2,
+   超出視窗的直接丟棄 → 高度恆定。max-height + overflow 為保底。 */
+#subtitles{
+  display:flex;flex-direction:column;gap:4px;
+  max-height:56dvh;overflow:hidden;
+}
 .sub-group{
   display:flex;flex-direction:column;gap:2px;width:100%;
   animation:subIn .2s ease-out;
@@ -80,45 +112,164 @@ body{
 .sub-line.tgt{font-size:clamp(1.5rem,5vw,2.6rem)}        /* 翻譯(中文) 大字 */
 .sub-line .meta{font-size:.7rem;color:rgba(255,255,255,.55);font-weight:400;margin-top:2px;text-shadow:none;background:none!important;padding:0!important}
 
-/* ===== 玻璃工具條 (圖示化, 預設收合) ===== */
+/* ===== 一體成形介面 (純 UI 改動, 不動功能邏輯) =====
+   設計: 字幕層 + 控制條合成單一連續表面, 共用同一片深藍玻璃底。
+   互動: 字幕區唯讀(只接收/顯示), 拖曳把手在下方控制條。
+   調色沿用原設計: --glass 深藍玻璃 / --gold 暖金 / --txt 米白。 */
+#stage{
+  pointer-events:none;
+}
+/* 字幕區: 唯讀, 不攔截底層影片點擊, 也不作為拖曳起點 */
+#subtitles{
+  pointer-events:none;cursor:default;
+  background:var(--glass);
+  backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  border:1px solid var(--line);
+  /* 承接下方控制條 → 底部不收圓角, 形成一體 */
+  border-bottom:none;
+  border-radius:var(--omni-radius) var(--omni-radius) 0 0;
+  padding:12px 18px 8px;
+  box-shadow:var(--omni-shadow);
+}
+#subtitles.dragging{cursor:default}
+/* 拖曳把手 = 下方控制條容器 */
+#grip{
+  pointer-events:auto;cursor:grab;touch-action:none;
+  width:min(94vw,1100px);
+  display:flex;flex-direction:column;align-items:stretch;
+}
+#grip.dragging{cursor:grabbing}
+/* 控制條: 字幕正下方的水平玻璃條, 與字幕同寬同色, 無邊界分隔 → 一體成形 */
 #toolbar{
-  position:fixed;
-  right:calc(clamp(12px,2vw,24px) + env(safe-area-inset-right));
-  bottom:calc(clamp(12px,2vw,24px) + env(safe-area-inset-bottom));
-  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
-  pointer-events:auto;z-index:20;
+  display:flex;flex-direction:column;align-items:stretch;width:100%;
+  pointer-events:auto;
+  /* 定位錨點: .sheet 用 bottom:calc(100% + 8px) 往上長出選單,
+     必須相對本元素 (底部工具列) 解析, 否則會退回初始包含區塊而整片跑出視窗。 */
+  position:relative;
 }
-.capsule{
+/* ===== 設定選單 (sheet) =====
+   由介面往上長出的選單面板: 深藍玻璃卡片 + 分節標題 + 分隔線。
+   樣式全部在此, markup 不再夾帶 style=""。 */
+.sheet{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  z-index:30;
+  width:min(92vw,360px);max-height:70dvh;overflow:auto;overscroll-behavior:contain;
+  background:var(--glass-strong);backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--omni-shadow-lift);
+  display:none;flex-direction:column;gap:0;
+}
+.sheet.open{display:flex;animation:subIn .2s ease-out}
+/* 選單抬頭: 標題 + 關閉鈕, 捲動時黏在上緣 */
+.sheet__head{
+  position:sticky;top:-14px;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:-14px -14px 0;padding:12px 14px;
+  background:var(--glass-strong);
+  border-bottom:1px solid var(--line);
+}
+.sheet__head b{font-size:.92rem;font-weight:700;letter-spacing:.02em}
+.sheet__close{
+  /* 觸控目標 44px: 與 .icon-btn(44) / .corner-btn(48) 對齊。
+     原為 32px, 在行動裝置低於建議最小觸控目標, 容易誤觸。 */
+  width:44px;height:44px;min-width:44px;min-height:44px;flex:none;
+  display:grid;place-items:center;
+  border:1px solid transparent;border-radius:10px;
+  background:transparent;color:var(--muted);
+  font-size:1rem;line-height:1;cursor:pointer;transition:.15s;
+}
+.sheet__close:hover{background:var(--omni-fill);border-color:var(--line);color:var(--txt)}
+.sheet__close:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* 每個選單分節: 標題 + 內文, 節與節之間以細線分隔 */
+.menu-sec{padding:13px 0;border-bottom:1px solid var(--line)}
+.menu-sec:last-of-type{border-bottom:none}
+.menu-sec__head{
+  font-size:.78rem;color:var(--muted);font-weight:600;
+  letter-spacing:.06em;margin:0 0 8px;
   display:flex;align-items:center;gap:6px;
-  background:var(--glass);backdrop-filter:blur(18px) saturate(160%);
-  -webkit-backdrop-filter:blur(18px) saturate(160%);
-  border:1px solid var(--line);border-radius:999px;
-  padding:8px;box-shadow:0 8px 30px rgba(0,0,0,.4);
 }
+.menu-sec__body{display:flex;flex-direction:column;gap:8px}
+/* 建立連結後展開的連結區塊 (與 .hidden 併用, 由 !important 決定顯隱) */
+.share-body{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+/* 定位九宮格: 置頂/置中/置底 與 靠左/置中/靠右 */
+.pos-grid{display:flex;justify-content:center;gap:4px}
+.pos-grid+.pos-grid{margin-top:4px}
+/* 選單內的字級滑桿佔滿整列 */
+.range-row label{flex:1}
+/* 選單內換行時額外留白 */
+.stack-gap{margin-top:6px}
 .icon-btn{
   width:44px;height:44px;min-width:44px;min-height:44px;border-radius:50%;border:1px solid transparent;
   background:transparent;color:var(--txt);cursor:pointer;font-size:1.2rem;
   display:grid;place-items:center;transition:.18s;flex:none;
 }
-.icon-btn:hover{background:rgba(255,255,255,.1);border-color:var(--line)}
+.icon-btn:hover{background:var(--omni-fill);border-color:var(--line)}
+/* ===== 四角功能圖示 =====
+   圖示固定在介面四角, 不再占用字幕下方的控制列。
+   字幕維持唯讀, 唯一的拖曳把手是字幕下方的 #gripHandle。 */
+.corner-btn{
+  position:fixed;z-index:20;
+  width:48px;height:48px;min-width:48px;min-height:48px;
+  display:grid;place-items:center;
+  border-radius:var(--omni-radius);
+  border:1px solid var(--line);
+  background:var(--glass);
+  backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  color:var(--txt);cursor:pointer;pointer-events:auto;
+  box-shadow:var(--omni-shadow);
+  transition:background .18s,border-color .18s,transform .18s;
+}
+.corner-btn:hover{background:var(--glass-strong);border-color:var(--gold)}
+.corner-btn:active{transform:scale(.94)}
+.corner-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.corner-btn svg{width:24px;height:24px;display:block;fill:none;
+  stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.corner-btn.active{color:var(--gold);border-color:var(--gold)}
+/* 四角定位: 加上 safe-area, 避免瀏海/圓角螢幕遮住圖示 */
+.corner-btn[data-pos="tl"]{top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left))}
+.corner-btn[data-pos="tr"]{top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right))}
+.corner-btn[data-pos="bl"]{bottom:calc(14px + env(safe-area-inset-bottom));left:calc(14px + env(safe-area-inset-left))}
+.corner-btn[data-pos="br"]{bottom:calc(14px + env(safe-area-inset-bottom));right:calc(14px + env(safe-area-inset-right))}
+/* 窄螢幕略縮, 避免四圖示在小手机上過度佔版面。
+   下限維持 44px, 符合最小點擊目標 (WCAG 2.5.5 / iOS HIG), 不可再縮。 */
+@media (max-width:420px){
+  .corner-btn{width:44px;height:44px;min-width:44px;min-height:44px;border-radius:12px}
+  .corner-btn svg{width:21px;height:21px}
+}
+/* 收音中: 沿用舊 .icon-btn.danger 的紅色狀態語意 */
+.corner-btn.danger{color:#ff8a82}
+.corner-btn.danger.active{
+  background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff;border-color:#ff8a82;
+}
+#gripHandle{
+  pointer-events:auto;cursor:grab;touch-action:none;
+  width:min(94vw,1100px);
+  height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--glass);
+  backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  border:1px solid var(--line);border-top:none;
+  border-radius:0 0 var(--omni-radius) var(--omni-radius);
+  box-shadow:var(--omni-shadow-lift);
+}
+#gripHandle.dragging{cursor:grabbing}
+/* 把手中央的抓握橫條 (純視覺, 由拖曳把手本體承載互動) */
+#gripHandle::after{
+  content:'';width:46px;height:4px;border-radius:2px;
+  background:var(--muted);opacity:.75;
+}
 .icon-btn.active{background:var(--gold);color:#06121a}
 .icon-btn.danger{color:#ff8a82}
 .icon-btn.danger.active{background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff}
 
-/* 展開面板 (點工具條上的 設定 才展開) */
-.sheet{
-  width:min(92vw,360px);max-height:70dvh;overflow:auto;overscroll-behavior:contain;
-  background:var(--glass-strong);backdrop-filter:blur(22px) saturate(160%);
-  -webkit-backdrop-filter:blur(22px) saturate(160%);
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.5);
-  display:none;flex-direction:column;gap:14px;
-}
-.sheet.open{display:flex;animation:subIn .2s ease-out}
-.sheet h2{font-size:.82rem;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-bottom:2px}
+/* 選單分節底色 (舊 .sheet 視覺區已合併到 .sheet 主規則, 此處只留通用元件) */
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn{
-  border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--txt);
+  border:1px solid var(--line);background:var(--omni-fill);color:var(--txt);
   border-radius:12px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:.85rem;transition:.15s;flex:1;min-width:120px;
 }
 .btn:hover{border-color:var(--gold)}
@@ -142,6 +293,46 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 .share-link{display:flex;gap:6px;align-items:center}
 .share-link input{flex:1;min-width:0;font-size:.72rem}
 .qr{background:#fff;border-radius:12px;padding:6px;width:130px;height:130px;display:grid;place-items:center;margin:0 auto}
+
+/* ===== QR 彈窗 =====
+   樣式集中於此; showLinkQR() 只建立 DOM 並掛 class, 不再塞 style="" / cssText。
+   分層: #qrModal (遮罩, display:none 預設) > .qr-card (深藍玻璃) > 標籤 / QR / 連結 / 關閉鈕。 */
+#qrModal{
+  position:fixed;inset:0;z-index:50;
+  display:none;place-items:center;
+  background:rgba(0,0,0,.6);
+  pointer-events:auto;
+}
+#qrModal.open{display:grid}
+.qr-card{
+  background:var(--glass-strong);
+  backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--omni-shadow-lift);
+  display:flex;flex-direction:column;gap:10px;align-items:center;
+  max-width:90vw;
+}
+.qr-card__label{font-size:.8rem;color:var(--muted)}
+/* QR 本體: 白底 + 圓角 + padding = 掃描器需要的安靜區 (quiet zone), 不可拿掉 */
+.qr-card__code{
+  width:auto;height:auto;
+  background:#fff;border-radius:10px;padding:8px;line-height:0;
+}
+.qr-card__link{
+  font-size:.78rem;color:var(--txt);opacity:.85;
+  overflow-wrap:anywhere;word-break:normal;
+  text-align:center;max-width:290px;line-height:1.5;
+}
+/* 每個 token 包成不可斷行的 span, 讓 <wbr> 成為唯一斷行點 -> 只在 ? 與 & 之後換行 */
+.qr-card__link span{white-space:nowrap}
+.qr-card__close{
+  border:1px solid var(--line);background:var(--omni-fill);color:var(--txt);
+  border-radius:var(--radius);padding:11px 26px;min-height:44px;
+  cursor:pointer;font-size:.9rem;white-space:nowrap;transition:.18s;
+}
+.qr-card__close:hover{border-color:var(--gold);color:var(--gold)}
 .badge{font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--glass);border:1px solid var(--line);color:var(--muted)}
 .badge.live{color:var(--gold);border-color:var(--gold)}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad17a;flex:none}
@@ -158,10 +349,10 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 #courseWin{
   position:fixed;top:clamp(12px,2vw,24px);right:clamp(12px,2vw,24px);
   width:min(92vw,380px);max-height:80dvh;overflow:auto;
-  background:var(--glass-strong);backdrop-filter:blur(22px) saturate(160%);
-  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  background:var(--glass-strong);backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
   border:1px solid var(--line);border-radius:var(--radius);
-  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  box-shadow:var(--omni-shadow-lift);
   pointer-events:auto;z-index:20;display:none;flex-direction:column;
 }
 #courseWin.open{display:flex;animation:subIn .2s ease-out}
@@ -169,11 +360,13 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 #courseWin header b{font-size:.85rem}
 #courseBody{padding:14px;display:flex;flex-direction:column;gap:14px}
 .csec{display:flex;flex-direction:column;gap:6px}
-.csec h3{font-size:.74rem;color:var(--green);font-weight:700;letter-spacing:.03em}
+/* csec 標題: h2 語意階層 (頁面 h1 → 分節 h2 → 本層), 樣式掛在 class 與 h2 兩者皆可,
+   但維持選擇器與標籤一致, 避免日後有人改標籤而樣式默默失效。 */
+.csec h2{font-size:.74rem;color:var(--green);font-weight:700;letter-spacing:.03em}
 .csec .summary{font-size:.92rem;font-weight:700;line-height:1.4}
 .ckp{font-size:.82rem;line-height:1.45;padding-left:14px;position:relative}
 .ckp::before{content:'•';position:absolute;left:2px;color:var(--gold)}
-.term{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.78rem;line-height:1.4}
+.term{background:var(--omni-fill);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.78rem;line-height:1.4}
 .term b{color:var(--green)}
 .term a{color:var(--gold);text-decoration:none}
 .term a:hover{text-decoration:underline}
@@ -214,10 +407,16 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 </head>
 <body>
 
-<!-- 字幕漂浮層 (可拖曳定位, 九宮格) -->
+<!-- 字幕漂浮層 (唯讀) + 一體控制條 (拖曳把手) -->
+<!-- #grip 與 #subtitles 同為 #stage 的 flex 子項, 故控制條自然緊接字幕下方, 成一體表面 -->
 <div id="stage">
-  <div id="subtitles"><div class="sub-line tgt placeholder">等待字幕…</div></div>
-</div>
+  <h1 class="sr-only">OmniLive 萬能即時轉譯雙語字幕</h1>
+  <!-- 這是本產品的核心輸出, 對螢幕閱讀器必須是 live region,
+       否則聾/聾盲使用者完全收不到逐句譯文 (與聽障者看字幕的需求對等)。
+       polite = 不搶斷目前朗讀; atomic = 整列重讀, 因列內容是整句替換而非逐字追加。
+       逐字淡入只切 opacity 不改 textContent, 故不會造成逐字轟炸。 -->
+  <div id="subtitles" role="region" aria-label="即時字幕" aria-live="polite" aria-atomic="true"><div class="sub-line tgt placeholder">等待字幕…</div></div>
+  <div id="grip">
 
 <!-- 課程即時解說浮窗 -->
 <div id="courseWin">
@@ -226,117 +425,145 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
     <button class="icon-btn" id="courseClose" title="收合">關閉</button>
   </header>
   <div id="courseBody">
-    <div class="csec"><h3>章節概要</h3><div class="summary" id="cSummary">—</div></div>
-    <div class="csec"><h3>重點項目</h3><div id="cKeypoints"></div></div>
-    <div class="csec"><h3>重要名詞</h3><div id="cTerms"></div></div>
-    <div class="csec"><h3>類似案例</h3><div id="cCases"></div></div>
+    <div class="csec"><h2>章節概要</h2><div class="summary" id="cSummary">—</div></div>
+    <div class="csec"><h2>重點項目</h2><div id="cKeypoints"></div></div>
+    <div class="csec"><h2>重要名詞</h2><div id="cTerms"></div></div>
+    <div class="csec"><h2>類似案例</h2><div id="cCases"></div></div>
     <div class="hint" id="cUpdated"></div>
   </div>
 </div>
 
-<!-- 玻璃工具條 (圖示化) -->
-<div id="toolbar">
-  <div class="sheet" id="sheet">
-    <!-- 建立分享 -->
-    <div id="sharePanel">
-      <h2>建立分享會議</h2>
-      <div class="row">
-        <button class="btn primary" id="createRoom">建立連結</button>
-        <input type="text" id="roomPwd" placeholder="房間密碼(選填)">
-      </div>
-      <div id="shareBody" class="hidden" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-        <div class="hint" style="color:var(--green)">主播️ 主持人連結</div>
-        <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink" aria-label="複製主持人連結" title="複製主持人連結">複製</button></div>
-        <div class="hint" style="color:var(--gold)">觀眾️ 觀眾連結</div>
-        <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink" aria-label="複製觀眾連結" title="複製觀眾連結">複製</button></div>
-        <div class="row" style="margin-top:4px">
-          <button class="btn" id="openViewer">預覽觀眾</button>
-          <button class="btn" id="refreshCount">人數</button>
-        </div>
-        <div class="qr" id="qrBox"></div>
-        <div class="hint" id="viewerCount"></div>
-      </div>
+<!-- 玻璃工具條 (圖示化) — 位於 #grip 內, 字幕區唯讀不可拖 -->
+  <div id="toolbar">
+  <div class="sheet" id="sheet" role="dialog" aria-label="設定選單">
+    <div class="sheet__head">
+      <b>設定</b>
+      <button class="sheet__close" id="sheetClose" aria-label="關閉設定選單">✕</button>
     </div>
+
+    <!-- 建立分享 -->
+    <section class="menu-sec" id="sharePanel">
+      <h2 class="menu-sec__head">建立分享會議</h2>
+      <div class="menu-sec__body">
+        <div class="row">
+          <button class="btn primary" id="createRoom">建立連結</button>
+          <input type="text" id="roomPwd" placeholder="房間密碼(選填)">
+        </div>
+        <div id="shareBody" class="share-body hidden">
+          <div class="hint hint-green">主播 主持人連結</div>
+          <div class="share-link"><input type="text" id="casterLink" readonly><button class="btn" data-copy="casterLink" aria-label="複製主持人連結" title="複製主持人連結">複製</button></div>
+          <div class="hint hint-gold">觀眾 觀眾連結</div>
+          <div class="share-link"><input type="text" id="viewerLink" readonly><button class="btn" data-copy="viewerLink" aria-label="複製觀眾連結" title="複製觀眾連結">複製</button></div>
+          <div class="row">
+            <button class="btn" id="openViewer">預覽觀眾</button>
+            <button class="btn" id="refreshCount">人數</button>
+          </div>
+          <div class="qr" id="qrBox"></div>
+          <div class="hint" id="viewerCount"></div>
+        </div>
+      </div>
+    </section>
 
     <!-- 收音控制 -->
-    <div id="casterPanel">
-      <h2>音訊來源 (Zoom 場景)</h2>
-      <div class="row">
-        <select id="audioSource">
-          <option value="system-display" selected>系統音訊 / Zoom 共享聲音</option>
-          <option value="mic">本機麥克風</option>
-          <option value="device">指定輸入裝置</option>
-          <option value="caption">手動字幕輸入</option>
-        </select>
+    <section class="menu-sec" id="casterPanel">
+      <h2 class="menu-sec__head">音訊來源 (Zoom 場景)</h2>
+      <div class="menu-sec__body">
+        <div class="row">
+          <select id="audioSource">
+            <option value="system-display" selected>系統音訊 / Zoom 共享聲音</option>
+            <option value="mic">本機麥克風</option>
+            <option value="device">指定輸入裝置</option>
+            <option value="caption">手動字幕輸入</option>
+          </select>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="startBtn">開始收音</button>
+          <button class="btn" id="stopBtn" disabled>停止</button>
+          <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊">⬇ 音訊</button>
+        </div>
+        <div class="row">
+          <span class="hint">音量</span>
+          <div class="meter"><div id="meter"></div></div>
+        </div>
+        <div class="row hidden" id="deviceRow">
+          <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)">
+        </div>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="btn primary" id="startBtn">開始收音</button>
-        <button class="btn" id="stopBtn" disabled>停止</button>
-        <button class="btn" id="dlAudioBtn" disabled title="下載前端實際送給 STT 的音訊">⬇ 音訊</button>
-      </div>
-      <div class="row" style="margin-top:8px;align-items:center">
-        <span class="hint">音量</span>
-        <div class="meter"><div id="meter"></div></div>
-      </div>
-      <div class="row" id="deviceRow" style="margin-top:6px;display:none">
-        <input type="text" id="deviceId" placeholder="虛擬音訊線 ID (留空=預設)">
-      </div>
-    </div>
+    </section>
 
     <!-- 手動字幕 -->
-    <div>
-      <h2>手動字幕 (caption)</h2>
-      <div class="row">
-        <input type="text" id="captionInput" placeholder="直接貼上發言文字…">
-        <button class="btn" id="sendCaption">送出</button>
+    <section class="menu-sec" id="captionPanel">
+      <h2 class="menu-sec__head">手動字幕 (caption)</h2>
+      <div class="menu-sec__body">
+        <div class="row">
+          <input type="text" id="captionInput" placeholder="直接貼上發言文字…">
+          <button class="btn" id="sendCaption">送出</button>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- 字幕設定 -->
-    <div>
-      <h2>字幕顯示</h2>
-      <div class="row">
-        <label>字級 <input type="range" id="fontSize" min="14" max="48" value="28" style="flex:1"></label>
+    <!-- 字幕顯示 -->
+    <section class="menu-sec">
+      <h2 class="menu-sec__head">字幕顯示</h2>
+      <div class="menu-sec__body">
+        <div class="row range-row">
+          <label>字級 <input type="range" id="fontSize" min="14" max="48" value="28"></label>
+        </div>
+        <div class="row">
+          <label class="chk"><input type="checkbox" id="orderSrcFirst"> 原文在上</label>
+          <label class="chk"><input type="checkbox" id="bgToggle" checked> 背景可讀</label>
+          <label class="chk"><input type="checkbox" id="wordToggle" checked> 逐字</label>
+          <label class="chk"><input type="checkbox" id="showToggle" checked> 顯示</label>
+          <label>字幕列 <select id="capSlots" title="同一個視窗內保留幾列字幕 (2=A1/A2, 3=加 A3)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option></select></label>
+        </div>
+        <div class="row">
+          <label>從 <select id="from"><option value="auto" selected>自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
+          <label>到 <select id="to"><option value="auto" selected>自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
+          <button class="btn btn-fixed" id="swapBtn" aria-label="交換原文與翻譯方向" title="交換原文與翻譯方向">⇄</button>
+        </div>
       </div>
-      <div class="row" style="margin-top:6px">
-        <label class="chk"><input type="checkbox" id="orderSrcFirst"> 原文在上</label>
-        <label class="chk"><input type="checkbox" id="bgToggle" checked> 背景可讀</label>
-        <label class="chk"><input type="checkbox" id="wordToggle" checked> 逐字</label>
-        <label class="chk"><input type="checkbox" id="showToggle" checked> 顯示</label>
-      </div>
-      <div class="row" style="margin-top:6px">
-        <label>從 <select id="from"><option value="auto" selected>自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
-        <label>到 <select id="to"><option value="auto" selected>自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
-        <button class="btn" id="swapBtn" style="flex:0" aria-label="交換原文與翻譯方向" title="交換原文與翻譯方向">⇄</button>
-      </div>
-    </div>
+    </section>
 
     <!-- 定位 -->
-    <div>
-      <h2>字幕位置 (拖曳或點選)</h2>
-      <div class="row" style="justify-content:center;gap:4px">
-        <button class="icon-btn" data-pos="top" title="置頂">⬆</button>
-        <button class="icon-btn" data-pos="center" title="置中">⬌</button>
-        <button class="icon-btn" data-pos="bottom" title="置底" style="background:var(--gold);color:#06121a">⬇</button>
+    <section class="menu-sec">
+      <h2 class="menu-sec__head">字幕位置 (拖曳或點選)</h2>
+      <div class="menu-sec__body">
+        <div class="pos-grid">
+          <button class="icon-btn" data-pos="top" title="置頂">⬆</button>
+          <button class="icon-btn" data-pos="center" title="置中">⬌</button>
+          <button class="icon-btn active" data-pos="bottom" title="置底">⬇</button>
+        </div>
+        <div class="pos-grid">
+          <button class="icon-btn" data-align="left" title="靠左">⤙</button>
+          <button class="icon-btn" data-align="center" title="置中">⤞</button>
+          <button class="icon-btn" data-align="right" title="靠右">⤧</button>
+        </div>
       </div>
-      <div class="row" style="justify-content:center;gap:4px;margin-top:4px">
-        <button class="icon-btn" data-align="left" title="靠左">⤙</button>
-        <button class="icon-btn" data-align="center" title="置中">⤞</button>
-        <button class="icon-btn" data-align="right" title="靠右">⤧</button>
-      </div>
-    </div>
+    </section>
 
-    <div class="status"><span class="dot bad" id="connDot"></span><span id="conn">未連線</span><span class="badge" id="roleBadge">—</span><span class="badge live hidden" id="roomBadge"></span></div>
-    <div id="errbar" class="hidden"></div>
-    <div class="log" id="log"></div>
+    <!-- 狀態 / 錯誤 / 日誌 -->
+    <section class="menu-sec menu-sec--status">
+      <div class="status"><span class="dot bad" id="connDot"></span><span id="conn">未連線</span><span class="badge" id="roleBadge">—</span><span class="badge live hidden" id="roomBadge"></span></div>
+      <div id="errbar" class="hidden"></div>
+      <div class="log" id="log"></div>
+    </section>
   </div>
 
-  <!-- 圖示工具條 (必要四鍵) -->
-  <div class="capsule">
-    <button class="icon-btn" id="btnFloat" title="開啟獨立字幕小窗 (跨頁面蓋在 Zoom/YouTube 上)">浮窗</button>
-    <button class="icon-btn" id="btnMic" title="開始/停止收音" class="danger">主播️</button>
-    <button class="icon-btn" id="btnLink" title="分享連結 / QR Code">分享</button>
-    <button class="icon-btn" id="btnSheet" title="設定面板">設定️</button>
+  <!-- 四角功能圖示: 字幕區唯讀, 拖曳由下方 #gripHandle 承載 -->
+  <button class="corner-btn danger" data-pos="tl" id="btnMic" title="開始/停止收音" aria-label="開始或停止收音">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/><path d="M8 22h8"/></svg>
+  </button>
+  <button class="corner-btn" data-pos="tr" id="btnSheet" title="設定面板" aria-label="開啟設定面板">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.31.4.55.72.68H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+  <button class="corner-btn" data-pos="bl" id="btnFloat" title="開啟獨立字幕小窗 (跨頁面蓋在 Zoom/YouTube 上)" aria-label="開啟獨立字幕小窗">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="14" height="12" rx="2"/><path d="M16 20h4a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-4z"/></svg>
+  </button>
+  <button class="corner-btn" data-pos="br" id="btnLink" title="分享連結 / QR Code" aria-label="分享連結或 QR Code">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+  </button>
+  <div id="gripHandle" title="拖曳移動字幕"></div>
+  </div>
   </div>
 </div>
 
@@ -346,12 +573,13 @@ const connEl=$('conn'),connDot=$('connDot'),logEl=$('log'),errbar=$('errbar');
 const srcSel=$('audioSource'),deviceRow=$('deviceRow');
 const fromSel=$('from'),toSel=$('to'),fontSize=$('fontSize');
 const orderChk=$('orderSrcFirst'),bgChk=$('bgToggle'),showChk=$('showToggle'),wordChk=$('wordToggle');
+const capSlotSel=$('capSlots');
 const subsEl=$('subtitles'),captionInput=$('captionInput');
 
 // 主題切換 (按鈕若不存在則略過, 避免 null 崩潰)
 const themeBtn=document.getElementById('btnTheme');
 if(themeBtn) themeBtn.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';};
-srcSel.onchange=()=>{deviceRow.style.display=srcSel.value==='device'?'flex':'none';};
+srcSel.onchange=()=>{deviceRow.classList.toggle('hidden',srcSel.value!=='device');};
 
 function log(m){const t=new Date().toLocaleTimeString();logEl.textContent=(t+' '+m+'\n')+logEl.textContent;}
 function showErr(m){errbar.textContent='注意 '+m;errbar.classList.remove('hidden');}
@@ -367,7 +595,7 @@ if(ROOM){$('roomBadge').classList.remove('hidden');$('roomBadge').textContent='�
 if(!isCaster){
   $('sharePanel').classList.add('hidden');
   $('casterPanel').classList.add('hidden');
-  $('captionInput').closest('div').classList.add('hidden');
+  $('captionPanel').classList.add('hidden');
   // 觀眾不需要建立面板; 但仍可開課程
   pollViewers();
 }
@@ -400,44 +628,79 @@ function promptRoomPassword(room){
     location.reload();
   });
 }
+// ── 固定視窗滾動字幕 ──────────────────────────────────────────────
+// 需求原文: 「字幕在同一個視窗中由左向右的一直替換」+「畫面不會一直往下增長」。
+// 舊版問題: 每句 append 一個 .sub-group, 只靠 while(children.length>8) 收尾 →
+//            最多 8 組 × 3 列 = 24 列, 畫面一路往下長, 使用者要一直往下捲。
+// 新版做法: 字幕列數由 CaptionWindow 固定 (預設 2 = A1/A2), 新句進 A1、舊句位移
+//            到 A2, 多餘的直接丟棄 → 高度恆定, 永遠同一個視窗。
+//            列數可在執行時調整 (需求: 視文字處理速度看要不要增加 A3)。
+// 純邏輯放在 lib/caption-window.mjs, 與 node --test 共用同一份檔案。
+let capWin=null;
+let capWinBuf=[]; // 模組載入前的字幕先暫存, 載好後依序重播
+async function initCaptionWindow(){
+  const mod=await import('/lib/caption-window.mjs');
+  capWin=new mod.CaptionWindow({slotCount:Number(capSlotSel&&capSlotSel.value)||2});
+  renderRows(); // 列數可能大於 1, 預先鋪好槽位
+  const pending=capWinBuf; capWinBuf=[];
+  for(const p of pending) renderSub(p[0],p[1],p[2],p[3],p[4],p[5],p[6]);
+}
 let activeGroup=null;
-let lastSubTs=0;
 function renderSub(src,tgt,meta,speaker,id,ts,words){
   const now=ts||Date.now();
-  const merge = activeGroup && (now-lastSubTs) < 2500;
-  lastSubTs=now;
+  const ph=subsEl.querySelector('.placeholder'); if(ph)ph.remove();
   // 逐字模式下 DOM 內是 .w span, textContent 只得已顯現的部分;
   // 合併時必須用 data-full 取完整文字, 否則會截斷。
   const full=(e)=>e.dataset.full!=null?e.dataset.full:e.textContent;
-  if(merge){
+  if(!capWin){ // 模組尚未載入 (極短暫) → 先累積, 載好後重播
+    capWinBuf.push([src,tgt,meta,speaker,id,ts,words]); return;
+  }
+  const res=capWin.push({id,source:src||'',target:tgt||'',meta,speaker,ts:now,words},now);
+  const cur=res.rows[0];
+  // merge: 文字併入作用中那一列 → 由左向右延伸
+  if(res.merged && activeGroup){
     const a=activeGroup.querySelector('.sub-line.src, .sub-line.tgt');
     const b=activeGroup.children[1];
-    const cur = orderChk.checked ? {srcEl:a,tgtEl:b} : {srcEl:b,tgtEl:a};
-    const newSrc=(full(cur.srcEl)+' '+(src||'')).trim();
-    const newTgt=(full(cur.tgtEl)+' '+(tgt||'')).trim();
-    cur.srcEl.textContent=newSrc; cur.srcEl.dataset.full=newSrc;
-    cur.tgtEl.textContent=newTgt; cur.tgtEl.dataset.full=newTgt;
+    const curEl = orderChk.checked ? {srcEl:a,tgtEl:b} : {srcEl:b,tgtEl:a};
+    curEl.srcEl.textContent=full(curEl.srcEl); curEl.srcEl.dataset.full=full(curEl.srcEl);
+    curEl.tgtEl.textContent=full(curEl.tgtEl); curEl.tgtEl.dataset.full=full(curEl.tgtEl);
+    // 逐字重播 (僅作用中列)
+    if(wordChk && wordChk.checked && Array.isArray(words) && words.length>1)
+      playWords(orderChk.checked?curEl.srcEl:curEl.tgtEl, words);
     return;
   }
-  if(activeGroup) activeGroup.classList.add('finalized');
-  const wrap=document.createElement('div');wrap.className='sub-group active';
-  const a=document.createElement('div');a.className='sub-line '+(orderChk.checked?'src':'tgt');
-  const b=document.createElement('div');b.className='sub-line '+(orderChk.checked?'tgt':'src');
-  a.dataset.full=orderChk.checked?(src||''):(tgt||'');
-  b.dataset.full=orderChk.checked?(tgt||''):(src||'');
-  a.textContent=a.dataset.full; b.textContent=b.dataset.full;
+  renderRows();
+  const wrap=subsEl.querySelector('.sub-group');
+  if(!wrap) return;
+  activeGroup=wrap;
   // 逐字: 原文有逐字時間戳且逐字模式開啟時以單字 span 漸進顯現。
   // 譯文是整段一次翻譯、無對應時間戳, 維持整行 —— 刻意取捨。
-  const wEl = orderChk.checked ? a : b;
-  if(wordChk && wordChk.checked && Array.isArray(words) && words.length>1) playWords(wEl, words);
-  const m=document.createElement('div');m.className='sub-line';
-  m.style.cssText='background:transparent;font-size:.7rem;color:rgba(255,255,255,.6);font-weight:400;text-shadow:none';
-  m.textContent=meta+(speaker?(' \u00b7 \u8aaa\u8a71\u8005 '+speaker):'');
-  wrap.appendChild(a);wrap.appendChild(b);wrap.appendChild(m);
-  const ph=subsEl.querySelector('.placeholder'); if(ph)ph.remove();
-  subsEl.appendChild(wrap);
-  activeGroup=wrap;
-  while(subsEl.children.length>8)subsEl.removeChild(subsEl.firstChild);
+  if(wordChk && wordChk.checked && Array.isArray(words) && words.length>1){
+    const a=wrap.querySelector('.sub-line.src, .sub-line.tgt');
+    const b=wrap.children[1];
+    const wEl = orderChk.checked ? a : b;
+    playWords(wEl, words);
+  }
+}
+// 依 capWin 目前的列數重畫整個視窗 (固定槽位, 不 append)。
+function renderRows(){
+  if(!capWin) return;
+  const rows=capWin.rows();
+  subsEl.textContent='';
+  rows.forEach((r,i)=>{
+    const wrap=document.createElement('div');
+    wrap.className='sub-group'+(i===0?' active':' finalized');
+    const a=document.createElement('div');a.className='sub-line '+(orderChk.checked?'src':'tgt');
+    const b=document.createElement('div');b.className='sub-line '+(orderChk.checked?'tgt':'src');
+    a.dataset.full=orderChk.checked?(r.source||''):(r.target||'');
+    b.dataset.full=orderChk.checked?(r.target||''):(r.source||'');
+    a.textContent=a.dataset.full; b.textContent=b.dataset.full;
+    const m=document.createElement('div');m.className='sub-line meta';
+    m.textContent=(r.meta||'')+(r.speaker?(' · 說話者 '+r.speaker):'');
+    wrap.appendChild(a);wrap.appendChild(b);wrap.appendChild(m);
+    subsEl.appendChild(wrap);
+  });
+  activeGroup=subsEl.querySelector('.sub-group');
 }
 
 /* 逐字顯現: 依 whisper 單字時間戳, 累積相鄰單字的時間差後逐字淡入。 */
@@ -478,6 +741,16 @@ function applyStyles(){
 }
 [fontSize,orderChk,bgChk,showChk].forEach(el=>el.oninput=applyStyles);
 applyStyles();
+// 字幕列數 (同一視窗內保留幾列): 執行時改立即重排, 畫面高度恆定。
+if(capSlotSel){
+  const savedSlots=localStorage.getItem('omnilive_cap_slots');
+  if(savedSlots) capSlotSel.value=savedSlots;
+  capSlotSel.onchange=()=>{
+    localStorage.setItem('omnilive_cap_slots',capSlotSel.value);
+    if(capWin){ capWin.setSlotCount(Number(capSlotSel.value)); renderRows(); applyStyles(); }
+  };
+}
+initCaptionWindow();
 fromSel.onchange=toSel.onchange=()=>{localStorage.setItem('omnilive_lang',fromSel.value+'|'+toSel.value);};
 const saved=localStorage.getItem('omnilive_lang');if(saved){const[a,b]=saved.split('|');if(a)fromSel.value=a;if(b)toSel.value=b;}
 function swapLang(){
@@ -491,7 +764,41 @@ document.addEventListener('keydown',e=>{ if(e.key==='s'||e.key==='S'){ if(e.targ
 
 // 工具條收合
 const sheetEl=$('sheet');
-$('btnSheet').onclick=()=>{ sheetEl.classList.toggle('open'); $('btnSheet').classList.toggle('active'); };
+const sheetBtn=$('btnSheet');
+// 對話框無障礙: 開啟時把焦點移入並記住來源, 關閉時歸還;
+// Escape 關閉; Tab 在對話框內循環 (否則焦點會跑到被遮住的頁面元素上)。
+let sheetOpener=null;
+const FOCUSABLE='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+const setSheet=open=>{
+  sheetEl.classList.toggle('open',open);
+  sheetBtn.classList.toggle('active',open);
+  // aria-expanded 讓螢幕閱讀器知道這個按鈕控制的是哪個區域。
+  sheetBtn.setAttribute('aria-expanded',open?'true':'false');
+  sheetBtn.setAttribute('aria-label',open?'關閉設定面板':'開啟設定面板');
+  if(open){
+    sheetOpener=document.activeElement;
+    // 焦點落在標題, 而非第一個輸入框 —— 使用者多半是要「看」選單而非立刻填值。
+    (sheetEl.querySelector('.sheet__head b')||sheetEl).setAttribute('tabindex','-1');
+    (sheetEl.querySelector('.sheet__head b')||sheetEl).focus({preventScroll:true});
+  }else if(sheetOpener&&sheetOpener.focus){
+    sheetOpener.focus({preventScroll:true}); sheetOpener=null;
+  }
+};
+sheetBtn.onclick=()=>setSheet(!sheetEl.classList.contains('open'));
+$('sheetClose').onclick=()=>setSheet(false);
+document.addEventListener('keydown',e=>{
+  if(!sheetEl.classList.contains('open'))return;
+  if(e.key==='Escape'){ e.preventDefault(); setSheet(false); return; }
+  if(e.key!=='Tab')return;
+  // 焦點陷阱: 取可聚焦元素, 讓焦點在對話框內循環
+  const f=[...sheetEl.querySelectorAll(FOCUSABLE)].filter(el=>el.offsetParent!==null);
+  if(!f.length)return;
+  const first=f[0], last=f[f.length-1];
+  if(e.shiftKey&&(document.activeElement===first||!sheetEl.contains(document.activeElement))){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
+// 初始狀態同步 (HTML 預設為收合)
+sheetBtn.setAttribute('aria-expanded','false');
 // 分享連結 / QR: 直接從工具列取得目前房間觀眾連結
 const linkBtn=$('btnLink');
 if(linkBtn) linkBtn.onclick=()=>{
@@ -501,23 +808,40 @@ if(linkBtn) linkBtn.onclick=()=>{
     const proto=(location.protocol||'https:');
     link=proto+'//'+location.host+'/?room='+encodeURIComponent(room);
   }
-  if(!link){ showErr('尚未建立房間：請先按 設定️ → 建立連結'); sheetEl.classList.add('open'); $('btnSheet').classList.add('active'); return; }
+  if(!link){ showErr('尚未建立房間：請先按 設定️ → 建立連結'); setSheet(true); return; }
   navigator.clipboard?.writeText(link).then(()=>log('已複製觀眾連結')).catch(()=>{});
   showLinkQR(link);
 };
 function showLinkQR(link){
   let box=document.getElementById('qrModal');
-  if(!box){ box=document.createElement('div'); box.id='qrModal';
-    box.style.cssText='position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.6);z-index:50;pointer-events:auto';
-    box.innerHTML='<div style="background:#16161f;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;align-items:center;max-width:90vw"><div style="font-size:.8rem;color:#aeb6c8">觀眾連結 (已複製)</div><div id="qrBox2" style="background:#fff;border-radius:10px;padding:8px"></div><div id="qrLink2" style="font-size:.68rem;color:#cfd6e6;word-break:break-all;text-align:center;max-width:280px"></div><button id="qrClose" style="border:1px solid rgba(255,255,255,.14);background:transparent;color:#fff;border-radius:10px;padding:8px 16px;cursor:pointer">關閉</button></div>';
+  if(!box){
+    box=document.createElement('div'); box.id='qrModal';
+    // 樣式全部來自 stylesheet 的 #qrModal / .qr-card 系列, 這裡只組結構。
+    box.innerHTML=
+      '<div class="qr-card" role="dialog" aria-modal="true" aria-labelledby="qrModalLabel">'+
+        '<div class="qr-card__label" id="qrModalLabel">觀眾連結 (已複製)</div>'+
+        '<div class="qr-card__code" id="qrBox2"></div>'+
+        '<div class="qr-card__link" id="qrLink2"></div>'+
+        '<button class="qr-card__close" id="qrClose" aria-label="關閉 QR 視窗">關閉</button>'+
+      '</div>';
     document.body.appendChild(box);
     box.onclick=e=>{ if(e.target===box) box.remove(); };
     box.querySelector('#qrClose').onclick=()=>box.remove();
   }
-  box.querySelector('#qrLink2').textContent=link;
+  // 在 ? 與 & 之後允許斷行, 讓網址在合理邊界換行而非切碎 token。
+  // 用 text node 組裝 (非 innerHTML), 避免把連結內容當 HTML 解析。
+  // 每段包成不可斷行的 span (樣式見 .qr-card__link span), 讓 <wbr> 成為唯一斷行點
+  var lk2=box.querySelector('#qrLink2'); lk2.textContent='';
+  var tok=link.split(/([?&])/);
+  for (var ti=0; ti<tok.length; ti++){
+    var sp=document.createElement('span');
+    sp.appendChild(document.createTextNode(tok[ti]));
+    lk2.appendChild(sp);
+    if (tok[ti]==='?'||tok[ti]==='&') lk2.appendChild(document.createElement('wbr'));
+  }
   const q=box.querySelector('#qrBox2'); q.innerHTML='';
   try{ new QRCode(q,{text:link,width:140,height:140,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.textContent=link; }
-  box.style.display='grid';
+  box.classList.add('open');
 }
 // 一鍵開啟獨立漂浮視窗: 真的蓋在 Zoom/YouTube 上, 達成同時顯示
 let floatWin=null;
@@ -540,11 +864,15 @@ if(courseBtn){
 const courseClose=document.getElementById('courseClose');
 if(courseClose) courseClose.onclick=()=>{ courseWin.classList.remove('open'); if(courseBtn)courseBtn.classList.remove('active'); stopCoursePolling(); };
 // 字幕位置 (九宮格)
-document.querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>{
+// 只作用於 .icon-btn[data-pos] 這三顆字幕位置鍵。
+// 不可用 querySelectorAll('[data-pos]'): 四角圖示也帶 data-pos(tl/tr/bl/br),
+// 會被一併綁上位置 handler, 進而蓋掉分享/設定/小窗自己的 onclick (順序在後者之後)。
+const subPosBtns=document.querySelectorAll('.icon-btn[data-pos]');
+subPosBtns.forEach(b=>b.onclick=()=>{
   document.documentElement.style.setProperty('--sub-pos',b.dataset.pos);
   const stage=$('stage');
   stage.style.justifyContent = b.dataset.pos==='top'?'flex-start':b.dataset.pos==='center'?'center':'flex-end';
-  document.querySelectorAll('[data-pos]').forEach(x=>x.classList.remove('active'));
+  subPosBtns.forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
 });
 document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{
@@ -554,17 +882,34 @@ document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{
   b.classList.add('active');
 });
 const posBtn=document.getElementById('btnPos');
-if(posBtn) posBtn.onclick=()=>{ sheetEl.classList.add('open'); $('btnSheet').classList.add('active'); document.getElementById('sheet').scrollIntoView({block:'nearest'}); };
+if(posBtn) posBtn.onclick=()=>{ setSheet(true); document.getElementById('sheet').scrollIntoView({block:'nearest'}); };
 
 // 拖曳定位 (原生 pointer events)
+// 把手在字幕下方的細玻璃條 (#gripHandle): 字幕區唯讀, 只能接收/顯示, 不攔截底層影片點擊。
+// 把手與字幕在 #grip 內垂直相接, 故拖把手時字幕跟著走, 兩者維持一體。
 (function enableDrag(){
-  const el=subsEl; let dragging=false,sx,sy,ox,oy;
-  el.addEventListener('pointerdown',e=>{ if(e.target.closest('.sub-line.meta'))return; dragging=true; el.classList.add('dragging'); sx=e.clientX; sy=e.clientY;
-    const r=el.getBoundingClientRect(); ox=r.left; oy=r.top; el.setPointerCapture(e.pointerId); });
+  const el=$('gripHandle'); const cap=subsEl; let dragging=false,sx,sy,ox,oy,cw,capH;
+  el.addEventListener('pointerdown',e=>{
+    if(e.target.closest('button,input,select,textarea,a,.sheet'))return; // 控制項自己點擊不觸發拖曳
+    dragging=true; el.classList.add('dragging'); sx=e.clientX; sy=e.clientY;
+    const r=el.getBoundingClientRect(); ox=r.left; oy=r.top; cw=r.width;
+    // 字幕自身高度 (非把手高度) — 否則字幕與把手之間會裂開一道縫
+    capH=cap.getBoundingClientRect().height;
+    el.setPointerCapture(e.pointerId);
+  });
   el.addEventListener('pointermove',e=>{ if(!dragging)return;
     const nx=ox+(e.clientX-sx), ny=oy+(e.clientY-sy);
-    el.style.position='fixed'; el.style.left=nx+'px'; el.style.top=ny+'px'; el.style.right='auto'; el.style.bottom='auto'; el.style.width='min(94vw,1100px)'; });
-  el.addEventListener('pointerup',e=>{ dragging=false; el.classList.remove('dragging'); el.releasePointerCapture(e.pointerId); });
+    // 整組 (字幕+控制條) 一起搬: 兩者都脫離舞台, 用同一組座標疊放
+    el.style.position='fixed'; el.style.left=nx+'px'; el.style.top=ny+'px'; el.style.width=cw+'px';
+    cap.style.position='fixed'; cap.style.left=nx+'px'; cap.style.top=(ny-capH)+'px';
+    cap.style.right='auto'; cap.style.bottom='auto'; cap.style.width=cw+'px'; cap.style.margin='0';
+  });
+  el.addEventListener('pointerup',e=>{ if(!dragging)return; dragging=false; el.classList.remove('dragging');
+    el.releasePointerCapture(e.pointerId);
+    // 鬆手後交還九宮格控制: 兩者恢復由 stage 佈局, 避免殘留 fixed 偏移
+    el.style.position=''; el.style.left=''; el.style.top=''; el.style.width='';
+    cap.style.position=''; cap.style.left=''; cap.style.top=''; cap.style.right=''; cap.style.bottom=''; cap.style.width=''; cap.style.margin='';
+  });
 })();
 
 connectSSE();
@@ -652,10 +997,10 @@ $('startBtn').onclick=async()=>{
     flushTimer=setInterval(flushWindow, 6000);
     $('dlAudioBtn').disabled=false;
     $('startBtn').disabled=true;$('stopBtn').disabled=false;
-    connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 每 6 秒送出一段');
+    connEl.textContent='收音中 ('+src+')';connDot.className='dot';log('開始收音: '+src+' — 每 6 秒送出一段 (音量閘門 rms≥'+VAD_RMS_GATE+', 語者分段 '+(wantVad?'開':'關')+')');
   }catch(e){showErr('無法取得音訊: '+e.message);log('收音失敗: '+e.message);}
 };
-$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);if(flushTimer){clearInterval(flushTimer);flushTimer=null;}analyser=null;recorder=null;captureBuf=null;gotAudio=false;$('startBtn').disabled=false;$('stopBtn').disabled=true;$('dlAudioBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
+$('stopBtn').onclick=()=>{if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;}if(audioCtx){audioCtx.close();audioCtx=null;}if(meterRAF)cancelAnimationFrame(meterRAF);if(flushTimer){clearInterval(flushTimer);flushTimer=null;}analyser=null;recorder=null;captureBuf=null;gotAudio=false;skipCount=0;$('startBtn').disabled=false;$('stopBtn').disabled=true;$('dlAudioBtn').disabled=true;connEl.textContent='已停止';connDot.className='dot bad';log('停止收音');};
 // 麥克風圖示快捷開關
 $('btnMic').onclick=()=>{ if($('startBtn').disabled){ $('stopBtn').click(); $('btnMic').classList.remove('active'); } else { $('startBtn').click(); $('btnMic').classList.add('active'); } };
 $('dlAudioBtn').onclick=()=>{ if(!debugBuf||debugBuf.length<SR*0.5){showErr('還沒有累積到音訊, 請先收音幾秒');return;} const pcm=encodeFloatTo16(debugBuf); const wav=encodeWav(pcm,16000); const blob=new Blob([wav],{type:'audio/wav'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='omnilive-captured-'+Date.now()+'.wav'; a.click(); log('已下載擷取音訊 ('+(debugBuf.length/SR).toFixed(1)+'s)'); };
@@ -664,6 +1009,13 @@ let captureBuf=null;
 let debugBuf=null;
 let sttInflight=false;
 let flushTimer=null;
+let skipCount=0;
+// 音量閘門 (RMS)。0.015 對齊 lib/stt.mjs vadSegments 的 threshold 常量。
+// 低於此值視為無語音 → 不送 STT。低於 0.005 基本等同數位靜音。
+const VAD_RMS_GATE=0.015;
+// 語者分段 (vad=1)。預設關: 開啟時能量偵測會覆蓋 whisper 真實 segments。
+// 僅在需要 A/B 輪替標記且收音品質穩定時才勾選。
+let wantVad=false;
 const SR=16000, WINDOW_MS=6000, OVERLAP_MS=2000, MAX_KEEP_MS=WINDOW_MS+OVERLAP_MS;
 const WINDOW_SAMPLES=Math.floor(SR*WINDOW_MS/1000);
 const KEEP_SAMPLES=Math.floor(SR*MAX_KEEP_MS/1000);
@@ -675,15 +1027,27 @@ function sendChunk(float32){
   merged.set(captureBuf,0); merged.set(float32,captureBuf.length); captureBuf=merged;
   if(captureBuf.length>KEEP_SAMPLES){ captureBuf=captureBuf.subarray(captureBuf.length-KEEP_SAMPLES); }
 }
+function rmsOf(f32){
+  if(!f32 || !f32.length) return 0;
+  let sum=0; for(let i=0;i<f32.length;i++){ const s=f32[i]; sum+=s*s; }
+  return Math.sqrt(sum/f32.length);
+}
 function flushWindow(){
   if(sttInflight || !captureBuf || captureBuf.length < SR*1.0) return;
   const samples=captureBuf.subarray(Math.max(0,captureBuf.length-WINDOW_SAMPLES));
+  // 音量閘門: 近乎靜音的視窗不送STT。避免 whisper 對無語音回空字串、
+  // 浪費每次 30s CPU 推論, 並讓 server.mjs 記錄 "STT returned empty" 噪音。
+  const rms=rmsOf(samples);
+  if(rms < VAD_RMS_GATE){ skipCount++; log('略過靜音視窗 (rms='+rms.toFixed(4)+' < '+VAD_RMS_GATE+') — 連續 '+skipCount+' 次'); return; }
+  if(skipCount){ log('偵測到聲音, 已恢復送字幕 (略過 '+skipCount+' 個靜音視窗)'); skipCount=0; }
   const pcm=encodeFloatTo16(samples);
   const wav=encodeWav(pcm, 16000);
   const room=new URLSearchParams(location.search).get('room')||'';
   const lang=fromSel.value||'';
   // auto 模式不送 lang 給 whisper (避免 auto→500 歷史問題); 讓 whisper 自行偵測
-  const url='/api/transcribe?room='+encodeURIComponent(room)+'&vad=1'+(lang && lang!=='auto'?'&lang='+encodeURIComponent(lang):'');
+  // vad=1 僅在明確需要語者分段時才送: 它會用能量偵測的啞元組覆蓋 whisper
+  // 真實 segments (見 lib/stt.mjs vadSegments fallback), 近靜音時反而抹掉有效結果。
+  const url='/api/transcribe?room='+encodeURIComponent(room)+(wantVad?'&vad=1':'')+(lang && lang!=='auto'?'&lang='+encodeURIComponent(lang):'');
   sttInflight=true;
   const release=()=>{ sttInflight=false; };
   const to=setTimeout(release, 45000);
@@ -721,7 +1085,10 @@ $('sendCaption').onclick=async()=>{
 
 // ── 課程即時解說: 輪詢 /api/course ──
 let courseTimer=null, courseAcc='';
-function courseText(){ return subsEl.textContent.trim(); }
+// 課程解說累加器: 必須讀「完整逐句紀錄」而不是畫面 DOM。
+// 畫面已改為固定視窗 (只留 slotCount 列), 若直接讀 subsEl.textContent
+// 會只剩 1~2 句 → 累加器會把舊句截斷。改讀 CaptionWindow.transcript()。
+function courseText(){ return capWin ? capWin.transcript() : subsEl.textContent.trim(); }
 async function fetchCourse(){
   const room=new URLSearchParams(location.search).get('room')||'';
   try{

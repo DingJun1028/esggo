@@ -18,12 +18,17 @@
   --muted:#8a8275;
   --gold:#c9a24b;
   --gold-soft:#b8941f;
-  --green:#3c6e47;
+  /* 與 index.html 同一組 token: 品牌文件值 #3c6e43 在本深藍底上僅 2.42:1,
+     字幕是主要閱讀內容, 必須可讀。#5fb37e = 5.67:1 (WCAG AA 通過)。 */
+  --green:#5fb37e;
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
   --mono:ui-monospace,"Cascadia Code","JetBrains Mono",monospace;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s8:48px;
   --r-sm:4px;--r-md:6px;
-  --ease:cubic-bezier(0.4,0,0.2,1);
+  --ease:cubic-bezier(0.4, 0, 0.2, 1);
+  /* 深色介面 → 原生控制項 (捲軸/選單) 也走深色, 否則淺色捲軸會在深藍上形成亮色破洞。 */
+  color-scheme:dark;
+  -webkit-tap-highlight-color:transparent;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{
@@ -67,6 +72,8 @@ body{display:flex;flex-direction:column;user-select:none}
   font-style:normal;
   color:var(--gold);
 }
+/* 關閉鈕: 原本是 <span> (靠 cursor:pointer 假裝是按鈕, 鍵盤不可達)。
+   改為真正的 <button> 後必須清掉 UA 預設樣式, 否則會出現灰底與瀏覽器框線。 */
 #bar .x{
   margin-left:auto;
   cursor:pointer;
@@ -75,8 +82,12 @@ body{display:flex;flex-direction:column;user-select:none}
   padding:0 var(--s2);
   line-height:1;
   transition:color .15s var(--ease);
+  /* 觸控目標: 補齊最小高度, 原 <span> 只有文字高度。 */
+  min-height:24px;
+  background:none;border:0;font-family:inherit;
 }
 #bar .x:hover{color:var(--gold)}
+#bar .x:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 #subs{
   flex:1;
@@ -149,11 +160,12 @@ body{display:flex;flex-direction:column;user-select:none}
 </head>
 <body>
 <div id="bar">
-  <div class="brand-mark">OA</div>
+  <div class="brand-mark" aria-hidden="true">OA</div>
   <span class="t"><em>OmniLive</em> 漂浮字幕</span>
-  <span class="x" id="close">關閉</span>
+  <button class="x" id="close" type="button" aria-label="關閉漂浮字幕窗">關閉</button>
 </div>
-<div id="subs"><div id="ph">等待字幕…</div></div>
+<!-- 字幕是本窗的唯一輸出 → 必須是 live region, 否則螢幕閱讀器使用者收不到任何內容。 -->
+<div id="subs" role="region" aria-label="漂浮字幕" aria-live="polite" aria-atomic="true"><div id="ph">等待字幕…</div></div>
 <div class="hint">拖曳標題列移動</div>
 <script>
 const params=new URLSearchParams(location.search);
@@ -161,17 +173,43 @@ const room=params.get('room')||''; const pwd=params.get('pwd')||'';
 const subs=document.getElementById('subs'); const ph=document.getElementById('ph');
 document.getElementById('close').onclick=()=>window.close();
 const bigFirst = params.get('order')!=='src'; // 預設大中文小英文
+// 字幕資料模型: 與 index.html 共用 lib/caption-window.mjs (單一 SSOT)。
+// 舊版在此 append 並在超過 8 列時砍掉最舊的, 那是「無限增長後再截斷」,
+// 高度會隨語速膨脹; 固定視窗以「位移」取代「累加」, 新句進第一列、其餘下移,
+// 超出槽位直接丟棄 → 視窗高度恆定。
+let capWin=null;
+async function initCapWin(){
+  try{
+    const mod=await import('/lib/caption-window.mjs');
+    capWin=new mod.CaptionWindow({slotCount:Number(params.get('slots'))||2});
+  }catch(e){ capWin=null; }
+  for(const p of capBuf) addSub(p);
+  capBuf.length=0;
+}
+const capBuf=[];
 function addSub(d){
   if(ph){ph.remove();}
-  const wrap=document.createElement('div'); wrap.className='sub';
-  const a=document.createElement('div'); a.className='src';
-  const b=document.createElement('div'); b.className='tgt';
-  if(bigFirst){ a.textContent=d.source||''; b.textContent=d.target||''; } // 大字=翻譯(中文) 在上
-  else { a.textContent=d.target||''; b.textContent=d.source||''; }
-  wrap.appendChild(a); wrap.appendChild(b);
-  subs.appendChild(wrap);
-  while(subs.children.length>8) subs.removeChild(subs.firstChild);
+  const push=(d)=>{
+    const res=capWin.push({id:d.id,source:d.source||'',target:d.target||'',meta:d.meta,speaker:d.speaker,ts:Date.now()},Date.now());
+    renderRows(res.rows);
+  };
+  if(!capWin){ if(capBuf.length<40)capBuf.push(d); return; }
+  push(d);
 }
+// 固定槽位重畫 (不 append)
+function renderRows(rows){
+  subs.textContent='';
+  rows.forEach(r=>{
+    const wrap=document.createElement('div'); wrap.className='sub';
+    const a=document.createElement('div'); a.className='src';
+    const b=document.createElement('div'); b.className='tgt';
+    if(bigFirst){ a.textContent=r.source||''; b.textContent=r.target||''; }
+    else { a.textContent=r.target||''; b.textContent=r.source||''; }
+    wrap.appendChild(a); wrap.appendChild(b);
+    subs.appendChild(wrap);
+  });
+}
+initCapWin();
 const es=new EventSource('/stream?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):''));
 es.addEventListener('subtitle',ev=>{try{const p=JSON.parse(ev.data);const d=p.data;if(!d)return;addSub(d);}catch(e){}});
 es.onerror=()=>{ if(es.readyState===EventSource.CLOSED){ const e2=new EventSource('/stream?room='+encodeURIComponent(room)+(pwd?'&pwd='+encodeURIComponent(pwd):'')); } };

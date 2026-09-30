@@ -41,6 +41,7 @@ try {
 const APP_VERSION = '1.0.0';
 const PORT = CFG.port;
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
+const LIB_DIR = path.join(process.cwd(), 'lib');
 const store = new SubtitleStore({ maxLines: CFG.subtitleMaxLines, ttlMs: CFG.subtitleTtlMs });
 // STT 併發保護旗標 (DEPLOY.md #4): 同一時間只跑一個 STT 請求, 避免 ClientDisconnect 連環
 let sttInflight = false;
@@ -364,6 +365,12 @@ const server = http.createServer(/** @param {import('node:http').IncomingMessage
     if (file) {
       const fp = path.join(PUBLIC_DIR, file);
       if (fs.existsSync(fp)) return res.writeHead(200, { 'content-type': ctype, 'Cache-Control': 'no-cache' }).end(fs.readFileSync(fp));
+    }
+    // 前端共用純邏輯模組 (單一事實來源: 瀏覽器與 node --test 載同一個檔)。
+    // 只開放明確列舉的檔名, 不開放整個 lib/ 目錄, 避免路徑穿越。
+    if (urlPath === '/lib/caption-window.mjs') {
+      const fp = path.join(LIB_DIR, 'caption-window.mjs');
+      if (fs.existsSync(fp)) return res.writeHead(200, { 'content-type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-cache' }).end(fs.readFileSync(fp));
     }
   }
 
