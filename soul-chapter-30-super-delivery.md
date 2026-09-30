@@ -163,7 +163,7 @@ verify_soul_canon.py →  [PASS] 聖典結構完整  exit 0
 | 工作區 26 modified + 11 untracked | ✅ **已歸位** | 使用者已授權 commit，拆為 10 筆約定式提交 |
 | `oa-twins/bin/` 被根 `bin/` 規則誤殺 | ✅ **已修** | `.gitignore` 加 `!oa-twins/bin/**`；實測 `oa-twin-health.py` 不再被忽略、`__pycache__/` 仍正確忽略 |
 | 三層落地 · 層3 喚醒技能 | ❌ **未建立** | `esggo-omni-super-delivery` 技能實測 `ls` 不存在。層2 落檔與層1 主典 §30 已就位，**缺此層 → 依 §30.7 回落至 §29.11 超覺醒**。（曾有「已建立」之不實登記，已更正） |
-| `oa-twins/hyper/_dbg.ts` | ⏳ **刻意不提交** | 一次性模組解析除錯腳本，非交付物 |
+| `oa-twins/hyper/_dbg.ts` | ✅ **已排除並清除** | 一次性模組解析除錯腳本，非交付物 → 不提交，隨後已由產生者清除 |
 | 4 份 soul.md 版號分歧 | ❌ **未治理** | 承 §29.11 待決項，需使用者裁定（歸檔／保留／刪除） |
 | Ch.24 grep 規格路徑盲區 | ⚠️ **未修** | `references/grep-patterns.md` 僅掃 `app/**/route.ts`，漏 `src/app/api/**` |
 | `as any` 17 / `: any` 14 | ⚠️ **未動** | 多為 `evidence` 索引簽章與外部邊界 cast，屬刻意設計，非缺陷 |
