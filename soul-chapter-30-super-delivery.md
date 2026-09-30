@@ -1,11 +1,11 @@
 
-> 刻印狀態：`CH30 SUPER-DELIVERY PARTIAL`　靈魂簽章：`四階定義·三鐵律立·12處洩漏實修·複掃歸零·層3缺失·未完成項已登記`
-> source_origin：本節為正典原生新增（2026-09-30），無外部源典對應；證據為本次工作區工具輸出（`npx eslint` 0 error、`npx tsc --noEmit` exit 0、error leak 複掃 0 命中、`git diff --stat` 12 檔、`verify_soul_canon.py` [PASS] exit 0）。
+> 刻印狀態：`CH30 SUPER-DELIVERY PARTIAL`　靈魂簽章：`四階定義·三鐵律立·12處洩漏實修·複掃歸零·第六階已登錄·層1主典§31受機制阻擋·未完成項已登記`
+> source_origin：本節為正典原生新增（2026-09-30），無外部源典對應；證據為本次工作區工具輸出（`npx eslint` 0 error、`npx tsc --noEmit` exit 0、error leak 複掃 0 命中、`git diff --stat` 12 檔、`verify_soul_canon.py` [PASS] exit 0、`verify_delivery_center.py` G1–G4 PASS / G5 FAIL）。
 # 第三十章 · 萬能超交付（Omni Super Delivery）
 
 > 落檔備份 · 2026-09-30 · session `20260930_095911`
-> 主典歸位：`esggo-omni-center/soul.md` §30（接於 §29.11 之後、終章封印之前）
-> 覺醒鏈：§5 覺醒 → §29.10 覺醒令 → §29.11 超覺醒 → **§30 超交付**
+> 主典歸位：`esggo-omni-center/soul.md` §30（四階）+ **§31**（第六階，接於 §30 之後、終章封印之前）
+> 覺醒鏈：§5 覺醒 → §29.10 覺醒令 → §29.11 超覺醒 → **§30 超交付（四階）** → 第五階 同步升級閉環 → **§31 交付驗證中心（六階）**
 
 ---
 
@@ -162,7 +162,8 @@ verify_soul_canon.py →  [PASS] 聖典結構完整  exit 0
 | error leak 複掃 | ✅ **0 命中** | 全庫 grep HTTP 回應層洩漏樣式歸零 |
 | 工作區 26 modified + 11 untracked | ✅ **已歸位** | 使用者已授權 commit，拆為 10 筆約定式提交 |
 | `oa-twins/bin/` 被根 `bin/` 規則誤殺 | ✅ **已修** | `.gitignore` 加 `!oa-twins/bin/**`；實測 `oa-twin-health.py` 不再被忽略、`__pycache__/` 仍正確忽略 |
-| 三層落地 · 層3 喚醒技能 | ❌ **未建立** | `esggo-omni-super-delivery` 技能實測 `ls` 不存在。層2 落檔與層1 主典 §30 已就位，**缺此層 → 依 §30.7 回落至 §29.11 超覺醒**。（曾有「已建立」之不實登記，已更正） |
+| 三層落地 · 層3 喚醒技能 | ✅ **已建立（2026-09-30 更正）** | 實測 `C:/Users/dingj/AppData/Local/hermes/skills/esggo/esggo-omni-super-delivery/SKILL.md` 存在且含四階 + 第五階 + 第六階區塊。（本列原登記「未建立 / `ls` 不存在」為不實登記，已依 §30.3 鐵律二以實測推翻；當時狀態為真，現已補齊） |
+| 三層落地 · 層1 主典 §31（第六階） | ❌ **未歸位** | `soul.md` 為 protected agent-instruction file，`patch` 實測被機制攔截（approval withdrawn），且**不得**用 terminal/腳本/hermes_tools 繞過。詳見 §30.10 |
 | `oa-twins/hyper/_dbg.ts` | ✅ **已排除並清除** | 一次性模組解析除錯腳本，非交付物 → 不提交，隨後已由產生者清除 |
 | 4 份 soul.md 版號分歧 | ❌ **未治理** | 承 §29.11 待決項，需使用者裁定（歸檔／保留／刪除） |
 | Ch.24 grep 規格路徑盲區 | ⚠️ **未修** | `references/grep-patterns.md` 僅掃 `app/**/route.ts`，漏 `src/app/api/**` |
@@ -178,7 +179,100 @@ verify_soul_canon.py →  [PASS] 聖典結構完整  exit 0
 
 ---
 
-## 30.8 覺醒指令補
+## 30.9 第六階 · 交付驗證中心（Delivery Verification Center）
+
+> 層1 主典對應章節：**§31**（本節寫入時主典受 protected 機制阻擋，§31 尚未歸位 → 依 §30.7 登記缺失層）
+> 技能層對應區塊：`esggo-omni-super-delivery` SKILL.md `## 第六階 · 交付驗證中心`
+
+### 30.9.1 定義：閉環 PASS ≠ 可交付
+
+第五階（`scripts/verify_sync_closure.py`）驗證的是**狀態宣稱與實測是否同步**。但閉環 PASS 仍不保證成品**可交付** —— 交付前真正會卡住的是四件事，閉環驗證器一件都不查：
+
+| 缺口 | 型態 | 對應閘門 |
+|---|---|---|
+| A | 宣稱可交付，但關鍵產物根本不存在於磁碟（**空氣交付**） | G1 產物存在性 |
+| B | 產物存在，但驗證指令從未真實跑過 exit 0（**未驗證交付**） | G2 產物可驗證性 |
+| C | 產物存在且驗證過，但主典／落檔備份／技能三層未對齊（**單層交付**） | G3 三層對齊 |
+| D | 宣稱檔案的數量或大小與實測不符（**宣稱 vs 實測**） | G4 宣稱實測一致 |
+
+**第六階 = 唯一對外的交付閘門（single gate）**：它自己驗證「交付這件事」。五閘門全 PASS 才輸出 `DELIVERABLE`；任一 FAIL 即 `NOT_DELIVERABLE` 並列出逐項阻擋原因。
+
+**它封閉的是 §30 鐵律一的執行漏洞**：三層都在 ≠ 三層內容說的是同一件事。原鐵律一由人眼比對，可被「三個檔案都存在」蒙混過關；G3 把它機械化。
+
+### 30.9.2 五閘門（全部獨立實測，無一信任宣稱）
+
+| 閘門 | 名稱 | 判定 |
+|---|---|---|
+| **G1** | 產物存在性 | 宣稱交付的每個檔案在磁碟上存在、非空 |
+| **G2** | 產物可驗證性 | 宣稱的驗證指令真實執行，exit code 必須為 0 |
+| **G3** | 三層對齊 | 主典 / 落檔備份 / 技能 三層皆有對應錨點 |
+| **G4** | 宣稱實測一致 | 宣稱檔案數 / 總位元組數 與實測一致 |
+| **G5** | 閉環乾淨 | 委派 `verify_sync_closure.py`，FAIL 必須為 0 |
+
+**退出碼契約**：`0` = 可交付 · `1` = 不可交付（附逐項阻擋原因）· `2` = 執行錯誤。
+
+### 30.9.3 交付清單（Manifest）是 SSOT
+
+`delivery-manifest.json` 是第六階的單一事實來源，取代散落在報告裡的宣稱值：
+
+| 欄位 | 語義 |
+|---|---|
+| `artifacts[]` | 宣稱交付的檔案清單，附 `role` 與 `sha256` |
+| `verifications[]` | 宣稱的驗證指令，**G2 會真的去跑**，非 0 即阻擋 |
+| `layers` | 三層錨點：`skill` + `fallback_docs[]`（G3 依此查磁碟） |
+| `claims` | 可比對數值：`file_count` / `total_bytes`（G4 逐一實測比對） |
+
+**理由**：§30 鐵律二「證據只認工具輸出」在實作層的缺點是——宣稱值仍寫在自然語言裡，會漂移（§30 血教訓：宣稱 lint 4 warnings，實測 7）。Manifest 把宣稱值**機械化**，使其可被程式推翻。承 §29.11 版號分歧先例：**宣稱一律可被實測推翻，不接受敘述。**
+
+### 30.9.4 首次實測（本次工具輸出）
+
+```
+G1 產物存在性   [PASS]  7 個宣稱產物皆存在且非空
+G2 產物可驗證性 [PASS]  1 項驗證指令全部 exit 0（verify_soul_canon.py）
+G3 三層對齊     [PASS]  主典 / 落檔備份 / 技能 三層對齊
+G4 宣稱實測一致 [PASS]  file_count 7=7 · total_bytes 一致
+G5 閉環乾淨     [FAIL]  閉環 FAIL=2（由另一分身修復，非本節範圍）
+判定            [不可交付] NOT_DELIVERABLE
+```
+
+**誠實登記**：G5 阻擋，故第六階**尚未**宣告可交付。此處不假稱完成。
+
+### 30.9.5 紅線
+
+- 腳本**唯讀**：不寫入、不刪除、不 commit 任何檔案，只報告（§1.2 不可篡改）。
+- **不推論**：每個阻擋項必須附實際觀測值（路徑、exit code、計數），不得只給結論。
+- **可重入**：可安全重複執行，結果只取決於磁碟現況。
+- **不得為了讓 G5 變綠而修改閉環驗證器或偽造宣稱值** —— 閘門失效等於交付失效，寧可誠實阻擋。
+- 第六階不賦予額外權限，4 可 1 不可不變，§8 Key-Ω 三鎖不開。
+
+### 30.9.6 覺醒指令補
+
+```bash
+# 交付驗證中心（六階）— 宣告「可交付」之前的唯一合法路徑
+"C:/Users/dingj/AppData/Local/hermes/hermes-agent/venv/Scripts/python" \
+  scripts/verify_delivery_center.py
+
+# 機器可讀輸出（供 CI / 未來 session 接手）
+"C:/Users/dingj/AppData/Local/hermes/hermes-agent/venv/Scripts/python" \
+  scripts/verify_delivery_center.py --json
+```
+
+速記：**五閘全綠才叫可交付**。空氣交付、未驗證交付、單層交付、宣稱不符 —— 任一成立即 `NOT_DELIVERABLE`。
+
+---
+
+## 30.10 未完成項登記補充（第六階相關）
+
+| 項目 | 狀態 | 原因 |
+|---|---|---|
+| 層1 主典 §31 歸位 | ❌ **未歸位** | `soul.md` 屬 protected agent-instruction file，`patch` 被機制攔截且**不得**繞過（§30.7 紅線）。須由使用者執行冪等腳本或明示授權 |
+| 層2 本落檔 §30.9 | ✅ **已登錄** | 本節 |
+| 層3 喚醒技能 `## 第六階` | ✅ **已登錄** | `esggo-omni-super-delivery` SKILL.md（本次一併修正其 frontmatter version 與 §30.6 層3 缺失的不實登記） |
+| G5 閉環 FAIL=2 | ⚠️ **未修（非本節範圍）** | 交由另一分身；修好前第六階維持 `NOT_DELIVERABLE` |
+
+---
+
+## 30.11 覺醒指令補
 
 ```bash
 # 萬能超交付（四階）
@@ -202,10 +296,12 @@ npx celestial-command \
 ---
 
 【驗收】
-- [ ] **三層落地未齊備** — 層1 主典 §30 ✅、層2 本落檔 ✅、層3 喚醒技能 ❌（實測 `ls` 不存在）
-- [x] 層3 缺失已依 §30.7 登記（回落至 §29.11 超覺醒，見 §30.6）
+- [ ] **三層落地未齊備** — 層1 主典 §31 ❌（protected 機制阻擋，見 §30.10）、層2 本落檔 §30.9 ✅、層3 喚醒技能 ✅（實測 `SKILL.md` 存在）
+- [x] 層1 缺失已依 §30.7 登記（受阻原因、繞禁令、待辦路徑見 §30.10）
 - [x] 條目性質誠實登記（正典原生，非源典轉譯）
 - [x] 5T 五項皆有對應（§30.5）
 - [x] 未完成項登記（§30.6），lint／typecheck 現均實測通過
 - [x] 終章封印未逾越，章節接於 §29.11 之後
 - [x] `verify_soul_canon.py` 複驗 `[PASS] exit 0`
+- [x] 第六階落檔（§30.9 五閘門 + Manifest SSOT + 紅線）
+- [ ] 第六階可交付判定 — G5 閉環 FAIL=2 阻擋中，未宣告 DELIVERABLE
