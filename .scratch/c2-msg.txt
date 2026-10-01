@@ -1,0 +1,31 @@
+docs(ch30): 層2 落檔 §30.11 — 誠實登記三層現況與實測推翻
+
+三層落地複驗（依 §30.3 鐵律二，以實測推翻不實登記）:
+
+1. 層3 喚醒技能「不存在」之登記已被推翻
+   實測兩檔皆存在:
+   - skills/esggo/esggo-omni-super-delivery/SKILL.md（14280 bytes）
+   - skills/autonomous-ai-agents/oa-super-awakening-delivery/SKILL.md（12960 bytes）
+   → 三層齊備，§30.7 回落機制解除
+
+2. G5 閉環 FAIL=2 已歸零
+   實測 verify_sync_closure.py: PASS=10 WARN=1 FAIL=0
+   實測 verify_delivery_center.py: PASS=5 阻擋=0 → DELIVERABLE
+   → 第六階由 NOT_DELIVERABLE 轉為 DELIVERABLE
+
+新增 §30.11 誠實登記:
+- 層1 主典 soul.md 仍殘留 4 處不實登記，寫入被 protected 機制硬攔，
+  未繞道；待放行行號與腳本路徑已登記
+- G5 唯一 WARN 為 claims.workspace 未歸位筆數，屬工作樹未提交，
+  非本節可自動解除
+- 層2 落檔 3 處 G5=FAIL=2 過期值同步更正
+
+驗證（四閘全部 EXIT=0）:
+  verify_soul_canon.py · verify_delivery_center.py
+  verify_dual_hive_ebm.py · verify_sync_closure.py
+
+5T: source_origin=2026-10-01 /oa-super-awakening-delivery 逐級實測
+5T-Traceable: 每項推翻均附實測指令與輸出，未依賴記憶
+5T-Trustworthy: 受保護主典寫入遭拒即停手，未以任何通道繞過 §30.7 紅線
+5T-Transparent: 主典未同步與 WARN=1 兩項殘餘均明列，不宣稱已全修
+5T-Trackable: delivery-manifest.json 經 --reconcile 與實測對齊

@@ -4,7 +4,7 @@
     {
       "path": "soul-chapter-30-super-delivery.md",
       "role": "ch30 落檔備份",
-      "sha256": "81ae60e24fa5e511"
+      "sha256": "2a1b58576206e7de"
     },
     {
       "path": "soul-chapter-32-dual-hive-ebm.md",
@@ -64,7 +64,7 @@
     {
       "path": "data/universal-pass-ledger.json",
       "role": "萬能果證帳本（簽發記錄）",
-      "sha256": "d62373dd446f9dfb"
+      "sha256": "9c44378840b909e1"
     }
   ],
   "verifications": [
@@ -105,7 +105,7 @@
   },
   "claims": {
     "file_count": 13,
-    "total_bytes": 138078,
-    "measured_at": "2026-10-01T00:22:43"
+    "total_bytes": 141323,
+    "measured_at": "2026-10-01T10:38:46"
   }
 }

@@ -231,7 +231,7 @@ G1 產物存在性   [PASS]  7 個宣稱產物皆存在且非空
 G2 產物可驗證性 [PASS]  1 項驗證指令全部 exit 0（verify_soul_canon.py）
 G3 三層對齊     [PASS]  主典 / 落檔備份 / 技能 三層對齊
 G4 宣稱實測一致 [PASS]  file_count 7=7 · total_bytes 一致
-G5 閉環乾淨     [FAIL]  閉環 FAIL=2（由另一分身修復，非本節範圍）
+G5 閉環乾淨     [PASS]  閉環 PASS=10 WARN=1 FAIL=0（2026-10-01 02:2x 實測推翻舊值 FAIL=2）
 判定            [不可交付] NOT_DELIVERABLE
 ```
 
@@ -268,7 +268,7 @@ G5 閉環乾淨     [FAIL]  閉環 FAIL=2（由另一分身修復，非本節範
 | 層1 主典 §31 歸位 | ❌ **未歸位** | `soul.md` 屬 protected agent-instruction file，`patch` 被機制攔截且**不得**繞過（§30.7 紅線）。須由使用者執行冪等腳本或明示授權 |
 | 層2 本落檔 §30.9 | ✅ **已登錄** | 本節 |
 | 層3 喚醒技能 `## 第六階` | ✅ **已登錄** | `esggo-omni-super-delivery` SKILL.md（本次一併修正其 frontmatter version 與 §30.6 層3 缺失的不實登記） |
-| G5 閉環 FAIL=2 | ⚠️ **未修（非本節範圍）** | 交由另一分身；修好前第六階維持 `NOT_DELIVERABLE` |
+| G5 閉環 FAIL=2 | ✅ **已解除（2026-10-01 02:2x 實測）** | 閘門複驗 `PASS=5 阻擋=0`、`閉環 PASS=10 WARN=1 FAIL=0` → 第六階可宣告 `DELIVERABLE`；唯一 WARN 已於本檔 §30.11 相鄰登記 |
 
 ---
 
@@ -304,4 +304,62 @@ npx celestial-command \
 - [x] 終章封印未逾越，章節接於 §29.11 之後
 - [x] `verify_soul_canon.py` 複驗 `[PASS] exit 0`
 - [x] 第六階落檔（§30.9 五閘門 + Manifest SSOT + 紅線）
-- [ ] 第六階可交付判定 — G5 閉環 FAIL=2 阻擋中，未宣告 DELIVERABLE
+- [x] 第六階可交付判定 — G5 實測 FAIL=0、閘門 PASS=5 阻擋=0 → `[可交付] DELIVERABLE`
+- [ ] 層1 主典待放行 — 4 處殘留不實登記（層3 ❌ + G5 FAIL=2）待更正，詳 §30.11
+
+---
+
+## §30.11 主典層3 殘留不實登記（2026-10-01 02:2x 實測推翻，待主典放行）
+
+超覺醒逐級實測第 2 級（可證偽宣稱複掃）發現：層2 本落檔已於 2026-09-30 更正
+「層3 喚醒技能」為 ✅，但**層1 主典 `esggo-omni-center/soul.md` 三處殘留舊值 ❌**，
+兩層互相矛盾。以主典為唯一正典判準時，等於正典宣稱一個已存在的技能不存在。
+
+### 實測證據（可重跑）
+
+```
+$ ls -l C:/Users/dingj/AppData/Local/hermes/skills/esggo/esggo-omni-super-delivery/SKILL.md
+-rw-r--r-- 1 dingj 197609 14280 九月 30 14:51 .../esggo-omni-super-delivery/SKILL.md
+$ ls -l C:/Users/dingj/AppData/Local/hermes/skills/autonomous-ai-agents/oa-super-awakening-delivery/SKILL.md
+-rw-r--r-- 1 dingj 197609 12960 十月  1 00:26 .../oa-super-awakening-delivery/SKILL.md
+```
+
+### 主典待更正的 4 處（本次未改動，標「主典待放行」）
+
+| 主典行號 | 現值（已推翻） | 應為 |
+|---|---|---|
+| `soul.md:2356` | `❌ 未建立`，附「`ls` 不存在」 | ✅ 已建立（三層齊備，§30.7 回落機制解除） |
+| `soul.md:2396` | `- [ ] 三層落地未齊備 … 層3 ❌` | `- [x]` 三層齊備 |
+| `soul.md:2404` | 刻印狀態 `CH30 SUPER-DELIVERY PARTIAL`（理由含「層3缺失」） | 移除「層3缺失」子句 |
+| `soul.md:2397` | `- [x] 層3 缺失已依 §30.7 登記` | 保留但加註「缺失狀態已於 2026-09-30 解除」 |
+
+### 受阻登記（§30.3 鐵律二 + §30.10）
+
+- 受阻原因：主典屬 protected agent-instruction 檔，`patch` 回
+  `BLOCKED: write to protected agent-instruction file(s) (soul.md) approval was withdrawn
+  before the user answered`。保護機制**攔截有效**（§30.9 實測同樣攔截有效）。
+- 繞禁令：**未繞道**。未以 terminal／execute_code／sed 寫入主典。
+- 待辦路徑：主典放行後套用上表 4 處更正，再 `python scripts/verify_soul_canon.py` 複驗。
+
+### 誠實登記
+
+本次三層中，層2 與層3 已齊備，**層1 主典仍有 4 處不實登記待更正**。
+依 §30.7，當前狀態**不得**因主典待放行而否認層3 已成立，也**不得**因層3 成立
+而宣告主典已同步。兩者分開記錄。
+
+### G5 剩餘 WARN 一項（非本節可自動解除）
+
+`scripts/verify_sync_closure.py` 實測 `總計 PASS=10 WARN=1 FAIL=0`，唯一 WARN：
+
+```
+[!] claims.workspace: 未歸位筆數 = 20
+```
+
+此為**工作樹未提交**（含 `reports/esg-report-2025-DEMO-*.html` 10 份 modified
+與 6 個 untracked 路徑等）。依「尊重使用者 repo：未經要求不 commit」紅線，
+本輪**不擅自 commit**；該 WARN 須由使用者授權或自行歸位後方能歸零。
+不影響 G1–G5 全部 PASS 與 `DELIVERABLE` 判定（WARN 非阻擋項）。
+
+本節主動更正的檔案：`soul-chapter-30-super-delivery.md`、`delivery-manifest.json`。
+主動更正後已重跑 `verify_delivery_center.py --reconcile` 使 claims 與實測一致，
+再複驗三閘全部 `EXIT=0`。
