@@ -87,9 +87,31 @@ echo "  ✓ $INDEX"
 # 5) 測試基線檢查
 echo "🧪 執行測試..."
 if command -v pnpm >/dev/null 2>&1; then
-  pnpm vitest run src/lib/__tests__/trust-label.test.ts \
-    src/lib/__tests__/omnitag-contract.test.ts \
-    src/lib/__tests__/five-t-omnitag-gate.test.ts 2>&1 | tail -5
+  # ⚠️ 不可寫成 `pnpm vitest run … 2>&1 | tail -5` —— 管線 exit 取自 tail（恆 0），
+  # 測試全紅時本腳本仍會走到下方印「✅ 全部重生完成（5T 閉環）」= 假綠。
+  # 先存輸出、取真實 exit（此處無管線，故 $? 即 pnpm 本身），失敗即中止。
+  _t_out="$(mktemp)"
+  # ⚠️ 本段曾三度假綠，三層陷阱必須同時堵住：
+  #  1) `pnpm vitest … | tail -5` → 管線 exit 取自 tail（恆 0）→ 改為先存檔再 tail。
+  #  2) 裸 `_t_rc=$?` 在 set -e 下看到非零會「立刻中止整支腳本」，後面的 if 永不執行。
+  #     set +e 只影響 subshell 內部，救不了外層這一行 → 改用 if ! ( … )，
+  #     -e 在 if 條件語境中停用。
+  #  3) subshell 的 exit 取自「最後一個指令」→ 必須顯式 exit $? 帶碼，
+  #     否則後續任何回 0 的指令（rm 等）都會把失敗覆蓋回 0。
+  if ! (
+    set +e
+    pnpm vitest run src/lib/__tests__/trust-label.test.ts \
+      src/lib/__tests__/omnitag-contract.test.ts \
+      src/lib/__tests__/five-t-omnitag-gate.test.ts >"$_t_out" 2>&1
+    exit $?
+  ); then
+    tail -5 "$_t_out"
+    rm -f "$_t_out"
+    echo "❌ 測試基線未過 — 文件未視為重生完成"
+    exit 1
+  fi
+  tail -5 "$_t_out"
+  rm -f "$_t_out"
 else
   echo "⚠️  pnpm 不存在，跳過測試（手動驗證）"
 fi
