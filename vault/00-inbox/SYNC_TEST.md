@@ -3,6 +3,7 @@ source_origin: obsidian-sync-test
 created: 2026-08-28T06:00:00Z
 modified: 2026-08-28T06:00:00Z
 co_authors: [obsidian-sync, qa-bot-30]
+access: public-research
 tags: [sync-test, 5t-verified]
 ---
 

@@ -3,6 +3,7 @@ tags: [ftg, journey, esggo, react, tailwind, express, sqlite, 5t]
 created: 2026-08-29
 source_origin: GitHub-Actions-Error
 co_authors: [QueenBee, OA-Twins]
+access: public-research
 ---
 
 # FTG Journey App v1.0

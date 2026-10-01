@@ -3,6 +3,7 @@ tags: [ftg, dual-agent, collaboration, swarm, 5t, oa-twins]
 created: 2026-08-29
 source_origin: oa-knowledge-avatar
 co_authors: [QueenBee, OA-Twins]
+access: public-research
 ---
 
 # FTG 雙分身協作經驗

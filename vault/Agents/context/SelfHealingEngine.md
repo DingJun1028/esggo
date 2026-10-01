@@ -3,6 +3,7 @@ tags: [esggo, self-healing, oa-twins, 5t, webhook, ollama]
 created: 2026-08-29
 source_origin: GitHub-Actions-Error
 co_authors: [QueenBee, OA-Twins]
+access: public-research
 ---
 
 # Self-Healing Engine v0.5.0

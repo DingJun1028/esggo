@@ -2,6 +2,7 @@
 type: experience
 source_origin: evolution-engine
 co_authors: [evolution-engine]
+access: public-research
 tag: T2-tidy
 source: untracked
 created: 2026-08-27T12:22:36.608Z
