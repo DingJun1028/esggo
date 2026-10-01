@@ -1,76 +1,61 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+/**
+ * App.jsx — route table and shell for ftgtours.
+ *
+ * 5T-Traceable: source_origin = deployed bundle index-XzYV-tOx.js route table
+ * (33 `path:` literals resolving to the 14 routes below).
+ *
+ * Recovered then corrected. The deployed app used BrowserRouter, and so does
+ * this one: every internal link is a react-router <Link to="...">. That makes
+ * the two `href="#/contact"` anchors that shipped in the Navbar a genuine
+ * dead link — under BrowserRouter a bare "#/contact" changes only the hash and
+ * never matches a route. Navbar now uses <Link to="/contact"> instead.
+ */
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LanguageProvider } from './i18n';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import CorporateTravel from './pages/corporate-travel';
-import FamilyDay from './pages/family-day';
-import EsgTeamDay from './pages/esg-team-day';
-import WellbeingRetreat from './pages/wellbeing-retreat';
-import ExecutiveRetreat from './pages/executive-retreat';
-import EsgImpactNote from './pages/esg-impact-note';
-import PrivacyPolicy from './pages/privacy-policy';
-import TermsOfService from './pages/terms-of-service';
-import JourneyApp from './pages/JourneyApp';
-import StreamsIndex from './pages/streams/index';
-import AwarenessStream from './pages/streams/awareness';
-import CohesionStream from './pages/streams/cohesion';
-import RestorationStream from './pages/streams/restoration';
-import MutualityStream from './pages/streams/mutuality';
-import MemorialStream from './pages/streams/memorial';
-import FoundationStream from './pages/streams/foundation';
-import HtbHome from './pages/htb-home';
-import HtbAbout from './pages/htb-about';
-import HtbContact from './pages/htb-contact';
-import HtbNuber from './pages/htb-nuber';
-import HtbSgs from './pages/htb-sgs';
-import HtbTechnology from './pages/htb-technology';
-import HtbCases from './pages/htb-cases';
-import HtbNews from './pages/htb-news';
-import HtbFaq from './pages/htb-faq';
-import HtbPartnership from './pages/htb-partnership';
-import HtbInvestor from './pages/htb-investor';
+import CorporateTravelPage from './pages/CorporateTravelPage';
+import FamilyDayPage from './pages/FamilyDayPage';
+import TeamDayPage from './pages/TeamDayPage';
+import WellbeingPage from './pages/WellbeingPage';
+import ExecutivePage from './pages/ExecutivePage';
+import ImpactNotePage from './pages/ImpactNotePage';
+import ContactPage from './pages/ContactPage';
+import JourneyDesignPage from './pages/JourneyDesignPage';
+import StreamsPage from './pages/StreamsPage';
+import AboutPage from './pages/AboutPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
+import NotFound from './pages/NotFound';
 
-function App() {
+export default function App() {
   return (
-    <HashRouter>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/htb" element={<HtbHome />} />
-            <Route path="/htb/about" element={<HtbAbout />} />
-            <Route path="/htb/contact" element={<HtbContact />} />
-            <Route path="/htb/nuber" element={<HtbNuber />} />
-            <Route path="/htb/sgs" element={<HtbSgs />} />
-            <Route path="/htb/technology" element={<HtbTechnology />} />
-            <Route path="/htb/cases" element={<HtbCases />} />
-            <Route path="/htb/news" element={<HtbNews />} />
-            <Route path="/htb/faq" element={<HtbFaq />} />
-            <Route path="/htb/partnership" element={<HtbPartnership />} />
-            <Route path="/htb/investor" element={<HtbInvestor />} />
-            <Route path="/corporate-travel" element={<CorporateTravel />} />
-            <Route path="/family-day" element={<FamilyDay />} />
-            <Route path="/esg-team-day" element={<EsgTeamDay />} />
-            <Route path="/wellbeing-retreat" element={<WellbeingRetreat />} />
-            <Route path="/executive-retreat" element={<ExecutiveRetreat />} />
-            <Route path="/esg-impact-note" element={<EsgImpactNote />} />
-            <Route path="/journey-app" element={<JourneyApp />} />
-            <Route path="/streams" element={<StreamsIndex />} />
-            <Route path="/streams/awareness" element={<AwarenessStream />} />
-            <Route path="/streams/cohesion" element={<CohesionStream />} />
-            <Route path="/streams/restoration" element={<RestorationStream />} />
-            <Route path="/streams/mutuality" element={<MutualityStream />} />
-            <Route path="/streams/memorial" element={<MemorialStream />} />
-            <Route path="/streams/foundation" element={<FoundationStream />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </HashRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/corporate-travel" element={<CorporateTravelPage />} />
+              <Route path="/family-day" element={<FamilyDayPage />} />
+              <Route path="/esg-team-day" element={<TeamDayPage />} />
+              <Route path="/wellbeing-retreat" element={<WellbeingPage />} />
+              <Route path="/executive-retreat" element={<ExecutivePage />} />
+              <Route path="/esg-impact-note" element={<ImpactNotePage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/journey-design" element={<JourneyDesignPage />} />
+              <Route path="/streams" element={<StreamsPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }
-
-export default App;

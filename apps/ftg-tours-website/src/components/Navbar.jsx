@@ -1,186 +1,93 @@
-import { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+function ur(){
+let [e,t]=
+  (0,x.useState)(!1),
+[n,r]=
+  (0,x.useState)(!1),
+i=xt(),
+{t:a,lang:o,setLang:s}=lr(),
+c=[{path:`/corporate-travel`,label:a(`products.corpTravel`)},{path:`/family-day`,label:a(`products.familyDay`)},{path:`/esg-team-day`,label:a(`products.esgTeamDay`)},{path:`/wellbeing-retreat`,label:a(`products.wellbeing`)},{path:`/executive-retreat`,label:a(`products.executive`)},{path:`/esg-impact-note`,label:a(`products.impactNote`)}];return
+  (0,A.jsx)(`nav`,{className:`bg-white shadow-sm sticky top-0 z-50`,children:
+  (0,A.jsxs)(`div`,{className:`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`,children:[
+  (0,A.jsxs)(`div`,{className:`flex justify-between items-center h-16 md:h-20`,children:[
+  (0,A.jsx)(k,{to:`/`,className:`flex items-center min-h-[44px] min-w-[44px]`,children:
+  (0,A.jsx)(`img`,{src:`/images/logo.webp`,alt:`墾趣旅遊 FTG TOURS`,className:`h-10 md:h-14 w-auto`})}),
 
-// 企業方案下拉選單
-const corporateItems = [
-  { path: '/streams', label: '六流體系', desc: '覺曉 / 凝聚 / 復元 / 共好 / 留念 / 基礎' },
-  { path: '/corporate-travel', label: '企業員工旅遊', desc: '客製化員工旅遊，凝聚團隊與永續行動' },
-  { path: '/family-day', label: '企業家庭日', desc: '親子共融的戶外健康家庭日活動' },
-  { path: '/esg-team-day', label: 'ESG Outdoor Team Day', desc: '結合環境與社會共益的戶外團隊日' },
-  { path: '/wellbeing-retreat', label: 'Employee Wellbeing Retreat', desc: '身心健康主題的主管與員工 retreat' },
-  { path: '/executive-retreat', label: '高階主管共識營', desc: '高階主管共識建立與策略 retreat' },
-  { path: '/journey-app', label: 'Journey App', desc: '永續旅程管理平台，追蹤旅行影響力' },
-];
 
-function MenuIcon({ open }) {
-  return (
-    <div className="w-6 h-5 flex flex-col justify-between">
-      <span className={`block h-0.5 bg-ftg-forest transition-all duration-300 ${open ? 'rotate-45 translate-y-2' : ''}`} />
-      <span className={`block h-0.5 bg-ftg-forest transition-all duration-300 ${open ? 'opacity-0' : ''}`} />
-      <span className={`block h-0.5 bg-ftg-forest transition-all duration-300 ${open ? '-rotate-45 -translate-y-2' : ''}`} />
-    </div>
-  );
-}
+  (0,A.jsxs)(`div`,{className:`hidden lg:flex items-center space-x-1`,children:[
+  (0,A.jsx)(k,{to:`/`,className:`px-3 py-2 min-h-[44px] inline-flex items-center rounded-md text-sm font-medium ${i.pathname===`/`?`text-ftg-green bg-ftg-sand`:`text-gray-700 hover:text-ftg-green`}`,children:a(`nav.home`)}),
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const location = useLocation();
 
-  return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand */}
-          <Link to="/" className="flex items-center gap-2 font-bold text-ftg-forest text-lg">
-            <span className="inline-block w-8 h-8 rounded-full bg-ftg-forest text-white flex items-center justify-center text-sm font-bold shadow">FTG</span>
-            <span className="hidden sm:inline">FTG TOURS</span>
-          </Link>
+  (0,A.jsxs)(`div`,{className:`relative group`,children:[
+  (0,A.jsxs)(`button`,{className:`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center rounded-md text-sm font-medium text-gray-700 hover:text-ftg-green`,children:[a(`nav.products`),
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive ? 'text-ftg-forest' : 'text-gray-600 hover:text-ftg-forest'
-                }`
-              }
-            >
-              首頁
-            </NavLink>
+  (0,A.jsx)(`svg`,{className:`ml-1 h-4 w-4 transition-transform group-hover:rotate-180`,fill:`none`,stroke:`currentColor`,viewBox:`0 0 24 24`,children:
+  (0,A.jsx)(`path`,{strokeLinecap:`round`,strokeLinejoin:`round`,strokeWidth:2,d:`M19 9l-7 7-7-7`})})]}),
 
-            {/* 企業方案 dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
-            >
-              <button
-                type="button"
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 transition-colors ${
-                  dropdownOpen ? 'text-ftg-forest' : 'text-gray-600 hover:text-ftg-forest'
-                }`}
-                aria-expanded={dropdownOpen}
-              >
-                企業方案
-                <svg className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
 
-              {dropdownOpen && (
-                <div className="absolute left-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-50">
-                  {corporateItems.map((item) => {
-                    const active = location.pathname === item.path;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`block px-4 py-3 rounded-lg transition-colors ${
-                          active ? 'bg-ftg-sand' : 'hover:bg-gray-50'
-                        }`}
-                      >
-                        <div className="text-sm font-semibold text-ftg-forest">{item.label}</div>
-                        <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+  (0,A.jsx)(`div`,{className:`absolute top-full left-0 mt-1 w-60 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100`,children:
+  (0,A.jsx)(`div`,{className:`py-2`,children:c.map(e=>
+  (0,A.jsx)(k,{to:e.path,className:`block px-4 py-2.5 min-h-[44px] inline-flex items-center text-sm ${i.pathname===e.path?`text-ftg-green bg-ftg-sand font-semibold`:`text-gray-700 hover:bg-ftg-sand hover:text-ftg-green`}`,children:e.label},e.path))})})]}),
 
-            <NavLink
-              to="/esg-impact-note"
-              className={({ isActive }) =>
-                `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive ? 'text-ftg-forest' : 'text-gray-600 hover:text-ftg-forest'
-                }`
-              }
-            >
-              ESG Impact Note
-            </NavLink>
-          </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            <a
-              href="https://journey.ftgtours.esggo.co"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2 rounded-full text-sm font-semibold bg-ftg-orange text-white hover:bg-orange-600 transition-all shadow"
-            >
-              探索方案
-            </a>
-          </div>
+  (0,A.jsxs)(`div`,{className:`flex items-center ml-2 border border-gray-200 rounded-full overflow-hidden text-xs font-semibold`,children:[
+  (0,A.jsx)(`button`,{onClick:()=>s(`zh`),
+className:`px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-colors ${o===`zh`?`bg-ftg-green text-white`:`text-gray-600 hover:bg-ftg-sand`}`,children:a(`lang.zh`)}),
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:text-ftg-forest hover:bg-gray-100 transition-colors"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-          >
-            <MenuIcon open={open} />
-          </button>
-        </div>
-      </div>
 
-      {/* Mobile Menu Drawer */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-96' : 'max-h-0'}`}>
-        <div className="bg-white border-t border-gray-100 px-4 py-3 space-y-1">
-          <NavLink
-            to="/"
-            end
-            onClick={() => setOpen(false)}
-            className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                isActive ? 'bg-ftg-sand text-ftg-forest' : 'text-gray-600 hover:bg-gray-50'
-              }`
-            }
-          >
-            首頁
-          </NavLink>
-          <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">企業方案</div>
-          {corporateItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `block px-4 py-2.5 rounded-lg text-sm transition-colors ${
-                  isActive ? 'bg-ftg-sand text-ftg-forest font-medium' : 'text-gray-600 hover:bg-gray-50'
-                }`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-          <NavLink
-            to="/esg-impact-note"
-            onClick={() => setOpen(false)}
-            className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                isActive ? 'bg-ftg-sand text-ftg-forest' : 'text-gray-600 hover:bg-gray-50'
-              }`
-            }
-          >
-            ESG Impact Note
-          </NavLink>
-          <div className="pt-3 pb-1">
-            <a
-              href="https://journey.ftgtours.esggo.co"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-center px-5 py-3 rounded-full text-sm font-semibold bg-ftg-orange text-white hover:bg-orange-600 transition-all shadow"
-            >
-              探索方案 →
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
+  (0,A.jsx)(`button`,{onClick:()=>s(`en`),
+className:`px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-colors ${o===`en`?`bg-ftg-green text-white`:`text-gray-600 hover:bg-ftg-sand`}`,children:a(`lang.en`)})]}),
+
+
+  (0,A.jsx)(k,{to:`/contact`,className:`bg-ftg-orange text-white px-5 py-2 min-h-[44px] min-w-[44px] inline-flex items-center rounded-full text-sm font-medium hover:bg-orange-600 transition-colors ml-2 shadow-sm`,children:a(`nav.contact`)})]}),
+
+
+  (0,A.jsx)(`button`,{onClick:()=>t(!e),
+className:`lg:hidden min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md text-gray-700 hover:text-ftg-green hover:bg-ftg-sand transition-colors`,"aria-label":`選單`,"aria-expanded":e,children:
+  (0,A.jsxs)(`div`,{className:`w-6 h-5 relative flex flex-col justify-between`,children:[
+  (0,A.jsx)(`span`,{className:`block h-0.5 w-6 bg-current transform transition-all duration-300 ${e?`rotate-45 translate-y-2`:``}`}),
+
+
+  (0,A.jsx)(`span`,{className:`block h-0.5 w-6 bg-current transition-all duration-300 ${e?`opacity-0 scale-0`:``}`}),
+
+
+  (0,A.jsx)(`span`,{className:`block h-0.5 w-6 bg-current transform transition-all duration-300 ${e?`-rotate-45 -translate-y-2`:``}`})]})})]}),
+
+
+  (0,A.jsx)(`div`,{className:`lg:hidden transition-all duration-300 ${e?`max-h-[80vh] opacity-100 overflow-y-auto overscroll-contain`:`max-h-0 opacity-0 overflow-hidden`}`,children:
+  (0,A.jsxs)(`div`,{className:`pb-4 pt-2 border-t border-gray-100`,children:[
+  (0,A.jsx)(k,{to:`/`,className:`block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-ftg-green hover:bg-ftg-sand`,onClick:()=>t(!1),
+children:a(`nav.home`)}),
+
+
+  (0,A.jsxs)(`div`,{children:[
+  (0,A.jsxs)(`button`,{onClick:()=>r(!n),
+className:`w-full flex items-center justify-between px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-ftg-green hover:bg-ftg-sand`,children:[a(`nav.products`),
+
+  (0,A.jsx)(`svg`,{className:`h-4 w-4 transition-transform duration-200 ${n?`rotate-180`:``}`,fill:`none`,stroke:`currentColor`,viewBox:`0 0 24 24`,children:
+  (0,A.jsx)(`path`,{strokeLinecap:`round`,strokeLinejoin:`round`,strokeWidth:2,d:`M19 9l-7 7-7-7`})})]}),
+
+
+  (0,A.jsx)(`div`,{className:`transition-all duration-300 ${n?`max-h-[60vh] opacity-100 overflow-y-auto`:`max-h-0 opacity-0 overflow-hidden`}`,children:
+  (0,A.jsx)(`div`,{className:`pl-4 py-1`,children:c.map(e=>
+  (0,A.jsx)(k,{to:e.path,className:`block px-4 py-2.5 min-h-[44px] inline-flex items-center rounded-lg text-sm ${i.pathname===e.path?`text-ftg-green bg-ftg-sand font-semibold`:`text-gray-600 hover:text-ftg-green hover:bg-ftg-sand`}`,onClick:()=>t(!1),
+children:e.label},e.path))})})]}),
+
+
+  (0,A.jsxs)(`div`,{className:`flex items-center gap-2 px-4 mt-3`,children:[
+  (0,A.jsxs)(`span`,{className:`text-sm text-gray-500`,children:[a(`lang.label`),
+`：`]}),
+
+
+  (0,A.jsxs)(`div`,{className:`flex border border-gray-200 rounded-full overflow-hidden`,children:[
+  (0,A.jsx)(`button`,{onClick:()=>s(`zh`),
+className:`px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium ${o===`zh`?`bg-ftg-green text-white`:`text-gray-600`}`,children:a(`lang.zh`)}),
+
+
+  (0,A.jsx)(`button`,{onClick:()=>s(`en`),
+className:`px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-sm font-medium ${o===`en`?`bg-ftg-green text-white`:`text-gray-600`}`,children:a(`lang.en`)})]})]}),
+
+
+  (0,A.jsx)(k,{to:`/contact`,className:`block mx-4 mt-4 bg-ftg-orange text-white px-6 py-3 rounded-full text-sm font-medium text-center shadow-sm`,onClick:()=>t(!1),
+children:a(`nav.contact`)})]})})]})})}
+
+export default ur;
