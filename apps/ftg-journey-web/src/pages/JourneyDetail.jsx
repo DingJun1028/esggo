@@ -30,38 +30,11 @@ const PACKING_LIST = [
   { id: 'cash', icon: '💵', label: '現金' },
 ];
 
-const ESG_TASKS = [
-  { id: 'cleanup', title: '淨灘清拾', icon: '🗑️', unit: '件', color: 'green', fields: [
-    { name: 'count', label: '垃圾數量', type: 'number', placeholder: '撿了幾件？' },
-    { name: 'weight', label: '預估重量(kg)', type: 'number', placeholder: '有多重？' },
-    { name: 'types', label: '垃圾類型', type: 'text', placeholder: '塑膠、玻璃...' },
-  ]},
-  { id: 'carbon', title: '碳足跡記錄', icon: '🌱', unit: 'kg', color: 'teal', fields: [
-    { name: 'distance', label: '距離(km)', type: 'number', placeholder: '移動距離' },
-    { name: 'mode', label: '交通方式', type: 'select', options: ['步行', '腳踏車', '公車/捷運', '火車', '汽車', '飛機'] },
-    { name: 'passengers', label: '同行人數', type: 'number', placeholder: '共乘人數' },
-  ]},
-  { id: 'biodiversity', title: '生態觀察', icon: '🦋', unit: '種', color: 'purple', fields: [
-    { name: 'species', label: '物種名稱', type: 'text', placeholder: '觀察到什麼？' },
-    { name: 'count', label: '數量', type: 'number', placeholder: '幾隻/棵？' },
-    { name: 'habitat', label: '棲息環境', type: 'select', options: ['森林', '水域', '草地', '濕地', '農田'] },
-  ]},
-  { id: 'local', title: '地方支持', icon: '🏪', unit: '元', color: 'orange', fields: [
-    { name: 'business', label: '商家名稱', type: 'text', placeholder: '在哪裡消費？' },
-    { name: 'amount', label: '消費金額', type: 'number', placeholder: '多少錢？' },
-    { name: 'category', label: '消費類型', type: 'select', options: ['餐飲', '住宿', '伴手禮', '體驗活動', '其他'] },
-  ]},
-  { id: 'water', title: '水資源', icon: '💧', unit: 'L', color: 'blue', fields: [
-    { name: 'amount', label: '用水量(L)', type: 'number', placeholder: '用了多少？' },
-    { name: 'purpose', label: '用途', type: 'select', options: ['飲用', '清洗', '淋浴', '烹飪', '其他'] },
-    { name: 'saved', label: '節約量(L)', type: 'number', placeholder: '節省多少？' },
-  ]},
-  { id: 'waste', title: '廢棄物減量', icon: '♻️', unit: '件', color: 'emerald', fields: [
-    { name: 'items', label: '減少用品', type: 'text', placeholder: '自備了什麼？' },
-    { name: 'count', label: '數量', type: 'number', placeholder: '幾件？' },
-    { name: 'reusable', label: '替代方案', type: 'select', options: ['自備餐具', '自備水壺', '自備購物袋', '其他'] },
-  ]},
-];
+// JG7 修正（2026-10-01）：本檔原有第二份 ESG_TASKS 副本，欄位與後端
+// apps/ftg-journey-server/esg-tasks.js 漂移（後端少了 weight/types/species/habitat 等），
+// 導致規則雙真實：後端改動不會同步到 UI。
+// 現唯一真實是後端 esg-tasks.js，前端一律讀 GET /api/journeys/:id/esg-tasks 回傳的
+// data.tasks（已由 refreshEsgTasks 寫入 esgTasks state）。勿在此重新宣告任務目錄。
 
 const ESG_KNOWLEDGE = {
   before: [
@@ -553,7 +526,7 @@ export function JourneyDetail() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {ESG_TASKS.map(task => (
+            {esgTasks.map(task => (
               <motion.div key={task.id} whileHover={{ scale: 1.02 }} className="card-hoverable" onClick={() => openTask(task)}>
                 <div className="flex items-center gap-3">
                   <div className="text-3xl">{task.icon}</div>
@@ -576,8 +549,8 @@ export function JourneyDetail() {
               {taskLog.map(log => (
                 <div key={log.id} className="card">
                   <div className="flex items-center gap-2">
-                    <span>{ESG_TASKS.find(t => t.id === log.task_id)?.icon}</span>
-                    <span className="font-semibold">{ESG_TASKS.find(t => t.id === log.task_id)?.title}</span>
+                    <span>{esgTasks.find(t => t.id === log.task_id)?.icon}</span>
+                    <span className="font-semibold">{esgTasks.find(t => t.id === log.task_id)?.title}</span>
                     <span className="text-xs text-gray-400 ml-auto">{new Date(log.created_at).toLocaleString('zh-TW')}</span>
                   </div>
                 </div>

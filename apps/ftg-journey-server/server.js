@@ -250,33 +250,42 @@ function simpleSign(payload) {
   return header + '.' + body + '.' + sig;
 }
 
-// 正常的 Token 驗證中介層：過期即視為無效
-function verifyToken(req, res, next) {
-  const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'no token' });
-  try {
-    const parts = auth.slice(7).split('.');
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-    if (payload.exp && payload.exp < Date.now() / 1000) return res.status(401).json({ error: 'expired' });
-    req.user = { email: payload.email, name: payload.name, picture: payload.picture };
-    next();
-  } catch {
-    return res.status(401).json({ error: 'invalid token' });
-  }
-}
-
-// 解析並驗證 JWT 簽章（不檢查是否過期），供刷新端點使用
-function decodeTokenUnsafe(token) {
+// 驗證 HMAC 簽章（常數時間比較）。
+// 2026-10-01 實測缺陷（E2E esg-tasks.e2e.mjs）：verifyToken 過去只 base64 解 payload
+// 就直接放行，任何人只要手組 header.payload.任意簽章 就能冒充任意 email，
+// 連 /api/badges 都拿得到（回 200）。簽章驗證必須放在中介層一次做齊，
+// 不可依賴各端點另有 requireAccess —— 後者擋的是「旅程歸屬」，不是「你是誰」。
+function verifySignature(token) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    // 重新計算簽章並比對，防止偽造
-    const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(parts[0] + '.' + parts[1]).digest('base64url');
-    if (parts[2] !== expectedSig) return null;
+    const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(parts[0] + '.' + parts[1]).digest();
+    const actualSig = Buffer.from(parts[2], 'base64url');
+    // 長度不同時 timingSafeEqual 會丟錯，先比長度再用常數時間比較內容。
+    if (expectedSig.length !== actualSig.length) return null;
+    if (!crypto.timingSafeEqual(expectedSig, actualSig)) return null;
     return JSON.parse(Buffer.from(parts[1], 'base64url').toString());
   } catch {
     return null;
   }
+}
+
+// Token 驗證中介層：簽章 + 過期，兩者都要過
+function verifyToken(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'no token' });
+  const payload = verifySignature(auth.slice(7));
+  if (!payload) return res.status(401).json({ error: 'invalid token' });
+  // 過期即視為無效
+  if (payload.exp && payload.exp < Date.now() / 1000) return res.status(401).json({ error: 'expired' });
+  if (!payload.email) return res.status(401).json({ error: 'no email' });
+  req.user = { email: payload.email, name: payload.name, picture: payload.picture, role: payload.role };
+  next();
+}
+
+// 解析驗證簽章但**不**檢查過期，供 refresh 端點使用（用戶尚未過期但想換新 token）
+function decodeTokenUnsafe(token) {
+  return verifySignature(token);
 }
 
 const app = express();

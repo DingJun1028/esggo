@@ -390,4 +390,71 @@ describe('跨檔契約 — metric 必須被前端 Impact Note 宣告', () => {
     expect(schema[1]).toMatch(/\bemail\b/);
     expect(code).toMatch(/FROM checkins WHERE email=\?/);
   });
+
+  // ─── 缺陷 G（JG7，2026-10-01 實測）：前端不得保留第二份任務目錄 ────
+  // 修正前 JourneyDetail.jsx:33 另宣告一份 ESG_TASKS，欄位比後端多
+  // （weight/types/species/habitat/business/category/purpose/reusable/items），
+  // 後端改動不會同步到 UI → 規則雙真實，屬無法被推翻的空宣稱。
+  // 現前端改讀 GET /api/journeys/:id/esg-tasks 回傳的 data.tasks。
+  // 注意：掃「實際程式碼」而非註解（修正說明本身會提到舊符號名）。
+  test('缺陷G: JourneyDetail.jsx 不得再宣告 ESG_TASKS 常數', () => {
+    expect(
+      /\bESG_TASKS\b/.test(journeyDetailCode()),
+      'JourneyDetail.jsx 仍宣告或使用 ESG_TASKS，任務目錄會與 esg-tasks.js 漂移'
+    ).toBe(false);
+  });
+
+  test('缺陷G: JourneyDetail.jsx 確實消費後端回傳的 tasks（esgTasks state）', () => {
+    const src = journeyDetailCode();
+    expect(src, '應由 GET /esg-tasks 的回應寫入 esgTasks state').toMatch(/setEsgTasks\(data\.tasks \|\| \[\]\)/);
+    expect(src, '應由 GET /esg-tasks 的回應更新 esgTasks state').toMatch(/setEsgTasks\(updated\.tasks \|\| \[\]\)/);
+    expect(src, '任務卡應渲染後端目錄').toMatch(/esgTasks\.map\(/);
+  });
+
+  test('缺陷G: 每個任務都有 unit（前端任務卡直接渲染 task.unit）', () => {
+    for (const task of ESG_TASKS) {
+      expect(task.unit, `任務 ${task.id} 缺 unit，JourneyDetail 會顯示 undefined`).toBeTruthy();
+    }
+  });
+
+  test('缺陷G: unit 與該任務累積值對應的 impact 單位一致（不得單位漂移）', () => {
+    // 對應表 = 「任務卡顯示的累積數字」與「impact 裡同一個數字」應有的單位。
+    // 不用 impactRowsForTask 反推：回傳只含 value>0 的列，樣本若讓碳排為 0
+    // （交通方式取「步行」＝零排放）就會只剩 distance(km)，把正確的 kg 判成漂移。
+    // Trustworthy：這三個單位都會出現在對外 GRI/SDG 報告中，錯一個就是對外揭露失真。
+    const EXPECTED = {
+      cleanup: '件',       // trash_collected
+      carbon: 'kg',        // carbon_saved（碳排 kg，不是輸入的距離 km）
+      biodiversity: '種',  // species_observed
+      local: '元',         // local_spending
+      water: 'L',          // water_saved
+      waste: '件',         // waste_reduced
+    };
+    for (const task of ESG_TASKS) {
+      expect(
+        task.unit,
+        `任務 ${task.id} 的 unit=${task.unit}，應為 ${EXPECTED[task.id]}`
+      ).toBe(EXPECTED[task.id]);
+    }
+  });
+
+  test('缺陷G: carbon 任務的累積值確實是 kg 碳排（輸入 km 不得直接當 kg）', () => {
+    // 直接用有排放的樣本驗一次，確保 EXPECTED 表不是憑空寫的。
+    const rows = impactRowsForTask('carbon', { distance: 100, mode: '汽車', passengers: 1 });
+    expect(rows.map((r) => r.unit)).toContain('kg');
+    expect(getTask('carbon').unit).toBe('kg');
+    // 步行（零排放）時不應產生 kg 列，但仍保留 km
+    const walk = impactRowsForTask('carbon', { distance: 10, mode: '步行', passengers: 1 });
+    expect(walk.map((r) => r.unit)).toEqual(['km']);
+  });
 });
+
+function journeyDetailCode() {
+  return fs
+    .readFileSync(
+      path.join(__dirname, '..', 'ftg-journey-web', 'src', 'pages', 'JourneyDetail.jsx'),
+      'utf8'
+    )
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^[ \t]*\/\/.*$/gm, '');
+}

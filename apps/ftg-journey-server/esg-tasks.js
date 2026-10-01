@@ -39,19 +39,28 @@ export const DEFAULT_CARBON_MODE = '汽車';
 // fields[].type 僅支援 'number' | 'text' | 'select'；
 // type === 'select' 時必須提供非空 options（前端 field.options.map 直接迭代）。
 // 欄位 name 必須與 impactRowsForTask 讀的 key 一致，否則使用者填了卻不會進 impact。
+// unit 與後端 IMPACT_SYNC 對外輸出的單位一致（Trustworthy：不得單位漂移）。
+// fields 為完整表單定義：包含「不進 impact 但使用者仍會填」的描述性欄位
+// （重量、類型、物種名稱、棲地、商家名稱、用途、替代方案）。
+// 這些欄位會隨 data 整包存入 esg_task_logs，只是沒有對應的 impact metric。
+// 前端唯一真實是本檔（JG7 修正：移除 JourneyDetail.jsx 的第二份副本）。
 export const ESG_TASKS = [
   {
     id: 'cleanup',
     title: '淨灘清拾',
     icon: '🗑️',
+    unit: '件',
     fields: [
       { name: 'count', label: '撿拾垃圾件數', type: 'number', placeholder: '例如 12' },
+      { name: 'weight', label: '預估重量（kg）', type: 'number', placeholder: '例如 2.5' },
+      { name: 'types', label: '垃圾類型', type: 'text', placeholder: '塑膠、玻璃...' },
     ],
   },
   {
     id: 'carbon',
     title: '碳足跡記錄',
     icon: '🌱',
+    unit: 'kg',
     fields: [
       { name: 'distance', label: '移動距離（km）', type: 'number', placeholder: '例如 10' },
       {
@@ -67,32 +76,53 @@ export const ESG_TASKS = [
     id: 'biodiversity',
     title: '生態觀察',
     icon: '🦋',
+    unit: '種',
     fields: [
       { name: 'count', label: '觀察到幾種生物', type: 'number', placeholder: '例如 3' },
+      { name: 'species', label: '物種名稱', type: 'text', placeholder: '觀察到什麼？' },
+      { name: 'habitat', label: '棲息環境', type: 'select', options: ['森林', '水域', '草地', '濕地', '農田'] },
     ],
   },
   {
     id: 'local',
     title: '地方支持',
     icon: '🏪',
+    unit: '元',
     fields: [
       { name: 'amount', label: '在地消費金額（元）', type: 'number', placeholder: '例如 450' },
+      { name: 'business', label: '商家名稱', type: 'text', placeholder: '在哪裡消費？' },
+      {
+        name: 'category',
+        label: '消費類型',
+        type: 'select',
+        options: ['餐飲', '住宿', '伴手禮', '體驗活動', '其他'],
+      },
     ],
   },
   {
     id: 'water',
     title: '水資源',
     icon: '💧',
+    unit: 'L',
     fields: [
       { name: 'saved', label: '節約用水（L）', type: 'number', placeholder: '例如 120' },
+      { name: 'purpose', label: '用途', type: 'select', options: ['飲用', '清洗', '淋浴', '烹飪', '其他'] },
     ],
   },
   {
     id: 'waste',
     title: '廢棄物減量',
     icon: '♻️',
+    unit: '件',
     fields: [
       { name: 'count', label: '減廢件數', type: 'number', placeholder: '例如 5' },
+      { name: 'items', label: '減少用品', type: 'text', placeholder: '自備了什麼？' },
+      {
+        name: 'reusable',
+        label: '替代方案',
+        type: 'select',
+        options: ['自備餐具', '自備水壺', '自備購物袋', '其他'],
+      },
     ],
   },
 ];
