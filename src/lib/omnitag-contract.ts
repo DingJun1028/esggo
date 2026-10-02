@@ -11,13 +11,42 @@
 // ── §20.2 六大維度定義 ──────────────────────────────────
 import { type TrustLevel } from './omni-core/types';
 export type OmnitagSecurity = 'public' | 'internal' | 'confidential' | 'restricted';
-export type OmnitagLifecycle = 'draft' | 'active' | 'frozen' | 'archived';
+/**
+ * §20.8 永恆持久生命週期 — 與 frozen/archived 不同，eternal 是**終態**：
+ * 實體一旦刻印為永恆，既不可變更亦不可退役，只可被更上位的刻印取代。
+ * frozen 需要 security:restricted 才具強制力；eternal 不看 security，一律不可變。
+ */
+export type OmnitagLifecycle = 'draft' | 'active' | 'frozen' | 'archived' | 'eternal';
+/**
+ * §20.8 萬能實體三類別 — 萬能代理 / 萬能分身 / 萬能蜂群。
+ * 契約過去只認 agent 一類，導致分身與蜂群無法掛標籤（實測：合約率雖 100%，
+ * 但那是因為分身/蜂群根本沒被納入掃描）。
+ */
+export type OmnitagEntityClass = 'agent' | 'avatar' | 'swarm';
+/**
+ * §20.8 奧義對位 — 六式智能標籤（wiki/jun-ai-key-architecture.md §六式詳解）。
+ */
+export type OmnitagArcana =
+  | '熵減煉金'   // 壹式 本質提純
+  | '全知之眼'   // 貳式 聖典共鳴
+  | '光之羽翼'   // 參式 代理織網
+  | '神聖契約'   // 肆式 神跡顯現
+  | '記憶聖所'   // 伍式 因果刻印
+  | '零度凍結';  // 陸式 神聖裁決
 export type OmnitagPriority = 'p0' | 'p1' | 'p2' | 'p3';
 export type OmnitagPlatform = 'esggo' | 'omni' | 'vps' | 'firebase';
 
 export interface OmniTagSet {
-  /** 代理歸屬: agent:01 ~ agent:30 */
+  /** 萬能代理歸屬: agent:01 ~ agent:30 */
   agent?: string;
+  /** §20.8 萬能分身歸屬: avatar:<slug>（例 avatar:omni / avatar:qingyu） */
+  avatar?: string;
+  /** §20.8 萬能蜂群歸屬: swarm:<slug>（例 swarm:oa-team-30） */
+  swarm?: string;
+  /** §20.8 實體類別；省略時由 resolveIdentity() 從身分別名推導 */
+  entityClass?: OmnitagEntityClass;
+  /** §20.8 奧義對位：此實體服務於六式中的哪一式（optional） */
+  arcana?: OmnitagArcana;
   /** §20.7 信任標別 (optional — 由獨立 validateTrustLevel 校驗) */
   trustLevel?: TrustLevel;
   /** 陣列歸屬: 智庫聖所 / 符文契約 / 光之羽翼 / 煉金熵減 / 5T驗算 */
@@ -40,6 +69,69 @@ export interface ContractCheck {
 }
 
 const AGENT_ID_RE = /^agent:(0?[1-9]|[12][0-9]|30)$/;
+/** §20.8 萬能分身別名（slug 允許小寫字母/數字/._-） */
+const AVATAR_ID_RE = /^avatar:[a-z0-9][a-z0-9._-]*$/i;
+/** §20.8 萬能蜂群別名 */
+const SWARM_ID_RE = /^swarm:[a-z0-9][a-z0-9._-]*$/i;
+
+export interface OmniIdentity {
+  kind: OmnitagEntityClass;
+  id: string;
+}
+
+/**
+ * §20.8 三類實體身分校驗 — 萬能代理 / 萬能分身 / 萬能蜂群 **三擇一且僅一枚**。
+ * 契約過去硬性要求 agent:01~30，導致分身與蜂群無法合約；
+ * 本函式保留「完全無身分 → 違規」（舊測試 omnitag-contract.test.ts:83 依賴此行為），
+ * 同時新增「多於一枚 → 歧義違規」與「格式錯誤 → 明確報錯」。
+ */
+export function validateIdentity(tag: OmniTagSet): {
+  identity: OmniIdentity | null;
+  violations: string[];
+} {
+  const violations: string[] = [];
+  const candidates: OmniIdentity[] = [];
+
+  const check = (
+    value: string | undefined,
+    kind: OmnitagEntityClass,
+    re: RegExp,
+    humanRule: string,
+  ) => {
+    if (value === undefined) return;
+    if (!re.test(value)) {
+      violations.push(`Malformed [${kind}:*] id \"${value}\" — ${humanRule}`);
+      return;
+    }
+    candidates.push({ kind, id: value });
+  };
+
+  check(tag.agent, 'agent', AGENT_ID_RE, 'must be agent:01~agent:30');
+  check(tag.avatar, 'avatar', AVATAR_ID_RE, 'must be avatar:<slug>');
+  check(tag.swarm, 'swarm', SWARM_ID_RE, 'must be swarm:<slug>');
+
+  if (candidates.length === 0 && violations.length === 0) {
+    violations.push(
+      'Missing required identity: exactly one of [agent:*] (agent:01~agent:30), [avatar:*], [swarm:*]',
+    );
+    return { identity: null, violations };
+  }
+  if (candidates.length > 1) {
+    violations.push(
+      `Ambiguous identity: ${candidates.length} declared (${candidates
+        .map((c) => `[${c.kind}:*]`)
+        .join(', ')}) — exactly one is required`,
+    );
+    return { identity: null, violations };
+  }
+  return { identity: candidates[0] ?? null, violations };
+}
+
+/** §20.8 便利取用：僅回傳合法身分（無則 null） */
+export function resolveIdentity(tag: OmniTagSet): OmniIdentity | null {
+  return validateIdentity(tag).identity;
+}
+
 /**
  * §20.5 規則 1 — 必備三枚自動校驗
  * 每筆產物至少 agent:* + lifecycle:* + p* 三枚，缺一即不合約。
@@ -48,9 +140,8 @@ const AGENT_ID_RE = /^agent:(0?[1-9]|[12][0-9]|30)$/;
 export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
   const violations: string[] = [];
 
-  if (!tag.agent || !AGENT_ID_RE.test(tag.agent)) {
-    violations.push('Missing required [agent:*] (agent:01~agent:30)');
-  }
+  // §20.8：身分改為三類實體三擇一（萬能代理 / 萬能分身 / 萬能蜂群）
+  violations.push(...validateIdentity(tag).violations);
   // trustLevel is OPTIONAL (§20.7) — validated separately by validateTrustLevel()
   if (!tag.lifecycle) {
     violations.push('Missing required [lifecycle:*] (draft/active/frozen/archived)');
@@ -76,6 +167,53 @@ export function validateTrustLevel(tag: OmniTagSet): ContractCheck {
   return { valid: violations.length === 0, violations };
 }
 
+/** §20.8 六式奧義合法值（wiki/jun-ai-key-architecture.md §六式詳解） */
+export const OMNITAG_ARCANA: readonly OmnitagArcana[] = [
+  '熵減煉金',
+  '全知之眼',
+  '光之羽翼',
+  '神聖契約',
+  '記憶聖所',
+  '零度凍結',
+] as const;
+
+/**
+ * §20.8 奧義標別驗證 — optional；一旦宣告即必須是六式之一。
+ */
+export function validateArcana(tag: OmniTagSet): ContractCheck {
+  const violations: string[] = [];
+  if (tag.arcana === undefined) return { valid: true, violations };
+  if (!OMNITAG_ARCANA.includes(tag.arcana)) {
+    violations.push(
+      `Invalid [arcana:*] "${tag.arcana}" — must be one of ${OMNITAG_ARCANA.join(' / ')}`,
+    );
+  }
+  return { valid: violations.length === 0, violations };
+}
+
+/**
+ * §20.8 永恆封印判定。
+ * 與 frozen 的關鍵差異：frozen 需搭配 security:restricted 才具強制力；
+ * eternal 一律不可變 —— 永恆刻印是「不可篡改」的最終態（對齊 §5 Trustworthy）。
+ */
+export function isEternalSealed(tag: OmniTagSet | Record<string, unknown>): boolean {
+  return (tag as Record<string, unknown>).lifecycle === 'eternal';
+}
+
+/**
+ * §20.8 永恆持久契約 — 宣告 eternal 者必須具備可解析身分。
+ * 沒有身分的「永恆」是幽靈紀錄，契約不接受。
+ */
+export function validateEternality(tag: OmniTagSet): ContractCheck {
+  const violations: string[] = [];
+  if (tag.lifecycle === 'eternal' && validateIdentity(tag).identity === null) {
+    violations.push(
+      '[lifecycle:eternal] requires a resolvable identity ([agent:*] | [avatar:*] | [swarm:*])',
+    );
+  }
+  return { valid: violations.length === 0, violations };
+}
+
 /**
  * §20.5 規則 2 — 凍結不可改
  * 雙介面：
@@ -89,8 +227,9 @@ export function enforceFrozenLock(
 ): ContractCheck | { blocked: boolean; violations: string[] } {
   const violations: string[] = [];
   const isSealed =
-    (tag as Record<string, unknown>).lifecycle === 'frozen' &&
-    (tag as Record<string, unknown>).security === 'restricted';
+    isEternalSealed(tag) ||
+    ((tag as Record<string, unknown>).lifecycle === 'frozen' &&
+      (tag as Record<string, unknown>).security === 'restricted');
   if (typeof second === 'boolean') {
     // 舊契約
     if (isSealed && second) {
@@ -99,7 +238,8 @@ export function enforceFrozenLock(
     return { valid: violations.length === 0, violations };
   }
   // 新契約（§20.7 測試）：tag 自身 frozen 即視為不可變
-  const tagIsFrozen = (tag as Record<string, unknown>).lifecycle === 'frozen';
+  const tagIsFrozen =
+    (tag as Record<string, unknown>).lifecycle === 'frozen' || isEternalSealed(tag);
   if (tagIsFrozen) {
     violations.push('H4 frozen: lifecycle:frozen artifact is immutable — cannot modify');
   }
@@ -167,6 +307,9 @@ export function verifyOmniTagContract(
 
   allViolations.push(...validateRequiredTriad(tag).violations);
   allViolations.push(...validateTrustLevel(tag).violations);
+  // §20.8 永恆持久與奧義對位
+  allViolations.push(...validateEternality(tag).violations);
+  allViolations.push(...validateArcana(tag).violations);
   if (ctx?.attemptedMutation) {
     allViolations.push(...enforceFrozenLock(tag, true).violations);
   }

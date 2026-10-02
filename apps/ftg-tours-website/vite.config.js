@@ -5,7 +5,10 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    // Temporary: map runtime errors back to recovered source while the
+    // module-scope alias defects are being closed. Revert to false once the
+    // bundle renders clean (a 380 kB sourcemap has no business in prod).
+    sourcemap: true,
   },
   server: {
     port: 5174,

@@ -5,8 +5,16 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
+import { default as yr } from '../components/Seo'
 import * as x from 'react'
+
+/* 5T-Traceable: `Ai` in the deployed bundle is the reCAPTCHA v3 site key.
+ * Deployed it ships as a `REPLACE…` placeholder, and the effect below
+ * short-circuits on `Ai.startsWith('REPLACE')`, so the widget is
+ * deliberately inert in production. Restored as a placeholder rather
+ * than a key — supplying a real one here would change behaviour and
+ * require a credential. */
+const Ai = 'REPLACE_WITH_RECAPTCHA_SITE_KEY';
 
 function ji(){let{t:e}=lr();yr({title:e(`contact.title`),
 description:e(`contact.metaDesc`),

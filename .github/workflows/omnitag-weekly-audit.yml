@@ -13,6 +13,11 @@ on:
   schedule:
     - cron: "0 3 * * 1"  # 每週一 03:00 UTC
   workflow_dispatch:       # 允許手動觸發
+  pull_request:            # §20.8 P3：永恆刻印完整性必須在「合併前」就擋
+    paths:
+      - '.oa/omnitag-registry.jsonl'
+      - 'cli/oa-cli/src/omnitag.ts'
+      - 'scripts/verify-eternal-seals.ts'
 
 permissions:
   contents: read
@@ -79,3 +84,33 @@ jobs:
                 title, body, labels: ['omnitag-audit-alert', 'ci-quality'],
               });
             }
+
+  # ─── 永恆刻印完整性 gate（§20.8 P3，2026-10-01）────────────────
+  # 與上方抽驗的差別：上方量「合約率」（新寫入的 tag 有沒有標全），
+  # 本 job 量「已落盤的刻印有沒有被竄改」。兩者互補，都不可省。
+  eternal-seal-integrity:
+    name: Eternal Seal Integrity Gate (§20.8)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # 唯讀驗證：重算 Hash Lock，不寫入。
+      # 刻意不跑 seal-eternal-identity.ts —— 那支會嘗試寫入，不可變契約應擋下，
+      # 在 CI 裡觸發只會產生雜訊，不會提供額外保證。
+      - name: Verify eternal seal Hash Locks
+        run: npx tsx scripts/verify-eternal-seals.ts
+      # 預設 warn-only：歷史紀錄的 sourceOrigin=unknown 尚未補正（P1），
+      # 若在此設成阻斷條件，這個 job 會長期紅 —— 長期紅的等於沒有。
+      # 待 P1 閉環後改為 OMNITAG_BLOCK_UNKNOWN_ORIGIN=1 即可升級為硬 gate。
+      - name: Summary
+        if: always()
+        run: echo "完整性 gate 完成；竄改=阻斷，sourceOrigin unknown=warn（P1 未結）"

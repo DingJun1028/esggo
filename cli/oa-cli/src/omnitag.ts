@@ -13,12 +13,32 @@ import { dirname } from 'path';
 
 // ── §20.2 六大維度 ──────────────────────────────────────────
 export type OmnitagSecurity = 'public' | 'internal' | 'confidential' | 'restricted';
-export type OmnitagLifecycle = 'draft' | 'active' | 'frozen' | 'archived';
+// §20.8 新增 eternal — 與 frozen/archived 不同，eternal 是終態且不看 security，一律不可變。
+export type OmnitagLifecycle = 'draft' | 'active' | 'frozen' | 'archived' | 'eternal';
+// §20.8 萬能實體三類別：萬能代理 / 萬能分身 / 萬能蜂群
+export type OmnitagEntityClass = 'agent' | 'avatar' | 'swarm';
+// §20.8 奧義對位 — 六式智能標籤（與 src/lib/omnitag-contract.ts 同構）
+export type OmnitagArcana =
+  | '熵減煉金'
+  | '全知之眼'
+  | '光之羽翼'
+  | '神聖契約'
+  | '記憶聖所'
+  | '零度凍結';
 export type OmnitagPriority = 'p0' | 'p1' | 'p2' | 'p3';
 export type OmnitagPlatform = 'esggo' | 'omni' | 'vps' | 'firebase';
 
 export interface OmniTagSet {
+  /** 萬能代理: agent:01~agent:30 */
   agent?: string;
+  /** §20.8 萬能分身: avatar:<slug> */
+  avatar?: string;
+  /** §20.8 萬能蜂群: swarm:<slug> */
+  swarm?: string;
+  /** §20.8 實體類別；省略時由 resolveIdentity() 推導 */
+  entityClass?: OmnitagEntityClass;
+  /** §20.8 奧義對位（optional） */
+  arcana?: OmnitagArcana;
   squad?: string;
   security?: OmnitagSecurity;
   lifecycle?: OmnitagLifecycle;
@@ -34,12 +54,101 @@ export interface ContractCheck {
 
 // ── §20.5 規則 1：必備三枚 ──────────────────────────────────
 const AGENT_ID_RE = /^agent:(0?[1-9]|[12][0-9]|30)$/;
+// ── §20.8 三類實體身分別名 ──────────────────────────────────
+const AVATAR_ID_RE = /^avatar:[a-z0-9][a-z0-9._-]*$/i;
+const SWARM_ID_RE = /^swarm:[a-z0-9][a-z0-9._-]*$/i;
+
+export const OMNITAG_ARCANA: readonly OmnitagArcana[] = [
+  '熵減煉金',
+  '全知之眼',
+  '光之羽翼',
+  '神聖契約',
+  '記憶聖所',
+  '零度凍結',
+] as const;
+
+export interface OmniIdentity {
+  kind: OmnitagEntityClass;
+  id: string;
+}
+
+/** §20.8 萬能代理/分身/蜂群 三擇一且僅一枚；格式錯誤與歧義皆回報具體原因 */
+export function validateIdentity(tag: OmniTagSet): {
+  identity: OmniIdentity | null;
+  violations: string[];
+} {
+  const violations: string[] = [];
+  const candidates: OmniIdentity[] = [];
+  const check = (
+    value: string | undefined,
+    kind: OmnitagEntityClass,
+    re: RegExp,
+    humanRule: string,
+  ) => {
+    if (value === undefined) return;
+    if (!re.test(value)) {
+      violations.push(`Malformed [${kind}:*] id "${value}" — ${humanRule}`);
+      return;
+    }
+    candidates.push({ kind, id: value });
+  };
+  check(tag.agent, 'agent', AGENT_ID_RE, 'must be agent:01~agent:30');
+  check(tag.avatar, 'avatar', AVATAR_ID_RE, 'must be avatar:<slug>');
+  check(tag.swarm, 'swarm', SWARM_ID_RE, 'must be swarm:<slug>');
+
+  if (candidates.length === 0 && violations.length === 0) {
+    violations.push(
+      'Missing required identity: exactly one of [agent:*] (agent:01~agent:30), [avatar:*], [swarm:*]',
+    );
+    return { identity: null, violations };
+  }
+  if (candidates.length > 1) {
+    violations.push(
+      `Ambiguous identity: ${candidates.length} declared (${candidates
+        .map((c) => `[${c.kind}:*]`)
+        .join(', ')}) — exactly one is required`,
+    );
+    return { identity: null, violations };
+  }
+  return { identity: candidates[0] ?? null, violations };
+}
+
+export function resolveIdentity(tag: OmniTagSet): OmniIdentity | null {
+  return validateIdentity(tag).identity;
+}
+
+/** §20.8 永恆封印判定 — eternal 一律不可變，不看 security */
+export function isEternalSealed(tag: OmniTagSet | Record<string, unknown>): boolean {
+  return (tag as Record<string, unknown>).lifecycle === 'eternal';
+}
+
+/** §20.8 永恆必須有可解析身分，拒絕幽靈紀錄 */
+export function validateEternality(tag: OmniTagSet): ContractCheck {
+  const violations: string[] = [];
+  if (tag.lifecycle === 'eternal' && validateIdentity(tag).identity === null) {
+    violations.push(
+      '[lifecycle:eternal] requires a resolvable identity ([agent:*] | [avatar:*] | [swarm:*])',
+    );
+  }
+  return { valid: violations.length === 0, violations };
+}
+
+/** §20.8 奧義標別驗證 — optional；宣告即須為六式之一 */
+export function validateArcana(tag: OmniTagSet): ContractCheck {
+  const violations: string[] = [];
+  if (tag.arcana === undefined) return { valid: true, violations };
+  if (!OMNITAG_ARCANA.includes(tag.arcana)) {
+    violations.push(
+      `Invalid [arcana:*] "${tag.arcana}" — must be one of ${OMNITAG_ARCANA.join(' / ')}`,
+    );
+  }
+  return { valid: violations.length === 0, violations };
+}
 
 export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
   const violations: string[] = [];
-  if (!tag.agent || !AGENT_ID_RE.test(tag.agent)) {
-    violations.push('Missing required [agent:*] (agent:01~agent:30)');
-  }
+  // §20.8：身分改為三類實體三擇一（萬能代理 / 萬能分身 / 萬能蜂群）
+  violations.push(...validateIdentity(tag).violations);
   if (!tag.lifecycle) {
     violations.push('Missing required [lifecycle:*] (draft/active/frozen/archived)');
   }
@@ -52,7 +161,8 @@ export function validateRequiredTriad(tag: OmniTagSet): ContractCheck {
 // ── §20.5 規則 2：凍結不可改 ───────────────────────────────
 export function enforceFrozenLock(tag: OmniTagSet, attemptedMutation: boolean): ContractCheck {
   const violations: string[] = [];
-  const isSealed = tag.lifecycle === 'frozen' && tag.security === 'restricted';
+  const isSealed =
+    isEternalSealed(tag) || (tag.lifecycle === 'frozen' && tag.security === 'restricted');
   if (isSealed && attemptedMutation) {
     violations.push('H4 frozen: lifecycle:frozen + restricted artifact is immutable');
   }
@@ -138,6 +248,9 @@ export function emitArtifact(params: {
   const check = (() => {
     const all: string[] = [];
     all.push(...validateRequiredTriad(params.tag).violations);
+    // §20.8 永恆持久 + 奧義對位
+    all.push(...validateEternality(params.tag).violations);
+    all.push(...validateArcana(params.tag).violations);
     if (params.attemptedMutation) {
       all.push(...enforceFrozenLock(params.tag, true).violations);
     }
@@ -150,8 +263,9 @@ export function emitArtifact(params: {
 
   const route = routeOmniTag(params.tag);
   const sealedAt = Date.now();
+  const identity = resolveIdentity(params.tag);
   const hashLock = generateHashLock(
-    params.tag.agent ?? 'unknown',
+    `${identity?.kind ?? 'unknown'}:${identity?.id ?? 'unknown'}`,
     params.content ?? JSON.stringify(params.tag),
     sealedAt,
   );
@@ -166,6 +280,8 @@ export function emitArtifact(params: {
 
 export interface PersistedArtifact {
   entityId: string;
+  /** §20.8 實體類別（萬能代理 / 萬能分身 / 萬能蜂群），落盤時固化 */
+  entityClass: OmnitagEntityClass;
   tag: OmniTagSet;
   content?: string;
   hashLock: string;
@@ -217,7 +333,7 @@ export class OmniTagRegistry {
   /**
    * 寫入即凍結：通過 emitArtifact 後將產物持久化。
    * @throws OmniTagContractViolation 契約不合規
-   * @throws Error frozen+restricted 實體已存在（不可改）
+   * @throws Error 實體已刻印（eternal 或 frozen+restricted）不可改
    */
   persistArtifact(params: {
     entityId: string;
@@ -227,14 +343,17 @@ export class OmniTagRegistry {
     // 1. 過閘
     const sealed = emitArtifact(params);
 
-    // 2. 凍結不可改：若已存在 frozen+restricted 實體，拒絕
+    // 2. 凍結不可改：若已存在已刻印實體（eternal 或 frozen+restricted），拒絕
     const existing = this.getArtifact(params.entityId);
     if (existing) {
-      const isSealed =
-        existing.tag.lifecycle === 'frozen' && existing.tag.security === 'restricted';
-      if (isSealed) {
+      const reason = isEternalSealed(existing.tag)
+        ? `eternal/${existing.tag.arcana ?? 'arcana'}`
+        : existing.tag.lifecycle === 'frozen' && existing.tag.security === 'restricted'
+          ? 'frozen+restricted'
+          : null;
+      if (reason) {
         throw new Error(
-          `H4 frozen: entity ${params.entityId} is sealed (frozen+restricted) — immutable`,
+          `H4 frozen: entity ${params.entityId} is sealed (${reason}) — immutable`,
         );
       }
     }
@@ -242,11 +361,12 @@ export class OmniTagRegistry {
     // 3. 寫入即凍結
     const record: PersistedArtifact = {
       entityId: sealed.entityId,
+      entityClass: resolveIdentity(params.tag)?.kind ?? 'agent',
       tag: params.tag,
       content: params.content,
       hashLock: sealed.hashLock,
       sealedAt: sealed.sealedAt,
-      sourceOrigin: params.tag.agent ?? 'unknown',
+      sourceOrigin: resolveIdentity(params.tag)?.id ?? 'unknown',
     };
     this._appendLine(JSON.stringify(record));
     return record;
@@ -286,11 +406,20 @@ export class OmniTagRegistry {
     const rec = this.getArtifact(entityId);
     if (!rec) return { exists: false, tampered: false };
 
-    const expected = generateHashLock(
-      rec.tag.agent ?? 'unknown',
-      rec.content ?? JSON.stringify(rec.tag),
-      rec.sealedAt,
-    );
+    // 向後相容：§20.8 之前的紀錄沒有 entityClass 欄位，Hash Lock 公式為舊版。
+    // 對這類紀錄以舊公式重算，避免把「舊格式」誤判成「遭竄改」。
+    const legacy = (rec as { entityClass?: OmnitagEntityClass }).entityClass === undefined;
+    const expected = legacy
+      ? generateHashLock(
+          rec.tag.agent ?? 'unknown',
+          rec.content ?? JSON.stringify(rec.tag),
+          rec.sealedAt,
+        )
+      : generateHashLock(
+          `${rec.entityClass}:${rec.tag.agent ?? rec.tag.avatar ?? rec.tag.swarm ?? 'unknown'}`,
+          rec.content ?? JSON.stringify(rec.tag),
+          rec.sealedAt,
+        );
     const tampered = expected !== rec.hashLock;
     return { exists: true, tampered, record: rec };
   }

@@ -29,6 +29,7 @@ export default defineConfig({
       '**/dist/**',
       '**/archive/**',
       'archive/**',
+      'packages/scripts/**', // Exclude custom scripts from Vitest
       // 腳本式驗證（頂層 console.log + assert + process.exit），非 vitest 套件，不應被抓取執行
       '**/__test__/**',
       'apps/gateway/sync/__test__/**',
@@ -81,7 +82,8 @@ export default defineConfig({
       // 該測試具真實 gate（失敗時 process.exit(1)），已於沙箱注入缺陷實測可失敗，
       // 非永遠綠的假測試，覆蓋率不減。
       'scripts/avatar-metrics.reg.test.mjs',
-    ],
+        'packages/scripts/avatar-metrics.reg.test.mjs',
+      ],
   },
   resolve: {
     alias: {

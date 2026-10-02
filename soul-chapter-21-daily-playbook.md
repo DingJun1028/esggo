@@ -7,7 +7,7 @@
 
 | 時段 | 載體 | 任務 | 決策歸屬 (§19) | 負責靈魂 | 共享記憶 (§20) |
 | --- | --- | --- | --- | --- | --- |
-| 05:30 | 雲端助理 (VPS) | 晨報生成 → `Agents/briefing/YYYY-MM-DD.md` | H0 全自主 | 01+20 | 寫入 trace_id |
+| 05:30 | 雲端助理 (VPS) | 晨報生成 → `vault/Agents/briefing/YYYY-MM-DD.md` | H0 全自主 | 01+20 | 寫入 trace_id |
 | 06:00 | 雲端助理 | 夜間收件分檢 + 委派重活至 `inbox-triage/` | H1 代行回報 | 20+11 | 讀 context/ |
 | 每週日 02:00 | 雲端助理 | 熵投週煉金（每週 -3%） | H0 全自主 | 19-24 | 沉澱技術債閉環 |
 | 用戶在場 | 本機實習生 | 研究/製圖/影片/筆記整理 | H2 授權 | 15+13+14+25 | 讀寫本地 vault |
@@ -17,8 +17,13 @@
 
 ```bash
 # /etc/cron.d/oa-swarm  (VPS, 常駐)
-30 5 * * *  ubuntu  cd /opt/esggo && oa-cli brief --out Agents/briefing/$(date +\%F).md
-0  6 * * *  ubuntu  cd /opt/esggo && oa-cli triage --delegate inbox-triage/
+# 路徑必須帶 vault/ 前綴：oa-cli 預設值為 vault/Agents/...，
+# 而所有消費端（karpathy-reasoning-core / knowledge-avatar / tdai-memory-sync）
+# 都以 VAULT_PATH 解析 Agents/。若傳 root-relative 的 Agents/ 會在 repo 根
+# 產生假的 Agents/ 目錄，該目錄不是子系統，會讓 verify_mece12 / verify_bee_city 的
+# CE 集盡失敗（實測 2026-10-01）。
+30 5 * * *  ubuntu  cd /opt/esggo && oa-cli brief --out vault/Agents/briefing/$(date +\%F).md
+0  6 * * *  ubuntu  cd /opt/esggo && oa-cli triage --delegate vault/Agents/inbox-triage/
 0  2 * * 0  ubuntu  cd /opt/esggo && oa-cli forge --entropy -3% --weekly
 */15 * * * * ubuntu  ssh 161.118.248.180 'cd /opt/esggo/apps/tencentdb-memory && ./verify.sh' >/dev/null 2>&1
 ```

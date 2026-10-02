@@ -1,0 +1,363 @@
+#!/usr/bin/env bash
+# oa-cli — OA-Team 30 本地運維 CLI
+#
+# 用法:
+#   oa-cli manual 48 [--view|--local-only]   # 手冊檢視（既有功能）
+#   oa-cli brief   [--out PATH]              # 每日簡報（真實 repo 狀態）
+#   oa-cli triage  [--delegate DIR]          # 待辦分流（真實檔案分類搬移）
+#   oa-cli forge   [--weekly] [--entropy N]  # 熵減健檢（真跑 gate 量測）
+#
+# 設計原則（5T）:
+#   Traceable  — 每個數字都標來源（gate 名 / git sha / 檔案路徑）
+#   Transparent— 绝不編造；量不到就寫「未量到」，不填假值
+#   Tangible   — brief 產出可直接讀的 markdown 檔
+#   Trustworthy— triage 只在指定目錄內搬移，不刪檔
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# MSYS/git-bash 產生的 /c/... 路徑，native Windows 程式（python）無法解析
+# （此環境未啟用 MSYS path conversion）。凡是要交給 python 的路徑一律用此變數。
+if command -v cygpath >/dev/null 2>&1; then
+  REPO_NATIVE="$(cygpath -m "$REPO_ROOT")"
+else
+  REPO_NATIVE="$REPO_ROOT"
+fi
+# 單一閘逾時上限（秒）。部分 gate 正常需 30-120s，不可無限等。
+GATE_TIMEOUT_S="${GATE_TIMEOUT_S:-180}"
+MANUAL_MD="$REPO_ROOT/docs/manuals/48-omnifactory-manual.md"
+MANUAL_HTML="$REPO_ROOT/docs/manuals/48-html/index.html"
+
+PY=python
+command -v python >/dev/null 2>&1 || PY=python3
+
+die() { echo "[oa-cli] ERROR: $*" >&2; exit 1; }
+info() { echo "[oa-cli] $*"; }
+
+# ────────────────────────────────────────────────────────────
+# manual — 既有手冊檢視功能，行為不變
+# ────────────────────────────────────────────────────────────
+cmd_manual() {
+  local sub="${1:-}" option="${2:-}"
+  if [[ "$sub" != "48" ]]; then
+    echo "Only manual 48 is available locally."
+    exit 1
+  fi
+  if [[ "$option" == "--view" ]]; then
+    if command -v python >/dev/null 2>&1; then
+      python -m webbrowser "file:///$MANUAL_HTML" || true
+    fi
+    if command -v start >/dev/null 2>&1; then
+      start "" "$(cygpath -w "$MANUAL_HTML" 2>/dev/null || echo "$MANUAL_HTML")" || true
+    fi
+    echo "[oa-cli] Open manual: $MANUAL_HTML"
+  elif [[ "$option" == "--local-only" ]]; then
+    echo "[oa-cli] local-only manual 48"
+    echo "HTML: $MANUAL_HTML"
+    echo "MD: $MANUAL_MD"
+  else
+    echo "Usage: oa-cli manual 48 --view|--local-only"
+    exit 1
+  fi
+}
+
+# 收集 gate 結果：輸出 "PASS|FAIL|SLOW <gate>" 每行一筆
+# 平行執行 + 逐閘逾時：部分 gate 正常需 30-120s，序列執行會讓 CLI 卡死數分鐘。
+# 路徑一律用 REPO_NATIVE（native python 讀不了 MSYS 的 /c/...）。
+run_gates() {
+  local tmpd; tmpd="$(mktemp -d)"
+  local g name rc
+  local -a names=() pids=()
+
+  shopt -s nullglob
+  for g in "$REPO_ROOT"/scripts/verify_*.py; do
+    [[ -e "$g" ]] || continue
+    name="$(basename "$g" .py)"
+    names+=("$name")
+    # 關鍵：gate 失敗（exit 1）時若沿用 set -e，子殼會在寫出 .rc 之前中止，
+    # 父層讀不到 rc 只能當 124 → 假的 SLOW。這裡顯式用 || 捕捉真實 exit code。
+    ( set +e
+      timeout "$GATE_TIMEOUT_S" "$PY" "$REPO_NATIVE/scripts/$name.py" \
+        >"$tmpd/$name.out" 2>&1
+      printf '%s\n' "$?" > "$tmpd/$name.rc" ) &
+    pids+=($!)
+  done
+  shopt -u nullglob
+
+  local i
+  for i in "${!pids[@]}"; do
+    wait "${pids[$i]}" 2>/dev/null || true
+  done
+
+  # Pass 2: 真正逾時（rc=124）者序列重跑一次，確認不是資源競爭造成的假逾時。
+  local -a redo=()
+  for i in "${!names[@]}"; do
+    name="${names[$i]}"
+    rc="$(cat "$tmpd/$name.rc" 2>/dev/null || echo 124)"
+    if [[ "$rc" == "124" ]]; then redo+=("$name"); fi
+  done
+  if [[ ${#redo[@]} -gt 0 ]]; then
+    local r
+    for r in "${redo[@]}"; do
+      set +e
+      timeout "$GATE_TIMEOUT_S" "$PY" "$REPO_NATIVE/scripts/$r.py" \
+        >"$tmpd/$r.out" 2>&1
+      printf '%s\n' "$?" > "$tmpd/$r.rc"
+      set -e
+    done
+  fi
+
+  for i in "${!names[@]}"; do
+    name="${names[$i]}"
+    rc="$(cat "$tmpd/$name.rc" 2>/dev/null || echo 124)"
+    case "$rc" in
+      0)   echo "PASS $name" ;;
+      124) echo "SLOW $name" ;;
+      *)   echo "FAIL $name" ;;
+    esac
+  done
+  rm -rf "$tmpd"
+}
+
+# ────────────────────────────────────────────────────────────
+# brief — 每日簡報
+# ────────────────────────────────────────────────────────────
+cmd_brief() {
+  local out=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --out) out="${2:-}"; shift 2 ;;
+      *) die "brief: 未知參數 '$1'（用法：oa-cli brief [--out PATH]）" ;;
+    esac
+  done
+  [[ -n "$out" ]] || out="$REPO_ROOT/vault/Agents/briefing/$(date +%F).md"
+  mkdir -p "$(dirname "$out")"
+
+  local sha="" branch="" commits="(無法讀取 git)"
+  # git 是 native Windows 程式，同樣不能用 MSYS 的 /c/... 路徑
+  if git -C "$REPO_NATIVE" rev-parse --git-dir >/dev/null 2>&1; then
+    sha="$(git -C "$REPO_NATIVE" rev-parse --short HEAD 2>/dev/null || echo '?')"
+    branch="$(git -C "$REPO_NATIVE" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')"
+    commits="$(git -C "$REPO_NATIVE" log --since='24 hours ago' --oneline 2>/dev/null | head -20 || true)"
+    [[ -n "$commits" ]] || commits="(近 24 小時無 commit)"
+  fi
+
+  local gate_file; gate_file="$(mktemp)"
+  run_gates > "$gate_file"
+  local pass_n fail_n slow_n
+  pass_n="$(grep -c '^PASS ' "$gate_file" || true)"
+  fail_n="$(grep -c '^FAIL ' "$gate_file" || true)"
+  slow_n="$(grep -c '^SLOW ' "$gate_file" || true)"
+
+  {
+    echo "# OA-Team 30 每日簡報 — $(date +%F)"
+    echo
+    echo "產生時間: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+    echo "來源: git $sha (branch: $branch)"
+    echo
+    echo "## 1. 近 24 小時提交"
+    echo '```'
+    echo "$commits"
+    echo '```'
+    echo
+    echo "## 2. 5T 驗證閘狀態"
+    echo
+    echo "| 結果 | 閘腳本 |"
+    echo "| --- | --- |"
+    local line name res
+    while read -r res name; do
+      [[ -n "${res:-}" ]] || continue
+      echo "| $res | \`scripts/$name.py\` |"
+    done < "$gate_file"
+    echo
+    echo "**合計**: PASS=$pass_n / FAIL=$fail_n / SLOW=$slow_n"
+    echo
+    echo "（SLOW = 超過 ${GATE_TIMEOUT_S}s 逾時上限，未取得結果；非通過也非失敗）"
+    echo
+    echo "## 3. 熵值"
+    echo
+    echo "- 目標: < 0.1"
+    if [[ "$fail_n" -eq 0 && "$slow_n" -eq 0 ]]; then
+      echo "- 本日推論: 所有閘全綠，結構性熵無新增回歸"
+    elif [[ "$fail_n" -eq 0 ]]; then
+      echo "- 本日推論: 無失敗，但有 $slow_n 個閘逾時未取得結果，熵值未完整量到"
+    else
+      echo "- 本日推論: 有 $fail_n 個閘失敗，結構性熵增加（詳見上表）"
+    fi
+    echo
+    echo "## 4. 備註"
+    echo
+    echo "- 本簡報所有數字均由 \`scripts/verify_*.py\` 實際執行取得，未做任何推估或填補。"
+  } > "$out"
+
+  rm -f "$gate_file"
+  info "brief 已寫入: $out"
+  info "gate 統計: PASS=$pass_n FAIL=$fail_n SLOW=$slow_n"
+  [[ "$fail_n" -eq 0 && "$slow_n" -eq 0 ]] || return 1
+  return 0
+}
+
+# ────────────────────────────────────────────────────────────
+# triage — 待辦分流
+# ────────────────────────────────────────────────────────────
+classify() {
+  # 依檔名關鍵字做確定性分類（先比對特殊前綴，再比對內容關鍵字）
+  local f="$1" base; base="$(basename "$f")"
+  case "$base" in
+    BUG*|bug*)       echo "bug"      ; return ;;
+    SEC*|sec*)       echo "security" ; return ;;
+    DOC*|doc*)       echo "docs"     ; return ;;
+    TEST*|test*)     echo "test"     ; return ;;
+  esac
+  if grep -qiE 'bug|defect|regression|錯誤' "$f" 2>/dev/null; then echo "bug"; return; fi
+  if grep -qiE 'security|vuln|cve|資安|安全' "$f" 2>/dev/null; then echo "security"; return; fi
+  if grep -qiE 'deploy|release|上線|部署' "$f" 2>/dev/null; then echo "ops"; return; fi
+  if grep -qiE 'test|coverage|測試' "$f" 2>/dev/null; then echo "test"; return; fi
+  echo "inbox"
+}
+
+cmd_triage() {
+  local dir="$REPO_ROOT/vault/Agents/inbox-triage"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --delegate) dir="${2:-}"; shift 2 ;;
+      *) die "triage: 未知參數 '$1'（用法：oa-cli triage [--delegate DIR]）" ;;
+    esac
+  done
+
+  if [[ ! -d "$dir" ]]; then
+    info "triage: 來源目錄不存在 -> $dir"
+    info "triage: 建立空 inbox 以供後續使用"
+    mkdir -p "$dir"
+  fi
+
+  shopt -s nullglob
+  local files=("$dir"/*.md)
+  shopt -u nullglob
+
+  if [[ ${#files[@]} -eq 0 ]]; then
+    info "triage: $dir 內無 .md 檔，無需分流"
+    return 0
+  fi
+
+  local f cat_n moved=0
+  local -A tally=()
+  for f in "${files[@]}"; do
+    [[ -f "$f" ]] || continue
+    cat_n="$(classify "$f")"
+    mkdir -p "$dir/$cat_n"
+    # 同名不覆寫：已存在則加時間戳
+    local dest="$dir/$cat_n/$(basename "$f")"
+    if [[ -e "$dest" ]]; then
+      dest="$dir/$cat_n/$(basename "${f%.md}")-$(date +%H%M%S).md"
+    fi
+    mv "$f" "$dest"
+    moved=$((moved + 1))
+    tally["$cat_n"]=$(( ${tally["$cat_n"]:-0} + 1 ))
+  done
+
+  info "triage: 已分流 $moved 個檔案（來源 $dir，未刪除任何檔案）"
+  local k
+  for k in "${!tally[@]}"; do
+    echo "  $k: ${tally[$k]}"
+  done | sort
+  return 0
+}
+
+# ────────────────────────────────────────────────────────────
+# forge — 熵減健檢
+# ────────────────────────────────────────────────────────────
+cmd_forge() {
+  local weekly=0 entropy=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --weekly) weekly=1; shift ;;
+      --entropy) entropy="${2:-}"; shift 2 ;;
+      --entropy=*) entropy="${1#*=}"; shift ;;
+      *) die "forge: 未知參數 '$1'（用法：oa-cli forge [--weekly] [--entropy PCT]）" ;;
+    esac
+  done
+
+  info "forge: 開始熵減健檢${weekly:+（weekly）}"
+  local gate_file; gate_file="$(mktemp)"
+  run_gates > "$gate_file"
+  local pass_n fail_n slow_n
+  pass_n="$(grep -c '^PASS ' "$gate_file" || true)"
+  fail_n="$(grep -c '^FAIL ' "$gate_file" || true)"
+  slow_n="$(grep -c '^SLOW ' "$gate_file" || true)"
+  local total=$(( pass_n + fail_n ))
+
+  echo
+  echo "=== 閘總覽 ==="
+  local res name
+  while read -r res name; do
+    [[ -n "${res:-}" ]] || continue
+    printf '  %-4s scripts/%s.py\n' "$res" "$name"
+  done < "$gate_file"
+  rm -f "$gate_file"
+
+  echo
+  if [[ "$slow_n" -gt 0 ]]; then
+    echo "注意: $slow_n 個閘超過 ${GATE_TIMEOUT_S}s 未取得結果（SLOW），以下熵值僅就 PASS/FAIL 計算，非完整量測。"
+    echo
+  fi
+  if [[ "$total" -eq 0 ]]; then
+    echo "熵值: 未量到（沒有任何閘回傳 PASS 或 FAIL）"
+  elif [[ "$fail_n" -eq 0 ]]; then
+    echo "熵值: 0.0（已量到的 $pass_n/$total 閘全綠）"
+  else
+    # 明確的量測公式，不做掩飾
+    "$PY" - "$pass_n" "$fail_n" "$total" <<'PYEOF'
+import sys
+p, f, t = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
+print(f"熵值: {f / t:.3f}（{f}/{t} 閘失敗；目標 < 0.1）")
+PYEOF
+  fi
+
+  if [[ -n "$entropy" ]]; then
+    echo "熵減目標: $entropy（此旗標為目標值記錄；實際變更需另行授權，forge 不自行改檔）"
+  fi
+  if [[ $weekly -eq 1 ]]; then
+    echo "週期: weekly（建議搭配 cron: 0 2 * * 0）"
+  fi
+
+  echo
+  echo "=== forge 結論 ==="
+  if [[ "$total" -eq 0 ]]; then
+    echo "  未量到熵值，無法給出結論（不填假值）。"
+  elif [[ "$fail_n" -eq 0 && "$slow_n" -eq 0 ]]; then
+    echo "  結構性熵 = 0，無需退火。"
+  elif [[ "$fail_n" -eq 0 ]]; then
+    echo "  已量到的閘全綠，但 $slow_n 個閘逾時未量到；不可宣稱熵為 0。"
+  else
+    echo "  有 $fail_n 個閘失敗，熵值 > 0，需針對上表紅燈項退火。"
+  fi
+
+  [[ "$fail_n" -eq 0 && "$slow_n" -eq 0 ]] || return 1
+  return 0
+}
+
+# ────────────────────────────────────────────────────────────
+# dispatcher
+# ────────────────────────────────────────────────────────────
+cmd="${1:-help}"
+[[ $# -gt 0 ]] && shift || true
+
+case "$cmd" in
+  manual) cmd_manual "${1:-}" "${2:-}" ;;
+  brief)  cmd_brief "$@" ;;
+  triage) cmd_triage "$@" ;;
+  forge)  cmd_forge "$@" ;;
+  help|--help|-h|"")
+    cat <<'USAGE'
+oa-cli — OA-Team 30 本地運維 CLI
+
+  oa-cli manual 48 [--view|--local-only]   手冊檢視
+  oa-cli brief   [--out PATH]              每日簡報（真實 repo 狀態）
+  oa-cli triage  [--delegate DIR]          待辦分流（預設 vault/inbox）
+  oa-cli forge   [--weekly] [--entropy N]  熵減健檢（真跑 gate）
+USAGE
+    ;;
+  *) echo "Usage: oa-cli {manual|brief|triage|forge} ..." >&2; exit 1 ;;
+esac

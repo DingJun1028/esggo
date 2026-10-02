@@ -5,11 +5,12 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import Icon as M from '../components/Icon'
-import FeatureCard as Ar from '../components/FeatureCard'
-import PhotoCard as kr from '../components/PhotoCard'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as M } from '../components/Icon'
+import { default as Ar } from '../components/FeatureCard'
+import { default as kr } from '../components/PhotoCard'
+import { default as wr } from '../components/ContactSection'
+import { DATA_Dr as Dr } from '../data/siteData'
 
 function jr(){let{t:e}=lr();yr({title:e(`products.corpTravel`),
 description:e(`corporateTravel.metaDesc`),

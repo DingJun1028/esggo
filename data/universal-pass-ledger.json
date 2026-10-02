@@ -10,7 +10,7 @@
       "矩陣": true,
       "依賴": true
     },
-    "issued_at": "2026-10-01T06:02:53+08:00",
+    "issued_at": "2026-10-01T13:48:57+08:00",
     "canon_digest": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",
     "dependencies": {
       "esggo-omni-center/soul.md": "e2d5458a43dd0eaa11cce997f212a1d254160ab33f840178db8d3664783117ca",

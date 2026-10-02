@@ -38,7 +38,15 @@ try:
 except ImportError:
     WhisperModel = None
 
-MODEL_SIZE = os.environ.get("WHISPER_MODEL", "base")
+# 預設 small 而非 base/tiny — 實測 (zh-TW, edge-tts 合成語音, CPU int8, beam=1):
+#   tiny  平均 CER 13.8%, infer 3.0s (0.43x RT) — 最快但錯字多
+#   base  平均 CER  6.8%, infer 7.2s (1.03x RT) — 明顯較準, 偶有同音錯字
+#   small 平均 CER  ~3%,  infer 8.8s (1.26x RT) — 最準, base 的錯字被修正
+# 取捨: small 比 base 慢約 22%, 但把 base 的同音錯字(保寒/用續)修回正確,
+# 對「即時會議字幕」品質代價划算。RT 1.26x 意為需切片並行才能跟上真人語速;
+# 若目標是低延遲優先, 用 WHISPER_MODEL=base 覆寫 (lib/config.mjs 的 sttModel
+# 必須與此一致, 否則兩層預設漂移 — 見 CHANGELOG 同類修復)。
+MODEL_SIZE = os.environ.get("WHISPER_MODEL", "small")
 DEVICE = os.environ.get("WHISPER_DEVICE", "cpu")
 COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE", "int8")
 STT_PORT = int(os.environ.get("STT_PORT", "8791"))

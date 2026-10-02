@@ -9,6 +9,14 @@
 # Source of truth: .agents/skills/oa-team-bee-colony (OA-Team 30 萬能蜂群 究極版奧義)
 # =============================================================================
 
+# Canonical cross-reference layer (added 2026-10-01, 5T Traceable remediation).
+#   soul_title : the OA-Team canon title for this id, per oa-swarm/src/soul-matrix.ts
+#   soul_array : the OA-Team canon array this squad is positionally aligned to,
+#                per ARRAY_NAMES in oa-swarm/src/soul-matrix.ts
+# agents.yaml keeps the ESG-GO *functional role* name; soul-matrix.ts keeps the
+# *canon soul* name. Both refer to the same id. Verified by scripts/verify-agents-yaml.py
+# check 8 (cross-file soul-matrix consistency).
+
 framework:
   name: OA-Team 30-Swarm
   name_zh: OA-Team 30 萬能蜂群
@@ -46,6 +54,8 @@ squads:
     name: 智庫聖所
     name_en: sage-vault
     agent_range: "01-06"
+    soul_array: strategy
+    soul_array_zh: 策略組
     mission: Hindsight 記憶、知識索引、脈絡、模式、標籤、結界
     gateway_agent: "01"
     route: Hindsight / 記憶召回
@@ -53,6 +63,8 @@ squads:
     name: 符文契約
     name_en: rune-contract
     agent_range: "07-12"
+    soul_array: tech
+    soul_array_zh: 技術組
     mission: API / TypeScript / ZKP / 合約 / 安全 / 測試
     gateway_agent: "07"
     route: API / TypeScript / ZKP 修復
@@ -60,6 +72,8 @@ squads:
     name: 光之羽翼
     name_en: wings-of-light
     agent_range: "13-18"
+    soul_array: creative
+    soul_array_zh: 創意組
     mission: VPS / Docker / CI/CD / Cron / 部署 / 前端
     gateway_agent: "13"
     route: 部署 / cron / 自動化
@@ -67,6 +81,8 @@ squads:
     name: 煉金熵減
     name_en: alchemy-entropy
     agent_range: "19-24"
+    soul_array: marketing
+    soul_array_zh: 營銷組
     mission: 重構 / lint / 效能 / 熵減 / 清理 / 自動化
     gateway_agent: "19"
     route: 重構 / lint / test / entropy
@@ -74,6 +90,8 @@ squads:
     name: 5T驗算
     name_en: five-t-verify
     agent_range: "25-30"
+    soul_array: guard
+    soul_array_zh: 守衛組
     mission: ISO / Hash Lock / UUID / 調度 / 品質 / 恢復
     gateway_agent: "25"
     route: ISO / Hash Lock / 稽核
@@ -85,6 +103,7 @@ agents:
   - id: "01"
     name: 記憶長
     name_en: memory-keeper
+    soul_title: "萬能蜂后"
     squad: 智庫聖所
     responsibility: Hindsight 記憶召回與壓縮
     omnitag:
@@ -102,6 +121,7 @@ agents:
   - id: "02"
     name: 知識官
     name_en: knowledge-officer
+    soul_title: "萬能規劃蜂"
     squad: 智庫聖所
     responsibility: 外部知識庫索引與關聯
     omnitag:
@@ -119,6 +139,7 @@ agents:
   - id: "03"
     name: 脈絡師
     name_en: context-weaver
+    soul_title: "萬能分析蜂"
     squad: 智庫聖所
     responsibility: 對話脈絡提純與摘要
     omnitag:
@@ -136,6 +157,7 @@ agents:
   - id: "04"
     name: 模式師
     name_en: pattern-miner
+    soul_title: "萬能策効蜂"
     squad: 智庫聖所
     responsibility: 重複模式識別與萃取
     omnitag:
@@ -153,6 +175,7 @@ agents:
   - id: "05"
     name: 標籤師
     name_en: tag-master
+    soul_title: "萬能風險蜂"
     squad: 智庫聖所
     responsibility: OmniTag 自動分類與分配
     omnitag:
@@ -170,6 +193,7 @@ agents:
   - id: "06"
     name: 結界師
     name_en: barrier-master
+    soul_title: "萬能優化蜂"
     squad: 智庫聖所
     responsibility: 最佳實踐覺繼承狀態維護
     omnitag:
@@ -190,6 +214,7 @@ agents:
   - id: "07"
     name: API 匠
     name_en: api-artisan
+    soul_title: "萬能編碼蜂"
     squad: 符文契約
     responsibility: REST/GraphQL 端點設計與維護
     omnitag:
@@ -208,6 +233,7 @@ agents:
   - id: "08"
     name: TypeScript 守
     name_en: typescript-guardian
+    soul_title: "萬能算法蜂"
     squad: 符文契約
     responsibility: 型別系統嚴格把關與補齊
     omnitag:
@@ -225,6 +251,7 @@ agents:
   - id: "09"
     name: ZKP 師
     name_en: zkp-master
+    soul_title: "萬能架構蜂"
     squad: 符文契約
     responsibility: 零知識證明整合與稽核
     omnitag:
@@ -243,6 +270,7 @@ agents:
   - id: "10"
     name: 合約師
     name_en: contract-master
+    soul_title: "萬能數據蜂"
     squad: 符文契約
     responsibility: Smart Contract / Hash Lock 簽署
     omnitag:
@@ -260,6 +288,7 @@ agents:
   - id: "11"
     name: 安全官
     name_en: security-officer
+    soul_title: "萬能測試蜂"
     squad: 符文契約
     responsibility: OWASP / 憑證輪換 / Secrets 管理
     omnitag:
@@ -278,6 +307,7 @@ agents:
   - id: "12"
     name: 測試長
     name_en: test-lead
+    soul_title: "萬能設計蜂"
     squad: 符文契約
     responsibility: Vitest / E2E / 覆蓋率閘道
     omnitag:
@@ -300,6 +330,7 @@ agents:
   - id: "13"
     name: VPS 守護
     name_en: vps-guardian
+    soul_title: "萬能圖像蜂"
     squad: 光之羽翼
     responsibility: SSH / Docker / nginx 健康監控
     omnitag:
@@ -317,6 +348,7 @@ agents:
   - id: "14"
     name: Docker 長
     name_en: docker-master
+    soul_title: "萬能動畫蜂"
     squad: 光之羽翼
     responsibility: Compose / Image / Healthcheck 管理
     omnitag:
@@ -335,6 +367,7 @@ agents:
   - id: "15"
     name: CI/CD 匠
     name_en: cicd-artisan
+    soul_title: "萬能文案蜂"
     squad: 光之羽翼
     responsibility: GitHub Actions / Pipeline 維護
     omnitag:
@@ -353,6 +386,7 @@ agents:
   - id: "16"
     name: Cron 師
     name_en: cron-master
+    soul_title: "萬能音頻蜂"
     squad: 光之羽翼
     responsibility: OpenCode / Hermes Cron 排程
     omnitag:
@@ -371,6 +405,7 @@ agents:
   - id: "17"
     name: 部署師
     name_en: deploy-master
+    soul_title: "萬能市場蜂"
     squad: 光之羽翼
     responsibility: Firebase / VPS / Blue-Green 部署
     omnitag:
@@ -390,6 +425,7 @@ agents:
   - id: "18"
     name: 前端匠
     name_en: frontend-artisan
+    soul_title: "萬能社群蜂"
     squad: 光之羽翼
     responsibility: Next.js / UI/UX / 效能優化
     omnitag:
@@ -412,6 +448,7 @@ agents:
   - id: "19"
     name: 重構師
     name_en: refactor-master
+    soul_title: "萬能增長蜂"
     squad: 煉金熵減
     responsibility: 程式碼重構與設計模式導入
     omnitag:
@@ -430,6 +467,7 @@ agents:
   - id: "20"
     name: Lint 長
     name_en: lint-lead
+    soul_title: "萬能運營蜂"
     squad: 煉金熵減
     responsibility: ESLint / Prettier / 風格一致性
     omnitag:
@@ -448,6 +486,7 @@ agents:
   - id: "21"
     name: 效能官
     name_en: perf-officer
+    soul_title: "萬能商業分析蜂"
     squad: 煉金熵減
     responsibility: Bundle 體積 / 加載速度 / FP/FCP
     omnitag:
@@ -466,6 +505,7 @@ agents:
   - id: "22"
     name: 熵減師
     name_en: entropy-reducer
+    soul_title: "萬能探路蜂"
     squad: 煉金熵減
     responsibility: 系統熵值監控與治理
     omnitag:
@@ -484,6 +524,7 @@ agents:
   - id: "23"
     name: 清理長
     name_en: cleaner-lead
+    soul_title: "萬能外交蜂"
     squad: 煉金熵減
     responsibility: 垃圾檔案 / 殘留 branch / 重複程式碼
     omnitag:
@@ -502,6 +543,7 @@ agents:
   - id: "24"
     name: 自動化師
     name_en: automation-master
+    soul_title: "萬能調研蜂"
     squad: 煉金熵減
     responsibility: 流程自動化設計與編排
     omnitag:
@@ -522,6 +564,7 @@ agents:
   - id: "25"
     name: ISO 官
     name_en: iso-officer
+    soul_title: "萬能測場蜂"
     squad: 5T驗算
     responsibility: ISO 27001 / SOC2 / 合規稽核
     omnitag:
@@ -540,6 +583,7 @@ agents:
   - id: "26"
     name: Hash 鎖匠
     name_en: hash-locksmith
+    soul_title: "萬能追蹤蜂"
     squad: 5T驗算
     responsibility: Hash Lock / HexLock 凍結機制
     omnitag:
@@ -558,6 +602,7 @@ agents:
   - id: "27"
     name: UUID 師
     name_en: uuid-master
+    soul_title: "萬能安全蜂"
     squad: 5T驗算
     responsibility: 全域唯一識別碼生成與管理
     omnitag:
@@ -576,6 +621,7 @@ agents:
   - id: "28"
     name: 調度長
     name_en: dispatcher-lead
+    soul_title: "萬能維護蜂"
     squad: 5T驗算
     responsibility: 任務排程 / 負載均衡 / 佇列管理
     omnitag:
@@ -594,6 +640,7 @@ agents:
   - id: "29"
     name: 品質官
     name_en: quality-officer
+    soul_title: "萬能支援蜂"
     squad: 5T驗算
     responsibility: 品質控制閘道 / 驗證檢查點
     omnitag:
@@ -612,6 +659,7 @@ agents:
   - id: "30"
     name: 恢復師
     name_en: recovery-master
+    soul_title: "萬能質控蜂"
     squad: 5T驗算
     responsibility: 錯誤恢復 / 回滾 / 降級機制
     omnitag:

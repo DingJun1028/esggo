@@ -6,7 +6,7 @@ const { execSync, execFileSync } = require('child_process');
 
 // 1. Check encoding issues (U+FFFD, non-UTF-8)
 try {
-  execSync('node scripts/encoding-check.mjs --staged', { stdio: 'inherit', encoding: 'utf-8' });
+  execSync('node packages/scripts/encoding-check.mjs --staged', { stdio: 'inherit', encoding: 'utf-8' });
 } catch {
   process.exit(1);
 }
@@ -89,7 +89,7 @@ try {
       const tmp = path.join(os.tmpdir(), `agents-staged-${process.pid}.yaml`);
       try {
         fs.writeFileSync(tmp, execFileSync('git', ['show', ':agents.yaml'], { encoding: 'utf-8' }));
-        execSync(`python3 scripts/verify-agents-yaml.py "${tmp}"`, { stdio: 'inherit', encoding: 'utf-8' });
+        execSync(`python3 packages/scripts/verify-agents-yaml.py "${tmp}"`, { stdio: 'inherit', encoding: 'utf-8' });
         console.log('[pre-commit] agents.yaml verification passed (staged content).');
       } finally {
         fs.unlinkSync(tmp);

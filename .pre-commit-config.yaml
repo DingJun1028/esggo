@@ -7,3 +7,13 @@ repos:
         exclude: ^.github/
       - id: ruff-format
         exclude: ^.github/
+  - repo: local
+    hooks:
+      # 5T Trustworthy: agents.yaml 集體配置的跨檔正典守門。
+      # 修改 agents.yaml 時先擋，避免 id 與 soul-matrix.ts 正典脫鉤。
+      - id: agents-yaml-canon
+        name: agents.yaml canon cross-ref (vs oa-swarm soul-matrix.ts)
+        entry: python scripts/verify-agents-yaml.py
+        language: system
+        pass_filenames: false
+        files: ^agents\.yaml$|^oa-swarm/src/soul-matrix\.ts$|^scripts/verify-agents-yaml\.py$

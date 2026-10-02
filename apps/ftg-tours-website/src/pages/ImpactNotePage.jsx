@@ -5,9 +5,13 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import Icon as M from '../components/Icon'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as M } from '../components/Icon'
+import { default as wr } from '../components/ContactSection'
+import { DATA_wi as wi } from '../data/siteData'
+import { default as Di } from '../components/ShadowFeatureCard'
+import { default as Ei } from '../components/NotePhotoCard'
+import { default as Oi } from '../components/LightCenterTitle'
 
 function ki(){let{t:e}=lr();yr({title:e(`products.impactNote`),
 description:e(`impactNote.metaDesc`),

@@ -5,7 +5,7 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
+import { default as yr } from '../components/Seo'
 
 function Li(){let{t:e}=lr();yr({title:e(`privacy.title`),
 description:e(`privacy.metaDesc`),

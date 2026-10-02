@@ -5,8 +5,13 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as wr } from '../components/ContactSection'
+import { default as Qr } from '../components/TightFeatureCard'
+import { default as Zr } from '../components/TallPhotoCard'
+import { default as ei } from '../components/CenterTitle'
+import { default as $r } from '../components/NumberBadgeCard'
+import { DATA_Ur as Ur } from '../data/siteData'
 
 function ti(){let{t:e}=lr(),
 t=[e(`esgTeamDay.ctaFeature1`),

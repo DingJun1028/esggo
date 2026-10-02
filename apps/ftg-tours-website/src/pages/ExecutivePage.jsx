@@ -5,8 +5,9 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as wr } from '../components/ContactSection'
+import { DATA__i as _i } from '../data/siteData'
 
 function Ci(){let{t:e}=lr();yr({title:e(`products.executive`),
 description:e(`executive.metaDesc`),

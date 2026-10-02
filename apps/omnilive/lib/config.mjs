@@ -26,9 +26,9 @@ const AUDIO_SOURCES = ['mic', 'system-display', 'device', 'caption'];
  *   geminiApiKey: string,
  *   geminiModel: string,
  *   autoStartStt: boolean,
- *   sttModel: string,
- *   sttDevice: string,
- *   sttCompute: string,
+  *   sttModel: string,
+  *   sttDevice: string,
+  *   sttCompute: string,
  *   roomPasswordEnabled: boolean,
  *   hostApiKey: string,
  *   roomTtlMs: number,
@@ -43,7 +43,9 @@ export function loadConfig() {
     );
   }
   const from = (process.env.OMNILIVE_FROM || 'auto').trim();
-  const to = (process.env.OMNILIVE_TO || 'en').trim();
+  // 預設翻譯目標為繁中: 與前端 index.html 的 <select id="to"> 預設一致。
+  // 兩端必須同預設, 否則未帶參數時前端顯示「繁中」但後端翻成英文 (log 會顯示 auto → en)。
+  const to = (process.env.OMNILIVE_TO || 'zh-TW').trim();
   if (!from || !to) {
     throw new Error('CONFIG_MISSING: OMNILIVE_FROM 與 OMNILIVE_TO 皆不可為空');
   }
@@ -65,9 +67,12 @@ export function loadConfig() {
     geminiApiKey: (process.env.GEMINI_API_KEY || '').trim(),
     geminiModel: (process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim(),
     autoStartStt: (process.env.OMNILIVE_AUTOSTART_STT || 'true').toLowerCase() !== 'false',
-    sttModel: (process.env.WHISPER_MODEL || 'tiny').trim(),
-    sttDevice: (process.env.WHISPER_DEVICE || 'cpu').trim(),
-    sttCompute: (process.env.WHISPER_COMPUTE || 'int8').trim(),
+    // 預設必須與 apps/stt/server.py 的 MODEL_SIZE 一致 (皆 small) — 否則兩層預設
+        // 漂移: Node 以 tiny 計算延遲/品質預期, Python 實際跑 small。
+        // 實測 CER/latency 見 server.py 註解。base = 低延遲替代, tiny = 最快但錯字多。
+        sttModel: (process.env.WHISPER_MODEL || 'small').trim(),
+        sttDevice: (process.env.WHISPER_DEVICE || 'cpu').trim(),
+        sttCompute: (process.env.WHISPER_COMPUTE || 'int8').trim(),
     roomPasswordEnabled: (process.env.OMNILIVE_ROOM_PASSWORD || '').trim().length > 0,
     // 主持人端金鑰: 守護 POST /api/* (room / transcribe / speak / course)。
     // 這四個端點會實際消耗 CPU (STT 與本地 LLM), 無防護時任何人都能打爆主機。

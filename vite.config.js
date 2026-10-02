@@ -10,11 +10,15 @@ export default defineConfig({
   build: {
     target: 'es2020',
     cssCodeSplit: true,
+    minify: 'esbuild',
+    cacheDir: 'node_modules/.vite',
     rollupOptions: {
       output: {
         manualChunks: {
           'firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
           'lucide': ['lucide-react'],
+          'react': ['react', 'react-dom'],
+          'tailwindcss': ['tailwindcss'],
         },
       },
     },

@@ -102,11 +102,19 @@ body{
 @keyframes typing{0%{opacity:.2;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:.2;transform:scaleX(.3)}}
 @keyframes subIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .sub-line{
-  display:inline-block;width:fit-content;max-width:100%;
+  display:block;width:fit-content;max-width:100%;
   border-radius:12px;padding:4px 14px;line-height:1.28;font-weight:800;
   /* 漂移字幕標準: 僅 text-shadow 保證任何背景可讀, 無不透明底 */
   text-shadow:0 2px 6px rgba(0,0,0,.95),0 0 3px rgba(0,0,0,.9);
   color:#fff;
+  /* 繁中長句必須換行而非溢出: 中日韓無空白可斷, 預設 line-break 不在字間斷,
+     這兩項強制逐字斷行, 避免 #subtitles 的 overflow:hidden 把字幕裁掉。
+     overflow-wrap:anywhere 兼顧無空白的英文長字/網址。
+     刻意不加 white-space:pre-wrap —— 逐字渲染會在 span 之間留下縮排空白,
+     反而讓字幕多出空格; 換行需求已由上面三項滿足。 */
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-break:anywhere;
 }
 .sub-line.src{font-size:clamp(1.05rem,3.4vw,1.7rem)}   /* 原文(英文) 較小 */
 .sub-line.tgt{font-size:clamp(1.5rem,5vw,2.6rem)}        /* 翻譯(中文) 大字 */
@@ -151,10 +159,18 @@ body{
 /* ===== 設定選單 (sheet) =====
    由介面往上長出的選單面板: 深藍玻璃卡片 + 分節標題 + 分隔線。
    樣式全部在此, markup 不再夾帶 style=""。 */
+/* 錨定觸發它的四角鈕 (position:fixed, JS 計算座標), 不再錨在字幕下方的
+   #toolbar。原錨點用 bottom:calc(100%+8px) 往上長, 面板會穿出視窗上緣被裁切。
+   高度上限改用 100dvh - 上下內距, 保證「完整呈現」而非半截。 */
 .sheet{
-  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  position:fixed;
   z-index:30;
-  width:min(92vw,360px);max-height:70dvh;overflow:auto;overscroll-behavior:contain;
+  /* --sheet-top / --sheet-left 由 placeSheet() 依觸發鈕的位置設定 */
+  top:var(--sheet-top,0px);left:var(--sheet-left,0px);
+  width:min(92vw,360px);
+  /* 視窗高度扣掉角鈕與安全邊距 → 面板永不溢出, 也不會被上緣裁掉 */
+  max-height:calc(100dvh - var(--sheet-vpad,28px) - 20px);
+  overflow:auto;overscroll-behavior:contain;
   background:var(--glass-strong);backdrop-filter:blur(var(--omni-blur)) saturate(160%);
   -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
   border:1px solid var(--line);border-radius:var(--radius);
@@ -210,9 +226,19 @@ body{
    圖示固定在介面四角, 不再占用字幕下方的控制列。
    字幕維持唯讀, 唯一的拖曳把手是字幕下方的 #gripHandle。 */
 .corner-btn{
-  position:fixed;z-index:20;
-  width:48px;height:48px;min-width:48px;min-height:48px;
-  display:grid;place-items:center;
+  /* 四角鈕錨定「介面本體」而非螢幕。
+     問題: 原本 .corner-btn 是 position:fixed + data-pos 的 top/right/bottom/left(14px),
+     直接釘在 viewport 邊緣; 而 placeSheet()/sharePlace() 以鈕的 getBoundingClientRect()
+     計算彈出位置 -> 位於視窗最上緣的鈕 (top:14px) 會讓面板被算出畫面外看不到。
+     修法: 仍用 fixed (需跨過 body/#grip 的包含塊), 但 14px 邊距改由 JS 以
+     placeCorners() 依「介面本體」實際內距 (stage padding) 設定 --edge-* 變數,
+     讓鈕與面板共用同一套本體座標系, 而不是各自用不同的常數。
+     不可改成 absolute: 祖先鏈為 #stage(absolute) > #grip > #toolbar,
+     absolute 會把鈕錨到字幕拖曳把手 #grip 而非介面四角。 */
+     position:fixed;z-index:20;
+     top:var(--edge-top,14px);right:var(--edge-right,14px);
+     bottom:var(--edge-bottom,14px);left:var(--edge-left,14px);
+     width:48px;height:48px;min-width:48px;min-height:48px;
   border-radius:var(--omni-radius);
   border:1px solid var(--line);
   background:var(--glass);
@@ -229,10 +255,12 @@ body{
   stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .corner-btn.active{color:var(--gold);border-color:var(--gold)}
 /* 四角定位: 加上 safe-area, 避免瀏海/圓角螢幕遮住圖示 */
-.corner-btn[data-pos="tl"]{top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left))}
-.corner-btn[data-pos="tr"]{top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right))}
-.corner-btn[data-pos="bl"]{bottom:calc(14px + env(safe-area-inset-bottom));left:calc(14px + env(safe-area-inset-left))}
-.corner-btn[data-pos="br"]{bottom:calc(14px + env(safe-area-inset-bottom));right:calc(14px + env(safe-area-inset-right))}
+/* data-pos 決定哪一角落, 邊距統一取自 placeCorners() 寫入的 --edge-* 變數,
+   不再各自寫死 14px, 才能與面板的彈出座標系一致 (見 .corner-btn 註解)。 */
+.corner-btn[data-pos="tl"]{top:var(--edge-top,14px);left:var(--edge-left,14px)}
+.corner-btn[data-pos="tr"]{top:var(--edge-top,14px);right:var(--edge-right,14px)}
+.corner-btn[data-pos="bl"]{bottom:var(--edge-bottom,14px);left:var(--edge-left,14px)}
+.corner-btn[data-pos="br"]{bottom:var(--edge-bottom,14px);right:var(--edge-right,14px)}
 /* 窄螢幕略縮, 避免四圖示在小手机上過度佔版面。
    下限維持 44px, 符合最小點擊目標 (WCAG 2.5.5 / iOS HIG), 不可再縮。 */
 @media (max-width:420px){
@@ -294,45 +322,9 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
 .share-link input{flex:1;min-width:0;font-size:.72rem}
 .qr{background:#fff;border-radius:12px;padding:6px;width:130px;height:130px;display:grid;place-items:center;margin:0 auto}
 
-/* ===== QR 彈窗 =====
-   樣式集中於此; showLinkQR() 只建立 DOM 並掛 class, 不再塞 style="" / cssText。
-   分層: #qrModal (遮罩, display:none 預設) > .qr-card (深藍玻璃) > 標籤 / QR / 連結 / 關閉鈕。 */
-#qrModal{
-  position:fixed;inset:0;z-index:50;
-  display:none;place-items:center;
-  background:rgba(0,0,0,.6);
-  pointer-events:auto;
-}
-#qrModal.open{display:grid}
-.qr-card{
-  background:var(--glass-strong);
-  backdrop-filter:blur(var(--omni-blur)) saturate(160%);
-  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:18px;
-  box-shadow:var(--omni-shadow-lift);
-  display:flex;flex-direction:column;gap:10px;align-items:center;
-  max-width:90vw;
-}
-.qr-card__label{font-size:.8rem;color:var(--muted)}
-/* QR 本體: 白底 + 圓角 + padding = 掃描器需要的安靜區 (quiet zone), 不可拿掉 */
-.qr-card__code{
-  width:auto;height:auto;
-  background:#fff;border-radius:10px;padding:8px;line-height:0;
-}
-.qr-card__link{
-  font-size:.78rem;color:var(--txt);opacity:.85;
-  overflow-wrap:anywhere;word-break:normal;
-  text-align:center;max-width:290px;line-height:1.5;
-}
-/* 每個 token 包成不可斷行的 span, 讓 <wbr> 成為唯一斷行點 -> 只在 ? 與 & 之後換行 */
-.qr-card__link span{white-space:nowrap}
-.qr-card__close{
-  border:1px solid var(--line);background:var(--omni-fill);color:var(--txt);
-  border-radius:var(--radius);padding:11px 26px;min-height:44px;
-  cursor:pointer;font-size:.9rem;white-space:nowrap;transition:.18s;
-}
-.qr-card__close:hover{border-color:var(--gold);color:var(--gold)}
+/* 舊的全螢幕 QR 遮罩 (#qrModal / .qr-card 系列) 已移除:
+   分享改為 .sharepop 就近小卡 (見下), 全螢幕遮罩會蓋住整個介面且無法
+   「在介面本體中向上輕輕彈出」。 */
 .badge{font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--glass);border:1px solid var(--line);color:var(--muted)}
 .badge.live{color:var(--gold);border-color:var(--gold)}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad17a;flex:none}
@@ -403,6 +395,27 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
   vertical-align:middle;
   flex:none;
 }
+/* 分享彈出卡: 在介面本體內輕輕浮現的玻璃卡, 由觸發鈕定位。
+   原先是全螢幕遮罩 (#qrModal), 會蓋住整個介面; 改為就近小卡,
+   向上長出時不出現「彈到最上方看不到」的情況。 */
+.sharepop{
+  position:fixed;z-index:32;
+  top:var(--sheet-top,0px);left:var(--sheet-left,0px);
+  width:min(88vw,300px);
+  max-height:calc(100dvh - 32px);
+  overflow:auto;overscroll-behavior:contain;
+  background:var(--glass-strong);backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--omni-blur)) saturate(160%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--omni-shadow-lift);
+  display:none;flex-direction:column;gap:10px;
+  pointer-events:auto;
+}
+.sharepop.open{display:flex;animation:subIn .2s ease-out}
+.sharepop__head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sharepop__head b{font-size:.92rem;font-weight:700}
+.sharepop .share-link input{min-width:0;font-size:.72rem}
+.sharepop .qr{background:#fff;border-radius:12px;padding:6px;width:118px;height:118px;display:grid;place-items:center;margin:0 auto}
 </style>
 </head>
 <body>
@@ -518,7 +531,7 @@ label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px
         </div>
         <div class="row">
           <label>從 <select id="from"><option value="auto" selected>自動</option><option value="zh-TW">繁中</option><option value="en">英文</option></select></label>
-          <label>到 <select id="to"><option value="auto" selected>自動</option><option value="en">英文</option><option value="zh-TW">繁中</option></select></label>
+          <label>到 <select id="to"><option value="auto">自動</option><option value="en">英文</option><option value="zh-TW" selected>繁中</option></select></label>
           <button class="btn btn-fixed" id="swapBtn" aria-label="交換原文與翻譯方向" title="交換原文與翻譯方向">⇄</button>
         </div>
       </div>
@@ -769,7 +782,57 @@ const sheetBtn=$('btnSheet');
 // Escape 關閉; Tab 在對話框內循環 (否則焦點會跑到被遮住的頁面元素上)。
 let sheetOpener=null;
 const FOCUSABLE='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-const setSheet=open=>{
+/* 依觸發鈕所在角, 把面板擺進視窗內。
+   角鈕是 position:fixed 於四角, 面板原本錨在字幕區 (兩者脫鉤), 往上長就會穿出
+   上緣被裁。這裡改成以觸發鈕為錨: 下半視窗 → 往上長, 上半視窗 → 往下長,
+   橫向以「靠哪側」對齊並夾在視窗內, 四個角落按鈕都能完整呈現面板。 */
+// 四角鈕的邊距: 依「介面本體」實際可用範圍 + safe-area 設定 --edge-* 變數。
+// 這讓鈕與 placeSheet()/sharePlace() 共用同一套本體座標系 —— 兩者各自寫死常數時,
+// 視窗上緣的鈕 (top:14px) 會讓面板被算出畫面外。safe-area 內縮讓四角鈕不會被
+// 瀏海/圓角螢幕遮住, 與原 calc(14px + env(safe-area-inset-*)) 等價但集中管理。
+function placeCorners(){
+  // safe-area 實測值: 用一個隱藏探針元素讀 env() (getComputedStyle 無法直接讀 env)。
+  // 桌面瀏覽器 env() 皆為 0px, 探針因此回 0, pad 為主; 行動裝置則自動內縮。
+  const probe=document.getElementById('saProbe')||(()=>{
+    const p=document.createElement('div'); p.id='saProbe';
+    p.style.cssText='position:fixed;visibility:hidden;pointer-events:none;'+
+      'top:env(safe-area-inset-top);right:env(safe-area-inset-right);'+
+      'bottom:env(safe-area-inset-bottom);left:env(safe-area-inset-left);';
+    document.body.appendChild(p); return p;
+  })();
+  const cs=getComputedStyle(probe);
+  const inset=k=>parseFloat(cs.getPropertyValue(k))||0;
+  const vw=document.documentElement.clientWidth, vh=document.documentElement.clientHeight;
+  // 面板彈出需要空間: 讓鈕離邊至少 14px, 並隨本體尺寸微調 (不超過 20px, 免得遮住字幕主體)
+  const pad=Math.max(14, Math.min(20, Math.round(Math.min(vw,vh)*0.022)));
+  const r=document.documentElement.style;
+  r.setProperty('--edge-top',    (pad+inset('top'))+'px');
+  r.setProperty('--edge-bottom', (pad+inset('bottom'))+'px');
+  r.setProperty('--edge-left',   (pad+inset('left'))+'px');
+  r.setProperty('--edge-right',  (pad+inset('right'))+'px');
+}
+addEventListener('resize',()=>{ placeCorners(); placeSheet(); if(sharePop) sharePlace(); });
+
+function placeSheet(anchor){
+  const GAP=10, EDGE=12;
+  const a=anchor.getBoundingClientRect();
+  const vw=document.documentElement.clientWidth, vh=document.documentElement.clientHeight;
+  const w=Math.min(vw*0.92,360);
+  const below=a.bottom+GAP, above=a.top-GAP;
+  // 先假設往上長; 若上方放不下而下方有空間, 改為往下長 (面板永遠留在畫面上)。
+  let top=above;
+  const belowRoom=vh-below, aboveRoom=above;
+  if(aboveRoom<Math.min(sheetEl.scrollHeight||320,vh*0.5) && belowRoom>aboveRoom) top=below;
+  top=Math.max(EDGE,Math.min(top,vh-EDGE-40));
+  let left;
+  // 鈕在右半 → 面板右緣對齊鈕右緣; 在左半 → 左緣對齊鈕左緣。夾在視窗內避免左右溢出。
+  if(a.left+a.width/2>vw/2) left=a.right-w; else left=a.left;
+  left=Math.max(EDGE,Math.min(left,vw-w-EDGE));
+  sheetEl.style.setProperty('--sheet-top',top+'px');
+  sheetEl.style.setProperty('--sheet-left',left+'px');
+  sheetEl.style.setProperty('--sheet-vpad',Math.round(a.height+EDGE)+'px');
+}
+const setSheet=(open,anchor)=>{
   sheetEl.classList.toggle('open',open);
   sheetBtn.classList.toggle('active',open);
   // aria-expanded 讓螢幕閱讀器知道這個按鈕控制的是哪個區域。
@@ -777,6 +840,9 @@ const setSheet=open=>{
   sheetBtn.setAttribute('aria-label',open?'關閉設定面板':'開啟設定面板');
   if(open){
     sheetOpener=document.activeElement;
+    // 以觸發鈕為錨擺位: 右上鈕 → 面板往下長留在畫面內, 右下鈕 → 往上長。
+    // 用 activeElement 兜底 (鍵盤觸發時沒有事件目標)。
+    placeSheet(anchor||sheetOpener||sheetBtn);
     // 焦點落在標題, 而非第一個輸入框 —— 使用者多半是要「看」選單而非立刻填值。
     (sheetEl.querySelector('.sheet__head b')||sheetEl).setAttribute('tabindex','-1');
     (sheetEl.querySelector('.sheet__head b')||sheetEl).focus({preventScroll:true});
@@ -801,47 +867,69 @@ document.addEventListener('keydown',e=>{
 sheetBtn.setAttribute('aria-expanded','false');
 // 分享連結 / QR: 直接從工具列取得目前房間觀眾連結
 const linkBtn=$('btnLink');
-if(linkBtn) linkBtn.onclick=()=>{
+// 分享: 在介面本體中輕輕彈出小卡 (非全螢幕遮罩), 位置依觸發鈕而定,
+// 向上長出並夾在視窗內 → 不會彈到最上方看不到。
+let sharePop=null;
+function closeShare(){ if(sharePop){ sharePop.remove(); sharePop=null; linkBtn.classList.remove('active'); } }
+if(linkBtn) linkBtn.onclick=e=>{
+  if(sharePop){ closeShare(); return; }
   let link=$('viewerLink').value.trim();
   const room=new URLSearchParams(location.search).get('room')||'';
   if(!link && room){
     const proto=(location.protocol||'https:');
     link=proto+'//'+location.host+'/?room='+encodeURIComponent(room);
   }
-  if(!link){ showErr('尚未建立房間：請先按 設定️ → 建立連結'); setSheet(true); return; }
+  if(!link){ showErr('尚未建立房間：請先按 設定 → 建立連結'); setSheet(true,sheetBtn); return; }
+  setSheet(false);
+  const pop=document.createElement('div');
+  pop.className='sharepop';
+  pop.setAttribute('role','dialog');
+  pop.setAttribute('aria-label','分享連結');
+  pop.innerHTML=
+    '<div class="sharepop__head"><b>分享</b>'+
+    '<button class="sheet__close" aria-label="關閉分享">✕</button></div>'+
+    '<div class="share-link"></div><div class="qr"></div>';
+  document.body.appendChild(pop);
+  sharePop=pop;
+  linkBtn.classList.add('active');
+  fillShareLink(pop,link);
   navigator.clipboard?.writeText(link).then(()=>log('已複製觀眾連結')).catch(()=>{});
-  showLinkQR(link);
+  pop.querySelector('.sheet__close').onclick=closeShare;
+  sharePlace();
+  const onDoc=e=>{ if(sharePop&&!sharePop.contains(e.target)&&e.target!==linkBtn){ closeShare(); document.removeEventListener('pointerdown',onDoc); } };
+  setTimeout(()=>document.addEventListener('pointerdown',onDoc),0);
 };
-function showLinkQR(link){
-  let box=document.getElementById('qrModal');
-  if(!box){
-    box=document.createElement('div'); box.id='qrModal';
-    // 樣式全部來自 stylesheet 的 #qrModal / .qr-card 系列, 這裡只組結構。
-    box.innerHTML=
-      '<div class="qr-card" role="dialog" aria-modal="true" aria-labelledby="qrModalLabel">'+
-        '<div class="qr-card__label" id="qrModalLabel">觀眾連結 (已複製)</div>'+
-        '<div class="qr-card__code" id="qrBox2"></div>'+
-        '<div class="qr-card__link" id="qrLink2"></div>'+
-        '<button class="qr-card__close" id="qrClose" aria-label="關閉 QR 視窗">關閉</button>'+
-      '</div>';
-    document.body.appendChild(box);
-    box.onclick=e=>{ if(e.target===box) box.remove(); };
-    box.querySelector('#qrClose').onclick=()=>box.remove();
-  }
-  // 在 ? 與 & 之後允許斷行, 讓網址在合理邊界換行而非切碎 token。
-  // 用 text node 組裝 (非 innerHTML), 避免把連結內容當 HTML 解析。
-  // 每段包成不可斷行的 span (樣式見 .qr-card__link span), 讓 <wbr> 成為唯一斷行點
-  var lk2=box.querySelector('#qrLink2'); lk2.textContent='';
-  var tok=link.split(/([?&])/);
-  for (var ti=0; ti<tok.length; ti++){
-    var sp=document.createElement('span');
-    sp.appendChild(document.createTextNode(tok[ti]));
-    lk2.appendChild(sp);
-    if (tok[ti]==='?'||tok[ti]==='&') lk2.appendChild(document.createElement('wbr'));
-  }
-  const q=box.querySelector('#qrBox2'); q.innerHTML='';
-  try{ new QRCode(q,{text:link,width:140,height:140,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.textContent=link; }
-  box.classList.add('open');
+// 依觸發鈕擺位分享卡: 下半視窗往上長, 上半往下長, 橫向夾在視窗內。
+function sharePlace(){
+  const GAP=10,EDGE=12;
+  const a=linkBtn.getBoundingClientRect();
+  const vw=document.documentElement.clientWidth,vh=document.documentElement.clientHeight;
+  const w=Math.min(vw*0.88,300);
+  const above=a.top-GAP, below=a.bottom+GAP;
+  let top=above;
+  if(above<vh*0.5 && vh-below>above) top=below;
+  top=Math.max(EDGE,Math.min(top,vh-EDGE-40));
+  let left=(a.left+a.width/2>vw/2)?a.right-w:a.left;
+  left=Math.max(EDGE,Math.min(left,vw-w-EDGE));
+  sharePop.style.setProperty('--sheet-top',top+'px');
+  sharePop.style.setProperty('--sheet-left',left+'px');
+}
+// 分享小卡: 就近浮現於介面本體內 (取代舊的全螢幕 #qrModal 遮罩)。
+// 舊 showLinkQR() 裡的「? / & 之後插 <wbr> 讓網址在合理邊界換行」需要 DOM 節點,
+// 而 <input> 是單一文字框無法放 <wbr>; 故小卡沿用 <input> 顯示完整連結 (title
+// 提供 tooltip), 完整連結可整段選取複製, 實際使用不需在窄卡內斷行。
+function fillShareLink(pop,link){
+  const box=pop.querySelector('.share-link');
+  box.innerHTML='<input type="text" readonly aria-label="觀眾連結"><button class="btn">複製</button>';
+  const inp=box.querySelector('input');
+  inp.value=link;
+  inp.title=link;
+  box.querySelector('.btn').onclick=()=>{
+    navigator.clipboard?.writeText(link).then(()=>log('已複製觀眾連結')).catch(()=>{});
+  };
+  const q=pop.querySelector('.qr'); q.innerHTML='';
+  try{ new QRCode(q,{text:link,width:112,height:112,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M}); }
+  catch(e){ q.textContent=link; }
 }
 // 一鍵開啟獨立漂浮視窗: 真的蓋在 Zoom/YouTube 上, 達成同時顯示
 let floatWin=null;
@@ -888,13 +976,21 @@ if(posBtn) posBtn.onclick=()=>{ setSheet(true); document.getElementById('sheet')
 // 把手在字幕下方的細玻璃條 (#gripHandle): 字幕區唯讀, 只能接收/顯示, 不攔截底層影片點擊。
 // 把手與字幕在 #grip 內垂直相接, 故拖把手時字幕跟著走, 兩者維持一體。
 (function enableDrag(){
-  const el=$('gripHandle'); const cap=subsEl; let dragging=false,sx,sy,ox,oy,cw,capH;
+  const el=$('gripHandle'); const cap=subsEl;
+  // 四角鈕是 position:fixed 在視窗角落, 字幕+把手卻由 stage 佈局 ——
+  // 只搬字幕+把手會讓圖示原地不動。使用者要「整個本體可拖移」, 故把四角鈕
+  // 一併納入同一組位移, 否則拖完介面就分裂了。
+  const corners=[...document.querySelectorAll('.corner-btn')];
+  let dragging=false,sx,sy,ox,oy,cw,capH;
+  let base=null; // 四角鈕相對視窗的原始位移量 (鈕是 fixed, 記錄其 left/top 供還原)
   el.addEventListener('pointerdown',e=>{
     if(e.target.closest('button,input,select,textarea,a,.sheet'))return; // 控制項自己點擊不觸發拖曳
     dragging=true; el.classList.add('dragging'); sx=e.clientX; sy=e.clientY;
     const r=el.getBoundingClientRect(); ox=r.left; oy=r.top; cw=r.width;
     // 字幕自身高度 (非把手高度) — 否則字幕與把手之間會裂開一道縫
     capH=cap.getBoundingClientRect().height;
+    // 記下四角鈕當下的 fixed 偏移, 拖曳時一併套用, 鬆手後還原。
+    base=corners.map(b=>{ const br=b.getBoundingClientRect(); return {el:b,x:br.left,y:br.top}; });
     el.setPointerCapture(e.pointerId);
   });
   el.addEventListener('pointermove',e=>{ if(!dragging)return;
@@ -903,12 +999,17 @@ if(posBtn) posBtn.onclick=()=>{ setSheet(true); document.getElementById('sheet')
     el.style.position='fixed'; el.style.left=nx+'px'; el.style.top=ny+'px'; el.style.width=cw+'px';
     cap.style.position='fixed'; cap.style.left=nx+'px'; cap.style.top=(ny-capH)+'px';
     cap.style.right='auto'; cap.style.bottom='auto'; cap.style.width=cw+'px'; cap.style.margin='0';
+    // 四角鈕跟著平移相同位移量 → 整個介面本體維持一體
+    if(base){ const dx=e.clientX-sx, dy=e.clientY-sy;
+      for(const b of base){ b.el.style.left=(b.x+dx)+'px'; b.el.style.top=(b.y+dy)+'px'; b.el.style.right='auto'; b.el.style.bottom='auto'; }
+    }
   });
   el.addEventListener('pointerup',e=>{ if(!dragging)return; dragging=false; el.classList.remove('dragging');
     el.releasePointerCapture(e.pointerId);
     // 鬆手後交還九宮格控制: 兩者恢復由 stage 佈局, 避免殘留 fixed 偏移
     el.style.position=''; el.style.left=''; el.style.top=''; el.style.width='';
     cap.style.position=''; cap.style.left=''; cap.style.top=''; cap.style.right=''; cap.style.bottom=''; cap.style.width=''; cap.style.margin='';
+    if(base){ for(const b of base){ b.el.style.left=''; b.el.style.top=''; b.el.style.right=''; b.el.style.bottom=''; } base=null; }
   });
 })();
 
@@ -1106,6 +1207,10 @@ async function fetchCourse(){
 function startCoursePolling(){ if(courseTimer)return; courseTimer=setInterval(()=>{ courseAcc=courseText()+'\n'+courseAcc; fetchCourse(); }, 45000); fetchCourse(); }
 function stopCoursePolling(){ if(courseTimer){clearInterval(courseTimer);courseTimer=null;} }
 function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+// 初始錨定四角: 必須在 layout 就緒後跑一次, 否則 --edge-* 未設定,
+// 四角鈕會停在 CSS fallback 14px (與面板座標系又不一致)。
+placeCorners();
+if(document.readyState==='loading') addEventListener('DOMContentLoaded',placeCorners);
 </script>
 </body>
 </html>

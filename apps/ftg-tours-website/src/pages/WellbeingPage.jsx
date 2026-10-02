@@ -5,8 +5,20 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as wr } from '../components/ContactSection'
+import { DATA_ni as ni } from '../data/siteData'
+import { default as mi } from '../components/CreamFeatureCard'
+import { default as ri } from '../components/LeadPhotoCard'
+
+/* 5T-Traceable: icon-name lists lifted verbatim from the deployed bundle's
+ * shared data block (`ii` / `ai` / `oi` / `si`), where each sat next to
+ * this page's own arrays. Kept as plain lists, not translated constants:
+ * they are Icon keys, and Icon renders null for an unknown name. */
+const ii = ['leaf', 'leaf', 'users', 'star', 'star'];
+const ai = ['mail', 'map', 'shield', 'tree', 'utensils', 'calendar', 'compass', 'clipboard'];
+const oi = ['wind', 'link', 'heart', 'camera', 'star'];
+const si = ['local', 'shield', 'mountain', 'compass', 'safety'];
 
 function hi(){let{t:e}=lr();yr({title:e(`products.wellbeing`),
 description:e(`wellbeing.metaDesc`),

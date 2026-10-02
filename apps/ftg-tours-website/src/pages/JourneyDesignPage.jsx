@@ -4,8 +4,15 @@
  * otherwise untouched. */
 import * as A from 'react/jsx-runtime'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import Icon as M from '../components/Icon'
+import { default as yr } from '../components/Seo'
+import { default as M } from '../components/Icon'
+import { STREAMS_COPY as N, SIX_STREAMS as Ni } from '../data/siteData'
+
+/* 5T-Traceable: `Pi` in the deployed bundle is this one-line locale picker,
+ * assigned as an arrow const (not `function`), which is why a
+ * declaration-only extractor misses it. */
+const Pi = (stream, lang) => (lang === 'en' ? stream.titleEn : stream.title);
+const Fi = (stream, lang) => (lang === 'en' ? stream.descEn : stream.desc);
 
 function Ii(){let{lang:e}=lr(),
 t=e===`en`;return yr({title:t?N.titleEn:N.title,description:t?N.metaDescEn:N.metaDesc,path:`/streams`,keywords:t?N.keywordsEn:N.keywords}),

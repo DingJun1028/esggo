@@ -5,8 +5,8 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as wr } from '../components/ContactSection'
 
 function Hr(){let{t:e}=lr();yr({title:e(`products.familyDay`),
 description:e(`familyDay.metaDesc`),

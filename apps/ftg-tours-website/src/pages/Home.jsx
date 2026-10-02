@@ -5,9 +5,9 @@
 import * as A from 'react/jsx-runtime'
 import { Link as k } from 'react-router-dom'
 import { useLanguage as lr } from '../i18n'
-import Seo as yr from '../components/Seo'
-import Icon as M from '../components/Icon'
-import ContactSection as wr from '../components/ContactSection'
+import { default as yr } from '../components/Seo'
+import { default as M } from '../components/Icon'
+import { default as wr } from '../components/ContactSection'
 import * as x from 'react'
 
 function Tr(){let{t:e}=lr();yr({title:e(`home.h1`)||`ESG 戶外健康旅遊方案`,description:e(`home.metaDesc`),

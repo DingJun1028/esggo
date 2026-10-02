@@ -52,6 +52,33 @@ body{display:flex;flex-direction:column;user-select:none}
   flex:none;
   backdrop-filter:blur(8px);
 }
+/* 摺疊後只留一條把手: 字幕佔滿整窗, 使用者要的「縮小 / 隱藏上方介面」。
+   標題列縮成一條細把手仍可拖曳, 並保留字級調節的浮出鈕。 */
+#bar.min{height:12px;padding:0;justify-content:center}
+/* 摺疊時連 .x (含自動 margin-left) 一起隱藏, 否則收合列會左空一塊、右卡一個鈕。
+   只留 ::after 的置中提示; 展開鈕用 min::before 畫在左側, 仍可點擊 (見 JS)。 */
+#bar.min #barText,#bar.min .brand-mark,#bar.min .close,#bar.min .x,
+#bar.min .gear,#bar.min .fz{display:none}
+/* 字級調整: 預設隱藏, 點右上齒輪才浮出; 獨立窗原本把 .tgt 寫死 1.55rem 無法調。 */
+#bar .fz{display:none;align-items:center;gap:2px}
+#bar.fz-open .fz{display:flex}
+#bar .fz button{
+  width:26px;height:22px;border-radius:4px;border:1px solid var(--line-soft);
+  background:rgba(255,255,255,.04);color:var(--txt-soft);cursor:pointer;
+  font-family:var(--mono);font-size:.7rem;line-height:1;
+}
+#bar .fz button:hover{border-color:var(--gold);color:var(--gold)}
+#bar .fz button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#bar .gear{
+  background:none;border:0;color:var(--muted);cursor:pointer;
+  font-size:.78rem;padding:0 var(--s1);min-height:22px;line-height:1;
+}
+#bar .gear:hover,#bar .gear:focus-visible{color:var(--gold);outline:2px solid var(--gold);outline-offset:2px}
+/* 摺疊把手上的提示文字 (繁中, 置中) */
+#bar.min::after{
+  content:'拖曳移動 · 點此展開';font-size:.58rem;color:var(--muted);
+  font-family:var(--mono);letter-spacing:.04em;
+}
 #bar .brand-mark{
   width:18px;height:18px;
   border:1px solid var(--gold);
@@ -109,7 +136,9 @@ body{display:flex;flex-direction:column;user-select:none}
   to{opacity:1;transform:translateY(0)}
 }
 .sub .src{
-  font-size:.95rem;
+  /* --tgt-scale 由字級調整 (A-/A+) 改寫; 預設 1。原文與譯文同步縮放,
+     維持「大中文小英文」的視覺階層。 */
+  font-size:calc(.95rem * var(--tgt-scale,1));
   font-weight:500;
   color:var(--txt-soft);
   text-shadow:0 1px 3px rgba(0,0,0,.85);
@@ -120,9 +149,14 @@ body{display:flex;flex-direction:column;user-select:none}
   width:fit-content;
   max-width:100%;
   letter-spacing:.01em;
+  /* 繁中長句換行而非溢出: 中日韓無空白可斷, 需 line-break:anywhere;
+     overflow-wrap:anywhere 兼顧英文長字/網址。否則會被 #subs 的 overflow:hidden 裁掉。 */
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-break:anywhere;
 }
 .sub .tgt{
-  font-size:1.55rem;
+  font-size:calc(1.55rem * var(--tgt-scale,1));
   font-weight:600;
   color:var(--txt);
   text-shadow:0 2px 6px rgba(0,0,0,.9);
@@ -133,10 +167,13 @@ body{display:flex;flex-direction:column;user-select:none}
   width:fit-content;
   max-width:100%;
   letter-spacing:.01em;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-break:anywhere;
 }
 #ph{
   color:var(--muted);
-  font-size:.95rem;
+  font-size:calc(.95rem * var(--tgt-scale,1));
   text-align:center;
   margin:auto;
   letter-spacing:.02em;
@@ -161,8 +198,14 @@ body{display:flex;flex-direction:column;user-select:none}
 <body>
 <div id="bar">
   <div class="brand-mark" aria-hidden="true">OA</div>
-  <span class="t"><em>OmniLive</em> 漂浮字幕</span>
+  <span class="t" id="barText"><em>OmniLive</em> 漂浮字幕</span>
+  <div class="fz" role="group" aria-label="字幕字級">
+    <button type="button" id="fzDown" aria-label="縮小字級" title="縮小字級">A-</button>
+    <button type="button" id="fzUp" aria-label="放大字級" title="放大字級">A+</button>
+  </div>
+  <button class="gear" id="gear" type="button" aria-label="顯示字級調整" aria-expanded="false" title="字級調整">⚙</button>
   <button class="x" id="close" type="button" aria-label="關閉漂浮字幕窗">關閉</button>
+  <button class="x" id="minimize" type="button" aria-label="隱藏上方介面" aria-expanded="false" title="隱藏上方介面">▾</button>
 </div>
 <!-- 字幕是本窗的唯一輸出 → 必須是 live region, 否則螢幕閱讀器使用者收不到任何內容。 -->
 <div id="subs" role="region" aria-label="漂浮字幕" aria-live="polite" aria-atomic="true"><div id="ph">等待字幕…</div></div>
@@ -219,6 +262,43 @@ bar.addEventListener('pointerdown',e=>{ if(e.target.id==='close')return;
   const sx=e.screenX,sy=e.screenY, wx=window.screenX,wy=window.screenY;
   const mv=ev=>window.moveTo(wx+(ev.screenX-sx), wy+(ev.screenY-sy));
   bar.onpointermove=mv; bar.onpointerup=()=>{bar.onpointermove=null;};
+});
+// ── 隱藏上方介面 (使用者: 左下開啟獨立頁面「請讓他可以在縮小 隱藏上方介面那塊」) ──
+// 收合成一條可拖曳的細把手, 字幕佔滿整窗; 點把手任何處即可展開。
+const minBtn=document.getElementById('minimize');
+function setMin(on){
+  bar.classList.toggle('min',on);
+  bar.setAttribute('aria-label',on?'展開上方介面':'隱藏上方介面');
+  minBtn.setAttribute('aria-expanded',on?'false':'true');
+  minBtn.setAttribute('aria-label',on?'展開上方介面':'隱藏上方介面');
+  minBtn.textContent=on?'▴':'▾';
+}
+minBtn.onclick=e=>{ e.stopPropagation(); setMin(!bar.classList.contains('min')); };
+// 收合後點條 (避開子元素) 直接展開
+bar.addEventListener('click',e=>{ if(bar.classList.contains('min')) setMin(false); });
+
+// ── 字級調整 (使用者: 「字體改成都可以調整」; 獨立窗原本寫死 1.55rem 無法調) ──
+const gear=document.getElementById('gear');
+gear.onclick=e=>{ e.stopPropagation();
+  const open=bar.classList.toggle('fz-open');
+  gear.setAttribute('aria-expanded',open?'true':'false');
+  gear.setAttribute('aria-label',open?'隱藏字級調整':'顯示字級調整');
+};
+// 以 0.1 為步進, 範圍 0.6–2.4 (≈ 12.6px–62px 的大譯文字級)
+let scale=Number(localStorage.getItem('ol.scale'))||1;
+function applyScale(v){
+  scale=Math.max(.6,Math.min(2.4,Math.round(v*10)/10));
+  document.documentElement.style.setProperty('--tgt-scale',scale);
+  localStorage.setItem('ol.scale',scale);
+}
+applyScale(scale);
+document.getElementById('fzUp').onclick=e=>{ e.stopPropagation(); applyScale(scale+.1); };
+document.getElementById('fzDown').onclick=e=>{ e.stopPropagation(); applyScale(scale-.1); };
+// 方向鍵微調 (±0.1), 免得使用者只能靠點擊
+document.addEventListener('keydown',e=>{
+  if(!e.ctrlKey&&!e.metaKey)return;
+  if(e.key==='='||e.key==='+'){ e.preventDefault(); applyScale(scale+.1); }
+  else if(e.key==='-'){ e.preventDefault(); applyScale(scale-.1); }
 });
 </script>
 </body>

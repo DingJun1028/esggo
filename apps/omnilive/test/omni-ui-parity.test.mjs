@@ -97,3 +97,56 @@ test('每個 var(--omni-*) 引用都有對應定義 (無悬空變數)', () => {
     assert.ok(defined.has(u), `使用了未定義的變數 ${u}`);
   }
 });
+
+/* ── 四角鈕定位契約 ────────────────────────────────────────────────
+ * 來源 bug: 四角鈕用 position:fixed + data-pos 寫死 14px, 直接釘在 viewport;
+ * 而 placeSheet()/sharePlace() 以鈕的 getBoundingClientRect() 計算彈出座標。
+ * 兩套座標系不一致 -> 位於視窗最上緣的鈕讓面板被算出畫面外 (使用者回報
+ * 「設定彈到最上方了看不到」)。修法是兩者共用 --edge-* 變數。
+ * 這組測試鎖住該不變量: 四角鈕與面板必須同源, 且不得寫死常數。
+ */
+
+test('四角鈕的邊距來自 --edge-* 變數 (與面板彈出座標系同源)', () => {
+  for (const pos of ['tl', 'tr', 'bl', 'br']) {
+    assert.match(
+      html,
+      new RegExp(`\\.corner-btn\\[data-pos="${pos}"\\][^{]*\\{[\\s\\S]{0,160}?var\\(--edge-`),
+      `四角 ${pos} 必須用 var(--edge-*) 取邊距, 不得寫死常數`
+    );
+  }
+  // 四角鈕基底不得再有獨立寫死的 top/left/right/bottom
+  const base = html.match(/\.corner-btn\{([\s\S]*?)\n  border-radius/);
+  assert.ok(base, '找不到 .corner-btn 基底規則');
+  assert.ok(
+    !/(^|[;{\s])(top|right|bottom|left)\s*:\s*calc?\s*\(?\s*\d+px/.test(base[1]),
+    `.corner-btn 基底仍寫死邊距, 會覆蓋 data-pos 的變數: ${base[1].slice(0, 120)}`
+  );
+});
+
+test('placeCorners() 存在且於初始化 + resize 時被呼叫', () => {
+  assert.match(html, /function placeCorners\(\)/, '缺少 placeCorners(): 無法設定 --edge-*');
+  // 初始錨定: 只在 resize 呼叫會讓 --edge-* 一開始未設定, 四角鈕停在 CSS fallback
+  const calls = [...html.matchAll(/placeCorners\(\)/g)].length - 1; // 扣掉定義
+  assert.ok(calls >= 2, `placeCorners() 呼叫次數不足 (${calls}), 需含初始 + resize`);
+  assert.match(html, /DOMContentLoaded[^)]*placeCorners/, '應在 DOM 就緒後再錨定一次');
+});
+
+test('resize 時重算面板定位 (面板與四角鈕同源)', () => {
+  assert.match(
+    html,
+    /addEventListener\(\s*['"]resize['"][\s\S]{0,200}?placeCorners\(\)[\s\S]{0,200}?placeSheet\(/,
+    'resize 應同時重算 placeCorners() 與 placeSheet(), 否則捲動/縮放後面板錯位'
+  );
+});
+
+test('四角鈕維持 position:fixed (不可改 absolute — 會錨到 #grip)', () => {
+  // 祖先鏈 #stage(absolute) > #grip > #toolbar; 改 absolute 會讓鈕跟著字幕拖曳
+  // 把���跑, 而非釘在介面本體四角。座標對齊改由 --edge-* 變數負責。
+  const base = html.match(/\.corner-btn\{([\s\S]*?)\n  border-radius/);
+  assert.ok(base, '找不到 .corner-btn 基底規則');
+  assert.match(
+    base[1],
+    /position:\s*fixed/,
+    '.corner-btn 必須維持 position:fixed (absolute 會錨到字幕把手 #grip)'
+  );
+});

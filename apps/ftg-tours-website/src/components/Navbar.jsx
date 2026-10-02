@@ -1,3 +1,14 @@
+/* 5T-Traceable: imports restore the bundle-scope bindings this lifted function
+ * depended on. Resolved against the deployed bundle by definition body, not by
+ * guesswork: A = react/jsx-runtime, x = react hooks, k = Link,
+ * xt = useLocation, lr = useLanguage. Function body is otherwise untouched.
+ */
+import * as A from 'react/jsx-runtime';
+import * as x from 'react';
+import { Link as k } from 'react-router-dom';
+import { useLocation as xt } from 'react-router-dom';
+import { useLanguage as lr } from '../i18n';
+
 function ur(){
 let [e,t]=
   (0,x.useState)(!1),
