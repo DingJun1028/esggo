@@ -141,7 +141,7 @@ test('resize 時重算面板定位 (面板與四角鈕同源)', () => {
 
 test('四角鈕維持 position:fixed (不可改 absolute — 會錨到 #grip)', () => {
   // 祖先鏈 #stage(absolute) > #grip > #toolbar; 改 absolute 會讓鈕跟著字幕拖曳
-  // 把���跑, 而非釘在介面本體四角。座標對齊改由 --edge-* 變數負責。
+  // 把它帶跑, 而非釘在介面本體四角。座標對齊改由 --edge-* 變數負責。
   const base = html.match(/\.corner-btn\{([\s\S]*?)\n  border-radius/);
   assert.ok(base, '找不到 .corner-btn 基底規則');
   assert.match(
