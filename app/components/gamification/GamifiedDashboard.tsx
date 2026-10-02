@@ -1,70 +1,74 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Trophy, Target, CheckCircle, Flame, Star, Shield } from "lucide-react";
+import { Zap, Trophy, Target, CheckCircle, Flame, Star, Shield, Sparkles } from "lucide-react";
+import { useOmniGamification } from "@/app/hooks/useOmniGamification";
 
-// ==========================================
-// Types & Mock Data
-// ==========================================
-type Quest = {
-  id: string;
-  title: string;
-  xpReward: number;
-  completed: boolean;
-  type: "daily" | "weekly" | "epic";
+// Map icon strings back to actual Lucide components
+const IconMap = {
+  Target: <Target className="w-6 h-6 text-emerald-400" />,
+  Flame: <Flame className="w-6 h-6 text-cyan-400" />,
+  Shield: <Shield className="w-6 h-6 text-purple-400" />,
+  Star: <Star className="w-6 h-6 text-yellow-400" />,
 };
-
-type Badge = {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ReactNode;
-  unlocked: boolean;
-};
-
-const INITIAL_QUESTS: Quest[] = [
-  { id: "q1", title: "完成 Scope 1 碳排數據初審", xpReward: 50, completed: false, type: "daily" },
-  { id: "q2", title: "清理 3 個系統熵增警告 (Entropy)", xpReward: 100, completed: false, type: "daily" },
-  { id: "q3", title: "連續 5 天登入 ESG 儀表板", xpReward: 300, completed: false, type: "weekly" },
-];
-
-const BADGES: Badge[] = [
-  { id: "b1", name: "淨零先鋒", description: "完成首次碳中和目標設定", icon: <Target className="w-6 h-6 text-emerald-400" />, unlocked: true },
-  { id: "b2", name: "熵減煉金術士", description: "解決超過 50 個代碼/系統警告", icon: <Flame className="w-6 h-6 text-cyan-400" />, unlocked: true },
-  { id: "b3", name: "守密者", description: "成功觸發 10 次 Hash Lock 驗證", icon: <Shield className="w-6 h-6 text-purple-400" />, unlocked: false },
-  { id: "b4", name: "萬能共鳴", description: "與全通之心達成 100% 同步率", icon: <Star className="w-6 h-6 text-yellow-400" />, unlocked: false },
-];
-
-// ==========================================
-// Components
-// ==========================================
 
 export function GamifiedDashboard() {
-  const [level, setLevel] = useState(12);
-  const [xp, setXp] = useState(850);
-  const xpNeeded = 1000;
-  const [quests, setQuests] = useState<Quest[]>(INITIAL_QUESTS);
-
-  const handleCompleteQuest = (id: string, reward: number) => {
-    setQuests((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, completed: true } : q))
-    );
-    
-    // Add XP and handle level up
-    setXp((prev) => {
-      const newXp = prev + reward;
-      if (newXp >= xpNeeded) {
-        setLevel((l) => l + 1);
-        return newXp - xpNeeded;
-      }
-      return newXp;
-    });
-  };
+  const { 
+    level, xp, xpNeeded, quests, badges, 
+    showLevelUp, lastGainedXp, completeQuest, dismissLevelUp 
+  } = useOmniGamification();
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-50 p-8 font-sans selection:bg-cyan-500/30">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#020617] text-slate-50 p-8 font-sans selection:bg-cyan-500/30 relative overflow-hidden">
+      
+      {/* ---------------- LEVEL UP OVERLAY (Dopamine hit!) ---------------- */}
+      <AnimatePresence>
+        {showLevelUp && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]/80 backdrop-blur-sm"
+            onClick={dismissLevelUp}
+          >
+            <motion.div 
+              initial={{ scale: 0.5, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 12, stiffness: 100 }}
+              className="relative flex flex-col items-center justify-center p-12 rounded-3xl bg-gradient-to-b from-cyan-500/20 to-emerald-500/10 border border-cyan-400/30 shadow-[0_0_100px_rgba(6,182,212,0.3)]"
+            >
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none" />
+              
+              <motion.div 
+                animate={{ rotate: 360 }} 
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                className="absolute w-64 h-64 bg-cyan-400/20 rounded-full blur-3xl pointer-events-none"
+              />
+              
+              <Sparkles className="w-16 h-16 text-yellow-400 mb-4 animate-pulse relative z-10" />
+              <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-300 relative z-10 drop-shadow-lg">
+                LEVEL UP!
+              </h2>
+              <p className="text-xl text-cyan-100 mt-4 font-mono relative z-10">
+                您的靈魂等級已躍升至 {level} 級
+              </p>
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="text-emerald-400 font-bold mt-2 relative z-10"
+              >
+                + 解鎖新的 5T 驗證權限
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* ----------------------------------------------------------------- */}
+
+      <div className="max-w-6xl mx-auto space-y-8 relative z-10">
         
         {/* Header Section */}
         <header className="flex items-center justify-between mb-12">
@@ -76,7 +80,22 @@ export function GamifiedDashboard() {
           </div>
           <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-5 py-3 rounded-2xl shadow-lg shadow-cyan-500/10">
             <Zap className="w-6 h-6 text-cyan-400 animate-pulse" />
-            <span className="text-xl font-bold font-mono text-cyan-50">{xp} <span className="text-sm text-cyan-400">/ {xpNeeded} XP</span></span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold font-mono text-cyan-50">{xp} <span className="text-sm text-cyan-400">/ {xpNeeded} XP</span></span>
+              <AnimatePresence>
+                {lastGainedXp > 0 && (
+                  <motion.span 
+                    initial={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 1.5 }}
+                    onAnimationComplete={() => {}} // Could reset lastGainedXp here in a real app
+                    className="absolute -top-6 right-8 text-emerald-400 font-bold text-sm"
+                  >
+                    +{lastGainedXp}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </header>
 
@@ -89,11 +108,11 @@ export function GamifiedDashboard() {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden"
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
               
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex justify-between items-end mb-4 relative z-10">
                 <div>
                   <h2 className="text-2xl font-bold flex items-center gap-2">
                     <Star className="w-5 h-5 text-emerald-400" />
@@ -104,7 +123,7 @@ export function GamifiedDashboard() {
                 <div className="text-sm font-mono text-cyan-400">{(xp / xpNeeded * 100).toFixed(1)}%</div>
               </div>
               
-              <div className="h-4 bg-slate-900 rounded-full overflow-hidden border border-white/5">
+              <div className="h-4 bg-slate-900 rounded-full overflow-hidden border border-white/5 relative z-10">
                 <motion.div 
                   className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 relative"
                   initial={{ width: 0 }}
@@ -138,7 +157,7 @@ export function GamifiedDashboard() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      whileHover={{ scale: 1.01, backgroundColor: "rgba(255,255,255,0.08)" }}
+                      whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.08)" }}
                       className={`flex items-center justify-between p-5 rounded-2xl border transition-colors ${
                         quest.completed 
                           ? "bg-emerald-500/10 border-emerald-500/30" 
@@ -147,18 +166,18 @@ export function GamifiedDashboard() {
                     >
                       <div className="flex items-center gap-4">
                         <button 
-                          onClick={() => !quest.completed && handleCompleteQuest(quest.id, quest.xpReward)}
+                          onClick={() => !quest.completed && completeQuest(quest.id, quest.xpReward)}
                           disabled={quest.completed}
                           className={`flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
                             quest.completed 
-                              ? "border-emerald-400 bg-emerald-400 text-[#020617]" 
-                              : "border-slate-500 hover:border-cyan-400 text-transparent hover:text-cyan-400"
+                              ? "border-emerald-400 bg-emerald-400 text-[#020617] scale-110" 
+                              : "border-slate-500 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] text-transparent hover:text-cyan-400"
                           }`}
                         >
                           <CheckCircle className="w-5 h-5" />
                         </button>
                         <div>
-                          <h3 className={`font-medium ${quest.completed ? "text-slate-400 line-through" : "text-slate-100"}`}>
+                          <h3 className={`font-medium transition-colors ${quest.completed ? "text-slate-400 line-through" : "text-slate-100"}`}>
                             {quest.title}
                           </h3>
                           <span className="text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-400 mt-2 inline-block">
@@ -189,7 +208,7 @@ export function GamifiedDashboard() {
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              {BADGES.map((badge) => (
+              {badges.map((badge) => (
                 <motion.div
                   key={badge.id}
                   whileHover={{ scale: 1.05, y: -5 }}
@@ -200,16 +219,16 @@ export function GamifiedDashboard() {
                   }`}
                 >
                   {/* Icon Container */}
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
                     badge.unlocked ? "bg-[#020617] shadow-inner border border-white/10" : "bg-slate-800"
                   }`}>
-                    {badge.icon}
+                    {IconMap[badge.iconName]}
                   </div>
                   <h3 className="text-sm font-bold text-center leading-tight">{badge.name}</h3>
                   
                   {/* Tooltip */}
-                  <div className="absolute inset-0 bg-[#020617]/90 backdrop-blur-md rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center z-10 border border-white/10 pointer-events-none">
-                    <p className="text-xs text-slate-300">{badge.description}</p>
+                  <div className="absolute inset-0 bg-[#020617]/95 backdrop-blur-md rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center z-10 border border-white/10 pointer-events-none">
+                    <p className="text-xs text-slate-300 font-medium">{badge.description}</p>
                   </div>
                 </motion.div>
               ))}
