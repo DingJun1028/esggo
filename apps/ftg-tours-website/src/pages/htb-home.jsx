@@ -3,6 +3,7 @@ import HtbHero from '../components/htb/HtbHero';
 import HtbImagePlaceholder from '../components/htb/HtbImagePlaceholder';
 import HtbStatCard from '../components/htb/HtbStatCard';
 import HtbSectionHeader from '../components/htb/HtbSectionHeader';
+import HtbResearchGrid from '../components/htb/HtbResearchGrid';
 import HtbFooter from '../components/htb/HtbFooter';
 
 export default function HtbHome() {

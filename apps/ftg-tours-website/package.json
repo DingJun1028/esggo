@@ -1,23 +1,41 @@
 {
-  "name": "@esggo/ftg-tours-website",
-  "version": "1.0.0",
+  "name": "ftg-tours-website",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@11.15.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "lint": "oxlint",
+    "audit:encoding": "python scripts/check_mojibake.py",
+    "check": "npm run audit:encoding && npm run lint && npm run test:run",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "preview": "vite preview",
+    "audit:tokens": "node scripts/design-token-audit.cjs"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router-dom": "^7.0.0"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
-    "tailwindcss": "^3.4.0",
-    "vite": "^8.0.0"
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^4.1.11",
+    "autoprefixer": "^10.5.4",
+    "happy-dom": "^20.11.1",
+    "oxlint": "^1.71.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.1.1",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22.13",
+    "pnpm": ">=11"
   }
 }

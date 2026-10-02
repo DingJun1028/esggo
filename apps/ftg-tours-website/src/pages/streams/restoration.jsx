@@ -24,7 +24,7 @@ export default function RestorationStream() {
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-teal-700 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-700 via-teal-800 to-teal-900" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <Link to="/streams" className="inline-flex items-center text-gray-300 hover:text-white mb-8 transition-colors text-sm">
+          <Link to="/streams" className="min-h-[44px] min-w-[44px] px-2 -mx-2 inline-flex items-center text-gray-300 hover:text-white mb-8 transition-colors text-sm">
             <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>

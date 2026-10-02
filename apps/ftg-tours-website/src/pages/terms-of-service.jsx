@@ -4,7 +4,7 @@ export default function TermsOfService() {
   return (
     <div className="min-h-screen py-24 bg-white">
       <div className="max-w-4xl mx-auto px-4">
-        <Link to="/" className="inline-flex items-center text-ftg-forest mb-8 hover:text-ftg-orange transition-colors text-sm">
+        <Link to="/" className="min-h-[44px] min-w-[44px] px-2 -mx-2 inline-flex items-center text-ftg-forest mb-8 hover:text-ftg-orange transition-colors text-sm">
           <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           返回首頁
         </Link>

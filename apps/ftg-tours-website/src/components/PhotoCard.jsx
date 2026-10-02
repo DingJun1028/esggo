@@ -1,23 +1,29 @@
 /**
- * PhotoCard.jsx — image card with a caption overlaid on the bottom of the photo.
- * 5T-Traceable: recovered from the production bundle, `function kr({src,title,desc})`
- *   at offset 370429. The prop is `src`, not `image`: call sites pass
- *   `(0,A.jsx)(kr,{src:t.src,title:...,desc:...})`, so an `image` prop silently
- *   renders an <img> with no source.
+ * PhotoCard — 防止孤兒句 (Orphan Lines)
+ * - text-balance: 平衡文字換行, 防止單詞/單字孤立
+ * - line-clamp-2: 標題最多 2 行
+ * - line-clamp-3: 描述最多 3 行
+ * - min-h-[120px]: 固定最小高度, 防止版面跳動
+ * - flex-shrink-0: 防止 flex 容器壓縮
  */
 export default function PhotoCard({ src, title, desc }) {
   return (
-    <figure className="relative overflow-hidden rounded-2xl shadow-lg group">
-      <img
-        src={src}
-        alt={title}
-        className="w-full h-48 sm:h-56 md:h-64 lg:h-72 object-cover transition-transform group-hover:scale-105"
-        loading="lazy"
-      />
-      <figcaption className="absolute inset-x-0 bottom-0 bg-black/50 p-3 md:p-4">
-        <h3 className="text-white text-base md:text-lg font-bold">{title}</h3>
-        <p className="text-gray-200 text-xs md:text-sm">{desc}</p>
-      </figcaption>
-    </figure>
+    <div className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="relative aspect-[3/2] w-full overflow-hidden">
+        <img
+          src={src}
+          alt={title}
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+      <div className="p-4 max-w-xs sm:max-w-sm flex-shrink-0 min-h-[120px]">
+        <h3 className="text-lg font-semibold text-ftg-forest line-clamp-2 text-balance">
+          {title}
+        </h3>
+        <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+          {desc}
+        </p>
+      </div>
+    </div>
   );
 }
