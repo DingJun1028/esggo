@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Trophy, Target, CheckCircle, Flame, Star, Shield, Sparkles } from "lucide-react";
+import { Zap, Trophy, Target, CheckCircle, Flame, Star, Shield, Sparkles, Users } from "lucide-react";
 import { useOmniGamification } from "@/app/hooks/useOmniGamification";
+import { getLeaderboard } from "@/app/actions/gamification";
 
 // Map icon strings back to actual Lucide components
 const IconMap = {
@@ -13,16 +14,31 @@ const IconMap = {
   Star: <Star className="w-6 h-6 text-yellow-400" />,
 };
 
+type LeaderboardEntry = {
+  id: string;
+  name: string;
+  level: number;
+  xp: number;
+  avatar: string;
+};
+
 export function GamifiedDashboard() {
   const { 
     level, xp, xpNeeded, quests, badges, 
     showLevelUp, lastGainedXp, completeQuest, dismissLevelUp 
   } = useOmniGamification();
 
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+
+  useEffect(() => {
+    // Fetch real/mock data from Supabase Server Action
+    getLeaderboard().then(setLeaderboard);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#020617] text-slate-50 p-8 font-sans selection:bg-cyan-500/30 relative overflow-hidden">
       
-      {/* ---------------- LEVEL UP OVERLAY (Dopamine hit!) ---------------- */}
+      {/* ---------------- LEVEL UP OVERLAY ---------------- */}
       <AnimatePresence>
         {showLevelUp && (
           <motion.div 
@@ -40,13 +56,11 @@ export function GamifiedDashboard() {
               className="relative flex flex-col items-center justify-center p-12 rounded-3xl bg-gradient-to-b from-cyan-500/20 to-emerald-500/10 border border-cyan-400/30 shadow-[0_0_100px_rgba(6,182,212,0.3)]"
             >
               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none" />
-              
               <motion.div 
                 animate={{ rotate: 360 }} 
                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                 className="absolute w-64 h-64 bg-cyan-400/20 rounded-full blur-3xl pointer-events-none"
               />
-              
               <Sparkles className="w-16 h-16 text-yellow-400 mb-4 animate-pulse relative z-10" />
               <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-300 relative z-10 drop-shadow-lg">
                 LEVEL UP!
@@ -60,15 +74,15 @@ export function GamifiedDashboard() {
                 transition={{ delay: 0.5 }}
                 className="text-emerald-400 font-bold mt-2 relative z-10"
               >
-                + 解鎖新的 5T 驗證權限
+                + 已同步至 Supabase 資料庫 (Hash Locked)
               </motion.p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      {/* ----------------------------------------------------------------- */}
+      {/* -------------------------------------------------- */}
 
-      <div className="max-w-6xl mx-auto space-y-8 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         
         {/* Header Section */}
         <header className="flex items-center justify-between mb-12">
@@ -88,7 +102,6 @@ export function GamifiedDashboard() {
                     initial={{ opacity: 1, y: 0 }}
                     animate={{ opacity: 0, y: -20 }}
                     transition={{ duration: 1.5 }}
-                    onAnimationComplete={() => {}} // Could reset lastGainedXp here in a real app
                     className="absolute -top-6 right-8 text-emerald-400 font-bold text-sm"
                   >
                     +{lastGainedXp}
@@ -111,7 +124,6 @@ export function GamifiedDashboard() {
               className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
-              
               <div className="flex justify-between items-end mb-4 relative z-10">
                 <div>
                   <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -122,7 +134,6 @@ export function GamifiedDashboard() {
                 </div>
                 <div className="text-sm font-mono text-cyan-400">{(xp / xpNeeded * 100).toFixed(1)}%</div>
               </div>
-              
               <div className="h-4 bg-slate-900 rounded-full overflow-hidden border border-white/5 relative z-10">
                 <motion.div 
                   className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 relative"
@@ -130,7 +141,6 @@ export function GamifiedDashboard() {
                   animate={{ width: `${(xp / xpNeeded) * 100}%` }}
                   transition={{ type: "spring", stiffness: 50, damping: 15 }}
                 >
-                  {/* Glare effect */}
                   <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/50" />
                 </motion.div>
               </div>
@@ -147,7 +157,6 @@ export function GamifiedDashboard() {
                 <Target className="w-6 h-6 text-cyan-400" />
                 <h2 className="text-2xl font-bold">每日委託 (Quest Board)</h2>
               </div>
-              
               <div className="space-y-4">
                 <AnimatePresence>
                   {quests.map((quest) => (
@@ -195,46 +204,78 @@ export function GamifiedDashboard() {
             </motion.div>
           </div>
 
-          {/* Right Column: Badges */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 h-fit"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Trophy className="w-6 h-6 text-yellow-400" />
-              <h2 className="text-2xl font-bold">聖所徽章牆</h2>
-            </div>
+          {/* Right Column: Badges & Leaderboard */}
+          <div className="space-y-8">
             
-            <div className="grid grid-cols-2 gap-4">
-              {badges.map((badge) => (
-                <motion.div
-                  key={badge.id}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className={`group relative aspect-square rounded-2xl flex flex-col items-center justify-center p-4 border transition-all cursor-default ${
-                    badge.unlocked 
-                      ? "bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-lg shadow-cyan-500/10" 
-                      : "bg-slate-900/50 border-white/5 opacity-50 grayscale"
-                  }`}
-                >
-                  {/* Icon Container */}
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
-                    badge.unlocked ? "bg-[#020617] shadow-inner border border-white/10" : "bg-slate-800"
-                  }`}>
-                    {IconMap[badge.iconName]}
+            {/* Badges */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Trophy className="w-6 h-6 text-yellow-400" />
+                <h2 className="text-2xl font-bold">聖所徽章牆</h2>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {badges.map((badge) => (
+                  <motion.div
+                    key={badge.id}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className={`group relative aspect-square rounded-2xl flex flex-col items-center justify-center p-4 border transition-all cursor-default ${
+                      badge.unlocked 
+                        ? "bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-lg shadow-cyan-500/10" 
+                        : "bg-slate-900/50 border-white/5 opacity-50 grayscale"
+                    }`}
+                  >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
+                      badge.unlocked ? "bg-[#020617] shadow-inner border border-white/10" : "bg-slate-800"
+                    }`}>
+                      {IconMap[badge.iconName]}
+                    </div>
+                    <h3 className="text-sm font-bold text-center leading-tight">{badge.name}</h3>
+                    <div className="absolute inset-0 bg-[#020617]/95 backdrop-blur-md rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center z-10 border border-white/10 pointer-events-none">
+                      <p className="text-xs text-slate-300 font-medium">{badge.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Leaderboard */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="w-6 h-6 text-cyan-400" />
+                <h2 className="text-2xl font-bold">ESG 永續戰力榜</h2>
+              </div>
+              <div className="space-y-3">
+                {leaderboard.map((user, index) => (
+                  <div key={user.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-lg shadow-inner">
+                        {user.avatar}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                          {user.name}
+                          {index === 0 && <span className="text-xs text-yellow-400 font-mono">TOP 1</span>}
+                        </div>
+                        <div className="text-xs text-emerald-400">Lv. {user.level}</div>
+                      </div>
+                    </div>
+                    <div className="text-sm font-mono text-cyan-400">{user.xp} XP</div>
                   </div>
-                  <h3 className="text-sm font-bold text-center leading-tight">{badge.name}</h3>
-                  
-                  {/* Tooltip */}
-                  <div className="absolute inset-0 bg-[#020617]/95 backdrop-blur-md rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center z-10 border border-white/10 pointer-events-none">
-                    <p className="text-xs text-slate-300 font-medium">{badge.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-          
+                ))}
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </div>
     </div>

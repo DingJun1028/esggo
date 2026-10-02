@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { syncGamificationState } from "@/app/actions/gamification";
 
 // ==========================================
 // Types
@@ -19,7 +20,7 @@ export type Badge = {
   unlocked: boolean;
 };
 
-// Initial Mock Data (Ready for Supabase replacement)
+// Initial Mock Data
 const INITIAL_QUESTS: Quest[] = [
   { id: "q1", title: "完成 Scope 1 碳排數據初審", xpReward: 50, completed: false, type: "daily" },
   { id: "q2", title: "清理 3 個系統熵增警告 (Entropy)", xpReward: 100, completed: false, type: "daily" },
@@ -44,33 +45,45 @@ export function useOmniGamification() {
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [lastGainedXp, setLastGainedXp] = useState(0);
 
-  const completeQuest = useCallback((id: string, reward: number) => {
-    // 1. Mark quest as complete
+  const completeQuest = useCallback(async (id: string, reward: number) => {
+    // 1. Mark quest as complete locally
     setQuests((prev) =>
       prev.map((q) => (q.id === id ? { ...q, completed: true } : q))
     );
     
     // 2. Add XP and check for level up
     setLastGainedXp(reward);
+    let newLevel = level;
+    let finalXp = xp + reward;
+    
     setXp((prev) => {
-      const newXp = prev + reward;
-      if (newXp >= xpNeeded) {
-        // Level up!
-        setLevel((l) => l + 1);
+      const updatedXp = prev + reward;
+      if (updatedXp >= xpNeeded) {
+        newLevel = level + 1;
+        setLevel(newLevel);
         setShowLevelUp(true);
-        
-        // Hide level up modal after 3 seconds
         setTimeout(() => setShowLevelUp(false), 3000);
-        
-        return newXp - xpNeeded; // Carry over XP
+        finalXp = updatedXp - xpNeeded;
+        return finalXp;
       }
-      return newXp;
+      return updatedXp;
     });
     
-    // TODO: Trigger Supabase RPC to securely record the transaction with 5T Hash Lock
-    // supabase.rpc('grant_omni_energy', { user_id, quest_id, reward_amount });
+    // 3. Trigger Supabase Server Action to securely record the transaction with 5T Hash Lock
+    try {
+      const result = await syncGamificationState("u4", {
+        level: newLevel,
+        xp: finalXp,
+        questsCompleted: [id]
+      });
+      if (result.success) {
+        console.log(`[5T Protocol] Gamification state synced. Hash Lock: ${result.hashLock}`);
+      }
+    } catch (error) {
+      console.error("Failed to sync gamification state with Supabase", error);
+    }
     
-  }, [xpNeeded]);
+  }, [level, xp, xpNeeded]);
 
   const dismissLevelUp = () => setShowLevelUp(false);
 
