@@ -89,7 +89,6 @@ e2e-k1/runs/
 .playwright-mcp/
 .storybook/
 .codeturtle.yml
-.editorconfig
 .husky/
 .lintstagedrc.json
 .npmrc
