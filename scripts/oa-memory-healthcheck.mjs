@@ -65,8 +65,8 @@ const SVC = process.env.TDAI_SERVICE_ID ?? 'oa-team-swarm';
 const USER = 'admin';
 const QUIET = process.env.HEALTHCHECK_QUIET === '1';
 const TIMEOUT_MS = Number(process.env.OA_MEMORY_TEST_TIMEOUT_MS ?? 30000);
-// /health 的 budget 必須 >= 實際 RTT。本機 TDAI 在忙碌時單次 /v3/conversation/search
-// 實測要 10~17s，固定 5s 的 AbortController 會讓 ping 誤報 "This operation was aborted"
+// /health 的 budget 必須 >= 實際 RTT。本機 TDAI 在忙碌時單次 search 實測要
+// 10~17s，固定 5s 的 AbortController 會讓 ping 誤報 "This operation was aborted"
 // → 假告警。預設拉高到 30s（與 TIMEOUT_MS 同級），可用 env 覆寫。
 const PING_TIMEOUT_MS = Number(process.env.OA_MEMORY_PING_TIMEOUT_MS ?? 30000);
 const MIN_WRITES = Number(process.env.OA_MEMORY_MIN_WRITES ?? 2);
@@ -102,31 +102,45 @@ async function ping() {
 }
 
 async function capture(sid, agent, content) {
-  const res = await fetch(`${CORE}/v3/conversation/add`, {
+  // 端點實測 2026-10-07（gateway 無 /v3/conversation/* → 404）：
+  //   POST /capture 成功回 {status, record_id, session_key, l0_ids[], scene_name}
+  //   傳 messages:[{role,content}] → 400 {"detail":"user_content or assistant_content is required"}
+  // 故改傳 user_content，並回傳 l0_ids（原 data.accepted_ids 已不存在）。
+  const res = await fetch(`${CORE}/capture`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({
       service_id: SVC,
       user_id: USER,
       session_id: sid,
-      messages: [{ role: 'user', content: `[${agent}] ${content}` }],
+      session_key: sid,
+      user_content: `[${agent}] ${content}`,
     }),
   });
   const d = await res.json().catch(() => ({}));
-  return { ok: res.ok, code: d.code, ids: d.data?.accepted_ids };
+  return { ok: res.ok, code: d.code ?? res.status, ids: d.l0_ids, detail: d.detail };
 }
 
 async function recall(sid, query) {
-  const res = await fetch(`${CORE}/v3/conversation/search`, {
+  const res = await fetch(`${CORE}/search/conversations`, {
     method: 'POST',
     headers: authHeaders(),
-    // limit 是必要的：/v3/conversation/search 預設只回 top-1。兩隻蜂都寫了含
-    // "healthcheck" 的訊息時，語意較近的那則永遠贏，單靠 query 區分不出兩隻蜂，
-    // 跨代理召回會恆為 false → 假告警。實測 limit=10 才拿得到兩隻蜂各自的訊息。
-    body: JSON.stringify({ service_id: SVC, user_id: USER, session_id: sid, query, limit: 10 }),
+    // limit 是必要的：search 預設只回 top-1。兩隻蜂都寫了含 "healthcheck" 的訊息時，
+    // 語意較近的那則永遠贏，單靠 query 區分不出兩隻蜂，跨代理召回會恆為 false
+    // → 假告警。實測 limit=10 才拿得到兩隻蜂各自的訊息。
+    // session_key 才是正確過濾欄位（實測回顯 session_key=sid；傳 session_id 不回顯）。
+    body: JSON.stringify({
+      service_id: SVC,
+      user_id: USER,
+      session_id: sid,
+      session_key: sid,
+      query,
+      limit: 10,
+    }),
   });
   const d = await res.json().catch(() => ({}));
-  return d.data?.messages ?? [];
+  // 實測回應為頂層 results[]（非 data.messages），訊息在 message_text（非 content）
+  return d.results ?? [];
 }
 
 function finish(checks, alert) {
@@ -186,7 +200,8 @@ async function main() {
 
   const r1 = await withTimeout(recall(sid, 'healthcheck'), TIMEOUT_MS, 'r1').catch(() => []);
   const r2 = await withTimeout(recall(sid, 'healthcheck recall'), TIMEOUT_MS, 'r2').catch(() => []);
-  const cross = r1.some((m) => m.content?.includes('Bee-07')) && r2.some((m) => m.content?.includes('Bee-03'));
+  // 訊息欄位實測為 message_text（非 content）
+  const cross = r1.some((m) => m.message_text?.includes('Bee-07')) && r2.some((m) => m.message_text?.includes('Bee-03'));
   const recallOk = (r1.length > 0 ? 1 : 0) + (r2.length > 0 ? 1 : 0);
 
   checks.push(['跨代理召回', cross, `r1=${r1.length} r2=${r2.length}`]);
