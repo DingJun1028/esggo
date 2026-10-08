@@ -17,7 +17,7 @@
     "verify:matrix": "node scripts/verify-matrix.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.111.0",
+    "@supabase/supabase-js": "^2.117.2",
     "firebase": "^12.17.0",
     "lucide-react": "^0.395.0",
     "react": "^19.2.7",

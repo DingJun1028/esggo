@@ -49,7 +49,7 @@
     "@notionhq/client": "^5.27.0",
     "@notionhq/workers": "^0.4.0",
     "@prisma/client": "^6.19.3",
-    "@supabase/supabase-js": "^2.45.6",
+    "@supabase/supabase-js": "^2.117.2",
     "@tailwindcss/typography": "^0.5.20",
     "@upstash/redis": "^1.39.0",
     "cheerio": "^1.2.0",
