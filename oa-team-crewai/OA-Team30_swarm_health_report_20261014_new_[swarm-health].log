@@ -1,0 +1,61 @@
+================================================================================
+OA-Team 30 萬能蜂群 — 健康檢查報告（Health Check Report）        [swarm-health]
+執行時間：2026-10-14 台北標準時間  |  執行者：cron 自動化排程
+================================================================================
+
+【1】 Hermes proxy 監聽（Port 8645）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    檢查需求：測試 Hermes proxy 是否於本機 127.0.0.1 監聽 8645
+    結果：【FAIL─未發現】連接 127.0.0.1:8645 無回應（ConnectionRefused）
+    實測（curl -m 5）：
+      8642 = 200 OK {"status":"ok","platform":"hermes-agent","version":"0.21.7"}
+      8644 = 200 OK {"status":"ok","platform":"webhook"}
+      8645 = connection refused（無回應）
+    掃描結論：
+      8642 = LISTENING（實際 Hermes API server）
+      8644 = LISTENING（webhook 平台）
+      8645 = NOT_LISTENING（未偵測到任何監聽端口）
+    說明：Hermes proxy 未以 8645 為監聽端口啟動或尚未啟動。
+          實際可用的服務端點為 8642 / 8644。
+
+【2】 crew.jsonc 結構（30 agents + 5 tasks）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    檢查需求：crew.jsonc 檔案是否存在，且包含 30 個 agents 與 5 個 tasks
+    發現位置：C:/Users/dingj/esggo/oa-team-crewai/crew.jsonc
+    結果：【OK─通過】
+      agents 個數：30（含 6 個策略/技術/創意/營銷/守衛小隊）
+      tasks 個數：5（extract_essence / forge_contract / dispatch_swarm / entropy_forge / verify_5t）
+      檔名：crew.jsonc
+      屬性 name：oa_team_30_swarm
+    進一步確認：agents/ 資料夾含 30 個 JSONC 定義（sage_01..verify_30）
+    5T 驗算：格式解析 PASS，MECE 5×6 分組 PASS
+
+【3】 日誌（Swarm status report, Traditional Chinese, [swarm-health] tag）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    檢查需求：記錄 swarm 狀態報告（繁體中文）並標注 [swarm-health]
+    結果：【OK─已寫入】
+    日誌檔案：OA-Team30_swarm_health_report_20261014_[swarm-health].log
+    該報告本身即為此日誌（繁體中文，含 [swarm-health] 標籤）。
+    5T 落實：Traceable（起源可追溯）/ Trackable（流轉可記錄）
+           / Tangible（實際輸出可感）/ Transparent（邏輯公開）
+           / Trustworthy（Hash Lock 凍結）
+
+【4】 綜合結論
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    結果：【門檻差異】標準 1 未通過，標準 2、3 已通過。
+      * 標準 1（Port 8645 監聽）：未通過（FLA）
+      * 標準 2（crew.jsonc 30 agents + 5 tasks）：已通過
+      * 標準 3（繁體中文日誌標 [swarm-health]）：已通過
+
+    建議後續動作：
+      1. 確認 Hermes 是否應於 8645 監聽；若需要，啟動 hermes 並指定 port 8645
+      2. 若 8645 為遠端 VPS 所需，改啟遠端服務並指向該 VPS
+      3. 重新執行本次檢查，並記錄重新檢查的結果
+
+================================================================================
+    標籤：[swarm-health]   │   語言：繁體中文   │   狀態：標準 2、3 通過，標準 1 失敗
+================================================================================
+
+> 封存：5T 合規。所有數據寫入後執行 Hash Lock + Object.freeze()。
+
+結論：**標準 1 失敗，其餘 2 項成功。** 建議從 8645 proxy 復原開始。
