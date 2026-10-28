@@ -43,4 +43,5 @@ jobs:
             echo "::error::LLM 憑證缺失：GROQ_API_KEY、CREWAI_API_KEY、OPENAI_API_KEY 皆為空，無法載入 agents/*.jsonc"
             exit 1
           fi
-          uv run --python 3.13 --with 'crewai[litellm]' python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
+          # 固定 mcp<2：未固定時 litellm 會因 mcp.types 缺少 CacheableResult 而匯入失敗
+          uv run --python 3.13 --with 'crewai[litellm]' --with 'mcp<2' python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
