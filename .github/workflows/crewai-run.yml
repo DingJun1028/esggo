@@ -15,10 +15,6 @@ jobs:
     defaults:
       run:
         working-directory: oa-team-crewai
-    env:
-      # LLM 憑證：優先用 CREWAI_API_KEY（若日後設定），否則回落到倉庫既有的 OPENAI_API_KEY。
-      # 註：GitHub Actions 運算式中空字串為 falsy，故未設定的 secret 會自動回落。
-      CREWAI_API_KEY: ${{ secrets.CREWAI_API_KEY || secrets.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,13 +23,24 @@ jobs:
 
       - name: Run OA-Team 30 Swarm (via uv run)
         env:
-          OPENAI_API_KEY: ${{ secrets.CREWAI_API_KEY || secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL_NAME: gpt-4o-mini
+          # LLM：優先使用 Groq（litellm 的 groq/ 前綴會讀取 GROQ_API_KEY）。
+          # 沒有 GROQ_API_KEY 時，才回落到 CREWAI_API_KEY 或 OPENAI_API_KEY（OpenAI）。
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          FALLBACK_OPENAI_API_KEY: ${{ secrets.CREWAI_API_KEY || secrets.OPENAI_API_KEY }}
+          GROQ_MODEL_NAME: groq/qwen/qwen3.8-27b
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          echo "DEBUG: injected OPENAI_API_KEY length = ${#OPENAI_API_KEY}"
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo "::error::LLM 憑證缺失：secrets.CREWAI_API_KEY 與 secrets.OPENAI_API_KEY 皆為空，無法載入 agents/*.jsonc"
+          if [ -n "$GROQ_API_KEY" ]; then
+            echo "LLM 提供者：Groq（${GROQ_MODEL_NAME}）"
+            export OPENAI_MODEL_NAME="$GROQ_MODEL_NAME"
+            # CrewAI 預設仍會檢查 OPENAI_API_KEY 是否存在，給佔位值，實際呼叫走 Groq
+            export OPENAI_API_KEY="${FALLBACK_OPENAI_API_KEY:-unused-groq-routed}"
+          elif [ -n "$FALLBACK_OPENAI_API_KEY" ]; then
+            echo "LLM 提供者：OpenAI（回落）"
+            export OPENAI_API_KEY="$FALLBACK_OPENAI_API_KEY"
+            export OPENAI_MODEL_NAME="gpt-4o-mini"
+          else
+            echo "::error::LLM 憑證缺失：GROQ_API_KEY、CREWAI_API_KEY、OPENAI_API_KEY 皆為空，無法載入 agents/*.jsonc"
             exit 1
           fi
           uv run --python 3.13 --with 'crewai[litellm]' python main.py "為 ESG-GO 產出一個 5T 合規的元件骨架"
