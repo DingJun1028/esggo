@@ -94,9 +94,10 @@ chcp 65001
 
 根因：PS5.1 的 `>` 與管道對 native 指令（gh/git/node…）輸出**轉碼成 UTF-16LE**，
 下游 node `JSON.parse` 吃到 FF FE 開頭即炸 `Unexpected token '<U+FFFD>'`（此處以 `<U+FFFD>` 代替實際 U+FFFD 字面值，避免本檔自身被 encoding-check 判為毀損）。
-（跡象：檔案 20KB 內容正常卻 parse 失敗；`[Text.Encoding]::UTF8.GetString` 讀出全空格交錯＝UTF-16LE 特徵。）
 
-根果消除（一次修復不復發）：
+
+
+
 - **落檔給程式讀：一律 `cmd /c "命令 > file"`**（cmd 不轉碼、原位元組直通，BOM 都不會加）
 - 人讀的輸出：`| Out-File -Encoding utf8`
 - node 側防禦：`readFileSync(...,'utf8').replace(/\uFEFF/,'')` 且先 sniff `buf[0]===0xFF&&buf[1]===0xFE` 判 UTF-16 直接改用 `'utf16le'`
