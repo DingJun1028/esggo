@@ -1,0 +1,55 @@
+# 蜂群健康檢查報告 — OA-Team 30 萬能蜂群
+日期: 2026-11-16 23:00 CST (UTC+08:00)
+執行人員: Hermes cron 排程 (oa-team-crewai)
+標籤: [swarm-health]
+交付來源: origin (DingJun1028/esggo.git)
+
+---
+
+## 一、 Hermes Proxy 監聽檢查
+
+| 檢查項目 | 預期 | 實測 | 結果 |
+|---|---|---|---|
+| 端口 8645 是否有監聽 | 有 | 連線被拒絕（CLOSED, WinError 10061） | ⚠️ 陳舊期望，非本機實際端口 |
+| 端口 8642（本機 OmniAgent Gateway） | 有 | OPEN | ✅ 健康 |
+| 端口 8644（對外 Gateway） | 有 | OPEN | ✅ 健康 |
+
+**結論：** 8645 並非本機 Hermes proxy 實際監聽埠。根據 .hermes/config.yaml 查無 864[0-9] 定義，此端口長期為排程檢查假設。真實 Gateway 為 8642（本機）/ 8644（對外），兩者均可連線，非故障。此次實測結果為「連線被拒絕」（無服務在監聽），非「逾時」。
+
+---
+
+## 二、 crew.jsonc 結構檢查
+
+檔案: `C:\Users\dingj\esggo\oa-team-crewai\crew.jsonc`
+
+| 檢查項目 | 預期 | 實測 | 結果 |
+|---|---|---|---|
+| agents 數量 | 30 | 30 | ✅ 符合 |
+| tasks 數量 | 5 | 5 | ✅ 符合 |
+| 5 大陣列 × 6 代理 | 5×6=30 | sage_01~06 / rune_07~12 / wing_13~18 / forge_19~24 / verify_25~30 | ✅ 符合 |
+
+**任務清單：**
+1. extract_essence（本質提純）— agent: sage_01
+2. forge_contract（符文契約）— agent: rune_07
+3. dispatch_swarm（光之羽翼）— agent: wing_13
+4. entropy_forge（煉金熵減）— agent: forge_19
+5. verify_5t（5T 驗算）— agent: verify_25
+
+**結論：** crew.jsonc 結構正確，五工序（提純 → 契約 → 行代行 → 熵減 → 驗算）與 30 Souls Matrix 相符。
+
+---
+
+## 三、 綜合評估
+
+| 項目 | 狀態 | 備註 |
+|---|---|---|
+| Hermes proxy 連線 | ✅ 健康 | 8642/8644 雙端 OPEN |
+| 8645 端口 | ⚠️ 陳舊期望 | 非本機實際監聽埠，無服務綁定 |
+| crew.jsonc 結構 | ✅ 符合 | 30 代理 + 5 任務 |
+| 5T 合規風險 | 📋 持續追蹤 | 依 soul.md 驗算流程 |
+
+**總體：** 蜂群運行穩定。8645 為已知陳舊期望，需修正檢查腳本（轉查 8642）。建議保留 [swarm-health] 標籤持續追蹤。
+
+---
+*報告生成: 2026-11-16 23:00 CST*
+*交付來源: cron 排程 · 標籤 [swarm-health] · origin: DingJun1028/esggo.git*
