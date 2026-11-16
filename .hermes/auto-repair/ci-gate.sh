@@ -11,6 +11,11 @@
 #   - 全綠 → exit 0，可開下一個 PR
 #   - 有紅燈 → 印出每個失敗 check + 可操作建議，exit 1（呼叫端必須停下修復）
 #
+# 資料來源：同時讀 /commits/{sha}/check-runs 與 /commits/{sha}/status ——
+# 外部 GitHub App（如 Vercel）只寫 commit status，不寫 check-run；
+# 只讀 check-runs 會對它們全盲（實測 PR #1432: combined_state=failure
+# 卻被判真全綠）。同名 context 在兩個來源結論不同時保留兩列 → fail closed。
+#
 # 用法：
 #   .hermes/auto-repair/ci-gate.sh                 # 檢查當前分支的 HEAD commit
 #   .hermes/auto-repair/ci-gate.sh <sha>           # 檢查特定 commit
@@ -41,8 +46,21 @@ fetch_checks_raw() {
     --jq '.check_runs[] | "\(.name)|\(.status)|\(.conclusion // "")"'
 }
 
+# Legacy commit *statuses* (posted by external GitHub Apps such as Vercel) are a
+# DIFFERENT API surface from check-runs. Reading only /check-runs made the gate
+# blind to them — real incident: PR #1432 head 7968c8b3c had combined_state=
+# failure via status "Vercel|failure" while every check-run was green, and the
+# gate still printed 真全綠 ✅. Fetch both surfaces and merge; sort -u dedupes
+# identical rows, and if one context shows up green in one surface and red in
+# the other both rows survive -> fail closed.
+fetch_statuses_raw() {
+  gh api "repos/$REPO/commits/$SHA/status" \
+    --paginate \
+    --jq '.statuses[] | if .state == "pending" then "\(.context)|pending|" else "\(.context)|completed|\(.state)" end'
+}
+
 fetch_checks() {
-  local body rc
+  local body rc sbody src
   body="$(fetch_checks_raw 2>/dev/null)"; rc=$?
   if [ "$rc" -ne 0 ]; then
     # A body that is JSON (starts with { or [) is the API error envelope.
@@ -51,7 +69,14 @@ fetch_checks() {
     esac
     return "$rc"
   fi
-  printf '%s' "$body" | sort -u
+  sbody="$(fetch_statuses_raw 2>/dev/null)"; src=$?
+  if [ "$src" -ne 0 ]; then
+    case "$sbody" in
+      \{*|\[*) echo "CIGATE-FETCH-ERROR(status) $(printf '%s' "$sbody" | tr -d '\n' | cut -c1-300)" ;;
+    esac
+    return "$src"
+  fi
+  printf '%s\n%s\n' "$body" "$sbody" | sed '/^$/d' | sort -u
 }
 
 # --- known-flaky allow-list -------------------------------------------------
@@ -147,7 +172,21 @@ while :; do
             else
               MANUAL+=("$name|$concl")
             fi ;;
-          *) RED+=("$name|$concl") ;;
+          # failure-class conclusions are normally RED (hard rule). Exception:
+          # an explicit known-flaky entry for THIS name with THIS conclusion
+          # downgrades to WARN — intended for external GitHub App statuses that
+          # no in-repo workflow can ever repair (e.g. retired Vercel). The
+          # verdict still prints 條件式放行 ⚠ and lists the check as NOT green,
+          # so this can never masquerade as 真全綠 ✅. If the live conclusion no
+          # longer matches the entry, it stays RED (fail closed).
+          *)
+            wl_reason="$(flaky_reason "$name" "$concl" "$SCRIPT_DIR")"
+            if [ -n "$wl_reason" ]; then
+              WARNED+=("$name|$concl|$wl_reason")
+              echo "CIGATE: WARN  $name ($concl) allowed by known-flaky: $wl_reason"
+            else
+              RED+=("$name|$concl")
+            fi ;;
         esac ;;
       *) RED+=("$name|status=$status") ;;
     esac

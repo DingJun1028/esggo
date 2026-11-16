@@ -9,6 +9,9 @@
 #
 # 規則：每筆需有「證據」欄。gate 會驗證該 check 當前結論確實等於 listed 狀態，
 #       狀態一變（例如 SonarCloud 真的跑起來了）即失效，自動恢復為阻擋。
+#       自 2026-11-17 起，failure 結論也可被白名單降級為 WARN（不是綠燈；
+#       verdict 仍為「條件式放行 ⚠」並列出該 check 確實非綠）——僅供
+#       外部 GitHub App 且 repo 內無任何 workflow 可修復者（見 Vercel 條）。
 #
 # 語法：<check 名稱>|<允許的結論>|<理由與證據>
 
@@ -28,3 +31,18 @@
 #     plan，GET /branches/main/protection 回 403 "Upgrade to GitHub Pro"）。
 #   本白名單僅允許 cancelled 結論；一旦 SonarCloud 回傳 success/failure 即自動失效。
 SonarCloud Code Analysis|cancelled|外部 App；main 上不穩定（2cc5a6bd 曾 success），非 required check
+
+# Vercel|failure|
+#   證據（2026-10-17 實測，PR #1430/#1431/#1432 head commit）:
+#     ·該 check 是 Vercel GitHub App 寫的 **commit status**（非 check-run；
+#      GET /commits/7968c8b3c/status → combined_state=failure, statuses 含
+#      "Vercel|failure|Deployment has failed"），dpl_3LibfNZJoYyG34GkBobu5bRJH9KX 等。
+#     ·同一 context 名「Vercel」在不同 PR 被不同 Vercel 專案搶：
+#      #1429 為 htb-b2b → success；#1430/#1431/#1432 為 esggo → failure。
+#   根因已證：
+#     ·repo 內無任何部署 Vercel 的 workflow（.github/workflows 中 vercel 字樣
+#      皆為退役註解），auto-repair.yml 無從修復外部 App 的 status。
+#     ·國策已全面退役 Vercel；2026-11-17 使用者已刪除 Vercel 帳號，
+#      新 SHA 不會再出現此 status，本條隨之自然失效（inert）。
+#   本條僅允許 failure 結論；若 Vercel 重現 success 即自動失效（綠就是綠）。
+Vercel|failure|外部 Vercel App 的 commit status；repo 無 Vercel 部署 workflow；帳號已於 2026-11-17 刪除，過渡期保護用
