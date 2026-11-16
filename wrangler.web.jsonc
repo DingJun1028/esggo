@@ -10,13 +10,25 @@
       "id": "2f376dbffa554d3680c04cc936ace80c"
     }
   ],
-  // 522 根因：無 routes/custom_domains 時 CF 只把 proxied CNAME 當一般 origin 拉
-  // workers.dev → 連線逾時。route 綁定讓 esggo-web 直接接管 web.esggo.co 請求。
-  // DNS CNAME（web.esggo.co → esggo-web...workers.dev，proxied）仍由 CI 步驟冪等確保，
-  // 公開站不經 Cloudflare Access「All Workers」保護層（該層僅匹配 workers.dev hostname）。
+  // 522 根因：無 routes/custom_domains 時 CF 只把 proxied 記錄當一般 origin 拉
+  // → 回源目標死亡（2026-11-17 Vercel 帳號刪除後 apex/origin 全 522）。
+  // route 綁定讓 esggo-web 直接接管請求（proxied 域名由 CF 依 hostname 路由到 Worker）。
+  // 實測 2026-10-17：帳號級 Access app「All Workers」(86a4d5af…, destination
+  // all_workers, allow→account_member) 會匹配 Worker/Pages 自訂網域（htb-b2b.esggo.co
+  // 曾 302），故 web.esggo.co 另有專屬 app (14121b0e…) 加 Everyone→Skip 才公開。
+  // apex/www 加入 route 後同樣會先被 All Workers 擋（302），需把專屬 app 的
+  // domain 擴到 esggo.co / www.esggo.co（或另建 app 加 bypass）才會 200。
   "routes": [
     {
       "pattern": "web.esggo.co",
+      "zone_name": "esggo.co"
+    },
+    {
+      "pattern": "esggo.co",
+      "zone_name": "esggo.co"
+    },
+    {
+      "pattern": "www.esggo.co",
       "zone_name": "esggo.co"
     }
   ]
