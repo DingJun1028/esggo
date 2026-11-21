@@ -1,62 +1,75 @@
-# 智庫聖所OA-Team 30 蜂群健康檢查報告
+# [swarm-health] OA-Team 30 萬能蜂群 健康檢查報告
 
-- 報告日期：2026-10-10
-- 執行人員：Hermes cron 自動化調度（scheduled run）
-- 標籤：[swarm-health]
-- 協定：5T（Traceable, Trackable, Tangible, Transparent, Trustworthy）
-- 儲存庫：`C:\Users\dingj\esggo\oa-team-crewai`
+**檢查時間**: 2026-11-22 02:00 CST (UTC+08:00)
+**檢查模式**: Cron 週期性健康檢查
+**報告語言**: 繁體中文
 
 ---
 
-## 檢查項目與結果
+## 1. Hermes Proxy 端口監聽檢查
 
-### 1. Hermes proxy 監聽端口 8645 — 檢查失敗
+| 項目 | 狀態 | 詳細 |
+|------|------|------|
+| Hermes proxy 8645 端口 | ❌ **未聆聽** | 連線被拒絕 (Connection refused)，errno=111 |
+| 檢查方法 | 127.0.0.1:8645 TCP 連線 | `connect_ex()` 回傳 111 |
 
-- 預期： Hermes proxy 應在 127.0.0.1:8645 監聽
-- 實際結果： **未監聽**
-  - `netstat -tlnp` 無 `8645` 記錄
-  - `(echo > /dev/tcp/127.0.0.1/8645)` → **CLOSED**
-  - 本地 `127.0.0.1:8642` 有 Hermes API server 存在（`platform: hermes-agent`），此為實際可用的服務端點
-- 結論：8645 未啟用/未監聽，屬於**異常**（歷史遺留期望與實際 gateway 不一致，非蜂群結構異常）
-- 風險等級：中
+**狀態**: 檢查失敗 (FAIL)
 
-### 2. crew.jsonc 結構檢查 — 檢查成功
+**說明**: 本機 127.0.0.1:8645 端口目前沒有任何服務在監聽。 Hermes 代理系統已安裝，但 egress proxy (iron-proxy) 未在 8645 端口啟動中。已知 hermes proxy 預設 tunnel 端口為 9090（iron-proxy 配置），8645 端口未映射。
 
-- 檔案：`C:/Users/dingj/esggo/oa-team-crewai/crew.jsonc`
-- 代理數量：**30**（== 30 ✓）
-- 任務數量：**5**（== 5 ✓）
-- 代理名稱皆為字串：✓
-- 任務欄位完整（name / description / expected_output / agent）：✓
-- 任務代理指派：
-  - `extract_essence` → `sage_01` （策略組 01-06）
-  - `forge_contract` → `rune_07` （技術組 07-12）
-  - `dispatch_swarm` → `wing_13` （創意組 13-18）
-  - `entropy_forge` → `forge_19` （營銷組 19-24）
-  - `verify_5t` → `verify_25` （守衛組 25-30）
-- 進程模式：sequential / verbose=True
-- 補充驗證（`verify_crew_structure.py`）：AGENTS=30 OK / TASKS=5 OK / 重複=0 OK / MECE 5x6 OK / 編號 01-30 連續 OK / 三步工作流 OK / 5T 驗算閘：**PASS**
-- 結論：結構完整、合規（30 agents, 5 tasks）✓
-
-### 3. 日誌記錄（繁體中文）
-
-- 本檔已記錄（繁體中文），標籤 [swarm-health]
-- 逸佈目標：本機 origin（`C:\Users\dingj\esggo\oa-team-crewai\`）
-- 結論：記錄完成 ✓
+**建議動作**: 檢查 Hermes egress proxy 是否應在 8645 啟動；若為預期配置，執行 `hermes proxy start` 或相關啟動指令。
 
 ---
 
-## 總結
+## 2. crew.jsonc 結構檢查
 
-| # | 檢查項目 | 狀態 |
-|---|---------|------|
-| 1 | Hermes proxy 8645 監聽 | ❌ 失敗（8642 為實際 API server，歷史遺留期望，非蜂群故障） |
-| 2 | crew.jsonc 30 agents / 5 tasks | ✅ 成功 |
-| 3 | 繁體中文報告記錄 | ✅ 成功 |
+| 項目 | 狀態 | 詳細 |
+|------|------|------|
+| 整體名稱 | ✅ `oa_team_30_swarm` | 符合預期 |
+| 代理總數 | ✅ **30** | 5 陣列 × 6 代理 |
+| 任務總數 | ✅ **5** | 提純→契約→代行→熵減→驗算 |
+| 策略組 (sage) | ✅ 6 | sage_01 ~ sage_06 |
+| 技術組 (rune) | ✅ 6 | rune_07 ~ rune_12 |
+| 創意組 (wing) | ✅ 6 | wing_13 ~ wing_18 |
+| 營銷組 (forge) | ✅ 6 | forge_19 ~ forge_24 |
+| 守衛組 (verify) | ✅ 6 | verify_25 ~ verify_30 |
+| 流程模式 | ✅ `sequential` | 單向鏈條 |
 
-**整體狀態**：⚠️ 蜂群結構定義完整（30 agents / 5 tasks），CrewAI 驗證閘通過；主要瓶頸為 8645 端口標的與實際 8642 gateway 不一致，屬歷史遺留，建議後續由維運組校正端口映射或補上 8645 拉起機制。
+**狀態**: 檢查通過 (PASS)
+
+**詳細結構**:
+
+```json
+{
+  "name": "oa_team_30_swarm",
+  "agents": [6 + 6 + 6 + 6 + 6 = 30],
+  "tasks": [5 tasks],
+  "process": "sequential",
+  "verbose": true
+}
+```
 
 ---
 
-*自動生成 by OA-Team 30 萬能蜂群健康檢查 Cron Job*
-*報告時間: 2026-10-10 (UTC+08:00)*
-*5T 自評：Traceable／Trackable／Tangible／Transparent／Trustworthy*
+## 3. 檢查結果總結
+
+| 檢查項目 | 結果 |
+|----------|------|
+| Hermes proxy 8645 端口 | ❌ 失敗 |
+| crew.jsonc 30 代理 | ✅ 通過 |
+| crew.jsonc 5 任務 | ✅ 通過 |
+| **整體狀態** | ⚠️ **部分異常** (1/2 通過) |
+
+---
+
+## 4. 掃除建議
+
+1. **立即**: 確認 8645 端口是否為預期配置；若是，啟動 Hermes egress proxy。
+2. **確認**: 確認 8645 端口用途是否為 Hermes proxy 或其他服務（如 Kubernetes ingress 等）。
+3. **記錄**: 如 8645 持續未聆聽，標記為已知異常並在下次健康檢查中持續追蹤。
+
+---
+
+*報告生成: 2026-11-22 02:00 CST*
+*出處: /c/Users/dingj/esggo/oa-team-crewai/crew.jsonc*
+*標籤: [swarm-health]*

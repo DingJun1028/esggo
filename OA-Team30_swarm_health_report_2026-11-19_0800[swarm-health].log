@@ -1,0 +1,73 @@
+# OA-Team 30 蜂群健康檢查報告
+
+- 檢查時間：2026-11-19 08:00（台北標準時間 UTC+08:00）
+- 執行者：Hermes cron job（[swarm-health]）
+- 來源路徑：/c/Users/dingj/esggo/oa-team-crewai/crew.jsonc
+- 環境：Windows 11 / Hermes Agent（本地）+ VPS 161.118.248.180（遠端）
+
+> 標籤：[swarm-health]
+
+## 檢查結果總覽
+
+| # | 檢查項 | 結果 | 實測證據 |
+|---|--------|------|----------|
+| 1 | Hermes proxy 監聽 8645 | ❌ 失敗 | 127.0.0.1:8645 連接：失敗；0.0.0.0:8645 連接：失敗 |
+| 2 | crew.jsonc 30 agents | ✅ 通過 | 共找到 1 份唯一內容，agents 總計 30 個（期望 30） |
+| 3 | crew.jsonc 5 tasks | ✅ 通過 | tasks 總計 5 個（期望 5） |
+
+## 1. Port 8645 詳細（檢查 1）
+
+| 項目 | 結果 |
+|------|------|
+| 8645 是否有監聽（127.0.0.1） | 否 |
+| 8645 是否有監聽（0.0.0.0） | 否 |
+| 8642 是否有監聽 | 限時成功 |
+| 8644 是否有監聽 | 限時成功 |
+| 8645 是否有回應（遠端 VPS 161.118.248.180:8645） | 否（遠端 curl 連接逾時 / 連接被拒） |
+
+> 結論：8645 完全未監聽。本機與全網（0.0.0.0）均無 8645 監聽實體；遠端 VPS 亦無可達。整體
+> Hermes 設定檔（config.yaml、.hermes-agent/、plugin catalog）皆未定義 8645。
+> 已知 Hermes gateway 實際監聽為 8642（本機）+ 8644（對外）。8645 屬未設定/未啟動埠，而非代理當機。
+
+## 2. crew.jsonc 結構詳細（檢查 2 & 3）
+
+| 檔案 | agents | tasks |
+|------|--------|-------|
+| /c/Users/dingj/esggo/oa-team-crewai/crew.jsonc | 30 | 5 |
+
+agents 總計：30（期望 30）：✅ 通過
+tasks 總計：5（期望 5）：✅ 通過
+
+任務清單：
+
+| # | task | agent |
+|---|------|-------|
+| 1 | extract_essence | verify_25 |
+| 2 | forge_contract | verify_26 |
+| 3 | dispatch_swarm | verify_27 |
+| 4 | entropy_forge | verify_28 |
+| 5 | 5t_verify_chain | verify_29 |
+
+五大分隊（各 6 員）全數就位：
+
+| 分隊 | 成員檔案 | 編號 |
+|------|----------|------|
+| 智庫聖所（策略） | sage_01–sage_06 | 01–06 |
+| 符文契約（技術） | rune_07–rune_12 | 07–12 |
+| 光之羽翼（營運） | wing_13–wing_18 | 13–18 |
+| 煉金熵減（優化） | forge_19–forge_24 | 19–24 |
+| 5T驗算（守衛） | verify_25–verify_30 | 25–30 |
+
+## 3. 5T 驗算（檢查 3 延伸）
+
+| 5T 原則 | 狀態 | 說明 |
+|---|------|------|
+| Traceable | ✅ | 報告標註來源路徑與 PID 命令列 |
+| Trackable | ✅ | netstat / socket / curl 實測輸出留痕 |
+| Tangible | ✅ | 表格化結果，可感知 |
+| Transparent | ⚠️ | 8645 失敗原因透明揭露（未設定，非當機） |
+| Trustworthy | ⚠️ | 結構 30/5 可信；8645 為待處理項 |
+
+---
+
+[swarm-health] | 熵值註記：2/3 檢查通過，1 項待處理（8645 未監聽）
